@@ -113,7 +113,7 @@
 <div class="d-flex flex-wrap flex-stack pb-7" data-select2-id="select2-data-131-enac">
     <!--begin::Title-->
     <div class="d-flex flex-wrap align-items-center my-1">
-        <h3 class="fw-bolder me-5 my-1">{{ $data_disc->total }} Items Found
+        <h3 class="fw-bolder me-5 my-1">{{ $data_disc->total }} Data Diskon Produk
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
