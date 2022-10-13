@@ -1222,6 +1222,18 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+    public static function ValidasiDiskonProduk($produk, $cabang)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/diskonproduk/cekproduk';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'cabang'        => $cabang,
+            'produk'   => $produk,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 
     public static function DiskonProdukSimpan($cabang, $produk, $disc_normal, $disc_max, $disc_plus_normal, $disc_plus_max, $umur_faktur, $user_id)
     {

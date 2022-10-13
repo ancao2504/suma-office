@@ -69,6 +69,35 @@ class DiskonProdukController extends Controller
         }
     }
 
+    public function validasiDiskonProduk(Request $request)
+    {
+        // dd($request->all());
+        $responseApi = ApiService::ValidasiDiskonProduk(trim($request->kd_produk), trim($request->cabang));
+        // dd($responseApi);
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if ($statusApi == 1) {
+            if ($messageApi == 'success') {
+                return response()->json([
+                    'status' => 0,
+                ]);
+            } else {
+                $data = json_decode($responseApi)->data;
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data Diskon Produk : ' . trim($data->kode_produk) . ' Cabang : ' . trim($data->cabang) . ' sudah ada, apakah anda ingin mengubahnya ?',
+                    'data' => $data,
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => $messageApi,
+            ]);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -77,10 +106,17 @@ class DiskonProdukController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
 
+        if (in_array(trim($request->get('cabang')), array('RK', 'PC'))) {
+            $cabang = strtoupper(trim($request->get('cabang')));
+        } else {
+            return redirect()->back()->withInput()->with('failed', 'Cabang tidak valid');
+        }
+
         $responseApi = ApiService::DiskonProdukSimpan(
-            trim($request->get('cabang')),
+            trim($cabang),
             trim($request->get('produk')),
             trim($request->get('disc_normal')),
             trim($request->get('disc_max')),
@@ -93,7 +129,7 @@ class DiskonProdukController extends Controller
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
         if ($statusApi == 1) {
-            return redirect()->back()->withInput()->with('success', $messageApi);
+            return redirect()->back()->with('success', $messageApi);
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }

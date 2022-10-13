@@ -48,56 +48,61 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="produk" class="form-label required mt-1">Produk</label>
-                                <input type="text" class="form-control" id="produk" name="produk" placeholder="Produk" required>
+                                <input type="text" class="form-control" id="produk" name="produk" placeholder="Produk" value="{{ old('produk') }}" autocomplete="fasle" oninput="this.value = this.value.toUpperCase()" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="produk" class="form-label mt-1">Nama produk</label>
-                                <input type="text" class="form-control bg-secondary" id="nama_produk" name="nama_produk" placeholder="Nama produk" readonly>
+                                <input type="text" class="form-control bg-secondary" id="nama_produk" name="nama_produk" placeholder="Nama produk" value="{{ old('nama_produk') }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="cabang" class="form-label mt-1">Cabang</label>
-                                <input type="text" class="form-control bg-secondary" id="cabang" name="cabang" placeholder="Cabang" required value="{{ $companyid }}" readonly>
+                                {{-- <input type="text" class="form-control bg-secondary" id="cabang" name="cabang" placeholder="Cabang" required value="{{ $companyid }}" readonly> --}}
+                                <select class="form-select" name="cabang" id="cabang" required>
+                                    <option value="">Pilih Cabang</option>
+                                    <option value="PC">PC</option>
+                                    <option value="RK">RK</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="umur_faktur" class="form-label required mt-1">Umur Faktur</label>
-                                <input type="text" class="form-control" id="umur_faktur" name="umur_faktur" placeholder="Umur Faktur" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="0" required>
+                                <input type="text" class="form-control" id="umur_faktur" name="umur_faktur" placeholder="Umur Faktur" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('umur_faktur')??'0' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="disc_normal" class="form-label required mt-1">Diskon Normal</label>
-                                <input type="text" class="form-control" id="disc_normal" name="disc_normal" placeholder="Diskon normal" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="0" required>
+                                <input type="text" class="form-control" id="disc_normal" name="disc_normal" placeholder="Diskon normal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_normal')??'0' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="disc_max" class="form-label required mt-1">Diskon Max</label>
-                                <input type="text" class="form-control" id="disc_max" name="disc_max" placeholder="Diskon maksimal" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="0" required>
+                                <input type="text" class="form-control" id="disc_max" name="disc_max" placeholder="Diskon maksimal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_max')??'0' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="disc_plus_normal" class="form-label required mt-1">Diskon Plus Normal</label>
-                                <input type="text" class="form-control" id="disc_plus_normal" name="disc_plus_normal" placeholder="Diskon plus normal" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="0" required>
+                                <input type="text" class="form-control" id="disc_plus_normal" name="disc_plus_normal" placeholder="Diskon plus normal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_plus_normal')??'0' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="disc_plus_max" class="form-label required mt-1">Diskon Plus Maxsimal</label>
-                                <input type="text" class="form-control" id="disc_plus_max" name="disc_plus_max" placeholder="Diskon Plus maksimal" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="0" required>
+                                <input type="text" class="form-control" id="disc_plus_max" name="disc_plus_max" placeholder="Diskon Plus maksimal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_plus_max')??'0' }}" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary" onclick="loadingContent.block();">Simpan</button>
+                    <button type="button" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -176,19 +181,24 @@
                                 <div class="fw-bolder">Cabang : {{ $data->cabang }}</div>
                                 <div class="fs-6 fw-bold text-gray-400">Cabang : {{ $data->cabang }}</div>
                             </div> --}}
-                            <table class="table table-borderless">
+                            <table class="table table-borderless table-sm">
                                 <tbody>
                                     <tr>
                                         <td class="fw-bolder">Cabang</td>
                                         <td class="fw-bolder">:</td>
-                                        <td class="fw-bolder">{{ $data->cabang }}</td>
+                                        <td><span class="badge badge-light-primary fw-bolder fs-6">{{ $data->cabang }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bolder">Umur Faktur</td>
+                                        <td class="fw-bolder">:</td>
+                                        <td><span class="badge badge-light-info fw-bolder fs-6">{{ number_format($data->umur_faktur) }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <!--begin::Wrapper-->
                         <div class="d-flex align-items-center w-100">
-                            <table class="tb">
+                            <table class="table table-borderless table-sm tb-card">
                                 <thead class="p-3">
                                     <tr>
                                         <th class="fw-bolder">#</th>
@@ -199,13 +209,13 @@
                                 <tbody class="p-3">
                                     <tr>
                                         <td class="fw-bolder">Disc</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ number_format($data->disc_normal) }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ number_format($data->disc_max) }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $data->disc_normal == '.00'? '0' : $data->disc_normal }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $data->disc_max == '.00'? '0' : $data->disc_max }}</span></td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bolder">Disc +</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ number_format($data->disc_plus_normal) }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ number_format($data->disc_plus_max) }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $data->disc_plus_normal == '.00'? '0' : $data->disc_plus_normal }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $data->disc_plus_max == '.00'? '0' : $data->disc_plus_max }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -221,15 +231,15 @@
                                     json_encode([
                                         'kode_produk' => $data->kode_produk,
                                         'nama_produk' => $data->nama_produk,
-                                        'disc_normal' => number_format($data->disc_normal),
-                                        'disc_max' => number_format($data->disc_max),
-                                        'disc_plus_normal' => number_format($data->disc_plus_normal),
-                                        'disc_plus_max' => number_format($data->disc_plus_max),
-                                        'umur_faktur' => $data->umur_faktur,
+                                        'disc_normal' => $data->disc_normal == '.00' ? 0 : $data->disc_normal,
+                                        'disc_max' => $data->disc_max == '.00' ? 0 : $data->disc_max,
+                                        'disc_plus_normal' => $data->disc_plus_normal == '.00' ? 0 : $data->disc_plus_normal,
+                                        'disc_plus_max' => $data->disc_plus_max == '.00' ? 0 : $data->disc_plus_max,
+                                        'umur_faktur' => number_format($data->umur_faktur),
                                         'cabang' => $data->cabang,
                                     ])
-                                }}"
-                        >Edit</button>
+                                }}">
+                        Edit</button>
                     </div>
                     <!--end::Actions-->
                 </div>
@@ -284,13 +294,14 @@
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
-                            <table id="kt_project_users_table" class="table table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
+                            <table id="kt_project_users_table" class="table table-sm table-hover table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
                                 <!--begin::Head-->
                                 <thead class="fs-7 text-gray-400 text-uppercase">
                                     <tr>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No Part</th>
                                         <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Umur Faktur</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc Normal</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc Max</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc plus normal</th>
@@ -312,19 +323,22 @@
                                             {{ $data->nama_produk }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder">{{ number_format($data->disc_normal) }}</span>
+                                            <span class="badge badge-light-info fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-warning fw-bolder">{{ number_format($data->disc_max) }}</span>
+                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_normal == '.00' ? '0' : $data->disc_normal }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder">{{ number_format($data->disc_plus_normal) }}</span>
+                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_max == '.00' ? '0' : $data->disc_max }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-warning fw-bolder">{{ number_format($data->disc_plus_max) }}</span>
+                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_plus_normal == '.00' ? '0' : $data->disc_plus_normal }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-primary fw-bolder">{{ $data->cabang }}</span>
+                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_plus_max == '.00' ? '0' : $data->disc_plus_max }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-light-primary fw-bolder fs-5">{{ $data->cabang }}</span>
                                         </td>
                                         <td class="text-center">
                                             <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}" data-bs-toggle="modal" data-bs-target="#delet_model">
@@ -335,11 +349,11 @@
                                                             json_encode([
                                                                 'kode_produk' => $data->kode_produk,
                                                                 'nama_produk' => $data->nama_produk,
-                                                                'disc_normal' => number_format($data->disc_normal),
-                                                                'disc_max' => number_format($data->disc_max),
-                                                                'disc_plus_normal' => number_format($data->disc_plus_normal),
-                                                                'disc_plus_max' => number_format($data->disc_plus_max),
-                                                                'umur_faktur' => $data->umur_faktur,
+                                                                'disc_normal' => $data->disc_normal =='.00'?0:$data->disc_normal,
+                                                                'disc_max' => $data->disc_max =='.00'?0:$data->disc_max,
+                                                                'disc_plus_normal' => $data->disc_plus_normal =='.00'?0:$data->disc_plus_normal,
+                                                                'disc_plus_max' => $data->disc_plus_max =='.00'?0:$data->disc_plus_max,
+                                                                'umur_faktur' => number_format($data->umur_faktur),
                                                                 'cabang' => $data->cabang,
                                                             ])
                                                         }}"
@@ -436,7 +450,7 @@
 
 				<div class="modal-footer">
 					<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-danger" onclick="loadingContent.block();">Hapus</button>
+					<button type="submit" class="btn btn-danger">Hapus</button>
 				</div>
 			</form>
 		</div>
@@ -453,186 +467,9 @@
     @push('scripts')
     <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            
-        var targetmodal = document.querySelector("#staticBackdrop .modal-content");
-        var loadingModal = new KTBlockUI(targetmodal, {
-            message: '<div class="blockui-message">'+
-                '<span class="spinner-border text-primary"></span> Loading...'+
-                '</div>'
-            });
-
-        var targetcontent = document.querySelector("#kt_wrapper");
-        var loadingContent = new KTBlockUI(targetcontent, {
-            message: '<div class="blockui-message">'+
-                        '<span class="spinner-border text-primary"></span> Loading...'+
-                    '</div>'
-        });
-
-        // jika terdapat submit pada form
-        $('form').submit(function(e) {
-            loadingModal.block();
-        });
-        // end form
-
-            // responsive ukuran layar
-            if(screen.width > 576){ 
-                // $('#dataDiskon > div:nth-child(3) > div > div.d-flex.flex-column.py-2.w-100 > div:nth-child(3) > table')add class table table-borderless
-                $('#dataDiskon table.tb').addClass('table table-borderless');
-                // #dataDiskon > div:nth-child(1) > div > div.d-flex.flex-column.py-2.w-100 > div:nth-child(3) > table
-            }
-            // $(window).resize(function() {
-            //     (screen.width < 576)? viewCard():'';
-            // });
-
-            function viewCard() {
-                $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a')[0].click();
-                $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a').removeClass('active');
-            }
-            function viewTabel() {
-                $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a')[0].click();
-                $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a').removeClass('active');
-            }
-            // end responsive ukuran layar
-            
-            // pagination,search,per_page
-            const params = new URLSearchParams(window.location.search)
-            for (const param of params) {
-                var search = params.get('search');
-                var per_page = params.get('per_page');
-                var page = params.get('page');
-            }
-
-            // per_page
-            $('#kt_project_users_table_length > label > select > option[value="{{  $data_disc->per_page }}"]').prop('selected', true);
-
-            $('#kt_project_users_table_length > label > select').on('change', function() {
-                if (params.has('per_page')) {
-                    gantiUrl(1);
-                } else {
-                    gantiUrl(1);
-                }
-            });
-            // end per_page
-
-            // search
-            $('#filterSearch').val(search);
-            $('#btn-filtersubmit').on('click', function() {
-                if (params.has('search')) {
-                    gantiUrl(1);
-                } else {
-                    gantiUrl(1);
-                }
-            });
-            // end search
-            
-            // pagination, card & tabel
-            $('#kt_project_users_table_paginate > ul > li').on('click', function() {
-                if ($(this).hasClass('disabled') === false) {
-                    gantiUrl($(this).find('a').data('page'),'tabel');
-                }
-            });
-            $('#kt_project_users_card_pane > div.d-flex.flex-stack.flex-wrap.pt-10 > ul > li').on('click', function() {
-                if ($(this).hasClass('disabled') === false) {
-                    gantiUrl($(this).find('a').data('page'),'card');
-                }
-            });
-            if (params.has('data')) {
-                if (params.get('data') == 'tabel') {
-                    viewTabel();
-                } else if (params.get('data') == 'card') {
-                    viewCard();
-                }
-            }
-            // end pagination
-
-            // merubah url dengan parameter yang baru + reload
-            function gantiUrl(page = "{{ $data_disc->current_page }}", data = '') {
-                loadingContent.block();
-                window.location.href = "{{ url('/setting/diskonproduk') }}?page="+page+"&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val()+"&data="+data;
-            }
-            // end pagination,search,per_page
-
-            // validasi inputan kode produk
-            $('#produk').on('change', function() {
-                loadingModal.block();
-                $.ajax({
-                    url: "{{ route('setting.setting-validasi-produk') }}",
-                    type: "GET",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        kd_produk: this.value
-                    },
-                    success: function(data) {
-                        if (data.status == 1) {
-                            $('#nama_produk').val(data.data.nama_produk);
-                            $('#produk').removeClass('is-invalid');
-                            $('#produk').addClass('is-valid');
-                            $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
-                        } else if (data.status == 0) {
-                            $('#nama_produk').val('');
-                            $('#produk').removeClass('is-valid');
-                            $('#produk').addClass('is-invalid');
-                            $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
-                        }
-                    },
-                    error: function(data) {
-                        $('#nama_produk').val('');
-                        $('#produk').removeClass('is-valid');
-                        $('#produk').addClass('is-invalid');
-                        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
-                    }
-                });
-                loadingModal.release();
-            });
-            // end validasi inputan kode produk
-
-            // delete data
-            $('.btn-delete').on('click', function() {
-                $('#delet_model #produk').val($(this).data('p').trim());
-                $('#delet_model #cabang').val($(this).data('c').trim());
-
-                $('#form > div.modal-body > div > p.ms-text').html('Apakah anda yakin ingin menghapus diskon produk <b>' + $(this).data('p') + '</b>, pada cabang <b>'+$(this).data('c')+'</b> ?');
-            });
-            // end delete data
-
-            // edit data
-            $('.btn-edit').on('click', function() {
-                $('#staticBackdropLabel').html('Edit Diskon Produk');
-                var data = $(this).data('array');
-                $('#produk').val(data.kode_produk.trim());
-                $('#nama_produk').val(data.nama_produk);
-                $('#cabang').val(data.cabang);
-                $('#umur_faktur').val(data.umur_faktur);
-                $('#disc_normal').val(data.disc_normal);
-                $('#disc_max').val(data.disc_max);
-                $('#disc_plus_normal').val(data.disc_plus_normal);
-                $('#disc_plus_max').val(data.disc_plus_max);
-                $('#staticBackdrop').modal('show');
-                $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
-            });
-            // end edit data
-
-            //  add data hanya menganti label di modal dan mengosongkan inputan
-            $('#btn-adddiskonproduk').on('click', function() {
-                $('#staticBackdropLabel').html('Tambah Diskon Produk');
-                $('#staticBackdrop > div > div > form').trigger('reset');
-            });
-            // end add data
-            
-            // saat tambah diskon di klik focus ke pruduk dan erubah tombol enter menjadi tab
-            $('#staticBackdrop').on('shown.bs.modal', function() {
-                $('#produk').focus();
-                $('#staticBackdrop').find('input').on('keydown', function(e) {
-                    if (e.which == 13) {
-                        e.preventDefault();
-                        var index = $('#staticBackdrop').find('input').index(this) + 1;
-                        $('#staticBackdrop').find('input').eq(index).focus();
-                    }
-                });
-            });
-            // end saat tambah diskon
-        });
+            let old ={"cabang": "{{ old('cabang')??''}}"};
+            const current_page = "{{ $data_disc->current_page }}"
     </script>
+    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskonproduk.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

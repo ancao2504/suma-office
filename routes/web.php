@@ -132,6 +132,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::get('/setting/diskonproduk', 'App\Setting\DiskonProdukController@index')->middleware('authLogin')->name('setting-diskon-produk');
         Route::post('/setting/diskonproduk/simpan', 'App\Setting\DiskonProdukController@store')->middleware('authLogin')->name('setting-diskon-produk-simpan');
         Route::get('/setting/validasiproduk', 'App\Setting\DiskonProdukController@validasiProduk')->middleware('authLogin')->name('setting-validasi-produk');
+        Route::get('/setting/diskonproduk/cekproduk', 'App\Setting\DiskonProdukController@validasiDiskonProduk')->middleware('authLogin')->name('setting-validasi-diskon-produk');
         Route::post('/setting/diskonproduk/hapus', 'App\Setting\DiskonProdukController@destroy')->middleware('authLogin')->name('setting-diskon-produk-hapus');
     });
 
