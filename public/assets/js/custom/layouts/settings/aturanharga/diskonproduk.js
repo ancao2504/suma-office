@@ -155,10 +155,12 @@ $(document).ready(function () {
                             text: data.message,
                             icon: 'warning',
                             showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
                             confirmButtonText: 'Ya, Edit!',
-                            cancelButtonText: 'Tidak !'
+                            cancelButtonText: 'Tidak !',
+                            customClass: {
+                                confirmButton: 'btn btn-primary',
+                                cancelButton: 'btn btn-danger'
+                            }
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $('#staticBackdropLabel').html('Edit Diskon Produk');
