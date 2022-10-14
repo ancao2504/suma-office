@@ -36,7 +36,6 @@ class DiskonProdukController extends Controller
                 [
                     'title_menu'    => 'Diskon Produk',
                     'data_disc'     => $data,
-                    'companyid'     => $companyid,
                 ]
             );
         } else {
@@ -44,36 +43,9 @@ class DiskonProdukController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function validasiProduk(Request $request)
+    public function cekDiskonProduk(Request $request)
     {
-        $responseApi = ApiService::ValidasiProduk(trim($request->kd_produk));
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-
-        if ($statusApi == 1) {
-            $data = json_decode($responseApi)->data;
-            return response()->json([
-                'status' => 1,
-                'data' => $data,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 0,
-                'message' => $messageApi,
-            ]);
-        }
-    }
-
-    public function validasiDiskonProduk(Request $request)
-    {
-        // dd($request->all());
         $responseApi = ApiService::ValidasiDiskonProduk(trim($request->kd_produk), trim($request->cabang));
-        // dd($responseApi);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 

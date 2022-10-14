@@ -51,23 +51,17 @@ $(document).ready(function () {
     }
 
     // per_page
-    $('#kt_project_users_table_length > label > select > option[value="{{  $data_disc->per_page }}"]').prop('selected', true);
+    $('#kt_project_users_table_length > label > select > option[value="' + per_page + '"]').prop('selected', true);
 
     $('#kt_project_users_table_length > label > select').on('change', function () {
-        if (params.has('per_page')) {
-            gantiUrl(1);
-        } else {
-            gantiUrl(1);
-        }
+        gantiUrl(1);
     });
     // end per_page
 
     // search
     $('#filterSearch').val(search);
-    $('#btn-filtersubmit').on('click', function () {
-        if (params.has('search')) {
-            gantiUrl(1);
-        } else {
+    $('#filterSearch').on('change keydown', function (e) {
+        if (e.keyCode == 13 || e.type == 'change') {
             gantiUrl(1);
         }
     });
@@ -104,8 +98,8 @@ $(document).ready(function () {
     $('#produk').on('change', function () {
         loadingModal.block();
         $.ajax({
-            url: base_url + '/setting/validasiproduk',
-            type: "GET",
+            url: base_url + '/validasi/produk',
+            type: "POST",
             data: {
                 _token: $('input[name="_token"]').val(),
                 kd_produk: this.value
@@ -140,7 +134,7 @@ $(document).ready(function () {
             loadingModal.block();
             $.ajax({
                 url: base_url + '/setting/diskonproduk/cekproduk',
-                type: "GET",
+                type: "POST",
                 data: {
                     _token: $('input[name="_token"]').val(),
                     kd_produk: $('#produk').val(),
@@ -236,7 +230,7 @@ $(document).ready(function () {
     });
     // end add data
 
-    // saat tambah diskon di klik focus ke pruduk dan erubah tombol enter menjadi tab
+    // saat tambah diskon di klik focus ke pruduk dan merubah tombol enter menjadi tab
     $('#staticBackdrop').on('shown.bs.modal', function () {
         $('#produk').focus();
         $('#staticBackdrop').find('input').on('keydown', function (e) {

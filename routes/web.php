@@ -127,13 +127,17 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
     Route::name('setting.')->group(function () {
         Route::get('/setting/clossingmkr', 'App\Setting\SettingController@clossingMarketing')->middleware('authLogin')->name('setting-clossing-marketing');
-
-        // route get diskonproduk
+        // diskon Produk
         Route::get('/setting/diskonproduk', 'App\Setting\DiskonProdukController@index')->middleware('authLogin')->name('setting-diskon-produk');
         Route::post('/setting/diskonproduk/simpan', 'App\Setting\DiskonProdukController@store')->middleware('authLogin')->name('setting-diskon-produk-simpan');
-        Route::get('/setting/validasiproduk', 'App\Setting\DiskonProdukController@validasiProduk')->middleware('authLogin')->name('setting-validasi-produk');
-        Route::get('/setting/diskonproduk/cekproduk', 'App\Setting\DiskonProdukController@validasiDiskonProduk')->middleware('authLogin')->name('setting-validasi-diskon-produk');
         Route::post('/setting/diskonproduk/hapus', 'App\Setting\DiskonProdukController@destroy')->middleware('authLogin')->name('setting-diskon-produk-hapus');
+
+        Route::post('/setting/diskonproduk/cekproduk', 'App\Setting\DiskonProdukController@cekDiskonProduk')->middleware('authLogin')->name('setting-validasi-diskon-produk');
+
+        // diskon Dealer
+        Route::get('/setting/diskondealer', 'App\Setting\DiskonDealerController@index')->middleware('authLogin')->name('setting-diskon-dealer');
+        Route::post('/setting/diskondealer/simpan', 'App\Setting\DiskonDealerController@store')->middleware('authLogin')->name('setting-diskon-dealer-simpan');
+        Route::post('/setting/diskondealer/hapus', 'App\Setting\DiskonDealerController@destroy')->middleware('authLogin')->name('setting-diskon-dealer-hapus');
     });
 
     Route::name('validasi.')->group(function () {
@@ -141,6 +145,9 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::post('/validasi/dealer', 'App\Validasi\ValidasiController@validasiDealer')->middleware('authLogin')->name('validasi-dealer');
         Route::post('/validasi/dealersalesman', 'App\Validasi\ValidasiController@validasiDealerSalesman')->middleware('authLogin')->name('validasi-dealer-salesman');
         Route::post('/validasi/partnumber', 'App\Validasi\ValidasiController@validasiPartNumber')->middleware('authLogin')->name('validasi-part-number');
+
+        // validasiProduk
+        Route::post('/validasi/produk', 'App\Validasi\ValidasiController@validasiProduk')->middleware('authLogin')->name('validasi-produk');
     });
 
     Route::name('visit.')->group(function () {

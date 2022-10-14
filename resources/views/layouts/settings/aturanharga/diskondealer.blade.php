@@ -19,12 +19,12 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search Kode Produk">
+                <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search">
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Diskon Produk</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Diskon Dealer</button>
             </div>
             <!--end:Action-->
         </div>
@@ -37,10 +37,10 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Produk</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Dealer</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-diskon-produk-simpan') }}" method="POST">
+            <form action="{{ route('setting.setting-diskon-dealer-simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -52,56 +52,39 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="produk" class="form-label mt-1">Nama produk</label>
+                                <label for="nama_produk" class="form-label mt-1">Nama produk</label>
                                 <input type="text" class="form-control bg-secondary" id="nama_produk" name="nama_produk" placeholder="Nama produk" value="{{ old('nama_produk') }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="cabang" class="form-label mt-1">Cabang</label>
-                                {{-- <input type="text" class="form-control bg-secondary" id="cabang" name="cabang" placeholder="Cabang" required value="{{ $companyid }}" readonly> --}}
-                                <select class="form-select" name="cabang" id="cabang" required>
-                                    <option value="">Pilih Cabang</option>
-                                    <option value="PC">PC</option>
-                                    <option value="RK">RK</option>
-                                </select>
+                                <label for="dealer" class="form-label required mt-1">Kode Dealer</label>
+                                <input type="text" class="form-control" id="dealer" name="dealer" placeholder="Kode Dealer" value="{{ old('dealer')??'' }}" oninput="this.value = this.value.toUpperCase()" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="umur_faktur" class="form-label required mt-1">Umur Faktur</label>
-                                <input type="text" class="form-control" id="umur_faktur" name="umur_faktur" placeholder="Umur Faktur" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('umur_faktur')??'0' }}" required>
+                                <label for="nama_dealer" class="form-label mt-1">Nama Dealer</label>
+                                <input type="text" class="form-control bg-secondary" id="nama_dealer" name="nama_dealer" placeholder="Nama dealer" value="{{ old('nama_dealer') }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="disc_normal" class="form-label required mt-1">Diskon Normal</label>
-                                <input type="text" class="form-control" id="disc_normal" name="disc_normal" placeholder="Diskon normal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_normal')??'0' }}" required>
+                                <label for="companyid" class="form-label required mt-1">Cabang</label>
+                                <input type="text" class="form-control bg-secondary" id="companyid" name="companyid" placeholder="Keterangan" value="{{ $companyid}}" readonly>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label for="disc_max" class="form-label required mt-1">Diskon Max</label>
-                                <input type="text" class="form-control" id="disc_max" name="disc_max" placeholder="Diskon maksimal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_max')??'0' }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="disc_plus_normal" class="form-label required mt-1">Diskon Plus Normal</label>
-                                <input type="text" class="form-control" id="disc_plus_normal" name="disc_plus_normal" placeholder="Diskon plus normal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_plus_normal')??'0' }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="disc_plus_max" class="form-label required mt-1">Diskon Plus Maxsimal</label>
-                                <input type="text" class="form-control" id="disc_plus_max" name="disc_plus_max" placeholder="Diskon Plus maksimal" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('disc_plus_max')??'0' }}" required>
+                                <label for="keterangan" class="form-label required mt-1">Keterangan</label>
+                                <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" value="{{ old('keterangan')??'' }}" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -112,7 +95,7 @@
 <div class="d-flex flex-wrap flex-stack pb-7" data-select2-id="select2-data-131-enac">
     <!--begin::Title-->
     <div class="d-flex flex-wrap align-items-center my-1">
-        <h3 class="fw-bolder me-5 my-1">{{ $data_disc->total }} Data Diskon Produk
+        <h3 class="fw-bolder me-5 my-1">{{ $data_disc->total }} Data Diskon Dealer
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
@@ -120,7 +103,7 @@
     <div class="d-flex flex-wrap my-1">
         <!--begin::Tab nav-->
         <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-            <li class="nav-item m-0">
+            {{-- <li class="nav-item m-0">
                 <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary me-3" data-bs-toggle="tab" href="#kt_project_users_card_pane">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -135,7 +118,7 @@
                     </span>
                     <!--end::Svg Icon-->
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item m-0">
                 <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
                     <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
@@ -160,7 +143,7 @@
 
 <div class="tab-content">
     <!--begin::Tab pane-->
-    <div id="kt_project_users_card_pane" class="tab-pane fade">
+    {{-- <div id="kt_project_users_card_pane" class="tab-pane fade">
         <!--begin::Row-->
         <div class="row g-3" id="dataDiskon">
         @foreach ( $data_disc->data as $data)
@@ -176,10 +159,6 @@
                         </div>
                         <!--end::Owner-->
                         <div class="d-flex align-items-center w-100">
-                            {{-- <div class="card w-100">
-                                <div class="fw-bolder">Cabang : {{ $data->cabang }}</div>
-                                <div class="fs-6 fw-bold text-gray-400">Cabang : {{ $data->cabang }}</div>
-                            </div> --}}
                             <table class="table table-borderless table-sm">
                                 <tbody>
                                     <tr>
@@ -280,7 +259,7 @@
             <!--end::Pages-->
         </div>
         <!--end::Pagination-->
-    </div>
+    </div> --}}
     <!--end::Tab pane-->
     <!--begin::Tab pane-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
@@ -298,14 +277,13 @@
                                 <thead class="fs-7 text-gray-400 text-uppercase">
                                     <tr>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No Part</th>
-                                        <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Umur Faktur</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc Normal</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc Max</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc plus normal</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc plus max</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Cabang</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Kode Produk</th>
+                                        <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Produk</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Kode Dealer</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Cabang</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Diskon</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Keterangan</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">User Time</th>
                                         <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
                                     </tr>
                                 </thead>
@@ -322,42 +300,32 @@
                                             {{ $data->nama_produk }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-info fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
+                                            {{ $data->kode_dealer }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_normal == '.00' ? '0' : $data->disc_normal }}</span>
+                                            {{ $data->companyid }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_max == '.00' ? '0' : $data->disc_max }}</span>
+                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc == '.00' ? '0' : $data->disc }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_plus_normal == '.00' ? '0' : $data->disc_plus_normal }}</span>
+                                                {{ $data->keterangan}}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_plus_max == '.00' ? '0' : $data->disc_plus_max }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-light-primary fw-bolder fs-5">{{ $data->cabang }}</span>
+                                            {{
+                                                substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1) .'/'. date('d/M/Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
+                                            }}
+                                            {{-- . '/' . substr($data->usertime,strpos($data->usertime,"=")+1,12) --}}
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}" data-bs-toggle="modal" data-bs-target="#delet_model">
-                                                <span class="bi bi-trash"></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit"
-                                            data-array="{{
+                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-array="{{
                                                             json_encode([
-                                                                'kode_produk' => $data->kode_produk,
-                                                                'nama_produk' => $data->nama_produk,
-                                                                'disc_normal' => $data->disc_normal =='.00'?0:$data->disc_normal,
-                                                                'disc_max' => $data->disc_max =='.00'?0:$data->disc_max,
-                                                                'disc_plus_normal' => $data->disc_plus_normal =='.00'?0:$data->disc_plus_normal,
-                                                                'disc_plus_max' => $data->disc_plus_max =='.00'?0:$data->disc_plus_max,
-                                                                'umur_faktur' => number_format($data->umur_faktur),
-                                                                'cabang' => $data->cabang,
+                                                                'produk' => $data->kode_produk,
+                                                                'dealer' => $data->kode_dealer,
+                                                                'cabang' => $data->companyid,
                                                             ])
-                                                        }}"
-                                            >
-                                                <span class="bi bi-pencil"></span>
+                                                        }}" data-bs-toggle="modal" data-bs-target="#delet_model">
+                                                <span class="bi bi-trash"></span>
                                             </button>
                                         </td>
                                     </tr>
@@ -427,14 +395,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Peringatan !</h5>
-
 				<!--begin::Close-->
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="bi bi-x-lg"></i>
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-diskon-produk-hapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.setting-diskon-dealer-hapus') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >
@@ -444,9 +411,9 @@
 						<p class="mt-10 ms-text"></p>
 					</div >
 					<input type="hidden" name="produk" id="produk" value="">
+					<input type="hidden" name="dealer" id="dealer" value="">
 					<input type="hidden" name="cabang" id="cabang" value="">
 				</div>
-
 				<div class="modal-footer">
 					<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-danger">Hapus</button>
@@ -466,9 +433,8 @@
     @push('scripts')
     <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
     <script type="text/javascript">
-            let old ={"cabang": "{{ old('cabang')??''}}"};
             const current_page = "{{ $data_disc->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskonproduk.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

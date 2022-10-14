@@ -1193,18 +1193,16 @@ class ApiService
         return $response;
     }
 
-    // diskon produk daftar
-    public static function DiskonProdukDaftar($companyid, $page, $per_page, $role_id, $search)
+    public static function DiskonProdukDaftar($page, $per_page, $role_id, $search)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk';
         $header = ['Authorization' => $credential];
         $body = [
-            // 'cabang'     => $companyid,
-            'page'          => $page ?? 1,
-            'per_page'      => in_array($per_page, [10, 25, 50, 100]) ? $per_page : 10,
-            'role_id'       => $role_id,
-            'search'        => $search,
+            'page'          => trim($page ?? 1),
+            'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
+            'role_id'       => trim($role_id),
+            'search'        => trim($search),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -1251,18 +1249,65 @@ class ApiService
             'user_id'           => trim($user_id),
         ];
 
-        // dd($body);
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
     public static function DiskonProdukHapus($cabang, $produk)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/hapus';
         $header = ['Authorization' => $credential];
         $body = [
-            'cabang'         => $cabang,
-            'produk'            => $produk,
+            'cabang'         => trim($cabang),
+            'produk'         => trim($produk),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function DiskonDealerDaftar($companyid, $page, $per_page, $role_id, $search)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/diskonproduk/dealer';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'companyid'     => trim($companyid),
+            'page'          => trim($page ?? 1),
+            'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
+            'role_id'       => trim($role_id),
+            'search'        => trim($search),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function DiskonDealerSimpan($produk, $dealer, $keterangan, $companyid, $user_id)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/diskonproduk/dealer/simpan';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'produk'            => trim($produk),
+            'dealer'            => trim($dealer),
+            'keterangan'        => trim($keterangan),
+            'companyid'            => trim($companyid),
+            'user_id'           => trim($user_id),
+        ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function DiskonDealerHapus($produk, $dealer, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/diskonproduk/dealer/hapus';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'produk'            => trim($produk),
+            'dealer'            => trim($dealer),
+            'companyid'            => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
