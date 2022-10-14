@@ -134,10 +134,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         Route::post('/setting/diskonproduk/cekproduk', 'App\Setting\DiskonProdukController@cekDiskonProduk')->middleware('authLogin')->name('setting-validasi-diskon-produk');
 
-        // diskon Dealer
-        Route::get('/setting/diskondealer', 'App\Setting\DiskonDealerController@index')->middleware('authLogin')->name('setting-diskon-dealer');
-        Route::post('/setting/diskondealer/simpan', 'App\Setting\DiskonDealerController@store')->middleware('authLogin')->name('setting-diskon-dealer-simpan');
-        Route::post('/setting/diskondealer/hapus', 'App\Setting\DiskonDealerController@destroy')->middleware('authLogin')->name('setting-diskon-dealer-hapus');
+        // diskon Produk Dealer
+        Route::get('/setting/diskonproduk/dealer', 'App\Setting\DiskonProdukDealerController@index')->middleware('authLogin')->name('setting-diskon-produk-dealer');
+        Route::post('/setting/diskonproduk/dealer/simpan', 'App\Setting\DiskonProdukDealerController@store')->middleware('authLogin')->name('setting-diskon-produk-dealer-simpan');
+        Route::post('/setting/diskonproduk/dealer/hapus', 'App\Setting\DiskonProdukDealerController@destroy')->middleware('authLogin')->name('setting-diskon-produk-dealer-hapus');
     });
 
     Route::name('validasi.')->group(function () {
