@@ -1235,22 +1235,31 @@ class ApiService
 
     public static function DiskonProdukSimpan($cabang, $produk, $disc_normal, $disc_max, $disc_plus_normal, $disc_plus_max, $umur_faktur, $user_id)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'setting/diskonproduk/simpan';
-        $header = ['Authorization' => $credential];
-        $body = [
-            'cabang'            => trim($cabang),
-            'produk'            => trim($produk),
-            'disc_normal'       => trim($disc_normal),
-            'disc_max'          => trim($disc_max),
-            'disc_plus_normal'  => trim($disc_plus_normal),
-            'disc_plus_max'     => trim($disc_plus_max),
-            'umur_faktur'       => trim($umur_faktur),
-            'user_id'           => trim($user_id),
-        ];
 
-        $response = ApiRequest::requestPost($request, $header, $body);
-        return $response;
+        // cek produk pada funsction ValidasiProduk
+        $validasiProduk = ApiService::ValidasiProduk($produk);
+        $validasiProduk = json_decode($validasiProduk)->status;
+
+        if ($validasiProduk == 1) {
+            $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+            $request = 'setting/diskonproduk/simpan';
+            $header = ['Authorization' => $credential];
+            $body = [
+                'cabang'            => trim($cabang),
+                'produk'            => trim($produk),
+                'disc_normal'       => trim($disc_normal),
+                'disc_max'          => trim($disc_max),
+                'disc_plus_normal'  => trim($disc_plus_normal),
+                'disc_plus_max'     => trim($disc_plus_max),
+                'umur_faktur'       => trim($umur_faktur),
+                'user_id'           => trim($user_id),
+            ];
+
+            $response = ApiRequest::requestPost($request, $header, $body);
+            return $response;
+        } else {
+            return json_encode(['status' => 0, 'message' => 'Produk tidak ditemukan']);
+        }
     }
 
     public static function DiskonProdukHapus($cabang, $produk)
@@ -1259,8 +1268,8 @@ class ApiService
         $request = 'setting/diskonproduk/hapus';
         $header = ['Authorization' => $credential];
         $body = [
-            'cabang'         => trim($cabang),
-            'produk'         => trim($produk),
+            'cabang'        => trim($cabang),
+            'produk'        => trim($produk),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -1284,19 +1293,38 @@ class ApiService
 
     public static function DiskonDealerSimpan($produk, $dealer, $keterangan, $companyid, $user_id)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'setting/diskonproduk/dealer/simpan';
-        $header = ['Authorization' => $credential];
-        $body = [
-            'produk'            => trim($produk),
-            'dealer'            => trim($dealer),
-            'keterangan'        => trim($keterangan),
-            'companyid'            => trim($companyid),
-            'user_id'           => trim($user_id),
-        ];
 
-        $response = ApiRequest::requestPost($request, $header, $body);
-        return $response;
+        // cek produk pada funsction ValidasiProduk
+        $validasiProduk = ApiService::ValidasiProduk($produk);
+        $validasiProduk = json_decode($validasiProduk)->status;
+
+        if ($validasiProduk == 1) {
+
+            // cek dealer pada funsction ValidasiDealer
+            $validasiDealer = ApiService::ValidasiDealer($dealer, $companyid);
+            $validasiDealer = json_decode($validasiDealer)->status;
+
+            if ($validasiDealer == 1) {
+
+                $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+                $request = 'setting/diskonproduk/dealer/simpan';
+                $header = ['Authorization' => $credential];
+                $body = [
+                    'produk'        => trim($produk),
+                    'dealer'        => trim($dealer),
+                    'keterangan'    => trim($keterangan),
+                    'companyid'     => trim($companyid),
+                    'user_id'       => trim($user_id),
+                ];
+
+                $response = ApiRequest::requestPost($request, $header, $body);
+                return $response;
+            } else {
+                return json_encode(['status' => 0, 'message' => 'Dealer tidak ditemukan']);
+            }
+        } else {
+            return json_encode(['status' => 0, 'message' => 'Produk tidak ditemukan']);
+        }
     }
 
     public static function DiskonDealerHapus($produk, $dealer, $companyid)

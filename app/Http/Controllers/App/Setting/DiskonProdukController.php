@@ -78,7 +78,6 @@ class DiskonProdukController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
 
         if (in_array(trim($request->get('cabang')), array('RK', 'PC'))) {
