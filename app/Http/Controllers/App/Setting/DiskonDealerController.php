@@ -19,11 +19,11 @@ class DiskonDealerController extends Controller
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
         $responseApi = ApiService::DiskonDealerDaftar(
-            $companyid,
             $request->get('page'),
             $request->get('per_page'),
+            $companyid,
             $role_id,
-            $request->get('search')
+            // $request->get('search')
         );
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -38,58 +38,6 @@ class DiskonDealerController extends Controller
                     'companyid'     => $companyid,
                 ]
             );
-        } else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $user_id = strtoupper(trim($request->session()->get('app_user_id')));
-        $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
-
-        $responseApi = ApiService::DiskonDealerSimpan(
-            trim($request->get('produk')),
-            trim($request->get('dealer')),
-            trim($request->get('keterangan')),
-            trim($companyid),
-            trim($user_id)
-        );
-
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-        if ($statusApi == 1) {
-            return redirect()->back()->with('success', $messageApi);
-        } else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
-    {
-        $responseApi = ApiService::DiskonDealerHapus(
-            trim($request->get('produk')),
-            trim($request->get('dealer')),
-            trim($request->get('cabang'))
-        );
-
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-
-        if ($statusApi == 1) {
-            return redirect()->back()->with('success', $messageApi);
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }

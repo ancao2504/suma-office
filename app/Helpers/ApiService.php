@@ -1275,7 +1275,7 @@ class ApiService
         return $response;
     }
 
-    public static function DiskonDealerDaftar($companyid, $page, $per_page, $role_id, $search)
+    public static function DiskonProdukDealerDaftar($companyid, $page, $per_page, $role_id, $search)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/dealer';
@@ -1291,7 +1291,7 @@ class ApiService
         return $response;
     }
 
-    public static function DiskonDealerSimpan($produk, $dealer, $keterangan, $companyid, $user_id)
+    public static function DiskonProdukDealerSimpan($produk, $dealer, $keterangan, $companyid, $user_id)
     {
 
         // cek produk pada funsction ValidasiProduk
@@ -1327,7 +1327,7 @@ class ApiService
         }
     }
 
-    public static function DiskonDealerHapus($produk, $dealer, $companyid)
+    public static function DiskonProdukDealerHapus($produk, $dealer, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/dealer/hapus';
@@ -1339,5 +1339,49 @@ class ApiService
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
+    }
+
+    public static function DiskonDealerDaftar($companyid, $page, $per_page, $role_id)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/harga/partnetto';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'page'          => trim($page ?? 1),
+            'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
+            'companyid'     => trim($companyid),
+            'role_id'       => trim($role_id),
+            // 'search'        => trim($search),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+
+    public static function DiskonDealerSimpan($kode_part, $status, $harga, $companyid, $user_id)
+    {
+
+        // cek part
+        $validasiPart = ApiService::ValidasiPartNumber($kode_part, $companyid);
+        $validasiPart = json_decode($validasiPart)->status;
+
+        if ($validasiPart == 1) {
+
+            $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+            $request = 'setting/harga/partnetto/simpan';
+            $header = ['Authorization' => $credential];
+            $body = [
+                'part_number'        => trim($kode_part),
+                'status'        => trim($status),
+                'harga'    => trim($harga),
+                'companyid'     => trim($companyid),
+                'user_id'       => trim($user_id),
+            ];
+
+            $response = ApiRequest::requestPost($request, $header, $body);
+            return $response;
+        } else {
+            return json_encode(['status' => 0, 'message' => 'Part Number tidak ditemukan']);
+        }
     }
 }
