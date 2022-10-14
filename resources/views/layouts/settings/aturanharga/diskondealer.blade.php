@@ -71,7 +71,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="companyid" class="form-label required mt-1">Cabang</label>
-                                <input type="text" class="form-control bg-secondary" id="companyid" name="companyid" placeholder="Keterangan" value="{{ $companyid}}" readonly>
+                                <input type="text" class="form-control bg-secondary" id="companyid" name="companyid" placeholder="Keterangan" value="{{$companyid}}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -272,7 +272,7 @@
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
-                            <table id="kt_project_users_table" class="table table-sm table-hover table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
+                            <table id="kt_project_users_table" class="table table-sm table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
                                 <!--begin::Head-->
                                 <thead class="fs-7 text-gray-400 text-uppercase">
                                     <tr>
