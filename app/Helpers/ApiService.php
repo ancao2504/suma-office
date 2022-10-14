@@ -1358,11 +1358,11 @@ class ApiService
     }
 
 
-    public static function DiskonDealerSimpan($kode_part, $status, $harga, $companyid, $user_id)
+    public static function DiskonDealerSimpan($part_number, $status, $harga, $companyid, $user_id)
     {
 
         // cek part
-        $validasiPart = ApiService::ValidasiPartNumber($kode_part, $companyid);
+        $validasiPart = ApiService::ValidasiPartNumber($part_number, $companyid);
         $validasiPart = json_decode($validasiPart)->status;
 
         if ($validasiPart == 1) {
@@ -1371,7 +1371,7 @@ class ApiService
             $request = 'setting/harga/partnetto/simpan';
             $header = ['Authorization' => $credential];
             $body = [
-                'part_number'        => trim($kode_part),
+                'part_number'        => trim($part_number),
                 'status'        => trim($status),
                 'harga'    => trim($harga),
                 'companyid'     => trim($companyid),

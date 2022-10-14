@@ -34,10 +34,39 @@ class DiskonDealerController extends Controller
                 'layouts.settings.aturanharga.diskondealer',
                 [
                     'title_menu'    => 'Diskon Dealer',
-                    'data_disc'     => $data,
+                    'data'     => $data,
                     'companyid'     => $companyid,
                 ]
             );
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
+        }
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeDestroy(Request $request)
+    {
+        $user_id = strtoupper(trim($request->session()->get('app_user_id')));
+        $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
+
+        $responseApi = ApiService::DiskonDealerSimpan(
+            trim($request->get('part_number')),
+            trim($request->get('status')),
+            trim($request->get('harga')),
+            trim($companyid),
+            trim($user_id)
+        );
+
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+        if ($statusApi == 1) {
+            return redirect()->back()->with('success', $messageApi);
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }

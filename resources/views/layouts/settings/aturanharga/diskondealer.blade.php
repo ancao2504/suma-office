@@ -19,12 +19,12 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search">
+                <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search Kode Produk">
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Diskon Dealer</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Diskon Produk</button>
             </div>
             <!--end:Action-->
         </div>
@@ -37,54 +37,56 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Dealer</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon (Part Netto)</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-diskon-produk-dealer-simpan') }}" method="POST">
+            <form action="{{ route('setting.setting-diskon-dealer-simpanhapus') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="produk" class="form-label required mt-1">Produk</label>
-                                <input type="text" class="form-control" id="produk" name="produk" placeholder="Produk" value="{{ old('produk') }}" autocomplete="fasle" oninput="this.value = this.value.toUpperCase()" required>
+                                <label for="part_number" class="form-label required mt-1">Part Number</label>
+                                <input type="text" class="form-control" id="part_number" name="part_number" placeholder="part_number" value="{{ old('part_number') }}" autocomplete="fasle" oninput="this.value = this.value.toUpperCase()" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="nama_produk" class="form-label mt-1">Nama produk</label>
-                                <input type="text" class="form-control bg-secondary" id="nama_produk" name="nama_produk" placeholder="Nama produk" value="{{ old('nama_produk') }}" readonly>
+                                <label for="nama_part" class="form-label mt-1">Nama Part</label>
+                                <input type="text" class="form-control bg-secondary" id="nama_part" name="nama_part" placeholder="Nama part" value="{{ old('nama_part') }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="dealer" class="form-label required mt-1">Kode Dealer</label>
-                                <input type="text" class="form-control" id="dealer" name="dealer" placeholder="Kode Dealer" value="{{ old('dealer')??'' }}" oninput="this.value = this.value.toUpperCase()" required>
+                                <label for="status" class="form-label mt-1">Status</label>
+                                <select class="form-select" name="status" id="status" required>
+                                    <option value="">Pilih Status</option>
+                                    <option value="Y">IYA</option>
+                                    <option value="T">TIDAK</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="nama_dealer" class="form-label mt-1">Nama Dealer</label>
-                                <input type="text" class="form-control bg-secondary" id="nama_dealer" name="nama_dealer" placeholder="Nama dealer" value="{{ old('nama_dealer') }}" readonly>
+                                <label for="harga" class="form-label required mt-1">Harga</label>
+                                <input type="text" class="form-control" id="harga" name="harga" placeholder="harga" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('harga')??'0' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="companyid" class="form-label required mt-1">Cabang</label>
-                                <input type="text" class="form-control bg-secondary" id="companyid" name="companyid" placeholder="Keterangan" value="{{$companyid}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="keterangan" class="form-label required mt-1">Keterangan</label>
-                                <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan" value="{{ old('keterangan')??'' }}" required>
+                                <label for="cabang" class="form-label mt-1">Cabang</label>
+                                <select class="form-select" name="cabang" id="cabang" required>
+                                    <option value="">Pilih Cabang</option>
+                                    <option value="PC">PC</option>
+                                    <option value="RK">RK</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -95,7 +97,7 @@
 <div class="d-flex flex-wrap flex-stack pb-7" data-select2-id="select2-data-131-enac">
     <!--begin::Title-->
     <div class="d-flex flex-wrap align-items-center my-1">
-        <h3 class="fw-bolder me-5 my-1">{{ $data_disc->total }} Data Diskon Dealer
+        <h3 class="fw-bolder me-5 my-1">{{ $dta->total }} Data Diskon Dealer (Part Netto)
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
@@ -103,7 +105,7 @@
     <div class="d-flex flex-wrap my-1">
         <!--begin::Tab nav-->
         <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-            {{-- <li class="nav-item m-0">
+            <li class="nav-item m-0">
                 <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary me-3" data-bs-toggle="tab" href="#kt_project_users_card_pane">
                     <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -118,7 +120,7 @@
                     </span>
                     <!--end::Svg Icon-->
                 </a>
-            </li> --}}
+            </li>
             <li class="nav-item m-0">
                 <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
                     <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
@@ -143,10 +145,10 @@
 
 <div class="tab-content">
     <!--begin::Tab pane-->
-    {{-- <div id="kt_project_users_card_pane" class="tab-pane fade">
+    <div id="kt_project_users_card_pane" class="tab-pane fade">
         <!--begin::Row-->
         <div class="row g-3" id="dataDiskon">
-        @foreach ( $data_disc->data as $data)
+        @foreach ( $data->data as $dta)
             <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                 <!--begin::Card-->
                 <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
@@ -154,22 +156,26 @@
                     <div class="d-flex flex-column py-2 w-100">
                         <!--begin::Owner-->
                         <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
-                            <span class="text-gray-800">{{ $data->kode_produk }}</span>
-                            <span class="text-muted fs-6 fw-bold ms-2">{{ $data->nama_produk }}</span>
+                            <span class="text-gray-800">{{ $dta->kode_produk }}</span>
+                            <span class="text-muted fs-6 fw-bold ms-2">{{ $dta->nama_produk }}</span>
                         </div>
                         <!--end::Owner-->
                         <div class="d-flex align-items-center w-100">
+                            {{-- <div class="card w-100">
+                                <div class="fw-bolder">Cabang : {{ $dta->cabang }}</div>
+                                <div class="fs-6 fw-bold text-gray-400">Cabang : {{ $dta->cabang }}</div>
+                            </div> --}}
                             <table class="table table-borderless table-sm">
                                 <tbody>
                                     <tr>
                                         <td class="fw-bolder">Cabang</td>
                                         <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-primary fw-bolder fs-6">{{ $data->cabang }}</span></td>
+                                        <td><span class="badge badge-light-primary fw-bolder fs-6">{{ $dta->cabang }}</span></td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bolder">Umur Faktur</td>
                                         <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-info fw-bolder fs-6">{{ number_format($data->umur_faktur) }}</span></td>
+                                        <td><span class="badge badge-light-info fw-bolder fs-6">{{ number_format($dta->umur_faktur) }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -187,13 +193,13 @@
                                 <tbody class="p-3">
                                     <tr>
                                         <td class="fw-bolder">Disc</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $data->disc_normal == '.00'? '0' : $data->disc_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $data->disc_max == '.00'? '0' : $data->disc_max }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $dta->disc_normal == '.00'? '0' : $dta->disc_normal }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $dta->disc_max == '.00'? '0' : $dta->disc_max }}</span></td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bolder">Disc +</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $data->disc_plus_normal == '.00'? '0' : $data->disc_plus_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $data->disc_plus_max == '.00'? '0' : $data->disc_plus_max }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $dta->disc_plus_normal == '.00'? '0' : $dta->disc_plus_normal }}</span></td>
+                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $dta->disc_plus_max == '.00'? '0' : $dta->disc_plus_max }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -203,18 +209,14 @@
                     <!--end::Info-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}">Delete</button>
+                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $dta->kode_produk }}" data-c="{{ $dta->cabang }}">Delete</button>
                         <button class="btn btn-sm btn-light btn-light-warning btn-edit"
                         data-array="{{
                                     json_encode([
-                                        'kode_produk' => $data->kode_produk,
-                                        'nama_produk' => $data->nama_produk,
-                                        'disc_normal' => $data->disc_normal == '.00' ? 0 : $data->disc_normal,
-                                        'disc_max' => $data->disc_max == '.00' ? 0 : $data->disc_max,
-                                        'disc_plus_normal' => $data->disc_plus_normal == '.00' ? 0 : $data->disc_plus_normal,
-                                        'disc_plus_max' => $data->disc_plus_max == '.00' ? 0 : $data->disc_plus_max,
-                                        'umur_faktur' => number_format($data->umur_faktur),
-                                        'cabang' => $data->cabang,
+                                        'kode_produk' => $dta->kode_produk,
+                                        'status' => $dta->status,
+                                        'harga' => $dta->harga,
+                                        'cabang' => $dta->cabang,
                                     ])
                                 }}">
                         Edit</button>
@@ -229,29 +231,29 @@
         <!--end::Row-->
         <!--begin::Pagination-->
         <div class="d-flex flex-stack flex-wrap pt-10">
-            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_disc->from }} to {{ $data_disc->to }} of {{ $data_disc->total }} entries</div>
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data->from }} to {{ $data->to }} of {{ $data->total }} entries</div>
             <!--begin::Pages-->
             <ul class="pagination">
-                @foreach ($data_disc->links as $data)
-                    @if (strpos($data->label, 'Next') !== false)
-                        <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
+                @foreach ($data->links as $dta)
+                    @if (strpos($dta->label, 'Next') !== false)
+                        <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
+                            <a href="#" data-page="{{ (string)((int)($data->current_page) + 1) }}" class="page-link">
                                 <i class="next"></i>
                             </a>
                         </li>
-                    @elseif (strpos($data->label, 'Previous') !== false)
-                        <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
+                    @elseif (strpos($dta->label, 'Previous') !== false)
+                        <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
+                            <a href="#" data-page="{{ (string)((int)($data->current_page) - 1) }}" class="page-link">
                                 <i class="previous"></i>
                             </a>
                         </li>
-                    @elseif ($data->active == true)
-                        <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                    @elseif ($dta->active == true)
+                        <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
+                            <a href="#" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
                         </li>
-                    @elseif ($data->active == false)
-                        <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                    @elseif ($dta->active == false)
+                        <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
+                            <a href="#" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
                         </li>
                     @endif
                 @endforeach
@@ -259,7 +261,7 @@
             <!--end::Pages-->
         </div>
         <!--end::Pagination-->
-    </div> --}}
+    </div>
     <!--end::Tab pane-->
     <!--begin::Tab pane-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
@@ -277,55 +279,43 @@
                                 <thead class="fs-7 text-gray-400 text-uppercase">
                                     <tr>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Kode Produk</th>
-                                        <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Produk</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Kode Dealer</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Cabang</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Diskon</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Keterangan</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">User Time</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Part Number</th>
+                                        <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Status (TPC20)</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Harga</th>
                                         <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
                                 <!--begin::Body-->
                                 <tbody class="fs-6">
-                                    @foreach ( $data_disc->data as $data)
+                                    @foreach ( $data->data as $dta)
                                     <tr class="odd">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            {{ $data->kode_produk }}
+                                            {{ $dta->kode_produk }}
                                         </td>
                                         <td>
-                                            {{ $data->nama_produk }}
+                                            {{ $dta->nama_produk }}
                                         </td>
                                         <td>
-                                            {{ $data->kode_dealer }}
+                                            {{ $dta->nama_produk }}
                                         </td>
                                         <td>
-                                            {{ $data->companyid }}
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc == '.00' ? '0' : $data->disc }}</span>
-                                        </td>
-                                        <td>
-                                                {{ $data->keterangan}}
-                                        </td>
-                                        <td>
-                                            {{
-                                                substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1) .'/'. date('d/M/Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
-                                            }}
-                                            {{-- . '/' . substr($data->usertime,strpos($data->usertime,"=")+1,12) --}}
+                                            <span class="badge badge-light-info fw-bolder fs-5">{{ number_format($dta->umur_faktur) }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-array="{{
+                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit"
+                                            data-array="{{
                                                             json_encode([
-                                                                'produk' => $data->kode_produk,
-                                                                'dealer' => $data->kode_dealer,
-                                                                'cabang' => $data->companyid,
+                                                                    'kode_produk' => $dta->kode_produk,
+                                                                    'status' => $dta->status,
+                                                                    'harga' => $dta->harga,
+                                                                    'cabang' => $dta->cabang,
                                                             ])
-                                                        }}" data-bs-toggle="modal" data-bs-target="#delet_model">
-                                                <span class="bi bi-trash"></span>
+                                                        }}"
+                                            >
+                                                <span class="bi bi-pencil"></span>
                                             </button>
                                         </td>
                                     </tr>
@@ -350,26 +340,26 @@
                             <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
                                 <div class="dataTables_paginate paging_simple_numbers" id="kt_project_users_table_paginate">
                                     <ul class="pagination">
-                                        @foreach ($data_disc->links as $data)
-                                            @if (strpos($data->label, 'Next') !== false)
-                                                <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
+                                        @foreach ($data->links as $dta)
+                                            @if (strpos($dta->label, 'Next') !== false)
+                                                <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
+                                                    <a href="#" data-page="{{ (string)((int)($data->current_page) + 1) }}" class="page-link">
                                                         <i class="next"></i>
                                                     </a>
                                                 </li>
-                                            @elseif (strpos($data->label, 'Previous') !== false)
-                                                <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
+                                            @elseif (strpos($dta->label, 'Previous') !== false)
+                                                <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
+                                                    <a href="#" data-page="{{ (string)((int)($data->current_page) - 1) }}" class="page-link">
                                                         <i class="previous"></i>
                                                     </a>
                                                 </li>
-                                            @elseif ($data->active == true)
-                                                <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                                            @elseif ($dta->active == true)
+                                                <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
+                                                    <a href="#" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
                                                 </li>
-                                            @elseif ($data->active == false)
-                                                <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                                            @elseif ($dta->active == false)
+                                                <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
+                                                    <a href="#" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
                                                 </li>
                                             @endif
                                         @endforeach
@@ -395,13 +385,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Peringatan !</h5>
+
 				<!--begin::Close-->
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="bi bi-x-lg"></i>
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-diskon-produk-dealer-hapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.setting-diskon-dealer-simpanhapus') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >
@@ -410,10 +401,11 @@
 						<!--end::Icon-->
 						<p class="mt-10 ms-text"></p>
 					</div >
-					<input type="hidden" name="produk" id="produk" value="">
-					<input type="hidden" name="dealer" id="dealer" value="">
-					<input type="hidden" name="cabang" id="cabang" value="">
+					<input type="hidden" name="part_number" id="part_number" value="">
+					<input type="hidden" name="status" id="status" value="">
+					<input type="hidden" name="harga" id="harga" value="">
 				</div>
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-danger">Hapus</button>
@@ -435,6 +427,6 @@
     <script type="text/javascript">
             const current_page = "{{ $data_disc->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskonprodukdealer.js') }}?v={{ time() }}"></script>
+    {{-- <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskonproduk.js') }}?v={{ time() }}"></script> --}}
     @endpush
 @endsection
