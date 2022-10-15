@@ -138,7 +138,7 @@
     </div>
     <!--end::Controls-->
 </div>
-{{-- asdasdasdasd --}}
+
 <div class="tab-content">
     <!--begin::Tab pane-->
     <div id="kt_project_users_card_pane" class="tab-pane fade">
