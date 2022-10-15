@@ -374,6 +374,9 @@
     @push('scripts')
     <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
     <script type="text/javascript">
+    let old = {
+        "status": "{{ old('status') }}",
+    }
             const current_page = "{{ $data->current_page }}"
     </script>
     <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>

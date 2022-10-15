@@ -58,7 +58,7 @@ class DiskonDealerController extends Controller
         $responseApi = ApiService::DiskonDealerSimpan(
             trim($request->get('part_number')),
             trim($request->get('status')),
-            trim($request->get('harga')),
+            trim(str_replace('.', '', $request->get('harga'))),
             trim($companyid),
             trim($user_id)
         );
