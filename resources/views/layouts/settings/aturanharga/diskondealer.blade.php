@@ -147,7 +147,7 @@
         @foreach ( $data->data as $dta)
             <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                 <!--begin::Card-->
-                <div class="card card-dashed h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
                     <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
                     <!--begin::Info-->
                     <div class="d-flex flex-column py-2">
