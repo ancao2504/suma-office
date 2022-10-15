@@ -23,6 +23,7 @@ $(document).ready(function () {
     });
     // end form
 
+    // agar tombol menu aktif
     function viewCard() {
         $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a')[0].click();
         $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a').removeClass('active');
@@ -31,6 +32,7 @@ $(document).ready(function () {
         $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a')[0].click();
         $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a').removeClass('active');
     }
+    // end tombol menu aktif
 
     // pagination,search,per_page
     const params = new URLSearchParams(window.location.search)

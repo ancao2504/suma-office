@@ -128,7 +128,7 @@ $(document).ready(function () {
     $('#filterSearch').val(search);
     $('#filterSearch').on('change keydown', function (e) {
         if (e.keyCode == 13 || e.type == 'change') {
-            gantiUrl(1, menuview);
+            gantiUrl(1);
         }
     });
     // end search
@@ -136,7 +136,7 @@ $(document).ready(function () {
     // per_page
     $('#kt_project_users_table_length > label > select > option[value="' + per_page + '"]').prop('selected', true);
     $('#kt_project_users_table_length > label > select').on('change', function () {
-        gantiUrl(1, 'table');
+        gantiUrl(1);
     });
     // end per_page
 
