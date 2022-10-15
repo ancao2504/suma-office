@@ -312,8 +312,13 @@
                                                 {{ $data->keterangan}}
                                         </td>
                                         <td>
+                                            <span class="badge badge-info">
+                                                {{ 
+                                                    substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1) 
+                                                }}
+                                            </span><br>
                                             {{
-                                                substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1) .'/'. date('d/M/Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
+                                                date('d:M:Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
                                             }}
                                             {{-- . '/' . substr($data->usertime,strpos($data->usertime,"=")+1,12) --}}
                                         </td>

@@ -37,7 +37,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon (Part Netto)</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Dealer (Part Netto)</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('setting.setting-diskon-dealer-simpanhapus') }}" method="POST">
@@ -47,12 +47,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="part_number" class="form-label required mt-1">Part Number</label>
-                                <input type="text" class="form-control" id="part_number" name="part_number" placeholder="part_number" value="{{ old('part_number') }}" autocomplete="fasle" oninput="this.value = this.value.toUpperCase()" required>
+                                <input type="text" class="form-control" id="part_number" name="part_number" placeholder="Part number" value="{{ old('part_number') }}" autocomplete="fasle" oninput="this.value = this.value.toUpperCase()" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="nama_part" class="form-label mt-1">Nama Part</label>
+                                <label for="nama_part" class="form-label mt-1">Deskripsi Part</label>
                                 <input type="text" class="form-control bg-secondary" id="nama_part" name="nama_part" placeholder="Nama part" value="{{ old('nama_part') }}" readonly>
                             </div>
                         </div>
@@ -75,11 +75,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="cabang" class="form-label mt-1">Cabang</label>
-                                <select class="form-select" name="cabang" id="cabang" required>
-                                    <option value="">Pilih Cabang</option>
-                                    <option value="PC">PC</option>
-                                    <option value="RK">RK</option>
-                                </select>
+                                <input type="text" class="form-control" id="cabang" name="cabang" placeholder="cabang" value="{{ $companyid }}" disabled>
                             </div>
                         </div>
                     </div>
@@ -97,7 +93,7 @@
 <div class="d-flex flex-wrap flex-stack pb-7" data-select2-id="select2-data-131-enac">
     <!--begin::Title-->
     <div class="d-flex flex-wrap align-items-center my-1">
-        <h3 class="fw-bolder me-5 my-1">{{ $dta->total }} Data Diskon Dealer (Part Netto)
+        <h3 class="fw-bolder me-5 my-1">{{ $data->total }} Data Diskon Dealer (Part Netto)
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
@@ -151,75 +147,35 @@
         @foreach ( $data->data as $dta)
             <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                 <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                <div class="card card-dashed h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                    <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
                     <!--begin::Info-->
-                    <div class="d-flex flex-column py-2 w-100">
+                    <div class="d-flex flex-column py-2">
                         <!--begin::Owner-->
-                        <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
-                            <span class="text-gray-800">{{ $dta->kode_produk }}</span>
-                            <span class="text-muted fs-6 fw-bold ms-2">{{ $dta->nama_produk }}</span>
-                        </div>
+                        {{-- <div class="d-flex align-items-center fs-4 fw-bolder mb-5">Jhon Larson</div> --}}
                         <!--end::Owner-->
-                        <div class="d-flex align-items-center w-100">
-                            {{-- <div class="card w-100">
-                                <div class="fw-bolder">Cabang : {{ $dta->cabang }}</div>
-                                <div class="fs-6 fw-bold text-gray-400">Cabang : {{ $dta->cabang }}</div>
-                            </div> --}}
-                            <table class="table table-borderless table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td class="fw-bolder">Cabang</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-primary fw-bolder fs-6">{{ $dta->cabang }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Umur Faktur</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-info fw-bolder fs-6">{{ number_format($dta->umur_faktur) }}</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                         <!--begin::Wrapper-->
-                        <div class="d-flex align-items-center w-100">
-                            <table class="table table-borderless table-sm tb-card">
-                                <thead class="p-3">
-                                    <tr>
-                                        <th class="fw-bolder">#</th>
-                                        <th class="fw-bolder">Normal</th>
-                                        <th class="fw-bolder">Max</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="p-3">
-                                    <tr>
-                                        <td class="fw-bolder">Disc</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $dta->disc_normal == '.00'? '0' : $dta->disc_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $dta->disc_max == '.00'? '0' : $dta->disc_max }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Disc +</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $dta->disc_plus_normal == '.00'? '0' : $dta->disc_plus_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $dta->disc_plus_max == '.00'? '0' : $dta->disc_plus_max }}</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="d-flex align-items-center">
+                            <!--begin::Icon-->
+                            <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4">
+                            <!--end::Icon-->
+                            <!--begin::Details-->
+                            <div>
+                                <div class="fs-4 fw-bolder">{{ $dta->part_number }}</div>
+                                <div class="fs-6 fw-bold text-gray-400">{{ $dta->keterangan }}</div>
+                            </div>
+                            <!--end::Details-->
                         </div>
                         <!--end::Wrapper-->
                     </div>
                     <!--end::Info-->
                     <!--begin::Actions-->
-                    <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $dta->kode_produk }}" data-c="{{ $dta->cabang }}">Delete</button>
-                        <button class="btn btn-sm btn-light btn-light-warning btn-edit"
-                        data-array="{{
-                                    json_encode([
-                                        'kode_produk' => $dta->kode_produk,
-                                        'status' => $dta->status,
-                                        'harga' => $dta->harga,
-                                        'cabang' => $dta->cabang,
-                                    ])
-                                }}">
-                        Edit</button>
+                    <div class="d-flex align-items-center py-2">
+                        <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
+                        data-array = "{{ json_encode($dta) }}"
+                        >
+                            Delete
+                        </button>
                     </div>
                     <!--end::Actions-->
                 </div>
@@ -281,7 +237,7 @@
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Part Number</th>
                                         <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Status (TPC20)</th>
+                                        {{-- <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Status (TPC20)</th> --}}
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Harga</th>
                                         <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
                                     </tr>
@@ -293,29 +249,22 @@
                                     <tr class="odd">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            {{ $dta->kode_produk }}
+                                            {{ $dta->part_number }}
                                         </td>
                                         <td>
-                                            {{ $dta->nama_produk }}
+                                            {{ $dta->keterangan }}
                                         </td>
+                                        {{-- <td>
+                                            {{ $dta->tpc20 == "Y" ? "IYA" : "Tidak" }}
+                                        </td> --}}
                                         <td>
-                                            {{ $dta->nama_produk }}
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-light-info fw-bolder fs-5">{{ number_format($dta->umur_faktur) }}</span>
+                                            <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga) }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit"
-                                            data-array="{{
-                                                            json_encode([
-                                                                    'kode_produk' => $dta->kode_produk,
-                                                                    'status' => $dta->status,
-                                                                    'harga' => $dta->harga,
-                                                                    'cabang' => $dta->cabang,
-                                                            ])
-                                                        }}"
-                                            >
-                                                <span class="bi bi-pencil"></span>
+                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" 
+                                            data-array = "{{ json_encode($dta) }}"
+                                            data-bs-toggle="modal" data-bs-target="#delet_model">
+                                                <span class="bi bi-trash"></span>
                                             </button>
                                         </td>
                                     </tr>
@@ -425,8 +374,8 @@
     @push('scripts')
     <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
     <script type="text/javascript">
-            const current_page = "{{ $data_disc->current_page }}"
+            const current_page = "{{ $data->current_page }}"
     </script>
-    {{-- <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskonproduk.js') }}?v={{ time() }}"></script> --}}
+    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

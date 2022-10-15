@@ -19,11 +19,11 @@ class DiskonDealerController extends Controller
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
         $responseApi = ApiService::DiskonDealerDaftar(
+            $companyid,
             $request->get('page'),
             $request->get('per_page'),
-            $companyid,
             $role_id,
-            // $request->get('search')
+            $request->get('search')
         );
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

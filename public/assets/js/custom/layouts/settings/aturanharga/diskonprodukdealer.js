@@ -6,6 +6,7 @@ $(document).ready(function () {
         var search = params.get('search');
         var per_page = params.get('per_page');
         var page = params.get('page');
+        var menuview = params.get('data');
     }
     //  end search di url
 
@@ -127,7 +128,7 @@ $(document).ready(function () {
     $('#filterSearch').val(search);
     $('#filterSearch').on('change keydown', function (e) {
         if (e.keyCode == 13 || e.type == 'change') {
-            gantiUrl(1);
+            gantiUrl(1, menuview);
         }
     });
     // end search
@@ -135,7 +136,7 @@ $(document).ready(function () {
     // per_page
     $('#kt_project_users_table_length > label > select > option[value="' + per_page + '"]').prop('selected', true);
     $('#kt_project_users_table_length > label > select').on('change', function () {
-        gantiUrl(1);
+        gantiUrl(1, 'table');
     });
     // end per_page
 

@@ -1341,7 +1341,7 @@ class ApiService
         return $response;
     }
 
-    public static function DiskonDealerDaftar($companyid, $page, $per_page, $role_id)
+    public static function DiskonDealerDaftar($companyid, $page, $per_page, $role_id, $search)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/harga/partnetto';
@@ -1351,7 +1351,7 @@ class ApiService
             'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
             'companyid'     => trim($companyid),
             'role_id'       => trim($role_id),
-            // 'search'        => trim($search),
+            'search'        => trim($search),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -1360,7 +1360,6 @@ class ApiService
 
     public static function DiskonDealerSimpan($part_number, $status, $harga, $companyid, $user_id)
     {
-
         // cek part
         $validasiPart = ApiService::ValidasiPartNumber($part_number, $companyid);
         $validasiPart = json_decode($validasiPart)->status;
