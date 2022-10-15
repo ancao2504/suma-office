@@ -69,7 +69,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="harga" class="form-label required mt-1">Harga</label>
-                                <input type="text" class="form-control" id="harga" name="harga" placeholder="harga" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('harga')??'0' }}" required>
+                                <input type="text" class="form-control" id="harga" name="harga" placeholder="Harga" oninput="this.value=this.value.replace(/[^0-9\.]/g,'');" value="{{ old('harga')??'' }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
