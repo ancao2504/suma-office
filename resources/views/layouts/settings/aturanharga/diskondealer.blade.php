@@ -143,8 +143,6 @@
     <!--begin::Tab pane-->
     <div id="kt_project_users_card_pane" class="tab-pane fade">
         <!--begin::Row-->
-        
-        {{-- coba perubahan --}}
         <div class="row g-3" id="dataDiskon">
         @foreach ( $data->data as $dta)
             <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
