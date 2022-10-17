@@ -368,8 +368,6 @@
     
     {{-- <div id="dataLoadDiskon"></div> --}}
 
-    @include('layouts.option.optiontipemotor')
-
     @push('scripts')
     <script type="text/javascript">
     let old = {

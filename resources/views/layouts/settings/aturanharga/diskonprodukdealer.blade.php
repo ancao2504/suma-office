@@ -433,8 +433,6 @@
     
     {{-- <div id="dataLoadDiskon"></div> --}}
 
-    @include('layouts.option.optiontipemotor')
-
     @push('scripts')
     <script type="text/javascript">
             const current_page = "{{ $data_disc->current_page }}"
