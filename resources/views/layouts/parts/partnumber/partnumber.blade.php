@@ -130,6 +130,28 @@
                     </div>
                     <div class="modal-body">
                         <div class="fv-row">
+                            <label class="form-label">Level:</label>
+                            <select id="selectFilterGroupLevel" name="group_level" class="form-select" data-dropdown-parent="#modalFilter"
+                                data-placeholder="Semua Level Produk" data-allow-clear="true">
+                                <option value="" @if($kode_level != 'HANDLE' && $kode_level != 'HON_HANDLE' && $kode_level != 'TUBE' && $kode_level != 'OLI') selected @endif>Semua Level Produk</option>
+                                <option value="HANDLE" @if($kode_level == 'HANDLE') selected @endif>Handle</option>
+                                <option value="NON_HANDLE" @if($kode_level == 'NON_HANDLE') selected @endif>Non-Handle</option>
+                                <option value="TUBE" @if($kode_level == 'TUBE') selected @endif>Tube</option>
+                                <option value="OLI" @if($kode_level == 'OLI') selected @endif>Oli</option>
+                            </select>
+                        </div>
+                        <div class="fv-row mt-8">
+                            <label class="form-label">Produk:</label>
+                            <div class="input-group">
+                                <input id="inputFilterKodeProduk" name="group_produk" type="search" class="form-control" placeholder="Semua Produk" readonly
+                                    @if(isset($kode_produk)) value="{{ $kode_produk }}" @else value="{{ old('produk') }}"@endif>
+                                <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
+                                    data-toggle="modal" data-target="#produkSearchModalForm">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="fv-row mt-8">
                             <label class="form-label">Tipe Motor:</label>
                             <div class="input-group">
                                 <input id="inputFilterTipeMotor" name="tipe_motor" type="search" class="form-control" placeholder="Semua Tipe Motor" readonly
@@ -139,50 +161,6 @@
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
-                        </div>
-                        <div class="fv-row mt-8">
-                            <label class="form-label">Produk:</label>
-                            <select id="selectFilterGroupProduk" name="group_produk" class="form-select" data-control="select2" data-dropdown-parent="#modalFilter"
-                                data-placeholder="Semua Produk" data-allow-clear="true">
-                                <option value="">Semua Produk</option>
-                                @foreach ($group_produk as $list)
-                                <option value="{{ trim($list->kode_produk) }}"
-                                    @if(old('kode_produk') != "")
-                                        @if(trim($list->kode_produk) == old('kode_produk'))
-                                            {{"selected"}}
-                                        @endif
-                                    @else
-                                        @if(@isset($kode_produk))
-                                            @if($kode_produk == trim($list->kode_produk))
-                                                {{"selected"}}
-                                            @endif
-                                        @endif
-                                    @endif>{{ $list->keterangan }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="fv-row mt-8">
-                            <label class="form-label">Level:</label>
-                            <select id="selectFilterGroupLevel" name="group_level" class="form-select" data-control="select2" data-dropdown-parent="#modalFilter"
-                                data-placeholder="Semua Level Produk" data-allow-clear="true">
-                                <option value="">Semua Level Produk</option>
-                                @foreach ($group_level as $list)
-                                <option value="{{ trim($list->level) }}"
-                                    @if(old('kode_level') != "")
-                                        @if($list->level == old('kode_level'))
-                                            {{"selected"}}
-                                        @endif
-                                    @else
-                                        @if(@isset($kode_level))
-                                            @if(trim($kode_level) == trim($list->level))
-                                                {{"selected"}}
-                                            @endif
-                                        @endif
-                                    @endif>{{ trim($list->level) }}
-                                </option>
-                                @endforeach
-                            </select>
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label">Part Number:</label>
@@ -203,6 +181,7 @@
     </div>
 
     @include('layouts.option.optiontipemotor')
+    @include('layouts.option.optiongroupproduk')
 
     @push('scripts')
     <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
@@ -306,12 +285,28 @@
                 e.preventDefault();
 
                 $('#inputFilterTipeMotor').val('{{ $tipe_motor }}');
-                $("#selectFilterGroupProduk").val('{{ $kode_produk }}').trigger("change");
                 $("#selectFilterGroupLevel").val('{{ $kode_level }}').trigger("change");
+                $('#inputFilterKodeProduk').val('{{ $kode_produk }}');
                 $('#inputFilterPartNumber').val('{{ $part_number }}');
 
                 $('#modalFilter').modal('show');
             });
+
+            $('#btnFilterProduk').on('click', function(e) {
+                e.preventDefault();
+
+                var selectFilterGroupLevel = $('#selectFilterGroupLevel').val();
+                loadDataProduk(1, 10, '', selectFilterGroupLevel);
+                $('#searchProdukForm').trigger('reset');
+                $('#produkSearchModal').modal('show');
+            });
+
+            $('body').on('click', '#produkContentModal #selectProduk', function(e) {
+                e.preventDefault();
+                $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
+                $('#produkSearchModal').modal('hide');
+            });
+
 
             $('#btnFilterPilihTipeMotor').on('click', function(e) {
                 e.preventDefault();
