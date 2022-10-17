@@ -84,7 +84,6 @@
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
-
                     </div>
                     <div class="fv-row mt-8">
                         <label class="form-label">Jenis Marketing:</label>
@@ -104,7 +103,6 @@
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -132,7 +130,6 @@
 <script type="text/javascript">
     window.onload = function() {
         var marketing = '{{$jenis_mkr}}';
-        var levelProduk = '{{$level_produk}}';
 
         getJenisMkr(marketing);
     }
@@ -157,11 +154,6 @@
             $("#btnFilterMarketing").prop("disabled", true);
         }
     }
-
-    $('#selectFilterJenisMkr').change(function(){
-        var selectFilterJenisMkr = $('#selectFilterJenisMkr').val();
-        getJenisMkr(selectFilterJenisMkr);
-    });
 
     $(document).ready(function() {
         $('#btnFilter').on('click', function(e) {
@@ -195,9 +187,12 @@
             $('#produkSearchModal').modal('hide');
         });
 
+        $('#selectFilterLevelProduk').change(function(){
+            $('#inputFilterKodeProduk').val('');
+        });
+
         $('#btnFilterMarketing').on('click', function(e) {
             e.preventDefault();
-
             var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
 
             if(jenis_mkr == "SALESMAN") {
@@ -221,6 +216,12 @@
             e.preventDefault();
             $('#inputFilterKodeMkr').val($(this).data('kode_spv'));
             $('#supervisorSearchModal').modal('hide');
+        });
+
+        $('#selectFilterJenisMkr').change(function(){
+            var selectFilterJenisMkr = $('#selectFilterJenisMkr').val();
+            getJenisMkr(selectFilterJenisMkr);
+            $('#inputFilterKodeMkr').val('');
         });
     });
 

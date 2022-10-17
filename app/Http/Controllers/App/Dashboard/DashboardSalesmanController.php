@@ -21,8 +21,8 @@ class DashboardSalesmanController extends Controller
             $month = $request->get('month');
         }
 
-        $responseApi = ApiService::DashboardSalesmanPenjualanBulanan($year, $month, $request->get('role_salesman'),
-                $request->get('kode_sales_spv'), strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = ApiService::DashboardSalesmanPenjualanBulanan($year, $month, $request->get('jenis_mkr'),
+                $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_id'))),
                 strtoupper(trim($request->session()->get('app_user_role_id'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -31,8 +31,8 @@ class DashboardSalesmanController extends Controller
         if($statusApi == 1) {
             $dataSalesMonth = json_decode($responseApi)->data;
 
-            $responseApi = ApiService::DashboardSalesmanPenjualanHarian($year, $month, $request->get('role_salesman'),
-                            $request->get('kode_sales_spv'), strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
+            $responseApi = ApiService::DashboardSalesmanPenjualanHarian($year, $month, $request->get('jenis_mkr'),
+                            $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
             if($statusApi == 1) {
@@ -50,8 +50,8 @@ class DashboardSalesmanController extends Controller
                     'month'                             => $dataSalesMonth->month,
                     'year'                              => $dataSalesMonth->year,
                     'role_id'                           => $dataSalesMonth->role_id,
-                    'role_salesman'                     => $dataSalesMonth->role_salesman,
-                    'kode_sales_spv'                    => $dataSalesMonth->kode_sales_spv,
+                    'jenis_mkr'                         => $dataSalesMonth->jenis_mkr,
+                    'kode_mkr'                          => $dataSalesMonth->kode_mkr,
                     'target_amount_total'               => (double)$dataSalesMonth->target_amount_total,
                     'target_amount_keterangan'          => $dataSalesMonth->target_amount_keterangan,
                     'target_amount_prosentase'          => (double)$dataSalesMonth->target_amount_prosentase,

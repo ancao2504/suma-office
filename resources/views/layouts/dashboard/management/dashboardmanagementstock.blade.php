@@ -2,161 +2,191 @@
 @section('title','Home')
 @section('subtitle','Dashboard')
 @section('container')
-    <form id="formDashboardManagementStock" action="{{ route('dashboard.dashboard-management-stock') }}" method="get">
-        <div class="card card-flush">
-            <div class="card-header align-items-center border-0 mt-4 mb-4">
-                <h3 class="card-title align-items-start flex-column">
-                    <span class="fw-bolder mb-2 text-dark">Management Stock</span>
-                    <span class="text-muted fw-bold fs-7">Dashboard Management Stock
-                        @if($month == 1) Januari
-                        @elseif($month == 2) Februari
-                        @elseif($month == 3) Maret
-                        @elseif($month == 4) April
-                        @elseif($month == 5) Mei
-                        @elseif($month == 6) Juni
-                        @elseif($month == 7) Juli
-                        @elseif($month == 8) Agustus
-                        @elseif($month == 9) September
-                        @elseif($month == 10) Oktober
-                        @elseif($month == 11) November
-                        @elseif($month == 12) Desember
-                        @endif {{ $year }}
-                    </span>
-                </h3>
-                <div class="card-toolbar">
-                    <button class="btn btn-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                        <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
-                    </button>
+    <div class="card card-flush">
+        <div class="card-header align-items-center border-0 mt-4 mb-4">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="fw-bolder mb-2 text-dark">Management Stock</span>
+                <span class="text-muted fw-bold fs-7">Dashboard Management Stock
+                    @if($month == 1) Januari
+                    @elseif($month == 2) Februari
+                    @elseif($month == 3) Maret
+                    @elseif($month == 4) April
+                    @elseif($month == 5) Mei
+                    @elseif($month == 6) Juni
+                    @elseif($month == 7) Juli
+                    @elseif($month == 8) Agustus
+                    @elseif($month == 9) September
+                    @elseif($month == 10) Oktober
+                    @elseif($month == 11) November
+                    @elseif($month == 12) Desember
+                    @endif {{ $year }}
+                </span>
+            </h3>
+            <div class="card-toolbar">
+                <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
+                    <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
+                </button>
+            </div>
+        </div>
+    </div>
 
-                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6244763d95a3a" style="">
-                        <div class="px-7 py-5">
-                            <div class="fs-5 text-dark fw-bolder">Filter Options</div>
+    <div class="row mt-8">
+        <div class="col-lg-6">
+            <div class="card card-flush h-xl-100">
+                <div class="card-header pt-7">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-gray-800">Stock All</span>
+                    </h3>
+                </div>
+
+                <div class="card-body pt-8">
+                    <div id="chartStockAll" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-flush h-xl-100">
+                <div class="card-header pt-7">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-gray-800">Pembelian</span>
+                    </h3>
+                </div>
+
+                <div class="card-body pt-8">
+                    <div id="chartPembelian" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-6">
+        <div class="col-lg-6">
+            <div class="card card-flush h-xl-100">
+                <div class="card-header pt-7">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-gray-800">FS</span>
+                    </h3>
+                </div>
+
+                <div class="card-body pt-8">
+                    <div id="chartFS" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-flush h-xl-100">
+                <div class="card-header pt-7">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-gray-800">CNO</span>
+                    </h3>
+                </div>
+
+                <div class="card-body pt-8">
+                    <div id="chartCNO" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-6">
+        <div class="col-lg-12">
+            <div class="card card-flush">
+                <div class="card-header pt-7">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-gray-800">Sales By Product</span>
+                    </h3>
+                </div>
+
+                <div class="card-body pt-8">
+                    @if(isset($produk))
+                    <div id="chartStockByProduct" style="height: 500px; width: 100%;"></div>
+                    @else
+                    <div id="chartStockByProduct" style="height: 5500px; width: 100%;"></div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-2" id="modalFilter">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modalFilterContent">
+                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('dashboard.dashboard-management-stock') }}">
+                    <div class="modal-header">
+                        <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Faktur</h5>
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                            <span class="svg-icon svg-icon-muted svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path opacity="0.3" d="M6 19.7C5.7 19.7 5.5 19.6 5.3 19.4C4.9 19 4.9 18.4 5.3 18L18 5.3C18.4 4.9 19 4.9 19.4 5.3C19.8 5.7 19.8 6.29999 19.4 6.69999L6.7 19.4C6.5 19.6 6.3 19.7 6 19.7Z" fill="currentColor"/>
+                                    <path d="M18.8 19.7C18.5 19.7 18.3 19.6 18.1 19.4L5.40001 6.69999C5.00001 6.29999 5.00001 5.7 5.40001 5.3C5.80001 4.9 6.40001 4.9 6.80001 5.3L19.5 18C19.9 18.4 19.9 19 19.5 19.4C19.3 19.6 19 19.7 18.8 19.7Z" fill="currentColor"/>
+                                </svg>
+                            </span>
                         </div>
-                        <div class="separator border-gray-200"></div>
-                        <div class="px-7 py-5">
-                            <div class="mb-5">
-                                <label class="form-label required">Bulan:</label>
-                                <select id="selectMonth" name="month" class="form-select" data-control="select2" data-hide-search="true">
-                                    <option value="1" @if($month == 1) {{"selected"}} @endif>Januari</option>
-                                    <option value="2" @if($month == 2) {{"selected"}} @endif>Februari</option>
-                                    <option value="3" @if($month == 3) {{"selected"}} @endif>Maret</option>
-                                    <option value="4" @if($month == 4) {{"selected"}} @endif>April</option>
-                                    <option value="5" @if($month == 5) {{"selected"}} @endif>Mei</option>
-                                    <option value="6" @if($month == 6) {{"selected"}} @endif>Juni</option>
-                                    <option value="7" @if($month == 7) {{"selected"}} @endif>Juli</option>
-                                    <option value="8" @if($month == 8) {{"selected"}} @endif>Agustus</option>
-                                    <option value="9" @if($month == 9) {{"selected"}} @endif>September</option>
-                                    <option value="10" @if($month == 10) {{"selected"}} @endif>Oktober</option>
-                                    <option value="11" @if($month == 11) {{"selected"}} @endif>November</option>
-                                    <option value="12" @if($month == 12) {{"selected"}} @endif>Desember</option>
-                                </select>
-                            </div>
-                            <div class="mb-5">
-                                <label class="form-label required">Tahun:</label>
-                                <input type="text" id="inputYear" name="year" class="form-control" placeholder="Tahun" autocomplete="off"
-                                    @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
-                            </div>
-                            <div class="mb-5">
-                                <label class="form-label required">Data yang ditampilkan:</label>
-                                <select id="selectFields" name="fields" class="form-select" data-control="select2" data-hide-search="true">
-                                    <option value="QUANTITY" @if($fields == 'QUANTITY') {{"selected"}} @endif>Quantity</option>
-                                    <option value="AMOUNT" @if($fields == 'AMOUNT') {{"selected"}} @endif>Amount</option>
-                                </select>
-                            </div>
-                            <div class="mb-5">
-                                <label class="form-label">Produk:</label>
-                                <input type="text" id="inputProduk" name="produk" class="form-control" placeholder="Kode Produk" autocomplete="off"
+                    </div>
+                    <div class="modal-body">
+                        <div class="fv-row">
+                            <label class="form-label required">Tahun:</label>
+                            <input type="text" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun" autocomplete="off"
+                                @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
+                        </div>
+                        <div class="fv-row mt-8">
+                            <label class="form-label required">Bulan:</label>
+                            <select id="selectFilterMonth" name="month" class="form-select" data-hide-search="true">
+                                <option value="1" @if($month == 1) {{"selected"}} @endif>Januari</option>
+                                <option value="2" @if($month == 2) {{"selected"}} @endif>Februari</option>
+                                <option value="3" @if($month == 3) {{"selected"}} @endif>Maret</option>
+                                <option value="4" @if($month == 4) {{"selected"}} @endif>April</option>
+                                <option value="5" @if($month == 5) {{"selected"}} @endif>Mei</option>
+                                <option value="6" @if($month == 6) {{"selected"}} @endif>Juni</option>
+                                <option value="7" @if($month == 7) {{"selected"}} @endif>Juli</option>
+                                <option value="8" @if($month == 8) {{"selected"}} @endif>Agustus</option>
+                                <option value="9" @if($month == 9) {{"selected"}} @endif>September</option>
+                                <option value="10" @if($month == 10) {{"selected"}} @endif>Oktober</option>
+                                <option value="11" @if($month == 11) {{"selected"}} @endif>November</option>
+                                <option value="12" @if($month == 12) {{"selected"}} @endif>Desember</option>
+                            </select>
+                        </div>
+                        <div class="fv-row mt-8">
+                            <label class="form-label required">Data yang ditampilkan:</label>
+                            <select id="selectFields" name="fields" class="form-select" data-hide-search="true">
+                                <option value="QUANTITY" @if($fields == 'QUANTITY') {{"selected"}} @endif>Quantity</option>
+                                <option value="AMOUNT" @if($fields == 'AMOUNT') {{"selected"}} @endif>Amount</option>
+                            </select>
+                        </div>
+                        <div class="fv-row mt-8">
+                            <label class="form-label">Level Produk:</label>
+                            <select id="selectFilterLevelProduk" name="level" class="form-select" data-placeholder="Semua Level Produk" data-allow-clear="true">
+                                <option value="" @if($level != 'HANDLE' && $level != 'NON_HANDLE' && $level != 'TUBE' && $level != 'OLI') selected @endif>Semua Level Produk</option>
+                                <option value="HANDLE" @if($level == 'HANDLE') selected @endif>Handle</option>
+                                <option value="NON_HANDLE" @if($level == 'NON_HANDLE') selected @endif>Non-Handle</option>
+                                <option value="TUBE" @if($level == 'TUBE') selected @endif>Tube</option>
+                                <option value="OLI" @if($level == 'OLI') selected @endif>Oli</option>
+                            </select>
+                        </div>
+                        <div class="fv-row mt-8">
+                            <label class="form-label">Produk:</label>
+                            <div class="input-group">
+                                <input id="inputFilterKodeProduk" name="produk" type="search" class="form-control" placeholder="Semua Produk" readonly
                                     @if(isset($produk)) value="{{ $produk }}" @else value="{{ old('produk') }}"@endif>
-                            </div>
-                            <div class="mb-5">
-                                <div class="d-flex align-items-center">
-                                    <button id="btnFilterProses" class="btn btn-sm btn-primary me-2" type="submit">Terapkan</button>
-                                    <a id="btnFilterReset" href="{{ route('dashboard.dashboard-dealer') }}" class="btn btn-sm btn-danger me-2" role="button">Reset Filter</a>
-                                </div>
+                                <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
+                                    data-toggle="modal" data-target="#produkSearchModalForm">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="modal-footer justify-content-between">
+                        <button id="btnFilterReset" class="btn btn-danger" role="button">Reset Filter</button>
+                        <div class="text-end">
+                            <button id="btnFilterProses" type="submit" class="btn btn-primary">Terapkan</button>
+                            <button id="btnFilterClose" name="btnClose" type="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="row mt-8">
-            <div class="col-lg-6">
-                <div class="card card-flush h-xl-100">
-                    <div class="card-header pt-7">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-gray-800">Stock All</span>
-                        </h3>
-                    </div>
-
-                    <div class="card-body pt-8">
-                        <div id="chartStockAll" style="height: 350px;"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card card-flush h-xl-100">
-                    <div class="card-header pt-7">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-gray-800">Pembelian</span>
-                        </h3>
-                    </div>
-
-                    <div class="card-body pt-8">
-                        <div id="chartPembelian" style="height: 350px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-6">
-            <div class="col-lg-6">
-                <div class="card card-flush h-xl-100">
-                    <div class="card-header pt-7">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-gray-800">FS</span>
-                        </h3>
-                    </div>
-
-                    <div class="card-body pt-8">
-                        <div id="chartFS" style="height: 350px;"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card card-flush h-xl-100">
-                    <div class="card-header pt-7">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-gray-800">CNO</span>
-                        </h3>
-                    </div>
-
-                    <div class="card-body pt-8">
-                        <div id="chartCNO" style="height: 350px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-6">
-            <div class="col-lg-12">
-                <div class="card card-flush">
-                    <div class="card-header pt-7">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder text-gray-800">Sales By Product</span>
-                        </h3>
-                    </div>
-
-                    <div class="card-body pt-8">
-                        @if(isset($produk))
-                        <div id="chartStockByProduct" style="height: 300px; width: 100%;"></div>
-                        @else
-                        <div id="chartStockByProduct" style="height: 5500px; width: 100%;"></div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
+    </div>
+    @include('layouts.option.optiongroupproduk')
     @push('scripts')
+        <script src="{{ asset('assets/js/suma/option/option.js') }}?time={{ time() }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/index.js') }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/percent.js') }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/xy.js') }}"></script>
@@ -165,23 +195,41 @@
 
         <script type="text/javascript">
             var btnFilterProses = document.querySelector("#btnFilterProses");
-            var btnFilterReset = document.querySelector("#btnFilterReset");
-            var targetBlockDashboardManagementStock = document.querySelector("#formDashboardManagementStock");
-
-            var blockDashboardManagementStock = new KTBlockUI(targetBlockDashboardManagementStock, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockDashboardManagementStock.block();
-                document.getElementById("formDashboardManagementStock").submit();
+                blockIndex.block();
+                document.getElementById("formFilter").submit();
             });
-            btnFilterReset.addEventListener("click", function(e) {
-                e.preventDefault();
-                blockDashboardManagementStock.block();
-                document.getElementById("formDashboardManagementStock").submit();
+
+            $(document).ready(function() {
+                $('#btnFilterReset').on('click', function(e) {
+                    e.preventDefault();
+                    var dateObj = new Date();
+                    var year = dateObj.getUTCFullYear();
+                    $('#inputFilterYear').val(year);
+                    $('#selectFilterMonth').prop('selectedIndex', {{ $month }} - 1).change();
+                    $('#selectFilterLevelProduk').prop('selectedIndex', 0).change();
+                    $('#inputFilterKodeProduk').val('');
+                });
+
+                $('#btnFilterProduk').on('click', function(e) {
+                    e.preventDefault();
+
+                    var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
+                    loadDataProduk(1, 10, '', selectFilterLevelProduk);
+                    $('#searchProdukForm').trigger('reset');
+                    $('#produkSearchModal').modal('show');
+                });
+
+                $('body').on('click', '#produkContentModal #selectProduk', function(e) {
+                    e.preventDefault();
+                    $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
+                    $('#produkSearchModal').modal('hide');
+                });
+
+                $('#selectFilterLevelProduk').change(function(){
+                    $('#inputFilterKodeProduk').val('');
+                });
             });
 
             $(function chartStockAll() {

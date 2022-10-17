@@ -173,11 +173,6 @@
         }
     }
 
-    $('#selectFilterJenisMkr').change(function(){
-        var selectFilterJenisMkr = $('#selectFilterJenisMkr').val();
-        getJenisMkr(selectFilterJenisMkr);
-    });
-
     $(document).ready(function() {
         $('#btnFilter').on('click', function(e) {
             e.preventDefault();
@@ -190,6 +185,12 @@
             var year = dateObj.getUTCFullYear();
             $('#inputYear').val(year);
             $('#selectFilterJenisMkr').prop('selectedIndex', 0).change();
+            $('#inputFilterKodeMkr').val('');
+        });
+
+        $('#selectFilterJenisMkr').change(function(){
+            var selectFilterJenisMkr = $('#selectFilterJenisMkr').val();
+            getJenisMkr(selectFilterJenisMkr);
             $('#inputFilterKodeMkr').val('');
         });
 

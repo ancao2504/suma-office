@@ -289,7 +289,7 @@ class ApiService {
         return $response;
     }
 
-    public static function DashboardManagementSalesByProduct($year, $month, $fields, $produk, $user_id, $role_id, $companyid) {
+    public static function DashboardManagementSalesByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'dashboard/management/sales/salesbyproduct';
         $header = [ 'Authorization' => $credential ];
@@ -297,6 +297,7 @@ class ApiService {
             'year'          => $year,
             'month'         => $month,
             'fields'        => $fields,
+            'level'         => $level,
             'produk'        => $produk,
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -306,7 +307,7 @@ class ApiService {
         return $response;
     }
 
-    public static function DashboardManagementSalesByDate($year, $month, $fields, $produk, $user_id, $role_id, $companyid) {
+    public static function DashboardManagementSalesByDate($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'dashboard/management/sales/salesbydate';
         $header = [ 'Authorization' => $credential ];
@@ -314,6 +315,7 @@ class ApiService {
             'year'          => $year,
             'month'         => $month,
             'fields'        => $fields,
+            'level'         => $level,
             'produk'        => $produk,
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -323,7 +325,7 @@ class ApiService {
         return $response;
     }
 
-    public static function DashboardManagementStockByProduct($year, $month, $fields, $produk, $user_id, $role_id, $companyid) {
+    public static function DashboardManagementStockByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'dashboard/management/stock/stockbyproduct';
         $header = [ 'Authorization' => $credential ];
@@ -331,6 +333,7 @@ class ApiService {
             'year'          => $year,
             'month'         => $month,
             'fields'        => $fields,
+            'level'         => $level,
             'produk'        => $produk,
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -372,15 +375,15 @@ class ApiService {
         return $response;
     }
 
-    public static function DashboardSalesmanPenjualanBulanan($year, $month, $role_salesman, $kode_sales_spv, $user_id, $role_id, $companyid) {
+    public static function DashboardSalesmanPenjualanBulanan($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'dashboard/salesman/penjualanbulanan';
         $header = [ 'Authorization' => $credential ];
         $body = [
             'year'              => $year,
             'month'             => $month,
-            'role_salesman'     => $role_salesman,
-            'kode_sales_spv'    => $kode_sales_spv,
+            'jenis_mkr'         => $jenis_mkr,
+            'kode_mkr'          => $kode_mkr,
             'user_id'           => $user_id,
             'role_id'           => $role_id,
             'companyid'         => $companyid
@@ -389,15 +392,15 @@ class ApiService {
         return $response;
     }
 
-    public static function DashboardSalesmanPenjualanHarian($year, $month, $role_salesman, $kode_sales_spv, $user_id, $role_id, $companyid) {
+    public static function DashboardSalesmanPenjualanHarian($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'dashboard/salesman/penjualanharian';
         $header = [ 'Authorization' => $credential ];
         $body = [
             'year'              => $year,
             'month'             => $month,
-            'role_salesman'     => $role_salesman,
-            'kode_sales_spv'    => $kode_sales_spv,
+            'jenis_mkr'         => $jenis_mkr,
+            'kode_mkr'          => $kode_mkr,
             'user_id'           => $user_id,
             'role_id'           => $role_id,
             'companyid'         => $companyid

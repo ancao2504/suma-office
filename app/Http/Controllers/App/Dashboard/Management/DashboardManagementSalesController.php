@@ -35,7 +35,7 @@ class DashboardManagementSalesController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Anda tidak dapat mengakses halaman ini');
         }
 
-        $responseApi = ApiService::DashboardManagementSalesByProduct($year, $month, $fields, $request->get('produk'),
+        $responseApi = ApiService::DashboardManagementSalesByProduct($year, $month, $fields, $request->get('level'), $request->get('produk'),
                             strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -49,7 +49,7 @@ class DashboardManagementSalesController extends Controller
             $data_comparison = $dataSalesByProduct->comparison;
             $data_best_sales = $dataSalesByProduct->best_sales;
 
-            $responseApi = ApiService::DashboardManagementSalesByDate($year, $month, $fields, $request->get('produk'),
+            $responseApi = ApiService::DashboardManagementSalesByDate($year, $month, $fields, $request->get('level'), $request->get('produk'),
                                 strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
@@ -62,6 +62,7 @@ class DashboardManagementSalesController extends Controller
                     'year'                  => $year,
                     'month'                 => $month,
                     'fields'                => $fields,
+                    'level'          => $request->get('level'),
                     'produk'                => $request->get('produk'),
                     'selling'       => [
                         'selling_total'             => $dataSalesByProduct->selling->selling_total,

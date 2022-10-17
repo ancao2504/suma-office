@@ -34,7 +34,7 @@ class DashboardManagementStockController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Anda tidak dapat mengakses halaman ini');
         }
 
-        $responseApi = ApiService::DashboardManagementStockByProduct($year, $month, $fields, $request->get('produk'),
+        $responseApi = ApiService::DashboardManagementStockByProduct($year, $month, $fields, $request->get('level'), $request->get('produk'),
                             strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -49,6 +49,7 @@ class DashboardManagementStockController extends Controller
                 'month'         => $month,
                 'fields'        => $fields,
                 'produk'        => $request->get('produk'),
+                'level'         => $request->get('level'),
                 'stock_total'   => $dataStockByProduct->total_stock,
                 'pembelian'     => $dataStockByProduct->pembelian,
                 'total'         => $dataStockByProduct->company,
@@ -56,8 +57,6 @@ class DashboardManagementStockController extends Controller
                 'cno'           => $dataStockByProduct->cno,
                 'product'       => $dataStockByProduct->product,
             ]);
-
-
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
