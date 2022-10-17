@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/ABDUL-HALIM-MUKLIS/pmo/blob/main/public/assets/images/logo/ic_suma.png" width="200"></p>
+<p align="center"><img src="https://github.com/ABDUL-HALIM-MUKLIS/pmo/blob/main/public/assets/images/logo/ic_suma.png" width="100"></p>
 <p align="center">
 
 ## Dokumentasi
