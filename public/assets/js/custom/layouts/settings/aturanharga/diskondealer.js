@@ -133,8 +133,6 @@ $(document).ready(function () {
     });
     // end delete data
 
-
-
     // saat tambah diskon di klik focus ke pruduk dan merubah tombol enter menjadi tab
     $('#staticBackdrop').on('shown.bs.modal', function () {
         $('#part_number').focus();
