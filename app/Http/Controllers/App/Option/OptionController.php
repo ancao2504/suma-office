@@ -501,6 +501,122 @@ class OptionController extends Controller {
         }
     }
 
+    public function optionSupervisor(Request $request) {
+        $responseApi = ApiService::optionSupervisor($request->get('search'), $request->get('page'), $request->get('per_page'),
+            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            $data_per_page = $data->per_page;
+            $data_link_page = $data->links;
+            $data_from_record = $data->from;
+            $data_to_record = $data->to;
+            $data_total_record = $data->total;
+
+            $dataSupervisor = new LengthAwarePaginator(array_values($data->data), $data->total, $data->per_page, $data->current_page,
+            [ 'path' => '#', 'query' => request()->query()  ]);
+
+            $table_row = '';
+            $table_pagination = '';
+
+            foreach($dataSupervisor as $data) {
+                $table_row .= '<tr>
+                        <td>'.$data->kode_spv.'</td>
+                        <td>'.$data->nama_spv.'</td>
+                        <td class="text-center">
+                            <button id="selectSupervisor" class="btn btn-icon btn-bg-primary btn-sm me-1"
+                                data-kode_spv="'.$data->kode_spv.'" data-nama_spv="'.$data->nama_spv.'">
+                                <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
+                            </button>
+                        </td>
+                    </tr>';
+            }
+
+            foreach($data_link_page as $data) {
+                $label = $data->label;
+                $disabled = ($data->url == null) ? 'disabled' : '';
+                $active = ($data->active == true) ? 'active' : '';
+                $item = 'page-item';
+                $url = $data->url;
+
+                if(Str::contains(trim($data->label), 'Previous')) {
+                    $label = '<';
+                    $item = 'page-item previous';
+                }
+
+                if(Str::contains(trim($data->label), 'Next')) {
+                    $label = '>';
+                    $item = 'page-item next';
+                }
+
+                if($data->url == null) {
+                    $table_pagination .= '<li class="'.trim(trim($item).' '.trim($disabled)).'">
+                        <span class="page-link">'.trim($label).'</span></span>
+                    </li>';
+                } else {
+                    $table_pagination .= '<li class="'.trim(trim($item).' '.trim($active).' '.trim($disabled)).'">
+                        <a href="#" class="page-link" data-page="'.trim($url).'">'.trim($label).'</a>
+                    </li>';
+                }
+            }
+
+            $table_per_page10 = '';
+            $table_per_page25 = '';
+            $table_per_page50 = '';
+            $table_per_page100 = '';
+            if($data_per_page == '10') {
+                $table_per_page10 = 'selected';
+            } elseif($data_per_page == '25') {
+                $table_per_page25 = 'selected';
+            } elseif($data_per_page == '50') {
+                $table_per_page50 = 'selected';
+            } elseif($data_per_page == '100') {
+                $table_per_page100 = 'selected';
+            }
+
+            $table_header = '<table id="tableSearchSupervisor" class="table align-middle table-row-bordered fs-6">
+                    <thead>
+                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                            <th class="min-w-100px">Kode SPV</th>
+                            <th class="min-w-150px">Nama SPV</th>
+                            <th class="min-w-50px text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fs-6 fw-bold text-gray-800">'.$table_row.'</tbody>
+                </table>
+                <div id="pageSupervisor" class="mt-5">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+                            <div class="dataTables_length">
+                                <label>
+                                    <select id="selectPerPageSupervisor" name="selectPerPageSupervisor" aria-controls="selectPerPage"
+                                        class="form-select form-select-sm" data-control="select2" data-hide-search="true">
+                                        <option value="10" '.$table_per_page10.'>10</option>
+                                        <option value="25" '.$table_per_page25.'>25</option>
+                                        <option value="50" '.$table_per_page50.'>50</option>
+                                        <option value="100" '.$table_per_page100.'>100</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="dataTables_info" id="selectPerPageSupervisorInfo" role="status" aria-live="polite">Showing <span id="startRecordSalesman">'.$data_from_record.'</span> to '.$data_to_record.' of '.$data_total_record.' records</div>
+                        </div>
+                        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+                            <div class="dataTables_paginate paging_simple_numbers" id="kt_datatable_example_5_paginate">
+                                <ul class="pagination">'.$table_pagination.'</ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>';
+
+
+            return response()->json([ 'status' => 1, 'message' => 'success', 'data' => $table_header ]);
+        } else {
+            return response()->json([ 'status' => 0, 'message' => $messageApi ]);
+        }
+    }
+
     public function optionTipeMotor(Request $request) {
         $responseApi = ApiService::OptionTipeMotor($request->get('search'), $request->get('page'), $request->get('per_page'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -601,6 +717,120 @@ class OptionController extends Controller {
                                     </label>
                                 </div>
                                 <div class="dataTables_info" id="selectPerPageTipeMotorInfo" role="status" aria-live="polite">Showing <span id="startRecordSalesman">'.$data_from_record.'</span> to '.$data_to_record.' of '.$data_total_record.' records</div>
+                            </div>
+                            <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+                                <div class="dataTables_paginate paging_simple_numbers" id="kt_datatable_example_5_paginate">
+                                    <ul class="pagination">'.$table_pagination.'</ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
+
+            return response()->json([ 'status' => 1, 'message' => 'success', 'data' => $table_header ]);
+        } else {
+            return response()->json([ 'status' => 0, 'message' => $messageApi ]);
+        }
+    }
+
+    public function optionGroupProduk(Request $request) {
+        $responseApi = ApiService::OptionGroupProduk($request->get('search'), $request->get('page'), $request->get('per_page'));
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            $data_per_page = $data->per_page;
+            $data_link_page = $data->links;
+            $data_from_record = $data->from;
+            $data_to_record = $data->to;
+            $data_total_record = $data->total;
+
+            $dataProdukSales = new LengthAwarePaginator(array_values($data->data), $data->total, $data->per_page, $data->current_page,
+            [ 'path' => '#', 'query' => request()->query()  ]);
+
+            $table_row = '';
+            $table_pagination = '';
+
+            foreach($dataProdukSales as $data) {
+                $table_row .= '<tr>
+                        <td>'.$data->kode_produk.'</td>
+                        <td>'.$data->keterangan.'</td>
+                        <td class="text-center">
+                            <button id="selectProduk" class="btn btn-icon btn-bg-primary btn-sm me-1"
+                                data-kode_produk="'.$data->kode_produk.'" data-keterangan="'.$data->keterangan.'">
+                                <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
+                            </button>
+                        </td>
+                    </tr>';
+            }
+
+            foreach($data_link_page as $data) {
+                $label = $data->label;
+                $disabled = ($data->url == null) ? 'disabled' : '';
+                $active = ($data->active == true) ? 'active' : '';
+                $item = 'page-item';
+                $url = $data->url;
+
+                if(Str::contains(trim($data->label), 'Previous')) {
+                    $label = '<';
+                    $item = 'page-item previous';
+                }
+
+                if(Str::contains(trim($data->label), 'Next')) {
+                    $label = '>';
+                    $item = 'page-item next';
+                }
+
+                if($data->url == null) {
+                    $table_pagination .= '<li class="'.trim(trim($item).' '.trim($disabled)).'">
+                            <span class="page-link">'.trim($label).'</span></span>
+                        </li>';
+                    } else {
+                    $table_pagination .= '<li class="'.trim(trim($item).' '.trim($active).' '.trim($disabled)).'">
+                            <a href="#" class="page-link" data-page="'.trim($url).'">'.trim($label).'</a>
+                        </li>';
+                    }
+                }
+
+                $table_per_page10 = '';
+                $table_per_page25 = '';
+                $table_per_page50 = '';
+                $table_per_page100 = '';
+                if($data_per_page == '10') {
+                    $table_per_page10 = 'selected';
+                } elseif($data_per_page == '25') {
+                    $table_per_page25 = 'selected';
+                } elseif($data_per_page == '50') {
+                    $table_per_page50 = 'selected';
+                } elseif($data_per_page == '100') {
+                    $table_per_page100 = 'selected';
+                }
+
+                $table_header = '<table id="tableSearchProduk" class="table align-middle table-row-bordered fs-6">
+                        <thead>
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-100px">Kode Sales</th>
+                                <th class="min-w-150px">Nama Sales</th>
+                                <th class="min-w-50px text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="fs-6 fw-bold text-gray-800">'.$table_row.'</tbody>
+                    </table>
+                    <div id="pageProduk" class="mt-5">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+                                <div class="dataTables_length">
+                                    <label>
+                                        <select id="selectPerPageProduk" name="selectPerPageProduk" aria-controls="selectPerPage"
+                                            class="form-select form-select-sm" data-control="select2" data-hide-search="true">
+                                            <option value="10" '.$table_per_page10.'>10</option>
+                                            <option value="25" '.$table_per_page25.'>25</option>
+                                            <option value="50" '.$table_per_page50.'>50</option>
+                                            <option value="100" '.$table_per_page100.'>100</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="dataTables_info" id="selectPerPageProdukInfo" role="status" aria-live="polite">Showing <span id="startRecordSalesman">'.$data_from_record.'</span> to '.$data_to_record.' of '.$data_total_record.' records</div>
                             </div>
                             <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
                                 <div class="dataTables_paginate paging_simple_numbers" id="kt_datatable_example_5_paginate">

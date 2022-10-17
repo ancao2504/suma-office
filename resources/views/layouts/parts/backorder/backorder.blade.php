@@ -16,15 +16,15 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-5" id="dataBackOrder">
-            @if(strtoupper(trim($device)) == "DESKTOP")
-                @include('layouts.parts.backorder.desktop.backorderlist')
-            @else
-                @include('layouts.parts.backorder.mobile.backorderlist')
-            @endif
-        </div>
-        <div id="dataLoadBackOrder"></div>
     </div>
+    <div class="row mt-5" id="dataBackOrder">
+        @if(strtoupper(trim($device)) == "DESKTOP")
+            @include('layouts.parts.backorder.desktop.backorderlist')
+        @else
+            @include('layouts.parts.backorder.mobile.backorderlist')
+        @endif
+    </div>
+    <div id="dataLoadBackOrder"></div>
 
     <div class="modal fade" tabindex="-1" id="modalFilter">
         <div class="modal-dialog">
@@ -129,7 +129,7 @@
 
             $(window).scroll(function() {
                 if(blockDataBackOrder.isBlocked() === false) {
-                    if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
                             var salesman = params.get('salesman');

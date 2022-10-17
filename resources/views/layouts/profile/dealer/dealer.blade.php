@@ -72,7 +72,7 @@
 
             $(window).scroll(function() {
                 if(blockFormDealer.isBlocked() === false) {
-                    if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
                             var search = params.get('search');

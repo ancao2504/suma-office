@@ -148,7 +148,7 @@
 
                 $(window).scroll(function() {
                     if(blockDataFaktur.isBlocked() === false) {
-                        if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                        if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                             const params = new URLSearchParams(window.location.search)
                             for (const param of params) {
                                 var year = params.get('year');
@@ -175,7 +175,6 @@
                         type: "get",
                         data: { year: year, month: month, page: pages, salesman: salesman,
                                 dealer: dealer, nomor_faktur: nomor_faktur
-
                         },
 
                         success:function(response) {
@@ -211,9 +210,9 @@
 
                     $('#selectFilterMonth').prop('selectedIndex', {{ $month }} - 1).change();
                     $('#inputFilterYear').val({{ $year }});
-                    $('#inputFilterSalesman').val('{{ $kode_sales }}');
-                    $('#inputFilterDealer').val('{{ $kode_dealer }}');
-                    $('#inputFilterNomorFaktur').val('{{ $nomor_faktur }}');
+                    $('#inputFilterSalesman').val('{{$kode_sales}}');
+                    $('#inputFilterDealer').val('{{$kode_dealer}}');
+                    $('#inputFilterNomorFaktur').val('{{$nomor_faktur}}');
 
                     $('#modalFilter').modal('show');
                 });

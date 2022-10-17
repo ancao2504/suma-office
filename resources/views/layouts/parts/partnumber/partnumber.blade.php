@@ -186,7 +186,7 @@
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label">Part Number:</label>
-                            <input type="text" id="inputPartNumber" name="part_number" class="form-control" placeholder="Semua Part Number" autocomplete="off"
+                            <input type="text" id="inputFilterPartNumber" name="part_number" class="form-control" placeholder="Semua Part Number" autocomplete="off"
                                 @if(isset($part_number)) value="{{ $part_number }}" @else value="{{ old('part_number') }}"@endif>
                         </div>
                     </div>
@@ -240,7 +240,7 @@
 
         $(window).scroll(function() {
             if(blockDataPartNumber.isBlocked() === false) {
-                if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                     const params = new URLSearchParams(window.location.search)
                     for (const param of params) {
                         var tipe_motor = params.get('tipe_motor');

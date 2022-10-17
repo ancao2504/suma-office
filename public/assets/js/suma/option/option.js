@@ -1,3 +1,63 @@
+function loadDataSupervisor(page = 1, per_page = 10, search = '') {
+    $.ajax({
+        url: base_url+'/option/supervisor'+"?search="+search+"&per_page="+per_page+"&page="+page,
+        method: "get",
+        success:function(response) {
+            if (response.status == false) {
+                Swal.fire({
+                    text: response.message,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            } else {
+                $('#supervisorContentModal').html(response.data);
+            }
+        }
+    });
+}
+
+$(document).on('click', '#searchSupervisorForm #pageSupervisor .pagination .page-item a', function() {
+    pages = $(this)[0].getAttribute("data-page");
+    page = pages.split('?page=')[1];
+
+    var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
+    var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
+
+    loadDataSupervisor(page, per_page_spv, search_spv);
+});
+
+$('body').on('change', '#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor', function(e) {
+    e.preventDefault();
+
+    var start_record_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisorInfo #startRecordSupervisor').html();
+    var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
+    var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
+
+    var page = Math.ceil(start_record_spv / per_page_spv);
+
+    loadDataSupervisor(page, per_page_spv, search_spv);
+});
+
+$('body').on('click', '#searchSupervisorForm #btnSearchSupervisor', function(e) {
+    e.preventDefault();
+    var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
+    var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
+
+    loadDataSupervisor(1, per_page_spv, search_spv);
+});
+
+$('#searchSupervisorForm #inputSearchSupervisor').on('change', function(e) {
+    e.preventDefault();
+    var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
+    var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
+
+    loadDataSupervisor(1, per_page_spv, search_spv);
+});
+
 function loadDataSalesman(page = 1, per_page = 10, search = '') {
     $.ajax({
         url: base_url+'/option/salesman'+"?search="+search+"&per_page="+per_page+"&page="+page,
@@ -240,4 +300,66 @@ $('#searchTipeMotorForm #inputSearchTipeMotor').on('change', function(e) {
     var per_page_tipe_motor = $('#searchTipeMotorForm #tipeMotorContentModal #pageTipeMotor #selectPerPageTipeMotor').val();
 
     loadDataTipeMotor(1, per_page_tipe_motor, search_tipe_motor);
+});
+
+function loadDataProduk(page = 1, per_page = 10, search = '', level = '') {
+    $('#inputFilterLevelProduk').html(level);
+
+    $.ajax({
+        url: base_url+'/option/groupproduk'+"?level="+level+"&search="+search+"&per_page="+per_page+"&page="+page,
+        method: "get",
+        success:function(response) {
+            if (response.status == false) {
+                Swal.fire({
+                    text: response.message,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            } else {
+                $('#produkContentModal').html(response.data);
+            }
+        }
+    });
+}
+
+$(document).on('click', '#searchProdukForm #pageProduk .pagination .page-item a', function() {
+    pages = $(this)[0].getAttribute("data-page");
+    page = pages.split('?page=')[1];
+
+    var search_produk = $('#searchProdukForm #inputSearchProduk').val();
+    var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
+
+    loadDataProduk(page, per_page_produk, search_produk);
+});
+
+$('body').on('change', '#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk', function(e) {
+    e.preventDefault();
+
+    var start_record_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProdukInfo #startRecordProduk').html();
+    var search_produk = $('#searchProdukForm #inputSearchProduk').val();
+    var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
+
+    var page = Math.ceil(start_record_produk / per_page_produk);
+
+    loadDataProduk(page, per_page_produk, search_produk);
+});
+
+$('body').on('click', '#searchProdukForm #btnSearchProduk', function(e) {
+    e.preventDefault();
+    var search_produk = $('#searchProdukForm #inputSearchProduk').val();
+    var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
+
+    loadDataProduk(1, per_page_produk, search_produk);
+});
+
+$('#searchProdukForm #inputSearchProduk').on('change', function(e) {
+    e.preventDefault();
+    var search_produk = $('#searchProdukForm #inputSearchProduk').val();
+    var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
+
+    loadDataProduk(1, per_page_produk, search_produk);
 });

@@ -363,8 +363,7 @@ class CartController extends Controller
 
                 if((double)$jumlah_data_detail <= 0) {
                     $data_table_detail = '<tr>
-                            <td>-</td>
-                            <td><span class="text-muted fw-bold text-muted fs-7">DETAIL CART MASIH KOSONG</td>
+                            <td colspan="5" class="fs-7 fw-bolder text-gray-500 text-center pt-10 pb-10">- DETAIL CART MASIH KOSONG -</td>
                         </tr>';
                 }
                 $data_table_detail .= '<tr>
