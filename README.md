@@ -13,13 +13,13 @@
     |   |📁assets
     |   |   |📁js
     |   |   |    |📁custom
-    |   |   |    |    |📁layout     # custom js pada view
+    |   |   |    |    |📁layout         # custom js pada view
     📁resources
     |   |📁views
-    |   |   |📁components             # komponen
-    |   |   |📁errors                 # error
-    |   |   |📁layouts                # layout
-    |   |   |📁reports                # laporan
+    |   |   |📁components               # komponen
+    |   |   |📁errors                   # error
+    |   |   |📁layouts                  # layout
+    |   |   |📁reports                  # laporan
     |   |   |📁dll
     📁routes                            # route
     |   |📄web.php
