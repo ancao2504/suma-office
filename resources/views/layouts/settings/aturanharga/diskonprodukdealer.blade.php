@@ -440,6 +440,6 @@
     <script type="text/javascript">
             const current_page = "{{ $data_disc->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskonprodukdealer.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskonprodukdealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

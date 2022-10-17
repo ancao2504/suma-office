@@ -10,7 +10,7 @@ $(document).ready(function () {
             '</div>'
     });
 
-    var targetcontent = document.querySelector("#kt_wrapper");
+    var targetcontent = document.querySelector("#loading_componenet");
     var loadingContent = new KTBlockUI(targetcontent, {
         message: '<div class="blockui-message">' +
             '<span class="spinner-border text-primary"></span> Loading...' +

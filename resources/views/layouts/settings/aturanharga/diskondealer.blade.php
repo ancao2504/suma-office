@@ -378,6 +378,6 @@
     }
             const current_page = "{{ $data->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/custom/layouts/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

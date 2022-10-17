@@ -24,13 +24,24 @@
 		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css/stylesuma.css') }}" rel="stylesheet" type="text/css" />
-        
         @stack('styles')
-
+        {{-- <style>
+            div#loading_componenet {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 99999999;
+                display: none;
+            }
+        </style> --}}
     </head>
 
     <!--begin::Body-->
 	<body id="kt_body" class="print-content-only">
+        {{-- <div id="loading_componenet"></div> --}}
 		<div class="d-flex flex-column flex-root">
 			<div class="page d-flex flex-row flex-column-fluid">
 				@extends('layouts.main.sidebarleft')
@@ -130,6 +141,7 @@
                 </div>
             </div>
         </div>
+        
 
 		<!--begin::Javascript-->
 		<script>const base_url = "{{ url('/') }}";</script>
@@ -152,6 +164,18 @@
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
         <!-- App scripts -->
+        
+        <script>
+            // target elemet div.loading_componenet buat posisi di atas element lainya 
+            // // $('.loading_component') tambah css posisi absolute
+            // $('.loading_component').css('position', 'absolute');
+            // $('.loading_component').css('top', '0');
+            // $('.loading_component').css('left', '0');
+            // $('.loading_component').css('width', '100vw');
+            // $('.loading_component').css('height', '100vh');
+            // $('.loading_component').css('background', 'rgba(0,0,0)');
+            // $('.loading_component').css('z-index', '99999999');
+        </script>
         @stack('scripts')
 
         @extends('components.swalfailed')
