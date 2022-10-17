@@ -142,7 +142,7 @@ $(document).ready(function () {
                     cabang: $('#cabang').val()
                 },
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     if (data.status == 1) {
                         loadingModal.release();
                         Swal.fire({
@@ -199,7 +199,7 @@ $(document).ready(function () {
     });
 
     function editData(data) {
-        console.log(data);
+        // console.log(data);
         $('#produk').val(data.kode_produk.trim());
         $('#produk').attr('readonly', true);
         $('#produk').addClass('bg-secondary');

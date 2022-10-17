@@ -1,4 +1,3 @@
-// dokumen ready
 $(document).ready(function () {
     if (old.status != null) {
         $('#status option[value="' + old.status.trim() + '"]').prop('selected', true);
@@ -10,7 +9,7 @@ $(document).ready(function () {
             '</div>'
     });
 
-    var targetcontent = document.querySelector("#loading_componenet");
+    var targetcontent = document.querySelector("#kt_wrapper");
     var loadingContent = new KTBlockUI(targetcontent, {
         message: '<div class="blockui-message">' +
             '<span class="spinner-border text-primary"></span> Loading...' +
@@ -98,7 +97,7 @@ $(document).ready(function () {
                 part_number: this.value
             },
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 if (data.status == 1) {
                     $('#nama_part').val(data.data.description);
                     $('#part_number').removeClass('is-invalid');
@@ -149,7 +148,7 @@ $(document).ready(function () {
     /* Tanpa Rupiah */
     var tanpa_rupiah = document.getElementById('harga');
     tanpa_rupiah.addEventListener('keyup', function (e) {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         tanpa_rupiah.value = formatRupiah(this.value);
     });
 

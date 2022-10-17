@@ -436,7 +436,6 @@
     @include('layouts.option.optiontipemotor')
 
     @push('scripts')
-    <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
     <script type="text/javascript">
             const current_page = "{{ $data_disc->current_page }}"
     </script>

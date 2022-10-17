@@ -464,7 +464,6 @@
     @include('layouts.option.optiontipemotor')
 
     @push('scripts')
-    <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
     <script type="text/javascript">
             let old ={"cabang": "{{ old('cabang')??''}}"};
             const current_page = "{{ $data_disc->current_page }}"
