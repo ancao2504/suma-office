@@ -365,6 +365,40 @@ class ApiService
         return $response;
     }
 
+    public static function DashboardMarketingGroupPerLevel($year, $jenis_mkr, $kode_mkr, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'dashboard/marketing/pencapaian/perlevel';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'year'          => $year,
+            'jenis_mkr'     => $jenis_mkr,
+            'kode_mkr'      => $kode_mkr,
+            'role_id'       => $role_id,
+            'companyid'     => $companyid
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function DashboardMarketingGrowth($year, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'dashboard/marketing/pencapaian/growth';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'year'          => $year,
+            'level_produk'  => $level_produk,
+            'kode_produk'   => $kode_produk,
+            'jenis_mkr'     => $jenis_mkr,
+            'kode_mkr'      => $kode_mkr,
+            'role_id'       => $role_id,
+            'companyid'     => $companyid
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function DashboardSalesmanPenjualanBulanan($year, $month, $role_salesman, $kode_sales_spv, $user_id, $role_id, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
@@ -519,12 +553,17 @@ class ApiService
         return $response;
     }
 
-    public static function OptionGroupProduk()
+    public static function OptionGroupProduk($level, $search, $page, $per_page)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/groupproduk';
         $header = ['Authorization' => $credential];
-        $body = [];
+        $body = [
+            'level'     => $level,
+            'search'    => $search,
+            'page'      => $page,
+            'per_page'  => $per_page,
+        ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
@@ -556,6 +595,21 @@ class ApiService
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/salesman';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'search'        => $search,
+            'page'          => $page,
+            'per_page'      => $per_page,
+            'companyid'     => $companyid,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OptionSupervisor($search, $page, $per_page, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'options/supervisor';
         $header = ['Authorization' => $credential];
         $body = [
             'search'        => $search,

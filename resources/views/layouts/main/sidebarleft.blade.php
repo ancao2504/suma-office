@@ -108,6 +108,35 @@
                                 </div>
                             </div>
                         </div>
+                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (str_contains($title_menu, 'Dashboard Marketing')) ? 'show' : '' }}">
+                            <span class="menu-link">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title {{ (str_contains($title_menu, 'Dashboard Marketing')) ? 'active' : '' }}">Marketing</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a id="menuDashboardMarketingPencapaianPerLevel" class="menu-link {{ ($title_menu == 'Dashboard Marketing Pencapaian Per-Level') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perlevel') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Pencapaian Per-Level</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a id="menuDashboardMarketingGrowthPencapaian" class="menu-link {{ ($title_menu == 'Dashboard Marketing Growth Pencapaian') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/growth') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Growth Pencapaian</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <div class="menu-item">
                             <a class="menu-link {{ ($title_menu == 'Dashboard Salesman') ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
                                 <span class="menu-bullet">

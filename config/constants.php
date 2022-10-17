@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'app' => [
         'app_base_url'  => 'http://192.168.1.47:2022/suma-pmo/public',

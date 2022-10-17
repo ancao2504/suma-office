@@ -186,7 +186,7 @@
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label">Part Number:</label>
-                            <input type="text" id="inputPartNumber" name="part_number" class="form-control" placeholder="Semua Part Number" autocomplete="off"
+                            <input type="text" id="inputFilterPartNumber" name="part_number" class="form-control" placeholder="Semua Part Number" autocomplete="off"
                                 @if(isset($part_number)) value="{{ $part_number }}" @else value="{{ old('part_number') }}"@endif>
                         </div>
                     </div>
@@ -238,41 +238,40 @@
 
         var pages = 1;
 
-        // $(window).scroll(function() {
-        //     if(blockDataPartNumber.isBlocked() === false) {
-        //         if($(window).scrollTop() + $(window).height() >= $(document).height()) {
-        //             const params = new URLSearchParams(window.location.search)
-        //             for (const param of params) {
-        //                 var tipe_motor = params.get('tipe_motor');
-        //                 var group_level = params.get('group_level');
-        //                 var group_produk = params.get('group_produk');
-        //                 var part_number = params.get('part_number');
-        //             }
-        //             pages++;
-        //             loadMoreData(tipe_motor, group_level, group_produk, part_number, pages);
-        //             console.log(pages);
-        //         }
-        //     }
-        // });
-
-        window.addEventListener("scroll", myFunction);
-        // saat kt_aside_footer terlihat di layar maka 
-        function myFunction() {
-            var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
-            console.log(scrollpercent);
-            if (scrollpercent > 0.975 && scrollpercent <= 1 && blockDataPartNumber.isBlocked() === false) {
-                const params = new URLSearchParams(window.location.search)
-                for (const param of params) {
-                    var tipe_motor = params.get('tipe_motor');
-                    var group_level = params.get('group_level');
-                    var group_produk = params.get('group_produk');
-                    var part_number = params.get('part_number');
+        $(window).scroll(function() {
+            if(blockDataPartNumber.isBlocked() === false) {
+                if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+                    const params = new URLSearchParams(window.location.search)
+                    for (const param of params) {
+                        var tipe_motor = params.get('tipe_motor');
+                        var group_level = params.get('group_level');
+                        var group_produk = params.get('group_produk');
+                        var part_number = params.get('part_number');
+                    }
+                    pages++;
+                    loadMoreData(tipe_motor, group_level, group_produk, part_number, pages);
                 }
-                pages++;
-                loadMoreData(tipe_motor, group_level, group_produk, part_number, pages);
-                // console.log(pages);
             }
-        }
+        });
+
+        // window.addEventListener("scroll", myFunction);
+        // // saat kt_aside_footer terlihat di layar maka 
+        // function myFunction() {
+        //     var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+        //     console.log(scrollpercent);
+        //     if (scrollpercent > 0.975 && scrollpercent <= 1 && blockDataPartNumber.isBlocked() === false) {
+        //         const params = new URLSearchParams(window.location.search)
+        //         for (const param of params) {
+        //             var tipe_motor = params.get('tipe_motor');
+        //             var group_level = params.get('group_level');
+        //             var group_produk = params.get('group_produk');
+        //             var part_number = params.get('part_number');
+        //         }
+        //         pages++;
+        //         loadMoreData(tipe_motor, group_level, group_produk, part_number, pages);
+        //         // console.log(pages);
+        //     }
+        // }
 
         window.onbeforeunload = function () {
             window.scrollTo(0, 0);

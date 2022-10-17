@@ -39,6 +39,9 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::get('/dashboard/management', 'App\Dashboard\Management\DashboardManagementController@index')->middleware('authLogin')->name('dashboard-management');
         Route::get('/dashboard/management/sales', 'App\Dashboard\Management\DashboardManagementSalesController@index')->middleware('authLogin')->name('dashboard-management-sales');
         Route::get('/dashboard/management/stock', 'App\Dashboard\Management\DashboardManagementStockController@index')->middleware('authLogin')->name('dashboard-management-stock');
+
+        Route::get('/dashboard/marketing/pencapaian/perlevel', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerLevel')->middleware('authLogin')->name('dashboard-marketing-pencapaian-perlevel');
+        Route::get('/dashboard/marketing/pencapaian/growth', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianGrowth')->middleware('authLogin')->name('dashboard-marketing-pencapaian-growth');
     });
 
     Route::name('profile.')->group(function () {
@@ -121,8 +124,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::get('/option/dealerindex', 'App\Option\OptionController@optionDealerIndex')->middleware('authLogin')->name('option-dealer-index');
         Route::get('/option/dealersalesman', 'App\Option\OptionController@optionDealerSalesman')->middleware('authLogin')->name('option-dealer-salesman');
         Route::get('/option/salesman', 'App\Option\OptionController@optionSalesman')->middleware('authLogin')->name('option-salesman');
+        Route::get('/option/supervisor', 'App\Option\OptionController@optionSupervisor')->middleware('authLogin')->name('option-supervisor');
         Route::get('/option/partnumber', 'App\Option\OptionController@optionPartNumber')->middleware('authLogin')->name('option-part-number');
         Route::get('/option/tipemotor', 'App\Option\OptionController@optionTipeMotor')->middleware('authLogin')->name('option-tipe-motor');
+        Route::get('/option/groupproduk', 'App\Option\OptionController@OptionGroupProduk')->middleware('authLogin')->name('option-group-produk');
     });
 
     Route::name('setting.')->group(function () {

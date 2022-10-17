@@ -139,7 +139,7 @@
 
             $(window).scroll(function() {
                 if(blockDataTrackingOrder.isBlocked() === false) {
-                    if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
                             var year = params.get('year');
