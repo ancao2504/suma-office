@@ -516,11 +516,12 @@ class ApiService {
         return $response;
     }
 
-    public static function OptionGroupProduk($search, $page, $per_page) {
+    public static function OptionGroupProduk($level, $search, $page, $per_page) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'options/groupproduk';
         $header = [ 'Authorization' => $credential ];
         $body = [
+            'level'     => $level,
             'search'    => $search,
             'page'      => $page,
             'per_page'  => $per_page,

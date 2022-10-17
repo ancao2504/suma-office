@@ -11,29 +11,6 @@ class PartNumberController extends Controller
 {
     public function index(Request $request) {
         $Agent = new Agent();
-
-        $data_group_produk = [];
-        $responseApi = ApiService::OptionGroupProduk();
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-
-        if($statusApi == 1) {
-            $data_group_produk = json_decode($responseApi)->data;
-        } else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
-        }
-
-        $data_group_level = [];
-        $responseApi = ApiService::OptionProdukLevel();
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-
-        if($statusApi == 1) {
-            $data_group_level = json_decode($responseApi)->data;
-        } else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
-        }
-
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
@@ -70,8 +47,6 @@ class PartNumberController extends Controller
                 'kode_motor'    => $request->get('type_motor'),
                 'part_number'   => $request->get('part_number'),
                 'tipe_motor'    => $request->get('tipe_motor'),
-                'group_produk'  => $data_group_produk,
-                'group_level'   => $data_group_level,
                 'data_part'     => $data_part
             ]);
         } else {

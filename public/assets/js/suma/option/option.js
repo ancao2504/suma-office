@@ -1,3 +1,6 @@
+// =====================================================================
+// Load Data Supervisor
+// =====================================================================
 function loadDataSupervisor(page = 1, per_page = 10, search = '') {
     $.ajax({
         url: base_url+'/option/supervisor'+"?search="+search+"&per_page="+per_page+"&page="+page,
@@ -58,6 +61,9 @@ $('#searchSupervisorForm #inputSearchSupervisor').on('change', function(e) {
     loadDataSupervisor(1, per_page_spv, search_spv);
 });
 
+// =====================================================================
+// Load Data Salesman
+// =====================================================================
 function loadDataSalesman(page = 1, per_page = 10, search = '') {
     $.ajax({
         url: base_url+'/option/salesman'+"?search="+search+"&per_page="+per_page+"&page="+page,
@@ -118,6 +124,9 @@ $('#searchSalesmanForm #inputSearchSalesman').on('change', function(e) {
     loadDataSalesman(1, per_page_sales, search_sales);
 });
 
+// =====================================================================
+// Load Data Dealer Salesman
+// =====================================================================
 function loadDataDealerSalesman(salesman = '', page = 1, per_page = 10, search = '') {
     $.ajax({
         url: base_url+'/option/dealersalesman'+"?salesman="+salesman+"&search="+search+"&per_page="+per_page+"&page="+page,
@@ -182,6 +191,9 @@ $('#searchDealerSalesmanForm #inputSearchDealerSalesman').on('change', function(
     loadDataDealerSalesman(salesman, 1, per_page_dealer_salesman, search_dealer_salesman);
 });
 
+// =====================================================================
+// Load Data Dealer
+// =====================================================================
 function loadDataDealer(page = 1, per_page = 10, search = '') {
     $.ajax({
         url: base_url+'/option/dealer'+"?search="+search+"&per_page="+per_page+"&page="+page,
@@ -242,6 +254,9 @@ $('#searchDealerForm #inputSearchDealer').on('change', function(e) {
     loadDataDealer(1, per_page_dealer, search_dealer);
 });
 
+// =====================================================================
+// Load Data Tipe Motor
+// =====================================================================
 function loadDataTipeMotor(page = 1, per_page = 10, search = '') {
     $.ajax({
         url: base_url+'/option/tipemotor'+"?search="+search+"&per_page="+per_page+"&page="+page,
@@ -302,8 +317,11 @@ $('#searchTipeMotorForm #inputSearchTipeMotor').on('change', function(e) {
     loadDataTipeMotor(1, per_page_tipe_motor, search_tipe_motor);
 });
 
+// =====================================================================
+// Load Data Produk
+// =====================================================================
 function loadDataProduk(page = 1, per_page = 10, search = '', level = '') {
-    $('#inputFilterLevelProduk').html(level);
+    $('#searchProdukForm #inputFilterLevelProduk').html(level);
 
     $.ajax({
         url: base_url+'/option/groupproduk'+"?level="+level+"&search="+search+"&per_page="+per_page+"&page="+page,
@@ -330,36 +348,40 @@ $(document).on('click', '#searchProdukForm #pageProduk .pagination .page-item a'
     pages = $(this)[0].getAttribute("data-page");
     page = pages.split('?page=')[1];
 
+    var level_produk = $('#searchProdukForm #inputFilterLevelProduk').html();
     var search_produk = $('#searchProdukForm #inputSearchProduk').val();
     var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
 
-    loadDataProduk(page, per_page_produk, search_produk);
+    loadDataProduk(page, per_page_produk, search_produk, level_produk);
 });
 
 $('body').on('change', '#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk', function(e) {
     e.preventDefault();
 
     var start_record_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProdukInfo #startRecordProduk').html();
+    var level_produk = $('#searchProdukForm #inputFilterLevelProduk').html();
     var search_produk = $('#searchProdukForm #inputSearchProduk').val();
     var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
 
     var page = Math.ceil(start_record_produk / per_page_produk);
 
-    loadDataProduk(page, per_page_produk, search_produk);
+    loadDataProduk(page, per_page_produk, search_produk, level_produk);
 });
 
 $('body').on('click', '#searchProdukForm #btnSearchProduk', function(e) {
     e.preventDefault();
+    var level_produk = $('#searchProdukForm #inputFilterLevelProduk').html();
     var search_produk = $('#searchProdukForm #inputSearchProduk').val();
     var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
 
-    loadDataProduk(1, per_page_produk, search_produk);
+    loadDataProduk(1, per_page_produk, search_produk, level_produk);
 });
 
 $('#searchProdukForm #inputSearchProduk').on('change', function(e) {
     e.preventDefault();
+    var level_produk = $('#searchProdukForm #inputFilterLevelProduk').html();
     var search_produk = $('#searchProdukForm #inputSearchProduk').val();
     var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
 
-    loadDataProduk(1, per_page_produk, search_produk);
+    loadDataProduk(1, per_page_produk, search_produk, level_produk);
 });

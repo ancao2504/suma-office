@@ -87,7 +87,7 @@
 
                     </div>
                     <div class="fv-row mt-8">
-                        <label class="form-label">Marketing:</label>
+                        <label class="form-label">Jenis Marketing:</label>
                         <select id="selectFilterJenisMkr" name="jenis_mkr" class="form-select" data-placeholder="Semua Jenis Marketing" data-allow-clear="true">
                             <option value="" @if($jenis_mkr != 'SALESMAN' && $jenis_mkr != 'SUPERVISOR') selected @endif>Semua Marketing</option>
                             <option value="SALESMAN" @if($jenis_mkr == 'SALESMAN') selected @endif>SALESMAN</option>
@@ -134,7 +134,6 @@
         var marketing = '{{$jenis_mkr}}';
         var levelProduk = '{{$level_produk}}';
 
-        getLevelProduk(levelProduk);
         getJenisMkr(marketing);
     }
 
@@ -143,26 +142,6 @@
         e.preventDefault();
         blockIndex.block();
         document.getElementById("formFilter").submit();
-    });
-
-    function getLevelProduk(selectFilterLevelProduk = '') {
-        if(selectFilterLevelProduk == 'HANDLE') {
-            $("#btnFilterProduk").prop("disabled", false);
-        } else if(selectFilterLevelProduk == 'NON_HANDLE') {
-            $("#btnFilterProduk").prop("disabled", false);
-        } else if(selectFilterLevelProduk == 'TUBE') {
-            $("#btnFilterProduk").prop("disabled", false);
-        } else if(selectFilterLevelProduk == 'OLI') {
-            $("#btnFilterProduk").prop("disabled", false);
-        } else {
-            $('#inputFilterKodeProduk').val('');
-            $("#btnFilterProduk").prop("disabled", true);
-        }
-    }
-
-    $('#selectFilterLevelProduk').change(function(){
-        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
-        getLevelProduk(selectFilterLevelProduk);
     });
 
     function getJenisMkr(selectFilterJenisMkr = '') {
@@ -204,7 +183,8 @@
         $('#btnFilterProduk').on('click', function(e) {
             e.preventDefault();
 
-            loadDataProduk(1, 10, '', 'HANDLE');
+            var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
+            loadDataProduk(1, 10, '', selectFilterLevelProduk);
             $('#searchProdukForm').trigger('reset');
             $('#produkSearchModal').modal('show');
         });
@@ -214,9 +194,6 @@
             $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
             $('#produkSearchModal').modal('hide');
         });
-
-
-
 
         $('#btnFilterMarketing').on('click', function(e) {
             e.preventDefault();

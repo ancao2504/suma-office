@@ -733,12 +733,14 @@ class OptionController extends Controller {
     }
 
     public function optionGroupProduk(Request $request) {
-        $responseApi = ApiService::OptionGroupProduk($request->get('search'), $request->get('page'), $request->get('per_page'));
+        $responseApi = ApiService::OptionGroupProduk($request->get('level'), $request->get('search'),
+                            $request->get('page'), $request->get('per_page'));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
             $data = json_decode($responseApi)->data;
+
             $data_per_page = $data->per_page;
             $data_link_page = $data->links;
             $data_from_record = $data->from;
@@ -809,8 +811,8 @@ class OptionController extends Controller {
                 $table_header = '<table id="tableSearchProduk" class="table align-middle table-row-bordered fs-6">
                         <thead>
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-100px">Kode Sales</th>
-                                <th class="min-w-150px">Nama Sales</th>
+                                <th class="min-w-100px">Kode Produk</th>
+                                <th class="min-w-150px">Nama Produk</th>
                                 <th class="min-w-50px text-center">Action</th>
                             </tr>
                         </thead>
