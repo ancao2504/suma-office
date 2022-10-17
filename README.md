@@ -22,8 +22,8 @@
     |   |   |📁reports                # laporan
     |   |   |📁dll
     📁routes                            # route
-    |    |📄web.php
-    |    |📄dll
+    |   |📄web.php
+    |   |📄dll
 ```
 
 ## License
