@@ -161,7 +161,7 @@
         <script type="text/javascript">
             var targetIndex = document.querySelector("#kt_body");
             var blockIndex = new KTBlockUI(targetIndex, {
-                message: '<div class="blockui-message">'+
+                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
                             '<span class="spinner-border text-primary"></span> Loading...'+
                         '</div>'
             });

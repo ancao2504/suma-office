@@ -612,44 +612,16 @@
             });
 
             var btnSimpanHeader = document.querySelector("#btnSimpanHeaderCart");
-            var modalHeader = document.querySelector("#modalContentCartHeader");
-            var blockModalHeader = new KTBlockUI(modalHeader, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-            });
-
             btnSimpanHeader.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockModalHeader.block();
+                blockIndex.block();
                 document.getElementById("formModalCartHeader").submit();
             });
 
-            var btnCartImportExcel = document.querySelector("#btnImportExcelCartProses");
-            var modalCartImportExcel = document.querySelector("#modalCartContentImportExcel");
-            var blockModalCartImportExcel = new KTBlockUI(modalCartImportExcel, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
+            var btnTambahCart = document.querySelector("#btnTambahCart");
+            btnTambahCart.addEventListener("click", function(e) {
+                blockIndex.block();
             });
-
-            var modalEditPart = document.querySelector("#modalContentCartDetail");
-            var blockModalEditPart = new KTBlockUI(modalEditPart, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-            });
-
-            var cartForm = document.querySelector("#cartForm");
-            var blockCartForm = new KTBlockUI(cartForm, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-            });
-
-            var cartDetail = document.querySelector("#cardCartDetail");
-            var blockCartDetail = new KTBlockUI(cartDetail, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-            });
-
-            var btnCartCheckOutProses = document.querySelector("#btnCheckOutProses");
-            var modalContentCartCheckOutProses = document.querySelector("#modalContentCartCheckOut");
-            var blockModalCartCheckOutProses = new KTBlockUI(modalContentCartCheckOutProses, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Loading...</div>',
-            });
-
 
             function formatDiscount(nominal, prefix) {
                 var number_string = nominal.replace(/[^,\d]/g, "").toString(),
@@ -683,13 +655,13 @@
             var xInputKeyUser = document.getElementById("inputKodeCart").value;
 
             function daftarDetailCart() {
-                blockCartDetail.block();
+                blockIndex.block();
                 $.ajax({
                     url: "{{ route('orders.daftar-cart-detail') }}",
                     method: "GET",
 
                     success:function(response) {
-                        blockCartDetail.release();
+                        blockIndex.release();
 
                         if (response.status == true) {
                             $('#tableDetailCart').html(response.data);
@@ -706,7 +678,7 @@
                         }
                     },
                     error:function() {
-                        blockCartDetail.release();
+                        blockIndex.release();
                     }
                 })
             }
@@ -782,14 +754,14 @@
                     var tpc = $('#selectKodeTpc').val();
                     var _token = $('input[name="_token"]').val();
 
-                    blockModalEditPart.block();
+                    blockIndex.block();
                     $.ajax({
                         url: "{{ route('orders.cart-detail-edit') }}",
                         method: "POST",
                         data: { part_number: part_number, _token: _token },
 
                         success:function(response) {
-                            blockModalEditPart.release();
+                            blockIndex.release();
 
                             if (response.status == true) {
                                 $('#modalTitle').html("Edit Data Cart");
@@ -842,13 +814,13 @@
                             }
                         },
                         error:function() {
-                            blockModalEditPart.release();
+                            blockIndex.release();
                         }
                     })
                 });
 
                 $('#modalEditCartSelectTpc').on('change', function() {
-                    blockModalEditPart.block();
+                    blockIndex.block();
 
                     var part_number = $('#modalEditCartInputPartNumber').val();
                     var tpc = this.value;
@@ -860,7 +832,7 @@
                         data: { part_number: part_number, _token: _token },
 
                         success:function(response) {
-                            blockModalEditPart.release();
+                            blockIndex.release();
 
                             if(tpc == 14) {
                                 $('#modalEditCartInputHarga').val(formatRupiah(response.data.het.toString(), ""));
@@ -891,7 +863,7 @@
                             }
                         },
                         error:function() {
-                            blockModalEditPart.release();
+                            blockIndex.release();
                         }
                     });
                 });
@@ -905,7 +877,7 @@
                     var discount_plus = $('#modalEditCartInputDiscountPlus').val();
                     var _token = $('input[name="_token"]').val();
 
-                    blockModalEditPart.block();
+                    blockIndex.block();
                     $.ajax({
                         url: "{{ route('orders.insert-cart-detail') }}",
                         method: "POST",
@@ -914,7 +886,7 @@
                             discount: discount, discount_plus: discount_plus, _token: _token
                         },
                         success:function(response) {
-                            blockModalEditPart.release();
+                            blockIndex.release();
 
                             if (response.status == false) {
                                 Swal.fire({
@@ -941,7 +913,7 @@
                             }
                         },
                         error:function() {
-                            blockModalEditPart.release();
+                            blockIndex.release();
                         }
                     });
                 });
@@ -968,7 +940,7 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            blockCartForm.block();
+                            blockIndex.block();
 
                             $.ajax({
                                 url: "{{ route('orders.delete-cart-detail') }}",
@@ -976,7 +948,7 @@
                                 data: { part_number: part_number, _token: _token },
 
                                 success:function(response) {
-                                    blockCartForm.release();
+                                    blockIndex.release();
 
                                     if (response.status == true) {
                                         Swal.fire({
@@ -1002,7 +974,7 @@
                                     }
                                 },
                                 error:function() {
-                                    blockCartForm.release();
+                                    blockIndex.release();
                                 }
                             })
                         }
@@ -1028,7 +1000,7 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            blockCartForm.block();
+                            blockIndex.block();
 
                             $.ajax({
                                 url: "{{ route('orders.reset-cart') }}",
@@ -1036,7 +1008,7 @@
                                 data: { _token: _token },
 
                                 success:function(response) {
-                                    blockCartForm.release();
+                                    blockIndex.release();
 
                                     if (response.status == true) {
                                         Swal.fire({
@@ -1062,7 +1034,7 @@
                                     }
                                 },
                                 error:function() {
-                                    blockCartForm.release();
+                                    blockIndex.release();
                                 }
                             })
                         }
@@ -1108,7 +1080,7 @@
                             }
                         });
                     } else {
-                        blockModalCartImportExcel.block();
+                        blockIndex.block();
                         var formData = new FormData(document.getElementById("formModalCartImportExcel"));
                         $.ajax({
                             type:'POST',
@@ -1119,7 +1091,7 @@
                             processData: false,
 
                             success:function(response) {
-                                blockModalCartImportExcel.release();
+                                blockIndex.release();
 
                                 if (response.status == false) {
                                     Swal.fire({
@@ -1158,7 +1130,7 @@
                                 }
                             },
                             error:function() {
-                                blockModalCartImportExcel.release();
+                                blockIndex.release();
                             }
                         });
                     }
@@ -1170,7 +1142,7 @@
 
                 $('#btnCheckOut').click(function(e) {
                     e.preventDefault();
-                    blockModalCartCheckOutProses.block();
+                    blockIndex.block();
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url: "{{ route('orders.cart-check-out-cek-aturan-harga') }}",
@@ -1178,7 +1150,7 @@
                         data: { _token: _token },
 
                         success:function(response) {
-                            blockModalCartCheckOutProses.release();
+                            blockIndex.release();
 
                             if(response.status == false) {
                                 Swal.fire({
@@ -1191,7 +1163,7 @@
                                     }
                                 });
                             } else {
-                                blockModalCartCheckOutProses.release();
+                                blockIndex.release();
 
                                 if(response.message == 'STATUS_OK') {
                                     $('#modalCartCheckOut').modal('show');
@@ -1217,7 +1189,7 @@
                             }
                         },
                         error:function() {
-                            blockModalCartCheckOutProses.release();
+                            blockIndex.release();
                         }
                     });
                 });

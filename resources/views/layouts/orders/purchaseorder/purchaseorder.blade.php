@@ -114,15 +114,9 @@
         <script type="text/javascript">
             @if(strtoupper(trim($device)) != 'DESKTOP')
             var btnFilterProses = document.querySelector("#btnFilterProses");
-            var targetModalFilter = document.querySelector("#modalFilterContent");
-            var blockFilter = new KTBlockUI(targetModalFilter, {
-                message: '<div class="blockui-message">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockFilter.block();
+                blockIndex.block();
                 document.getElementById("formFilter").submit();
             });
 

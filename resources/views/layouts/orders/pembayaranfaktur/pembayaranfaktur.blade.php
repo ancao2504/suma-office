@@ -202,20 +202,6 @@
 
     @push('scripts')
         <script type="text/javascript">
-            var targetModalPembayaranPerFaktur = document.querySelector("#modalContentPembayaranPerFaktur");
-            var blockModalPembayaranPerFaktur = new KTBlockUI(targetModalPembayaranPerFaktur, {
-                message: '<div class="blockui-message">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
-
-            var targetModalPembayaranPerNomorBpk = document.querySelector("#modalContentPembayaranPerNomorBpk");
-            var blockModalPembayaranPerNomorBpk = new KTBlockUI(targetModalPembayaranPerNomorBpk, {
-                message: '<div class="blockui-message">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
-
             function formatNumber(val) {
                 var sign = 1;
                 if (val < 0) {
@@ -241,7 +227,7 @@
                     var nomor_faktur = $(this).data('kode');
                     var _token = $('input[name="_token"]').val();
 
-                    blockModalPembayaranPerFaktur.block();
+                    blockIndex.block();
 
                     $.ajax({
                         url: "{{ route('orders.pembayaran-faktur-detail-per-faktur') }}",
@@ -249,7 +235,7 @@
                         data: { nomor_faktur: nomor_faktur, _token: _token },
 
                         success:function(response) {
-                            blockModalPembayaranPerFaktur.release();
+                            blockIndex.release();
 
                             if (response.status == true) {
                                 $('#modalTitlePerNomorFaktur').html('Pembayaran Per-Faktur');
@@ -286,7 +272,7 @@
                             }
                         },
                         error:function() {
-                            blockModalPembayaranPerFaktur.release();
+                            blockIndex.release();
                         }
                     })
                 });
@@ -295,7 +281,7 @@
                     var nomor_bpk = $(this).data('kode');
                     var _token = $('input[name="_token"]').val();
 
-                    blockModalPembayaranPerNomorBpk.block();
+                    blockIndex.block();
 
                     $.ajax({
                         url: "{{ route('orders.pembayaran-faktur-detail-per-bpk') }}",
@@ -303,7 +289,7 @@
                         data: { nomor_bpk: nomor_bpk, _token: _token },
 
                         success:function(response) {
-                            blockModalPembayaranPerNomorBpk.release();
+                            blockIndex.release();
 
                             if (response.status == true) {
                                 $('#modalTitlePerNomorBpk').html('Bukti Pembayaran Kas');
@@ -345,7 +331,7 @@
                             }
                         },
                         error:function() {
-                            blockModalPembayaranPerNomorBpk.release();
+                            blockIndex.release();
                         }
                     })
                 });
