@@ -149,7 +149,7 @@ $(document).ready(function () {
 
         $('#harga').val(data.harga_jual.trim());
 
-        $('#keterangan').val();
+        $('#keterangan').val(data.keterangan);
 
         $('#staticBackdrop').modal('show');
         $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');

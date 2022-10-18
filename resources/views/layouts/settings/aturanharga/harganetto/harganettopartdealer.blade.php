@@ -156,6 +156,7 @@
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">HET</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">TPC 20</th>
                                         <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Harga Jual</th>
+                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Keterangan</th>
                                         <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
                                     </tr>
                                 </thead>
@@ -179,6 +180,9 @@
                                         </td>
                                         <td>
                                             <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga_jual) }}</span>
+                                        </td>
+                                        <td>
+                                            {!! $dta->keterangan !!}
                                         </td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" 
@@ -298,6 +302,12 @@
     @push('scripts')
     <script type="text/javascript">
             const current_page = "{{ $data_part_netto_dealer->current_page }}"
+            let old = {
+                part_number: '{{ old('part_number') }}',
+            }
+            if (old.part_number != '') {
+                $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
+            }
     </script>
     <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer.js') }}?v={{ time() }}"></script>
     @endpush
