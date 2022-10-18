@@ -183,13 +183,9 @@
                     <!--end::Info-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model">Delete</button>
+                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">Delete</button>
                         <button class="btn btn-sm btn-light btn-light-warning btn-edit"
-                        data-array="{{
-                                        json_encode([
-                                            'kode_dealer' => $data->kode_dealer,
-                                        ])
-                                    }}">
+                        data-array="{{json_encode($data)}}">
                         Edit</button>
                     </div>
                     <!--end::Actions-->
@@ -276,16 +272,11 @@
                                             <span class="badge badge-light-info fw-bolder fs-5">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model">
+                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
+                                            data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">
                                                 <span class="bi bi-trash"></span>
                                             </button>
-                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit"
-                                            data-array="{{
-                                                            json_encode([
-                                                                'kode_dealer' => $data->kode_dealer,
-                                                            ])
-                                                        }}"
-                                            >
+                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit" data-array="{{json_encode($data)}}">
                                                 <span class="bi bi-pencil"></span>
                                             </button>
                                         </td>
@@ -394,6 +385,6 @@
                 'produk': '{{ old('dealer') }}',
             }
     </script>
-    {{-- <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonprodukdealer.js') }}?v={{ time() }}"></script> --}}
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskondealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

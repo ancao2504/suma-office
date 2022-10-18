@@ -57,7 +57,7 @@ $(document).ready(function () {
     });
     // end validasi inputan kode produk
 
-    // validasi inputan kode produk
+    // validasi dealer
     $('#dealer').on('change', function () {
         loading.block();
         $.ajax({
@@ -92,7 +92,7 @@ $(document).ready(function () {
         });
         loading.release();
     });
-    // end validasi inputan kode produk
+    // end validasi dealer
 
     // delete data
     $('.btn-delete').on('click', function () {
