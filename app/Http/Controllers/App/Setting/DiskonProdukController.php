@@ -32,7 +32,7 @@ class DiskonProdukController extends Controller
             $data = json_decode($responseApi)->data;
             // dd(json_decode($responseApi)->data);
             return view(
-                'layouts.settings.aturanharga.diskonproduk',
+                'layouts.settings.aturanharga.diskon.diskonproduk',
                 [
                     'title_menu'    => 'Diskon Produk',
                     'data_disc'     => $data,

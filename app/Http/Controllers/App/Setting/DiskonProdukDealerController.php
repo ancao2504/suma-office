@@ -31,7 +31,7 @@ class DiskonProdukDealerController extends Controller
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
             return view(
-                'layouts.settings.aturanharga.diskonprodukdealer',
+                'layouts.settings.aturanharga.diskon.diskonprodukdealer',
                 [
                     'title_menu'    => 'Diskon Produk (Dealer)',
                     'data_disc'     => $data,
