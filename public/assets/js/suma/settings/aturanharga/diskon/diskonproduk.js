@@ -1,6 +1,7 @@
 $(document).ready(function () {
     if (old.cabang != null) {
         $('#cabang option[value="' + old.cabang.trim() + '"]').prop('selected', true);
+        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
     }
 
     // jika terdapat submit pada form

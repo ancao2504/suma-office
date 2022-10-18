@@ -305,9 +305,6 @@
             let old = {
                 part_number: '{{ old('part_number') }}',
             }
-            if (old.part_number != '') {
-                $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
-            }
     </script>
     <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer.js') }}?v={{ time() }}"></script>
     @endpush

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     if (old.status != null) {
         $('#status option[value="' + old.status.trim() + '"]').prop('selected', true);
+        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
     }
 
     // jika terdapat submit pada form

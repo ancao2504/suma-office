@@ -143,123 +143,6 @@
 
 <div class="tab-content">
     <!--begin::Tab pane-->
-    {{-- <div id="kt_project_users_card_pane" class="tab-pane fade">
-        <!--begin::Row-->
-        <div class="row g-3" id="dataDiskon">
-        @foreach ( $data_disc->data as $data)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
-                <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
-                    <!--begin::Info-->
-                    <div class="d-flex flex-column py-2 w-100">
-                        <!--begin::Owner-->
-                        <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
-                            <span class="text-gray-800">{{ $data->kode_produk }}</span>
-                            <span class="text-muted fs-6 fw-bold ms-2">{{ $data->nama_produk }}</span>
-                        </div>
-                        <!--end::Owner-->
-                        <div class="d-flex align-items-center w-100">
-                            <table class="table table-borderless table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td class="fw-bolder">Cabang</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-primary fw-bolder fs-6">{{ $data->cabang }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Umur Faktur</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-info fw-bolder fs-6">{{ number_format($data->umur_faktur) }}</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--begin::Wrapper-->
-                        <div class="d-flex align-items-center w-100">
-                            <table class="table table-borderless table-sm tb-card">
-                                <thead class="p-3">
-                                    <tr>
-                                        <th class="fw-bolder">#</th>
-                                        <th class="fw-bolder">Normal</th>
-                                        <th class="fw-bolder">Max</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="p-3">
-                                    <tr>
-                                        <td class="fw-bolder">Disc</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $data->disc_normal == '.00'? '0' : $data->disc_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $data->disc_max == '.00'? '0' : $data->disc_max }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Disc +</td>
-                                        <td class="fw-bolder"><span class="badge badge-light-success fw-bolder px-4 py-3">{{ $data->disc_plus_normal == '.00'? '0' : $data->disc_plus_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="badge badge-light-warning fw-bolder px-4 py-3">{{ $data->disc_plus_max == '.00'? '0' : $data->disc_plus_max }}</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--end::Wrapper-->
-                    </div>
-                    <!--end::Info-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}">Delete</button>
-                        <button class="btn btn-sm btn-light btn-light-warning btn-edit"
-                        data-array="{{
-                                    json_encode([
-                                        'kode_produk' => $data->kode_produk,
-                                        'nama_produk' => $data->nama_produk,
-                                        'disc_normal' => $data->disc_normal == '.00' ? 0 : $data->disc_normal,
-                                        'disc_max' => $data->disc_max == '.00' ? 0 : $data->disc_max,
-                                        'disc_plus_normal' => $data->disc_plus_normal == '.00' ? 0 : $data->disc_plus_normal,
-                                        'disc_plus_max' => $data->disc_plus_max == '.00' ? 0 : $data->disc_plus_max,
-                                        'umur_faktur' => number_format($data->umur_faktur),
-                                        'cabang' => $data->cabang,
-                                    ])
-                                }}">
-                        Edit</button>
-                    </div>
-                    <!--end::Actions-->
-                </div>
-                <!--end::Card-->
-            </div>
-            
-        @endforeach
-        </div>
-        <!--end::Row-->
-        <!--begin::Pagination-->
-        <div class="d-flex flex-stack flex-wrap pt-10">
-            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_disc->from }} to {{ $data_disc->to }} of {{ $data_disc->total }} entries</div>
-            <!--begin::Pages-->
-            <ul class="pagination">
-                @foreach ($data_disc->links as $data)
-                    @if (strpos($data->label, 'Next') !== false)
-                        <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
-                                <i class="next"></i>
-                            </a>
-                        </li>
-                    @elseif (strpos($data->label, 'Previous') !== false)
-                        <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
-                                <i class="previous"></i>
-                            </a>
-                        </li>
-                    @elseif ($data->active == true)
-                        <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
-                        </li>
-                    @elseif ($data->active == false)
-                        <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
-            <!--end::Pages-->
-        </div>
-        <!--end::Pagination-->
-    </div> --}}
     <!--end::Tab pane-->
     <!--begin::Tab pane-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
@@ -436,6 +319,9 @@
     @push('scripts')
     <script type="text/javascript">
             const current_page = "{{ $data_disc->current_page }}"
+            let old = {
+                'produk': '{{ old('produk') }}',
+            }
     </script>
     <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonprodukdealer.js') }}?v={{ time() }}"></script>
     @endpush

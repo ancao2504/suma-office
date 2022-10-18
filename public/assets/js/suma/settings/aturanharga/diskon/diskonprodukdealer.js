@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    // jika terdapat variabel old maka data bisa langsung di submit tanpalagi menunggu validasi produk
+    if (old.produk != null) {
+        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
+    }
+    // end 
 
     // search di url
     const params = new URLSearchParams(window.location.search)
