@@ -1389,7 +1389,7 @@ class ApiService
         $body = [
             'produk'            => trim($produk),
             'dealer'            => trim($dealer),
-            'companyid'            => trim($companyid),
+            'companyid'         => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -1424,9 +1424,9 @@ class ApiService
             $request = 'setting/harga/partnetto/simpan';
             $header = ['Authorization' => $credential];
             $body = [
-                'part_number'        => trim($part_number),
+                'part_number'   => trim($part_number),
                 'status'        => trim($status),
-                'harga'    => trim($harga),
+                'harga'         => trim($harga),
                 'companyid'     => trim($companyid),
                 'user_id'       => trim($user_id),
             ];
@@ -1456,6 +1456,7 @@ class ApiService
 
     public static function HargaNettoPartDealerSimpan($part_number, $dealer, $harga, $keterangan, $companyid, $user_id)
     {
+        // dd($part_number, $dealer, $harga, $keterangan, $companyid, $user_id);
         // cek part
         $validasiPart = ApiService::ValidasiPartNumber($part_number, $companyid);
         $validasiPart = json_decode($validasiPart)->status;
@@ -1472,9 +1473,9 @@ class ApiService
                 $request = 'setting/harga/partnetto/dealer/simpan';
                 $header = ['Authorization' => $credential];
                 $body = [
-                    'part_number'        => trim($part_number),
-                    'status'        => trim($dealer),
-                    'harga'    => trim($harga),
+                    'part_number'   => trim($part_number),
+                    'dealer'        => trim($dealer),
+                    'harga'         => trim($harga),
                     'keterangan'    => $keterangan,
                     'companyid'     => trim($companyid),
                     'user_id'       => trim($user_id),
@@ -1494,12 +1495,12 @@ class ApiService
     public static function HargaNettoPartDealerHapus($part_number, $dealer, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'settsetting/harga/partnetto/dealer/hapus';
+        $request = 'setting/harga/partnetto/dealer/hapus';
         $header = ['Authorization' => $credential];
         $body = [
-            'produk'            => trim($part_number),
+            'part_number'       => trim($part_number),
             'dealer'            => trim($dealer),
-            'companyid'            => trim($companyid),
+            'companyid'         => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

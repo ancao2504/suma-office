@@ -80,7 +80,6 @@ class HargaNettoPartsDealerControllers extends Controller
      */
     public function destroy(Request $request)
     {
-
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $responseApi = ApiService::HargaNettoPartDealerHapus(
             trim($request->get('part_number')),

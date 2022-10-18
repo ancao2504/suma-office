@@ -19,7 +19,7 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search">
+                <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search Part Number">
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
@@ -110,22 +110,6 @@
         <!--begin::Tab nav-->
         <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
             <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary me-3" data-bs-toggle="tab" href="#kt_project_users_card_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="5" y="5" width="5" height="5" rx="1" fill="currentColor"></rect>
-                                <rect x="14" y="5" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="5" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="14" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                            </g>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-            <li class="nav-item m-0">
                 <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
                     <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -149,81 +133,6 @@
 
 <div class="tab-content">
     <!--begin::Tab pane-->
-    {{-- <div id="kt_project_users_card_pane" class="tab-pane fade">
-        <!--begin::Row-->
-        <div class="row g-3" id="dataDiskon">
-        @foreach ( $data_part_netto_dealer->data as $dta)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
-                <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
-                    <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
-                    <!--begin::Info-->
-                    <div class="d-flex flex-column py-2">
-                        <!--begin::Owner-->
-                        <!--end::Owner-->
-                        <!--begin::Wrapper-->
-                        <div class="d-flex align-items-center">
-                            <!--begin::Icon-->
-                            <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4">
-                            <!--end::Icon-->
-                            <!--begin::Details-->
-                            <div>
-                                <div class="fs-4 fw-bolder">{{ $dta->part_number }}</div>
-                                <div class="fs-6 fw-bold text-gray-400">{{ $dta->keterangan }}</div>
-                            </div>
-                            <!--end::Details-->
-                        </div>
-                        <!--end::Wrapper-->
-                    </div>
-                    <!--end::Info-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
-                        data-array = "{{ json_encode($dta) }}"
-                        >
-                            Delete
-                        </button>
-                    </div>
-                    <!--end::Actions-->
-                </div>
-                <!--end::Card-->
-            </div>
-        @endforeach
-        </div>
-        <!--end::Row-->
-        <!--begin::Pagination-->
-        <div class="d-flex flex-stack flex-wrap pt-10">
-            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_part_netto_dealer->from }} to {{ $data_part_netto_dealer->to }} of {{ $data_part_netto_dealer->total }} entries</div>
-            <!--begin::Pages-->
-            <ul class="pagination">
-                @foreach ($data_part_netto_dealer->links as $dta)
-                    @if (strpos($dta->label, 'Next') !== false)
-                        <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_part_netto_dealer->current_page) + 1) }}" class="page-link">
-                                <i class="next"></i>
-                            </a>
-                        </li>
-                    @elseif (strpos($dta->label, 'Previous') !== false)
-                        <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_part_netto_dealer->current_page) - 1) }}" class="page-link">
-                                <i class="previous"></i>
-                            </a>
-                        </li>
-                    @elseif ($dta->active == true)
-                        <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
-                        </li>
-                    @elseif ($dta->active == false)
-                        <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
-            <!--end::Pages-->
-        </div>
-        <!--end::Pagination-->
-    </div> --}}
     <!--end::Tab pane-->
     <!--begin::Tab pane-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
@@ -272,8 +181,13 @@
                                             <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga_jual) }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" 
-                                            data-array = "{{ json_encode($dta) }}"
+                                            <button type="button" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" 
+                                            data-array = "{{ json_encode(
+                                                [
+                                                    'part_number' => $dta->part_number,
+                                                    'kode_dealer' => $dta->kode_dealer,
+                                                ]
+                                            ) }}"
                                             data-bs-toggle="modal" data-bs-target="#delet_model">
                                                 <span class="bi bi-trash"></span>
                                             </button>
@@ -385,6 +299,6 @@
     <script type="text/javascript">
             const current_page = "{{ $data_part_netto_dealer->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
