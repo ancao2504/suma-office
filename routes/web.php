@@ -145,8 +145,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::post('/setting/diskonproduk/dealer/hapus', 'App\Setting\DiskonProdukDealerController@destroy')->middleware('authLogin')->name('setting-diskon-produk-dealer-hapus');
 
         // diskon dealer (part Netto)
-        Route::get('/setting/harga/partnetto', 'App\Setting\DiskonDealerController@index')->middleware('authLogin')->name('setting-diskon-dealer');
-        Route::post('/setting/harga/partnetto/simpan', 'App\Setting\DiskonDealerController@storeDestroy')->middleware('authLogin')->name('setting-diskon-dealer-simpanhapus');
+        Route::get('/setting/harga/partnetto', 'App\Setting\HargaNettoPartsControllers@index')->middleware('authLogin')->name('setting-diskon-dealer');
+        Route::post('/setting/harga/partnetto/simpan', 'App\Setting\HargaNettoPartsControllers@storeDestroy')->middleware('authLogin')->name('setting-diskon-dealer-simpanhapus');
     });
 
     Route::name('validasi.')->group(function () {
