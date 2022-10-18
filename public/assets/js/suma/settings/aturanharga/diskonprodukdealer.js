@@ -10,31 +10,15 @@ $(document).ready(function () {
     }
     //  end search di url
 
-    // loading target and action
-    var targetmodal = document.querySelector("#staticBackdrop .modal-content");
-    var loadingModal = new KTBlockUI(targetmodal, {
-        message: '<div class="blockui-message">' +
-            '<span class="spinner-border text-primary"></span> Loading...' +
-            '</div>'
-    });
-
-    var targetcontent = document.querySelector("#kt_wrapper");
-    var loadingContent = new KTBlockUI(targetcontent, {
-        message: '<div class="blockui-message">' +
-            '<span class="spinner-border text-primary"></span> Loading...' +
-            '</div>'
-    });
-    // end loading target and action
-
     // jika terdapat submit pada form
     $('form').submit(function (e) {
-        loadingModal.block();
+        loading.block();
     });
     // end form
 
     // validasi inputan kode produk
     $('#produk').on('change', function () {
-        loadingModal.block();
+        loading.block();
         $.ajax({
             url: base_url + '/validasi/produk',
             type: "POST",
@@ -64,13 +48,13 @@ $(document).ready(function () {
                 $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
             }
         });
-        loadingModal.release();
+        loading.release();
     });
     // end validasi inputan kode produk
 
     // validasi inputan kode produk
     $('#dealer').on('change', function () {
-        loadingModal.block();
+        loading.block();
         $.ajax({
             url: base_url + '/validasi/dealer',
             type: "POST",
@@ -101,7 +85,7 @@ $(document).ready(function () {
                 $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
             }
         });
-        loadingModal.release();
+        loading.release();
     });
     // end validasi inputan kode produk
 
@@ -142,7 +126,7 @@ $(document).ready(function () {
 
     // merubah url dengan parameter yang baru + reload
     function gantiUrl(page = current_page) {
-        loadingContent.block();
+        loading.block();
         window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
     }
     // end pagination,search,per_page

@@ -2,23 +2,10 @@ $(document).ready(function () {
     if (old.cabang != null) {
         $('#cabang option[value="' + old.cabang.trim() + '"]').prop('selected', true);
     }
-    var targetmodal = document.querySelector("#staticBackdrop .modal-content");
-    var loadingModal = new KTBlockUI(targetmodal, {
-        message: '<div class="blockui-message">' +
-            '<span class="spinner-border text-primary"></span> Loading...' +
-            '</div>'
-    });
-
-    var targetcontent = document.querySelector("#kt_wrapper");
-    var loadingContent = new KTBlockUI(targetcontent, {
-        message: '<div class="blockui-message">' +
-            '<span class="spinner-border text-primary"></span> Loading...' +
-            '</div>'
-    });
 
     // jika terdapat submit pada form
     $('form').submit(function (e) {
-        loadingModal.block();
+        loading.block();
     });
     // end form
 
@@ -90,14 +77,14 @@ $(document).ready(function () {
 
     // merubah url dengan parameter yang baru + reload
     function gantiUrl(page = current_page, data = '') {
-        loadingContent.block();
+        loading.block();
         window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val() + "&data=" + data;
     }
     // end pagination,search,per_page
 
     // validasi inputan kode produk
     $('#produk').on('change', function () {
-        loadingModal.block();
+        loading.block();
         $.ajax({
             url: base_url + '/validasi/produk',
             type: "POST",
@@ -125,14 +112,14 @@ $(document).ready(function () {
                 $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
             }
         });
-        loadingModal.release();
+        loading.release();
     });
     // end validasi inputan kode produk
 
     // validasi data produk
     $('#produk, #cabang').on('change', function () {
         if ($('#produk').val() != '' && $('#cabang').val() != '') {
-            loadingModal.block();
+            loading.block();
             $.ajax({
                 url: base_url + '/setting/diskonproduk/cekproduk',
                 type: "POST",
@@ -144,7 +131,7 @@ $(document).ready(function () {
                 success: function (data) {
                     // console.log(data);
                     if (data.status == 1) {
-                        loadingModal.release();
+                        loading.release();
                         Swal.fire({
                             title: 'Informasi',
                             text: data.message,
@@ -170,11 +157,11 @@ $(document).ready(function () {
                             }
                         });
                     } else if (data.status == 0) {
-                        loadingModal.release();
+                        loading.release();
                     }
                 },
                 error: function (data) {
-                    loadingModal.release();
+                    loading.release();
                 }
             });
         }

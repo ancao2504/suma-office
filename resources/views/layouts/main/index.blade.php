@@ -29,6 +29,12 @@
 
     <!--begin::Body-->
 	<body id="kt_body" class="print-content-only">
+        <div id="loading" style="position: fixed; width: 100%; height: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: none;">
+            <div class="d-flex flex-column flex-center w-100 h-100">
+                <div class="text-center" id="loading-massage">
+                </div>
+            </div>
+        </div>
 		<div class="d-flex flex-column flex-root">
 			<div class="page d-flex flex-row flex-column-fluid">
 				@extends('layouts.main.sidebarleft')
@@ -150,6 +156,8 @@
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+        
+		<script src="{{ asset('assets/js/custom/module/loading.js') }}"></script>
         <!-- App scripts -->
         @stack('scripts')
 

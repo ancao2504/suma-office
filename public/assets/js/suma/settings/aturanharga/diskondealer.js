@@ -2,23 +2,10 @@ $(document).ready(function () {
     if (old.status != null) {
         $('#status option[value="' + old.status.trim() + '"]').prop('selected', true);
     }
-    var targetmodal = document.querySelector("#staticBackdrop .modal-content");
-    var loadingModal = new KTBlockUI(targetmodal, {
-        message: '<div class="blockui-message">' +
-            '<span class="spinner-border text-primary"></span> Loading...' +
-            '</div>'
-    });
-
-    var targetcontent = document.querySelector("#kt_wrapper");
-    var loadingContent = new KTBlockUI(targetcontent, {
-        message: '<div class="blockui-message">' +
-            '<span class="spinner-border text-primary"></span> Loading...' +
-            '</div>'
-    });
 
     // jika terdapat submit pada form
     $('form').submit(function (e) {
-        loadingModal.block();
+        loading.block();
     });
     // end form
 
@@ -81,14 +68,14 @@ $(document).ready(function () {
 
     // merubah url dengan parameter yang baru + reload
     function gantiUrl(page = current_page, data = '') {
-        loadingContent.block();
+        loading.block();
         window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val() + "&data=" + data;
     }
     // end pagination,search,per_page
 
     // validasi inputan kode produk
     $('#part_number').on('change', function () {
-        loadingModal.block();
+        loading.block();
         $.ajax({
             url: base_url + '/validasi/partnumber',
             type: "POST",
@@ -117,7 +104,7 @@ $(document).ready(function () {
                 $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
             }
         });
-        loadingModal.release();
+        loading.release();
     });
     // end validasi inputan kode produk
 
