@@ -35,6 +35,7 @@ class DiskonDealerController extends Controller
                 [
                     'title_menu'    => 'Diskon Dealer',
                     'data_disc_dealer'     => $data,
+                    'companyid'     => $companyid,
                 ]
             );
         } else {

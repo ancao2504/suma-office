@@ -1410,9 +1410,9 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
     public static function DiskonDealerSimpan($dealer, $disc_default, $disc_plus, $umur_faktur, $companyid, $user_id)
     {
-
         // cek dealer
         $validasiDealer = ApiService::ValidasiDealer($dealer, $companyid);
         $validasiDealer = json_decode($validasiDealer)->status;

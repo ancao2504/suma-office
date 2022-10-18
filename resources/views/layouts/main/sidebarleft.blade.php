@@ -391,7 +391,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Dealer') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Diskon Dealer') ? 'active' : '' }}" href="{{ url('/setting/diskon/dealer') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
