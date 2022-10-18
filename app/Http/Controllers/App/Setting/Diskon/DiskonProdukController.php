@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\app\setting;
+namespace App\Http\Controllers\app\Setting\Diskon;
 
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class DiskonProdukDealerController extends Controller
+class DiskonProdukController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class DiskonProdukDealerController extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::DiskonProdukDealerDaftar(
+        $responseApi = ApiService::DiskonProdukDaftar(
             $companyid,
             $request->get('page'),
             $request->get('per_page'),
@@ -30,16 +30,43 @@ class DiskonProdukDealerController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
+            // dd(json_decode($responseApi)->data);
             return view(
-                'layouts.settings.aturanharga.diskon.diskonprodukdealer',
+                'layouts.settings.aturanharga.diskon.diskonproduk',
                 [
-                    'title_menu'    => 'Diskon Produk (Dealer)',
+                    'title_menu'    => 'Diskon Produk',
                     'data_disc'     => $data,
-                    'companyid'     => $companyid,
                 ]
             );
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
+        }
+    }
+
+    public function cekDiskonProduk(Request $request)
+    {
+        $responseApi = ApiService::ValidasiDiskonProduk(trim($request->kd_produk), trim($request->cabang));
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if ($statusApi == 1) {
+            if ($messageApi == 'success') {
+                return response()->json([
+                    'status' => 0,
+                ]);
+            } else {
+                $data = json_decode($responseApi)->data;
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data Diskon Produk : ' . trim($data->kode_produk) . ' Cabang : ' . trim($data->cabang) . ' sudah ada, apakah anda ingin mengubahnya ?',
+                    'data' => $data,
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => $messageApi,
+            ]);
         }
     }
 
@@ -52,13 +79,21 @@ class DiskonProdukDealerController extends Controller
     public function store(Request $request)
     {
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
-        $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::DiskonProdukDealerSimpan(
+        if (in_array(trim($request->get('cabang')), array('RK', 'PC'))) {
+            $cabang = strtoupper(trim($request->get('cabang')));
+        } else {
+            return redirect()->back()->withInput()->with('failed', 'Cabang tidak valid');
+        }
+
+        $responseApi = ApiService::DiskonProdukSimpan(
+            trim($cabang),
             trim($request->get('produk')),
-            trim($request->get('dealer')),
-            trim($request->get('keterangan')),
-            trim($companyid),
+            trim($request->get('disc_normal')),
+            trim($request->get('disc_max')),
+            trim($request->get('disc_plus_normal')),
+            trim($request->get('disc_plus_max')),
+            trim($request->get('umur_faktur')),
             trim($user_id)
         );
 
@@ -79,10 +114,10 @@ class DiskonProdukDealerController extends Controller
      */
     public function destroy(Request $request)
     {
-        $responseApi = ApiService::DiskonProdukDealerHapus(
-            trim($request->get('produk')),
-            trim($request->get('dealer')),
-            trim($request->get('cabang'))
+
+        $responseApi = ApiService::DiskonProdukHapus(
+            trim($request->get('cabang')),
+            trim($request->get('produk'))
         );
 
         $statusApi = json_decode($responseApi)->status;

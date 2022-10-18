@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting;
+namespace App\Http\Controllers\app\Setting\Diskon;
 
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;

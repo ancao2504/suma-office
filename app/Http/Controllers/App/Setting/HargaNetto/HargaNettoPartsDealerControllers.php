@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting;
+namespace App\Http\Controllers\app\Setting\HargaNetto;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
