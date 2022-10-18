@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     //  jika terdapat kesalahan dan kembali ke halaman maka otomatis terdapat variabel old agar button pada model dapat bisa di submit tanpa lagi menunggu verivikasi part dan dealer
     if (old.part_number != null) {
         $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');

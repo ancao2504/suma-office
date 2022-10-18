@@ -7,10 +7,14 @@ let loading = {
             </div>
         `);
         $('#loading').css('display', '');
+        // matikan fungsi scroll
+        $('body').css('overflow', 'hidden');
     },
     release: function () {
         $('#loading #loading-massage').html('');
         $('#loading').css('display', 'none');
+        // aktifkan fungsi scroll
+        $('body').css('overflow', '');
     }
 };
 
