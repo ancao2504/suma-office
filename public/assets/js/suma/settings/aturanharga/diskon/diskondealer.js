@@ -128,7 +128,7 @@ $(document).ready(function () {
         let data = $(this).data('array')
         $('#delet_model #dealer').val(data.kode_dealer.trim())
 
-        $('#form > div.modal-body > div > p.ms-text').html('Apakah anda yakin ingin menghapus diskon pada Dealer : <b>' + data.kode_dealer.trim() + '</b> ?');
+        $('#form > div.modal-body > div > p.ms-text').html('Apakah anda yakin ingin menghapus diskon pada <br>Dealer : <b>' + data.kode_dealer.trim() + '</b> ?');
     });
     // end delete data
 
