@@ -18,10 +18,10 @@ class HargaNettoPartsControllers extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::DiskonDealerDaftar(
-            $companyid,
+        $responseApi = ApiService::HargaNettoPartDaftar(
             $request->get('page'),
             $request->get('per_page'),
+            $companyid,
             $role_id,
             $request->get('search')
         );
@@ -55,7 +55,7 @@ class HargaNettoPartsControllers extends Controller
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::DiskonDealerSimpan(
+        $responseApi = ApiService::HargaNettoPartSimpan(
             trim($request->get('part_number')),
             trim($request->get('status')),
             trim(str_replace('.', '', $request->get('harga'))),

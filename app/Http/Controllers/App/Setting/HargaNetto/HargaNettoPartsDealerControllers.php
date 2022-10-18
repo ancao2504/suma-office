@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\app\Setting\HargaNetto;
 
-use App\Http\Controllers\Controller;
+use App\Helpers\ApiService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HargaNettoPartsDealerControllers extends Controller
 {
@@ -12,19 +13,34 @@ class HargaNettoPartsDealerControllers extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
+        $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $responseApi = ApiService::HargaNettoPartDealerDaftar(
+            $request->get('page'),
+            $request->get('per_page'),
+            $role_id,
+            $companyid,
+            $request->get('search')
+        );
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            return view(
+                'layouts.settings.aturanharga.harganetto.harganettopartdealer',
+                [
+                    'title_menu'    => 'Harga Netto Parts (Khusus)',
+                    'data_part_netto_dealer'     => $data,
+                    'companyid'     => $companyid,
+                ]
+            );
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
+        }
     }
 
     /**
@@ -35,41 +51,25 @@ class HargaNettoPartsDealerControllers extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $user_id = strtoupper(trim($request->session()->get('app_user_id')));
+        $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $responseApi = ApiService::HargaNettoPartDealerSimpan(
+            trim($request->get('part_number')),
+            trim($request->get('dealer')),
+            trim(str_replace('.', '', $request->get('harga'))),
+            trim($request->get('keterangan')),
+            trim($companyid),
+            trim($user_id)
+        );
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+        if ($statusApi == 1) {
+            return redirect()->back()->with('success', $messageApi);
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
+        }
     }
 
     /**
@@ -78,8 +78,23 @@ class HargaNettoPartsDealerControllers extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+
+        $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
+        $responseApi = ApiService::HargaNettoPartDealerHapus(
+            trim($request->get('part_number')),
+            trim($request->get('dealer')),
+            $companyid
+        );
+
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if ($statusApi == 1) {
+            return redirect()->back()->with('success', $messageApi);
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
+        }
     }
 }

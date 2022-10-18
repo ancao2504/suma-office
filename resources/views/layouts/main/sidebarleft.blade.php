@@ -436,7 +436,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts (Khusus)') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts (Khusus)') ? 'active' : '' }}" href="{{ url('/setting/harga/partnettodealer') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>

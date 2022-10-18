@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
-@section('title','Diskon')
-@section('subtitle','Diskon Produk')
+@section('title','Harga Netto')
+@section('subtitle','Harga Netto Part')
 @section('container')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -24,7 +24,7 @@
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Diskon Produk</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Part Netto</button>
             </div>
             <!--end:Action-->
         </div>
@@ -37,10 +37,10 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Dealer (Part Netto)</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Part Netto</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-diskon-dealer-simpanhapus') }}" method="POST">
+            <form action="{{ route('setting.setting-harga-netto-parts-simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -340,7 +340,7 @@
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-diskon-dealer-simpanhapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.setting-harga-netto-parts-simpan') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >
@@ -375,6 +375,6 @@
     }
             const current_page = "{{ $data->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskondealer.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

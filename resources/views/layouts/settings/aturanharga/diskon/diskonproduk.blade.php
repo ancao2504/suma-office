@@ -466,6 +466,6 @@
             let old ={"cabang": "{{ old('cabang')??''}}"};
             const current_page = "{{ $data_disc->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskonproduk.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonproduk.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

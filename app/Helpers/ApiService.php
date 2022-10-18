@@ -1366,7 +1366,7 @@ class ApiService
                 $body = [
                     'produk'        => trim($produk),
                     'dealer'        => trim($dealer),
-                    'keterangan'    => trim($keterangan),
+                    'keterangan'    => $keterangan,
                     'companyid'     => trim($companyid),
                     'user_id'       => trim($user_id),
                 ];
@@ -1395,7 +1395,7 @@ class ApiService
         return $response;
     }
 
-    public static function DiskonDealerDaftar($companyid, $page, $per_page, $role_id, $search)
+    public static function HargaNettoPartDaftar($page, $per_page, $companyid, $role_id, $search)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/harga/partnetto';
@@ -1412,7 +1412,7 @@ class ApiService
     }
 
 
-    public static function DiskonDealerSimpan($part_number, $status, $harga, $companyid, $user_id)
+    public static function HargaNettoPartSimpan($part_number, $status, $harga, $companyid, $user_id)
     {
         // cek part
         $validasiPart = ApiService::ValidasiPartNumber($part_number, $companyid);
@@ -1436,5 +1436,72 @@ class ApiService
         } else {
             return json_encode(['status' => 0, 'message' => 'Part Number tidak ditemukan']);
         }
+    }
+
+    public static function HargaNettoPartDealerDaftar($page, $per_page, $role_id, $companyid, $search)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/harga/partnetto/dealer';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'page'          => trim($page ?? 1),
+            'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
+            'role_id'       => trim($role_id),
+            'companyid'     => trim($companyid),
+            'search'        => trim($search),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function HargaNettoPartDealerSimpan($part_number, $dealer, $harga, $keterangan, $companyid, $user_id)
+    {
+        // cek part
+        $validasiPart = ApiService::ValidasiPartNumber($part_number, $companyid);
+        $validasiPart = json_decode($validasiPart)->status;
+
+        if ($validasiPart == 1) {
+
+            // cek dealer
+            $validasiDealer = ApiService::ValidasiDealer($dealer, $companyid);
+            $validasiDealer = json_decode($validasiDealer)->status;
+
+            if ($validasiDealer == 1) {
+
+                $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+                $request = 'setting/harga/partnetto/dealer/simpan';
+                $header = ['Authorization' => $credential];
+                $body = [
+                    'part_number'        => trim($part_number),
+                    'status'        => trim($dealer),
+                    'harga'    => trim($harga),
+                    'keterangan'    => $keterangan,
+                    'companyid'     => trim($companyid),
+                    'user_id'       => trim($user_id),
+                ];
+
+                $response = ApiRequest::requestPost($request, $header, $body);
+                return $response;
+            } else {
+                return json_encode(['status' => 0, 'message' => 'Dealer tidak ditemukan']);
+            }
+        } else {
+            return json_encode(['status' => 0, 'message' => 'Part Number tidak ditemukan']);
+        }
+    }
+
+
+    public static function HargaNettoPartDealerHapus($part_number, $dealer, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'settsetting/harga/partnetto/dealer/hapus';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'produk'            => trim($part_number),
+            'dealer'            => trim($dealer),
+            'companyid'            => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
     }
 }
