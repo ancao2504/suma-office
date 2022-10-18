@@ -1395,6 +1395,63 @@ class ApiService
         return $response;
     }
 
+    public static function DiskonDealerDaftar($page, $per_page, $role_id, $companyid, $search)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/diskon/dealer';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'page'          => trim($page ?? 1),
+            'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
+            'role_id'       => trim($role_id),
+            'companyid'     => trim($companyid),
+            'search'        => trim($search),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+    public static function DiskonDealerSimpan($dealer, $disc_default, $disc_plus, $umur_faktur, $companyid, $user_id)
+    {
+
+        // cek dealer
+        $validasiDealer = ApiService::ValidasiDealer($dealer, $companyid);
+        $validasiDealer = json_decode($validasiDealer)->status;
+
+        if ($validasiDealer == 1) {
+
+            $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+            $request = 'setting/diskon/dealer/simpan';
+            $header = ['Authorization' => $credential];
+            $body = [
+                'dealer'            => trim($dealer),
+                'disc_default'      => trim($disc_default),
+                'disc_plus'         => trim($disc_plus),
+                'umur_faktur'       => trim($umur_faktur),
+                'companyid'         => trim($companyid),
+                'user_id'           => trim($user_id),
+            ];
+            $response = ApiRequest::requestPost($request, $header, $body);
+            return $response;
+        } else {
+            return json_encode(['status' => 0, 'message' => 'Dealer tidak ditemukan']);
+        }
+    }
+
+    public static function DiskonDealerHapus($dealer, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/diskon/dealer/hapus';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'dealer'            => trim($dealer),
+            'companyid'         => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+
+
     public static function HargaNettoPartDaftar($page, $per_page, $companyid, $role_id, $search)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
