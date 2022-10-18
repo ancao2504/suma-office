@@ -256,23 +256,23 @@
                 @foreach ($data_disc->links as $data)
                     @if (strpos($data->label, 'Next') !== false)
                         <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
+                            <a role="button" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
                                 <i class="next"></i>
                             </a>
                         </li>
                     @elseif (strpos($data->label, 'Previous') !== false)
                         <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
+                            <a role="button" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
                                 <i class="previous"></i>
                             </a>
                         </li>
                     @elseif ($data->active == true)
                         <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                            <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
                         </li>
                     @elseif ($data->active == false)
                         <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
-                            <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                            <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
                         </li>
                     @endif
                 @endforeach
@@ -385,23 +385,23 @@
                                         @foreach ($data_disc->links as $data)
                                             @if (strpos($data->label, 'Next') !== false)
                                                 <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
+                                                    <a role="button" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
                                                         <i class="next"></i>
                                                     </a>
                                                 </li>
                                             @elseif (strpos($data->label, 'Previous') !== false)
                                                 <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
+                                                    <a role="button" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
                                                         <i class="previous"></i>
                                                     </a>
                                                 </li>
                                             @elseif ($data->active == true)
                                                 <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                                                    <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
                                                 </li>
                                             @elseif ($data->active == false)
                                                 <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
-                                                    <a href="#" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                                                    <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
                                                 </li>
                                             @endif
                                         @endforeach
