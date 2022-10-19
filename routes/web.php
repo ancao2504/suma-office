@@ -43,7 +43,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::get('/dashboard/marketing/pencapaian/perlevel', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerLevel')->middleware('authLogin')->name('dashboard-marketing-pencapaian-perlevel');
         Route::get('/dashboard/marketing/pencapaian/growth', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianGrowth')->middleware('authLogin')->name('dashboard-marketing-pencapaian-growth');
         Route::get('/dashboard/marketing/pencapaian/perproduk', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerProduk')->middleware('authLogin')->name('dashboard-marketing-pencapaian-perproduk');
-
     });
 
     Route::name('profile.')->group(function () {
@@ -143,8 +142,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         // diskon Produk Dealer
         Route::get('/setting/diskonproduk/dealer', 'App\Setting\Diskon\DiskonProdukDealerController@index')->middleware('authLogin')->name('setting-diskon-produk-dealer');
-        Route::post('/setting/diskonproduk/dealer/simpan', 'App\Diskon\Setting\DiskonProdukDealerController@store')->middleware('authLogin')->name('setting-diskon-produk-dealer-simpan');
-        Route::post('/setting/diskonproduk/dealer/hapus', 'App\Diskon\Setting\DiskonProdukDealerController@destroy')->middleware('authLogin')->name('setting-diskon-produk-dealer-hapus');
+        Route::post('/setting/diskonproduk/dealer/simpan', 'App\Setting\Diskon\DiskonProdukDealerController@store')->middleware('authLogin')->name('setting-diskon-produk-dealer-simpan');
+        Route::post('/setting/diskonproduk/dealer/hapus', 'App\Setting\Diskon\DiskonProdukDealerController@destroy')->middleware('authLogin')->name('setting-diskon-produk-dealer-hapus');
 
         // diskon Dealer
         Route::get('/setting/diskon/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->middleware('authLogin')->name('setting-diskon-dealer');
