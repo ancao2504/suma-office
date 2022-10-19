@@ -134,7 +134,7 @@
                 </div>
             </div>
         </div>
-        
+
 
 		<!--begin::Javascript-->
 		<script>const base_url = "{{ url('/') }}";</script>
@@ -156,7 +156,7 @@
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-        
+
 		<script src="{{ asset('assets/js/custom/module/loading.js') }}?v={{ time() }}"></script>
         <!-- App scripts -->
         @stack('scripts')
@@ -168,20 +168,13 @@
         @include('layouts.option.optiondealerindex')
 
         <script type="text/javascript">
-            var targetIndex = document.querySelector("#kt_body");
-            var blockIndex = new KTBlockUI(targetIndex, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
-
             $('body').on('click', '.menu-item a', function(e) {
-                blockIndex.block();
+                loading.block();
             });
 
             $('body').on('keypress', '#searchHeaderParts', function(e) {
                 if (e.which == 13) {
-                    blockIndex.block();
+                    loading.block();
                 }
             });
 

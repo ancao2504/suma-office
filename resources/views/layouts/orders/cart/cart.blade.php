@@ -614,13 +614,13 @@
             var btnSimpanHeader = document.querySelector("#btnSimpanHeaderCart");
             btnSimpanHeader.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockIndex.block();
+                loading.block();
                 document.getElementById("formModalCartHeader").submit();
             });
 
             var btnTambahCart = document.querySelector("#btnTambahCart");
             btnTambahCart.addEventListener("click", function(e) {
-                blockIndex.block();
+                loading.block();
             });
 
             function formatDiscount(nominal, prefix) {
@@ -655,13 +655,13 @@
             var xInputKeyUser = document.getElementById("inputKodeCart").value;
 
             function daftarDetailCart() {
-                blockIndex.block();
+                loading.block();
                 $.ajax({
                     url: "{{ route('orders.daftar-cart-detail') }}",
                     method: "GET",
 
                     success:function(response) {
-                        blockIndex.release();
+                        loading.release();
 
                         if (response.status == true) {
                             $('#tableDetailCart').html(response.data);
@@ -678,7 +678,7 @@
                         }
                     },
                     error:function() {
-                        blockIndex.release();
+                        loading.release();
                     }
                 })
             }
@@ -754,14 +754,14 @@
                     var tpc = $('#selectKodeTpc').val();
                     var _token = $('input[name="_token"]').val();
 
-                    blockIndex.block();
+                    loading.block();
                     $.ajax({
                         url: "{{ route('orders.cart-detail-edit') }}",
                         method: "POST",
                         data: { part_number: part_number, _token: _token },
 
                         success:function(response) {
-                            blockIndex.release();
+                            loading.release();
 
                             if (response.status == true) {
                                 $('#modalTitle').html("Edit Data Cart");
@@ -814,13 +814,13 @@
                             }
                         },
                         error:function() {
-                            blockIndex.release();
+                            loading.release();
                         }
                     })
                 });
 
                 $('#modalEditCartSelectTpc').on('change', function() {
-                    blockIndex.block();
+                    loading.block();
 
                     var part_number = $('#modalEditCartInputPartNumber').val();
                     var tpc = this.value;
@@ -832,7 +832,7 @@
                         data: { part_number: part_number, _token: _token },
 
                         success:function(response) {
-                            blockIndex.release();
+                            loading.release();
 
                             if(tpc == 14) {
                                 $('#modalEditCartInputHarga').val(formatRupiah(response.data.het.toString(), ""));
@@ -863,7 +863,7 @@
                             }
                         },
                         error:function() {
-                            blockIndex.release();
+                            loading.release();
                         }
                     });
                 });
@@ -877,7 +877,7 @@
                     var discount_plus = $('#modalEditCartInputDiscountPlus').val();
                     var _token = $('input[name="_token"]').val();
 
-                    blockIndex.block();
+                    loading.block();
                     $.ajax({
                         url: "{{ route('orders.insert-cart-detail') }}",
                         method: "POST",
@@ -886,7 +886,7 @@
                             discount: discount, discount_plus: discount_plus, _token: _token
                         },
                         success:function(response) {
-                            blockIndex.release();
+                            loading.release();
 
                             if (response.status == false) {
                                 Swal.fire({
@@ -913,7 +913,7 @@
                             }
                         },
                         error:function() {
-                            blockIndex.release();
+                            loading.release();
                         }
                     });
                 });
@@ -940,7 +940,7 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            blockIndex.block();
+                            loading.block();
 
                             $.ajax({
                                 url: "{{ route('orders.delete-cart-detail') }}",
@@ -948,7 +948,7 @@
                                 data: { part_number: part_number, _token: _token },
 
                                 success:function(response) {
-                                    blockIndex.release();
+                                    loading.release();
 
                                     if (response.status == true) {
                                         Swal.fire({
@@ -974,7 +974,7 @@
                                     }
                                 },
                                 error:function() {
-                                    blockIndex.release();
+                                    loading.release();
                                 }
                             })
                         }
@@ -1000,7 +1000,7 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            blockIndex.block();
+                            loading.block();
 
                             $.ajax({
                                 url: "{{ route('orders.reset-cart') }}",
@@ -1008,7 +1008,7 @@
                                 data: { _token: _token },
 
                                 success:function(response) {
-                                    blockIndex.release();
+                                    loading.release();
 
                                     if (response.status == true) {
                                         Swal.fire({
@@ -1034,7 +1034,7 @@
                                     }
                                 },
                                 error:function() {
-                                    blockIndex.release();
+                                    loading.release();
                                 }
                             })
                         }
@@ -1080,7 +1080,7 @@
                             }
                         });
                     } else {
-                        blockIndex.block();
+                        loading.block();
                         var formData = new FormData(document.getElementById("formModalCartImportExcel"));
                         $.ajax({
                             type:'POST',
@@ -1091,7 +1091,7 @@
                             processData: false,
 
                             success:function(response) {
-                                blockIndex.release();
+                                loading.release();
 
                                 if (response.status == false) {
                                     Swal.fire({
@@ -1130,7 +1130,7 @@
                                 }
                             },
                             error:function() {
-                                blockIndex.release();
+                                loading.release();
                             }
                         });
                     }
@@ -1142,7 +1142,7 @@
 
                 $('#btnCheckOut').click(function(e) {
                     e.preventDefault();
-                    blockIndex.block();
+                    loading.block();
                     var _token = $('input[name="_token"]').val();
                     $.ajax({
                         url: "{{ route('orders.cart-check-out-cek-aturan-harga') }}",
@@ -1150,7 +1150,7 @@
                         data: { _token: _token },
 
                         success:function(response) {
-                            blockIndex.release();
+                            loading.release();
 
                             if(response.status == false) {
                                 Swal.fire({
@@ -1163,7 +1163,7 @@
                                     }
                                 });
                             } else {
-                                blockIndex.release();
+                                loading.release();
 
                                 if(response.message == 'STATUS_OK') {
                                     $('#modalCartCheckOut').modal('show');
@@ -1189,7 +1189,7 @@
                             }
                         },
                         error:function() {
-                            blockIndex.release();
+                            loading.release();
                         }
                     });
                 });

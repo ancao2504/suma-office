@@ -364,21 +364,14 @@
     <script type="text/javascript">
         var btnFilterProses = document.querySelector("#btnFilterProses");
         var btnFilterReset = document.querySelector("#btnFilterReset");
-        var targetBlockDashboardDealer = document.querySelector("#formDashboardDealer");
-
-        var blockDashboardDealer = new KTBlockUI(targetBlockDashboardDealer, {
-            message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                        '<span class="spinner-border text-primary"></span> Loading...'+
-                    '</div>'
-        });
         btnFilterProses.addEventListener("click", function(e) {
             e.preventDefault();
-            blockDashboardDealer.block();
+            loading.block();
             document.getElementById("formDashboardDealer").submit();
         });
         btnFilterReset.addEventListener("click", function(e) {
             e.preventDefault();
-            blockDashboardDealer.block();
+            loading.block();
             document.getElementById("formDashboardDealer").submit();
         });
     </script>

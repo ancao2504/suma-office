@@ -30,7 +30,7 @@ class DiskonProdukController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            // dd(json_decode($responseApi)->data);
+
             return view(
                 'layouts.settings.aturanharga.diskon.diskonproduk',
                 [

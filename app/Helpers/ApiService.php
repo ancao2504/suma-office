@@ -1262,12 +1262,13 @@ class ApiService
         return $response;
     }
 
-    public static function DiskonProdukDaftar($page, $per_page, $role_id, $search)
+    public static function DiskonProdukDaftar($companyid, $page, $per_page, $role_id, $search)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk';
         $header = ['Authorization' => $credential];
         $body = [
+            'companyid'     => trim($companyid),
             'page'          => trim($page ?? 1),
             'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
             'role_id'       => trim($role_id),
