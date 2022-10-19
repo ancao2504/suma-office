@@ -15,6 +15,9 @@ let loading = {
         $('#loading').css('display', 'none');
         // aktifkan fungsi scroll
         $('body').css('overflow', '');
+    },
+    isBlock: function () {
+        return $('#loading').css('display') == 'none' ? false : true;
     }
 };
 
