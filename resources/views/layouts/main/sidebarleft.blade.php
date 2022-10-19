@@ -401,7 +401,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Dealer') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Diskon Dealer') ? 'active' : '' }}" href="{{ url('/setting/diskon/dealer') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -409,7 +409,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Produk') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Diskon Produk') ? 'active' : '' }}" href="{{ url('/setting/diskonproduk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -417,7 +417,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Produk (Dealer)') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Diskon Produk (Dealer)') ? 'active' : '' }}" href="{{ url('/setting/diskonproduk/dealer') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -438,7 +438,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts') ? 'active' : '' }}" href="{{ url('/setting/harga/partnetto') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -446,7 +446,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts (Khusus)') ? 'active' : '' }}" href="#">
+                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts (Khusus)') ? 'active' : '' }}" href="{{ url('/setting/harga/partnettodealer') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>

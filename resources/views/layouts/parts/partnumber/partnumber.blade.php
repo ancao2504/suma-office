@@ -227,6 +227,25 @@
             }
         });
 
+        // window.addEventListener("scroll", myFunction);
+        // // saat kt_aside_footer terlihat di layar maka 
+        // function myFunction() {
+        //     var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+        //     console.log(scrollpercent);
+        //     if (scrollpercent > 0.975 && scrollpercent <= 1 && blockDataPartNumber.isBlocked() === false) {
+        //         const params = new URLSearchParams(window.location.search)
+        //         for (const param of params) {
+        //             var tipe_motor = params.get('tipe_motor');
+        //             var group_level = params.get('group_level');
+        //             var group_produk = params.get('group_produk');
+        //             var part_number = params.get('part_number');
+        //         }
+        //         pages++;
+        //         loadMoreData(tipe_motor, group_level, group_produk, part_number, pages);
+        //         // console.log(pages);
+        //     }
+        // }
+
         window.onbeforeunload = function () {
             window.scrollTo(0, 0);
         }
