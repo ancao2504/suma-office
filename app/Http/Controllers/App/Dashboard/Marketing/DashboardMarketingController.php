@@ -76,6 +76,48 @@ class DashboardMarketingController extends Controller
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
+    }
 
+    public function dashboardPencapaianPerProduk(Request $request) {
+        $year = date('Y');
+        $month = date('m');
+
+        if(!empty($request->get('year'))) {
+            $year = $request->get('year');
+        }
+
+        if(!empty($request->get('month'))) {
+            $month = $request->get('month');
+        }
+
+        $responseApi = ApiService::DashboardMarketingGroupPerProduk($year, $month, $request->get('level_produk'), $request->get('kode_produk'),
+                            $request->get('jenis_mkr'), $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_role_id'))),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            $data_product = $data;
+
+            $jumlah_data = 0;
+            foreach($data as $data) {
+                $jumlah_data = (double)$jumlah_data + 1;
+            }
+
+            return view('layouts.dashboard.marketing.dashboardpencapaianperproduk', [
+                'title_menu'    => 'Dashboard Marketing Pencapaian Per-Produk',
+                'year'          => $year,
+                'month'         => $month,
+                'level_produk'  => $request->get('level_produk'),
+                'kode_produk'   => $request->get('kode_produk'),
+                'jenis_mkr'     => $request->get('jenis_mkr'),
+                'kode_mkr'      => $request->get('kode_mkr'),
+                'product_count' => (double)$jumlah_data * 135,
+                'product'       => $data_product
+            ]);
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
+        }
     }
 }

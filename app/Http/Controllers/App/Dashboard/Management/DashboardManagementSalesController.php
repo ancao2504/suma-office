@@ -62,7 +62,7 @@ class DashboardManagementSalesController extends Controller
                     'year'                  => $year,
                     'month'                 => $month,
                     'fields'                => $fields,
-                    'level'          => $request->get('level'),
+                    'level'                 => $request->get('level'),
                     'produk'                => $request->get('produk'),
                     'selling'       => [
                         'selling_total'             => $dataSalesByProduct->selling->selling_total,

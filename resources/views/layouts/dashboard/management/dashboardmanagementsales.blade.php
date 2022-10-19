@@ -510,11 +510,7 @@
                 </div>
 
                 <div class="card-body pt-8">
-                    @if(isset($produk))
-                    <div id="chartSalesByProduct" style="height: 300px; width: 100%;"></div>
-                    @else
-                    <div id="chartSalesByProduct" style="height: 5500px; width: 100%;"></div>
-                    @endif
+                    <div id="chartSalesByProduct" style="height: 1000px; width: 100%;"></div>
                 </div>
             </div>
         </div>
@@ -1115,6 +1111,19 @@
                                     populateText: true
                                 })
                             });
+                        });
+
+                        var cellSize = 70;
+                        series.events.on("datavalidated", function(ev) {
+                            var series = ev.target;
+                            var chart = series.chart;
+                            var xAxis = chart.xAxes.getIndex(0);
+
+                            // Calculate how we need to adjust chart height
+                            var chartHeight = series.data.length * cellSize + xAxis.height() + chart.get("paddingTop", 0) + chart.get("paddingBottom", 0);
+
+                            // Set it on chart's container
+                            chart.root.dom.style.height = chartHeight + "px";
                         });
 
                         series.data.setAll(data);

@@ -343,6 +343,24 @@ class ApiService {
         return $response;
     }
 
+    public static function DashboardMarketingGroupPerProduk($year, $month, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid) {
+        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+        $request = 'dashboard/marketing/pencapaian/perproduk';
+        $header = [ 'Authorization' => $credential ];
+        $body = [
+            'year'          => $year,
+            'month'         => $month,
+            'level_produk'  => $level_produk,
+            'kode_produk'   => $kode_produk,
+            'jenis_mkr'     => $jenis_mkr,
+            'kode_mkr'      => $kode_mkr,
+            'role_id'       => $role_id,
+            'companyid'     => $companyid
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function DashboardMarketingGroupPerLevel($year, $jenis_mkr, $kode_mkr, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'dashboard/marketing/pencapaian/perlevel';
@@ -613,15 +631,15 @@ class ApiService {
         return $response;
     }
 
-    public static function PartDaftar($page, $type_motor, $group_level, $group_produk, $part_number, $user_id, $role_id, $companyid) {
+    public static function PartDaftar($page, $type_motor, $level_produk, $kode_produk, $part_number, $user_id, $role_id, $companyid) {
         $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
         $request = 'parts/partnumber';
         $header = [ 'Authorization' => $credential ];
         $body = [
             'page'          => $page,
             'type_motor'    => $type_motor,
-            'group_level'   => $group_level,
-            'group_produk'  => $group_produk,
+            'level_produk'  => $level_produk,
+            'kode_produk'   => $kode_produk,
             'part_number'   => $part_number,
             'user_id'       => $user_id,
             'role_id'       => $role_id,

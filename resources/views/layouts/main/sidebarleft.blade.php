@@ -118,6 +118,16 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
+                                    <a id="menuDashboardMarketingPencapaianPerProduk" class="menu-link {{ ($title_menu == 'Dashboard Marketing Pencapaian Per-Produk') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perproduk') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Pencapaian Per-Produk</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
                                     <a id="menuDashboardMarketingPencapaianPerLevel" class="menu-link {{ ($title_menu == 'Dashboard Marketing Pencapaian Per-Level') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perlevel') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>

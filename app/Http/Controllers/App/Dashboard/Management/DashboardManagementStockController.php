@@ -55,7 +55,7 @@ class DashboardManagementStockController extends Controller
                 'total'         => $dataStockByProduct->company,
                 'fs'            => $dataStockByProduct->fs,
                 'cno'           => $dataStockByProduct->cno,
-                'product'       => $dataStockByProduct->product,
+                'product'       => $dataStockByProduct->product
             ]);
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);

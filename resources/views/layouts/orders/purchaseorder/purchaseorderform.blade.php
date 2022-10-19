@@ -138,7 +138,7 @@
                 @if($approve != 1)
                 <div class="card card-flush mt-5">
                     <div class="d-flex p-4">
-                        <button class="btn btn-primary" id="btnTambahPartNumber" name="btnTambahPartNumber" data-backdrop="static" data-keyboard="false">Tambah Part Number</button>
+                        <button id="btnTambahPartNumber" name="btnTambahPartNumber" class="btn btn-primary" type="button" data-backdrop="static" data-keyboard="false">Tambah Part Number</button>
                     </div>
                 </div>
                 @endif
