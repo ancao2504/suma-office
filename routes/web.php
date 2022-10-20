@@ -43,7 +43,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::get('/dashboard/marketing/pencapaian/perlevel', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerLevel')->middleware('authLogin')->name('dashboard-marketing-pencapaian-perlevel');
         Route::get('/dashboard/marketing/pencapaian/growth', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianGrowth')->middleware('authLogin')->name('dashboard-marketing-pencapaian-growth');
         Route::get('/dashboard/marketing/pencapaian/perproduk', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerProduk')->middleware('authLogin')->name('dashboard-marketing-pencapaian-perproduk');
-
     });
 
     Route::name('profile.')->group(function () {
