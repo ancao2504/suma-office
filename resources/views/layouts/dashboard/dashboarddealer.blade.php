@@ -361,19 +361,6 @@
         </div>
     </form>
     @push('scripts')
-    <script type="text/javascript">
-        var btnFilterProses = document.querySelector("#btnFilterProses");
-        var btnFilterReset = document.querySelector("#btnFilterReset");
-        btnFilterProses.addEventListener("click", function(e) {
-            e.preventDefault();
-            loading.block();
-            document.getElementById("formDashboardDealer").submit();
-        });
-        btnFilterReset.addEventListener("click", function(e) {
-            e.preventDefault();
-            loading.block();
-            document.getElementById("formDashboardDealer").submit();
-        });
-    </script>
+        <script src="{{ asset('assets/js/suma/dashboard/dashboarddealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
