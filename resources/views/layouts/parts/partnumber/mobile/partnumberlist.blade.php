@@ -1,6 +1,6 @@
 @foreach ($data_part as $data)
 <div class="col-6 col-sm-3 col-sm-2">
-    <div class="card ribbon ribbon-top ribbon-vertical pt-5 h-380px mb-5" id="addToCart" role="button" data-bs-toggle="modal" data-bs-target="#modalPartNumberCart" data-kode="{{ $data->part_number }}">
+    <div class="card ribbon ribbon-top ribbon-vertical pt-5 h-380px mb-5 addToCart" role="button" data-bs-toggle="modal" data-bs-target="#modalPartNumberCart" data-kode="{{ $data->part_number }}">
         @if($data->discount_plus > 0)
         <div class="ribbon-label fw-bold bg-primary">
             <div class="row">
