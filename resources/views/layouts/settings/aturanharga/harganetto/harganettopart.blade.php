@@ -172,8 +172,7 @@
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-2">
                         <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
-                        data-array = "{{ json_encode($dta) }}"
-                        >
+                        data-array = "{{ json_encode($dta) }}">
                             Delete
                         </button>
                     </div>

@@ -68,7 +68,6 @@ $(document).ready(function () {
     });
     // end validasi dealer
 
-
     // search di url
     const params = new URLSearchParams(window.location.search)
     for (const param of params) {

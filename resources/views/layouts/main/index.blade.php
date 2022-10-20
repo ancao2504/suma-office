@@ -37,10 +37,10 @@
         </div>
 		<div class="d-flex flex-column flex-root">
 			<div class="page d-flex flex-row flex-column-fluid">
-				@extends('layouts.main.sidebarleft')
+				@include('layouts.main.sidebarleft')
 
 				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-					@extends('layouts.main.header')
+					@include('layouts.main.header')
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                         @csrf
                         <div id="infoCartTotal"></div>
@@ -102,7 +102,6 @@
                                 <div class="input-group">
                                     <input id="inputKodeSalesIndex" name="salesmanIndex" type="text" class="form-control @if(session()->get('app_user_role_id') == 'MD_H3_SM') form-control-solid @endif"
                                         @if(session()->get('app_user_role_id') == 'MD_H3_SM') value="{{ session()->get('app_user_id') }}" @endif readonly required>
-
                                         @if(strtoupper(trim(session()->get('app_user_role_id'))) != 'D_H3')
                                             @if(strtoupper(trim(session()->get('app_user_role_id'))) != 'MD_H3_SM')
                                             <button id="btnPilihSalesmanIndex" name="btnPilihSalesmanIndex" class="btn btn-icon btn-primary" type="button"
@@ -134,7 +133,6 @@
                 </div>
             </div>
         </div>
-
 
 		<!--begin::Javascript-->
 		<script>const base_url = "{{ url('/') }}";</script>
