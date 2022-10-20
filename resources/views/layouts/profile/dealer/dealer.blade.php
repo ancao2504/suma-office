@@ -48,70 +48,8 @@
     </div>
     @push('scripts')
         <script type="text/javascript">
-            var btnFilterProses = document.querySelector("#btnFilterProses");
-            var btnFilterReset = document.querySelector("#btnFilterReset");
-
-            btnFilterProses.addEventListener("click", function(e) {
-                e.preventDefault();
-                loading.block();
-                document.getElementById("formDealer").submit();
-            });
-            btnFilterReset.addEventListener("click", function(e) {
-                e.preventDefault();
-                loading.block();
-                document.getElementById("formDealer").submit();
-            });
-
-            var pages = 1;
-
-            $(window).scroll(function() {
-                if(loading.isBlocked() === false) {
-                    if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                        const params = new URLSearchParams(window.location.search)
-                        for (const param of params) {
-                            var search = params.get('search');
-                        }
-                        pages++;
-                        loadMoreData(search,pages);
-                    }
-                }
-            });
-
-            window.onbeforeunload = function () {
-                window.scrollTo(0, 0);
-            }
-
-            async function loadMoreData(search, pages) {
-                loading.block();
-                $.ajax({
-                    url: "{{ route('profile.dealer') }}",
-                    type: "get",
-                    data: { search: search, page: pages },
-                    success:function(response) {
-                        if(response.html == '') {
-                            $('#dataLoadDealer').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            loading.release();
-                            return;
-                        }
-                        $("#dataDealer").append(response.html);
-                        loading.release();
-                    },
-                    error:function() {
-                        loading.release();
-                        pages = pages - 1;
-
-                        Swal.fire({
-                            text: "Gagal mengambil data ke dalam server, Coba lagi",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-danger"
-                            }
-                        });
-                    }
-                });
-            }
+                const url_profile_dealer = "{{ route('profile.dealer') }}";
         </script>
+        <script src="{{ asset('assets/js/suma/profile/dealer.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
