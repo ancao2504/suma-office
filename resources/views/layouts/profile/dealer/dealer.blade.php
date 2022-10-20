@@ -50,28 +50,22 @@
         <script type="text/javascript">
             var btnFilterProses = document.querySelector("#btnFilterProses");
             var btnFilterReset = document.querySelector("#btnFilterReset");
-            var targetFormDealer = document.querySelector("#formDealer");
-            var blockFormDealer = new KTBlockUI(targetFormDealer, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
+
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockFormDealer.block();
+                loading.block();
                 document.getElementById("formDealer").submit();
             });
             btnFilterReset.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockFormDealer.block();
+                loading.block();
                 document.getElementById("formDealer").submit();
             });
 
-            var targetDataPartNumber = document.querySelector("#dataDealer");
             var pages = 1;
 
             $(window).scroll(function() {
-                if(blockFormDealer.isBlocked() === false) {
+                if(loading.isBlocked() === false) {
                     if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
@@ -88,7 +82,7 @@
             }
 
             async function loadMoreData(search, pages) {
-                blockFormDealer.block();
+                loading.block();
                 $.ajax({
                     url: "{{ route('profile.dealer') }}",
                     type: "get",
@@ -96,14 +90,14 @@
                     success:function(response) {
                         if(response.html == '') {
                             $('#dataLoadDealer').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            blockFormDealer.release();
+                            loading.release();
                             return;
                         }
                         $("#dataDealer").append(response.html);
-                        blockFormDealer.release();
+                        loading.release();
                     },
                     error:function() {
-                        blockFormDealer.release();
+                        loading.release();
                         pages = pages - 1;
 
                         Swal.fire({

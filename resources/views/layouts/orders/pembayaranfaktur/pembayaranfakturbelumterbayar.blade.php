@@ -94,21 +94,14 @@
             var btnFilterProses = document.querySelector("#btnFilterProses");
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockIndex.block();
+                loading.block();
                 document.getElementById("formFilter").submit();
-            });
-
-            var targetDataPembayaran = document.querySelector("#dataPembayaran");
-            var blockDataPembayaran = new KTBlockUI(targetDataPembayaran, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
             });
 
             var pages = 1;
 
             $(window).scroll(function() {
-                if(blockDataPembayaran.isBlocked() === false) {
+                if(loading.isBlocked() === false) {
                     if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
@@ -129,7 +122,7 @@
             }
 
             async function loadMoreData(start_date, end_date, salesman, dealer, nomor_faktur, pages) {
-                blockDataPembayaran.block();
+                loading.block();
 
                 $.ajax({
                     url: "{{ route('orders.pembayaran-faktur-belum-terbayar') }}",
@@ -140,14 +133,14 @@
                     success:function(response) {
                         if(response.html == '') {
                             $('#dataLoadPembayaran').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            blockDataPembayaran.release();
+                            loading.release();
                             return;
                         }
                         $("#dataPembayaran").append(response.html);
-                        blockDataPembayaran.release();
+                        loading.release();
                     },
                     error:function() {
-                        blockDataPembayaran.release();
+                        loading.release();
                         pages = pages - 1;
 
                         Swal.fire({

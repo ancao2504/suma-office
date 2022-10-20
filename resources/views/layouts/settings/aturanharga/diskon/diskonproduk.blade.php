@@ -1,5 +1,5 @@
 @extends('layouts.main.index')
-@section('title','Diskon')
+@section('title','Pengaturan ')
 @section('subtitle','Diskon Produk')
 @section('container')
 @push('styles')
@@ -244,7 +244,7 @@
                 </div>
                 <!--end::Card-->
             </div>
-            
+
         @endforeach
         </div>
         <!--end::Row-->
@@ -456,9 +456,9 @@
 	</div>
 </div>
 <!--end::Modal delet data-->
-    
 
-    
+
+
     {{-- <div id="dataLoadDiskon"></div> --}}
 
     @push('scripts')

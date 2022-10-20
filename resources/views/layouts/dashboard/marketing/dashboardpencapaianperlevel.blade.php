@@ -156,7 +156,7 @@
     var btnFilterProses = document.querySelector("#btnFilterProses");
     btnFilterProses.addEventListener("click", function(e) {
         e.preventDefault();
-        loading.block();
+        blockIndex.block();
         document.getElementById("formFilter").submit();
     });
 

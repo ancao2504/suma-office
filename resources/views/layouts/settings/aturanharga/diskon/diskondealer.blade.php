@@ -1,5 +1,5 @@
 @extends('layouts.main.index')
-@section('title','Diskon')
+@section('title','Pengaturan')
 @section('subtitle','Diskon Dealer')
 @section('container')
 @push('styles')
@@ -164,17 +164,17 @@
                                     <tr>
                                         <td class="fw-bolder">Diskon</td>
                                         <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-success fw-bolder fs-6">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
+                                        <td><span class="text-end text-primary fw-bolder fs-6">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bolder">Diskon +</td>
                                         <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-warning fw-bolder fs-6">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
+                                        <td><span class="text-end text-danger fw-bolder fs-6">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bolder">Umur Faktur</td>
                                         <td class="fw-bolder">:</td>
-                                        <td><span class="badge badge-light-info fw-bolder fs-6">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</span></td>
+                                        <td><span class="text-end text-info fw-bolder fs-6">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -192,7 +192,7 @@
                 </div>
                 <!--end::Card-->
             </div>
-            
+
         @endforeach
         </div>
         <!--end::Row-->
@@ -235,22 +235,22 @@
     <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card body-->
-            <div class="card-body pt-0">
+            <div class="card-body">
                 <!--begin::Table container-->
                 <div class="table-responsive">
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
-                            <table id="kt_project_users_table" class="table table-sm table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
+                            <table id="kt_project_users_table" class="table table-row-dashed table-row-gray-300 align-middle">
                                 <!--begin::Head-->
-                                <thead class="fs-7 text-gray-400 text-uppercase">
+                                <thead class="fw-boldest fs-7 text-gray-400 text-uppercase">
                                     <tr>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">kode Dealer</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Diskon</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Diskon +</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Umur Faktur</th>
-                                        <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
+                                        <th style="width: 0px;">No</th>
+                                        <th style="width: 0px;">kode Dealer</th>
+                                        <th class="text-end" style="width: 0px;">Diskon</th>
+                                        <th class="text-end" style="width: 0px;">Diskon (+)</th>
+                                        <th class="text-end" style="width: 0px;">Umur Faktur</th>
+                                        <th class="text-end" class="min-w-60px" style="width: 0px;">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
@@ -258,26 +258,18 @@
                                 <tbody class="fs-6">
                                     @foreach ( $data_disc_dealer->data as $data)
                                     <tr class="odd">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            {{ $data->kode_dealer }}
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_default == '.00' ? '0' : $data->disc_default }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_plus == '.00' ? '0' : $data->disc_plus }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-light-info fw-bolder fs-5">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
+                                        <td class="fw-bold">{{ $loop->iteration }}</td>
+                                        <td class="fw-bold">{{ $data->kode_dealer }}</td>
+                                        <td class="fw-boldest text-primary text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
+                                        <td class="fw-boldest text-danger text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
+                                        <td class="fw-boldest text-info text-end">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-icon btn-primary mt-1 btn-edit" data-array="{{json_encode($data)}}">
+                                                <span class="bi bi-pencil"></span>
+                                            </button>
+                                            <button type="reset" class="btn btn-sm btn-icon btn-danger mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
                                             data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">
                                                 <span class="bi bi-trash"></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit" data-array="{{json_encode($data)}}">
-                                                <span class="bi bi-pencil"></span>
                                             </button>
                                         </td>
                                     </tr>
@@ -373,9 +365,9 @@
 	</div>
 </div>
 <!--end::Modal delet data-->
-    
 
-    
+
+
     {{-- <div id="dataLoadDiskon"></div> --}}
 
     @push('scripts')

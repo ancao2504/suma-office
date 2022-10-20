@@ -1,4 +1,3 @@
-
 <div id="kt_aside" class="aside aside-light aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <a href="#">
@@ -24,7 +23,7 @@
                 </div>
                 @if (Session::get('app_user_role_id') == 'D_H3')
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Dashboard') ? 'active' : '' }}" href="{{ url('/dashboard/dealer') }}">
+                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ url('/dashboard/dealer') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -33,12 +32,12 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Dashboard') ? 'active' : '' }}">Dashboard</span>
+                        <span class="menu-title {{ (Request::is('dashboard/*')) ? 'active' : '' }}">Dashboard</span>
                     </a>
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_SM')
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Dashboard') ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
+                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -47,12 +46,12 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Dashboard') ? 'active' : '' }}">Dashboard</span>
+                        <span class="menu-title {{ (Request::is('dashboard/*')) ? 'active' : '' }}">Dashboard</span>
                     </a>
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_KORSM')
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Dashboard') ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
+                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -61,11 +60,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Dashboard') ? 'active' : '' }}">Dashboard</span>
+                        <span class="menu-title {{ (Request::is('dashboard/*')) ? 'active' : '' }}">Dashboard</span>
                     </a>
                 </div>
                 @else
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (str_contains($title_menu, 'Dashboard')) ? 'here hover show' : '' }}">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('dashboard/*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-2">
@@ -77,21 +76,21 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ (str_contains($title_menu, 'Dashboard')) ? 'active' : '' }}">Dashboards</span>
+                        <span class="menu-title {{ (Request::is('dashboard/*')) ? 'active' : '' }}">Dashboards</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (str_contains($title_menu, 'Dashboard Management')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (str_contains($title_menu, 'Dashboard Management')) ? 'show' : '' }}">
+                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (Request::is('dashboard/management/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (Request::is('dashboard/management/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title {{ (str_contains($title_menu, 'Dashboard Management')) ? 'active' : '' }}">Management</span>
+                                <span class="menu-title {{ (Request::is('dashboard/management/*')) ? 'active' : '' }}">Management</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a id="menuDashboardManagementSales" class="menu-link {{ ($title_menu == 'Dashboard Management Sales') ? 'active' : '' }}" href="{{ url('/dashboard/management/sales') }}">
+                                    <a id="menuDashboardManagementSales" class="menu-link {{ (Request::is('dashboard/management/sales')) ? 'active' : '' }}" href="{{ url('/dashboard/management/sales') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -99,7 +98,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Dashboard Management Stock') ? 'active' : '' }}" href="{{ url('/dashboard/management/stock') }}">
+                                    <a class="menu-link {{ (Request::is('dashboard/management/stock')) ? 'active' : '' }}" href="{{ url('/dashboard/management/stock') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -108,17 +107,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (str_contains($title_menu, 'Dashboard Marketing')) ? 'show' : '' }}">
+                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (Request::is('dashboard/marketing/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title {{ (str_contains($title_menu, 'Dashboard Marketing')) ? 'active' : '' }}">Marketing</span>
+                                <span class="menu-title {{ (Request::is('dashboard/marketing/*')) ? 'active' : '' }}">Marketing</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a id="menuDashboardMarketingPencapaianPerProduk" class="menu-link {{ ($title_menu == 'Dashboard Marketing Pencapaian Per-Produk') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perproduk') }}">
+                                    <a id="menuDashboardMarketingPencapaianPerProduk" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/perproduk')) ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perproduk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -128,7 +127,7 @@
                             </div>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a id="menuDashboardMarketingPencapaianPerLevel" class="menu-link {{ ($title_menu == 'Dashboard Marketing Pencapaian Per-Level') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perlevel') }}">
+                                    <a id="menuDashboardMarketingPencapaianPerLevel" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/perlevel')) ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perlevel') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -138,7 +137,7 @@
                             </div>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a id="menuDashboardMarketingGrowthPencapaian" class="menu-link {{ ($title_menu == 'Dashboard Marketing Growth Pencapaian') ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/growth') }}">
+                                    <a id="menuDashboardMarketingGrowthPencapaian" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/growth')) ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/growth') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -148,7 +147,7 @@
                             </div>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ ($title_menu == 'Dashboard Salesman') ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
+                            <a class="menu-link {{ (Request::is('dashboard/salesman')) ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -156,7 +155,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ ($title_menu == 'Dashboard Dealer') ? 'active' : '' }}" href="{{ url('/dashboard/dealer') }}">
+                            <a class="menu-link {{ (Request::is('dashboard/dealer')) ? 'active' : '' }}" href="{{ url('/dashboard/dealer') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -173,7 +172,7 @@
                 </div>
                 @if (Session::get('app_user_role_id') == "D_H3")
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Dealer') ? 'active' : '' }}" href="{{ route('profile.dealer-profile', strtoupper(trim(Session::get('app_user_id')))) }}">
+                    <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ route('profile.dealer-profile', strtoupper(trim(Session::get('app_user_id')))) }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -194,7 +193,7 @@
                 @endif
                 @if (Session::get('app_user_role_id') != "D_H3")
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Dealer') ? 'active' : '' }}" href="{{ url('/profile/dealer') }}">
+                    <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ url('/profile/dealer') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -215,7 +214,7 @@
                 @endif
                 @if (Session::get('app_user_role_id') == "MD_H3_MGMT")
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Users') ? 'active' : '' }}" href="{{ url('/profile/users') }}">
+                    <a class="menu-link {{ (Request::is('profile/users*')) ? 'active' : '' }}" href="{{ url('/profile/users') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -224,7 +223,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Users') ? 'active' : '' }}">Users</span>
+                        <span class="menu-title {{ (Request::is('profile/users*')) ? 'active' : '' }}">Users</span>
                     </a>
                 </div>
                 @endif
@@ -234,7 +233,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Part Number') ? 'active' : '' }}" href="{{ url('/parts/partnumber') }}">
+                    <a class="menu-link {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}" href="{{ url('/parts/partnumber') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -249,11 +248,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Part Number') ? 'active' : '' }}">Part Number</span>
+                        <span class="menu-title {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}">Part Number</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Back Order') ? 'active' : '' }}" href="{{ route('parts.back-order') }}">
+                    <a class="menu-link {{ (Request::is('parts/backorder*')) ? 'active' : '' }}" href="{{ route('parts.back-order') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -263,11 +262,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Back Order') ? 'active' : '' }}">Back Order</span>
+                        <span class="menu-title {{ (Request::is('parts/backorder*')) ? 'active' : '' }}">Back Order</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Stock Harian') ? 'active' : '' }}" href="{{ url('/parts/stockharian') }}">
+                    <a class="menu-link {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}" href="{{ url('/parts/stockharian') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
@@ -276,7 +275,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Stock Harian') ? 'active' : '' }}">Stock Harian</span>
+                        <span class="menu-title {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}">Stock Harian</span>
                     </a>
                 </div>
                 <div class="menu-item">
@@ -285,7 +284,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Cart') ? 'active' : '' }}" href="{{ url('/orders/cart') }}">
+                    <a class="menu-link {{ (Request::is('orders/cart*')) ? 'active' : '' }}" href="{{ url('/orders/cart') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -296,11 +295,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Cart') ? 'active' : '' }}">Cart</span>
+                        <span class="menu-title {{ (Request::is('orders/cart*')) ? 'active' : '' }}">Cart</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Purchase Order') ? 'active' : '' }}" href="{{ url('/orders/purchaseorder') }}">
+                    <a class="menu-link {{ (Request::is('orders/purchaseorder*')) ? 'active' : '' }}" href="{{ url('/orders/purchaseorder') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -310,11 +309,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Purchase Order') ? 'active' : '' }}">Purchase Order</span>
+                        <span class="menu-title {{ (Request::is('orders/purchaseorder*')) ? 'active' : '' }}">Purchase Order</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Faktur') ? 'active' : '' }}" href="{{ url('/orders/faktur') }}">
+                    <a class="menu-link {{ (Request::is('orders/faktur*')) ? 'active' : '' }}" href="{{ url('/orders/faktur') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -323,11 +322,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Faktur') ? 'active' : '' }}">Faktur</span>
+                        <span class="menu-title {{ (Request::is('orders/faktur*')) ? 'active' : '' }}">Faktur</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Tracking Order') ? 'active' : '' }}" href="{{ url('/orders/tracking') }}">
+                    <a class="menu-link {{ (Request::is('orders/tracking*')) ? 'active' : '' }}" href="{{ url('/orders/tracking') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -336,11 +335,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Tracking Order') ? 'active' : '' }}">Tracking Order</span>
+                        <span class="menu-title {{ (Request::is('orders/tracking*')) ? 'active' : '' }}">Tracking Order</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Pembayaran') ? 'active' : '' }}" href="{{ url('/orders/pembayaranfaktur/belumterbayar') }}">
+                    <a class="menu-link {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}" href="{{ url('/orders/pembayaranfaktur/belumterbayar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -350,7 +349,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Pembayaran') ? 'active' : '' }}">Pembayaran</span>
+                        <span class="menu-title {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}">Pembayaran</span>
                     </a>
                 </div>
                 @if (Session::get('app_user_role_id') == "MD_H3_MGMT")
@@ -359,57 +358,39 @@
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">SETTING</span>
                     </div>
                 </div>
-                <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Parts TPC') ? 'active' : '' }}" href="#">
-                        <span class="menu-icon">
-                            <span class="svg-icon svg-icon-muted svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M8.7 4.19995L4 6.30005V18.8999L8.7 16.8V19L3.1 21.5C2.6 21.7 2 21.4 2 20.8V6C2 5.4 2.3 4.89995 2.9 4.69995L8.7 2.09998V4.19995Z" fill="currentColor"/>
-                                    <path d="M15.3 19.8L20 17.6999V5.09992L15.3 7.19989V4.99994L20.9 2.49994C21.4 2.29994 22 2.59989 22 3.19989V17.9999C22 18.5999 21.7 19.1 21.1 19.3L15.3 21.8998V19.8Z" fill="currentColor"/>
-                                    <path opacity="0.3" d="M15.3 7.19995L20 5.09998V17.7L15.3 19.8V7.19995Z" fill="currentColor"/>
-                                    <path opacity="0.3" d="M8.70001 4.19995V2L15.4 5V7.19995L8.70001 4.19995ZM8.70001 16.8V19L15.4 22V19.8L8.70001 16.8Z" fill="currentColor"/>
-                                    <path opacity="0.3" d="M8.7 16.8L4 18.8999V6.30005L8.7 4.19995V16.8Z" fill="currentColor"/>
-                                </svg>
-                            </span>
-                        </span>
-                        <span class="menu-title {{ ($title_menu == 'Parts TPC') ? 'active' : '' }}">Parts TPC</span>
-                    </a>
-                </div>
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (str_contains($title_menu, 'Aturan Harga')) ? 'here hover show' : '' }}">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"></rect>
-                                    <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"></rect>
-                                    <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"></rect>
-                                    <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"></rect>
+                                    <path opacity="0.3" d="M22.1 11.5V12.6C22.1 13.2 21.7 13.6 21.2 13.7L19.9 13.9C19.7 14.7 19.4 15.5 18.9 16.2L19.7 17.2999C20 17.6999 20 18.3999 19.6 18.7999L18.8 19.6C18.4 20 17.8 20 17.3 19.7L16.2 18.9C15.5 19.3 14.7 19.7 13.9 19.9L13.7 21.2C13.6 21.7 13.1 22.1 12.6 22.1H11.5C10.9 22.1 10.5 21.7 10.4 21.2L10.2 19.9C9.4 19.7 8.6 19.4 7.9 18.9L6.8 19.7C6.4 20 5.7 20 5.3 19.6L4.5 18.7999C4.1 18.3999 4.1 17.7999 4.4 17.2999L5.2 16.2C4.8 15.5 4.4 14.7 4.2 13.9L2.9 13.7C2.4 13.6 2 13.1 2 12.6V11.5C2 10.9 2.4 10.5 2.9 10.4L4.2 10.2C4.4 9.39995 4.7 8.60002 5.2 7.90002L4.4 6.79993C4.1 6.39993 4.1 5.69993 4.5 5.29993L5.3 4.5C5.7 4.1 6.3 4.10002 6.8 4.40002L7.9 5.19995C8.6 4.79995 9.4 4.39995 10.2 4.19995L10.4 2.90002C10.5 2.40002 11 2 11.5 2H12.6C13.2 2 13.6 2.40002 13.7 2.90002L13.9 4.19995C14.7 4.39995 15.5 4.69995 16.2 5.19995L17.3 4.40002C17.7 4.10002 18.4 4.1 18.8 4.5L19.6 5.29993C20 5.69993 20 6.29993 19.7 6.79993L18.9 7.90002C19.3 8.60002 19.7 9.39995 19.9 10.2L21.2 10.4C21.7 10.5 22.1 11 22.1 11.5ZM12.1 8.59998C10.2 8.59998 8.6 10.2 8.6 12.1C8.6 14 10.2 15.6 12.1 15.6C14 15.6 15.6 14 15.6 12.1C15.6 10.2 14 8.59998 12.1 8.59998Z" fill="currentColor"></path>
+                                    <path d="M17.1 12.1C17.1 14.9 14.9 17.1 12.1 17.1C9.30001 17.1 7.10001 14.9 7.10001 12.1C7.10001 9.29998 9.30001 7.09998 12.1 7.09998C14.9 7.09998 17.1 9.29998 17.1 12.1ZM12.1 10.1C11 10.1 10.1 11 10.1 12.1C10.1 13.2 11 14.1 12.1 14.1C13.2 14.1 14.1 13.2 14.1 12.1C14.1 11 13.2 10.1 12.1 10.1Z" fill="currentColor"></path>
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ (str_contains($title_menu, 'Aturan Harga')) ? 'active' : '' }}">Aturan Harga</span>
+                        <span class="menu-title {{ (Request::is('setting*')) ? 'active' : '' }}">Pengaturan</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (str_contains($title_menu, 'Diskon')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (str_contains($title_menu, 'Diskon')) ? 'show' : '' }}">
+                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title {{ (str_contains($title_menu, 'Diskon')) ? 'active' : '' }}">Diskon</span>
+                                <span class="menu-title {{ (Request::is('setting/diskon/*')) ? 'active' : '' }}">Diskon</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Dealer') ? 'active' : '' }}" href="{{ url('/setting/diskon/dealer') }}">
+                                    <a class="menu-link {{ (Request::is('setting/diskon/default/dealer*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/default/dealer') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Diskon Dealer</span>
+                                        <span class="menu-title">Diskon Dealer (Default)</span>
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Produk') ? 'active' : '' }}" href="{{ url('/setting/diskonproduk') }}">
+                                    <a class="menu-link {{ (Request::is('setting/diskon/produk*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/produk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -417,7 +398,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Diskon Produk (Dealer)') ? 'active' : '' }}" href="{{ url('/setting/diskonproduk/dealer') }}">
+                                    <a class="menu-link {{ (Request::is('setting/diskon/dealer/produk*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/dealer/produk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -427,30 +408,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (str_contains($title_menu, 'Harga Netto')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (str_contains($title_menu, 'Harga Netto')) ? 'show' : '' }}">
+                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title {{ (str_contains($title_menu, 'Harga Netto')) ? 'active' : '' }}">Harga Netto</span>
+                                <span class="menu-title {{ (Request::is('setting/harga/netto*')) ? 'active' : '' }}">Harga Netto</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts') ? 'active' : '' }}" href="{{ url('/setting/harga/partnetto') }}">
+                                    <a class="menu-link {{ (Request::is('setting/harga/netto/part*')) ? 'active' : '' }}" href="{{ url('/setting/harga/netto/part') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Harga Netto Parts</span>
+                                        <span class="menu-title">Harga Netto (Parts)</span>
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ ($title_menu == 'Harga Netto Parts (Khusus)') ? 'active' : '' }}" href="{{ url('/setting/harga/partnettodealer') }}">
+                                    <a class="menu-link {{ (Request::is('setting/harga/netto/dealer/part*')) ? 'active' : '' }}" href="{{ url('/setting/harga/netto/dealer/part') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Harga Netto Parts (Dealer)</span>
+                                        <span class="menu-title">Harga Netto (Dealer)</span>
                                     </a>
                                 </div>
                             </div>
@@ -465,7 +446,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ ($title_menu == 'Planning Visit') ? 'active' : '' }}" href="{{ url('/visit/planningvisit') }}">
+                    <a class="menu-link {{ (Request::is('visit/planningvisit*')) ? 'active' : '' }}" href="{{ url('/visit/planningvisit') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -477,7 +458,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ ($title_menu == 'Planning Visit') ? 'active' : '' }}">Planning Visit</span>
+                        <span class="menu-title {{ (Request::is('visit/planningvisit*')) ? 'active' : '' }}">Planning Visit</span>
                     </a>
                 </div>
                 @endif

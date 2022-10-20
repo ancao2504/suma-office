@@ -135,30 +135,30 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
     Route::name('setting.')->group(function () {
         Route::get('/setting/clossingmkr', 'App\Setting\SettingController@clossingMarketing')->middleware('authLogin')->name('setting-clossing-marketing');
         // diskon Produk
-        Route::get('/setting/diskonproduk', 'App\Setting\Diskon\DiskonProdukController@index')->middleware('authLogin')->name('setting-diskon-produk');
-        Route::post('/setting/diskonproduk/simpan', 'App\Setting\Diskon\DiskonProdukController@store')->middleware('authLogin')->name('setting-diskon-produk-simpan');
-        Route::post('/setting/diskonproduk/hapus', 'App\Setting\Diskon\DiskonProdukController@destroy')->middleware('authLogin')->name('setting-diskon-produk-hapus');
+        Route::get('/setting/diskon/produk', 'App\Setting\Diskon\DiskonProdukController@index')->middleware('authLogin')->name('setting-diskon-produk');
+        Route::post('/setting/diskon/produk/simpan', 'App\Setting\Diskon\DiskonProdukController@store')->middleware('authLogin')->name('setting-diskon-produk-simpan');
+        Route::post('/setting/diskon/produk/hapus', 'App\Setting\Diskon\DiskonProdukController@destroy')->middleware('authLogin')->name('setting-diskon-produk-hapus');
 
-        Route::post('/setting/diskonproduk/cekproduk', 'App\Setting\Diskon\DiskonProdukController@cekDiskonProduk')->middleware('authLogin')->name('setting-validasi-diskon-produk');
+        Route::post('/setting/diskon/produk/cekproduk', 'App\Setting\Diskon\DiskonProdukController@cekDiskonProduk')->middleware('authLogin')->name('setting-validasi-diskon-produk');
 
         // diskon Produk Dealer
-        Route::get('/setting/diskonproduk/dealer', 'App\Setting\Diskon\DiskonProdukDealerController@index')->middleware('authLogin')->name('setting-diskon-produk-dealer');
-        Route::post('/setting/diskonproduk/dealer/simpan', 'App\Diskon\Setting\DiskonProdukDealerController@store')->middleware('authLogin')->name('setting-diskon-produk-dealer-simpan');
-        Route::post('/setting/diskonproduk/dealer/hapus', 'App\Diskon\Setting\DiskonProdukDealerController@destroy')->middleware('authLogin')->name('setting-diskon-produk-dealer-hapus');
+        Route::get('/setting/diskon/dealer/produk', 'App\Setting\Diskon\DiskonProdukDealerController@index')->middleware('authLogin')->name('setting-diskon-produk-dealer');
+        Route::post('/setting/diskon/dealer/produk/simpan', 'App\Setting\Diskon\DiskonProdukDealerController@store')->middleware('authLogin')->name('setting-diskon-produk-dealer-simpan');
+        Route::post('/setting/diskon/dealer/produk/hapus', 'App\Setting\Diskon\DiskonProdukDealerController@destroy')->middleware('authLogin')->name('setting-diskon-produk-dealer-hapus');
 
         // diskon Dealer
-        Route::get('/setting/diskon/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->middleware('authLogin')->name('setting-diskon-dealer');
-        Route::post('/setting/diskon/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->middleware('authLogin')->name('setting-diskon-dealer-simpan');
-        Route::post('/setting/diskon/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->middleware('authLogin')->name('setting-diskon-dealer-hapus');
+        Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->middleware('authLogin')->name('setting-diskon-dealer');
+        Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->middleware('authLogin')->name('setting-diskon-dealer-simpan');
+        Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->middleware('authLogin')->name('setting-diskon-dealer-hapus');
 
         // part Netto
-        Route::get('/setting/harga/partnetto', 'App\Setting\HargaNetto\HargaNettoPartsControllers@index')->middleware('authLogin')->name('setting-harga-netto-parts');
-        Route::post('/setting/harga/partnetto/simpan', 'App\Setting\HargaNetto\HargaNettoPartsControllers@storeDestroy')->middleware('authLogin')->name('setting-harga-netto-parts-simpan');
+        Route::get('/setting/harga/netto/part', 'App\Setting\HargaNetto\HargaNettoPartsControllers@index')->middleware('authLogin')->name('setting-harga-netto-parts');
+        Route::post('/setting/harga/netto/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsControllers@storeDestroy')->middleware('authLogin')->name('setting-harga-netto-parts-simpan');
 
         // part Netto Dealer
-        Route::get('/setting/harga/partnettodealer', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@index')->middleware('authLogin')->name('setting-harga-netto-parts-dealer');
-        Route::post('/setting/harga/partnettodealer/simpan', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@store')->middleware('authLogin')->name('setting-harga-netto-parts-dealer-simpan');
-        Route::post('/setting/harga/partnettodealer/hapus', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@destroy')->middleware('authLogin')->name('setting-harga-netto-parts-dealer-hapus');
+        Route::get('/setting/harga/netto/dealer/part', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@index')->middleware('authLogin')->name('setting-harga-netto-parts-dealer');
+        Route::post('/setting/harga/netto/dealer/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@store')->middleware('authLogin')->name('setting-harga-netto-parts-dealer-simpan');
+        Route::post('/setting/harga/netto/dealer/part/hapus', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@destroy')->middleware('authLogin')->name('setting-harga-netto-parts-dealer-hapus');
     });
 
     Route::name('validasi.')->group(function () {

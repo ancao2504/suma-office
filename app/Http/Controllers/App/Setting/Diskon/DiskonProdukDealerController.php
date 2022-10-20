@@ -33,7 +33,7 @@ class DiskonProdukDealerController extends Controller
             return view(
                 'layouts.settings.aturanharga.diskon.diskonprodukdealer',
                 [
-                    'title_menu'    => 'Diskon Produk (Dealer)',
+                    'title_menu'    => 'Pengaturan Diskon Produk (Dealer)',
                     'data_disc'     => $data,
                     'companyid'     => $companyid,
                 ]

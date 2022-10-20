@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
-@section('title','Harga Netto')
-@section('subtitle','Harga Netto Part Dealer')
+@section('title','Pengaturan')
+@section('subtitle','Harga Netto (Dealer)')
 @section('container')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -185,7 +185,7 @@
                                             {!! $dta->keterangan !!}
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" 
+                                            <button type="button" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete"
                                             data-array = "{{ json_encode(
                                                 [
                                                     'part_number' => $dta->part_number,
@@ -297,7 +297,7 @@
 	</div>
 </div>
 <!--end::Modal delet data-->
-    
+
 
     @push('scripts')
     <script type="text/javascript">

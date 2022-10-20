@@ -74,27 +74,21 @@
         <script type="text/javascript">
             var btnFilterProses = document.querySelector("#btnFilterProses");
             var btnFilterReset = document.querySelector("#btnFilterReset");
-            var targetFormUsers = document.querySelector("#formUsers");
-            var blockFormUsers = new KTBlockUI(targetFormUsers, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockFormUsers.block();
+                loading.block();
                 document.getElementById("formUsers").submit();
             });
             btnFilterReset.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockFormUsers.block();
+                loading.block();
                 document.getElementById("formUsers").submit();
             });
 
             var pages = 1;
 
             $(window).scroll(function() {
-                if(blockFormUsers.isBlocked() === false) {
+                if(loading.isBlocked() === false) {
                     if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
@@ -112,7 +106,7 @@
             }
 
             async function loadMoreData(user_id, pages, role_filter) {
-                blockFormUsers.block();
+                loading.block();
                 $.ajax({
                     url: "{{ route('profile.users') }}",
                     type: "get",
@@ -121,14 +115,14 @@
                     success:function(response) {
                         if(response.html == '') {
                             $('#dataLoadUsers').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            blockFormUsers.release();
+                            loading.release();
                             return;
                         }
                         $("#dataUsers").append(response.html);
-                        blockFormUsers.release();
+                        loading.release();
                     },
                     error:function() {
-                        blockFormUsers.release();
+                        loading.release();
                         pages = pages - 1;
 
                         Swal.fire({

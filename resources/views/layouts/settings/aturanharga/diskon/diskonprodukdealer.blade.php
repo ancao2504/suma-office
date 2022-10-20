@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
-@section('title','Diskon')
-@section('subtitle','Diskon Produk Dealer')
+@section('title','Pengaturan ')
+@section('subtitle','Diskon Produk (Dealer)')
 @section('container')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -196,8 +196,8 @@
                                         </td>
                                         <td>
                                             <span class="badge badge-info">
-                                                {{ 
-                                                    substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1) 
+                                                {{
+                                                    substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1)
                                                 }}
                                             </span><br>
                                             {{
@@ -311,9 +311,9 @@
 	</div>
 </div>
 <!--end::Modal delet data-->
-    
 
-    
+
+
     {{-- <div id="dataLoadDiskon"></div> --}}
 
     @push('scripts')

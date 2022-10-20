@@ -99,30 +99,14 @@
             var btnFilterProses = document.querySelector("#btnFilterProses");
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockIndex.block();
+                loading.block();
                 document.getElementById("formFilter").submit();
-            });
-
-            var targetDataBackOrder = document.querySelector("#dataBackOrder");
-
-            @if (strtoupper(trim($device)) == 'DESKTOP')
-            var messageLoadBackOrder = '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                                            '<span class="spinner-border text-primary"></span> Loading...'+
-                                        '</div>'
-            @else
-            var messageLoadBackOrder = '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                                            '<span class="spinner-border text-primary"></span> Loading...'+
-                                        '</div>'
-            @endif
-
-            var blockDataBackOrder = new KTBlockUI(targetDataBackOrder, {
-                message: messageLoadBackOrder,
             });
 
             var pages = 1;
 
             $(window).scroll(function() {
-                if(blockDataBackOrder.isBlocked() === false) {
+                if(loading.isBlocked() === false) {
                     if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
@@ -141,7 +125,7 @@
             }
 
             async function loadMoreData(salesman, dealer, part_number, pages) {
-                blockDataBackOrder.block();
+                loading.block();
 
                 $.ajax({
                     url: "{{ route('parts.back-order') }}",
@@ -151,14 +135,14 @@
                     success:function(response) {
                         if(response.html == '') {
                             $('#dataLoadBackOrder').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            blockDataBackOrder.release();
+                            loading.release();
                             return;
                         }
                         $("#dataBackOrder").append(response.html);
-                        blockDataBackOrder.release();
+                        loading.release();
                     },
                     error:function() {
-                        blockDataBackOrder.release();
+                        loading.release();
                         pages = pages - 1;
 
                         Swal.fire({

@@ -33,7 +33,7 @@ class HargaNettoPartsControllers extends Controller
             return view(
                 'layouts.settings.aturanharga.harganetto.harganettopart',
                 [
-                    'title_menu'    => 'Harga Netto Parts',
+                    'title_menu'    => 'Pengaturan Harga Netto Parts',
                     'data'     => $data,
                     'companyid'     => $companyid,
                 ]

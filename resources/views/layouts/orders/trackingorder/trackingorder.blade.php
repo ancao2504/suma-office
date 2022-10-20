@@ -118,21 +118,14 @@
             var btnFilterProses = document.querySelector("#btnFilterProses");
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockIndex.block();
+                loading.block();
                 document.getElementById("formFilter").submit();
-            });
-
-            var targetDataTrackingOrder = document.querySelector("#dataTrackingOrder");
-            var blockDataTrackingOrder = new KTBlockUI(targetDataTrackingOrder, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>',
             });
 
             var pages = 1;
 
             $(window).scroll(function() {
-                if(blockDataTrackingOrder.isBlocked() === false) {
+                if(loading.isBlocked() === false) {
                     if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
@@ -153,7 +146,7 @@
             }
 
             async function loadMoreData(year, month, salesman, dealer, nomor_faktur, pages) {
-                blockDataTrackingOrder.block();
+                loading.block();
 
                 $.ajax({
                     url: "{{ route('orders.tracking-order') }}",
@@ -165,14 +158,14 @@
                     success:function(response) {
                         if(response.html == '') {
                             $('#dataLoadTrackingOrder').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            blockDataTrackingOrder.release();
+                            loading.release();
                             return;
                         }
                         $("#dataTrackingOrder").append(response.html);
-                        blockDataTrackingOrder.release();
+                        loading.release();
                     },
                     error:function() {
-                        blockDataTrackingOrder.release();
+                        loading.release();
                         pages = pages - 1;
 
                         Swal.fire({

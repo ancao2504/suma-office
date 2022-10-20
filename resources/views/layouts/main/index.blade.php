@@ -37,10 +37,10 @@
         </div>
 		<div class="d-flex flex-column flex-root">
 			<div class="page d-flex flex-row flex-column-fluid">
-				@extends('layouts.main.sidebarleft')
+				@include('layouts.main.sidebarleft')
 
 				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-					@extends('layouts.main.header')
+					@include('layouts.main.header')
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                         @csrf
                         <div id="infoCartTotal"></div>

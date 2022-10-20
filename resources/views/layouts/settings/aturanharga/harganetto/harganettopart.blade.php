@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
-@section('title','Harga Netto')
-@section('subtitle','Harga Netto Part')
+@section('title','Pengaturan')
+@section('subtitle','Harga Netto (Parts)')
 @section('container')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -260,7 +260,7 @@
                                             <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga) }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" 
+                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete"
                                             data-array = "{{ json_encode($dta) }}"
                                             data-bs-toggle="modal" data-bs-target="#delet_model">
                                                 <span class="bi bi-trash"></span>
@@ -363,9 +363,9 @@
 	</div>
 </div>
 <!--end::Modal delet data-->
-    
 
-    
+
+
     {{-- <div id="dataLoadDiskon"></div> --}}
 
     @push('scripts')

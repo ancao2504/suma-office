@@ -189,30 +189,14 @@
         var btnFilterProses = document.querySelector("#btnFilterProses");
         btnFilterProses.addEventListener("click", function(e) {
             e.preventDefault();
-            blockIndex.block();
+            loading.block();
             document.getElementById("formFilter").submit();
-        });
-
-        var targetDataPartNumber = document.querySelector("#dataPartNumber");
-
-        @if (strtoupper(trim($device)) == 'DESKTOP')
-        var messageLoadPartNumber = '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                                        '<span class="spinner-border text-primary"></span> Loading...'+
-                                    '</div>';
-        @else
-        var messageLoadPartNumber = '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                                        '<span class="spinner-border text-primary"></span> Loading...'+
-                                    '</div>';
-        @endif
-
-        var blockDataPartNumber = new KTBlockUI(targetDataPartNumber, {
-            message: messageLoadPartNumber,
         });
 
         var pages = 1;
 
         $(window).scroll(function() {
-            if(blockDataPartNumber.isBlocked() === false) {
+            if(loading.isBlocked() === false) {
                 if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                     const params = new URLSearchParams(window.location.search)
                     for (const param of params) {
@@ -228,11 +212,11 @@
         });
 
         // window.addEventListener("scroll", myFunction);
-        // // saat kt_aside_footer terlihat di layar maka 
+        // // saat kt_aside_footer terlihat di layar maka
         // function myFunction() {
         //     var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
         //     console.log(scrollpercent);
-        //     if (scrollpercent > 0.975 && scrollpercent <= 1 && blockDataPartNumber.isBlocked() === false) {
+        //     if (scrollpercent > 0.975 && scrollpercent <= 1 && loading.isBlocked() === false) {
         //         const params = new URLSearchParams(window.location.search)
         //         for (const param of params) {
         //             var tipe_motor = params.get('tipe_motor');
@@ -251,7 +235,7 @@
         }
 
         async function loadMoreData(tipe_motor, group_level, group_produk, part_number, pages) {
-            blockDataPartNumber.block();
+            loading.block();
 
             $.ajax({
                 url: "{{ route('parts.part-number') }}",
@@ -263,14 +247,14 @@
                 success:function(response) {
                     if(response.html == '') {
                         $('#dataLoadPartNumber').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                        blockDataPartNumber.release();
+                        loading.release();
                         return;
                     }
                     $("#dataPartNumber").append(response.html);
-                    blockDataPartNumber.release();
+                    loading.release();
                 },
                 error:function() {
-                    blockDataPartNumber.release();
+                    loading.release();
                     pages = pages - 1;
 
                     Swal.fire({

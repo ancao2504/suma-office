@@ -112,25 +112,18 @@
     @push('scripts')
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
-            @if(strtoupper(trim($device)) != 'DESKTOP')
             var btnFilterProses = document.querySelector("#btnFilterProses");
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
-                blockIndex.block();
+                loading.block();
                 document.getElementById("formFilter").submit();
             });
 
-            var targetDataPurchaseOrder = document.querySelector("#dataPurchaseOrder");
-            var blockDataPurchaseOrder = new KTBlockUI(targetDataPurchaseOrder, {
-                message: '<div class="blockui-message" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">'+
-                            '<span class="spinner-border text-primary"></span> Loading...'+
-                        '</div>'
-            });
-
+            @if(strtoupper(trim($device)) != 'DESKTOP')
             var pages = 1;
 
             $(window).scroll(function() {
-                if(blockDataPurchaseOrder.isBlocked() === false) {
+                if(loading.isBlocked() === false) {
                     if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                         const params = new URLSearchParams(window.location.search)
                         for (const param of params) {
@@ -150,7 +143,7 @@
             }
 
             async function loadMoreData(year, month, salesman, dealer, pages) {
-                blockDataPurchaseOrder.block();
+                loading.block();
 
                 $.ajax({
                     url: "{{ route('orders.purchase-order') }}",
@@ -161,14 +154,14 @@
                     success:function(response) {
                         if(response.html == '') {
                             $('#dataLoadPurchaseOrder').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            blockDataPurchaseOrder.release();
+                            loading.release();
                             return;
                         }
                         $("#dataPurchaseOrder").append(response.html);
-                        blockDataPurchaseOrder.release();
+                        loading.release();
                     },
                     error:function() {
-                        blockDataPurchaseOrder.release();
+                        loading.release();
                         pages = pages - 1;
 
                         Swal.fire({
