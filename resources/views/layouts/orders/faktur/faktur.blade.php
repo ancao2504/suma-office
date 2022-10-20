@@ -149,6 +149,6 @@
             }
         </script>
         
-            <script src="{{ asset('assets/js/suma/orders/faktur/faktur.js') }}?v={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/orders/faktur/faktur.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
