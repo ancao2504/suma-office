@@ -72,82 +72,8 @@
     </div>
     @push('scripts')
         <script type="text/javascript">
-            var btnFilterProses = document.querySelector("#btnFilterProses");
-            var btnFilterReset = document.querySelector("#btnFilterReset");
-            btnFilterProses.addEventListener("click", function(e) {
-                e.preventDefault();
-                loading.block();
-                document.getElementById("formUsers").submit();
-            });
-            btnFilterReset.addEventListener("click", function(e) {
-                e.preventDefault();
-                loading.block();
-                document.getElementById("formUsers").submit();
-            });
-
-            var pages = 1;
-
-            $(window).scroll(function() {
-                if(loading.isBlocked() === false) {
-                    if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                        const params = new URLSearchParams(window.location.search)
-                        for (const param of params) {
-                            var user_id = params.get('search');
-                            var role_filter = params.get('role_filter');
-                        }
-                        pages++;
-                        loadMoreData(user_id,pages,role_filter);
-                    }
-                }
-            });
-
-            window.onbeforeunload = function () {
-                window.scrollTo(0, 0);
-            }
-
-            async function loadMoreData(user_id, pages, role_filter) {
-                loading.block();
-                $.ajax({
-                    url: "{{ route('profile.users') }}",
-                    type: "get",
-                    data: { user_id: user_id, page: pages, role_filter: role_filter },
-
-                    success:function(response) {
-                        if(response.html == '') {
-                            $('#dataLoadUsers').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            loading.release();
-                            return;
-                        }
-                        $("#dataUsers").append(response.html);
-                        loading.release();
-                    },
-                    error:function() {
-                        loading.release();
-                        pages = pages - 1;
-
-                        Swal.fire({
-                            text: "Gagal mengambil data ke dalam server, Coba lagi",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-danger"
-                            }
-                        });
-                    }
-                });
-            }
-            $(document).ready(function() {
-                $('body').on('click', '#modalUser', function () {
-                    $("#userModalForm").modal({ backdrop: "static ", keyboard: false });
-                    // var _token = $('input[name="_token"]').val();
-                    $('#userModalForm').modal('show');
-
-                    $('#userModalForm').on('shown.bs.modal', function () {
-                    });
-                });
-
-            });
+            const url_profile_user = "{{ route('profile.users') }}"
         </script>
+        <script src="{{ asset('assets/js/suma/profile/user.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
