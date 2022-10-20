@@ -113,154 +113,31 @@
     @push('scripts')
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
-            var btnFilterProses = document.querySelector("#btnFilterProses");
-            btnFilterProses.addEventListener("click", function(e) {
-                e.preventDefault();
-                loading.block();
-                document.getElementById("formFilter").submit();
-            });
-
-            var pages = 1;
-
-            $(window).scroll(function() {
-                if(loading.isBlocked() === false) {
-                    if($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                        const params = new URLSearchParams(window.location.search)
-                        for (const param of params) {
-                            var year = params.get('year');
-                            var month = params.get('month');
-                            var salesman = params.get('salesman');
-                            var dealer = params.get('dealer');
-                            var nomor_faktur = params.get('nomor_faktur');
-                        }
-                        pages++;
-                        loadMoreData(year, month, salesman, dealer, nomor_faktur, pages);
-                    }
-                }
-            });
-
-            window.onbeforeunload = function () {
-                window.scrollTo(0, 0);
+            const url_terbayar = {
+                'pembayaran_faktur_terbayar': '{{ route("orders.pembayaran-faktur-terbayar") }}',
+                'setting_clossing_marketing': '{{ route("setting.setting-clossing-marketing") }}',
             }
-
-            async function loadMoreData(year, month, salesman, dealer, nomor_faktur, pages) {
-                loading.block();
-
-                $.ajax({
-                    url: "{{ route('orders.pembayaran-faktur-terbayar') }}",
-                    type: "get",
-                    data: { year: year, month: month, page: pages, salesman: salesman,
-                            dealer: dealer, nomor_faktur: nomor_faktur
-                    },
-                    success:function(response) {
-                        if(response.html == '') {
-                            $('#dataLoadPembayaran').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                            loading.release();
-                            return;
-                        }
-                        $("#dataPembayaran").append(response.html);
-                        loading.release();
-                    },
-                    error:function() {
-                        loading.release();
-                        pages = pages - 1;
-
-                        Swal.fire({
-                            text: "Gagal mengambil data ke dalam server, Coba lagi",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-danger"
-                            }
-                        });
-                    }
-                });
+            const data_filter_terbayar = {
+                'month': '{{ $month }}',
+                'year': '{{ $year }}',
+                'kode_sales': '{{ $kode_sales }}',
+                'kode_dealer': '{{ $kode_dealer }}',
+                'nomor_faktur': '{{ $nomor_faktur }}'
             }
-
-            $(document).ready(function() {
-                $('#btnFilterPembayaran').on('click', function(e) {
-                    e.preventDefault();
-
-                    $('#selectFilterMonth').prop('selectedIndex', {{ $month }} - 1).change();
-                    $('#inputFilterYear').val({{ $year }});
-                    $('#inputFilterSalesman').val('{{ $kode_sales }}');
-                    $('#inputFilterDealer').val('{{ $kode_dealer }}');
-                    $('#inputFilterNomorFaktur').val('{{ $nomor_faktur }}');
-
-                    $('#modalFilter').modal('show');
-                });
-
-                $('#btnFilterPilihSalesman').on('click', function(e) {
-                    e.preventDefault();
-                    loadDataSalesman();
-                    $('#searchSalesmanForm').trigger('reset');
-                    $('#salesmanSearchModal').modal('show');
-                });
-
-                $('body').on('click', '#salesmanContentModal #selectSalesman', function(e) {
-                    e.preventDefault();
-                    $('#inputFilterSalesman').val($(this).data('kode_sales'));
-                    $('#salesmanSearchModal').modal('hide');
-                });
-
-                $('#btnFilterPilihDealer').on('click', function(e) {
-                    e.preventDefault();
-                    loadDataDealer(1, 10, '');
-                    $('#searchDealerForm').trigger('reset');
-                    $('#dealerSearchModal').modal('show');
-                });
-
-
-                $('body').on('click', '#dealerContentModal #selectDealer', function(e) {
-                    e.preventDefault();
-                    $('#inputFilterDealer').val($(this).data('kode_dealer'));
-                    $('#dealerSearchModal').modal('hide');
-                });
-
-
-                $('#btnFilterReset').on('click', function(e) {
-                    e.preventDefault();
-                    var dateObj = new Date();
-                    var month = dateObj.getUTCMonth() + 1;
-                    var year = dateObj.getUTCFullYear();
-
-                    $.ajax({
-                        url: "{{ route('setting.setting-clossing-marketing') }}",
-                        method: "get",
-                        success:function(response) {
-                            if (response.status == false) {
-                                Swal.fire({
-                                    text: response.message,
-                                    icon: "error",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger"
-                                    }
-                                });
-                            } else {
-                                month = response.data.bulan_aktif;
-                                year = response.data.tahun_aktif;
-                            }
-                        }
-                    });
-
-                    $('#selectFilterMonth').prop('selectedIndex', month - 1).change();
-                    $('#inputFilterYear').val(year);
-
-                    @if($role_id == 'MD_H3_SM')
+            function input_kososng(){
+                @if ($role_id == 'MD_H3_SM')
                     $('#inputFilterDealer').val('');
-                    $('#inputFilterNomorFaktur').val('');
-                    @elseif($role_id == 'D_H3')
-                    $('#inputFilterNomorFaktur').val('');
-                    @else
-                    $('#inputFilterSalesman').val('');
-                    $('#inputFilterDealer').val('');
-                    $('#inputFilterNomorFaktur').val('');
-                    @endif;
-                });
-            });
+                $('#inputFilterNomorFaktur').val('');
+                @elseif($role_id == 'D_H3')
+                $('#inputFilterNomorFaktur').val('');
+                @else
+                $('#inputFilterSalesman').val('');
+                $('#inputFilterDealer').val('');
+                $('#inputFilterNomorFaktur').val('');
+                @endif;
+            }
         </script>
+        
+        <script src="{{ asset('assets/js/suma/orders/pembayaranfaktur/pembayaranfakturterbayar.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
