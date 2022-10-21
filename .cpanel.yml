@@ -1,0 +1,8 @@
+
+deployment:
+
+ tasks:
+
+ - export DEPLOYPATH=/home/public_html
+
+ - /usr/bin/rsync -Paz * $DEPLOYPATH --delete

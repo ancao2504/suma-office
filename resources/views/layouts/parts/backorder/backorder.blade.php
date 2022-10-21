@@ -121,7 +121,6 @@
                 });
             });
         </script>
-        
         <script src="{{ asset('assets/js/suma/parts/backorder.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

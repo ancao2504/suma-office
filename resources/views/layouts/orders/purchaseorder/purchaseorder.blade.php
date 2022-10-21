@@ -112,7 +112,7 @@
     @push('scripts')
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         @if(strtoupper(trim($device)) != 'DESKTOP')
-            <script src="{{ asset('assets/js/suma/orders/purchaseorder/purchaseorderMobail.js') }}?v={{ time() }}"></script>
+            <script src="{{ asset('assets/js/suma/orders/purchaseorder/purchaseordermobile.js') }}?v={{ time() }}"></script>
         @endif
 
         <script type="text/javascript">
@@ -137,7 +137,6 @@
                 @endif;
             }
         </script>
-        
         <script src="{{ asset('assets/js/suma/orders/purchaseorder/purchaseorder.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

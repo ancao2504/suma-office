@@ -132,7 +132,7 @@
             }
         </script>
         @if(strtoupper(trim($device)) != 'DESKTOP')
-            <script src="{{ asset('assets/js/suma/orders/faktur/fakturMobail.js') }}?v={{ time() }}"></script>
+            <script src="{{ asset('assets/js/suma/orders/faktur/fakturmobile.js') }}?v={{ time() }}"></script>
         @endif
         <script type="text/javascript">
             function input_kososng(){
@@ -148,7 +148,6 @@
                 @endif;
             }
         </script>
-        
         <script src="{{ asset('assets/js/suma/orders/faktur/faktur.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

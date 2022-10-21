@@ -591,7 +591,6 @@
             }
             const image_notfound = "'{{ URL::asset('assets/images/background/part_image_not_found.png') }}'";
         </script>
-        
         <script src="{{ asset('assets/js/suma/orders/cart.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
