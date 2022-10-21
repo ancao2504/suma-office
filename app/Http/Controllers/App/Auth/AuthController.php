@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller {
 
     public function index() {
-        dd('tes');
         return view('layouts.auth.login');
     }
 
