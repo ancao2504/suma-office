@@ -607,7 +607,7 @@
         <script src="{{ asset('assets/media/charts/amcharts/Animated.js') }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/Micro.js') }}"></script>
 
-        <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsalesindex.js') }}?time={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsales.js') }}?time={{ time() }}"></script>
         @if($fields == 'QUANTITY')
             <script>
                 let data_qty = {
@@ -629,7 +629,7 @@
                     'month':{{ $month }}
                 }
             </script>
-            <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsales.js') }}?time={{ time() }}"></script>
+            <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsalesSellingpriceinppn.js') }}?time={{ time() }}"></script>
         @endif
 
         {{-- <script type="text/javascript">
