@@ -1,11 +1,10 @@
 $(document).ready(function () {
-
     // saat tambah diskon di klik focus ke pruduk dan merubah tombol enter menjadi tab
-    $('.card-body').find('input').on('keydown', function (e) {
+    $('#form_sj .card-body').find('input').on('keydown', function (e) {
         if (e.which == 13) {
             e.preventDefault();
-            var index = $('.card-body').find('input').index(this) + 1;
-            $('.card-body').find('input').eq(index).focus();
+            var index = $('#form_sj .card-body').find('input').index(this) + 1;
+            $('#form_sj .card-body').find('input').eq(index).focus();
         }
     });
     // end saat tambah diskon
@@ -26,17 +25,21 @@ $(document).ready(function () {
     });
     // end ajax stop
 
-    // $('#tgl_terima').val(moment().format('DD-MM-YYYY'));
+    // tanggal dan jam di isi saat ini 
     $('#tgl_terima').flatpickr({
         dateFormat: "d-m-Y",
         defaultDate: moment().format('DD-MM-YYYY')
     });
     $('#jam_terima').val(moment().format('HH:mm:ss'));
+    // end tanggal dan jam di isi saat ini
 
+    // saat ada perubahan di inputan no sj
     $('#no_sj').on('change', function () {
         suratJalan($(this).val());
     });
+    // end saat ada perubahan di inputan no sj
 
+    // fungsi cek no_sj saat ada maka auto load data dan sudah ada maka bisa hapus dan penanganan lainnya
     function suratJalan(data) {
         $.ajax({
             url: url.cek_penerimaan_sj,
@@ -64,7 +67,7 @@ $(document).ready(function () {
 
                     $('#foto').parent().removeClass('col-md-3');
                     $('div > label[for="foto"]').text('Upload Gambar');
-                    $('#foto').replaceWith('<input class="form-control" type="file" id="foto" name="foto">');
+                    $('#foto').replaceWith('<input class="form-control" type="file" id="foto" name="foto" accept="image/*">');
 
                     $('#form_sj').attr('action', url.surat_jalan_simpan);
                     $('div.modal-footer > button').text('DI Terima');
@@ -133,6 +136,7 @@ $(document).ready(function () {
                     $('div.modal-footer > button').addClass('btn-danger');
 
                     $('#btn_kirim.btn-danger').on('click', function () {
+                        // console.log elemnt yang di klik
                         swal.fire({
                             title: "Apakah Anda Yakin Ingin Menghapus Surat Jalan?",
                             icon: "warning",
@@ -154,6 +158,16 @@ $(document).ready(function () {
                 } else if (data.status == 404) {
                     $('#no_sj').addClass('is-invalid');
                     $('#no_sj').removeClass('is-valid');
+                    if ($('#no_sj').next().is('span') == false) {
+                        $('#no_sj').after(`<span class="invalid-feedback" role="alert">
+                            ${data.message}
+                        </span>`);
+                    } else {
+                        $('#no_sj').next().remove();
+                        $('#no_sj').after(`<span class="invalid-feedback" role="alert">
+                            ${data.message}
+                        </span>`);
+                    }
                     $('#no_sj').focus();
 
                     $('#tgl_terima').attr('readonly', false);
@@ -180,4 +194,5 @@ $(document).ready(function () {
             }
         });
     }
+    // end function
 });

@@ -22,7 +22,7 @@
                                         <input type="text" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" placeholder="Tanggal Terima" value="{{ old('end_date') }}" autofocus autocomplete="off" required>
                                     </div>
                                     @if ($errors->has('start_date') || $errors->has('end_date'))
-                                        <span class="text-danger">{{ $errors->default->first() }}</span>
+                                        <span class="invalid-feedback">{{ $errors->default->first() }}</span>
                                     @endif
                                 </div>
                                 <div class="col-sm-6">

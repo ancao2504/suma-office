@@ -15,32 +15,29 @@
                             <div class="form-group row mb-2">
                                 <div class="col-sm-6">
                                     <label for="no_sj" class="form-label">No Surat Jalan</label>
-                                    <input type="text" class="form-control" id="no_sj" name="no_sj" placeholder="No Surat Jalan" value="{{ old('no_sj') }}" autofocus autocomplete="off" required>
+                                    <input type="text" class="form-control @error('no_sj') is-invalid @enderror" id="no_sj" name="no_sj" placeholder="No Surat Jalan" value="{{ old('no_sj') }}" autocomplete="off" required>
                                     @error('no_sj')
-                                        <span class="text-danger">{{ $message }}</span>
+                                        <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="tgl" class="form-label">Tanggal</label>
                                     <input type="text" class="form-control bg-secondary" id="tgl" name="tgl" placeholder="Tanggal" value="{{ old('tgl') }}" readonly>
-                                    @error('tgl')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row mb-2">
                                 <div class="col-sm-6">
                                     <label for="tgl_terima" class="form-label">Tanggal Terima</label>
-                                    <input type="text" class="form-control" id="tgl_terima" name="tgl_terima" placeholder="Tanggal" value="{{ old('tgl_terima')??date('d-m-Y') }}" required>
+                                    <input type="text" class="form-control @error('tgl_terima') is-invalid @enderror" id="tgl_terima" name="tgl_terima" placeholder="Tanggal" value="{{ old('tgl_terima')??date('d-m-Y') }}" required>
                                     @error('tgl_terima')
-                                        <span class="text-danger">{{ $message }}</span>
+                                        <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="jam_terima" class="form-label">Jam Terima</label>
-                                    <input type="time" class="form-control" id="jam_terima" name="jam_terima" placeholder="Jam Terima" value="{{ old('jam_terima') }}" required>
+                                    <input type="time" class="form-control @error('jam_terima') is-invalid @enderror" id="jam_terima" name="jam_terima" placeholder="Jam Terima" value="{{ old('jam_terima') }}" required>
                                     @error('jam_terima')
-                                        <span class="text-danger">{{ $message }}</span>
+                                        <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
@@ -48,40 +45,28 @@
                                 <div class="col-sm-6">
                                     <label for="dealer" class="form-label">Dealer</label>
                                     <input type="text" class="form-control bg-secondary" id="dealer" name="dealer" placeholder="Dealer" value="{{ old('dealer') }}" readonly>
-                                    @error('dealer')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="nm_dealer" class="form-label">Nama Dealer</label>
-                                    <input type="text" class="form-control bg-secondary" id="nm_dealer" name="nm_dealer" placeholder="Nama Dealer" value="{{ old('nm_dealer') }}" readonly>
-                                    @error('nm_dealer')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" class="form-control bg-secondary " id="nm_dealer" name="nm_dealer" placeholder="Nama Dealer" value="{{ old('nm_dealer') }}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row mb-2">
                                 <div class="col-sm-6">
                                     <label for="alamat_dealer" class="form-label">Alamat Dealer</label>
-                                    <input type="text" class="form-control bg-secondary" id="alamat_dealer" name="alamat_dealer" placeholder="Alamat" value="{{ old('alamat_dealer') }}" readonly>
-                                    @error('alamat_dealer')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" class="form-control bg-secondary " id="alamat_dealer" name="alamat_dealer" placeholder="Alamat" value="{{ old('alamat_dealer') }}" readonly>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="kota_dealer" class="form-label">Kota Dealer</label>
-                                    <input type="text" class="form-control bg-secondary" id="kota_dealer" name="kota_dealer" placeholder="Nama Dealer" value="{{ old('kota_dealer') }}" readonly>
-                                    @error('kota_dealer')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" class="form-control bg-secondary " id="kota_dealer" name="kota_dealer" placeholder="Nama Dealer" value="{{ old('kota_dealer') }}" readonly>
                                 </div>
                             </div>
                             <div class="form-group row mb-2">
                                 <div class="mb-3 col-sm-6">
                                     <label for="foto" class="form-label d-block">Upload Gambar</label>
-                                    <input class="form-control" type="file" id="foto" name="foto">
+                                    <input class="form-control @error('foto') is-invalid @enderror" type="file" id="foto" name="foto" accept="image/*">
                                     @error('foto')
-                                        <span class="text-danger">{{ $message }}</span>
+                                        <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
