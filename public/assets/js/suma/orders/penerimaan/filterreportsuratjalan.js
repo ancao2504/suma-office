@@ -6,11 +6,11 @@ $(document).ready(function () {
         }
     });
 
-    $('#tanggal_awal').flatpickr({
+    $('#start_date').flatpickr({
         dateFormat: "d-m-Y",
         defaultDate: moment().format('DD-MM-YYYY')
     });
-    $('#tanggal_akhir').flatpickr({
+    $('#end_date').flatpickr({
         dateFormat: "d-m-Y",
         defaultDate: moment().format('DD-MM-YYYY')
     });

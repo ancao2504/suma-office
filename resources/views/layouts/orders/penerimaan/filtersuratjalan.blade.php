@@ -17,11 +17,11 @@
                                 <div class="col-sm-6">
                                     <label for="tanggal" class="form-label required">Tanggal Terima</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control @error('tanggal_awal') is-invalid @enderror" id="tanggal_awal" name="tanggal_awal" placeholder="Tanggal Terima" value="{{ old('tanggal_awal') }}" autofocus autocomplete="off" required>
+                                        <input type="text" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" placeholder="Tanggal Terima" value="{{ old('start_date') }}" autofocus autocomplete="off" required>
                                         <span class="input-group-text">sd</span>
-                                        <input type="text" class="form-control @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" placeholder="Tanggal Terima" value="{{ old('tanggal_akhir') }}" autofocus autocomplete="off" required>
+                                        <input type="text" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" placeholder="Tanggal Terima" value="{{ old('end_date') }}" autofocus autocomplete="off" required>
                                     </div>
-                                    @if ($errors->has('tanggal_awal') || $errors->has('tanggal_akhir'))
+                                    @if ($errors->has('start_date') || $errors->has('end_date'))
                                         <span class="text-danger">{{ $errors->default->first() }}</span>
                                     @endif
                                 </div>

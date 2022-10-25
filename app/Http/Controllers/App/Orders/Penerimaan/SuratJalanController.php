@@ -170,8 +170,8 @@ class SuratJalanController extends Controller
         $this->validate(
             $request,
             [
-                'tanggal_awal' => 'required',
-                'tanggal_akhir' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
             ],
             [
                 'required' => 'Tanggal Awal dan Tanggal Akhir harus diisi',
@@ -181,7 +181,8 @@ class SuratJalanController extends Controller
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
         $responseApi = ApiService::PenerimaanSuratJalanReport(
-            trim($request->get('tanggal')),
+            trim($request->get('start_date')),
+            trim($request->get('end_date')),
             $companyid,
             trim($request->get('no_serah_terima')),
             trim($request->get('driver')),
@@ -200,7 +201,7 @@ class SuratJalanController extends Controller
                     'nama_company'      => 'PT KHARISMA SUMA JAYA SAKTI',
                     'alamat_company'    => 'JL RUNGKUT INDUSTRI III / 20',
                     'kota_company'      => 'SURABAYA',
-                    'periode'           => trim($request->get('tanggal')),
+                    'periode'           => date('d-F-Y', strtotime($request->get('start_date'))) . ' s/d ' . date('d-F-Y', strtotime($request->get('end_date'))),
                 ]
             );
         } else {

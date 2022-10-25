@@ -1630,13 +1630,14 @@ class ApiService
         return $response;
     }
 
-    public static function PenerimaanSuratJalanReport($tanggal, $companyid, $no_serah_terima, $driver)
+    public static function PenerimaanSuratJalanReport($start_date, $end_date, $companyid, $no_serah_terima, $driver)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/sj/report';
         $header = ['Authorization' => $credential];
         $body = [
-            'tanggal'           => date('Y-m-d', strtotime(trim($tanggal))),
+            'start_date'           => date('Y-m-d', strtotime(trim($start_date))),
+            'end_date'           => date('Y-m-d', strtotime(trim($end_date))),
             'companyid'         => trim($companyid),
             'no_serah_terima'   => trim($no_serah_terima),
             'driver'            => strtoupper(trim($driver)),

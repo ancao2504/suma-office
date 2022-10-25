@@ -1,6 +1,6 @@
 @extends('reports.main.reportheader')
 @section('title','Report Penerimaan Surat Jalan')
-@section('subtitle','Tanggal Terima : '.date('d-F-Y',strtotime($periode)))
+@section('subtitle','Tanggal Terima : '.$periode)
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 @endpush
