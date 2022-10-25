@@ -607,7 +607,32 @@
         <script src="{{ asset('assets/media/charts/amcharts/Animated.js') }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/Micro.js') }}"></script>
 
-        <script type="text/javascript">
+        <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsalesindex.js') }}?time={{ time() }}"></script>
+        @if($fields == 'QUANTITY')
+            <script>
+                let data_qty = {
+                    'comparison':{!!json_encode($comparison)!!},
+                    'sales_all':{!!json_encode($sales_all)!!},
+                    'by_date':{!!json_encode($by_date)!!},
+                    'by_product':{!!json_encode($by_product)!!},
+                    'month':{{ $month }}
+                }
+            </script>
+            <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsalesQuantity.js') }}?time={{ time() }}"></script>
+        @else
+            <script>
+                let data_nonqty = {
+                    'gross_profit':{!!json_encode($gross_profit)!!},
+                    'sales_all':{!!json_encode($sales_all)!!},
+                    'by_date':{!!json_encode($by_date)!!},
+                    'by_product':{!!json_encode($by_product)!!},
+                    'month':{{ $month }}
+                }
+            </script>
+            <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsales.js') }}?time={{ time() }}"></script>
+        @endif
+
+        {{-- <script type="text/javascript">
             var btnFilterProses = document.querySelector("#btnFilterProses");
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
@@ -830,12 +855,12 @@
                             "{category}: [bold] {value} PCS"
                     });
                     @else
-                    series.slices.template.setAll({
-                        stroke: bgColor,
-                        strokeWidth: 2,
-                        tooltipText:
-                            "{category}: [bold]Rp. {value} (Selling Price)"
-                    });
+                        series.slices.template.setAll({
+                            stroke: bgColor,
+                            strokeWidth: 2,
+                            tooltipText:
+                                "{category}: [bold]Rp. {value} (Selling Price)"
+                        });
                     @endif
 
                     series.slices.template.states.create("hover", { scale: 0.95 });
@@ -933,21 +958,21 @@
                             })
                         );
                         @else
-                        var series = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: name,
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: field,
-                                stroke: color,
-                                fill: color,
-                                categoryXField: "tanggal",
-                                tooltip: am5.Tooltip.new(root, {
-                                    pointerOrientation: "horizontal",
-                                    labelText: "[bold]{name}[/]\n[bold] Tanggal {categoryX} : Rp. {valueY}"
+                            var series = chart.series.push(
+                                am5xy.LineSeries.new(root, {
+                                    name: name,
+                                    xAxis: xAxis,
+                                    yAxis: yAxis,
+                                    valueYField: field,
+                                    stroke: color,
+                                    fill: color,
+                                    categoryXField: "tanggal",
+                                    tooltip: am5.Tooltip.new(root, {
+                                        pointerOrientation: "horizontal",
+                                        labelText: "[bold]{name}[/]\n[bold] Tanggal {categoryX} : Rp. {valueY}"
+                                    })
                                 })
-                            })
-                        );
+                            );
                         @endif
 
 
@@ -1054,19 +1079,19 @@
                             })
                         }));
                         @else
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueXField: field,
-                            categoryYField: "produk",
-                            sequencedInterpolation: true,
-                            fill: color,
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name}[/]\n{categoryY} : [bold]Rp. {valueX}"
-                            })
-                        }));
+                            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                                name: name,
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueXField: field,
+                                categoryYField: "produk",
+                                sequencedInterpolation: true,
+                                fill: color,
+                                tooltip: am5.Tooltip.new(root, {
+                                    pointerOrientation: "horizontal",
+                                    labelText: "[bold]{name}[/]\n{categoryY} : [bold]Rp. {valueX}"
+                                })
+                            }));
                         @endif
 
                         series.columns.template.setAll({
@@ -1086,17 +1111,17 @@
                             });
                         });
                         @else
-                        series.bullets.push(function() {
-                            return am5.Bullet.new(root, {
-                                locationX: 1,
-                                locationY: 0.5,
-                                sprite: am5.Label.new(root, {
-                                    centerY: am5.p50,
-                                    text: "Rp. {valueX}",
-                                    populateText: true
-                                })
+                            series.bullets.push(function() {
+                                return am5.Bullet.new(root, {
+                                    locationX: 1,
+                                    locationY: 0.5,
+                                    sprite: am5.Label.new(root, {
+                                        centerY: am5.p50,
+                                        text: "Rp. {valueX}",
+                                        populateText: true
+                                    })
+                                });
                             });
-                        });
                         @endif
 
                         series.bullets.push(function() {
@@ -1154,8 +1179,7 @@
                 });
 
             });
-        </script>
-
+        </script> --}}
 
     @endpush
 @endsection

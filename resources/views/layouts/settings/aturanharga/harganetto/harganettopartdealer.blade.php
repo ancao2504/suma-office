@@ -173,19 +173,19 @@
                                             {{ $dta->kode_dealer }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->het) }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ number_format($dta->het) }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga_tpc_20) }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ number_format($dta->harga_tpc_20) }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga_jual) }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ number_format($dta->harga_jual) }}</span>
                                         </td>
                                         <td>
                                             {!! $dta->keterangan !!}
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete"
+                                            <button type="button" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete"
                                             data-array = "{{ json_encode(
                                                 [
                                                     'part_number' => $dta->part_number,
@@ -195,7 +195,7 @@
                                             data-bs-toggle="modal" data-bs-target="#delet_model">
                                                 <span class="bi bi-trash"></span>
                                             </button>
-                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit"
+                                            <button class="btn btn-sm btn-icon btn-primary d-inline-block mt-1 btn-edit"
                                             data-array="{{ json_encode($dta) }}"
                                             >
                                                 <span class="bi bi-pencil"></span>

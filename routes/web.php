@@ -118,6 +118,16 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::get('/orders/pembayaranfaktur/terbayar', 'App\Orders\PembayaranFakturController@pembayaranFakturTerbayar')->middleware('authLogin')->name('pembayaran-faktur-terbayar');
         Route::post('/orders/pembayaranfaktur/detailperfaktur', 'App\Orders\PembayaranFakturController@pembayaranFakturDetailPerFaktur')->middleware('authLogin')->name('pembayaran-faktur-detail-per-faktur');
         Route::post('/orders/pembayaranfaktur/detailperbpk', 'App\Orders\PembayaranFakturController@pembayaranFakturDetailPerBpk')->middleware('authLogin')->name('pembayaran-faktur-detail-per-bpk');
+
+        // surat jalan
+        Route::get('/orders/penerimaan/ceksj', 'App\Orders\Penerimaan\SuratJalanController@CekPenerimaanSJ')->middleware('authLogin')->name('cek_penerimaan_sj');
+
+        Route::get('/orders/penerimaan/sj', 'App\Orders\Penerimaan\SuratJalanController@create')->middleware('authLogin')->name('surat_jalan');
+        Route::post('/orders/penerimaan/sj/simpan', 'App\Orders\Penerimaan\SuratJalanController@store')->middleware('authLogin')->name('surat_jalan_simpan');
+        Route::post('/orders/penerimaan/sj/hapus', 'App\Orders\Penerimaan\SuratJalanController@destroy')->middleware('authLogin')->name('surat_jalan_hapus');
+
+        Route::get('/orders/penerimaan/sj/filter', 'App\Orders\Penerimaan\SuratJalanController@filter')->middleware('authLogin')->name('surat_jalan_filter');
+        Route::get('/orders/penerimaan/sj/report', 'App\Orders\Penerimaan\SuratJalanController@report')->middleware('authLogin')->name('surat_jalan_report');
     });
 
     Route::name('option.')->group(function () {

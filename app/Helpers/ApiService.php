@@ -311,8 +311,9 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardManagementSalesByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardManagementSalesByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/management/sales/salesbyproduct';
         $header = ['Authorization' => $credential];
         $body = [
@@ -329,8 +330,9 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardManagementSalesByDate($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardManagementSalesByDate($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/management/sales/salesbydate';
         $header = ['Authorization' => $credential];
         $body = [
@@ -347,8 +349,9 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardManagementStockByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardManagementStockByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/management/stock/stockbyproduct';
         $header = ['Authorization' => $credential];
         $body = [
@@ -365,10 +368,11 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardMarketingGroupPerProduk($year, $month, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardMarketingGroupPerProduk($year, $month, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/marketing/pencapaian/perproduk';
-        $header = [ 'Authorization' => $credential ];
+        $header = ['Authorization' => $credential];
         $body = [
             'year'          => $year,
             'month'         => $month,
@@ -383,8 +387,9 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardMarketingGroupPerLevel($year, $jenis_mkr, $kode_mkr, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardMarketingGroupPerLevel($year, $jenis_mkr, $kode_mkr, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/marketing/pencapaian/perlevel';
         $header = ['Authorization' => $credential];
         $body = [
@@ -416,8 +421,9 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardSalesmanPenjualanBulanan($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardSalesmanPenjualanBulanan($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/salesman/penjualanbulanan';
         $header = ['Authorization' => $credential];
         $body = [
@@ -433,8 +439,9 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardSalesmanPenjualanHarian($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid) {
-        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+    public static function DashboardSalesmanPenjualanHarian($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/salesman/penjualanharian';
         $header = ['Authorization' => $credential];
         $body = [
@@ -1574,6 +1581,65 @@ class ApiService
             'part_number'       => trim($part_number),
             'dealer'            => trim($dealer),
             'companyid'         => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function CekPenerimaanSuratJalan($nomor_sj, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'orders/penerimaan/sj';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'nomor_sj'        => trim($nomor_sj),
+            'companyid'   => trim($companyid),
+        ];
+
+        // dd($nomor_sj, $companyid);
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function PenerimaanSuratJalanSimpan($nomor_sj, $tanggal, $jam, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'orders/penerimaan/sj/simpan';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'nomor_sj'   => trim($nomor_sj),
+            'tanggal'        => trim($tanggal),
+            'jam'         => trim($jam),
+            'companyid'     => trim($companyid),
+        ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function PenerimaanSuratJalanHapus($nomor_sj, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'orders/penerimaan/sj/hapus';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'nomor_sj'       => trim($nomor_sj),
+            'companyid'      => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function PenerimaanSuratJalanReport($tanggal, $companyid, $no_serah_terima, $driver)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'orders/penerimaan/sj/report';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'tanggal'           => date('Y-m-d', strtotime(trim($tanggal))),
+            'companyid'         => trim($companyid),
+            'no_serah_terima'   => trim($no_serah_terima),
+            'driver'            => strtoupper(trim($driver)),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

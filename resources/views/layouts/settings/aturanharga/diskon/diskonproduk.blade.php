@@ -322,28 +322,28 @@
                                             {{ $data->nama_produk }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-info fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
+                                            <span class="text-info fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_normal == '.00' ? '0' : $data->disc_normal }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ $data->disc_normal == '.00' ? '0' : $data->disc_normal }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_max == '.00' ? '0' : $data->disc_max }}</span>
+                                            <span class="text-warning fw-bolder fs-5">{{ $data->disc_max == '.00' ? '0' : $data->disc_max }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc_plus_normal == '.00' ? '0' : $data->disc_plus_normal }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ $data->disc_plus_normal == '.00' ? '0' : $data->disc_plus_normal }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-warning fw-bolder fs-5">{{ $data->disc_plus_max == '.00' ? '0' : $data->disc_plus_max }}</span>
+                                            <span class="text-warning fw-bolder fs-5">{{ $data->disc_plus_max == '.00' ? '0' : $data->disc_plus_max }}</span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-primary fw-bolder fs-5">{{ $data->cabang }}</span>
+                                            <span class="fw-bolder fs-5">{{ $data->cabang }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}" data-bs-toggle="modal" data-bs-target="#delet_model">
+                                            <button type="reset" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}" data-bs-toggle="modal" data-bs-target="#delet_model">
                                                 <span class="bi bi-trash"></span>
                                             </button>
-                                            <button class="btn btn-sm btn-light btn-light-warning d-inline-block mt-1 btn-edit"
+                                            <button class="btn btn-sm btn-icon btn-primary d-inline-block mt-1 btn-edit"
                                             data-array="{{
                                                             json_encode([
                                                                 'kode_produk' => $data->kode_produk,

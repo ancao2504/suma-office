@@ -256,10 +256,10 @@
                                             {{ $dta->tpc20 == "Y" ? "IYA" : "Tidak" }}
                                         </td> --}}
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ number_format($dta->harga) }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ number_format($dta->harga) }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete"
+                                            <button type="reset" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete"
                                             data-array = "{{ json_encode($dta) }}"
                                             data-bs-toggle="modal" data-bs-target="#delet_model">
                                                 <span class="bi bi-trash"></span>
