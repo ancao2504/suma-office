@@ -82,6 +82,7 @@ class SuratJalanController extends Controller
      */
     public function store(Request $request)
     {
+        // dd(config('constants.app.app_images_url_SJ'));
         $this->validate(
             $request,
             [
@@ -113,10 +114,10 @@ class SuratJalanController extends Controller
         if ($statusApi == 1) {
             if ($request->hasFile('foto')) {
                 $nama_file = str_replace('/', '', $request->no_sj);
-                $request->file('foto')->move('assets/images/sj', $nama_file . '.jpg');
+                $request->file('foto')->move('assets/images/sj/', $nama_file . '.jpg');
 
                 $image = Image::make('assets/images/sj/' . $nama_file . '.jpg');
-                $image->resize(800, null, function ($constraint) {
+                $image->resize(600, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 $image->save('assets/images/sj/' . $nama_file . '.jpg');
@@ -148,7 +149,9 @@ class SuratJalanController extends Controller
         if ($statusApi == 1) {
             // hapus foto
             $nama_file = str_replace('/', '', $request->no_sj);
-            if (file_exists('assets/images/sj/' . $nama_file . '.jpg')) {
+            if (file_exists(
+                'assets/images/sj/' . $nama_file . '.jpg'
+            )) {
                 unlink('assets/images/sj/' . $nama_file . '.jpg');
             }
             return redirect()->back()->with('success', $messageApi);
