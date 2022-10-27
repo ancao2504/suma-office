@@ -44,7 +44,7 @@ class SuratJalanController extends Controller
     {
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $responseApi = ApiService::CekPenerimaanSuratJalan(
-            $request->get('nomor_sj'),
+            $request->get('no_st'),
             $companyid,
         );
 
@@ -53,22 +53,15 @@ class SuratJalanController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            if ($messageApi == 'BELUM_TERIMA') {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Surat Jalan belum diterima',
-                    'data_sj' => $data,
-                ]);
-            } else {
-                return response()->json([
+            return response()->json(
+                [
                     'status' => 1,
-                    'message' => 'Surat Jalan sudah diterima',
-                    'data_sj' => $data,
-                ]);
-            }
+                    'data' => $data,
+                ]
+            );
         } else {
             return response()->json([
-                'status' => 404,
+                'status' => 0,
                 'message' => $messageApi,
             ]);
         }
@@ -82,7 +75,8 @@ class SuratJalanController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(config('constants.app.app_images_url_SJ'));
+        $no_sj = explode(',', substr($request->get('no_sj'), 0, -1));
+        dd($no_sj);
         $this->validate(
             $request,
             [

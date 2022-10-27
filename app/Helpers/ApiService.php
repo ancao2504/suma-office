@@ -1586,13 +1586,13 @@ class ApiService
         return $response;
     }
 
-    public static function CekPenerimaanSuratJalan($nomor_sj, $companyid)
+    public static function CekPenerimaanSuratJalan($nomor_serah_terima, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/sj';
         $header = ['Authorization' => $credential];
         $body = [
-            'nomor_sj'        => trim($nomor_sj),
+            'nomor_serah_terima'        => trim($nomor_serah_terima),
             'companyid'   => trim($companyid),
         ];
 
