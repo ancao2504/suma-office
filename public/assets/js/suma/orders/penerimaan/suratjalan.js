@@ -89,6 +89,7 @@ $(document).ready(function () {
         $('#btn_search').on('click', function () {
             search();
         });
+
         // input_search on keyup
         $('#input_search').on('keyup', function () {
             search();
@@ -512,7 +513,3 @@ $(document).ready(function () {
         // end saat sudah memilih
     });
 });
-
-
-// KJ99318
-// KJ99918
