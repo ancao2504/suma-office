@@ -126,7 +126,6 @@
             'kode_dealer': '{{ $kode_dealer }}',
             'nomor_faktur': '{{ $nomor_faktur }}',
         }
-
             function input_kososng(){
                 @if ($role_id == 'MD_H3_SM')
                     $('#inputFilterDealer').val('');
@@ -140,7 +139,6 @@
                 @endif;
             }
         </script>
-
         <script src="{{ asset('assets/js/suma/orders/trackingorder/trackingorder.js') }}"></script>
     @endpush
 @endsection

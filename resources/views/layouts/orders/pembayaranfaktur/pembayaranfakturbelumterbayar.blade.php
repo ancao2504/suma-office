@@ -113,7 +113,6 @@
                 @endif;
             }
         </script>
-
         <script src="{{ asset('assets/js/suma/orders/pembayaranfaktur/pembayaranfakturbelumterbayar.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

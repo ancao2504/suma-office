@@ -189,7 +189,7 @@
                                             {{ $data->companyid }}
                                         </td>
                                         <td>
-                                            <span class="badge badge-light-success fw-bolder fs-5">{{ $data->disc == '.00' ? '0' : $data->disc }}</span>
+                                            <span class="text-success fw-bolder fs-5">{{ $data->disc == '.00' ? '0' : $data->disc }}</span>
                                         </td>
                                         <td>
                                                 {{ $data->keterangan}}
@@ -201,12 +201,12 @@
                                                 }}
                                             </span><br>
                                             {{
-                                                date('d:M:Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
+                                                date('d:F:Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
                                             }}
                                             {{-- . '/' . substr($data->usertime,strpos($data->usertime,"=")+1,12) --}}
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-array="{{
+                                            <button type="reset" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete" data-array="{{
                                                             json_encode([
                                                                 'produk' => $data->kode_produk,
                                                                 'dealer' => $data->kode_dealer,

@@ -137,7 +137,6 @@
                 @endif;
             }
         </script>
-
         <script src="{{ asset('assets/js/suma/orders/purchaseorder/purchaseorder.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
