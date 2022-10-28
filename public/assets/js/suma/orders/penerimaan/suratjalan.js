@@ -129,6 +129,17 @@ $(document).ready(function () {
 
                             if (respon.data.belum_terima.length > 0) {
                                 createListModal(respon.data);
+
+                                // reset ListModal
+                                $('#suratjalanModal div.modal-footer > button#reset').on('click', function () {
+                                    createListModal(data_sj);
+                                    data = [];
+                                    $('#list_ceked_sj > table > tbody').html('');
+                                    $('#list_ceked_sj').css('display', 'none');
+                                    $('#no_sj').val('');
+                                    $('#no_sj').attr('readonly', false);
+                                    $('#no_sj').removeClass('bg-secondary');
+                                });
                             } else {
                                 $('#form_sj div.modal-footer > button').addClass('disabled');
                                 $('#tableSuratJalan #SuratJalanBody').html('');
@@ -486,17 +497,6 @@ $(document).ready(function () {
 
                 // close modal
                 $('#suratjalanModal').modal('hide');
-
-                // reset ListModal
-                $('#suratjalanModal div.modal-footer > button#reset').on('click', function () {
-                    createListModal(data_sj);
-                    data = [];
-                    $('#list_ceked_sj > table > tbody').html('');
-                    $('#list_ceked_sj').css('display', 'none');
-                    $('#no_sj').val('');
-                    $('#no_sj').attr('readonly', false);
-                    $('#no_sj').removeClass('bg-secondary');
-                });
             } else {
                 swal.fire({
                     title: "Peringatan",
