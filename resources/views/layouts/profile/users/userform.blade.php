@@ -27,7 +27,7 @@
                 <div class="fv-row mb-7">
                     <label class="d-block fw-bold fs-6 mb-5">Photo</label>
                     <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true" style="background-image: url('{{ asset('assets/images/profile/no-image.png') }}')">
-                        @if (isset($photo))
+                        @if(isset($photo))
                         <div class="image-input-wrapper w-125px h-125px" style="background-image: url('{{ $photo }}');"></div>
                         @else
                         <div class="image-input-wrapper w-125px h-125px" style="background-image: none;"></div>

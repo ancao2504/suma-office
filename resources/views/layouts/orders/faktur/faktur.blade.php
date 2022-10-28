@@ -138,13 +138,13 @@
             function input_kososng(){
                 @if ($role_id == 'MD_H3_SM')
                     $('#inputFilterDealer').val('');
-                $('#inputFilterNomorFaktur').val('');
+                    $('#inputFilterNomorFaktur').val('');
                 @elseif($role_id == 'D_H3')
-                $('#inputFilterNomorFaktur').val('');
+                    $('#inputFilterNomorFaktur').val('');
                 @else
-                $('#inputFilterSalesman').val('');
-                $('#inputFilterDealer').val('');
-                $('#inputFilterNomorFaktur').val('');
+                    $('#inputFilterSalesman').val('');
+                    $('#inputFilterDealer').val('');
+                    $('#inputFilterNomorFaktur').val('');
                 @endif;
             }
         </script>
