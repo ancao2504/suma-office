@@ -4,7 +4,16 @@ $(document).ready(function () {
         if (e.which == 13) {
             e.preventDefault();
             var index = $('#form_sj .card-body').find('input').index(this) + 1;
-            $('#form_sj .card-body').find('input').eq(index).focus();
+            if ($('#form_sj .card-body').find('input').eq(index).attr('readonly') || $('#form_sj .card-body').find('input').eq(index).hasClass('bg-secondary')) {
+                for (let i = index; i < $('#form_sj .card-body').find('input').length; i++) {
+                    if (!$('#form_sj .card-body').find('input').eq(i).attr('readonly') || !$('#form_sj .card-body').find('input').eq(i).hasClass('bg-secondary')) {
+                        $('#form_sj .card-body').find('input').eq(i).focus();
+                        break;
+                    }
+                }
+            } else {
+                $('#form_sj .card-body').find('input').eq(index).focus();
+            }
         }
     });
     // end saat tambah diskon
@@ -46,6 +55,27 @@ $(document).ready(function () {
     $('#jam_terima').val(moment().format('HH:mm:ss'));
     // end tanggal dan jam di isi saat ini
 
+    function createListModal(data) {
+        $('#form_sj div.modal-footer > button').addClass('disabled');
+        $('#tableSuratJalan #SuratJalanBody').html('');
+        data.belum_terima.forEach(function (item) {
+            $('#tableSuratJalan #SuratJalanBody').append(`
+                <tr>
+                    <td>
+                        <div class="form-check form-check-custom form-check-solid form-check-lg">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                        </div>
+                    </td>
+                    <td class="text-success">${item.no_sj}</td>
+                    <td>${item.tanggal_sj}</td>
+                    <td>${item.kode_dealer}</td>
+                    <td>${item.nama_dealer}</td>
+                    <td>${item.alamat}</td>
+                    <td>${item.kota}</td>
+                </tr>
+            `);
+        });
+    }
 
     // no_st on change
     $('#no_st').on('change', function () {
@@ -63,8 +93,6 @@ $(document).ready(function () {
                         $('#no_st').val(respon.data.no_serah_terima);
                         $('#no_sj').val('');
                         resetForm();
-                        $('#form_sj div.modal-footer > button').addClass('disabled');
-                        $('#tableSuratJalan #SuratJalanBody').html('');
                         if (respon.data.belum_terima.length > 0 || respon.data.diterima.length > 0) {
                             data_sj = respon.data;
                             $('#no_st').removeClass('is-invalid');
@@ -72,24 +100,10 @@ $(document).ready(function () {
                             $('#no_st').next().remove();
 
                             if (respon.data.belum_terima.length > 0) {
-                                respon.data.belum_terima.forEach(function (item) {
-                                    $('#tableSuratJalan #SuratJalanBody').append(`
-                                        <tr>
-                                            <td>
-                                                <div class="form-check form-check-custom form-check-solid form-check-lg">
-                                                    <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
-                                                </div>
-                                            </td>
-                                            <td class="text-success">${item.no_sj}</td>
-                                            <td>${item.tanggal_sj}</td>
-                                            <td>${item.kode_dealer}</td>
-                                            <td>${item.nama_dealer}</td>
-                                            <td>${item.alamat}</td>
-                                            <td>${item.kota}</td>
-                                        </tr>
-                                    `);
-                                });
+                                createListModal(respon.data);
                             } else {
+                                $('#form_sj div.modal-footer > button').addClass('disabled');
+                                $('#tableSuratJalan #SuratJalanBody').html('');
                                 $('#tableSuratJalan #SuratJalanBody').append(`
                                     <tr class="table-active">
                                         <td colspan="7" class="text-center">Tidak ada data yang perlu diterima</td>
@@ -97,6 +111,8 @@ $(document).ready(function () {
                                 `);
                             }
                         } else {
+                            $('#form_sj div.modal-footer > button').addClass('disabled');
+                            $('#tableSuratJalan #SuratJalanBody').html('');
                             $('#tableSuratJalan #SuratJalanBody').append(`
                                 <tr class="table-active">
                                     <td colspan="7" class="text-center">Tidak ada data yang bisa diterima atau dihapus</td>
@@ -114,7 +130,7 @@ $(document).ready(function () {
                         `);
                         $('#no_sj').val('');
                         resetForm();
-                        $('#form_sj div.modal-footer > button').addClass('disabled');
+                        $('#form_sj > div.modal-footer > button').addClass('disabled');
                     }
                 },
             });
@@ -122,6 +138,15 @@ $(document).ready(function () {
         }
     });
     // end no_st on change
+
+    function isiDataValue(ada_data) {
+        $('#no_sj').val(ada_data.no_sj);
+        $('#tgl').val(moment(ada_data.tanggal_sj).format('DD-MM-YYYY'));
+        $('#dealer').val(ada_data.kode_dealer);
+        $('#nm_dealer').val(ada_data.nama_dealer);
+        $('#alamat_dealer').val(ada_data.alamat);
+        $('#kota_dealer').val(ada_data.kota);
+    }
 
     // #no_sj change
     $('#no_sj').on('change', function () {
@@ -143,6 +168,10 @@ $(document).ready(function () {
             resetForm();
             $('#form_sj div.modal-footer > button').addClass('disabled');
         } else if ($('#no_sj').val() != '' && $('#no_st').val() != '' && $('#no_st').hasClass('is-valid')) {
+            $('#list_ceked_sj').css('display', 'none');
+            $('#no_sj').attr('readonly', false);
+            $('#no_sj').removeClass('bg-secondary');
+
             $('#no_sj').removeClass('is-invalid');
             $('#btn_no_sj').next('span').remove();
 
@@ -184,13 +213,7 @@ $(document).ready(function () {
 
             if (ada_data != undefined) {
                 if (ada_data.status == 0) {
-                    $('#no_sj').val(ada_data.no_sj);
-                    $('#tgl').val(moment(ada_data.tanggal_sj).format('DD-MM-YYYY'));
-
-                    $('#dealer').val(ada_data.kode_dealer);
-                    $('#nm_dealer').val(ada_data.nama_dealer);
-                    $('#alamat_dealer').val(ada_data.alamat);
-                    $('#kota_dealer').val(ada_data.kota);
+                    isiDataValue(ada_data);
 
                     $('#tgl_terima').attr('readonly', false);
                     $('#tgl_terima').removeClass('bg-secondary');
@@ -230,13 +253,7 @@ $(document).ready(function () {
                         });
                     });
                 } else if (ada_data.status == 1) {
-                    $('#no_sj').val(ada_data.no_sj);
-                    $('#tgl').val(moment(ada_data.tanggal_sj).format('DD-MM-YYYY'));
-
-                    $('#dealer').val(ada_data.kode_dealer);
-                    $('#nm_dealer').val(ada_data.nama_dealer);
-                    $('#alamat_dealer').val(ada_data.alamat);
-                    $('#kota_dealer').val(ada_data.kota);
+                    isiDataValue(ada_data);
 
                     $('#tgl_terima').attr('readonly', true);
                     $('#tgl_terima').addClass('bg-secondary');
@@ -250,7 +267,7 @@ $(document).ready(function () {
                     $('#foto').replaceWith(`<img id="foto" src="${url.url_image}/${ada_data.no_sj.replace('/', '')}.jpg" class="img-thumbnail" alt="Tidak Ada Gambar" style="cursor: pointer;">`);
 
                     $('#foto').on('click', function () {
-                        window.open(url.url_image + '/' + ada_data.no_sj.replace('/', '') + '.jpg', '_blank');
+                        window.open(url.url_image + '/' + $('#no_st').val().replace('/', '') + ada_data.no_sj.replace('/', '') + '.jpg', '_blank');
                     });
 
                     $('#form_sj').attr('action', url.surat_jalan_hapus);
@@ -258,7 +275,6 @@ $(document).ready(function () {
                     $('#form_sj div.modal-footer > button').removeClass('btn-scuccess');
                     $('#form_sj div.modal-footer > button').addClass('btn-danger');
                     $('#form_sj div.modal-footer > button').removeClass('disabled');
-
 
                     $('#suratjalanModalForm > div.modal-header > div.btn').trigger('click');
 
@@ -345,31 +361,44 @@ $(document).ready(function () {
 
             if (data.length > 0) {
                 if (data.length > 1) {
-                    $('#list_ceked_sj').css('display', '');
                     // membuat list no_sj yang di card
-                    data.forEach(function (data) {
-                        $('#list_ceked_sj > tbody').append(`
+                    $('#list_ceked_sj > table > tbody').html('');
+                    data.forEach(function (item) {
+                        $('#list_ceked_sj > table > tbody').append(`
                             <tr class="border-bottom">
-                                <td>${data.no_sj}</td>
+                                <td>${item.no_sj}</td>
                                 <td>
-                                    <span class="rounded-pill bg-danger btn_unceklist">X</span>
+                                    <span class="btn_unceklist  badge badge-danger" style="cursor: pointer;">
+                                        <i class="bi bi-x-lg text-white"></i>
+                                    </span>
                                 </td>
                             </tr>
                         `);
                     });
                     // end membuat list no_sj yang di card
+                    $('#list_ceked_sj').css('display', '');
+                    $('#no_sj').val('');
+                    $('#no_sj').attr('readonly', true);
+                    $('#no_sj').addClass('bg-secondary');
 
                     // saat btn_unceklist di klik
-                    $('#list_ceked_sj > tbody > tr > td > span.btn_unceklist').on('click', function () {
+                    $('#list_ceked_sj > table > tbody > tr > td > span.btn_unceklist').on('click', function () {
                         var no_sj = $(this).parent().parent().find('td:eq(0)').text();
                         data = data.filter(function (data) {
                             return data.no_sj != no_sj;
                         });
+                        // SuratJalanBody hapus tr yang di ceklis dan no_sj nya sama dengan no_sj yang di klik
+                        $('#tableSuratJalan tbody tr').each(function () {
+                            if ($(this).find('td:eq(1)').text() == no_sj) {
+                                $(this).find('input[type="checkbox"]').prop('checked', false);
+                            }
+                        });
+                        // end SuratJalanBody hapus tr yang di ceklis dan no_sj nya sama dengan no_sj yang di klik
                         $(this).parent().parent().remove();
                         // jika list no_sj yang di card tinggal 1
                         if (data.length == 1) {
-                            $('#list_ceked_sj').css('display', 'none');
                             $('#no_sj').val(data[0].no_sj);
+                            $('#no_sj').trigger('change');
                         }
                         // end jika list no_sj yang di card tinggal 1
                     });
@@ -380,19 +409,54 @@ $(document).ready(function () {
                     $('#nm_dealer').val('custom');
                     $('#alamat_dealer').val('custom');
                     $('#kota_dealer').val('custom');
-                } else {
-                    $('#list_ceked_sj').css('display', 'none');
-                    $('#no_sj').val(data[0].no_sj);
-                    $('#tgl').val(moment(data[0].tgl).format('DD-MM-YYYY'));
 
-                    $('#dealer').val(data[0].dealer);
-                    $('#nm_dealer').val(data[0].nama_dealer);
-                    $('#alamat_dealer').val(data[0].alamat_dealer);
-                    $('#kota_dealer').val(data[0].kota_dealer);
+
+                    $('#foto').parent().removeClass('col-md-3');
+                    $('div > label[for="foto"]').text('Upload Gambar');
+                    $('#foto').replaceWith('<input class="form-control" type="file" id="foto" name="foto" accept="image/*">');
+
+                    $('#form_sj').attr('action', url.surat_jalan_simpan);
+                    $('#form_sj div.modal-footer > button').text('DI Terima');
+                    $('#form_sj div.modal-footer > button').addClass('btn-scuccess');
+                    $('#form_sj div.modal-footer > button').removeClass('btn-danger');
+                    $('#form_sj div.modal-footer > button').removeClass('disabled');
+
+                    $('#btn_kirim.btn-success').on('click', function () {
+                        swal.fire({
+                            title: "Apakah Anda Yakin Ingin Menerima Surat Jalan?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Ya, Terima!",
+                            cancelButtonText: "Tidak, Batalkan!",
+                            reverseButtons: true,
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-secondary"
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                // isi no_sj dengan array data
+                                $('#no_sj').val(JSON.stringify(data));
+                                $('#form_sj').submit();
+                            } else if (result.dismiss === "cancel") {
+                            }
+                        });
+                    });
+                } else {
+                    $('#no_sj').val(data[0].no_sj);
+                    $('#no_sj').trigger('change');
                 }
 
                 // close modal
                 $('#suratjalanModal').modal('hide');
+
+                // reset ListModal
+                $('#suratjalanModal div.modal-footer > button#reset').on('click', function () {
+                    createListModal(data_sj);
+                    data = [];
+                    $('#list_ceked_sj > table > tbody').html('');
+                    $('#list_ceked_sj').css('display', 'none');
+                });
             } else {
                 swal.fire({
                     title: "Peringatan",
@@ -409,3 +473,7 @@ $(document).ready(function () {
         // end saat sudah memilih
     });
 });
+
+
+// 99281
+// 97341

@@ -75,8 +75,8 @@ class SuratJalanController extends Controller
      */
     public function store(Request $request)
     {
-        $no_sj = explode(',', substr($request->get('no_sj'), 0, -1));
-        dd($no_sj);
+        // dd($request->all());
+        $no_sj = json_decode($request->get('no_sj'));
         $this->validate(
             $request,
             [
@@ -94,32 +94,47 @@ class SuratJalanController extends Controller
         );
 
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
+        $no_sj_err = [];
+        foreach ($no_sj as $key => $value) {
+            $responseApi = ApiService::PenerimaanSuratJalanSimpan(
+                trim($value->no_sj),
+                trim($request->get('tgl_terima')),
+                trim($request->get('jam_terima')),
+                trim($companyid),
+            );
+            $statusApi = json_decode($responseApi)->status;
 
-        $responseApi = ApiService::PenerimaanSuratJalanSimpan(
-            trim($request->get('no_sj')),
-            trim($request->get('tgl_terima')),
-            trim($request->get('jam_terima')),
-            trim($companyid),
-        );
+            // jika terdapat error simpan no_sj
+            if ($statusApi == 0) {
+                $no_sj_err[] = $value->no_sj;
+            } else {
+                if ($request->hasFile('foto')) {
+                    $nama_file = trim(str_replace('/', '', $request->get('no_st'))) . '_' . trim(str_replace('/', '', $value->no_sj));
 
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+                    $image = Image::make('assets/images/sj/' . $nama_file . '.jpg');
+                    $image->resize(600, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    // pindahkan file ke folder public /assets/images/sj dengan nama file sesuai no_st dan no_sj yang sudah di rezise
+                    $image->save('assets/images/sj/' . $nama_file . '.jpg');
+                }
+            }
+        }
+
+        if (count($no_sj_err) > 0) {
+            $statusApi = 1;
+            $messageApi =  'Surat Jalan Berhasil Diterima, No Surat Jalan : ' . implode(', ', $no_sj_err) . ' Gagal Diterima';
+        } else {
+            $statusApi = 1;
+            $messageApi =  'Surat Jalan Berhasil Diterima';
+        }
 
         if ($statusApi == 1) {
-            if ($request->hasFile('foto')) {
-                $nama_file = str_replace('/', '', $request->no_sj);
-                $request->file('foto')->move('assets/images/sj/', $nama_file . '.jpg');
-
-                $image = Image::make('assets/images/sj/' . $nama_file . '.jpg');
-                $image->resize(600, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $image->save('assets/images/sj/' . $nama_file . '.jpg');
-            }
             return redirect()->back()->with('success', $messageApi);
-        } else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
         }
+        // else {
+        //     return redirect()->back()->withInput()->with('failed', $messageApi);
+        // }
     }
 
     /**
