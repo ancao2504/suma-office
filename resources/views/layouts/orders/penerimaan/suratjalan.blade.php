@@ -114,7 +114,7 @@
                             <label class="form-label">Cari berdasarkan Dealer:</label>
                             <div class="input-group">
                                 <span class="input-group-text">Pencarian</span>
-                                <input id="input_search" name="input_search" type="text" class="form-control" placeholder="Cari No Surat Jalan">
+                                <input id="input_search" name="input_search" type="text" class="form-control" placeholder="Cari No Surat Jalan" style="text-transform: uppercase;">
                                 {{-- <button type="button" id="btn_search" name="btn_search" class="btn btn-primary">Cari</button> --}}
                             </div>
                         </div>
