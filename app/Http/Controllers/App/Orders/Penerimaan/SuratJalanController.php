@@ -75,8 +75,17 @@ class SuratJalanController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $no_sj = json_decode($request->get('no_sj'));
+        if (is_array($no_sj)) {
+            $no_sj = $no_sj;
+        } else {
+            $no_sj = array(
+                (object) array(
+                    'no_sj' => $request->get('no_sj'),
+                )
+            );
+        }
+
         $this->validate(
             $request,
             [
@@ -94,6 +103,17 @@ class SuratJalanController extends Controller
         );
 
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
+
+        function uploadImage($request, $no_sj)
+        {
+            $nama_file = trim(str_replace('/', '', $request->get('no_st'))) . '_' . trim(str_replace('/', '', $no_sj));
+            $image = Image::make($request->file('foto'));
+            $image->resize(600, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $image->save('assets/images/sj/' . $nama_file . '.jpg');
+        }
+
         $no_sj_err = [];
         foreach ($no_sj as $key => $value) {
             $responseApi = ApiService::PenerimaanSuratJalanSimpan(
@@ -104,19 +124,11 @@ class SuratJalanController extends Controller
             );
             $statusApi = json_decode($responseApi)->status;
 
-            // jika terdapat error simpan no_sj
             if ($statusApi == 0) {
                 $no_sj_err[] = $value->no_sj;
             } else {
                 if ($request->hasFile('foto')) {
-                    $nama_file = trim(str_replace('/', '', $request->get('no_st'))) . '_' . trim(str_replace('/', '', $value->no_sj));
-
-                    $image = Image::make('assets/images/sj/' . $nama_file . '.jpg');
-                    $image->resize(600, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                    // pindahkan file ke folder public /assets/images/sj dengan nama file sesuai no_st dan no_sj yang sudah di rezise
-                    $image->save('assets/images/sj/' . $nama_file . '.jpg');
+                    uploadImage($request, $value->no_sj);
                 }
             }
         }
@@ -157,10 +169,9 @@ class SuratJalanController extends Controller
 
         if ($statusApi == 1) {
             // hapus foto
-            $nama_file = str_replace('/', '', $request->no_sj);
-            if (file_exists(
-                'assets/images/sj/' . $nama_file . '.jpg'
-            )) {
+            $nama_file = trim(str_replace('/', '', $request->get('no_st'))) . '_' . trim(str_replace('/', '', $request->get('no_sj')));
+
+            if (file_exists('assets/images/sj/' . $nama_file . '.jpg')) {
                 unlink('assets/images/sj/' . $nama_file . '.jpg');
             }
             return redirect()->back()->with('success', $messageApi);

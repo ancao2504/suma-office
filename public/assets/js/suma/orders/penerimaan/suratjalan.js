@@ -66,14 +66,41 @@ $(document).ready(function () {
                             <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
                         </div>
                     </td>
-                    <td class="text-success">${item.no_sj}</td>
-                    <td>${item.tanggal_sj}</td>
+                    <td>${item.no_sj}</td>
+                    <td>${moment(item.tanggal_sj).format('DD/MM/YYYY')}</td>
                     <td>${item.kode_dealer}</td>
                     <td>${item.nama_dealer}</td>
                     <td>${item.alamat}</td>
                     <td>${item.kota}</td>
                 </tr>
             `);
+        });
+
+        function search() {
+            var keyword = $('#input_search').val();
+            $('#tableSuratJalan tr td:nth-child(2)').each(function () {
+                if ($(this).text().toLowerCase().indexOf(keyword.toLowerCase()) == -1) {
+                    $(this).parent().hide();
+                } else {
+                    $(this).parent().show();
+                }
+            });
+        }
+        $('#btn_search').on('click', function () {
+            search();
+        });
+        // input_search on keyup
+        $('#input_search').on('keyup', function () {
+            search();
+        });
+
+        // $('#input_search'). jika di enter maka focus false
+        $('#input_search').on('keydown', function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                // maka jangan focus
+                $(this).blur();
+            }
         });
     }
 
@@ -168,6 +195,15 @@ $(document).ready(function () {
             resetForm();
             $('#form_sj div.modal-footer > button').addClass('disabled');
         } else if ($('#no_sj').val() != '' && $('#no_st').val() != '' && $('#no_st').hasClass('is-valid')) {
+
+            // convert no_st menjadi 5 digit
+            let no_sj = '';
+            for (let i = $(this).val().length; i < 5; i++) {
+                no_sj += '0';
+            }
+            // end convert no_sj menjadi 5 digit
+            no_sj = no_sj + $(this).val();
+
             $('#list_ceked_sj').css('display', 'none');
             $('#no_sj').attr('readonly', false);
             $('#no_sj').removeClass('bg-secondary');
@@ -179,7 +215,7 @@ $(document).ready(function () {
             let diterima = data_sj.diterima;
             let ada_data;
             belum_terima.forEach(function (item, index) {
-                if (item.no_sj.includes($('#no_sj').val())) {
+                if (item.no_sj.includes(no_sj)) {
                     ada_data = {
                         'no_sj': item.no_sj,
                         'tanggal_sj': item.tanggal_sj,
@@ -264,10 +300,10 @@ $(document).ready(function () {
 
                     $('#foto').parent().addClass('col-md-3');
                     $('div > label[for="foto"]').text('Gambar');
-                    $('#foto').replaceWith(`<img id="foto" src="${url.url_image}/${ada_data.no_sj.replace('/', '')}.jpg" class="img-thumbnail" alt="Tidak Ada Gambar" style="cursor: pointer;">`);
+                    $('#foto').replaceWith(`<img id="foto" src="${url.url_image}/${$('#no_st').val().replace(/\//g, '') + '_' + ada_data.no_sj.replace(/\//g, '')}.jpg" class="img-thumbnail" alt="Tidak Ada Gambar" style="cursor: pointer;">`);
 
                     $('#foto').on('click', function () {
-                        window.open(url.url_image + '/' + $('#no_st').val().replace('/', '') + ada_data.no_sj.replace('/', '') + '.jpg', '_blank');
+                        window.open(url.url_image + '/' + $('#no_st').val().replace(/\//g, '') + '_' + ada_data.no_sj.replace(/\//g, '') + '.jpg', '_blank');
                     });
 
                     $('#form_sj').attr('action', url.surat_jalan_hapus);
@@ -456,6 +492,9 @@ $(document).ready(function () {
                     data = [];
                     $('#list_ceked_sj > table > tbody').html('');
                     $('#list_ceked_sj').css('display', 'none');
+                    $('#no_sj').val('');
+                    $('#no_sj').attr('readonly', false);
+                    $('#no_sj').removeClass('bg-secondary');
                 });
             } else {
                 swal.fire({
@@ -475,5 +514,5 @@ $(document).ready(function () {
 });
 
 
-// 99281
-// 97341
+// KJ99318
+// KJ99918
