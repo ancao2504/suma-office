@@ -204,6 +204,9 @@ $(document).ready(function () {
                 $('#no_sj').val('');
                 resetForm();
                 $('#form_sj div.modal-footer > button').addClass('disabled');
+
+                createListModal(data_sj);
+
             } else if ($('#no_sj').val() != '' && $('#no_st').val() != '' && $('#no_st').hasClass('is-valid')) {
 
                 // convert no_st menjadi 5 digit
