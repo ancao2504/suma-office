@@ -19,7 +19,7 @@ $(function chartComparison() {
             })
         );
 
-        var data = data_qty.comparison;
+        var data = data_chart.comparison;
 
         var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
             categoryField: "company",
@@ -117,7 +117,7 @@ $(function chartSalesAll() {
             am5.color("#7239EA")
         ]);
 
-        var data = data_qty.sales_all;
+        var data = data_chart.sales_all;
         series.data.setAll(data);
 
         var legend = chart.children.push(am5.Legend.new(root, {
@@ -159,7 +159,7 @@ $(function chartSalesByDate() {
         }));
         cursor.lineY.set("visible", false);
 
-        var data = data_qty.by_date;
+        var data = data_chart.by_date;
 
         var xRenderer = am5xy.AxisRendererX.new(root, {});
         xRenderer.grid.template.set("location", 0.5);
@@ -273,7 +273,7 @@ $(function chartSalesByProduct() {
             x: am5.p50
         }))
 
-        var data = data_qty.by_product;
+        var data = data_chart.by_product;
 
         var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
             categoryField: "produk",

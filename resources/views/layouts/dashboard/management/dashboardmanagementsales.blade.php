@@ -607,10 +607,9 @@
         <script src="{{ asset('assets/media/charts/amcharts/Animated.js') }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/Micro.js') }}"></script>
 
-        <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsales.js') }}?time={{ time() }}"></script>
         @if($fields == 'QUANTITY')
             <script>
-                let data_qty = {
+                let data_chart = {
                     'comparison':{!!json_encode($comparison)!!},
                     'sales_all':{!!json_encode($sales_all)!!},
                     'by_date':{!!json_encode($by_date)!!},
@@ -621,7 +620,7 @@
             <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsalesQuantity.js') }}?time={{ time() }}"></script>
         @else
             <script>
-                let data_nonqty = {
+                let data_chart = {
                     'gross_profit':{!!json_encode($gross_profit)!!},
                     'sales_all':{!!json_encode($sales_all)!!},
                     'by_date':{!!json_encode($by_date)!!},
@@ -631,6 +630,8 @@
             </script>
             <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsalesSellingpriceinppn.js') }}?time={{ time() }}"></script>
         @endif
+        
+        <script src="{{ asset('assets/js/suma/dashboard/manajement/sales/dashboardmanajementsales.js') }}?time={{ time() }}"></script>
 
         {{-- <script type="text/javascript">
             var btnFilterProses = document.querySelector("#btnFilterProses");

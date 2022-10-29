@@ -190,6 +190,23 @@
         <script src="{{ asset('assets/media/charts/amcharts/Micro.js') }}"></script>
 
         <script type="text/javascript">
+            let data_chart = {
+                'month': {{ $month }},
+                'total': {!!json_encode($total)!!},
+                'pembelian':{!!json_encode($pembelian)!!},
+                'fs':{!!json_encode($fs)!!},
+                'cno':{!!json_encode($cno)!!},
+                'product':{!!json_encode($product)!!},
+            }
+        </script>
+        <script src="{{ asset('assets/js/suma/dashboard/manajement/stock/dashboardmanajementstock.js') }}?time={{ time() }}"></script>
+        @if($fields == 'QUANTITY')
+            <script src="{{ asset('assets/js/suma/dashboard/manajement/stock/dashboardmanajementstockQuantity.js') }}?time={{ time() }}"></script>
+        @else
+            <script src="{{ asset('assets/js/suma/dashboard/manajement/stock/dashboardmanajementstockAmount.js') }}?time={{ time() }}"></script>
+        @endif
+
+        {{-- <script type="text/javascript">
             var btnFilterProses = document.querySelector("#btnFilterProses");
             btnFilterProses.addEventListener("click", function(e) {
                 e.preventDefault();
@@ -737,6 +754,6 @@
                     chart.appear(1000, 100);
                 });
             });
-        </script>
+        </script> --}}
     @endpush
 @endsection
