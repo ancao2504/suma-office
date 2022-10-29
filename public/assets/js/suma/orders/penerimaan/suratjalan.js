@@ -75,7 +75,6 @@ $(document).ready(function () {
                 </tr>
             `);
         });
-
         function search() {
             var keyword = $('#input_search').val();
             $('#tableSuratJalan tr td:nth-child(2)').each(function () {
@@ -134,6 +133,7 @@ $(document).ready(function () {
                                     $('#list_ceked_sj > table > tbody').html('');
                                     $('#list_ceked_sj').css('display', 'none');
                                     $('#no_sj').val('');
+                                    $('#input_search').val('');
                                     $('#no_sj').attr('readonly', false);
                                     $('#no_sj').removeClass('bg-secondary');
                                 });
@@ -212,6 +212,7 @@ $(document).ready(function () {
                     no_sj += '0';
                 }
                 // end convert no_sj menjadi 5 digit
+
                 no_sj = no_sj + $(this).val();
 
                 $('#list_ceked_sj').css('display', 'none');
@@ -265,7 +266,6 @@ $(document).ready(function () {
                         $('#tgl_terima').removeClass('bg-secondary');
                         $('#jam_terima').attr('readonly', false);
                         $('#jam_terima').removeClass('bg-secondary');
-
 
                         $('#foto').parent().removeClass('col-md-3');
                         $('div > label[for="foto"]').text('Upload Gambar');

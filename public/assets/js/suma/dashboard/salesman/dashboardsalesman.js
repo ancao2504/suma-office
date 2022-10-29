@@ -208,7 +208,6 @@ $(function chartPerformaPenjualanHarian() {
             templateField: "fillSettings"
         });
 
-
         series.bullets.push(function () {
             return am5.Bullet.new(root, {
                 sprite: am5.Circle.new(root, {
