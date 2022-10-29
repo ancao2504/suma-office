@@ -186,6 +186,7 @@
     @push('scripts')
     <script src="{{ asset('assets/js/suma/option/option.js') }}?v={{ time() }}"></script>
     <script type="text/javascript">
+
         const url = {
             'part_number' : "{{ route('parts.part-number') }}",
             'view_cart_part_number' : "{{ route('parts.view-cart-part-number') }}",
