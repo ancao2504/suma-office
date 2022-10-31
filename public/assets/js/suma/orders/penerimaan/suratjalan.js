@@ -281,7 +281,6 @@ $(document).ready(function () {
                         $('#form_sj div.modal-footer > button').removeClass('disabled');
 
                         $('#suratjalanModalForm > div.modal-header > div.btn').trigger('click');
-
                         $('#btn_kirim.btn-success').on('click', function () {
                             swal.fire({
                                 title: "Apakah Anda Yakin Ingin Menerima Surat Jalan?",
@@ -453,6 +452,10 @@ $(document).ready(function () {
                         // end jika list no_sj yang di card tinggal 1
                     });
                     // end saat btn_unceklist di klik
+
+
+                    $('#no_sj').removeClass('is-invalid');
+                    $('#no_sj').next('span').remove();
 
                     $('#tgl').val('custom');
                     $('#dealer').val('custom');
