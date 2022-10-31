@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="mb-3 col-sm-6">
                                     <label for="foto" class="form-label d-block">Upload Gambar</label>
-                                    <input class="form-control @error('foto') is-invalid @enderror" type="file" id="foto" name="foto" accept="image/*">
+                                    <input class="form-control @error('foto') is-invalid @enderror" type="file" id="foto" name="foto" accept="image/*" required>
                                     @error('foto')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror

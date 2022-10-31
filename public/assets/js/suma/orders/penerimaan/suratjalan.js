@@ -371,7 +371,6 @@ $(document).ready(function () {
     });
     // #no_sj change
 
-
     // cek saat btn_no_sj di klik cek no_sj
     $('#btn_no_sj').on('click', function () {
         if ($('#no_st').val() != '') {
@@ -452,7 +451,6 @@ $(document).ready(function () {
                         // end jika list no_sj yang di card tinggal 1
                     });
                     // end saat btn_unceklist di klik
-
 
                     $('#no_sj').removeClass('is-invalid');
                     $('#no_sj').next('span').remove();
