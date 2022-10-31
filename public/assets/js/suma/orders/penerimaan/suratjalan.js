@@ -66,14 +66,38 @@ $(document).ready(function () {
                             <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
                         </div>
                     </td>
-                    <td class="text-success">${item.no_sj}</td>
-                    <td>${item.tanggal_sj}</td>
+                    <td>${item.no_sj}</td>
+                    <td>${moment(item.tanggal_sj).format('DD/MM/YYYY')}</td>
                     <td>${item.kode_dealer}</td>
                     <td>${item.nama_dealer}</td>
                     <td>${item.alamat}</td>
                     <td>${item.kota}</td>
                 </tr>
             `);
+        });
+        function search() {
+            var keyword = $('#input_search').val();
+            $('#tableSuratJalan tr td:nth-child(2)').each(function () {
+                if ($(this).text().toLowerCase().indexOf(keyword.toLowerCase()) == -1) {
+                    $(this).parent().hide();
+                } else {
+                    $(this).parent().show();
+                }
+            });
+        }
+
+        // input_search on keyup
+        $('#input_search').on('keyup', function () {
+            search();
+        });
+
+        // $('#input_search'). jika di enter maka focus false
+        $('#input_search').on('keydown', function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                // maka jangan focus
+                $(this).blur();
+            }
         });
     }
 
@@ -101,6 +125,18 @@ $(document).ready(function () {
 
                             if (respon.data.belum_terima.length > 0) {
                                 createListModal(respon.data);
+
+                                // reset ListModal
+                                $('#suratjalanModal div.modal-footer > button#reset').on('click', function () {
+                                    createListModal(data_sj);
+                                    data = [];
+                                    $('#list_ceked_sj > table > tbody').html('');
+                                    $('#list_ceked_sj').css('display', 'none');
+                                    $('#no_sj').val('');
+                                    $('#input_search').val('');
+                                    $('#no_sj').attr('readonly', false);
+                                    $('#no_sj').removeClass('bg-secondary');
+                                });
                             } else {
                                 $('#form_sj div.modal-footer > button').addClass('disabled');
                                 $('#tableSuratJalan #SuratJalanBody').html('');
@@ -148,54 +184,52 @@ $(document).ready(function () {
         $('#kota_dealer').val(ada_data.kota);
     }
 
-    // #no_sj change
-    $('#no_sj').on('change', function () {
-        if ($('#no_st').val() == '') {
-            $('#no_st').addClass('is-invalid');
-            $('#no_st').next('span').remove();
-            $('#no_st').after('<span class="invalid-feedback">No Surat Terima tidak boleh kosong</span>');
+    // #no_sj change dan enter
+    $('#no_sj').on('change keyup', function (e) {
+        if (e.which == 13 || e.type == 'change') {
+            if ($('#no_st').val() == '') {
+                $('#no_st').addClass('is-invalid');
+                $('#no_st').next('span').remove();
+                $('#no_st').after('<span class="invalid-feedback">No Surat Terima tidak boleh kosong</span>');
 
-            // reset form
-            $('#no_sj').val('');
+                // reset form
+                $('#no_sj').val('');
 
-        } else if ($('#no_sj').val() == '') {
-            $('#no_sj').addClass('is-invalid');
-            $('#btn_no_sj').next('span').remove();
-            $('#btn_no_sj').after('<span class="invalid-feedback">No Surat Jalan tidak boleh kosong</span>');
+            } else if ($('#no_sj').val() == '') {
+                $('#no_sj').addClass('is-invalid');
+                $('#btn_no_sj').next('span').remove();
+                $('#btn_no_sj').after('<span class="invalid-feedback">No Surat Jalan tidak boleh kosong</span>');
 
-            // reset form
-            $('#no_sj').val('');
-            resetForm();
-            $('#form_sj div.modal-footer > button').addClass('disabled');
-        } else if ($('#no_sj').val() != '' && $('#no_st').val() != '' && $('#no_st').hasClass('is-valid')) {
-            $('#list_ceked_sj').css('display', 'none');
-            $('#no_sj').attr('readonly', false);
-            $('#no_sj').removeClass('bg-secondary');
+                // reset form
+                $('#no_sj').val('');
+                resetForm();
+                $('#form_sj div.modal-footer > button').addClass('disabled');
 
-            $('#no_sj').removeClass('is-invalid');
-            $('#btn_no_sj').next('span').remove();
+                createListModal(data_sj);
 
-            let belum_terima = data_sj.belum_terima;
-            let diterima = data_sj.diterima;
-            let ada_data;
-            belum_terima.forEach(function (item, index) {
-                if (item.no_sj.includes($('#no_sj').val())) {
-                    ada_data = {
-                        'no_sj': item.no_sj,
-                        'tanggal_sj': item.tanggal_sj,
-                        'kode_dealer': item.kode_dealer,
-                        'nama_dealer': item.nama_dealer,
-                        'alamat': item.alamat,
-                        'kota': item.kota,
-                        'tanggal_terima': item.tanggal_terima ?? '',
-                        'jam_terima': item.jam_terima ?? '',
-                        'status': 0,
-                    }
+            } else if ($('#no_sj').val() != '' && $('#no_st').val() != '' && $('#no_st').hasClass('is-valid')) {
+
+                // convert no_st menjadi 5 digit
+                let no_sj = '';
+                for (let i = $(this).val().length; i < 5; i++) {
+                    no_sj += '0';
                 }
-            });
-            if (ada_data == undefined) {
-                diterima.forEach(function (item, index) {
-                    if (item.no_sj.includes($('#no_sj').val())) {
+                // end convert no_sj menjadi 5 digit
+
+                no_sj = no_sj + $(this).val();
+
+                $('#list_ceked_sj').css('display', 'none');
+                $('#no_sj').attr('readonly', false);
+                $('#no_sj').removeClass('bg-secondary');
+
+                $('#no_sj').removeClass('is-invalid');
+                $('#btn_no_sj').next('span').remove();
+
+                let belum_terima = data_sj.belum_terima;
+                let diterima = data_sj.diterima;
+                let ada_data;
+                belum_terima.forEach(function (item, index) {
+                    if (item.no_sj.includes(no_sj)) {
                         ada_data = {
                             'no_sj': item.no_sj,
                             'tanggal_sj': item.tanggal_sj,
@@ -205,118 +239,133 @@ $(document).ready(function () {
                             'kota': item.kota,
                             'tanggal_terima': item.tanggal_terima ?? '',
                             'jam_terima': item.jam_terima ?? '',
-                            'status': 1,
+                            'status': 0,
                         }
                     }
                 });
-            }
-
-            if (ada_data != undefined) {
-                if (ada_data.status == 0) {
-                    isiDataValue(ada_data);
-
-                    $('#tgl_terima').attr('readonly', false);
-                    $('#tgl_terima').removeClass('bg-secondary');
-                    $('#jam_terima').attr('readonly', false);
-                    $('#jam_terima').removeClass('bg-secondary');
-
-
-                    $('#foto').parent().removeClass('col-md-3');
-                    $('div > label[for="foto"]').text('Upload Gambar');
-                    $('#foto').replaceWith('<input class="form-control" type="file" id="foto" name="foto" accept="image/*">');
-
-                    $('#form_sj').attr('action', url.surat_jalan_simpan);
-                    $('#form_sj div.modal-footer > button').text('DI Terima');
-                    $('#form_sj div.modal-footer > button').addClass('btn-scuccess');
-                    $('#form_sj div.modal-footer > button').removeClass('btn-danger');
-                    $('#form_sj div.modal-footer > button').removeClass('disabled');
-
-                    $('#suratjalanModalForm > div.modal-header > div.btn').trigger('click');
-
-                    $('#btn_kirim.btn-success').on('click', function () {
-                        swal.fire({
-                            title: "Apakah Anda Yakin Ingin Menerima Surat Jalan?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "Ya, Terima!",
-                            cancelButtonText: "Tidak, Batalkan!",
-                            reverseButtons: true,
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-secondary"
+                if (ada_data == undefined) {
+                    diterima.forEach(function (item, index) {
+                        if (item.no_sj.includes($('#no_sj').val())) {
+                            ada_data = {
+                                'no_sj': item.no_sj,
+                                'tanggal_sj': item.tanggal_sj,
+                                'kode_dealer': item.kode_dealer,
+                                'nama_dealer': item.nama_dealer,
+                                'alamat': item.alamat,
+                                'kota': item.kota,
+                                'tanggal_terima': item.tanggal_terima ?? '',
+                                'jam_terima': item.jam_terima ?? '',
+                                'status': 1,
                             }
-                        }).then(function (result) {
-                            if (result.value) {
-                                $('#form_sj').submit();
-                            } else if (result.dismiss === "cancel") {
-                            }
-                        });
-                    });
-                } else if (ada_data.status == 1) {
-                    isiDataValue(ada_data);
-
-                    $('#tgl_terima').attr('readonly', true);
-                    $('#tgl_terima').addClass('bg-secondary');
-                    $('#tgl_terima').val(moment(ada_data.tanggal_terima).format('DD-MM-YYYY'));
-                    $('#jam_terima').attr('readonly', true);
-                    $('#jam_terima').addClass('bg-secondary');
-                    $('#jam_terima').val(ada_data.jam_terima);
-
-                    $('#foto').parent().addClass('col-md-3');
-                    $('div > label[for="foto"]').text('Gambar');
-                    $('#foto').replaceWith(`<img id="foto" src="${url.url_image}/${ada_data.no_sj.replace('/', '')}.jpg" class="img-thumbnail" alt="Tidak Ada Gambar" style="cursor: pointer;">`);
-
-                    $('#foto').on('click', function () {
-                        window.open(url.url_image + '/' + $('#no_st').val().replace('/', '') + ada_data.no_sj.replace('/', '') + '.jpg', '_blank');
-                    });
-
-                    $('#form_sj').attr('action', url.surat_jalan_hapus);
-                    $('#form_sj div.modal-footer > button').text('Hapus');
-                    $('#form_sj div.modal-footer > button').removeClass('btn-scuccess');
-                    $('#form_sj div.modal-footer > button').addClass('btn-danger');
-                    $('#form_sj div.modal-footer > button').removeClass('disabled');
-
-                    $('#suratjalanModalForm > div.modal-header > div.btn').trigger('click');
-
-                    $('#btn_kirim.btn-danger').on('click', function () {
-                        // console.log elemnt yang di klik
-                        swal.fire({
-                            title: "Apakah Anda Yakin Ingin Menghapus Surat Jalan?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "Ya, Hapus!",
-                            cancelButtonText: "Tidak, Batalkan!",
-                            reverseButtons: true,
-                            customClass: {
-                                confirmButton: "btn btn-danger",
-                                cancelButton: "btn btn-secondary"
-                            },
-                        }).then(function (result) {
-                            if (result.value) {
-                                $('#form_sj').submit();
-                            } else if (result.dismiss === "cancel") {
-                            }
-                        });
+                        }
                     });
                 }
-            } else {
-                swal.fire({
-                    title: "Surat Jalan Tidak Ditemukan!",
-                    icon: "warning",
-                    showCancelButton: false,
-                    confirmButtonText: "OK",
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: "btn btn-danger",
-                    },
-                }).then(function (result) {
-                    if (result.value) {
-                        $('#no_sj').val('');
-                        $('#no_sj').focus();
-                        resetForm();
-                        $('#form_sj div.modal-footer > button').addClass('disabled');
+
+                if (ada_data != undefined) {
+                    if (ada_data.status == 0) {
+                        isiDataValue(ada_data);
+
+                        $('#tgl_terima').attr('readonly', false);
+                        $('#tgl_terima').removeClass('bg-secondary');
+                        $('#jam_terima').attr('readonly', false);
+                        $('#jam_terima').removeClass('bg-secondary');
+
+                        $('#foto').parent().removeClass('col-md-3');
+                        $('div > label[for="foto"]').text('Upload Gambar');
+                        $('#foto').replaceWith('<input class="form-control" type="file" id="foto" name="foto" accept="image/*">');
+
+                        $('#form_sj').attr('action', url.surat_jalan_simpan);
+                        $('#form_sj div.modal-footer > button').text('DI Terima');
+                        $('#form_sj div.modal-footer > button').addClass('btn-scuccess');
+                        $('#form_sj div.modal-footer > button').removeClass('btn-danger');
+                        $('#form_sj div.modal-footer > button').removeClass('disabled');
+
+                        $('#suratjalanModalForm > div.modal-header > div.btn').trigger('click');
+                        $('#btn_kirim.btn-success').on('click', function () {
+                            swal.fire({
+                                title: "Apakah Anda Yakin Ingin Menerima Surat Jalan?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Ya, Terima!",
+                                cancelButtonText: "Tidak, Batalkan!",
+                                reverseButtons: true,
+                                customClass: {
+                                    confirmButton: "btn btn-success",
+                                    cancelButton: "btn btn-secondary"
+                                }
+                            }).then(function (result) {
+                                if (result.value) {
+                                    $('#form_sj').submit();
+                                } else if (result.dismiss === "cancel") {
+                                }
+                            });
+                        });
+                    } else if (ada_data.status == 1) {
+                        isiDataValue(ada_data);
+
+                        $('#tgl_terima').attr('readonly', true);
+                        $('#tgl_terima').addClass('bg-secondary');
+                        $('#tgl_terima').val(moment(ada_data.tanggal_terima).format('DD-MM-YYYY'));
+                        $('#jam_terima').attr('readonly', true);
+                        $('#jam_terima').addClass('bg-secondary');
+                        $('#jam_terima').val(ada_data.jam_terima);
+
+                        $('#foto').parent().addClass('col-md-3');
+                        $('div > label[for="foto"]').text('Gambar');
+                        $('#foto').replaceWith(`<img id="foto" src="${url.url_image}/${$('#no_st').val().replace(/\//g, '') + '_' + ada_data.no_sj.replace(/\//g, '')}.jpg" class="img-thumbnail" alt="Tidak Ada Gambar" style="cursor: pointer;">`);
+
+                        $('#foto').on('click', function () {
+                            window.open(url.url_image + '/' + $('#no_st').val().replace(/\//g, '') + '_' + ada_data.no_sj.replace(/\//g, '') + '.jpg', '_blank');
+                        });
+
+                        $('#form_sj').attr('action', url.surat_jalan_hapus);
+                        $('#form_sj div.modal-footer > button').text('Hapus');
+                        $('#form_sj div.modal-footer > button').removeClass('btn-scuccess');
+                        $('#form_sj div.modal-footer > button').addClass('btn-danger');
+                        $('#form_sj div.modal-footer > button').removeClass('disabled');
+
+                        $('#suratjalanModalForm > div.modal-header > div.btn').trigger('click');
+
+                        $('#btn_kirim.btn-danger').on('click', function () {
+                            // console.log elemnt yang di klik
+                            swal.fire({
+                                title: "Apakah Anda Yakin Ingin Menghapus Surat Jalan?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Ya, Hapus!",
+                                cancelButtonText: "Tidak, Batalkan!",
+                                reverseButtons: true,
+                                customClass: {
+                                    confirmButton: "btn btn-danger",
+                                    cancelButton: "btn btn-secondary"
+                                },
+                            }).then(function (result) {
+                                if (result.value) {
+                                    $('#form_sj').submit();
+                                } else if (result.dismiss === "cancel") {
+                                }
+                            });
+                        });
                     }
-                });
+                } else {
+                    swal.fire({
+                        title: "Surat Jalan Tidak Ditemukan!",
+                        icon: "warning",
+                        showCancelButton: false,
+                        confirmButtonText: "OK",
+                        reverseButtons: true,
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    }).then(function (result) {
+                        if (result.value) {
+                            $('#no_sj').val('');
+                            $('#no_sj').focus();
+                            resetForm();
+                            $('#form_sj div.modal-footer > button').addClass('disabled');
+                        }
+                    });
+                }
             }
         }
     });
@@ -404,6 +453,10 @@ $(document).ready(function () {
                     });
                     // end saat btn_unceklist di klik
 
+
+                    $('#no_sj').removeClass('is-invalid');
+                    $('#no_sj').next('span').remove();
+
                     $('#tgl').val('custom');
                     $('#dealer').val('custom');
                     $('#nm_dealer').val('custom');
@@ -449,14 +502,6 @@ $(document).ready(function () {
 
                 // close modal
                 $('#suratjalanModal').modal('hide');
-
-                // reset ListModal
-                $('#suratjalanModal div.modal-footer > button#reset').on('click', function () {
-                    createListModal(data_sj);
-                    data = [];
-                    $('#list_ceked_sj > table > tbody').html('');
-                    $('#list_ceked_sj').css('display', 'none');
-                });
             } else {
                 swal.fire({
                     title: "Peringatan",
@@ -473,7 +518,3 @@ $(document).ready(function () {
         // end saat sudah memilih
     });
 });
-
-
-// 99281
-// 97341
