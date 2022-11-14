@@ -380,6 +380,16 @@
                             </a>
                         </div>
                     </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg {{ (Request::is('orders/penerimaan/pembayaran*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div class="menu-item">
+                            <a class="menu-link {{ (Request::is('orders/penerimaan/pembayaran*')) ? 'active' : '' }}" href="{{ url('/orders/penerimaan/pembayaran') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Pembayaran</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 
                 @if (Session::get('app_user_role_id') == "MD_H3_MGMT")

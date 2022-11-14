@@ -128,6 +128,11 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         Route::get('/orders/penerimaan/sj/filter', 'App\Orders\Penerimaan\SuratJalanController@filter')->middleware('authLogin')->name('surat_jalan_filter');
         Route::get('/orders/penerimaan/sj/report', 'App\Orders\Penerimaan\SuratJalanController@report')->middleware('authLogin')->name('surat_jalan_report');
+
+        // pembayaran
+        Route::get('/orders/penerimaan/pembayaran/daftar', 'App\Orders\Penerimaan\PembayaranController@daftarPembayaranDealer')->middleware('authLogin')->name('daftar-pembayaran');
+        Route::post('/orders/penerimaan/pembayaran/simpan', 'App\Orders\Penerimaan\PembayaranController@store')->middleware('authLogin')->name('simpan-pembayaran');
+        Route::get('/orders/penerimaan/pembayaran', 'App\Orders\Penerimaan\PembayaranController@index')->middleware('authLogin')->name('pembayaran');
     });
 
     Route::name('option.')->group(function () {

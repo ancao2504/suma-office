@@ -27,7 +27,7 @@ class SuratJalanController extends Controller
     public function create()
     {
         return view(
-            'layouts.orders.penerimaan.suratjalan',
+            'layouts.orders.penerimaan.suratjalan.suratjalan',
             [
                 'title_menu'    => 'Surat Jalan',
             ]
@@ -183,7 +183,7 @@ class SuratJalanController extends Controller
     public function filter()
     {
         return view(
-            'layouts.orders.penerimaan.filtersuratjalan',
+            'layouts.orders.penerimaan.suratjalan.filtersuratjalan',
             [
                 'title_menu'    => 'Report Surat Jalan',
             ]
@@ -219,7 +219,7 @@ class SuratJalanController extends Controller
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
             return view(
-                'reports.suratjalan.reportsuratjalan',
+                'reports.suratjalan.suratjalan.reportsuratjalan',
                 [
                     'title_menu'    => 'Report Surat Jalan',
                     'data_report'   => $data,

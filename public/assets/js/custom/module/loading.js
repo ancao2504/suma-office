@@ -8,13 +8,13 @@ let loading = {
         `);
         $('#loading').css('display', '');
         // matikan fungsi scroll
-        $('body').css('overflow', 'hidden');
+        // $('body').css('overflow', 'hidden');
     },
     release: function () {
         $('#loading #loading-message').html('');
         $('#loading').css('display', 'none');
         // aktifkan fungsi scroll
-        $('body').css('overflow', '');
+        // $('body').css('overflow', 'scroll');
     },
     isBlocked: function () {
         return $('#loading').css('display') == 'none' ? false : true;

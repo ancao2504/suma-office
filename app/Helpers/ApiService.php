@@ -1626,7 +1626,9 @@ class ApiService
             'nomor_sj'       => trim($nomor_sj),
             'companyid'      => trim($companyid),
         ];
+
         $response = ApiRequest::requestPost($request, $header, $body);
+
         return $response;
     }
 
@@ -1642,6 +1644,42 @@ class ApiService
             'no_serah_terima'   => trim($no_serah_terima),
             'driver'            => strtoupper(trim($driver)),
         ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+
+        return $response;
+    }
+
+
+    public static function pembayaranDealerDaftar($kd_dealer, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'orders/penerimaan/pembayaran/daftar';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'dealer'        => trim($kd_dealer),
+            'cabang'        => strtoupper(trim($companyid)),
+        ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+
+        return $response;
+    }
+
+    public static function PembayaranDealerSimpan($kd_dealer,$jenis_transaksi, $total, $detail, $user_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'orders/penerimaan/pembayaran/simpan';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'kd_dealer'         => trim($kd_dealer),
+            'jenis_transaksi'   => trim($jenis_transaksi),
+            'total'             => trim($total),
+            'detail'            => $detail,
+            'user_id'           => trim($user_id),
+            'cabang'            => strtoupper(trim($companyid)),
+        ];
+
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
