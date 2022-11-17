@@ -4,7 +4,7 @@ namespace App\Http\Controllers\app\Orders\Penerimaan;
 
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Jenssegers\Agent\Agent as Agent;
 use App\Http\Controllers\Controller;
 
 class PembayaranController extends Controller
@@ -16,11 +16,19 @@ class PembayaranController extends Controller
      */
     public function index(Request $request)
     {
+        $Agent = new Agent();
+        if($Agent->isMobile()) {
+            $device = 'Mobile';
+        } else {
+            $device = 'Desktop';
+        }
+
         return view(
             'layouts.orders.penerimaan.pembayaran.pembayaran',
             [
                 'title_menu'    => 'Penerimaan Pembayaran',
                 'user'          => trim($request->session()->get('app_user_id')),
+                'device'        => $device,
             ]
         );
     }

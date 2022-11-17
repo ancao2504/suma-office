@@ -108,28 +108,28 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <div class="row">
-                            <label for="jml_faktur" class="col-xl-3 col-md-4 col-form-label">Jumlah Faktur</label>
-                            <div class="col-xl-4 col-md-5">
-                                <input type="text" class="form-control form-control-sm bg-secondary" id="jml_faktur" name="jml_faktur" readonly>
+                        <div class="row justify-content-end">
+                            <label for="jml_faktur" class="col-form-label col-lg-2 col-6 fs-8">Jumlah Faktur</label>
+                            <div class="col-lg-3 col-6">
+                                <input type="text" class="form-control form-control-sm" id="jml_faktur" name="jml_faktur" readonly>
                             </div>
                         </div>
-                        <div class="row">
-                            <label for="total_bpk" class="col-xl-3 col-md-4 col-form-label">Total BPK</label>
-                            <div class="col-xl-4 col-md-5">
-                                <input type="text" class="form-control form-control-sm bg-secondary" value="0" id="total_bpk" name="total_bpk" readonly>
+                        <div class="row justify-content-end">
+                            <label for="total_bpk" class="col-form-label col-lg-2 col-6 fs-8">Total BPK</label>
+                            <div class="col-lg-3 col-6">
+                                <input type="text" class="form-control form-control-sm" value="0" id="total_bpk" name="total_bpk" readonly>
                             </div>
                         </div>
-                        <div class="row">
-                            <label for="total_pemayaran" class="col-xl-3 col-md-4 col-form-label">Total Pembayaran</label>
-                            <div class="col-xl-4 col-md-5">
-                                <input type="text" class="form-control form-control-sm bg-secondary" value="0" id="total_pemayaran" readonly>
+                        <div class="row justify-content-end">
+                            <label for="total_pemayaran" class="col-form-label col-lg-2 col-6 fs-8">Total Pembayaran</label>
+                            <div class="col-lg-3 col-6">
+                                <input type="text" class="form-control form-control-sm" value="0" id="total_pemayaran" readonly>
                             </div>
                         </div>
-                        <div class="row">
-                            <label for="sisa" class="col-xl-3 col-md-4 col-form-label">Sisa</label>
-                            <div class="col-xl-4 col-md-5">
-                                <input type="text" class="form-control form-control-sm bg-secondary" id="sisa" name="sisa" readonly>
+                        <div class="row justify-content-end">
+                            <label for="sisa" class="col-form-label col-lg-2 col-6 fs-8">Sisa</label>
+                            <div class="col-lg-3 col-6">
+                                <input type="text" class="form-control form-control-sm" id="sisa" name="sisa" readonly>
                             </div>
                         </div>
                     </div>
@@ -139,9 +139,9 @@
 
 {{-- Modal List Pembayaran --}}
         <div class="modal fade" id="Modallistpembayaran" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
+            <div class="modal-dialog @if ($device != 'Mobile') modal-xl @endif">
+                <div class="modal-content" style="@if ($device == 'Mobile') background-color: #f5f8fa; @endif">
+                    <div class="modal-header @if ($device == 'Mobile') bg-white rounded-3 @endif">
                         <h5 id="modalTitlelistpembayaran" name="modalTitlelistpembayaran" class="modal-title">List Pembayaran</h5>
                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                             <span class="svg-icon svg-icon-muted svg-icon-1">
@@ -152,10 +152,10 @@
                             </span>
                         </div>
                     </div>
-                    <div class="modal-body pb-0 row h-auto">
-                        <div class="mb-3 row">
+                    <div class="modal-body @if ($device == 'Mobile') px-2 @endif">
+                        <div class="mb-3 @if ($device == 'Mobile') card bg-white p-6 @else row @endif">
                             <label class="form-label col-12">Cari berdasarkan No Faktur:</label>
-                            <div class="position-relative col-lg-3 mb-3">
+                            <div class="position-relative @if ($device == 'Mobile') col-lg-12  @else col-lg-3 @endif mb-3">
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                 <span class="svg-icon svg-icon-3 svg-icon-gray-500 position-absolute top-50 translate-middle ms-6">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -166,11 +166,27 @@
                                 <!--end::Svg Icon-->
                                 <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search">
                             </div>
-                            <div class="col-lg-2">
+                            <div class="@if ($device == 'Mobile') col-lg-12  @else col-lg-3 @endif">
                                 <a role="button" class="btn btn-primary" id="filter_list_pembayaran">Filter</a>
+                                @if ($device == 'Mobile')
+                                <a role="button" class="btn btn-light" id="filter_select_all">Select All</a>
+                                @endif
                             </div>
                         </div>
-                        <div id="SuratJalanModal" class="col-lg-9 mb-3 rounded-3 border" style="max-height: 50vh; overflow: scroll;">
+                        @if ($device == 'Mobile')
+                        <div id="SuratJalanModal2" class="mb-2" style="max-height: 70vh; overflow-y: scroll; overflow-x: hidden;">
+                            <div id="ListPembayaranCard" class="pb-3">
+                                <div id="data_block" class="card border border-secondary col-12 p-6 my-3" style="cursor: pointer;">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <span id="card_faktur">Tidak ada data</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <div id="SuratJalanModal" class="col-lg-12 mb-3 rounded-3 border px-2" style="max-height: 70vh; overflow: auto;">
                             <div class="table-responsive">
                                 <table class="table table-row-dashed table-row-gray-300 table-striped align-middle" id="tableSuratJalan">
                                     <thead class="fw-boldest fs-7 text-gray-400 text-uppercase">
@@ -180,7 +196,7 @@
                                                     <input class="form-check-input" type="checkbox" value="1" id="filter_select_all">
                                                 </div>
                                             </th>
-                                            <th>Jml Bayar</th>
+                                            <th >Jml Bayar</th>
                                             <th>No Faktur</th>
                                             <th>Tgl Faktur</th>
                                             <th>Jumlah</th>
@@ -198,38 +214,37 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="card bg-secondary p-3 mb-3 col-lg-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="jml_faktur" class="col-form-label fs-8">Jumlah Faktur</label>
-                                    <div class="">
-                                        <input type="text" class="form-control form-control-sm" id="jml_faktur" name="jml_faktur" readonly>
-                                    </div>
+                        @endif
+                        <div class="mb-3 @if ($device == 'Mobile') bg-white card p-6 @endif">
+                            <div class="row justify-content-end">
+                                <label for="jml_faktur" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Jumlah Faktur</label>
+                                <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
+                                    <input type="text" class="form-control form-control-sm" id="jml_faktur" name="jml_faktur" readonly>
                                 </div>
-                                <div class="col-12">
-                                    <label for="total_bpk" class="col-form-label fs-8">Total BPK</label>
-                                    <div class="">
-                                        <input type="text" class="form-control form-control-sm" value="0" id="total_bpk" name="total_bpk" readonly>
-                                    </div>
+                            </div>
+                            <div class="row justify-content-end">
+                                <label for="total_bpk" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Total BPK</label>
+                                <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
+                                    <input type="text" class="form-control form-control-sm" value="0" id="total_bpk" name="total_bpk" readonly>
                                 </div>
-                                <div class="col-12">
-                                    <label for="total_pemayaran" class="col-form-label fs-8">Total Pembayaran</label>
-                                    <div class="">
-                                        <input type="text" class="form-control form-control-sm" value="0" id="total_pemayaran" readonly>
-                                    </div>
+                            </div>
+                            <div class="row justify-content-end">
+                                <label for="total_pemayaran" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Total Pembayaran</label>
+                                <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
+                                    <input type="text" class="form-control form-control-sm" value="0" id="total_pemayaran" readonly>
                                 </div>
-                                <div class="col-12">
-                                    <label for="sisa" class="col-form-label fs-8">Sisa</label>
-                                    <div class="">
-                                        <input type="text" class="form-control form-control-sm" id="sisa" name="sisa" readonly>
-                                    </div>
+                            </div>
+                            <div class="row justify-content-end">
+                                <label for="sisa" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Sisa</label>
+                                <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
+                                    <input type="text" class="form-control form-control-sm" id="sisa" name="sisa" readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary font-weight-bold col-lg-1 col-12" id="pilih_pembayaran" >OK</button>
-                        <button type="button" class="btn btn-secondary font-weight-bold col-lg-1 col-12" data-bs-dismiss="modal">Batal</button>
+                    <div class="modal-footer @if ($device == 'Mobile') bg-white rounded-3 @endif">
+                        <button type="button" class="btn btn-primary font-weight-bold @if ($device == 'Mobile') col-lg-12 @else col-lg-1 @endif col-12" id="pilih_pembayaran" >OK</button>
+                        <button type="button" class="btn btn-secondary font-weight-bold @if ($device == 'Mobile') col-lg-12 @else col-lg-1 @endif col-12" data-bs-dismiss="modal">Batal</button>
                     </div>
                 </div>
             </div>
@@ -264,7 +279,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <label for="sales" class="col-form-label">Sales</label>
+                            <label for="sales" class="col-form-label">MKR</label>
                             <div class="">
                                 <input type="text" class="form-control" id="sales" name="sales" value="" oninput="this.value = this.value.toUpperCase()">
                             </div>
@@ -279,13 +294,49 @@
             </div>
         </div>
 
+@if ($device == 'Mobile')
+    <!-- Modal Edit Jumlah Dibayar -->
+        <div class="modal fade shadow-lg" id="ModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Jumlah Dibayar dari </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="jml_dibayar" class="col-form-label">Jumlah Dibayar</label>
+                            <input type="text" class="form-control" id="jml_dibayar" name="jml_dibayar" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="simpan_jml_dibayar">Simpan</button>
+                </div>
+            </div>
+            </div>
+        </div>
+@endif
+
     @include('layouts.option.optiondealer')
 
 
     @push('scripts')
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
+            let device = '{{ $device }}';
         </script>
+
+        
         <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaran.js') }}?v={{ time() }}"></script>
+        @if ($device == 'Mobile')
+            <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaranCard.js') }}?v={{ time() }}"></script>
+        @else
+            <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaranTabel.js') }}?v={{ time() }}"></script>
+        @endif
+
+
     @endpush
 @endsection
