@@ -5,6 +5,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 @endpush
 @section('container')
+
+@php
+    if(session()->get('_old_input')){
+        $old = session()->get('_old_input');
+    }
+    if (session()->get('detail')){
+        if (session()->get('_old_input')){
+            $old['detail'] = session()->get('detail');
+        }else {
+            $old = session()->get('detail');
+        }
+    }
+
+    if($old??false){
+        echo '<script>let old = []; old = '.json_encode($old).';</script>';
+    }else {
+        echo '<script>let old = [];</script>';
+    }
+@endphp
         <div class="row">
             <div class="col-lg-4">
                 <div class="card card-xl-stretch shadow mb-3">
@@ -47,7 +66,7 @@
                                 </div>
                                 <div class="col-sm-12 mb-2">
                                     <label for="nm_dealer" class="form-label">Nama Dealer</label>
-                                    <input type="text" class="form-control @error('nm_dealer') is-invalid @enderror" id="nm_dealer" name="nm_dealer" placeholder="Nama Dealer" value="{{ old('nm_dealer') }}" autocomplete="off" disabled>
+                                    <input type="text" class="form-control bg-secondary @error('nm_dealer') is-invalid @enderror" id="nm_dealer" name="nm_dealer" placeholder="Nama Dealer" value="{{ old('nm_dealer') }}" autocomplete="off" readonly>
                                     @error('nm_dealer')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -58,8 +77,8 @@
                                     <label for="jenis_transaksi" class="form-label">Jenis Transaksi</label>
                                     <select name="jenis_transaksi" id="jenis_transaksi" class="form-select form-control" aria-label="Default select example" required>
                                         <option value="">Pilih Jenis Transaksi</option>
-                                        <option value="T">Tunai</option>
-                                        <option value="G">Giro</option>
+                                        <option value="T" {{ old('jenis_transaksi')=='T'?'selected':'' }}>Tunai</option>
+                                        <option value="G" {{ old('jenis_transaksi')=='G'?'selected':'' }}>Giro</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12 mb-2">
@@ -79,18 +98,20 @@
             </div>
 
             <div class="col-lg-8">
-                <div class="card shadow" style="max-height: 100vh">
+                <div class="card shadow">
                     {{-- card-header --}}
                     <div class="card-header">
-                        <div class="card-title">Daftar Akan Dibayar</div>
+                        <div class="card-title">
+                            List Akan Dibayar
+                        </div>
                         <div class="card-title text-end">
                             <button type="button" id="btn_list_pembayaran" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modallistpembayaran">List Pembayaran</button>
                         </div>
                     </div>
-                    <div class="card-body overflow-auto" style="max-height: 70%">
+                    <div id="tabel_list_akan_dibayar" class="card-body py-0" style="max-height: 50vh; overflow: auto;">
                         <div class="table-responsive">
                             <table class="table table-row-dashed table-row-gray-300 table-striped align-middle" id="tableSuratJalan">
-                                <thead class="fw-boldest fs-7 text-gray-400 text-uppercase">
+                                <thead class="fw-boldest fs-7 text-gray-400 text-uppercase bg-white">
                                     <tr>
                                         <th>No</th>
                                         <th>No Faktur</th>
@@ -109,25 +130,25 @@
                     </div>
                     <div class="card-footer">
                         <div class="row justify-content-end">
-                            <label for="jml_faktur" class="col-form-label col-lg-2 col-6 fs-8">Jumlah Faktur</label>
+                            <label for="jml_faktur" class="col-form-label col-lg-3 col-6">Jumlah Faktur</label>
                             <div class="col-lg-3 col-6">
                                 <input type="text" class="form-control form-control-sm" id="jml_faktur" name="jml_faktur" readonly>
                             </div>
                         </div>
                         <div class="row justify-content-end">
-                            <label for="total_bpk" class="col-form-label col-lg-2 col-6 fs-8">Total BPK</label>
+                            <label for="total_bpk" class="col-form-label col-lg-3 col-6">Total BPK</label>
                             <div class="col-lg-3 col-6">
                                 <input type="text" class="form-control form-control-sm" value="0" id="total_bpk" name="total_bpk" readonly>
                             </div>
                         </div>
                         <div class="row justify-content-end">
-                            <label for="total_pemayaran" class="col-form-label col-lg-2 col-6 fs-8">Total Pembayaran</label>
+                            <label for="total_pemayaran" class="col-form-label col-lg-3 col-6">Total Pembayaran</label>
                             <div class="col-lg-3 col-6">
                                 <input type="text" class="form-control form-control-sm" value="0" id="total_pemayaran" readonly>
                             </div>
                         </div>
                         <div class="row justify-content-end">
-                            <label for="sisa" class="col-form-label col-lg-2 col-6 fs-8">Sisa</label>
+                            <label for="sisa" class="col-form-label col-lg-3 col-6">Sisa</label>
                             <div class="col-lg-3 col-6">
                                 <input type="text" class="form-control form-control-sm" id="sisa" name="sisa" readonly>
                             </div>
@@ -167,14 +188,14 @@
                                 <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search">
                             </div>
                             <div class="@if ($device == 'Mobile') col-lg-12  @else col-lg-3 @endif">
-                                <a role="button" class="btn btn-primary" id="filter_list_pembayaran">Filter</a>
+                                <a role="button" class="btn btn-primary" id="filter_list_pembayaran">Pilih Otomatis</a>
                                 @if ($device == 'Mobile')
                                 <a role="button" class="btn btn-light" id="filter_select_all">Select All</a>
                                 @endif
                             </div>
                         </div>
                         @if ($device == 'Mobile')
-                        <div id="SuratJalanModal2" class="mb-2" style="max-height: 70vh; overflow-y: scroll; overflow-x: hidden;">
+                        <div class="mb-2" style="max-height: 70vh; overflow-y: scroll; overflow-x: hidden;">
                             <div id="ListPembayaranCard" class="pb-3">
                                 <div id="data_block" class="card border border-secondary col-12 p-6 my-3" style="cursor: pointer;">
                                     <div class="row">
@@ -186,10 +207,10 @@
                             </div>
                         </div>
                         @else
-                        <div id="SuratJalanModal" class="col-lg-12 mb-3 rounded-3 border px-2" style="max-height: 70vh; overflow: auto;">
+                        <div id="tabel_list" class="col-lg-12 mb-3 border-top border-bottom" style="max-height: 50vh; overflow: auto;">
                             <div class="table-responsive">
                                 <table class="table table-row-dashed table-row-gray-300 table-striped align-middle" id="tableSuratJalan">
-                                    <thead class="fw-boldest fs-7 text-gray-400 text-uppercase">
+                                    <thead class="fw-boldest fs-7 text-gray-400 text-uppercase bg-white">
                                         <tr>
                                             <th>
                                                 <div class="form-check form-check-custom form-check-solid form-check-lg">
@@ -217,25 +238,25 @@
                         @endif
                         <div class="mb-3 @if ($device == 'Mobile') bg-white card p-6 @endif">
                             <div class="row justify-content-end">
-                                <label for="jml_faktur" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Jumlah Faktur</label>
+                                <label for="jml_faktur" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6">Jumlah Faktur</label>
                                 <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
                                     <input type="text" class="form-control form-control-sm" id="jml_faktur" name="jml_faktur" readonly>
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <label for="total_bpk" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Total BPK</label>
+                                <label for="total_bpk" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6">Total BPK</label>
                                 <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
                                     <input type="text" class="form-control form-control-sm" value="0" id="total_bpk" name="total_bpk" readonly>
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <label for="total_pemayaran" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Total Pembayaran</label>
+                                <label for="total_pemayaran" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6">Total Pembayaran</label>
                                 <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
                                     <input type="text" class="form-control form-control-sm" value="0" id="total_pemayaran" readonly>
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <label for="sisa" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6 fs-8">Sisa</label>
+                                <label for="sisa" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-2 @endif col-6">Sisa</label>
                                 <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
                                     <input type="text" class="form-control form-control-sm" id="sisa" name="sisa" readonly>
                                 </div>
@@ -273,7 +294,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <label for="nominal_awal" class="col-form-label">Nominal</label>
+                            <label for="nominal_awal" class="col-form-label">Nilai Faktur</label>
                             <div class="">
                                 <input type="text" class="form-control" id="nominal_awal" name="nominal_awal" value="0">
                             </div>
@@ -319,7 +340,6 @@
             </div>
         </div>
 @endif
-
     @include('layouts.option.optiondealer')
 
 
@@ -329,14 +349,12 @@
             let device = '{{ $device }}';
         </script>
 
-        
         <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaran.js') }}?v={{ time() }}"></script>
         @if ($device == 'Mobile')
             <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaranCard.js') }}?v={{ time() }}"></script>
         @else
             <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaranTabel.js') }}?v={{ time() }}"></script>
         @endif
-
 
     @endpush
 @endsection

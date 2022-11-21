@@ -9,6 +9,14 @@ let loading = {
         $('#loading').css('display', '');
         // matikan fungsi scroll
         // $('body').css('overflow', 'hidden');
+
+        // window.onbeforeunload = function (event) {
+        //     if (loading.isBlocked) {
+        //         event.preventDefault();
+        //         return event.returnValue = "Apakah anda yakin refresh halaman ?, merefresh halaman saat loading dapat mengagalkan prosess !";
+        //     }
+        // }
+
     },
     release: function () {
         $('#loading #loading-message').html('');

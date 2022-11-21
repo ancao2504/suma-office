@@ -62,8 +62,11 @@ function filterSelectAll(){
         hitungCeklist();
     });
 }
+
 function filterAuto(){
     $('#ModalFilter .modal-footer button.btn-primary').on('click', function () {
+        // $('#filter_list_pembayaran').removeClass('btn-light').addClass('btn-primary');
+
         $('#ListPembayaran tr input[type="checkbox"]').prop('checked', false);
         let nominal = $('#ModalFilter .modal-body input[name="nominal_awal"]').val().replace(/\D/g, '');
         $('#ListPembayaran tr td:nth-child(4)').each(function () {
@@ -72,18 +75,30 @@ function filterAuto(){
             let tanggal_akhir = $('#ModalFilter #tgl_akhir').val();
             if (moment(tanggal, 'DD/MM/YYYY').isBetween(moment(tanggal_awal, 'DD/MM/YYYY') - 1, moment(tanggal_akhir, 'DD/MM/YYYY') + 1)) {
                 if($('#ModalFilter #sales').val() != ''){
-                    if ($('#ModalFilter #sales').val() == $(this).parent().find('td:nth-child(9)').text()) {
+                    if ($('#ModalFilter #sales').val() == $(this).parent().find('td:nth-child(9)').text() && $(this).closest('tr').attr('style') != 'display: none;') {
                         if (parseInt($(this).parent().find('td:nth-child(2)').text().replace(/\D/g, '')) <= parseInt(nominal)) {
                             nominal -= parseInt($(this).parent().find('td:nth-child(2)').text().replace(/\D/g, ''));
+                            $(this).parent().find('td:nth-child(1) input').prop('checked', true);
+                            $(this).parent().find('td:nth-child(2)').addClass('edit-on');
+                        } else if (nominal > 0) {
+                            $(this).parent().find('td:nth-child(2)').text(nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                            nominal = 0;
                             $(this).parent().find('td:nth-child(1) input').prop('checked', true);
                             $(this).parent().find('td:nth-child(2)').addClass('edit-on');
                         }
                     }
                 } else {
-                    if (parseInt($(this).parent().find('td:nth-child(2)').text().replace(/\D/g, '')) <= parseInt(nominal)) {
-                        nominal -= parseInt($(this).parent().find('td:nth-child(2)').text().replace(/\D/g, ''));
-                        $(this).parent().find('td:nth-child(1) input').prop('checked', true);
-                        $(this).parent().find('td:nth-child(2)').addClass('edit-on');
+                    if ($(this).closest('tr').attr('style') != 'display: none;') {
+                        if (parseInt($(this).parent().find('td:nth-child(2)').text().replace(/\D/g, '')) <= parseInt(nominal)) {
+                            nominal -= parseInt($(this).parent().find('td:nth-child(2)').text().replace(/\D/g, ''));
+                            $(this).parent().find('td:nth-child(1) input').prop('checked', true);
+                            $(this).parent().find('td:nth-child(2)').addClass('edit-on');
+                        } else if (nominal > 0) {
+                            $(this).parent().find('td:nth-child(2)').text(nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                            nominal = 0;
+                            $(this).parent().find('td:nth-child(1) input').prop('checked', true);
+                            $(this).parent().find('td:nth-child(2)').addClass('edit-on');
+                        }
                     }
                 }
             }
@@ -133,16 +148,16 @@ function inputValList(data) {
                         }
                     });
                 } else {
-                    swal.fire({
-                        title: "Peringatan",
-                        text: "Jumlah yang diinputkan melebihi sisa piutang!",
-                        icon: "warning",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok",
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
+                        swal.fire({
+                            title: "Peringatan",
+                            text: "Jumlah yang diinputkan melebihi sisa piutang!",
+                            icon: "warning",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
                 }
 
                 $(data).text(data_khasbank[index_fu].sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -191,48 +206,59 @@ function totalPembayaran() {
 function ubahdataList(fak_update,jumlah){
     $('#ListPembayaran').find('tr').each(function () {
         if ($(this).find('td').eq(2).text() == fak_update) {
+            $(this).find('td').eq(0).find('input').prop('checked', true);
+            // $('#ListPembayaran tr:not([style="display: none;"]) td:nth-child(2)').addClass('edit-on');
+            $(this).not('[style="display: none;"]').find('td:nth-child(2)').addClass('edit-on');
             $(this).find('td').eq(1).text(jumlah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
     });
 }
-$('#ListPembayaran').on('click', '#flexCheckDefault', function () {
-    if (this.checked) {
-        $(this).closest('td').next().addClass('edit-on');
-    } else {
-        $(this).closest('td').next().removeClass('edit-on');
-    }
-});
 
-$('#ListPembayaran').on('click', '.edit-on', function () {
-    // if ($(this).closest('tr').eq(0).find('td > div > input[type="checkbox"]').is(':checked')) {
-    $(this).removeClass('edit-on').addClass('update-on');
-    $(this).html(`<input type="text" class="form-control" value="${$(this).text()}" style=" width: 15ch;">`);
-    $(this).find('input').focus().select();
-    // }
-
-    $('#ListPembayaran').on('focus blur keyup', 'input[type="text"]', function (e) {
-        $(this).val($(this).val().replace(/\D/g, '').replace(/^0+/, '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+$(document).ready(function () {
+    $('#ListPembayaran').on('click', '#flexCheckDefault', function () {
+        if (this.checked) {
+            $(this).closest('td').next().addClass('edit-on');
+        } else {
+            $(this).closest('td').next().removeClass('edit-on');
+        }
     });
-});
 
-$('#ListPembayaran').on('blur', '.update-on', function (e) {
-    inputValList(this);
-});
-$('#ListPembayaran').on('keydown', '.update-on', function (e) {
-    if (e.type == 'keydown' && e.keyCode == 13) {
+    $('#ListPembayaran').on('click', '.edit-on', function () {
+        // if ($(this).closest('tr').eq(0).find('td > div > input[type="checkbox"]').is(':checked')) {
+        $(this).removeClass('edit-on').addClass('update-on');
+        $(this).html(`<input type="text" class="form-control form-control-sm" value="${$(this).text()}" style=" width: 13ch;">`);
+        $(this).find('input').focus().select();
+        // }
+
+        $('#ListPembayaran').on('focus blur keyup', 'input[type="text"]', function (e) {
+            $(this).val($(this).val().replace(/\D/g, '').replace(/^0+/, '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+        });
+    });
+
+    $('#ListPembayaran').on('blur', '.update-on', function (e) {
         inputValList(this);
-    }
-});
+    });
+    $('#ListPembayaran').on('keydown', '.update-on', function (e) {
+        if (e.type == 'keydown' && e.keyCode == 13) {
+            inputValList(this);
+        }
+    });
 
-$('#ListPembayaran').on('click', '#flexCheckDefault', function () {
-    hitungCeklist();
-});
+    $('#ListPembayaran').on('click', '#flexCheckDefault', function () {
+        hitungCeklist();
+    });
 
-$('#ListPembayaran').on('change', 'input[type="text"]', function () {
-    setTimeout(function () {
-        totalPembayaran();
-        total();
-    }, 100);
+    $('#ListPembayaran').on('change', 'input[type="text"]', function () {
+        setTimeout(function () {
+            totalPembayaran();
+            total();
+        }, 100);
+    });
+
+    
+    $('#tabel_list').on('scroll', function () {
+        $('#tabel_list thead').css('transform', 'translateY(' + this.scrollTop + 'px)');
+    });
 });
 
 

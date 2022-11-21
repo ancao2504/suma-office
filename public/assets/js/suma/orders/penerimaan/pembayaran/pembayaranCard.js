@@ -1,8 +1,7 @@
-function VewCardListPembayaran(data_khasbank){
+function ViewListPembayaran(data_khasbank){
     $('#ListPembayaranCard').html('');
     data_khasbank.forEach(function (v, a) {
-        $('#ListPembayaranCard').append(
-        `
+        $('#ListPembayaranCard').append(`
             <div class="card border border-secondary col-12 p-6 mt-3" style="cursor: pointer;">
                 <div class="row">
                     <div class="col-5 ps-0 m-0">
@@ -13,10 +12,20 @@ function VewCardListPembayaran(data_khasbank){
                             <span class="fw-bold text-gray-400">${moment(v.tgl_faktur, 'YYYY-MM-DD').format('DD/MM/YYYY')}</span>
                         </div>
                         <div class="col-12">
-                            <span class="fw-bold text-gray-400">${v.kd_dealer}</span>
-                        </div>
-                        <div class="col-12">
-                            <span id="mkr" class="fw-bold text-gray-400">${v.kd_mkr}</span>
+                            <table>
+                                <tbody>
+                                    <tr class="fw-bold text-gray-400">
+                                        <td>Dealer</td>
+                                        <td>:</td>
+                                        <td>${v.kd_dealer}</td>
+                                    </tr>
+                                    <tr class="fw-bold text-gray-400">
+                                        <td>MKR</td>
+                                        <td>:</td>
+                                        <td id="mkr">${v.kd_mkr}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="col pe-0 m-0">
@@ -129,7 +138,7 @@ function VewCardListPembayaran(data_khasbank){
                 }
             });
             
-            $('#ModalEdit #jml_dibayar').val(data_khasbank[index].sisa);
+            $('#ModalEdit #jml_dibayar').val(data_khasbank[index].sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             
             // merubah pada table akan dibayar mencari faktur yang sama dan merubah jumlahnya
             $('#PenerimaanPembayaran').find('tr').each(function () {
@@ -146,7 +155,7 @@ function VewCardListPembayaran(data_khasbank){
 function ListTidakada(){
     $('#ListPembayaranCard').html(
         `
-            <div class="card border border-secondary col-12 p-2 my-3" style="cursor: pointer;">
+            <div class="card border border-secondary col-12 p-6 my-3" style="cursor: pointer;">
                 <div class="row">
                     <div class="col-12">
                         <div class="col-12 text-center">
@@ -193,13 +202,12 @@ function pilihData(){
     });
 }
 function ubahdataList(fak_update,jumlah){
-    // cari pada #ListPembayaranCard .card #card_faktur yang text nya sama dengan fak_update jika ketemu card_jml_dibayar nya di ubah dengan sisa
     $('#ListPembayaranCard').find('.card').each(function () {
         if ($(this).find('#card_faktur').text() == fak_update) {
+            $(this).removeClass('border-secondary').addClass('border-primary').addClass('bg-light-primary');
             $(this).find('#card_jml_dibayar').text(jumlah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
     });
-
 }
 
 function filterSelectAll(){
@@ -220,6 +228,7 @@ function filterSelectAll(){
 }
 function filterAuto(){
     $('#ModalFilter .modal-footer button.btn-primary').on('click', function () {
+        // $('#filter_list_pembayaran').removeClass('btn-light').addClass('btn-primary');
         // $('#ListPembayaran tr input[type="checkbox"]').prop('checked', false);
         $('#ListPembayaranCard .card').removeClass('border-primary').removeClass('bg-light-primary').addClass('border-secondary');
         let nominal = $('#ModalFilter .modal-body input[name="nominal_awal"]').val().replace(/\D/g, '');
@@ -228,17 +237,27 @@ function filterAuto(){
             let tanggal_awal = $('#ModalFilter #tgl_awal').val();
             let tanggal_akhir = $('#ModalFilter #tgl_akhir').val();
             if (moment(tanggal, 'DD/MM/YYYY').isBetween(moment(tanggal_awal, 'DD/MM/YYYY') - 1, moment(tanggal_akhir, 'DD/MM/YYYY') + 1)) {
-                if ($('#ModalFilter #sales').val() == $(this).closest('.card').find('#mkr').text()) {
-                    if($('#ModalFilter #sales').val() != ''){
+                if($('#ModalFilter #sales').val() != ''){
+                    if ($('#ModalFilter #sales').val() == $(this).closest('.card').find('#mkr').text() && $(this).closest('.card').attr('style').indexOf('display: none') == -1) {
                         if (parseInt($(this).closest('.card').find('#card_jml_dibayar').text().replace(/\D/g, '')) <= parseInt(nominal)) {
                             nominal = parseInt(nominal) - parseInt($(this).closest('.card').find('#card_jml_dibayar').text().replace(/\D/g, ''));
+                            $(this).closest('.card').toggleClass('border-secondary').toggleClass('border-primary').toggleClass('bg-light-primary');
+                        } else if(nominal > 0){
+                            $(this).closest('.card').find('#card_jml_dibayar').text(nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                            nominal = 0;
                             $(this).closest('.card').toggleClass('border-secondary').toggleClass('border-primary').toggleClass('bg-light-primary');
                         }
                     }
                 } else {
-                    if (parseInt($(this).closest('.card').find('#card_jml_dibayar').text().replace(/\D/g, '')) <= parseInt(nominal)) {
-                        nominal = parseInt(nominal) - parseInt($(this).closest('.card').find('#card_jml_dibayar').text().replace(/\D/g, ''));
-                        $(this).closest('.card').toggleClass('border-secondary').toggleClass('border-primary').toggleClass('bg-light-primary');
+                    if ($(this).closest('.card').attr('style').indexOf('display: none') == -1) {
+                        if (parseInt($(this).closest('.card').find('#card_jml_dibayar').text().replace(/\D/g, '')) <= parseInt(nominal)) {
+                            nominal = parseInt(nominal) - parseInt($(this).closest('.card').find('#card_jml_dibayar').text().replace(/\D/g, ''));
+                            $(this).closest('.card').toggleClass('border-secondary').toggleClass('border-primary').toggleClass('bg-light-primary');
+                        } else if(nominal > 0){
+                            $(this).closest('.card').find('#card_jml_dibayar').text(nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                            nominal = 0;
+                            $(this).closest('.card').toggleClass('border-secondary').toggleClass('border-primary').toggleClass('bg-light-primary');
+                        }
                     }
                 }
             }

@@ -83,7 +83,7 @@ class PembayaranController extends Controller
         if ($statusApi == 1) {
             return redirect()->back()->with('success', $messageApi);
         } else {
-            return redirect()->back()->with('failed', $messageApi);
+            return redirect()->back()->withInput()->with('failed',$messageApi)->with('detail',json_decode($request->get('detail')));
         }
     }
 }

@@ -65,10 +65,15 @@ $(document).ready(function () {
 
         // Saat Filter pertama di jalanakan
         $('#Modallistpembayaran').on('click','#filter_list_pembayaran', function () {
+            if($('#total_bpk').val() != 0 && $('#total_bpk').val() != ''){
+                if($('#ModalFilter #nominal_awal').val() == 0 || $('#ModalFilter #nominal_awal').val() == ''){
+                    $('#ModalFilter #nominal_awal').val($('#total_bpk').val());
+                }
+            }
+
             $('#ModalFilter').modal('show');
             $('#list_pembayaran').modal('show');
         });
-
         $('#ModalFilter #tgl_awal').flatpickr({
             dateFormat: "d/m/Y",
             defaultDate: moment().format('DD/MM/YYYY')
@@ -87,11 +92,9 @@ $(document).ready(function () {
 
     // double click pada jumlah yang akan dibayar
     $('#PenerimaanPembayaran').on('click', '.edit-on', function () {
-        // if ($(this).closest('tr').eq(0).find('td > div > input[type="checkbox"]').is(':checked')) {
         $(this).removeClass('edit-on').addClass('update-on');
-        $(this).html(`<input type="text" class="form-control" value="${$(this).text()}" style=" width: 15ch;">`);
+        $(this).html(`<input type="text" class="form-control form-control-sm" value="${$(this).text()}" style=" width: 13ch;">`);
         $(this).find('input').focus().select();
-        // }
 
         $('#PenerimaanPembayaran').on('focus blur keyup', 'input[type="text"]', function (e) {
             $(this).val($(this).val().replace(/\D/g, '').replace(/^0+/, '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -203,12 +206,7 @@ $(document).ready(function () {
                 success: function (data) {
                     data_khasbank = data.data;
                     if(data.data.length > 0){
-                        if(device == 'Mobile'){
-                            VewCardListPembayaran(data_khasbank);
-                        }else{
-                            ViewListPembayaran(data_khasbank);
-                        }
-
+                        ViewListPembayaran(data_khasbank);
                         $('#PenerimaanPembayaran').html(`
                             <tr>
                                 <td colspan="5" class="text-center text-muted">Tidak ada data</td>
@@ -216,7 +214,6 @@ $(document).ready(function () {
                         `);
                     } else {
                         ListTidakada();
-
                         $('#PenerimaanPembayaran').html(`
                             <tr>
                                 <td colspan="5" class="text-center text-muted">Tidak ada data</td>
@@ -243,7 +240,7 @@ $(document).ready(function () {
                                     ${a + 1}
                                 </td>
                                 <td>${v.no_faktur}</td>
-                                <td>${v.tgl_faktur.replace(/-/g, '/')}</td>
+                                <td>${moment(v.tgl_faktur).format('DD/MM/YYYY')}</td>
                                 <td class="edit-on">${v.jumlah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                                 <td>${v.dealer}</td>
                             </tr>
@@ -263,19 +260,13 @@ $(document).ready(function () {
                 $('#Modallistpembayaran').modal('hide');
             });
         } else {
-            // $('#form_pp #no_kasbank').val('');
-            // $('#form_pp #tgl').val('');
             $('#form_pp #kd_dealer').val('');
             $('#form_pp #nm_dealer').val('');
             $('#form_pp #total').val('');
             $('#form_pp #total').trigger('keyup');
             total();
 
-            
-            if(device == 'Mobile'){
-            }else{
-                ListTidakada();
-            }
+            ListTidakada();
 
             $('#Modallistpembayaran #jml_faktur').val(0);
             $('.card-footer .row #jml_faktur').val(0);
@@ -291,7 +282,7 @@ $(document).ready(function () {
             $(this).select();
         } else {
             $(this).val($(this).val().replace(/\D/g, '').replace(/^0+/, '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $('#total_bpk.form-control').val($(this).val());
+            $('#total_bpk.form-control').val($(this).val()==''?0:$(this).val());
             total();
         }
     });
@@ -407,4 +398,41 @@ $(document).ready(function () {
             });
         }
     }
+
+    $('#tabel_list_akan_dibayar').on('scroll', function () {
+        $('#tabel_list_akan_dibayar thead').css('transform', 'translateY(' + this.scrollTop + 'px)');
+    });
+
+    // hendel jika terjadi masalah pada server
+    if(old.length != 0){
+        
+        $('#form_pp #kd_dealer').trigger('change');
+        $('#form_pp #total').trigger('keyup');
+        
+        if(old.detail.length != 0){
+            
+            $(document).ajaxStop(function () {
+                data_akandibayar = old.detail;
+                $('#PenerimaanPembayaran').html('');
+                data_akandibayar.forEach(function (v, a) {
+                    $('#PenerimaanPembayaran').append(`
+                        <tr>
+                            <td>
+                                ${a + 1}
+                            </td>
+                            <td>${v.no_faktur}</td>
+                            <td>${moment(v.tgl_faktur).format('DD/MM/YYYY')}</td>
+                            <td class="edit-on">${v.jumlah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                            <td>${v.dealer}</td>
+                        </tr>
+                    `);
+
+                    ubahdataList(v.no_faktur, v.jumlah);
+                    hitungCeklist();
+                });
+            });
+
+        }
+    }
+    // end hendel jika terjadi masalah pada server
 });
