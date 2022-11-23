@@ -21,6 +21,13 @@
                     @elseif($month == 12) Desember
                     @endif {{ $year }}
                 </span>
+                <div class="d-flex align-items-center mt-4">
+                    @if($kode_mkr == "")
+                    <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                    @else
+                    <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
             <div class="card-toolbar">
                 <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -284,6 +291,13 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Pencapaian</span>
                         <span class="text-gray-400 mt-1 fw-bold fs-6">Group Per-Level</span>
+                        <div class="d-flex align-items-center mt-2">
+                            @if($kode_mkr == "")
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                            @else
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
                 <div class="card-body">
@@ -310,7 +324,15 @@
                             @elseif ($month == 10) Oktober
                             @elseif ($month == 11) November
                             @elseif ($month == 12) Desember
-                            @endif 2022</span>
+                            @endif 2022
+                        </span>
+                        <div class="d-flex align-items-center mt-2">
+                            @if($kode_mkr == "")
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                            @else
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
                 <div class="card-body">
@@ -326,6 +348,13 @@
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-gray-800">Omzet & Target Sales</span>
                     <span class="text-gray-400 mt-1 fw-bold fs-6">Target dan penjualan per-produk</span>
+                    <div class="d-flex align-items-center mt-2">
+                        @if($kode_mkr == "")
+                        <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                        @else
+                        <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                        @endif
+                    </div>
                 </h3>
             </div>
             @if (strtoupper(trim($device)) == 'DESKTOP')

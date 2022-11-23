@@ -1,7 +1,8 @@
 window.onload = function () {
-    var marketing = '{{$jenis_mkr}}';
+    var marketing = data.jenis_mkr;
 
     getJenisMkr(marketing);
+    $('#inputFilterKodeMkr').val(data.kode_mkr);
 }
 
 var btnFilterProses = document.querySelector("#btnFilterProses");

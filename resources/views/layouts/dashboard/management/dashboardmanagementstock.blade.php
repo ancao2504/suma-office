@@ -36,6 +36,17 @@
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Stock All</span>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            @if($level == "")
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            @else
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            @endif
+                            @if($produk != "")
+                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
 
@@ -49,6 +60,17 @@
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Pembelian</span>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            @if($level == "")
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            @else
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            @endif
+                            @if($produk != "")
+                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
 
@@ -64,6 +86,17 @@
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">FS</span>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            @if($level == "")
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            @else
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            @endif
+                            @if($produk != "")
+                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
 
@@ -77,6 +110,17 @@
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">CNO</span>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            @if($level == "")
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            @else
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            @endif
+                            @if($produk != "")
+                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
 
@@ -92,6 +136,17 @@
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Sales By Product</span>
+                        <div class="d-flex align-items-center mt-2">
+                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            @if($level == "")
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            @else
+                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            @endif
+                            @if($produk != "")
+                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
 
@@ -199,561 +254,11 @@
                 'product':{!!json_encode($product)!!},
             }
         </script>
-        <script src="{{ asset('assets/js/suma/dashboard/manajement/stock/dashboardmanajementstock.js') }}?time={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/dashboard/management/stock/dashboardmanagementstock.js') }}?time={{ time() }}"></script>
         @if($fields == 'QUANTITY')
-            <script src="{{ asset('assets/js/suma/dashboard/manajement/stock/dashboardmanajementstockQuantity.js') }}?time={{ time() }}"></script>
+            <script src="{{ asset('assets/js/suma/dashboard/management/stock/dashboardmanagementstockQuantity.js') }}?time={{ time() }}"></script>
         @else
-            <script src="{{ asset('assets/js/suma/dashboard/manajement/stock/dashboardmanajementstockAmount.js') }}?time={{ time() }}"></script>
+            <script src="{{ asset('assets/js/suma/dashboard/management/stock/dashboardmanagementstockAmount.js') }}?time={{ time() }}"></script>
         @endif
-
-        {{-- <script type="text/javascript">
-            var btnFilterProses = document.querySelector("#btnFilterProses");
-            btnFilterProses.addEventListener("click", function(e) {
-                e.preventDefault();
-                loading.block();
-                document.getElementById("formFilter").submit();
-            });
-
-            $(document).ready(function() {
-                $('#btnFilterReset').on('click', function(e) {
-                    e.preventDefault();
-                    var dateObj = new Date();
-                    var year = dateObj.getUTCFullYear();
-                    $('#inputFilterYear').val(year);
-                    $('#selectFilterMonth').prop('selectedIndex', {{ $month }} - 1).change();
-                    $('#selectFilterLevelProduk').prop('selectedIndex', 0).change();
-                    $('#inputFilterKodeProduk').val('');
-                });
-
-                $('#btnFilterProduk').on('click', function(e) {
-                    e.preventDefault();
-
-                    var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
-                    loadDataProduk(1, 10, '', selectFilterLevelProduk);
-                    $('#searchProdukForm').trigger('reset');
-                    $('#produkSearchModal').modal('show');
-                });
-
-                $('body').on('click', '#produkContentModal #selectProduk', function(e) {
-                    e.preventDefault();
-                    $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
-                    $('#produkSearchModal').modal('hide');
-                });
-
-                $('#selectFilterLevelProduk').change(function(){
-                    $('#inputFilterKodeProduk').val('');
-                });
-            });
-
-            $(function chartStockAll() {
-                {
-                    am5.ready(function() {
-                        var root = am5.Root.new("chartStockAll");
-
-                        root.setThemes([
-                            am5themes_Animated.new(root)
-                        ]);
-
-                        var chart = root.container.children.push(am5percent.PieChart.new(root, {
-                            layout: root.verticalLayout
-                        }));
-
-                        var series = chart.series.push(am5percent.PieSeries.new(root, {
-                            valueField: "total",
-                            categoryField: "company"
-                        }));
-
-                        var bgColor = root.interfaceColors.get("background");
-
-                        @if($fields == 'QUANTITY')
-                        series.slices.template.setAll({
-                            stroke: bgColor,
-                            strokeWidth: 2,
-                            tooltipText:
-                                "{category}: [bold] {value} PCS"
-                        });
-                        @else
-                        series.slices.template.setAll({
-                            stroke: bgColor,
-                            strokeWidth: 2,
-                            tooltipText:
-                                "{category}: [bold]Rp. {value} (Amount)"
-                        });
-                        @endif
-
-                        series.slices.template.states.create("hover", { scale: 0.95 });
-
-                        series.get("colors").set("colors", [
-                            am5.color("#009EF7"),
-                            am5.color("#F1416C"),
-                            am5.color("#7239EA")
-                        ]);
-
-                        var data = {!!json_encode($total)!!};
-                        series.data.setAll(data);
-
-                        var legend = chart.children.push(am5.Legend.new(root, {
-                            centerX: am5.percent(50),
-                            x: am5.percent(50),
-                            marginTop: 15,
-                            marginBottom: 15
-                        }));
-
-                        legend.data.setAll(series.dataItems);
-                        series.appear(1000, 100);
-                    });
-                }
-            });
-
-            $(function chartPembelian() {
-                am5.ready(function() {
-                    var root = am5.Root.new("chartPembelian");
-
-                    root.setThemes([
-                        am5themes_Animated.new(root)
-                    ]);
-
-                    var chart = root.container.children.push(am5xy.XYChart.new(root, {
-                        layout: root.verticalLayout
-                    }));
-
-                    var legend = chart.children.push(
-                        am5.Legend.new(root, {
-                            centerX: am5.p50,
-                            x: am5.p50
-                        })
-                    );
-
-                    var data = {!!json_encode($pembelian)!!};
-
-                    var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-                        categoryField: "keterangan",
-                        renderer: am5xy.AxisRendererX.new(root, {
-                            cellStartLocation: 0.1,
-                            cellEndLocation: 0.9
-                        }),
-                        tooltip: am5.Tooltip.new(root, {})
-                    }));
-
-                    xAxis.data.setAll(data);
-
-                    var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererY.new(root, {})
-                    }));
-
-                    function makeSeries(name, fieldName, color) {
-                        @if($fields == 'QUANTITY')
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: fieldName,
-                            fill: color,
-                            categoryXField: "keterangan",
-                            width: am5.percent(90),
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name} : [bold]{valueY} PCS"
-                            })
-                        }));
-                        @else
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: fieldName,
-                            fill: color,
-                            categoryXField: "keterangan",
-                            width: am5.percent(90),
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name} : [bold]Rp. {valueY}"
-                            })
-                        }));
-                        @endif
-
-                        series.data.setAll(data);
-
-                        series.appear();
-
-                        series.bullets.push(function () {
-                            return am5.Bullet.new(root, {
-                                locationY: 0,
-                                sprite: am5.Label.new(root, {
-                                    text: "{valueY}",
-                                    fill: root.interfaceColors.get("alternativeText"),
-                                    centerY: 0,
-                                    centerX: am5.p50,
-                                    populateText: true
-                                })
-                            });
-                        });
-
-                        legend.data.push(series);
-                    }
-
-                    makeSeries("Packing", "packing", am5.color("#009EF7"));
-                    makeSeries("On Order", "on_order", am5.color("#F1416C"));
-
-                    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
-                    }));
-                    cursor.lineY.set("forceHidden", true);
-                    cursor.lineX.set("forceHidden", true);
-
-                    chart.appear(1000, 100);
-                });
-            });
-
-            $(function chartFS() {
-                am5.ready(function() {
-                    var root = am5.Root.new("chartFS");
-
-                    root.setThemes([
-                        am5themes_Animated.new(root)
-                    ]);
-
-                    var chart = root.container.children.push(am5xy.XYChart.new(root, {
-                        layout: root.verticalLayout
-                    }));
-
-                    var legend = chart.children.push(
-                        am5.Legend.new(root, {
-                            centerX: am5.p50,
-                            x: am5.p50
-                        })
-                    );
-
-                    var data = {!!json_encode($fs)!!};
-
-                    var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-                        categoryField: "fs",
-                        renderer: am5xy.AxisRendererX.new(root, {
-                            cellStartLocation: 0.1,
-                            cellEndLocation: 0.9
-                        }),
-                        tooltip: am5.Tooltip.new(root, {})
-                    }));
-
-                    xAxis.data.setAll(data);
-
-                    var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererY.new(root, {})
-                    }));
-
-                    function makeSeries(name, fieldName, color) {
-                        @if($fields == 'QUANTITY')
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: fieldName,
-                            fill: color,
-                            categoryXField: "fs",
-                            width: am5.percent(90),
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name} : [bold]{valueY} PCS"
-                            })
-                        }));
-                        @else
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: fieldName,
-                            fill: color,
-                            categoryXField: "fs",
-                            width: am5.percent(90),
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name} : [bold]Rp. {valueY}"
-                            })
-                        }));
-                        @endif
-
-                        series.data.setAll(data);
-
-                        series.appear();
-
-                        series.bullets.push(function () {
-                            return am5.Bullet.new(root, {
-                                locationY: 0,
-                                sprite: am5.Label.new(root, {
-                                    text: "{valueY}",
-                                    fill: root.interfaceColors.get("alternativeText"),
-                                    centerY: 0,
-                                    centerX: am5.p50,
-                                    populateText: true
-                                })
-                            });
-                        });
-
-                        legend.data.push(series);
-                    }
-
-                    makeSeries("Pusat", "pusat", am5.color("#009EF7"));
-                    makeSeries("Part Center", "pc", am5.color("#F1416C"));
-                    makeSeries("Online", "online", am5.color("#7239EA"));
-
-                    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
-                    }));
-                    cursor.lineY.set("forceHidden", true);
-                    cursor.lineX.set("forceHidden", true);
-
-                    chart.appear(1000, 100);
-                });
-            });
-
-            $(function chartCNO() {
-                am5.ready(function() {
-
-                    var root = am5.Root.new("chartCNO");
-
-                    root.setThemes([
-                        am5themes_Animated.new(root)
-                    ]);
-
-                    var chart = root.container.children.push(am5xy.XYChart.new(root, {
-                        layout: root.verticalLayout
-                    }));
-
-                    var legend = chart.children.push(
-                        am5.Legend.new(root, {
-                            centerX: am5.p50,
-                            x: am5.p50
-                        })
-                    );
-
-                    var data = {!!json_encode($cno)!!};
-
-                    var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-                        categoryField: "cno",
-                        renderer: am5xy.AxisRendererX.new(root, {
-                            cellStartLocation: 0.1,
-                            cellEndLocation: 0.9
-                        }),
-                        tooltip: am5.Tooltip.new(root, {})
-                    }));
-
-                    xAxis.data.setAll(data);
-
-                    var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererY.new(root, {})
-                    }));
-
-                    function makeSeries(name, fieldName, color) {
-                        @if($fields == 'QUANTITY')
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: fieldName,
-                            fill: color,
-                            categoryXField: "cno",
-                            width: am5.percent(90),
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name} : [bold]{valueY} PCS"
-                            })
-                        }));
-                        @else
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: fieldName,
-                            fill: color,
-                            categoryXField: "cno",
-                            width: am5.percent(90),
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name} : [bold]Rp. {valueY}"
-                            })
-                        }));
-                        @endif
-
-                        series.data.setAll(data);
-
-                        series.appear();
-
-                        series.bullets.push(function () {
-                            return am5.Bullet.new(root, {
-                            locationY: 0,
-                            sprite: am5.Label.new(root, {
-                                text: "{valueY}",
-                                fill: root.interfaceColors.get("alternativeText"),
-                                centerY: 0,
-                                centerX: am5.p50,
-                                populateText: true
-                            })
-                            });
-                        });
-
-                        legend.data.push(series);
-                    }
-
-                    makeSeries("Pusat", "pusat", am5.color("#009EF7"));
-                    makeSeries("Part Center", "pc", am5.color("#F1416C"));
-                    makeSeries("Online", "online", am5.color("#7239EA"));
-
-                    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
-                    }));
-                    cursor.lineY.set("forceHidden", true);
-                    cursor.lineX.set("forceHidden", true);
-
-                    chart.appear(1000, 100);
-                });
-            });
-
-            $(function chartStockByProduct() {
-                am5.ready(function() {
-                    var root = am5.Root.new("chartStockByProduct");
-
-                    root.setThemes([
-                        am5themes_Animated.new(root)
-                    ]);
-
-                    var chart = root.container.children.push(am5xy.XYChart.new(root, {
-                        layout: root.verticalLayout
-                    }));
-
-                    var legend = chart.children.push(am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50
-                    }))
-
-                    var data = {!!json_encode($product)!!};
-
-                    var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
-                        categoryField: "produk",
-                        renderer: am5xy.AxisRendererY.new(root, {
-                            inversed: true,
-                            cellStartLocation: 0.1,
-                            cellEndLocation: 0.9
-                        })
-                    }));
-
-                    yAxis.data.setAll(data);
-
-                    var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererX.new(root, {}),
-                        min: 0
-                    }));
-
-                    function createSeries(field, name, color) {
-                        @if($fields == 'QUANTITY')
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueXField: field,
-                            categoryYField: "produk",
-                            sequencedInterpolation: true,
-                            fill: color,
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name}[/]\n{categoryY} : [bold] {valueX} PCS"
-                            })
-                        }));
-                        @else
-                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                            name: name,
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueXField: field,
-                            categoryYField: "produk",
-                            sequencedInterpolation: true,
-                            fill: color,
-                            tooltip: am5.Tooltip.new(root, {
-                                pointerOrientation: "horizontal",
-                                labelText: "[bold]{name}[/]\n{categoryY} : [bold]Rp. {valueX}"
-                            })
-                        }));
-                        @endif
-
-                        series.columns.template.setAll({
-                            height: am5.p100
-                        });
-
-                        @if($fields == 'QUANTITY')
-                        series.bullets.push(function() {
-                            return am5.Bullet.new(root, {
-                                locationX: 1,
-                                locationY: 0.5,
-                                sprite: am5.Label.new(root, {
-                                    centerY: am5.p50,
-                                    text: "{valueX} PCS",
-                                    populateText: true
-                                })
-                            });
-                        });
-                        @else
-                        series.bullets.push(function() {
-                            return am5.Bullet.new(root, {
-                                locationX: 1,
-                                locationY: 0.5,
-                                sprite: am5.Label.new(root, {
-                                    centerY: am5.p50,
-                                    text: "Rp. {valueX}",
-                                    populateText: true
-                                })
-                            });
-                        });
-                        @endif
-
-                        series.bullets.push(function() {
-                            return am5.Bullet.new(root, {
-                                locationX: 1,
-                                locationY: 0.5,
-                                sprite: am5.Label.new(root, {
-                                    centerX: am5.p100,
-                                    centerY: am5.p50,
-                                    text: "{name}",
-                                    fill: am5.color(0xffffff),
-                                    populateText: true
-                                })
-                            });
-                        });
-
-                        var cellSize = 70;
-                        series.events.on("datavalidated", function(ev) {
-                            var series = ev.target;
-                            var chart = series.chart;
-                            var xAxis = chart.xAxes.getIndex(0);
-
-                            // Calculate how we need to adjust chart height
-                            var chartHeight = series.data.length * cellSize + xAxis.height() + chart.get("paddingTop", 0) + chart.get("paddingBottom", 0);
-
-                            // Set it on chart's container
-                            chart.root.dom.style.height = chartHeight + "px";
-                        });
-
-                        series.data.setAll(data);
-                        series.appear();
-
-                        return series;
-                    }
-
-                    createSeries("pusat", "Pusat", am5.color("#009EF7"));
-                    createSeries("pc", "Part Center", am5.color("#F1416C"));
-                    createSeries("online", "Online", am5.color("#7239EA"));
-
-                    var legend = chart.children.push(am5.Legend.new(root, {
-                        centerX: am5.p50,
-                        x: am5.p50
-                    }));
-
-                    legend.data.setAll(chart.series.values);
-
-                    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
-                    }));
-
-                    cursor.lineY.set("forceHidden", true);
-                    cursor.lineX.set("forceHidden", true);
-
-                    chart.appear(1000, 100);
-                });
-            });
-        </script> --}}
     @endpush
 @endsection

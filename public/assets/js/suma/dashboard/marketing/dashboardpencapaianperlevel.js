@@ -1,16 +1,13 @@
 window.onload = function () {
-    // var marketing = '';
+    var marketing = data.jenis_mkr;
 
-    // @if ($jenis_mkr != '')
-    // marketing = "{{$jenis_mkr}}";
-    // @endif
-    getJenisMkr(data_chart.marketing);
+    getJenisMkr(marketing);
 }
 
 var btnFilterProses = document.querySelector("#btnFilterProses");
 btnFilterProses.addEventListener("click", function (e) {
     e.preventDefault();
-    blockIndex.block();
+    loading.block();
     document.getElementById("formFilter").submit();
 });
 

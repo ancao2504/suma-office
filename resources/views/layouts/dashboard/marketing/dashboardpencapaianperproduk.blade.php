@@ -6,8 +6,7 @@
     <div class="card-header align-items-center border-0 mt-4 mb-4">
         <h3 class="card-title align-items-start flex-column">
             <span class="fw-bolder mb-2 text-dark">Dashboard Marketing</span>
-            <span class="text-muted fw-bolder fs-7">Pencapaian Per-Produk {{ $year }}
-            </span>
+            <span class="text-muted fw-bolder fs-7">Pencapaian Per-Produk {{ $year }}</span>
         </h3>
         <div class="card-toolbar">
             <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -19,7 +18,20 @@
 <div class="card card-flush mt-4">
     <div class="card-header align-items-center border-0 mt-4">
         <h3 class="card-title align-items-start flex-column">
-            <span class="fw-boldest mb-2 text-dark">Data Pencapaian Per-Produk</span>
+            <span class="fw-bolder mb-2 text-dark">Data Pencapaian Per-Produk</span>
+            <div class="d-flex align-items-center">
+                @if($level_produk == "")
+                <span class="badge badge-light-info fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                @else
+                <span class="badge badge-light-info fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
+                @endif
+                @if($kode_produk != "")
+                <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
+                @endif
+                @if($kode_mkr != "")
+                <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                @endif
+            </div>
         </h3>
     </div>
     <div class="card-body">
@@ -134,6 +146,10 @@
 <script type="text/javascript">
     let data_chart = {
         'product':{!!json_encode($product)!!}
+    }
+    const data = {
+        'jenis_mkr': "{{$jenis_mkr}}",
+        'kode_mkr': "{{$kode_mkr}}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/dashboard/marketing/dashboardpencapaianperproduk.js') }}?v={{ time() }}"></script>

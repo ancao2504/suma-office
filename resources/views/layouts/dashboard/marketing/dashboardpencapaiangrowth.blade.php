@@ -20,7 +20,25 @@
     <div class="card card-flush mt-4">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
-                <span class="fw-boldest mb-2 text-dark">Grand Total</span>
+                <span class="fw-bolder mb-2 text-dark">Grand Total</span>
+                <div class="d-flex align-items-center">
+                    @if($jenis_mkr == "")
+                    <span class="badge badge-light-info fs-8 fw-boldest me-2">MKR : ALL</span>
+                    @else
+                    <span class="badge badge-light-info fs-8 fw-boldest me-2">MKR : {{ $jenis_mkr }}</span>
+                    @endif
+                    @if($level_produk == "")
+                    <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                    @else
+                    <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
+                    @endif
+                    @if($kode_produk != "")
+                    <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
+                    @endif
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -32,7 +50,25 @@
     <div class="card card-flush mt-4">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
-                <span class="fw-boldest mb-2 text-dark">Total Marketing</span>
+                <span class="fw-bolder mb-2 text-dark">Total Marketing</span>
+                <div class="d-flex align-items-center">
+                    @if($jenis_mkr == "")
+                    <span class="badge badge-light-info fs-8 fw-boldest me-2">MKR : ALL</span>
+                    @else
+                    <span class="badge badge-light-info fs-8 fw-boldest me-2">MKR : {{ $jenis_mkr }}</span>
+                    @endif
+                    @if($level_produk == "")
+                    <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                    @else
+                    <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
+                    @endif
+                    @if($kode_produk != "")
+                    <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
+                    @endif
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -131,6 +167,9 @@
     let data_chart = {
         'total':{!!json_encode($total)!!},
         'marketing':{!!json_encode($marketing)!!},
+    }
+    const data = {
+        'jenis_mkr': "{{ $jenis_mkr }}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/dashboard/marketing/dashboardpencapaiangrowth.js') }}?time={{ time() }}"></script>

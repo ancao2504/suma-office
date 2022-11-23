@@ -1,5 +1,5 @@
 window.onload = function () {
-    var marketing = '{{$jenis_mkr}}';
+    var marketing = data.jenis_mkr;
 
     getJenisMkr(marketing);
 }

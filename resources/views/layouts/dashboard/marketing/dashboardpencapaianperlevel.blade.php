@@ -7,8 +7,7 @@
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Dashboard Marketing</span>
-                <span class="text-muted fw-bolder fs-7">Pencapaian Per-Level {{ $year }}
-                </span>
+                <span class="text-muted fw-bolder fs-7">Pencapaian Per-Level {{ $year }}</span>
             </h3>
             <div class="card-toolbar">
                 <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -21,6 +20,11 @@
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-boldest mb-2 text-dark">Level Total</span>
+                <div class="d-flex align-items-center">
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -33,6 +37,11 @@
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-boldest mb-2 text-dark">Level Handle</span>
+                <div class="d-flex align-items-center">
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -45,6 +54,11 @@
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Level Non-Handle</span>
+                <div class="d-flex align-items-center">
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -57,6 +71,11 @@
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Level Tube</span>
+                <div class="d-flex align-items-center">
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -69,6 +88,11 @@
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Level Oli</span>
+                <div class="d-flex align-items-center">
+                    @if($kode_mkr != "")
+                    <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @endif
+                </div>
             </h3>
         </div>
         <div class="card-body">
@@ -144,12 +168,16 @@
 
 <script type="text/javascript">
     let data_chart = {
-        'marketing': @if ($jenis_mkr != '') {{$jenis_mkr}} @else '' @endif,
-        'total':{!!json_encode($total)!!},
-        'handle':{!!json_encode($handle)!!},
-        'non_handle':{!!json_encode($non_handle)!!},
-        'tube':{!!json_encode($tube)!!},
-        'oli':{!!json_encode($oli)!!}
+        'marketing': "@if($jenis_mkr != '') {{$jenis_mkr}} @endif",
+        'total': {!!json_encode($total)!!},
+        'handle': {!!json_encode($handle)!!},
+        'non_handle': {!!json_encode($non_handle)!!},
+        'tube': {!!json_encode($tube)!!},
+        'oli': {!!json_encode($oli)!!}
+    }
+    const data = {
+        'jenis_mkr': "{{$jenis_mkr}}",
+        'kode_mkr': "{{$kode_mkr}}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/dashboard/marketing/dashboardpencapaianperlevel.js') }}?v={{ time() }}"></script>
