@@ -1,4 +1,4 @@
-<div id="kt_aside" class="aside aside-light aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+<div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <a href="#">
             <img alt="Logo" src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-40px logo" />
@@ -352,7 +352,7 @@
                         <span class="menu-title {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}">Pembayaran</span>
                     </a>
                 </div>
-                
+
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('orders/penerimaan*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -391,7 +391,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 @if (Session::get('app_user_role_id') == "MD_H3_MGMT")
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
