@@ -6,7 +6,7 @@
 @endpush
 @section('container')
     {{-- include  --}}
-    @include('layouts.orders.penerimaan.menu')
+    @include('layouts.orders.penerimaan.suratjalan.menu')
     {{-- end include  --}}
             <div class="row">
                 <div class="card card-xl-stretch shadow">
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="mb-3 col-sm-6">
                                     <label for="foto" class="form-label d-block">Upload Gambar</label>
-                                    <input class="form-control @error('foto') is-invalid @enderror" type="file" id="foto" name="foto" accept="image/*">
+                                    <input class="form-control @error('foto') is-invalid @enderror" type="file" id="foto" name="foto" accept="image/*" required>
                                     @error('foto')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -111,7 +111,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="fv-row mb-5">
-                            <label class="form-label">Cari berdasarkan Dealer:</label>
+                            <label class="form-label">Cari berdasarkan Surat Jalan:</label>
                             <div class="input-group">
                                 <span class="input-group-text">Pencarian</span>
                                 <input id="input_search" name="input_search" type="text" class="form-control" placeholder="Cari No Surat Jalan" style="text-transform: uppercase;">

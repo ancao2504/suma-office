@@ -6,7 +6,7 @@
 @endpush
 @section('container')
     {{-- include  --}}
-    @include('layouts.orders.penerimaan.menu')
+    @include('layouts.orders.penerimaan.suratjalan.menu')
     {{-- end include  --}}
             <div class="row">
                 <div class="card card-xl-stretch shadow">

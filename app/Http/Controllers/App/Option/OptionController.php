@@ -49,7 +49,7 @@ class OptionController extends Controller
                         <td>' . $data->kode_dealer . '</td>
                         <td>' . $data->nama_dealer . '</td>
                         <td class="text-center">
-                            <button id="selectDealer" class="btn btn-icon btn-bg-primary btn-sm me-1"
+                            <button type="button" id="selectDealer" class="btn btn-icon btn-bg-primary btn-sm me-1"
                                 data-kode_dealer="' . $data->kode_dealer . '" data-nama_dealer="' . $data->nama_dealer . '">
                                 <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
                             </button>

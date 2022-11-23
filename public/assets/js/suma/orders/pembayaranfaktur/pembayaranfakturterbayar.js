@@ -3,25 +3,36 @@ $(document).ready(function () {
 
     var pages = 1;
 
-    $(window).scroll(function () {
-        if (loading.isBlocked() === false) {
-            if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                const params = new URLSearchParams(window.location.search)
-                for (const param of params) {
-                    var year = params.get('year');
-                    var month = params.get('month');
-                    var salesman = params.get('salesman');
-                    var dealer = params.get('dealer');
-                    var nomor_faktur = params.get('nomor_faktur');
-                }
-                pages++;
-                loadMoreData(year, month, salesman, dealer, nomor_faktur, pages);
-            }
-        }
-    });
+    const params = new URLSearchParams(window.location.search)
+    for (const param of params) {
+        var year = params.get('year');
+        var month = params.get('month');
+        var salesman = params.get('salesman');
+        var dealer = params.get('dealer');
+        var nomor_faktur = params.get('nomor_faktur');
+    }
 
-    window.onbeforeunload = function () {
-        window.scrollTo(0, 0);
+    if (year || month || salesman || dealer || nomor_faktur) {
+        $(window).scroll(function () {
+            if (loading.isBlocked() === false) {
+                if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+                    const params = new URLSearchParams(window.location.search)
+                    for (const param of params) {
+                        var year = params.get('year');
+                        var month = params.get('month');
+                        var salesman = params.get('salesman');
+                        var dealer = params.get('dealer');
+                        var nomor_faktur = params.get('nomor_faktur');
+                    }
+                    pages++;
+                    loadMoreData(year, month, salesman, dealer, nomor_faktur, pages);
+                }
+            }
+        });
+
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
     }
 
     async function loadMoreData(year, month, salesman, dealer, nomor_faktur, pages) {

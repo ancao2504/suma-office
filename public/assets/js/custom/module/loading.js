@@ -20,5 +20,3 @@ let loading = {
         return $('#loading').css('display') == 'none' ? false : true;
     }
 };
-
-
