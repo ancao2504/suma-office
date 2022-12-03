@@ -204,21 +204,34 @@ $(document).ready(function () {
                     kd_dealer: $(this).val()
                 },
                 success: function (data) {
-                    data_khasbank = data.data;
-                    if(data.data.length > 0){
-                        ViewListPembayaran(data_khasbank);
+                    if (data.status == 0) {
                         $('#PenerimaanPembayaran').html(`
                             <tr>
                                 <td colspan="5" class="text-center text-muted">Tidak ada data</td>
                             </tr>
                         `);
+                        $('#PenerimaanPembayaran').html(`
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Tidak ada data</td>
+                        </tr>
+                    `);
                     } else {
-                        ListTidakada();
-                        $('#PenerimaanPembayaran').html(`
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">Tidak ada data</td>
-                            </tr>
-                        `);
+                        data_khasbank = data.data;
+                        if(data.data.length > 0){
+                            ViewListPembayaran(data_khasbank);
+                            $('#PenerimaanPembayaran').html(`
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Tidak ada data</td>
+                                </tr>
+                            `);
+                        } else {
+                            ListTidakada();
+                            $('#PenerimaanPembayaran').html(`
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Tidak ada data</td>
+                                </tr>
+                            `);
+                        }
                     }
                 }
             });
