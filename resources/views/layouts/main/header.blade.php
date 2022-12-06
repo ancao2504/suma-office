@@ -15,7 +15,7 @@
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <a href="#" class="d-lg-none">
-                <img alt="Logo" src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-30px" />
+                <img alt="Logo" src="{{ asset('assets/images/logo/logo_suma_bg_white.svg') }}" class="h-50px" />
             </a>
         </div>
         <!--begin::Wrapper-->

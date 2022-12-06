@@ -50,8 +50,10 @@ class PembayaranFakturController extends Controller
             $responseApi = ApiService::PembayaranFakturDaftar(date('Y'), date('m'), $kode_sales, $kode_dealer, 'BELUM_LUNAS',
                         $request->get('nomor_faktur'), $request->get('page'), strtoupper(trim($request->session()->get('app_user_id'))),
                         strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
+
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
+
         }else{
             $statusApi = 1;
             $messageApi =  '';
@@ -134,7 +136,7 @@ class PembayaranFakturController extends Controller
             }
         }
 
-        
+
         if(!empty($request->get('month'))||!empty($request->get('year'))||!empty($request->get('salesman')) || !empty($request->get('dealer')) || !empty($request->get('nomor_faktur'))) {
             $responseApi = ApiService::PembayaranFakturDaftar($year, $month, $kode_sales, $kode_dealer, 'LUNAS',
                         $request->get('nomor_faktur'), $request->get('page'), strtoupper(trim($request->session()->get('app_user_id'))),
@@ -147,7 +149,7 @@ class PembayaranFakturController extends Controller
         }
 
         if($statusApi == 1) {
-            
+
             if(!empty($request->get('month'))||!empty($request->get('year'))||!empty($request->get('salesman')) || !empty($request->get('dealer')) || !empty($request->get('nomor_faktur'))) {
                 $data = json_decode($responseApi)->data;
             } else {
