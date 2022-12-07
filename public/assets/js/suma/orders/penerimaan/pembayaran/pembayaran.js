@@ -349,7 +349,7 @@ $(document).ready(function () {
                                 <td>${v.dealer}</td>
                             </tr>
                         `);
-
+                        console.log(v);
                         // $('#faktur_list_bayar').append(`
                         //     <div class="card border border-secondary col-12 p-6 mt-3">
                         //         <div class="row">
@@ -364,10 +364,10 @@ $(document).ready(function () {
                         //                     <table>
                         //                         <tbody>
                         //                             <tr class="fw-bold text-gray-400">
-                        //                                 <td>Jumlah faktur</td>
+                        //                                 <td>MKR</td>
                         //                             </tr>
                         //                             <tr class="fw-bold text-gray-800">
-                        //                                 <td>4 Item 400 pcs</td>
+                        //                                 <td>${v.}</td>
                         //                             </tr>
                         //                         </tbody>
                         //                     </table>
@@ -378,16 +378,16 @@ $(document).ready(function () {
                         //                     <span class="fs-4 fw-bolder text-white">-</span>
                         //                 </div>
                         //                 <div class="col-12">
-                        //                     <span class="fw-bold text-gray-400" id="_tglsekarang">08 Sept 2021</span>
+                        //                     <span class="fw-bold text-gray-400">${moment().format('DD/MM/YYYY')}</span>
                         //                 </div>
                         //                 <div class="col-12 mt-4 text-end">
                         //                     <table class="w-100">
                         //                         <tbody class="text-end">
                         //                             <tr class="fw-bold text-gray-400">
-                        //                                 <td>Piutang</td>
+                        //                                 <td>Piutang dibayar</td>
                         //                             </tr>
                         //                             <tr class="fw-bold text-gray-800">
-                        //                                 <td id="_total">Rp 24.000.000</td>
+                        //                                 <td>${v.jumlah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                         //                             </tr>
                         //                         </tbody>
                         //                     </table>

@@ -335,23 +335,19 @@
                         <div class="row">
                             <div class="col-6 ps-0 m-0">
                                 <div class="col-12">
-                                    <span class="fs-4 fw-bolder" id="_nofaktur">PIUT772192090</span>
+                                    <span class="fs-4 fw-bolder" id="_nofaktur">BG06122022014344G01</span>
                                 </div>
                                 <div class="col-12">
-                                    <span class="fw-bold text-gray-400" id="_tglfaktur">01 Sept 2021</span>
+                                    <span class="fw-bold text-gray-400" id="_tglfaktur">26 Nov 2022</span>
                                 </div>
                                 <div class="col-12 mt-4">
                                     <table>
                                         <tbody>
                                             <tr class="fw-bold text-gray-400">
                                                 <td>Jumlah faktur</td>
-                                                {{-- <td>:</td>
-                                                <td>${v.kd_dealer}</td> --}}
                                             </tr>
                                             <tr class="fw-bold text-gray-800">
-                                                <td>4 Item 400 pcs</td>
-                                                {{-- <td>:</td>
-                                                <td id="mkr">${v.kd_mkr}</td> --}}
+                                                <td>24 Item 32 pcs</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -362,20 +358,16 @@
                                     <span class="fs-4 fw-bolder text-white">-</span>
                                 </div>
                                 <div class="col-12">
-                                    <span class="fw-bold text-gray-400" id="_tglsekarang">08 Sept 2021</span>
+                                    <span class="fw-bold text-gray-400" id="_tglsekarang">06 Des 2022</span>
                                 </div>
                                 <div class="col-12 mt-4 text-end">
                                     <table class="w-100">
                                         <tbody class="text-end">
                                             <tr class="fw-bold text-gray-400">
                                                 <td>Piutang</td>
-                                                {{-- <td>:</td>
-                                                <td>${v.kd_dealer}</td> --}}
                                             </tr>
                                             <tr class="fw-bold text-gray-800">
-                                                <td id="_total">Rp 24.000.000</td>
-                                                {{-- <td>:</td>
-                                                <td id="mkr">${v.kd_mkr}</td> --}}
+                                                <td id="_total">Rp 10.000.000</td>
                                             </tr>
                                         </tbody>
                                     </table>
