@@ -8,6 +8,97 @@ function total() {
 }
 
 $(document).ready(function () {
+    let file_bukti = new DataTransfer();
+    
+    // #btn_kirim on click
+    // $('#btn_kirim').on('click', function () {
+        
+    //     $('#Modalkirim').modal('show');
+        
+    //     // uploadgambar klik trigger uploadgambar
+    //     $('#Modalkirim').on('click','#card_image', function () {
+    //         console.log('click');
+    //         $('#image').trigger('click');
+    //     });
+
+    //     // kirim_simpan on click
+    //     $('#kirim_simpan').on('click', function () {
+    //          swal.fire({
+    //                 title: "Apakah Anda Yakin Menyimpan Data?",
+    //                 icon: "warning",
+    //                 showCancelButton: true,
+    //                 confirmButtonText: "Ya, Simpan!",
+    //                 cancelButtonText: "Tidak, Batalkan!",
+    //                 reverseButtons: true,
+    //                 customClass: {
+    //                     confirmButton: "btn btn-success",
+    //                     cancelButton: "btn btn-secondary"
+    //                 }
+    //             }).then(function (result) {
+    //                 if (result.value) {
+    //                     // membuat inputan untuk menampung data
+    //                     $('#form_pp').append(`
+    //                         <input type="hidden" name="detail" value='${JSON.stringify(data_akandibayar)}'>
+    //                     `);
+    //                     // dikirim ke controller
+    //                     $('#form_pp').attr('action', base_url + '/orders/penerimaan/pembayaran/simpan').submit();
+    //                 } else if (result.dismiss === "cancel") {
+    //                 }
+    //             });
+    //     });
+    // });
+    // $('#image').on('change', function (e) {
+    //     let files = e.delegateTarget.files;
+    //     console.log(files);
+    //     // files length > 0
+    //     if (files.length > 0) {
+    //         // genret nama file waktu + random
+    //         let name = Date.now() + Math.floor(Math.random() * 1000);
+    //         file_bukti.items.add(new File([files[0]], name, {type: files[0].type}));
+    //         // buat tanda x untuk hapus gambar
+    //         $('#card_image').before(`
+    //             <div class="col-6 card_view_${name}">
+    //                 <div class="card border text-center h-150px w-150px">
+    //                     <image src="${URL.createObjectURL(e.delegateTarget.files[0])}" class="card-img-top h-150px w-150px" alt="...">
+    //                     <div class="card-body">
+    //                         <button type="button" class="btn btn-sm btn-block"
+    //                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 1; z-index: 2;">
+    //                             <i class="fas fa-times fs-1 btn_hapus_gambar" data-id="${name}"></i>
+    //                         </button>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         `);
+    //         // kosongkan input file
+    //         $('#image').val('');
+    //         console.log(file_bukti);
+    //     }
+    // });
+
+    // // .btn_hapus_gambar on click
+    // $('#Modalkirim').on('click', '.btn_hapus_gambar', function () {
+    //     let id = $(this).data('id');
+    //     swal.fire({
+    //         title: "Apakah Anda Yakin Menghapus Gambar?",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonText: "Ya, Hapus!",
+    //         cancelButtonText: "Tidak, Batalkan!",
+    //         reverseButtons: true,
+    //         customClass: {
+    //             confirmButton: "btn btn-success",
+    //             cancelButton: "btn btn-secondary"
+    //         }
+    //     }).then(function (result) {
+    //         if (result.value) {
+    //             let index = Array.from(file_bukti.files).findIndex(file => file.name == id);
+    //             file_bukti.items.remove(index);
+    //             $('#card_image').siblings(`.card_view_${id}`).remove();
+    //             console.log(file_bukti);
+    //         } else if (result.dismiss === "cancel") {
+    //         }
+    //     });
+    // });
 
     // tambah atribut data-kt-aside-minimize="on" pada tag body
     $('body').attr('data-kt-aside-minimize', 'on');
@@ -258,6 +349,54 @@ $(document).ready(function () {
                                 <td>${v.dealer}</td>
                             </tr>
                         `);
+
+                        // $('#faktur_list_bayar').append(`
+                        //     <div class="card border border-secondary col-12 p-6 mt-3">
+                        //         <div class="row">
+                        //             <div class="col-6 ps-0 m-0">
+                        //                 <div class="col-12">
+                        //                     <span class="fs-4 fw-bolder" id="_nofaktur">${v.no_faktur}</span>
+                        //                 </div>
+                        //                 <div class="col-12">
+                        //                     <span class="fw-bold text-gray-400" id="_tglfaktur">${moment(v.tgl_faktur).format('DD/MM/YYYY')}</span>
+                        //                 </div>
+                        //                 <div class="col-12 mt-4">
+                        //                     <table>
+                        //                         <tbody>
+                        //                             <tr class="fw-bold text-gray-400">
+                        //                                 <td>Jumlah faktur</td>
+                        //                             </tr>
+                        //                             <tr class="fw-bold text-gray-800">
+                        //                                 <td>4 Item 400 pcs</td>
+                        //                             </tr>
+                        //                         </tbody>
+                        //                     </table>
+                        //                 </div>
+                        //             </div>
+                        //             <div class="col-6 ps-0 m-0 text-end">
+                        //                 <div class="col-12">
+                        //                     <span class="fs-4 fw-bolder text-white">-</span>
+                        //                 </div>
+                        //                 <div class="col-12">
+                        //                     <span class="fw-bold text-gray-400" id="_tglsekarang">08 Sept 2021</span>
+                        //                 </div>
+                        //                 <div class="col-12 mt-4 text-end">
+                        //                     <table class="w-100">
+                        //                         <tbody class="text-end">
+                        //                             <tr class="fw-bold text-gray-400">
+                        //                                 <td>Piutang</td>
+                        //                             </tr>
+                        //                             <tr class="fw-bold text-gray-800">
+                        //                                 <td id="_total">Rp 24.000.000</td>
+                        //                             </tr>
+                        //                         </tbody>
+                        //                     </table>
+                        //                 </div>
+                        //             </div>
+                        //         </div>
+                        //     </div>
+                        // `);
+
                     });
                     // end loop data pada daftar akan dibayar
                 } else {
@@ -375,27 +514,61 @@ $(document).ready(function () {
                     }
                 });
             } else {
-                swal.fire({
-                    title: "Apakah Anda Yakin Menyimpan Data?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Ya, Simpan!",
-                    cancelButtonText: "Tidak, Batalkan!",
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: "btn btn-success",
-                        cancelButton: "btn btn-secondary"
-                    }
-                }).then(function (result) {
-                    if (result.value) {
-                        // membuat inputan untuk menampung data
-                        $('#form_pp').append(`
-                            <input type="hidden" name="detail" value='${JSON.stringify(data_akandibayar)}'>
-                        `);
-                        // dikirim ke controller
-                        $('#form_pp').attr('action', base_url + '/orders/penerimaan/pembayaran/simpan').submit();
-                    } else if (result.dismiss === "cancel") {
-                    }
+                // swal.fire({
+                //     title: "Apakah Anda Yakin Menyimpan Data?",
+                //     icon: "warning",
+                //     showCancelButton: true,
+                //     confirmButtonText: "Ya, Simpan!",
+                //     cancelButtonText: "Tidak, Batalkan!",
+                //     reverseButtons: true,
+                //     customClass: {
+                //         confirmButton: "btn btn-success",
+                //         cancelButton: "btn btn-secondary"
+                //     }
+                // }).then(function (result) {
+                //     if (result.value) {
+                //         // membuat inputan untuk menampung data
+                //         $('#form_pp').append(`
+                //             <input type="hidden" name="detail" value='${JSON.stringify(data_akandibayar)}'>
+                //         `);
+                //         // dikirim ke controller
+                //         $('#form_pp').attr('action', base_url + '/orders/penerimaan/pembayaran/simpan').submit();
+                //     } else if (result.dismiss === "cancel") {
+                //     }
+                // });
+
+                // Modalkirim show
+                $('#Modalkirim').modal('show');
+
+                $('#Modalkirim').on('click','#card_image', function () {
+                    console.log('click');
+                    $('#image').trigger('click');
+                });
+        
+                // kirim_simpan on click
+                $('#kirim_simpan').on('click', function () {
+                     swal.fire({
+                            title: "Apakah Anda Yakin Menyimpan Data?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Ya, Simpan!",
+                            cancelButtonText: "Tidak, Batalkan!",
+                            reverseButtons: true,
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-secondary"
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                // membuat inputan untuk menampung data
+                                $('#form_pp').append(`
+                                    <input type="hidden" name="detail" value='${JSON.stringify(data_akandibayar)}'>
+                                `);
+                                // dikirim ke controller
+                                $('#form_pp').attr('action', base_url + '/orders/penerimaan/pembayaran/simpan').submit();
+                            } else if (result.dismiss === "cancel") {
+                            }
+                        });
                 });
             }
         } else {
@@ -448,4 +621,43 @@ $(document).ready(function () {
         }
     }
     // end hendel jika terjadi masalah pada server
+
+
+    $('#image').on('change', function (e) {
+        let files = e.delegateTarget.files;
+        console.log(files);
+        // files length > 0
+        if (files.length > 0) {
+            // genret nama file waktu + random
+            let name = Date.now() + Math.floor(Math.random() * 1000);
+            file_bukti.items.add(new File([files[0]], name, {type: files[0].type}));
+            // buat tanda x untuk hapus gambar
+            $('#card_image').before(`
+                <div class="col-6 mb-3 card_view_${name}" style="display: flex; justify-content: center; align-items: center;">
+                    <div class="card border text-center" style="height: 150px; width: 150px;">
+                        <image src="${URL.createObjectURL(e.delegateTarget.files[0])}" class="card-img-top" alt="..." style="object-fit: cover; height: 100%; width: 100%; position: absolute; top: 0; left: 0;">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-sm btn-block"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 1; z-index: 2;">
+                                <i class="fas fa-times fs-1 btn_hapus_gambar" data-id="${name}"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `);
+            // kosongkan input file
+            $('#image').val('');
+            console.log(file_bukti);
+        }
+    });
+
+    // .btn_hapus_gambar on click
+    $('#Modalkirim').on('click', '.btn_hapus_gambar', function () {
+        let id = $(this).data('id');
+        let index = Array.from(file_bukti.files).findIndex(file => file.name == id);
+        file_bukti.items.remove(index);
+        $('#card_image').siblings(`.card_view_${id}`).remove();
+        console.log(file_bukti);
+    });
+
 });

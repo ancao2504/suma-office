@@ -315,6 +315,107 @@
             </div>
         </div>
 
+
+        
+
+<!-- Modal -->
+<div class="modal fade" id="Modalkirim" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-md-down @if ($device == 'Mobile') @else modal-md @endif">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload bukti pembayaran</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body overflow-hidden">
+            <input type="file" id="image" name="image" class="d-none" accept="image/*">
+            <div class="p-6">
+                <label class="col-form-label">Faktur List :</label>
+                <div id="faktur_list_bayar">
+                    <div class="card border border-secondary col-12 p-6 mt-3">
+                        <div class="row">
+                            <div class="col-6 ps-0 m-0">
+                                <div class="col-12">
+                                    <span class="fs-4 fw-bolder" id="_nofaktur">PIUT772192090</span>
+                                </div>
+                                <div class="col-12">
+                                    <span class="fw-bold text-gray-400" id="_tglfaktur">01 Sept 2021</span>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <table>
+                                        <tbody>
+                                            <tr class="fw-bold text-gray-400">
+                                                <td>Jumlah faktur</td>
+                                                {{-- <td>:</td>
+                                                <td>${v.kd_dealer}</td> --}}
+                                            </tr>
+                                            <tr class="fw-bold text-gray-800">
+                                                <td>4 Item 400 pcs</td>
+                                                {{-- <td>:</td>
+                                                <td id="mkr">${v.kd_mkr}</td> --}}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-6 ps-0 m-0 text-end">
+                                <div class="col-12">
+                                    <span class="fs-4 fw-bolder text-white">-</span>
+                                </div>
+                                <div class="col-12">
+                                    <span class="fw-bold text-gray-400" id="_tglsekarang">08 Sept 2021</span>
+                                </div>
+                                <div class="col-12 mt-4 text-end">
+                                    <table class="w-100">
+                                        <tbody class="text-end">
+                                            <tr class="fw-bold text-gray-400">
+                                                <td>Piutang</td>
+                                                {{-- <td>:</td>
+                                                <td>${v.kd_dealer}</td> --}}
+                                            </tr>
+                                            <tr class="fw-bold text-gray-800">
+                                                <td id="_total">Rp 24.000.000</td>
+                                                {{-- <td>:</td>
+                                                <td id="mkr">${v.kd_mkr}</td> --}}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <label class="ms-6 col-12 col-form-label">Upload Gambar Bukti Pembayaran</label>
+            <div class="mx-3 overflow-auto row" id="container_upload" style="height: 160px; width: auto;">
+                <div class="col-6 mb-3" id="card_image" style="cursor: pointer; display: flex; justify-content: center; align-items: center;">
+                    <div class="card border bg-secondary text-center h-150px w-150px">
+                        <div class="m-auto">
+                            <i class="bi bi-camera fs-1"></i>
+                            <label class="d-block">Upload Gambar</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 mx-6 @if ($device == 'Mobile') bg-white card @endif">
+                <div class="row justify-content-start">
+                    <label for="jml_faktur" class="col-form-label @if ($device == 'Mobile') col-lg-6 @else col-lg-6 @endif col-6">DETAIL PEMBAYARAN</label>
+                    <div class="@if ($device == 'Mobile') col-lg-6 @else col-lg-3 @endif col-6">
+                    </div>
+                </div>
+                <div class="row justify-content-start">
+                    <label for="" class="col-form-label text-gray-400 fs-7 @if ($device == 'Mobile') col-lg-6 @else col-lg-6 @endif col-6">Total Pembayaran <br>(1 items)</label>
+                    <label for="total_pemayaran" class="col-form-label text-end @if ($device == 'Mobile') col-lg-6 @else col-lg-6 @endif col-6">Rp24.000.000</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success font-weight-bold @if ($device == 'Mobile') col-lg-12 @else col-lg-3 @endif col-12" id="kirim_simpan" >SIMPAN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 @if ($device == 'Mobile')
     <!-- Modal Edit Jumlah Dibayar -->
         <div class="modal fade shadow-lg" id="ModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -348,6 +449,20 @@
         <script type="text/javascript">
             let device = '{{ $device }}';
         </script>
+        {{-- terdapat session succesPembayaran --}}
+        @if (session('successPembayaran'))
+            <script type="text/javascript">
+            swal.fire({
+                title: "{{ session('successPembayaran') }}",
+                text: "Total pembayaran : Rp. " + "{{ session('jml') }}",
+                icon: 'success',
+                // tombol ok hijau
+                customClass: {
+                    confirmButton: 'btn btn-success'
+                },
+            })
+            </script>
+        @endif
 
         <script src="{{ asset('assets/js/suma/orders/penerimaan/pembayaran/pembayaran.js') }}?v={{ time() }}"></script>
         @if ($device == 'Mobile')

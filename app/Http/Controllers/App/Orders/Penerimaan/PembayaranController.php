@@ -69,21 +69,23 @@ class PembayaranController extends Controller
      */
     public function store(Request $request)
     {
-        $responseApi = ApiService::PembayaranDealerSimpan(
-            trim($request->get('kd_dealer')),
-            trim($request->get('jenis_transaksi')),
-            $request->get('total'),
-            $request->get('detail'),
-            strtoupper(trim($request->session()->get('app_user_id'))),
-            strtoupper(trim($request->session()->get('app_user_company_id'))),
-        );
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+        return redirect()->back()->with('successPembayaran', 'Bukti Pembayaran Berhasil Diterima !')->with('jml', $request->get('total'));
 
-        if ($statusApi == 1) {
-            return redirect()->back()->with('success', $messageApi);
-        } else {
-            return redirect()->back()->withInput()->with('failed',$messageApi)->with('detail',json_decode($request->get('detail')));
-        }
+        // $responseApi = ApiService::PembayaranDealerSimpan(
+        //     trim($request->get('kd_dealer')),
+        //     trim($request->get('jenis_transaksi')),
+        //     $request->get('total'),
+        //     $request->get('detail'),
+        //     strtoupper(trim($request->session()->get('app_user_id'))),
+        //     strtoupper(trim($request->session()->get('app_user_company_id'))),
+        // );
+        // $statusApi = json_decode($responseApi)->status;
+        // $messageApi =  json_decode($responseApi)->message;
+
+        // if ($statusApi == 1) {
+        //     return redirect()->back()->with('successPembayaran', 'Bukti Pembayaran Berhasil Diterima !')->with('jml', number_format($request->get('total'),0,',','.'));
+        // } else {
+        //     return redirect()->back()->withInput()->with('failed',$messageApi)->with('detail',json_decode($request->get('detail')));
+        // }
     }
 }
