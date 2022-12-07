@@ -397,7 +397,7 @@
                 </div>
                 <div class="row justify-content-start">
                     <label for="" class="col-form-label text-gray-400 fs-7 @if ($device == 'Mobile') col-lg-6 @else col-lg-6 @endif col-6">Total Pembayaran <br>(1 items)</label>
-                    <label for="total_pemayaran" class="col-form-label text-end @if ($device == 'Mobile') col-lg-6 @else col-lg-6 @endif col-6">Rp24.000.000</label>
+                    <label for="total_pemayaran" class="col-form-label text-end @if ($device == 'Mobile') col-lg-6 @else col-lg-6 @endif col-6">Rp10.000.000</label>
                 </div>
             </div>
         </div>
