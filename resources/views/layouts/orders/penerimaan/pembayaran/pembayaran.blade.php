@@ -323,30 +323,69 @@
     <div class="modal-dialog modal-fullscreen-md-down @if ($device == 'Mobile') @else modal-md @endif">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload bukti pembayaran</h1>
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Upload Bukti Pembayaran</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body overflow-auto">
             <input type="file" id="image" name="image" class="d-none" accept="image/*">
             <div class="p-6">
                 {{-- <label class="col-form-label">Faktur List :</label> --}}
-                <div id="faktur_list_bayar">
-                </div>
-            </div>
-            
-            <label class="ms-6 col-12 col-form-label border-top">Upload Gambar Bukti Pembayaran</label>
-            <div class="mx-3 overflow-auto row" id="container_upload" style="height: 160px; width: auto;">
-                <div class="col-6 col-lg-4 mb-3" id="card_image" style="cursor: pointer; display: flex; justify-content: center; align-items: center;">
-                    <div class="card border bg-secondary text-center w-100 h-150px">
-                        <div class="m-auto">
-                            <i class="bi bi-camera fs-1"></i>
-                            <label class="d-block">Upload Gambar</label>
+                <div class="card border border-secondary col-12 p-6 mt-3">
+                    <div class="row">
+                        <div class="col-12 ps-0 m-0">
+                            <div class="col-12">
+                                <span class="fs-4 fw-bolder" style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" id="_no_bpk"></span>
+                            </div>
+                            <div class="col-12">
+                                <span class="fw-bold text-gray-400">{{ date('d M Y') }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6 ps-0 m-0">
+                            <div class="col-12 mt-4">
+                                <table>
+                                    <tbody>
+                                        <tr class="fw-bold text-gray-400">
+                                            <td>Jumlah Faktur</td>
+                                        </tr>
+                                        <tr class="fw-bold text-gray-800">
+                                            <td><span id="_jml_faktur"></span> Items</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-6 ps-0 m-0 text-end">
+                            <div class="col-12 mt-4 text-end">
+                                <table class="w-100">
+                                    <tbody class="text-end">
+                                        <tr class="fw-bold text-gray-400">
+                                            <td>Piutang Dibayar</td>
+                                        </tr>
+                                        <tr class="fw-bold text-gray-800">
+                                            <td>Rp <span id="_total"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="mb-3 mx-6 @if ($device == 'Mobile') bg-white card @endif">
-                <label class="col-form-label border-top">DETAIL PEMBAYARAN</label>
+            <div class="mb-3 mx-6">
+                <label class="col-12 col-form-label border-top">Upload Gambar Bukti Pembayaran</label>
+                <div class="mx-3 overflow-auto row" id="container_upload" style="height: 160px; width: auto;">
+                    <div class="col-6 col-lg-4 mb-3" id="card_image" style="cursor: pointer; display: flex; justify-content: center; align-items: center;">
+                        <div class="card border bg-secondary text-center w-100 h-150px">
+                            <div class="m-auto">
+                                <i class="bi bi-camera fs-1"></i>
+                                <label class="d-block">Upload Gambar</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 mx-6">
+                <label class="col-12 col-form-label border-top">DETAIL PEMBAYARAN</label>
                 <div class="row justify-content-start">
                     <div class="col-12">
                         <table class="w-100 table table-row-dashed table-row-gray-300">
@@ -354,9 +393,9 @@
                             </thead>
                             <tbody>
                                 <tr id="detail_bayar" class="border-gray-300 border-top-dashed py-10">
-                                    <td class="fs-7 text-start">Total Pembayaran</td>
-                                    <td class="text-end">Rp</td>
-                                    <td id="total_dibayar" class="text-end" id="total_faktur"></td>
+                                    <td class="fs-7 fw-bold text-start">Total Pembayaran</td>
+                                    <td class="text-end fw-bold">Rp</td>
+                                    <td id="total_dibayar" class="text-end fw-bold"></td>
                                 </tr>
                             </tbody>
                         </table>

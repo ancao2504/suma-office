@@ -70,13 +70,12 @@ class PembayaranController extends Controller
      */
     public function store(Request $request)
     {
-        
         $names_files = [];
         if(!empty($request->image)){
             foreach ($request->image as $key => $value) {
                 $nama_file =  'Bukti_Penagihan_'.strtoupper(trim($request->session()->get('app_user_id'))).'_'.strtoupper(trim($request->session()->get('app_user_company_id'))).'_'. date('YmdHis'). '.' . $value->getClientOriginalExtension();
                 $names_files[$key] = $nama_file;
-                $directory = 'C:/xampp/htdocs/suma-pmo/public/assets/images/Penagihan_pembayaran/';
+                $directory = 'C:/xampp/htdocs/suma-pmo/public/assets/images/penagihan_pembayaran/';
                 try {
                     $image_resize = Image::make(file_get_contents($value->getRealPath()));
                     $image_resize->resize(900, null , function ($constraint) {
@@ -92,7 +91,7 @@ class PembayaranController extends Controller
                 }
             }
         }
-
+        return redirect()->back()->withInput()->with('failed', 'Bukti Pembayaran Gagal diterima !');
         $responseApi = ApiService::PembayaranDealerSimpan(
             trim($request->get('kd_dealer')),
             trim($request->get('jenis_transaksi')),
