@@ -1666,7 +1666,7 @@ class ApiService
         return $response;
     }
 
-    public static function PembayaranDealerSimpan($kd_dealer,$jenis_transaksi, $total, $detail, $user_id, $companyid)
+    public static function PembayaranDealerSimpan($kd_dealer,$jenis_transaksi, $total, $detail,$file_names, $user_id, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/pembayaran/simpan';
@@ -1676,6 +1676,7 @@ class ApiService
             'jenis_transaksi'   => trim($jenis_transaksi),
             'total'             => trim($total),
             'detail'            => $detail,
+            'file_names'        => $file_names,
             'user_id'           => trim($user_id),
             'cabang'            => strtoupper(trim($companyid)),
         ];

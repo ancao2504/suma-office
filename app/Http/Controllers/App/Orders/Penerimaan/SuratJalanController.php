@@ -219,7 +219,7 @@ class SuratJalanController extends Controller
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
             return view(
-                'reports.suratjalan.suratjalan.reportsuratjalan',
+                'reports.suratjalan.reportsuratjalan',
                 [
                     'title_menu'    => 'Report Surat Jalan',
                     'data_report'   => $data,

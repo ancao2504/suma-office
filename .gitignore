@@ -10,5 +10,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/public/assets/images/parts
-/public/assets/images/sj
+/public/assets/images/parts/*
+/public/assets/images/sj/*
+/public/assets/images/penagihan_pembayaran/*
+

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\app\Orders\Penerimaan;
 
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
-use Jenssegers\Agent\Agent as Agent;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Jenssegers\Agent\Agent as Agent;
+use Intervention\Image\Facades\Image;
 
 class PembayaranController extends Controller
 {
@@ -22,7 +24,6 @@ class PembayaranController extends Controller
         } else {
             $device = 'Desktop';
         }
-
         return view(
             'layouts.orders.penerimaan.pembayaran.pembayaran',
             [
@@ -69,23 +70,49 @@ class PembayaranController extends Controller
      */
     public function store(Request $request)
     {
-        return redirect()->back()->with('successPembayaran', 'Bukti Pembayaran Berhasil Diterima !')->with('jml', $request->get('total'));
+        $names_files = [];
+        if(!empty($request->image)){
+            foreach ($request->image as $key => $value) {
+                $nama_file =  'Bukti_Penagihan_'.strtoupper(trim($request->session()->get('app_user_id'))).'_'.strtoupper(trim($request->session()->get('app_user_company_id'))).'_'. date('YmdHis'). '.' . $value->getClientOriginalExtension();
+                $names_files[$key] = $nama_file;
+                $directory = 'C:/xampp/htdocs/suma-pmo/public/assets/images/penagihan_pembayaran/';
+                try {
+                    $image_resize = Image::make(file_get_contents($value->getRealPath()));
+                    $image_resize->resize(900, null , function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    $image_resize->save($directory.$nama_file);
+                } catch (\Exception $e) {
+                    foreach ($names_files as $key => $value) {
+                        $file = $directory.$value;
+                        file_exists($file) ? unlink($file) : '';
+                    }
+                    return redirect()->back()->withInput()->with('failed', 'Bukti Pembayaran Gagal diterima !');
+                }
+            }
+        }
+        return redirect()->back()->withInput()->with('failed', 'Bukti Pembayaran Gagal diterima !');
+        $responseApi = ApiService::PembayaranDealerSimpan(
+            trim($request->get('kd_dealer')),
+            trim($request->get('jenis_transaksi')),
+            $request->get('total'),
+            $request->get('detail'),
+            $names_files,
+            strtoupper(trim($request->session()->get('app_user_id'))),
+            strtoupper(trim($request->session()->get('app_user_company_id'))),
+        );
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+        // $dataApi = json_decode($responseApi)->data;
 
-        // $responseApi = ApiService::PembayaranDealerSimpan(
-        //     trim($request->get('kd_dealer')),
-        //     trim($request->get('jenis_transaksi')),
-        //     $request->get('total'),
-        //     $request->get('detail'),
-        //     strtoupper(trim($request->session()->get('app_user_id'))),
-        //     strtoupper(trim($request->session()->get('app_user_company_id'))),
-        // );
-        // $statusApi = json_decode($responseApi)->status;
-        // $messageApi =  json_decode($responseApi)->message;
-
-        // if ($statusApi == 1) {
-        //     return redirect()->back()->with('successPembayaran', 'Bukti Pembayaran Berhasil Diterima !')->with('jml', number_format($request->get('total'),0,',','.'));
-        // } else {
-        //     return redirect()->back()->withInput()->with('failed',$messageApi)->with('detail',json_decode($request->get('detail')));
-        // }
+        if ($statusApi == 1) {
+            return redirect()->back()->with('successPembayaran', 'Bukti Pembayaran Berhasil Diterima !')->with('jml', $request->get('total'));
+        } else {
+            foreach ($names_files as $key => $value) {
+                $file = $directory.$value;
+                file_exists($file) ? unlink($file) : '';
+            }
+            return redirect()->back()->withInput()->with('failed',$messageApi)->with('detail',json_decode($request->get('detail')));
+        }
     }
 }
