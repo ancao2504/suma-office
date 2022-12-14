@@ -6,6 +6,7 @@ use App\Helpers\ApiService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use Jenssegers\Agent\Agent as Agent;
 use Illuminate\Support\Facades\Date;
 
 class CetakUlangController extends Controller
@@ -47,8 +48,15 @@ class CetakUlangController extends Controller
                 'month'     => $month,
             ]);
 
+            $Agent = new Agent();
+            $device = 'Desktop';
+            if($Agent->isMobile()) {
+                $device = 'Mobile';
+            }
+
             return view('layouts.settings.cetakulang.cetakulang', [
                 'title_menu'        => 'Cetak Ulang',
+                'device'            => $device,
                 'data_page'         => $data_page->first(),
                 'data_filter'       => $data_filter->first(),
                 'data_cetak_ulang'  => $data,

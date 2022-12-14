@@ -18,15 +18,9 @@
                             </svg>
                         </span>Tambah
                     </button>
-                    <button id="btnFilter" class="btn btn-light btn-active-light-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalFilter">
-                        <span class="svg-icon svg-icon-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor"/>
-                            </svg>
-                        </span>Filter
-                    </button>
                 </div>
             </div>
+            @if(strtoupper(trim($device)) == 'DESKTOP')
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-row-dashed table-row-gray-300 align-middle">
@@ -133,8 +127,45 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
+
+    @if(strtoupper(trim($device)) == 'MOBILE')
+    @forelse($data_cetak_ulang->data as $data)
+    <div class="card card-flush mt-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="align-items-center">
+                    <span class="fs-6 fw-boldest text-gray-800">{{ trim($data->no_faktur) }}</span>
+                    @if(strtoupper(trim($data->divisi)) == 'HONDA')
+                    <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase ms-2">Honda</span>
+                    @else
+                    <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase ms-2">FDR</span>
+                    @endif
+                </div>
+                <span class="fs-7 fw-bolder text-gray-800 mt-2">{{ date('d/m/Y', strtotime($data->tanggal)) }}</span>
+                <div class="d-flex align-items-center mt-2">
+                    <span class="badge badge-light-info fs-8 fw-boldest text-uppercase">{{ trim($data->cabang) }}</span>
+                    @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
+                    <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase ms-2">{{ trim($data->jenis) }}</span>
+                    @elseif(strtoupper(trim($data->jenis)) == 'PEMINDAHAN KELUAR')
+                    <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase ms-2">{{ trim($data->jenis) }}</span>
+                    @elseif(strtoupper(trim($data->jenis)) == 'PURCHASE ORDER HOTLINE')
+                    <span class="badge badge-light-success fs-8 fw-boldest text-uppercase ms-2">{{ trim($data->jenis) }}</span>
+                    @endif
+                </div>
+                <span class="fs-7 fw-bolder text-gray-600 mt-4">Jumlah Edit : </span>
+                <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->jml_edit) }}</span>
+                <span class="fs-7 fw-bolder text-gray-600 mt-4">Alasan : </span>
+                <p class="fs-7 fw-bolder text-gray-800">{{ $data->alasan }}</p>
+                <span class="fs-7 fw-bolder text-gray-600 mt-4">Usertime : </span>
+                <p class="fs-7 fw-bolder text-gray-800">{{ $data->usertime }}</p>
+            </div>
+        </div>
+    </div>
+    @endforeach
+    @endif
 
     <div id="modalEntryCetakUlang" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
