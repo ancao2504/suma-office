@@ -266,6 +266,22 @@ $(document).ready(function () {
         $('#inputFilterKodeMkr').val('');
     });
 
+    $('#inputFilterKodeMkr').on('click', function (e) {
+        e.preventDefault();
+
+        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
+
+        if (jenis_mkr == "SALESMAN") {
+            loadDataSalesman();
+            $('#searchSalesmanForm').trigger('reset');
+            $('#salesmanSearchModal').modal('show');
+        } else if (jenis_mkr == "SUPERVISOR") {
+            loadDataSupervisor();
+            $('#searchSupervisorForm').trigger('reset');
+            $('#supervisorSearchModal').modal('show');
+        }
+    });
+
     $('#btnFilterMarketing').on('click', function (e) {
         e.preventDefault();
 

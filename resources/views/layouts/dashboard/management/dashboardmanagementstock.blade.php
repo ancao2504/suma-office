@@ -6,7 +6,7 @@
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Management Stock</span>
-                <span class="text-muted fw-bold fs-7">Dashboard Management Stock
+                <span class="text-muted fw-boldest fs-7">Dashboard Management Stock
                     @if($month == 1) Januari
                     @elseif($month == 2) Februari
                     @elseif($month == 3) Maret
@@ -37,14 +37,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Stock All</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
                             @if($level == "")
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
                             @endif
                             @if($produk != "")
-                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -61,14 +61,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Pembelian</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
                             @if($level == "")
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
                             @endif
                             @if($produk != "")
-                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -87,14 +87,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">FS</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
                             @if($level == "")
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
                             @endif
                             @if($produk != "")
-                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -111,14 +111,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">CNO</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
                             @if($level == "")
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
                             @endif
                             @if($produk != "")
-                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -137,14 +137,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Sales By Product</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $fields }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
                             @if($level == "")
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-light-dark fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
                             @endif
                             @if($produk != "")
-                            <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -215,7 +215,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Produk:</label>
                             <div class="input-group">
-                                <input id="inputFilterKodeProduk" name="produk" type="search" class="form-control" placeholder="Semua Produk" readonly
+                                <input id="inputFilterKodeProduk" name="produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
                                     @if(isset($produk)) value="{{ $produk }}" @else value="{{ old('produk') }}"@endif>
                                 <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
                                     data-toggle="modal" data-target="#produkSearchModalForm">

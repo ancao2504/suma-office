@@ -3,57 +3,57 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-row-dashed table-row-gray-300 align-middle">
-                    <thead>
+                    <thead class="border">
                         <tr class="fw-bolder text-muted">
-                            <th class="w-50px">No</th>
-                            <th class="w-100px">No Faktur</th>
-                            <th class="w-100px">Tanggal</th>
-                            <th class="w-50px">Salesman</th>
-                            <th class="w-50px">Dealer</th>
-                            <th class="min-w-150px">Keterangan</th>
-                            <th class="w-50px text-center">TPC</th>
-                            <th class="w-50px text-center">BO</th>
-                            <th class="w-100px text-center">Jenis</th>
-                            <th class="min-w-100px text-end">Total</th>
-                            <th class="w-50px text-end">Action</th>
+                            <th class="w-50px ps-3 pe-3 text-center">No</th>
+                            <th class="w-100px ps-3 pe-3 text-center">No Faktur</th>
+                            <th class="w-100px ps-3 pe-3 text-center">Tanggal</th>
+                            <th class="w-50px ps-3 pe-3 text-center">Salesman</th>
+                            <th class="w-50px ps-3 pe-3 text-center">Dealer</th>
+                            <th class="min-w-150px ps-3 pe-3 text-center">Keterangan</th>
+                            <th class="w-50px text-center ps-3 pe-3 text-center">TPC</th>
+                            <th class="w-50px text-center ps-3 pe-3 text-center">BO</th>
+                            <th class="w-100px text-center ps-3 pe-3 text-center">Jenis</th>
+                            <th class="min-w-100px text-end ps-3 pe-3 text-center">Total</th>
+                            <th class="w-50px ps-3 pe-3 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="border">
                         @forelse($data_faktur as $data)
                         <tr>
-                            <td>{{ (($page->page * $page->per_page) + $loop->iteration) - 10 }}</td>
+                            <td class="ps-3 pe-3 fs-7 fw-bolder text-gray-800 text-center">{{ (($page->page * $page->per_page) + $loop->iteration) - 10 }}</td>
                             <td>
-                                <a href="{{ route('orders.faktur-view', trim($data->nomor_faktur)) }}" class="fs-7 fw-bold text-gray-800 text-hover-primary">{{ trim($data->nomor_faktur) }}</a>
+                                <a href="{{ route('orders.faktur-view', trim($data->nomor_faktur)) }}" class="fs-7 fw-bolder text-gray-800 text-hover-primary">{{ trim($data->nomor_faktur) }}</a>
                             </td>
-                            <td class="fs-7 fw-bold text-gray-800">{{ date('d/m/Y', strtotime($data->tanggal)) }}</td>
-                            <td><span class="badge badge-light-info fs-7 fw-bolder text-uppercase">{{ trim($data->kode_sales) }}</span></td>
-                            <td><span class="badge badge-light-primary fs-7 fw-bolder text-uppercase">{{ trim($data->kode_dealer) }}</span></td>
-                            <td class="fs-7 fw-bold text-gray-800">{{ $data->keterangan }}</td>
-                            <td class="text-center">
+                            <td class="fs-7 fw-bolder text-gray-800 text-center">{{ date('d/m/Y', strtotime($data->tanggal)) }}</td>
+                            <td class="ps-3 pe-3"><span class="ps-3 pe-3 badge badge-light-info fs-8 fw-boldest text-uppercase">{{ trim($data->kode_sales) }}</span></td>
+                            <td class="ps-3 pe-3"><span class="badge badge-light-primary fs-8 fw-boldest text-uppercase">{{ trim($data->kode_dealer) }}</span></td>
+                            <td class="ps-3 pe-3 fs-7 fw-bold text-gray-800">{{ $data->keterangan }}</td>
+                            <td class="ps-3 pe-3 text-center">
                                 @if($data->kode_tpc == '14')
-                                <span class="badge badge-light-primary fs-7 fw-boldest">14</span>
+                                <span class="badge badge-light-primary fs-8 fw-boldest">14</span>
                                 @else
-                                <span class="badge badge-light-danger fs-7 fw-boldest">20</span>
+                                <span class="badge badge-light-danger fs-8 fw-boldest">20</span>
                                 @endif
                             </td>
-                            <td class="text-center">
+                            <td class="ps-3 pe-3 text-center">
                                 @if($data->bo == 'B')
-                                <span class="badge badge-light-danger fs-7 fw-boldest">BO</span>
+                                <span class="badge badge-light-danger fs-8 fw-boldest">BO</span>
                                 @else
-                                <span class="badge badge-light-info fs-7 fw-boldest">TBO</span>
+                                <span class="badge badge-light-info fs-8 fw-boldest">TBO</span>
                                 @endif
                             </td>
-                            <td class="text-center">
+                            <td class="ps-3 pe-3 text-center">
                                 @if($data->jenis_order == 'H')
-                                <span class="badge badge-light-danger fs-7 fw-boldest">HOTLINE</span>
+                                <span class="badge badge-light-danger fs-8 fw-boldest">HOTLINE</span>
                                 @elseif($data->jenis_order == 'P')
-                                <span class="badge badge-light-info fs-7 fw-boldest">PMO</span>
+                                <span class="badge badge-light-info fs-8 fw-boldest">PMO</span>
                                 @else
-                                <span class="badge badge-light-success fs-7 fw-boldest">REGULER</span>
+                                <span class="badge badge-light-success fs-8 fw-boldest">REGULER</span>
                                 @endif
                             </td>
-                            <td class="fs-7 fw-bold text-gray-800 text-end">{{ number_format($data->total) }}</td>
-                            <td class="text-end">
+                            <td class="ps-3 pe-3 fs-7 fw-bolder text-gray-800 text-end">{{ number_format($data->total) }}</td>
+                            <td class="ps-3 pe-3 text-center">
                                 <a href="{{ route('orders.faktur-view', trim($data->nomor_faktur)) }}" class="btn btn-icon btn-primary btn-sm">
                                     <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
                                 </a>

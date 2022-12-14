@@ -148,6 +148,11 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
     Route::name('setting.')->group(function () {
         Route::get('/setting/clossingmkr', 'App\Setting\SettingController@clossingMarketing')->middleware('authLogin')->name('setting-clossing-marketing');
+
+        Route::get('/setting/cetakulang', 'App\Setting\CetakUlang\CetakUlangController@index')->middleware('authLogin')->name('setting-cetak-ulang');
+        Route::post('/setting/cetakulang/cekdokumen', 'App\Setting\CetakUlang\CetakUlangController@cekNomorDokumen')->middleware('authLogin')->name('setting-cetak-ulang-cek-dokumen');
+        Route::post('/setting/cetakulang/simpan', 'App\Setting\CetakUlang\CetakUlangController@simpanCetakUlang')->middleware('authLogin')->name('setting-cetak-ulang-simpan');
+
         // diskon Produk
         Route::get('/setting/diskon/produk', 'App\Setting\Diskon\DiskonProdukController@index')->middleware('authLogin')->name('setting-diskon-produk');
         Route::post('/setting/diskon/produk/simpan', 'App\Setting\Diskon\DiskonProdukController@store')->middleware('authLogin')->name('setting-diskon-produk-simpan');

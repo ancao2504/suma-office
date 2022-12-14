@@ -5,11 +5,11 @@ $(document).ready(function () {
 
     const params = new URLSearchParams(window.location.search)
     for (const param of params) {
-        var year = params.get('year');
-        var month = params.get('month');
-        var salesman = params.get('salesman');
-        var dealer = params.get('dealer');
-        var nomor_faktur = params.get('nomor_faktur');
+        var year = params.get('year').trim();
+        var month = params.get('month').trim();
+        var salesman = params.get('salesman').trim();
+        var dealer = params.get('dealer').trim();
+        var nomor_faktur = params.get('nomor_faktur').trim();
     }
 
     if (year || month || salesman || dealer || nomor_faktur) {
@@ -18,11 +18,11 @@ $(document).ready(function () {
                 if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                     const params = new URLSearchParams(window.location.search)
                     for (const param of params) {
-                        var year = params.get('year');
-                        var month = params.get('month');
-                        var salesman = params.get('salesman');
-                        var dealer = params.get('dealer');
-                        var nomor_faktur = params.get('nomor_faktur');
+                        var year = params.get('year').trim();
+                        var month = params.get('month').trim();
+                        var salesman = params.get('salesman').trim();
+                        var dealer = params.get('dealer').trim();
+                        var nomor_faktur = params.get('nomor_faktur').trim();
                     }
                     pages++;
                     loadMoreData(year, month, salesman, dealer, nomor_faktur, pages);
@@ -82,6 +82,13 @@ $(document).ready(function () {
         $('#modalFilter').modal('show');
     });
 
+    $('#inputFilterSalesman').on('click', function (e) {
+        e.preventDefault();
+        loadDataSalesman();
+        $('#searchSalesmanForm').trigger('reset');
+        $('#salesmanSearchModal').modal('show');
+    });
+
     $('#btnFilterPilihSalesman').on('click', function (e) {
         e.preventDefault();
         loadDataSalesman();
@@ -93,6 +100,13 @@ $(document).ready(function () {
         e.preventDefault();
         $('#inputFilterSalesman').val($(this).data('kode_sales'));
         $('#salesmanSearchModal').modal('hide');
+    });
+
+    $('#inputFilterDealer').on('click', function (e) {
+        e.preventDefault();
+        loadDataDealer(1, 10, '');
+        $('#searchDealerForm').trigger('reset');
+        $('#dealerSearchModal').modal('show');
     });
 
     $('#btnFilterPilihDealer').on('click', function (e) {

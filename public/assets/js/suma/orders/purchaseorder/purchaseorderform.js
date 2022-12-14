@@ -25,10 +25,7 @@ $(document).ready(function () {
 
     loadDetailPurchaseOrder();
 
-    function loadDetailPurchaseOrder() {
-        var nomorPof = $('#inputNomorPof').val();
-        $('#detailPurchaseOrderForm').load('<?php echo url("orders/purchaseorder/view/detail/' + nomorPof + '");?>');
-    }
+
 
     var tablePartNumber = $('#tableSearchPartNumber').DataTable();
 

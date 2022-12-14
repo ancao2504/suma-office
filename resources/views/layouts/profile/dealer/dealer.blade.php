@@ -14,7 +14,12 @@
                 <div class="card-header align-items-center border-0 mt-4">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="fw-bolder mb-2 text-dark">Dealer</span>
-                        <span class="text-muted fw-bold fs-7">Daftar dealer suma honda</span>
+                        <span class="text-muted fw-boldest fs-7">Daftar dealer suma honda</span>
+                        <div class="d-flex align-items-center mt-4">
+                            @if(isset($kode_dealer))
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">FILTER : {{ $kode_dealer }}</span>
+                            @endif
+                        </div>
                     </h3>
                 </div>
                 <div class="card card-flush">

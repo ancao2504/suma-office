@@ -6,7 +6,7 @@
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Sales Performance</span>
-                <span class="text-muted fw-bold fs-7">Dashboard Salesman
+                <span class="text-muted fw-boldest fs-7">Dashboard Salesman
                     @if($month == 1) Januari
                     @elseif($month == 2) Februari
                     @elseif($month == 3) Maret
@@ -23,9 +23,9 @@
                 </span>
                 <div class="d-flex align-items-center mt-4">
                     @if($kode_mkr == "")
-                    <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">MARKETING : ALL</span>
                     @else
-                    <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -289,29 +289,8 @@
             <div class="card card-flush h-xl-200">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label fw-bolder text-gray-800">Pencapaian</span>
-                        <span class="text-gray-400 mt-1 fw-bold fs-6">Group Per-Level</span>
-                        <div class="d-flex align-items-center mt-2">
-                            @if($kode_mkr == "")
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
-                            @else
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
-                            @endif
-                        </div>
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div id="chartPenjualanPerLevel" style="height: 350px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-8">
-            <div class="card card-flush h-xl-200">
-                <div class="card-header pt-7">
-                    <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label fw-bolder text-gray-800">Performa Penjualan</span>
-                        <span class="text-gray-400 mt-1 fw-bold fs-6">
+                        <span class="card-label fw-bolder text-dark">Pencapaian</span>
+                        <span class="text-muted mt-1 fw-boldest fs-7">Group Per-Level
                             @if ($month == 1) Januari
                             @elseif ($month == 2) Februari
                             @elseif ($month == 3) Maret
@@ -328,9 +307,44 @@
                         </span>
                         <div class="d-flex align-items-center mt-2">
                             @if($kode_mkr == "")
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">MARKETING : ALL</span>
                             @else
-                            <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                            @endif
+                        </div>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div id="chartPenjualanPerLevel" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8">
+            <div class="card card-flush h-xl-200">
+                <div class="card-header pt-7">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-dark">Performa Penjualan</span>
+                        <span class="text-muted mt-1 fw-boldest fs-7">
+                            @if ($month == 1) Januari
+                            @elseif ($month == 2) Februari
+                            @elseif ($month == 3) Maret
+                            @elseif ($month == 4) April
+                            @elseif ($month == 5) Mei
+                            @elseif ($month == 6) Juni
+                            @elseif ($month == 7) Juli
+                            @elseif ($month == 8) Agustus
+                            @elseif ($month == 9) September
+                            @elseif ($month == 10) Oktober
+                            @elseif ($month == 11) November
+                            @elseif ($month == 12) Desember
+                            @endif 2022
+                        </span>
+                        <div class="d-flex align-items-center mt-2">
+                            @if($kode_mkr == "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                            @else
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
                             @endif
                         </div>
                     </h3>
@@ -346,13 +360,13 @@
         <div class="card card-flush h-xl-100">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder text-gray-800">Omzet & Target Sales</span>
-                    <span class="text-gray-400 mt-1 fw-bold fs-6">Target dan penjualan per-produk</span>
+                    <span class="card-label fw-bolder text-dark">Omzet & Target Sales</span>
+                    <span class="text-muted mt-1 fw-boldest fs-7">Target dan penjualan per-produk</span>
                     <div class="d-flex align-items-center mt-2">
                         @if($kode_mkr == "")
-                        <span class="badge badge-light-info fs-8 fw-boldest me-2">MARKETING : ALL</span>
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">MARKETING : ALL</span>
                         @else
-                        <span class="badge badge-light-info fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
                         @endif
                     </div>
                 </h3>
@@ -568,7 +582,7 @@
                         <div class="fv-row mt-8">
                             <label id="labelKodeMkr" class="form-label">Kode Marketing:</label>
                             <div class="input-group">
-                                <input id="inputFilterKodeMkr" name="kode_mkr" type="search" class="form-control" placeholder="Semua Marketing" readonly
+                                <input id="inputFilterKodeMkr" name="kode_mkr" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Marketing" readonly
                                     @if(isset($kode_mkr)) value="{{ $kode_mkr }}" @else value="{{ old('kode_mkr') }}"@endif>
                                 <button id="btnFilterMarketing" name="btnFilterMarketing" class="btn btn-icon btn-primary" type="button"
                                     data-toggle="modal" data-target="#tipeMotorSearchModal">

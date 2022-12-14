@@ -7,7 +7,34 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Tracking Order</span>
-                    <span class="text-muted fw-bold fs-7">Daftar tracking order berdasarkan faktur penjualan</span>
+                    <span class="text-muted fw-boldest fs-7">Daftar tracking order berdasarkan faktur penjualan bulan
+                        @if($month == 1) Januari
+                        @elseif($month == 2) Februari
+                        @elseif($month == 3) Maret
+                        @elseif($month == 4) April
+                        @elseif($month == 5) Mei
+                        @elseif($month == 6) Juni
+                        @elseif($month == 7) Juli
+                        @elseif($month == 8) Agustus
+                        @elseif($month == 9) September
+                        @elseif($month == 10) Oktober
+                        @elseif($month == 11) November
+                        @elseif($month == 12) Desember
+                        @endif {{ $year }}
+                    </span>
+                    @if(trim($kode_sales) != '' || trim($kode_dealer) != '' || trim($nomor_faktur) != '')
+                    <div class="d-flex align-items-center mt-4">
+                        @if(trim($kode_sales) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ strtoupper(trim($kode_sales)) }}</span>
+                        @endif
+                        @if(trim($kode_dealer) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ strtoupper(trim($kode_dealer)) }}</span>
+                        @endif
+                        @if(trim($nomor_faktur) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">FAKTUR : {{ strtoupper(trim($nomor_faktur)) }}</span>
+                        @endif
+                    </div>
+                    @endif
                 </h3>
                 <div class="card-toolbar">
                     <button id="btnFilterTrackingOrder" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -64,7 +91,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Salesman:</label>
                             <div class="input-group">
-                                <input id="inputFilterSalesman" name="salesman" type="search" class="form-control" placeholder="Semua Salesman" readonly
+                                <input id="inputFilterSalesman" name="salesman" type="text" class="form-control" style="cursor: pointer;" placeholder="Semua Salesman" readonly
                                     @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
                                 @if($role_id != 'MD_H3_SM')
                                     @if($role_id != 'D_H3')
@@ -79,7 +106,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Dealer:</label>
                             <div class="input-group">
-                                <input id="inputFilterDealer" name="dealer" type="search" class="form-control" placeholder="Semua Dealer" readonly
+                                <input id="inputFilterDealer" name="dealer" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Dealer" readonly
                                     @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
                                 @if($role_id != 'D_H3')
                                 <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
@@ -113,6 +140,7 @@
     @include('layouts.option.optiondealer')
 
     @push('scripts')
+        <script src="{{ asset('assets/js/suma/orders/trackingorder/trackingorder.js') }}?v={{ time() }}"></script>
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
         const url = {
@@ -139,6 +167,5 @@
                 @endif;
             }
         </script>
-        <script src="{{ asset('assets/js/suma/orders/trackingorder/trackingorder.js') }}"></script>
     @endpush
 @endsection

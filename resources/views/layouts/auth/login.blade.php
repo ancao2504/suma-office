@@ -31,12 +31,12 @@
 	<body id="kt_body" class="bg-body">
 		<div class="d-flex flex-column flex-root">
 			<div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed" style="background-image: url(assets/media/illustrations/sketchy-1/14.png">
-				<div class="d-flex flex-center flex-column flex-column-fluid pb-lg-10">
+				<div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
 					<a href="{{ url('/login') }}" class="mb-2">
 						<img alt="Logo" src="{{ asset('assets/images/logo/logo_suma_bg_white.svg') }}" class="h-150px" />
 					</a>
 
-					<div class="w-lg-500px bg-body rounded shadow-sm p-5 p-lg-15 mx-auto">
+					<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
 						<form id="formLogin" class="form w-100" novalidate="novalidate" id="formLogin" data-kt-redirect-url="{{ url('/login') }}" method="POST" action="{{ route('auth.login') }}">
 							{{ csrf_field() }}
                             <div class="text-center mb-10">

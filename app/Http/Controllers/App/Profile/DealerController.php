@@ -26,6 +26,7 @@ class DealerController extends Controller
 
             return view('layouts.profile.dealer.dealer', [
                 'title_menu'    => 'Dealer',
+                'kode_dealer'   => $request->get('search'),
                 'data_dealer'   => $data_dealer
             ]);
         } else {

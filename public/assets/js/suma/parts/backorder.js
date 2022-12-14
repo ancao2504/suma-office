@@ -76,6 +76,13 @@ $(document).ready(function () {
         $('#modalFilter').modal('show');
     });
 
+    $('#inputFilterSalesman').on('click', function (e) {
+        e.preventDefault();
+        loadDataSalesman();
+        $('#searchSalesmanForm').trigger('reset');
+        $('#salesmanSearchModal').modal('show');
+    });
+
     $('#btnFilterPilihSalesman').on('click', function (e) {
         e.preventDefault();
         loadDataSalesman();
@@ -89,13 +96,19 @@ $(document).ready(function () {
         $('#salesmanSearchModal').modal('hide');
     });
 
-    $('#btnFilterPilihDealer').on('click', function (e) {
+    $('#inputFilterDealer').on('click', function (e) {
         e.preventDefault();
         loadDataDealer(1, 10, '');
         $('#searchDealerForm').trigger('reset');
         $('#dealerSearchModal').modal('show');
     });
 
+    $('#btnFilterPilihDealer').on('click', function (e) {
+        e.preventDefault();
+        loadDataDealer(1, 10, '');
+        $('#searchDealerForm').trigger('reset');
+        $('#dealerSearchModal').modal('show');
+    });
 
     $('body').on('click', '#dealerContentModal #selectDealer', function (e) {
         e.preventDefault();

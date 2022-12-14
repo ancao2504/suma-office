@@ -45,6 +45,13 @@ $(document).ready(function () {
         $('#modalFilter').modal('show');
     });
 
+    $('#inputFilterSalesman').on('click', function (e) {
+        e.preventDefault();
+        loadDataSalesman();
+        $('#searchSalesmanForm').trigger('reset');
+        $('#salesmanSearchModal').modal('show');
+    });
+
     $('#btnFilterPilihSalesman').on('click', function (e) {
         e.preventDefault();
         loadDataSalesman();
@@ -56,6 +63,13 @@ $(document).ready(function () {
         e.preventDefault();
         $('#inputFilterSalesman').val($(this).data('kode_sales'));
         $('#salesmanSearchModal').modal('hide');
+    });
+
+    $('#inputFilterDealer').on('click', function (e) {
+        e.preventDefault();
+        loadDataDealer(1, 10, '');
+        $('#searchDealerForm').trigger('reset');
+        $('#dealerSearchModal').modal('show');
     });
 
     $('#btnFilterPilihDealer').on('click', function (e) {

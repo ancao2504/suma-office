@@ -6,7 +6,20 @@
                 <div class="card-header align-items-center border-0 mt-4">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="fw-bolder mb-2 text-dark">Belum Terbayar</span>
-                        <span class="text-muted fw-bold fs-7">Daftar faktur yang belum terbayar</span>
+                        <span class="text-muted fw-boldest fs-7">Daftar faktur yang belum terbayar</span>
+                        @if(trim($kode_sales) != '' || trim($kode_dealer) != '' || trim($nomor_faktur) != '')
+                        <div class="d-flex align-items-center mt-4 mb-4">
+                            @if(trim($kode_sales) != '')
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ strtoupper(trim($kode_sales)) }}</span>
+                            @endif
+                            @if(trim($kode_dealer) != '')
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ strtoupper(trim($kode_dealer)) }}</span>
+                            @endif
+                            @if(trim($nomor_faktur) != '')
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">FAKTUR : {{ strtoupper(trim($nomor_faktur)) }}</span>
+                            @endif
+                        </div>
+                        @endif
                     </h3>
                     <div class="card-toolbar">
                         <button id="btnFilterPembayaran" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -26,10 +39,10 @@
                 <div class="card-boady">
                     <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('orders.pembayaran-faktur-belum-terbayar') }}">
                         <div class="modal-body row">
-                            <div class="col-md-6">
+                            <div class="fv-row">
                                 <label class="form-label">Salesman:</label>
                                 <div class="input-group">
-                                    <input id="inputFilterSalesman" name="salesman" type="search" class="form-control 
+                                    <input id="inputFilterSalesman" name="salesman" type="search" style="cursor: pointer;"  class="form-control
                                     @if($role_id == 'MD_H3_SM' || $role_id =='D_H3')bg-secondary @endif" placeholder="Semua Salesman" readonly @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}" @endif>
                                     @if($role_id != 'MD_H3_SM')
                                         @if ($role_id !='D_H3')
@@ -41,10 +54,10 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="fv-row mt-6">
                                 <label class="form-label">Dealer:</label>
                                 <div class="input-group">
-                                    <input id="inputFilterDealer" name="dealer" type="search" class="form-control @if($role_id =='D_H3')bg-secondary @endif" placeholder="Semua Dealer" readonly
+                                    <input id="inputFilterDealer" name="dealer" type="search" style="cursor: pointer;"  class="form-control @if($role_id =='D_H3')bg-secondary @endif" placeholder="Semua Dealer" readonly
                                         @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
                                     @if($role_id != 'D_H3')
                                     <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
@@ -54,7 +67,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="fv-row mt-6">
                                 <label class="form-label">Nomor Faktur:</label>
                                 <div class="input-group has-validation mb-2">
                                     <input id="inputFilterNomorFaktur" name="nomor_faktur" type="search" class="form-control" placeholder="Semua Nomor Faktur"
@@ -74,7 +87,7 @@
             </div>
         @endif
 
-        @if ($data_pembayaran == null && request()->get('salesman') != null || request()->get('dealer') != null || request()->get('number_faktur') != null)
+        @if ($data_pembayaran == null)
             <div class="card card-flush mt-4 p-5">
                 <div class="text-center">
                     <div class="text-muted">Tidak ada data yang ditampilkan</div>
@@ -87,7 +100,7 @@
             <div id="dataLoadPembayaran"></div>
         @endif
     </div>
-    
+
     @if (request()->get('salesman') || request()->get('dealer') || request()->get('number_faktur'))
         <div class="modal fade" tabindex="-1" id="modalFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -108,7 +121,8 @@
                             <div class="fv-row">
                                 <label class="form-label">Salesman:</label>
                                 <div class="input-group">
-                                    <input id="inputFilterSalesman" name="salesman" type="search" class="form-control @if($role_id == 'MD_H3_SM' || $role_id =='D_H3') bg-secondary @endif" placeholder="Semua Salesman" readonly @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}" @endif>
+                                    <input id="inputFilterSalesman" name="salesman" type="search" class="form-control @if($role_id == 'MD_H3_SM' || $role_id =='D_H3') bg-secondary @endif"
+                                        style="cursor: pointer;" placeholder="Semua Salesman" readonly @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}" @endif>
                                     @if($role_id != 'MD_H3_SM')
                                         @if ($role_id !='D_H3')
                                         <button id="btnFilterPilihSalesman" name="btnFilterPilihSalesman" class="btn btn-icon btn-primary" type="button"
@@ -122,7 +136,8 @@
                             <div class="fv-row mt-8">
                                 <label class="form-label">Dealer:</label>
                                 <div class="input-group">
-                                    <input id="inputFilterDealer" name="dealer" type="search" class="form-control @if($role_id =='D_H3')bg-secondary @endif" placeholder="Semua Dealer" readonly
+                                    <input id="inputFilterDealer" name="dealer" type="search" class="form-control @if($role_id =='D_H3')bg-secondary @endif"
+                                        style="cursor: pointer;" placeholder="Semua Dealer" readonly
                                         @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
                                     @if($role_id != 'D_H3')
                                     <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
@@ -160,7 +175,7 @@
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
         const url_belumterbayar = {
-            'ayaran_faktur_belum_terbayar' : "{{ route('orders.pembayaran-faktur-belum-terbayar') }}",
+            'pembayaran_faktur_belum_terbayar' : "{{ route('orders.pembayaran-faktur-belum-terbayar') }}",
         }
         const data_filter_belumterbayar = {
             'kode_sales': '{{ $kode_sales }}',

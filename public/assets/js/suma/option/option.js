@@ -2,6 +2,7 @@
 // Load Data Supervisor
 // =====================================================================
 function loadDataSupervisor(page = 1, per_page = 10, search = '') {
+    loading.block();
     $.ajax({
         url: base_url + '/option/supervisor' + "?search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
@@ -19,6 +20,19 @@ function loadDataSupervisor(page = 1, per_page = 10, search = '') {
             } else {
                 $('#supervisorContentModal').html(response.data);
             }
+            loading.release();
+        },
+        error: function() {
+            Swal.fire({
+                text: 'Tidak terhubung ke server, coba lagi',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+            loading.release();
         }
     });
 }
@@ -65,6 +79,7 @@ $('#searchSupervisorForm #inputSearchSupervisor').on('change', function (e) {
 // Load Data Salesman
 // =====================================================================
 function loadDataSalesman(page = 1, per_page = 10, search = '') {
+    loading.block();
     $.ajax({
         url: base_url + '/option/salesman' + "?search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
@@ -82,6 +97,19 @@ function loadDataSalesman(page = 1, per_page = 10, search = '') {
             } else {
                 $('#salesmanContentModal').html(response.data);
             }
+            loading.release();
+        },
+        error: function() {
+            Swal.fire({
+                text: 'Tidak terhubung ke server, coba lagi',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+            loading.release();
         }
     });
 }
@@ -128,6 +156,7 @@ $('#searchSalesmanForm #inputSearchSalesman').on('change', function (e) {
 // Load Data Dealer Salesman
 // =====================================================================
 function loadDataDealerSalesman(salesman = '', page = 1, per_page = 10, search = '') {
+    loading.block();
     $.ajax({
         url: base_url + '/option/dealersalesman' + "?salesman=" + salesman + "&search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
@@ -145,6 +174,19 @@ function loadDataDealerSalesman(salesman = '', page = 1, per_page = 10, search =
             } else {
                 $('#dealerSalesmanContentModal').html(response.data);
             }
+            loading.release();
+        },
+        error: function() {
+            Swal.fire({
+                text: 'Tidak terhubung ke server, coba lagi',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+            loading.release();
         }
     });
 }
@@ -195,6 +237,7 @@ $('#searchDealerSalesmanForm #inputSearchDealerSalesman').on('change', function 
 // Load Data Dealer
 // =====================================================================
 function loadDataDealer(page = 1, per_page = 10, search = '') {
+    loading.block();
     $.ajax({
         url: base_url + '/option/dealer' + "?search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
@@ -212,6 +255,19 @@ function loadDataDealer(page = 1, per_page = 10, search = '') {
             } else {
                 $('#dealerContentModal').html(response.data);
             }
+            loading.release();
+        },
+        error: function() {
+            Swal.fire({
+                text: 'Tidak terhubung ke server, coba lagi',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+            loading.release();
         }
     });
 }
@@ -258,6 +314,7 @@ $('#searchDealerForm #inputSearchDealer').on('change', function (e) {
 // Load Data Tipe Motor
 // =====================================================================
 function loadDataTipeMotor(page = 1, per_page = 10, search = '') {
+    loading.block();
     $.ajax({
         url: base_url + '/option/tipemotor' + "?search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
@@ -275,6 +332,19 @@ function loadDataTipeMotor(page = 1, per_page = 10, search = '') {
             } else {
                 $('#tipeMotorContentModal').html(response.data);
             }
+            loading.release();
+        },
+        error: function() {
+            Swal.fire({
+                text: 'Tidak terhubung ke server, coba lagi',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+            loading.release();
         }
     });
 }
@@ -323,6 +393,7 @@ $('#searchTipeMotorForm #inputSearchTipeMotor').on('change', function (e) {
 function loadDataProduk(page = 1, per_page = 10, search = '', level = '') {
     $('#searchProdukForm #inputFilterLevelProduk').html(level);
 
+    loading.block();
     $.ajax({
         url: base_url + '/option/groupproduk' + "?level=" + level + "&search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
@@ -340,6 +411,19 @@ function loadDataProduk(page = 1, per_page = 10, search = '', level = '') {
             } else {
                 $('#produkContentModal').html(response.data);
             }
+            loading.release();
+        },
+        error: function () {
+            Swal.fire({
+                text: 'Tidak terhubung ke server, coba lagi',
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                }
+            });
+            loading.release();
         }
     });
 }
@@ -382,6 +466,8 @@ $('#searchProdukForm #inputSearchProduk').on('change', function (e) {
     var level_produk = $('#searchProdukForm #inputFilterLevelProduk').html();
     var search_produk = $('#searchProdukForm #inputSearchProduk').val();
     var per_page_produk = $('#searchProdukForm #produkContentModal #pageProduk #selectPerPageProduk').val();
+
+    console.log(level_produk);
 
     loadDataProduk(1, per_page_produk, search_produk, level_produk);
 });

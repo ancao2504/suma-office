@@ -167,82 +167,87 @@
         @include('layouts.option.optiondealerindex')
 
         <script type="text/javascript">
-            $('body').on('click', '.menu-item a', function(e) {
-                loading.block();
-            });
-
-            $('body').on('keypress', '#searchHeaderParts', function(e) {
-                if (e.which == 13) {
-                    loading.block();
-                }
-            });
-
-            @if ($title_menu != 'Cart')
-                getInfoDataCart();
-            @else
-                $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                document.getElementById('kt_body').removeAttribute("style");
-            @endif
-
-            function getInfoDataCart() {
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url: "{{ route('header.cart-total') }}",
-                    method: "POST",
-                    data: { _token: _token },
-
-                    success:function(response) {
-                        if (response.status == true) {
-                            $('#infoCartTotal').html(response.view_total_estimate_cart);
-                            if(response.view_total_item_cart > 0) {
-                                $('#infoItemCart').html(response.view_total_item_cart);
-                            } else {
-                                $('#infoItemCart').html('');
-                            }
-                            $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed');
-                            document.getElementById('kt_body').style.cssText = '--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px';
-                        } else {
-                            $('#infoItemCart').html('');
-                            $('#infoCartTotal').html('');
-                            $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                            document.getElementById('kt_body').removeAttribute("style");
-                        }
-                    }
-                });
-            }
-
-            function openModalSalesDealer() {
-                var _token = $('input[name="_token"]').val();
-
-                $.ajax({
-                    url: "{{ route('orders.edit-header-cart') }}",
-                    method: "POST",
-                    data: { _token: _token },
-                    success:function(response) {
-                        if (response.status == false) {
-                            Swal.fire({
-                                text: response.message,
-                                icon: "error",
-                                buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-danger"
-                                }
-                            });
-                        } else {
-                            if(response.data != null) {
-                                $('#inputKodeSalesIndex').val(response.data.salesman);
-                                $('#inputKodeDealerIndex').val(response.data.dealer);
-                            }
-
-                            $('#modalSalesmanDealerIndex').modal({backdrop: 'static', keyboard: false});
-                            $('#modalSalesmanDealerIndex').modal('show');
-                        }
-                    }
-                });
-            }
+            // window.onbeforeunload = function(e) {
+            //     loading.block();
+            // };
 
             $(document).ready(function() {
+                loading.release();
+                @if ($title_menu != 'Cart')
+                    getInfoDataCart();
+                @else
+                    $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
+                    document.getElementById('kt_body').removeAttribute("style");
+                @endif
+
+                function getInfoDataCart() {
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url: "{{ route('header.cart-total') }}",
+                        method: "POST",
+                        data: { _token: _token },
+
+                        success:function(response) {
+                            if (response.status == true) {
+                                $('#infoCartTotal').html(response.view_total_estimate_cart);
+                                if(response.view_total_item_cart > 0) {
+                                    $('#infoItemCart').html(response.view_total_item_cart);
+                                } else {
+                                    $('#infoItemCart').html('');
+                                }
+                                $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed');
+                                document.getElementById('kt_body').style.cssText = '--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px';
+                            } else {
+                                $('#infoItemCart').html('');
+                                $('#infoCartTotal').html('');
+                                $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
+                                document.getElementById('kt_body').removeAttribute("style");
+                            }
+                        }
+                    });
+                }
+
+                function openModalSalesDealer() {
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                        url: "{{ route('orders.edit-header-cart') }}",
+                        method: "POST",
+                        data: { _token: _token },
+                        success:function(response) {
+                            if (response.status == false) {
+                                Swal.fire({
+                                    text: response.message,
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger"
+                                    }
+                                });
+                            } else {
+                                if(response.data != null) {
+                                    $('#inputKodeSalesIndex').val(response.data.salesman);
+                                    $('#inputKodeDealerIndex').val(response.data.dealer);
+                                }
+
+                                $('#modalSalesmanDealerIndex').modal({backdrop: 'static', keyboard: false});
+                                $('#modalSalesmanDealerIndex').modal('show');
+                            }
+                        }
+                    });
+                }
+
+                $('body').on('click', '.menu-item a', function(e) {
+                    loading.block();
+                });
+
+                $('body').on('keypress', '#searchHeaderParts', function(e) {
+                    if (e.which == 13) {
+                        loading.block();
+                    }
+                });
+
                 $('body').on('click', '#btnSalesmanDealerIndex', function(e) {
                     openModalSalesDealer();
                 });

@@ -6,7 +6,21 @@
     <div class="card-header align-items-center border-0 mt-4 mb-4">
         <h3 class="card-title align-items-start flex-column">
             <span class="fw-bolder mb-2 text-dark">Dashboard Marketing</span>
-            <span class="text-muted fw-bolder fs-7">Pencapaian Per-Produk {{ $year }}</span>
+            <span class="text-muted fw-boldest fs-7">Pencapaian Per-Produk
+                @if($month == 1) Januari
+                @elseif($month == 2) Februari
+                @elseif($month == 3) Maret
+                @elseif($month == 4) April
+                @elseif($month == 5) Mei
+                @elseif($month == 6) Juni
+                @elseif($month == 7) Juli
+                @elseif($month == 8) Agustus
+                @elseif($month == 9) September
+                @elseif($month == 10) Oktober
+                @elseif($month == 11) November
+                @elseif($month == 12) Desember
+                @endif {{ $year }}
+            </span>
         </h3>
         <div class="card-toolbar">
             <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -21,15 +35,15 @@
             <span class="fw-bolder mb-2 text-dark">Data Pencapaian Per-Produk</span>
             <div class="d-flex align-items-center">
                 @if($level_produk == "")
-                <span class="badge badge-light-info fs-8 fw-boldest me-2">LEVEL : ALL</span>
+                <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                 @else
-                <span class="badge badge-light-info fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
+                <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
                 @endif
                 @if($kode_produk != "")
-                <span class="badge badge-light-primary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
+                <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
                 @endif
                 @if($kode_mkr != "")
-                <span class="badge badge-light-danger fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
                 @endif
             </div>
         </h3>
@@ -92,7 +106,7 @@
                     <div class="fv-row mt-8">
                         <label class="form-label">Produk:</label>
                         <div class="input-group">
-                            <input id="inputFilterKodeProduk" name="kode_produk" type="search" class="form-control" placeholder="Semua Produk" readonly
+                            <input id="inputFilterKodeProduk" name="kode_produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
                                 @if(isset($kode_produk)) value="{{ $kode_produk }}" @else value="{{ old('kode_produk') }}"@endif>
                             <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
                                 data-toggle="modal" data-target="#produkSearchModalForm">
@@ -111,7 +125,7 @@
                     <div class="fv-row mt-8">
                         <label id="labelKodeMkr" class="form-label">Kode Marketing:</label>
                         <div class="input-group">
-                            <input id="inputFilterKodeMkr" name="kode_mkr" type="search" class="form-control" placeholder="Semua Marketing" readonly
+                            <input id="inputFilterKodeMkr" name="kode_mkr" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Marketing" readonly
                                 @if(isset($kode_mkr)) value="{{ $kode_mkr }}" @else value="{{ old('kode_mkr') }}"@endif>
                             <button id="btnFilterMarketing" name="btnFilterMarketing" class="btn btn-icon btn-primary" type="button"
                                 data-toggle="modal" data-target="#tipeMotorSearchModal">

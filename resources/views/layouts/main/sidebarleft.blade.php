@@ -412,7 +412,7 @@
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -449,7 +449,7 @@
                         </div>
                     </div>
                     <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div data-kt-menu-trigger="click" class="menu-item here menu-accordion {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -475,6 +475,16 @@
                                     </a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/cetakulang*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div class="menu-item">
+                            <a class="menu-link {{ (Request::is('setting/cetakulang*')) ? 'active' : '' }}" href="{{ url('/setting/cetakulang') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Cetak Ulang</span>
+                            </a>
                         </div>
                     </div>
                 </div>

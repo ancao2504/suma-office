@@ -1683,4 +1683,62 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function SettingCetakUlangDaftar($year, $month, $jenis, $page, $per_page, $role_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/cetakulang';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'year'      => trim($year),
+            'month'     => trim($month),
+            'jenis'     => trim($jenis),
+            'page'      => $page ?? 1,
+            'per_page'  => $per_page ?? 10,
+            'role_id'   => strtoupper(trim($role_id)),
+            'companyid' => strtoupper(trim($companyid)),
+        ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function SettingCetakUlangCekDokumen($nomor_dokumen, $jenis_transaksi, $divisi, $role_id)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/cetakulang/cekdokumen';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'no_dokumen'        => trim($nomor_dokumen),
+            'jenis_transaksi'   => trim($jenis_transaksi),
+            'divisi'            => trim($divisi),
+            'role_id'           => strtoupper(trim($role_id))
+        ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function SettingCetakUlangSimpan($nomor_dokumen, $jenis_transaksi, $divisi, $kode_cabang, $company_dokumen, $approve, $edit, $alasan, $role_id, $user_id, $companyid)
+    {
+        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $request = 'setting/cetakulang/simpan';
+        $header = ['Authorization' => $credential];
+        $body = [
+            'no_dokumen'        => trim($nomor_dokumen),
+            'jenis_transaksi'   => trim($jenis_transaksi),
+            'divisi'            => trim($divisi),
+            'kode_cabang'       => trim($kode_cabang),
+            'company_dokumen'   => trim($company_dokumen),
+            'approve'           => trim($approve),
+            'edit'              => trim($edit),
+            'alasan'            => trim($alasan),
+            'user_id'           => trim($user_id),
+            'role_id'           => strtoupper(trim($role_id)),
+            'companyid'         => strtoupper(trim($companyid)),
+        ];
+
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

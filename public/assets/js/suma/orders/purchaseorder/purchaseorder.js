@@ -46,6 +46,13 @@ $(document).ready(function () {
         $('#salesmanSearchModal').modal('show');
     });
 
+    $('#modalFilter #inputFilterSalesman').on('click', function (e) {
+        e.preventDefault();
+        loadDataSalesman();
+        $('#searchSalesmanForm').trigger('reset');
+        $('#salesmanSearchModal').modal('show');
+    });
+
     $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
         e.preventDefault();
         $('#inputFilterSalesman').val($(this).data('kode_sales'));
@@ -59,6 +66,12 @@ $(document).ready(function () {
         $('#dealerSearchModal').modal('show');
     });
 
+    $('#inputFilterDealer').on('click', function (e) {
+        e.preventDefault();
+        loadDataDealer(1, 10, '');
+        $('#searchDealerForm').trigger('reset');
+        $('#dealerSearchModal').modal('show');
+    });
 
     $('body').on('click', '#dealerContentModal #selectDealer', function (e) {
         e.preventDefault();

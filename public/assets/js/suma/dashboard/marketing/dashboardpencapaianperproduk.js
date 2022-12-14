@@ -52,6 +52,15 @@ $(document).ready(function () {
         $('#produkSearchModal').modal('show');
     });
 
+    $('#inputFilterKodeProduk').on('click', function (e) {
+        e.preventDefault();
+
+        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
+        loadDataProduk(1, 10, '', selectFilterLevelProduk);
+        $('#searchProdukForm').trigger('reset');
+        $('#produkSearchModal').modal('show');
+    });
+
     $('body').on('click', '#produkContentModal #selectProduk', function (e) {
         e.preventDefault();
         $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
@@ -63,6 +72,21 @@ $(document).ready(function () {
     });
 
     $('#btnFilterMarketing').on('click', function (e) {
+        e.preventDefault();
+        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
+
+        if (jenis_mkr == "SALESMAN") {
+            loadDataSalesman();
+            $('#searchSalesmanForm').trigger('reset');
+            $('#salesmanSearchModal').modal('show');
+        } else if (jenis_mkr == "SUPERVISOR") {
+            loadDataSupervisor();
+            $('#searchSupervisorForm').trigger('reset');
+            $('#supervisorSearchModal').modal('show');
+        }
+    });
+
+    $('#inputFilterKodeMkr').on('click', function (e) {
         e.preventDefault();
         var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
 

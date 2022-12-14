@@ -7,7 +7,23 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Part Number</span>
-                    <span class="text-muted fw-bold fs-7">Daftar parts suma honda</span>
+                    <span class="text-muted fw-boldest fs-7">Daftar parts suma honda</span>
+                    @if(trim($kode_level) != '' || trim($kode_produk) != '' || trim($tipe_motor) != '' || trim($part_number) != '')
+                    <div class="d-flex align-items-center mt-4">
+                        @if(isset($kode_level) && trim($kode_level) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ trim($kode_level) }}</span>
+                        @endif
+                        @if(isset($kode_produk) && trim($kode_produk) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ trim($kode_produk) }}</span>
+                        @endif
+                        @if(isset($tipe_motor) && trim($tipe_motor) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">TIPE MOTOR : {{ trim($tipe_motor) }}</span>
+                        @endif
+                        @if(isset($part_number) && trim($part_number) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-22">PART NUMBER : {{ trim($part_number) }}</span>
+                        @endif
+                    </div>
+                    @endif
                 </h3>
                 <div class="card-toolbar">
                     <button id="btnFilterPartNumber" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -143,7 +159,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Produk:</label>
                             <div class="input-group">
-                                <input id="inputFilterKodeProduk" name="group_produk" type="search" class="form-control" placeholder="Semua Produk" readonly
+                                <input id="inputFilterKodeProduk" name="group_produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
                                     @if(isset($kode_produk)) value="{{ $kode_produk }}" @else value="{{ old('produk') }}"@endif>
                                 <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
                                     data-toggle="modal" data-target="#produkSearchModalForm">
@@ -154,7 +170,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Tipe Motor:</label>
                             <div class="input-group">
-                                <input id="inputFilterTipeMotor" name="tipe_motor" type="search" class="form-control" placeholder="Semua Tipe Motor" readonly
+                                <input id="inputFilterTipeMotor" name="tipe_motor" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Tipe Motor" readonly
                                     @if(isset($tipe_motor)) value="{{ $tipe_motor }}" @else value="{{ old('tipe_motor') }}"@endif>
                                 <button id="btnFilterPilihTipeMotor" name="btnFilterPilihTipeMotor" class="btn btn-icon btn-primary" type="button"
                                     data-toggle="modal" data-target="#tipeMotorSearchModal">

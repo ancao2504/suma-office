@@ -287,6 +287,10 @@
 
     @push('scripts')
         <script type="text/javascript">
+            function loadDetailPurchaseOrder() {
+                var nomorPof = $('#inputNomorPof').val();
+                $('#detailPurchaseOrderForm').load('<?php echo url("orders/purchaseorder/view/detail/' + nomorPof + '");?>');
+            }
             const url_route = {
                 'option_part_number' : "{{ route('option.option-part-number') }}",
                 'validasi_part_number' : "{{ route('validasi.validasi-part-number') }}",

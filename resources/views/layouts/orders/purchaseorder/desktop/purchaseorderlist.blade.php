@@ -3,14 +3,14 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-row-dashed table-row-gray-300 align-middle">
-                    <thead>
+                    <thead class="border">
                         <tr class="fw-bolder text-muted">
-                            <th class="w-50px">No</th>
-                            <th class="w-100px">No POF</th>
-                            <th class="w-100px">Tanggal</th>
-                            <th class="w-50px">Salesman</th>
-                            <th class="w-50px">Dealer</th>
-                            <th class="w-150px">Keterangan</th>
+                            <th class="w-50px text-center">No</th>
+                            <th class="w-100px text-center">No POF</th>
+                            <th class="w-100px text-center">Tanggal</th>
+                            <th class="w-50px text-center">Salesman</th>
+                            <th class="w-50px text-center">Dealer</th>
+                            <th class="w-150px text-center">Keterangan</th>
                             <th class="w-50px text-end">Order</th>
                             <th class="w-50px text-end">Terlayani</th>
                             <th class="w-50px text-center">TPC</th>
@@ -18,37 +18,37 @@
                             <th class="w-50px text-end">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="border">
                         @forelse($data_pof as $data)
                         <tr>
-                            <td>{{ (($page->page * $page->per_page) + $loop->iteration) - 10 }}</td>
-                            <td>
-                                <a href="{{ route('orders.purchase-order-form', trim($data->nomor_pof)) }}" class="fs-6 fw-bold text-gray-800 text-hover-primary">{{ trim($data->nomor_pof) }}</a>
+                            <td class="ps-3 pe-3 fs-7 fw-bolder text-gray-800 text-center">{{ (($page->page * $page->per_page) + $loop->iteration) - 10 }}</td>
+                            <td class="ps-3 pe-3">
+                                <a href="{{ route('orders.purchase-order-form', trim($data->nomor_pof)) }}" class="fs-7 fw-bolder text-gray-800 text-hover-primary">{{ trim($data->nomor_pof) }}</a>
                             </td>
-                            <td class="fs-6 fw-bold text-gray-800">{{ date('d/m/Y', strtotime($data->tanggal_pof)) }}</td>
-                            <td><span class="badge badge-light-info fs-7 fw-boldest text-uppercase">{{ trim($data->kode_sales) }}</span></td>
-                            <td><span class="badge badge-light-primary fs-7 fw-boldest text-uppercase">{{ trim($data->kode_dealer) }}</span></td>
-                            <td class="fs-6 fw-bold text-gray-800">{{ $data->keterangan }}</td>
-                            <td class="fs-6 fw-bold text-gray-800 text-end">{{ number_format($data->jml_order) }}</td>
-                            <td class="text-end">
+                            <td class="ps-3 pe-3 fs-7 fw-bolder text-gray-800 text-center">{{ date('d/m/Y', strtotime($data->tanggal_pof)) }}</td>
+                            <td class="ps-3 pe-3"><span class="badge badge-light-info fs-7 fw-boldest text-uppercase">{{ trim($data->kode_sales) }}</span></td>
+                            <td class="ps-3 pe-3"><span class="badge badge-light-primary fs-7 fw-boldest text-uppercase">{{ trim($data->kode_dealer) }}</span></td>
+                            <td class="ps-3 pe-3 fs-7 fw-bolder text-gray-800">{{ $data->keterangan }}</td>
+                            <td class="ps-3 pe-3 fs-7 fw-bolder text-gray-800 text-end">{{ number_format($data->jml_order) }}</td>
+                            <td class="ps-3 pe-3 text-end">
                                 @if ($data->terlayani > 0)
                                     @if ($data->terlayani == $data->jml_order )
-                                    <span class="text-success fs-6 fw-bolder">{{ $data->terlayani }}</span>
+                                    <span class="text-success fs-7 fw-boldest">{{ $data->terlayani }}</span>
                                     @else
-                                    <span class="text-info fs-6 fw-bolder">{{ $data->terlayani }}</span>
+                                    <span class="text-info fs-7 fw-boldest">{{ $data->terlayani }}</span>
                                     @endif
                                 @else
-                                <span class="text-danger fs-6 fw-bolder">{{ $data->terlayani }}</span>
+                                <span class="text-danger fs-7 fw-boldest">{{ $data->terlayani }}</span>
                                 @endif
                             </td>
-                            <td class="text-center">
+                            <td class="ps-3 pe-3 text-center">
                                 @if($data->kode_tpc == '14')
                                 <span class="badge badge-light-primary fs-7 fw-boldest">14</span>
                                 @else
                                 <span class="badge badge-light-danger fs-7 fw-boldest">20</span>
                                 @endif
                             </td>
-                            <td class="text-center">
+                            <td class="ps-3 pe-3 text-center">
                                 @if($data->on_faktur == 1)
                                 <div class="badge badge-light-success badge-lg fs-8 fw-boldest mt-2">TERPROSES</div>
                                 @else
@@ -59,7 +59,7 @@
                                     @endif
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td class="ps-3 pe-3 text-end">
                                 <a href="{{ route('orders.purchase-order-form', trim($data->nomor_pof)) }}" class="btn btn-icon btn-primary btn-sm">
                                     <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
                                 </a>

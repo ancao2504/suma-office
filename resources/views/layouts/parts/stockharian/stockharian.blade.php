@@ -151,7 +151,7 @@
                     <button name="action" value="cetak" class="btn btn-primary" type="submit" formtarget="_blank">
                         <i class="bi bi-printer-fill fs-4 me-2"></i>Cetak
                     </button>
-                    <button name="action" value="excel" class="btn btn-success" type="submit">
+                    <button id="excel" name="action" value="excel" class="btn btn-success" type="submit">
                         <i class="bi bi-file-earmark-excel-fill fs-4 me-2"></i>Excel
                     </button>
                 </div>
@@ -161,6 +161,24 @@
 
     @push('scripts')
         <script type="text/javascript">
+            // $(document).on('click', '#excel', function(e) {
+            //     e.preventDefault();
+
+            //     $.ajax({
+            //         type: "get",
+            //         url: "{{ route('parts.stock-harian-proses') }}",
+            //         success: function (d){
+            //             var a = document.createElement("a");
+            //             a.download = "filename.xls";
+            //             a.href = "data:application/vnd.ms-excel,"+encodeURI(d);
+            //             document.body.appendChild(a);
+            //             a.click();
+            //         }
+            //     });
+            // });
+            // $(document).ready(function() {
+
+            // });
         </script>
     @endpush
 @endsection

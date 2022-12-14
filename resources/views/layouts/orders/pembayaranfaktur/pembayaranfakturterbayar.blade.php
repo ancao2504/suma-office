@@ -6,7 +6,34 @@
                 <div class="card-header align-items-center border-0 mt-4">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="fw-bolder mb-2 text-dark">Terbayar</span>
-                        <span class="text-muted fw-bold fs-7">Daftar faktur yang sudah terbayar (data yang ditampilkan berdasarkan bulan dan tahun faktur)</span>
+                        <span class="text-muted fw-boldest fs-7">Daftar faktur yang sudah terbayar faktur
+                            @if($month == 1) Januari
+                            @elseif($month == 2) Februari
+                            @elseif($month == 3) Maret
+                            @elseif($month == 4) April
+                            @elseif($month == 5) Mei
+                            @elseif($month == 6) Juni
+                            @elseif($month == 7) Juli
+                            @elseif($month == 8) Agustus
+                            @elseif($month == 9) September
+                            @elseif($month == 10) Oktober
+                            @elseif($month == 11) November
+                            @elseif($month == 12) Desember
+                            @endif {{ $year }}
+                        </span>
+                        @if(trim($kode_sales) != '' || trim($kode_dealer) != '' || trim($nomor_faktur) != '')
+                        <div class="d-flex align-items-center mt-4 mb-4">
+                            @if(trim($kode_sales) != '')
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ strtoupper(trim($kode_sales)) }}</span>
+                            @endif
+                            @if(trim($kode_dealer) != '')
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ strtoupper(trim($kode_dealer)) }}</span>
+                            @endif
+                            @if(trim($nomor_faktur) != '')
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">FAKTUR : {{ strtoupper(trim($nomor_faktur)) }}</span>
+                            @endif
+                        </div>
+                        @endif
                     </h3>
                     <div class="card-toolbar">
                         <button id="btnFilterPembayaran" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -26,7 +53,7 @@
                 <div class="card-boady">
                     <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('orders.pembayaran-faktur-terbayar') }}">
                         <div class="modal-body row">
-                            <div class="col-md-6">
+                            <div class="fv-row">
                                 <label class="form-label required">Bulan:</label>
                                 <select id="selectFilterMonth" name="month" class="form-select">
                                     <option value="1" @if($month == 1) {{"selected"}} @endif>Januari</option>
@@ -43,15 +70,15 @@
                                     <option value="12" @if($month == 12) {{"selected"}} @endif>Desember</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="fv-row mt-6">
                                 <label class="form-label required">Tahun:</label>
                                 <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun"
                                     @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
                             </div>
-                            <div class="col-md-6">
+                            <div class="fv-row mt-6">
                                 <label class="form-label">Salesman:</label>
                                 <div class="input-group">
-                                    <input id="inputFilterSalesman" name="salesman" type="search" class="form-control @if($role_id == 'MD_H3_SM' || $role_id =='D_H3')bg-secondary @endif" placeholder="Semua Salesman" readonly
+                                    <input id="inputFilterSalesman" name="salesman" type="search" style="cursor: pointer;" class="form-control @if($role_id == 'MD_H3_SM' || $role_id =='D_H3')bg-secondary @endif" placeholder="Semua Salesman" readonly
                                         @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
                                     @if($role_id != 'MD_H3_SM')
                                         @if($role_id != 'D_H3')
@@ -63,10 +90,10 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="fv-row mt-6">
                                 <label class="form-label">Dealer:</label>
                                 <div class="input-group">
-                                    <input id="inputFilterDealer" name="dealer" type="search" class="form-control @if($role_id =='D_H3') bg-secondary @endif" placeholder="Semua Dealer" readonly
+                                    <input id="inputFilterDealer" name="dealer" type="search" style="cursor: pointer;" class="form-control @if($role_id =='D_H3') bg-secondary @endif" placeholder="Semua Dealer" readonly
                                         @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
                                     @if($role_id != 'D_H3')
                                     <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
@@ -76,7 +103,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="fv-row mt-6">
                                 <label class="form-label">Nomor Faktur:</label>
                                 <div class="input-group has-validation mb-2">
                                     <input id="inputFilterNomorFaktur" name="nomor_faktur" type="search" class="form-control" placeholder="Semua Nomor Faktur"
@@ -96,7 +123,7 @@
             </div>
         @endif
 
-        @if ($data_pembayaran == null && request()->get('month')!= null || request()->get('year') != null || request()->get('salesman') != null || request()->get('dealer') != null || request()->get('number_faktur') != null)
+        @if ($data_pembayaran == null)
             <div class="card card-flush mt-4 p-5">
                 <div class="text-center">
                     <div class="text-muted">Tidak ada data yang ditampilkan</div>
@@ -110,7 +137,7 @@
         @endif
     </div>
 
-    
+
     @if (request()->get('month') ||request()->get('year') ||request()->get('salesman') || request()->get('dealer') || request()->get('number_faktur'))
     <div class="modal fade" tabindex="-1" id="modalFilter">
         <div class="modal-dialog">
@@ -153,7 +180,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Salesman:</label>
                             <div class="input-group">
-                                <input id="inputFilterSalesman" name="salesman" type="search" class="form-control @if($role_id == 'MD_H3_SM' || $role_id =='D_H3')bg-secondary @endif" placeholder="Semua Salesman" readonly
+                                <input id="inputFilterSalesman" name="salesman" type="search" style="cursor: pointer;" class="form-control @if($role_id == 'MD_H3_SM' || $role_id =='D_H3')bg-secondary @endif" placeholder="Semua Salesman" readonly
                                     @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
                                 @if($role_id != 'MD_H3_SM')
                                     @if($role_id != 'D_H3')
@@ -168,7 +195,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Dealer:</label>
                             <div class="input-group">
-                                <input id="inputFilterDealer" name="dealer" type="search" class="form-control @if($role_id =='D_H3')bg-secondary @endif" placeholder="Semua Dealer" readonly
+                                <input id="inputFilterDealer" name="dealer" type="search" style="cursor: pointer;" class="form-control @if($role_id =='D_H3')bg-secondary @endif" placeholder="Semua Dealer" readonly
                                     @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
                                 @if($role_id != 'D_H3')
                                 <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"

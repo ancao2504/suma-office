@@ -31,28 +31,7 @@ $(document).ready(function () {
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
     }
-    // end pagination scroll
 
-    // window.addEventListener("scroll", myFunction);
-    // // saat kt_aside_footer terlihat di layar maka
-    // function myFunction() {
-    //     var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
-    //     console.log(scrollpercent);
-    //     if (scrollpercent > 0.975 && scrollpercent <= 1 && loading.isBlocked() === false) {
-    //         const params = new URLSearchParams(window.location.search)
-    //         for (const param of params) {
-    //             var tipe_motor = params.get('tipe_motor');
-    //             var group_level = params.get('group_level');
-    //             var group_produk = params.get('group_produk');
-    //             var part_number = params.get('part_number');
-    //         }
-    //         pages++;
-    //         loadMoreData(tipe_motor, group_level, group_produk, part_number, pages);
-    //         // console.log(pages);
-    //     }
-    // }
-
-    // load more data
     async function loadMoreData(tipe_motor, group_level, group_produk, part_number, pages) {
         loading.block();
 
@@ -88,7 +67,6 @@ $(document).ready(function () {
             }
         });
     }
-    // end load more data
 
     $('#btnFilterPartNumber').on('click', function (e) {
         e.preventDefault();
@@ -99,6 +77,15 @@ $(document).ready(function () {
         $('#inputFilterPartNumber').val(data_filter.part_number);
 
         $('#modalFilter').modal('show');
+    });
+
+    $('#inputFilterKodeProduk').on('click', function (e) {
+        e.preventDefault();
+
+        var selectFilterGroupLevel = $('#selectFilterGroupLevel').val();
+        loadDataProduk(1, 10, '', selectFilterGroupLevel);
+        $('#searchProdukForm').trigger('reset');
+        $('#produkSearchModal').modal('show');
     });
 
     $('#btnFilterProduk').on('click', function (e) {
@@ -116,6 +103,13 @@ $(document).ready(function () {
         $('#produkSearchModal').modal('hide');
     });
 
+    $('#inputFilterTipeMotor').on('click', function (e) {
+        e.preventDefault();
+
+        loadDataTipeMotor();
+        $('#searchTipeMotorForm').trigger('reset');
+        $('#tipeMotorSearchModal').modal('show');
+    });
 
     $('#btnFilterPilihTipeMotor').on('click', function (e) {
         e.preventDefault();
@@ -193,7 +187,6 @@ $(document).ready(function () {
     $('#btnOrder').click(function (e) {
         e.preventDefault();
 
-        var messageErrorPartNumber = '';
         var part_number = $('#modalTextPartNumber').html();
         var jml_order = $('#inputJumlahOrder').val();
         var _token = $('input[name="_token"]').val();

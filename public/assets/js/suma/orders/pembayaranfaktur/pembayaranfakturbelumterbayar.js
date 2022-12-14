@@ -5,9 +5,9 @@ $(document).ready(function () {
 
     const params = new URLSearchParams(window.location.search)
     for (const param of params) {
-        var salesman = params.get('salesman');
-        var dealer = params.get('dealer');
-        var nomor_faktur = params.get('nomor_faktur');
+        var salesman = params.get('salesman').trim();
+        var dealer = params.get('dealer').trim();
+        var nomor_faktur = params.get('nomor_faktur').trim();
     }
 
     if(salesman || dealer || nomor_faktur) {
@@ -16,34 +16,32 @@ $(document).ready(function () {
                 if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                     const params = new URLSearchParams(window.location.search)
                     for (const param of params) {
-                        var start_date = params.get('start_date');
-                        var end_date = params.get('month');
-                        var salesman = params.get('salesman');
-                        var dealer = params.get('dealer');
-                        var nomor_faktur = params.get('nomor_faktur');
+                        var start_date = params.get('start_date').trim();
+                        var end_date = params.get('month').trim();
+                        var salesman = params.get('salesman').trim();
+                        var dealer = params.get('dealer').trim();
+                        var nomor_faktur = params.get('nomor_faktur').trim();
                     }
                     pages++;
                     loadMoreData(start_date, end_date, salesman, dealer, nomor_faktur, pages);
                 }
             }
         });
-    
+
         window.onbeforeunload = function () {
             window.scrollTo(0, 0);
         }
     }
 
-
-
     async function loadMoreData(start_date, end_date, salesman, dealer, nomor_faktur, pages) {
         loading.block();
 
         $.ajax({
-            url: url_belumterbayar.ayaran_faktur_belum_terbayar,
+            url: url_belumterbayar.pembayaran_faktur_belum_terbayar,
             type: "get",
             data: {
                 start_date: start_date, end_date: end_date, page: pages,
-                salesman: salesman, dealer: dealer, nomor_faktur: nomor_faktur
+                salesman: salesman.trim(), dealer: dealer.trim(), nomor_faktur: nomor_faktur.trim()
             },
 
             success: function (response) {
@@ -81,6 +79,13 @@ $(document).ready(function () {
         $('#modalFilter').modal('show');
     });
 
+    $('#inputFilterSalesman').on('click', function (e) {
+        e.preventDefault();
+        loadDataSalesman();
+        $('#searchSalesmanForm').trigger('reset');
+        $('#salesmanSearchModal').modal('show');
+    });
+
     $('#btnFilterPilihSalesman').on('click', function (e) {
         e.preventDefault();
         loadDataSalesman();
@@ -92,6 +97,13 @@ $(document).ready(function () {
         e.preventDefault();
         $('#inputFilterSalesman').val($(this).data('kode_sales'));
         $('#salesmanSearchModal').modal('hide');
+    });
+
+    $('#inputFilterDealer').on('click', function (e) {
+        e.preventDefault();
+        loadDataDealer(1, 10, '');
+        $('#searchDealerForm').trigger('reset');
+        $('#dealerSearchModal').modal('show');
     });
 
     $('#btnFilterPilihDealer').on('click', function (e) {

@@ -7,7 +7,10 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Dealer</span>
-                    <span class="text-muted fw-bold fs-7">Dashboard Dealer
+                    <span class="text-muted fw-boldest fs-7">Dashboard Dealer
+                        @if(isset($kode_dealer))
+                        {{ strtoupper($kode_dealer) }}
+                        @endif
                         @if($month == 1) Januari
                         @elseif($month == 2) Februari
                         @elseif($month == 3) Maret
@@ -125,14 +128,7 @@
                     <div class="card-header pt-5">
                         <div class="card-title d-flex flex-column">
                             <div class="d-flex align-items-center">
-                                @if($kode_dealer == '' || empty($kode_dealer))
                                 <i class="bi bi-infinity fs-2hx text-white"></i>
-                                @else
-                                    @if(isset($sisa_limit_piutang))
-                                    <span class="fs-6 fw-bolder text-white me-1 align-self-start">Rp.</span>
-                                    <span class="fs-2hx fw-bolder text-white me-2 lh-1 ls-n2">@if(isset($sisa_piutang)) {{ number_format($sisa_piutang) }} @endif</span>
-                                    @endif
-                                @endif
                             </div>
                             <span class="text-white pt-1 fw-bolder fs-6">Grand Total</span>
                         </div>
@@ -156,7 +152,7 @@
                         <div class="card-header p-6">
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bolder text-gray-800">Pembayaran</span>
-                                <span class="text-gray-400 mt-1 fw-bold fs-6">Daftar faktur belum terbayar</span>
+                                <span class="text-muted mt-1 fw-boldest fs-7">Daftar faktur belum terbayar</span>
                             </h3>
                         </div>
                         <div class="card-body pt-6">

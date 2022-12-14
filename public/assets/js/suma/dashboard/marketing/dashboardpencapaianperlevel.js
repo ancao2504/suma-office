@@ -61,6 +61,22 @@ $(document).ready(function () {
         }
     });
 
+    $('#inputFilterKodeMkr').on('click', function (e) {
+        e.preventDefault();
+
+        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
+
+        if (jenis_mkr == "SALESMAN") {
+            loadDataSalesman();
+            $('#searchSalesmanForm').trigger('reset');
+            $('#salesmanSearchModal').modal('show');
+        } else if (jenis_mkr == "SUPERVISOR") {
+            loadDataSupervisor();
+            $('#searchSupervisorForm').trigger('reset');
+            $('#supervisorSearchModal').modal('show');
+        }
+    });
+
     $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
         e.preventDefault();
         $('#inputFilterKodeMkr').val($(this).data('kode_sales'));

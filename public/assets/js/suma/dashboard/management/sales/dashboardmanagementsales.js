@@ -16,6 +16,15 @@ $(document).ready(function () {
         $('#inputFilterKodeProduk').val('');
     });
 
+    $('#inputFilterKodeProduk').on('click', function (e) {
+        e.preventDefault();
+
+        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
+        loadDataProduk(1, 10, '', selectFilterLevelProduk);
+        $('#searchProdukForm').trigger('reset');
+        $('#produkSearchModal').modal('show');
+    });
+
     $('#btnFilterProduk').on('click', function (e) {
         e.preventDefault();
 

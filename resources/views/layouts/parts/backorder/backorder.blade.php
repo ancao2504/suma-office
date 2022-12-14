@@ -7,7 +7,20 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Back Order</span>
-                    <span class="text-muted fw-bold fs-7">Daftar back order suma honda</span>
+                    <span class="text-muted fw-boldest fs-7">Daftar back order suma honda</span>
+                    @if(trim($kode_sales) != '' || trim($kode_dealer) != '' || trim($part_number) != '')
+                    <div class="d-flex align-items-center mt-4">
+                        @if(isset($kode_sales) && trim($kode_sales) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ trim($kode_sales) }}</span>
+                        @endif
+                        @if(isset($kode_dealer) && trim($kode_dealer) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ trim($kode_dealer) }}</span>
+                        @endif
+                        @if(isset($part_number) && trim($part_number) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">PART NUMBER : {{ trim($part_number) }}</span>
+                        @endif
+                    </div>
+                    @endif
                 </h3>
                 <div class="card-toolbar">
                     <button id="btnFilterBackOrder" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
@@ -45,7 +58,7 @@
                         <div class="fv-row">
                             <label class="form-label">Salesman:</label>
                             <div class="input-group">
-                                <input id="inputFilterSalesman" name="salesman" type="search" class="form-control" placeholder="Semua Salesman" readonly
+                                <input id="inputFilterSalesman" name="salesman" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Salesman" readonly
                                     @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
                                 @if($role_id != 'MD_H3_SM')
                                     @if($role_id != 'D_H3')
@@ -60,7 +73,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Dealer:</label>
                             <div class="input-group">
-                                <input id="inputFilterDealer" name="dealer" type="search" class="form-control" placeholder="Semua Dealer" readonly
+                                <input id="inputFilterDealer" name="dealer" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Dealer" readonly
                                     @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
                                 @if($role_id != 'D_H3')
                                 <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
