@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'App\Dashboard\DashboardController@index')->middleware('authLogin')->name('dashboard');
-
 Route::group(['middleware' => 'preventbackhistory'], function () {
     Route::name('auth.')->group(function () {
         Route::get('/login', 'App\Auth\AuthController@index')->middleware('guest')->name('index');
@@ -28,6 +26,11 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
     Route::name('header.')->group(function () {
         Route::post('/header/carttotal', 'App\Orders\CartController@cartInformation')->middleware('authLogin')->name('cart-total');
     });
+
+    Route::name('home.')->group(function () {
+        Route::get('/', 'App\Home\HomeController@index')->middleware('authLogin')->name('index');
+    });
+
 
     Route::name('dashboard.')->group(function () {
         Route::get('/dashboard/salesman', 'App\Dashboard\DashboardSalesmanController@index')->middleware('authLogin')->name('dashboard-salesman');

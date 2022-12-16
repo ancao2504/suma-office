@@ -27,13 +27,14 @@ class AuthController extends Controller {
             session()->put('authenticated', trim($data->companyid).trim($data->user_id).trim($data->email));
             session()->put('app_user_id', trim($data->user_id));
             session()->put('app_user_name', trim($data->name));
+            session()->put('app_user_jabatan', trim($data->jabatan));
             session()->put('app_user_role_id', trim($data->role_id));
             session()->put('app_user_telepon', trim($data->phone));
             session()->put('app_user_email', trim($data->email));
             session()->put('app_user_photo', trim($data->photo));
             session()->put('app_user_company_id', trim($data->companyid));
 
-            return redirect()->route('dashboard');
+            return redirect()->route('home.index');
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
