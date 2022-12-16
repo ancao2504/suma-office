@@ -165,6 +165,48 @@
         </div>
     </div>
     @endforeach
+    <div class="row mt-4">
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+            <div class="dataTables_length">
+                <label>
+                    <select id="selectPerPage" name="per_page" class="form-select form-select-sm">
+                        <option value="10" @if($data_page->per_page == 10) selected @endif>10</option>
+                        <option value="25" @if($data_page->per_page == 25) selected @endif>25</option>
+                        <option value="50" @if($data_page->per_page == 50) selected @endif>50</option>
+                        <option value="100" @if($data_page->per_page == 100) selected @endif>100</option>
+                    </select>
+                </label>
+            </div>
+            <div class="dataTables_info" role="status" aria-live="polite">Showing {{ $data_page->from }} to {{ $data_page->to }} of {{ $data_page->total }} records</div>
+        </div>
+    </div>
+    <div class="row mt-8">
+        <div class="col-sm-12 col-md-7 d-flex align-rooms-center justify-content-center justify-content-md-end">
+            <div class="dataTables_paginate paging_simple_numbers">
+                <ul class="pagination">
+                    @foreach ($data_cetak_ulang->links as $link)
+                    <li class="page-item @if($link->active == true) active @endif
+                        @if($link->url == '') disabled @endif
+                        @if($data_page->current_page == $link->label) active @endif">
+                        @if($link->active == true)
+                        <span class="page-link">{{ $link->label }}</span>
+                        @else
+                        <a href="#" class="page-link" data-page="{{ $link->url }}">
+                            @if(Str::contains(strtolower($link->label), 'previous'))
+                            <i class="previous"></i>
+                            @elseif(Str::contains(strtolower($link->label), 'next'))
+                            <i class="next"></i>
+                            @else
+                            {{ $link->label }}
+                            @endif
+                        </a>
+                        @endif
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
     @endif
 
     <div id="modalEntryCetakUlang" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
