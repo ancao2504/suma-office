@@ -41,10 +41,10 @@ class AccountController extends Controller
         if($image_file) {
             $extension = $image_file->getClientOriginalExtension();
             $rename_file = strtoupper(trim($request->get('user_id'))).'.'.$extension;
-            $path = trim(config('constants.app.app_asset_url')).'/images/profile/'.$rename_file;
+            $path = trim(url('/')).'assets/images/profile/'.$rename_file;
 
-            if(File::exists(trim(config('constants.app.app_asset_url')).'/images/profile/'.$rename_file)){
-                File::delete(trim(config('constants.app.app_asset_url')).'/images/profile/'.$rename_file);
+            if(File::exists(trim(url('/')).'assets/images/profile/'.$rename_file)){
+                File::delete(trim(url('/')).'assets/images/profile/'.$rename_file);
             }
 
             $image_file->move('assets/images/profile', $rename_file);

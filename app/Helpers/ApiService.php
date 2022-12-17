@@ -1720,7 +1720,7 @@ class ApiService
         return $response;
     }
 
-    public static function SettingCetakUlangSimpan($nomor_dokumen, $jenis_transaksi, $divisi, $kode_cabang, $company_dokumen, $approve, $edit, $alasan, $role_id, $user_id, $companyid)
+    public static function SettingCetakUlangSimpan($nomor_dokumen, $jenis_transaksi, $divisi, $kode_cabang, $company_dokumen, $approve, $edit, $alasan, $role_id, $companyid, $user_id)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/cetakulang/simpan';
