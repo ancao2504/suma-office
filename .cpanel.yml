@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/sumahond/repositories/suma-pmo/
+    - export DEPLOYPATH=/home/repositories/suma-pmo/
     - /bin/cp -r * $DEPLOYPATH
