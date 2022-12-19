@@ -169,7 +169,7 @@ function ListTidakada(){
 }
 
 function hitungCeklist() {
-    let jumlah = $('#ListPembayaranCard .card.border-primary').length;
+    let jumlah = $('#ListPembayaranCard .card.border-primary').length??0;
     $('#Modallistpembayaran #jml_faktur').val(jumlah);
     $('.card-footer .row #jml_faktur').val(jumlah);
     totalPembayaran();
@@ -212,7 +212,7 @@ function ubahdataList(fak_update,jumlah){
 
 function filterSelectAll(){
     $('#filter_select_all').on('click', function () {
-        if(data_khasbank.length > 0){
+        if(data_khasbank.length > 0 && data_khasbank != undefined){
             if ($(this).hasClass('btn-light')) {
                 $(this).removeClass('btn-light').addClass('btn-primary');
 

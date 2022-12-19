@@ -218,7 +218,7 @@ $(document).ready(function () {
                     `);
                     } else {
                         data_khasbank = data.data;
-                        if(data.data.length > 0){
+                        if(data.data.length > 0 && data.data != undefined){
                             ViewListPembayaran(data_khasbank);
                             $('#PenerimaanPembayaran').html(`
                                 <tr>
@@ -244,7 +244,7 @@ $(document).ready(function () {
                 
                 pilihData();
 
-                if(data_akandibayar.length > 0){
+                if(data_akandibayar.length > 0 && data_akandibayar != undefined){
                     $('#PenerimaanPembayaran').html('');
                     // looop data pada daftar akan dibayar
                     data_akandibayar.forEach(function (v, a) {
@@ -260,9 +260,6 @@ $(document).ready(function () {
                             </tr>
                         `);
                     });
-                    // $('#Modalkirim #_no_bpk').text($('#form_pp #no_kasbank').val());
-                    // $('#Modalkirim #_jml_faktur').text(data_akandibayar.length);
-                    // $('#Modalkirim #_total').text($('#total').val());
                     
                     // end loop data pada daftar akan dibayar
                 } else {
@@ -490,11 +487,9 @@ $(document).ready(function () {
         files = e.delegateTarget.files;
         
         // files length > 0
-        if (files.length > 0) {
+        if (files.length > 0 && files != undefined) {
             // genret nama file waktu + random
-            // let name = Date.now() + Math.floor(Math.random() * 1000) + '.' + files[0].name.split('.').pop();
             file_bukti.items.add(new File([files[0]], files[0].name, {type: files[0].type}));
-            // file_bukti.files[file_bukti.items.length-1].lastModified
             // buat tanda x untuk hapus gambar
             $('#card_image').before(`
                 <div class="col-6 col-lg-4 mb-3 card_view_${file_bukti.files[file_bukti.items.length-1].lastModified}" style="display: flex; justify-content: center; align-items: center;">

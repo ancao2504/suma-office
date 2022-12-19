@@ -123,7 +123,7 @@ $(document).ready(function () {
                             $('#no_st').addClass('is-valid');
                             $('#no_st').next().remove();
 
-                            if (respon.data.belum_terima.length > 0) {
+                            if (respon.data.belum_terima.length > 0 && respon.data.belum_terima != undefined) {
                                 createListModal(respon.data);
 
                                 // reset ListModal
@@ -407,7 +407,7 @@ $(document).ready(function () {
             });
             // end cek apakah ada data yang di pilih dengan cara meloooping tr yang ada pada tbody
 
-            if (data.length > 0) {
+            if (data.length > 0 && data.length != undefined) {
                 if (data.length > 1) {
                     // membuat list no_sj yang di card
                     $('#list_ceked_sj > table > tbody').html('');
