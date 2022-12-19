@@ -1,4 +1,4 @@
-// dokumen ready
+// dokumen ready faktur
 
 $(document).ready(function () {
 
