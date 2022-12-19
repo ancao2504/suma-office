@@ -2,6 +2,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/sumahond/public_html/
-    - /bin/cp -r /public/assets/* $DEPLOYPATH
-    - /bin/cp -r /public/vendor/* $DEPLOYPATH
-    - /bin/cp -r /public/storage/* $DEPLOYPATH
+    - /bin/cp -r /assets/* $DEPLOYPATH
+    - /bin/cp -r /vendor/* $DEPLOYPATH
+    - /bin/cp -r /storage/* $DEPLOYPATH
