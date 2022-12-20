@@ -57,7 +57,7 @@ $(document).ready(function () {
         $('#filterSearch').on('keyup',function () {
             searchList($(this).val());
         });
-        
+
     });
     // filter
         filterSelectAll();
@@ -88,7 +88,7 @@ $(document).ready(function () {
         });
 
         // end Saat fillter pertamakali di jalankan
-    
+
     // end js untuk modal list
 
     // double click pada jumlah yang akan dibayar
@@ -111,7 +111,7 @@ $(document).ready(function () {
         // merubah menjadi text di inutannya
         $(data).html(jumlah);
         // mencari pada arry dan merubah jumlahnya menjadi jumlah baru
-        
+
         let index_fu = data_khasbank.findIndex((x) => x.no_faktur == $(data).closest('tr').find('td').eq(1).text());
         if (index_fu != undefined) {
             if(parseInt(jumlah.replace(/\D/g, '')) > parseInt(data_khasbank[index_fu].sisa.replace(/\D/g, '')) || jumlah == ''|| jumlah == 0){
@@ -141,12 +141,12 @@ $(document).ready(function () {
                     }
 
                     $(data).text(data_khasbank[index_fu].sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                    
+
                     if(data_akandibayar != undefined){
                         let index_fda = data_akandibayar.findIndex((v) => v.no_faktur == data_khasbank[index_fu].no_faktur);
                         data_akandibayar[index_fda].jumlah = data_khasbank[index_fu].sisa
                     }
-                    
+
                     ubahdataList(data_khasbank[index_fu].no_faktur, data_khasbank[index_fu].sisa);
                 },100);
             } else{
@@ -158,7 +158,7 @@ $(document).ready(function () {
             }
         }
 
-        
+
         setTimeout(function () {
             totalPembayaran();
             total();
@@ -238,10 +238,10 @@ $(document).ready(function () {
             });
 
             hitungCeklist();
-            
+
             $('#pilih_pembayaran').on('click', function () {
                 data_akandibayar = [];
-                
+
                 pilihData();
 
                 if(data_akandibayar.length > 0 && data_akandibayar != undefined){
@@ -260,7 +260,7 @@ $(document).ready(function () {
                             </tr>
                         `);
                     });
-                    
+
                     // end loop data pada daftar akan dibayar
                 } else {
                     // jika data yang di ceklist kosong
@@ -378,7 +378,7 @@ $(document).ready(function () {
                 });
             } else {
                 $('#Modalkirim').modal('show');
-                
+
                 $('#Modalkirim #_no_bpk').text($('#form_pp #no_kasbank').val());
                 $('#Modalkirim #_jml_faktur').text(data_akandibayar.length);
                 $('#Modalkirim #_total').text($('#total').val());
@@ -446,10 +446,10 @@ $(document).ready(function () {
 
     // hendel jika terjadi masalah pada server
     if(old.length != 0 && old != undefined){
-        
+
         $('#form_pp #kd_dealer').trigger('change');
         $('#form_pp #total').trigger('keyup');
-        
+
         if(old.detail.length != 0){
             old.detail = JSON.parse(old.detail);
             $(document).ajaxStop(function () {
@@ -485,8 +485,8 @@ $(document).ready(function () {
     });
     $('#image').on('change', function (e) {
         files = e.delegateTarget.files;
-        
-        // files length > 0 dan tidak undefined
+
+        // files length > 0 dan tidak undefined test berubah apa gak
         if (files.length > 0 && files != undefined) {
             // genret nama file waktu + random
             file_bukti.items.add(new File([files[0]], files[0].name, {type: files[0].type}));
