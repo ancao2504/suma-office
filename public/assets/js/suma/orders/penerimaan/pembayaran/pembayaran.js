@@ -486,7 +486,7 @@ $(document).ready(function () {
     $('#image').on('change', function (e) {
         files = e.delegateTarget.files;
         
-        // files length > 0
+        // files length > 0 dan tidak undefined
         if (files.length > 0 && files != undefined) {
             // genret nama file waktu + random
             file_bukti.items.add(new File([files[0]], files[0].name, {type: files[0].type}));
