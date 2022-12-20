@@ -1,4 +1,4 @@
-// dokumen ready faktur test 123
+// dokumen ready
 
 $(document).ready(function () {
 
