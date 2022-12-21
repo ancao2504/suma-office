@@ -58,6 +58,13 @@
 								<input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" />
 							</div>
 
+                            <div class="fv-row mb-10">
+                                <label class="form-check form-check-custom form-check-solid form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="remember_me" value="1">
+                                    <span class="form-check-label fw-bold text-gray-700 fs-6">Remember me</span>
+                                </label>
+                            </div>
+
                             <div class="text-center">
 								<button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-primary w-100 mb-5">
 									<span class="indicator-label">Login</span>

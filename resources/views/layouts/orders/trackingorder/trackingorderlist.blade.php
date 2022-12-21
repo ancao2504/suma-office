@@ -5,24 +5,24 @@
             <div class="col-md-6">
                 <div class="row">
                     <span class="text-muted fw-bold d-block fs-7">Nomor Faktur :</span>
-                    <span class="text-gray-800 fs-6 fw-bolder">{{ trim($data->nomor_faktur) }}</span>
+                    <span class="fw-bolder fs-6 text-gray-800">{{ trim($data->nomor_faktur) }}</span>
                 </div>
                 <div class="row mt-4">
                     <span class="text-muted fw-bold d-block fs-7">Tanggal Faktur :</span>
-                    <span class="text-gray-800 fs-6 fw-bolder">{{ date('j F Y', strtotime($data->tanggal)) }}</span>
+                    <span class="fw-bolder fs-6 text-gray-800">{{ date('j F Y', strtotime($data->tanggal)) }}</span>
                 </div>
                 <div class="row mt-4">
                     <span class="text-muted fw-bold d-block fs-7">Salesman :</span>
                     <span class="fw-bolder">
                         <span class="fs-6 fw-bolder text-info text-uppercase">{{ trim($data->kode_sales) }}</span>
-                        <span class="text-gray-800 fs-6 fw-bolder ms-2">{{ trim($data->nama_sales) }}</span>
+                        <span class="fw-bolder fs-6 text-gray-800 ms-2">{{ trim($data->nama_sales) }}</span>
                     </span>
                 </div>
                 <div class="row mt-4">
                     <span class="text-muted fw-bold d-block fs-7">Dealer :</span>
                     <span class="fw-bolder">
                         <span class="fs-7 fw-bolder text-primary text-uppercase">{{ trim($data->kode_dealer) }}</span>
-                        <span class="text-gray-800 fs-6 fw-bolder ms-2">{{ trim($data->nama_dealer) }}</span>
+                        <span class="fw-bolder fs-6 text-gray-800 ms-2">{{ trim($data->nama_dealer) }}</span>
                     </span>
                 </div>
             </div>

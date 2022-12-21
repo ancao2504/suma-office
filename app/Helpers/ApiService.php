@@ -7,14 +7,15 @@ use App\Helpers\ApiRequest;
 class ApiService
 {
 
-    public static function AuthLogin($email, $password)
+    public static function AuthLogin($email, $password, $remember_me)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'auth/login';
         $header = ['Authorization' => $credential];
         $body = [
-            'email'     => $email,
-            'password'  => $password,
+            'email'         => $email,
+            'password'      => $password,
+            'remember_me'   => $remember_me,
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
