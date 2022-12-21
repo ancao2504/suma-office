@@ -17,20 +17,20 @@
                             <div class="row g-5 mb-8">
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">Nomor Faktur:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">{{ $nomor_faktur }}</div>
+                                    <div class="fw-bold fs-6 text-dark">{{ $nomor_faktur }}</div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">Tanggal Faktur:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">{{ date('j F Y', strtotime($tanggal_faktur)) }}</div>
+                                    <div class="fw-bold fs-6 text-dark">{{ date('j F Y', strtotime($tanggal_faktur)) }}</div>
                                 </div>
                             </div>
                             <div class="row g-5 mb-8">
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">Salesman:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">
-                                        <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center flex-wrap">
+                                    <div class="fw-bold fs-6 text-dark">
+                                        <div class="d-flex align-items-center flex-wrap">
                                             <span class="pe-2">{{ $nama_sales }}</span>
-                                            <span class="fs-7 text-info d-flex align-items-center">
+                                            <span class="fs-7 fw-boldest text-info d-flex align-items-center">
                                                 <span class="bullet bullet-dot bg-info me-2"></span>{{ $kode_sales }}
                                             </span>
                                         </div>
@@ -38,10 +38,10 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">Dealer:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">
-                                        <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center flex-wrap">
+                                    <div class="fw-bold fs-6 text-dark">
+                                        <div class="d-flex align-items-center flex-wrap">
                                             <span class="pe-2">{{ $nama_dealer }}</span>
-                                            <span class="fs-7 text-primary d-flex align-items-center">
+                                            <span class="fs-7 fw-boldest text-primary d-flex align-items-center">
                                                 <span class="bullet bullet-dot bg-primary me-2"></span>{{ $kode_dealer }}
                                             </span>
                                         </div>
@@ -51,21 +51,21 @@
                             <div class="row g-5 mb-8">
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">No Purchase Order:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">{{ $nomor_pof }}</div>
+                                    <div class="fw-bold fs-6 text-dark">{{ $nomor_pof }}</div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">Keterangan:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">@if(isset($keterangan)) {{ $keterangan }} @else - @endif</div>
+                                    <div class="fw-bold fs-6 text-dark">@if(isset($keterangan)) {{ $keterangan }} @else - @endif</div>
                                 </div>
                             </div>
                             <div class="row g-5 mb-8">
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">Kode TPC:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">{{ $kode_tpc }}</div>
+                                    <div class="fw-bold fs-6 text-dark">{{ $kode_tpc }}</div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="fw-bold fs-7 text-gray-600 mb-1">BO / Tidak BO:</div>
-                                    <div class="fw-bolder fs-6 text-gray-800">@if($bo == 'B') BO @else Tidak BO @endif</div>
+                                    <div class="fw-bold fs-6 text-dark">@if($bo == 'B') BO @else Tidak BO @endif</div>
                                 </div>
                             </div>
                             @if(strtoupper(trim($device)) == 'DESKTOP')
@@ -90,7 +90,7 @@
                                                             <span class="symbol-label" style="background-image:url({{ $data->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
                                                         </span>
                                                         <div class="ms-5">
-                                                            <span class="fs-7 text-dark fw-bolder">{{ $data->nama_part }}</a>
+                                                            <span class="fs-7">{{ $data->nama_part }}</a>
                                                             <div class="fs-7 text-muted">{{ $data->part_number }}</div>
                                                         </div>
                                                     </div>
@@ -103,27 +103,25 @@
                                             @endforeach
                                             <tr>
                                                 <td colspan="3" class="text-end fw-bolder text-muted text-uppercase fs-7">Subtotal</td>
-                                                <td colspan="2" class="text-end fw-bolder">{{ number_format($sub_total) }}</td>
+                                                <td colspan="2" class="text-end fw-bold">{{ number_format($sub_total) }}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end fw-bolder text-muted text-uppercase fs-7">Discount (%)</td>
-                                                <td class="text-end fw-bolder">{{ number_format($disc_header, 2) }}</td>
-                                                <td class="text-end fw-bolder">{{ number_format($nominal_disc_header) }}</td>
+                                                <td class="text-end fw-bold">{{ number_format($disc_header, 2) }}</td>
+                                                <td class="text-end fw-bold">{{ number_format($nominal_disc_header) }}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end fw-bolder text-muted text-uppercase fs-7">Discount (Rp.)</td>
-                                                <td colspan="2" class="text-end fw-bolder">{{ number_format($disc_rupiah) }}</td>
+                                                <td colspan="2" class="text-end fw-bold">{{ number_format($disc_rupiah) }}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end fw-bolder text-muted text-uppercase fs-7">Grand Total</td>
-                                                <td colspan="2" class="text-end fw-boldest text-danger">{{ number_format($grand_total) }}</td>
+                                                <td colspan="2" class="text-end fw-bold text-danger">{{ number_format($grand_total) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            @else
-
                             @endif
                         </div>
                     </div>
@@ -147,7 +145,7 @@
                                 </div>
                                 <div class="timeline-content mb-10 mt-n1">
                                     <div class="pe-3 mb-5">
-                                        <div class="fw-bolder fs-6 text-gray-800 mt-1">Faktur sudah tercetak</div>
+                                        <div class="fw-bold fs-6 text-dark mt-1">Faktur sudah tercetak</div>
                                         <div class="d-flex align-items-center fs-6">
                                             <div class="fw-bold text-gray-600 fs-7">{{ trim($detail_pengiriman->usertime_cetak_faktur) }}</div>
                                         </div>
@@ -178,7 +176,7 @@
                                 </div>
                                 <div class="timeline-content mb-10 mt-n1">
                                     <div class="pe-3 mb-5">
-                                        <div class="fw-bolder fs-6 text-gray-800 mt-1">Gudang mempersiapkan barang</div>
+                                        <div class="fw-bold fs-6 text-dark mt-1">Gudang mempersiapkan barang</div>
                                         <div class="d-flex align-items-center mt-1 fs-6">
                                             <div class="fw-bold text-gray-600 fs-7">{{ trim($detail_pengiriman->usertime_surat_jalan) }}</div>
                                         </div>
@@ -209,7 +207,7 @@
                                 </div>
                                 <div class="timeline-content mb-10 mt-n1">
                                     <div class="pe-3 mb-5">
-                                        <div class="fw-bolder fs-6 text-gray-800 mt-1">Surat jalan sudah tercetak</div>
+                                        <div class="fw-bold fs-6 text-dark mt-1">Surat jalan sudah tercetak</div>
                                         <div class="d-flex align-items-center mt-1 fs-6">
                                             <div class="fw-bold text-gray-600 fs-7">{{ trim($detail_pengiriman->usertime_cetak_surat_jalan) }}</div>
                                         </div>
@@ -223,7 +221,7 @@
                                     <div id="detailSuratJalan" class="overflow-auto pb-5">
                                         <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-250px px-7 py-3 mb-5">
                                             <div class="pe-3">
-                                                <div class="fw-bolder fs-6 text-gray-800 mt-1">No Surat Jalan :</div>
+                                                <div class="fw-bold fs-6 text-dark mt-1">No Surat Jalan :</div>
                                                 <div class="d-flex align-items-center mt-1 fs-6">
                                                     <div class="fw-bold text-gray-600 fs-7">{{ trim($detail_pengiriman->nomor_surat_jalan) }}</div>
                                                 </div>
@@ -252,7 +250,7 @@
                                 </div>
                                 <div class="timeline-content mb-10 mt-n1">
                                     <div class="pe-3 mb-5">
-                                        <div class="fw-bolder fs-6 text-gray-800 mt-1">Serah terima dengan ekspedisi</div>
+                                        <div class="fw-bold fs-6 text-dark mt-1">Serah terima dengan ekspedisi</div>
                                         <div class="d-flex align-items-center mt-1 fs-6">
                                             <div class="fw-bold text-gray-600 fs-7 me-2">{{ $detail_pengiriman->usertime_serah_terima }}</div>
                                         </div>
@@ -266,7 +264,7 @@
                                     <div id="detailSerahTerimaEkspedisi" class="overflow-auto pb-5">
                                         <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-250px px-7 py-3 mb-5">
                                             <div class="pe-3">
-                                                <div class="fw-bolder fs-6 text-gray-800 mt-1">No Serah Terima :</div>
+                                                <div class="fw-bold fs-6 text-dark mt-1">No Serah Terima :</div>
                                                 <div class="d-flex align-items-center mt-1 fs-6">
                                                     <div class="fw-bold text-gray-600 fs-7 me-2">{{ $detail_pengiriman->nomor_serah_terima }}</div>
                                                 </div>
@@ -274,7 +272,7 @@
                                         </div>
                                         <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-250px px-7 py-3 mb-5">
                                             <div class="pe-3">
-                                                <div class="fw-bolder fs-6 text-gray-800 mt-1">Kendaraan :</div>
+                                                <div class="fw-bold fs-6 text-dark mt-1">Kendaraan :</div>
                                                 <div class="d-flex align-items-center mt-1 fs-6">
                                                     <div class="fw-bold text-gray-600 fs-7 me-2">{{ $detail_pengiriman->kendaraan_serah_terima }}</div>
                                                 </div>
@@ -282,7 +280,7 @@
                                         </div>
                                         <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-250px px-7 py-3 mb-5">
                                             <div class="pe-3">
-                                                <div class="fw-bolder fs-6 text-gray-800 mt-1">Sopir :</div>
+                                                <div class="fw-bold fs-6 text-dark mt-1">Sopir :</div>
                                                 <div class="d-flex align-items-center mt-1 fs-6">
                                                     <div class="fw-bold text-gray-600 fs-7 me-2">{{ $detail_pengiriman->sopir_serah_terima }}</div>
                                                 </div>
@@ -311,7 +309,7 @@
                                 </div>
                                 <div class="timeline-content mb-10 mt-n1">
                                     <div class="pe-3 mb-5">
-                                        <div class="fw-bolder fs-6 text-gray-800 mt-1">Toko terima barang</div>
+                                        <div class="fw-bold fs-6 text-dark mt-1">Toko terima barang</div>
                                         @if ($detail_pengiriman->status_toko_terima == 1)
                                         <span class="fs-8 fw-boldest text-success text-uppercase">FINISH</span>
                                         @elseif ($detail_pengiriman->nomor_serah_terima != '')
@@ -322,7 +320,7 @@
                                     <div id="detailSuratJalan" class="overflow-auto pb-5">
                                         <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-250px px-7 py-3 mb-5">
                                             <div class="pe-3">
-                                                <div class="fw-bolder fs-6 text-gray-800 mt-1">Tanggal terima :</div>
+                                                <div class="fw-bold fs-6 text-dark mt-1">Tanggal terima :</div>
                                                 <div class="d-flex align-items-center mt-1 fs-6">
                                                     <div class="fw-bold text-gray-600 fs-7 me-2">{{ trim($detail_pengiriman->tanggal_terima_toko) }}</div>
                                                 </div>

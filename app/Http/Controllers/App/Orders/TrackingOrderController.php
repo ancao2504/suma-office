@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\Orders;
 use App\Http\Controllers\Controller;
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Jenssegers\Agent\Agent as Agent;
 
 class TrackingOrderController extends Controller
@@ -12,6 +13,8 @@ class TrackingOrderController extends Controller
     public function index(Request $request) {
         $year = date('Y');
         $month = date('m');
+        $kode_sales = '';
+        $kode_dealer = '';
 
         if(!empty($request->get('year'))) {
             $year = $request->get('year');
@@ -19,9 +22,6 @@ class TrackingOrderController extends Controller
         if(!empty($request->get('month'))) {
             $month = $request->get('month');
         }
-
-        $kode_sales = '';
-        $kode_dealer = '';
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
             $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -50,29 +50,49 @@ class TrackingOrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::TrackingOrderDaftar($year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
-                                        $request->get('page'), strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
+        $responseApi = ApiService::TrackingOrderDaftar($request->get('page'), $request->get('per_page'),
+                                        $year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
+                                        strtoupper(trim($request->session()->get('app_user_id'))),
+                                        strtoupper(trim($request->session()->get('app_user_role_id'))),
                                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
             $data = json_decode($responseApi)->data;
+
             $data_tracking = $data->data;
+            $data_page = new Collection();
+            $data_page->push((object) [
+                'from'          => $data->from,
+                'to'            => $data->to,
+                'total'         => $data->total,
+                'current_page'  => $data->current_page,
+                'per_page'      => $data->per_page,
+                'links'         => $data->links
+            ]);
 
-            if ($request->ajax()) {
-                $view = view('layouts.orders.trackingorder.trackingorderlist', compact('data_tracking'))->render();
-                return response()->json([ 'html' => $view ]);
-            }
-
-            return view('layouts.orders.trackingorder.trackingorder', [
-                'title_menu'    => 'Tracking Order',
+            $data_filter = new Collection();
+            $data_filter->push((object) [
                 'year'          => $year,
                 'month'         => $month,
                 'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
                 'kode_sales'    => $kode_sales,
                 'kode_dealer'   => $kode_dealer,
                 'nomor_faktur'  => $request->get('nomor_faktur'),
+            ]);
+
+            $data_user = new Collection();
+            $data_user->push((object) [
+                'user_id'       => strtoupper(trim($request->session()->get('app_user_id'))),
+                'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
+            ]);
+
+            return view('layouts.orders.trackingorder.trackingorder', [
+                'title_menu'    => 'Tracking Order',
+                'data_page'     => $data_page->first(),
+                'data_filter'   => $data_filter->first(),
+                'data_user'     => $data_user->first(),
                 'data_tracking' => $data_tracking
             ]);
         } else {

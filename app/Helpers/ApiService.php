@@ -1108,18 +1108,19 @@ class ApiService
         return $response;
     }
 
-    public static function TrackingOrderDaftar($year, $month, $kode_sales, $kode_dealer, $nomor_faktur, $page, $user_id, $role_id, $companyid)
+    public static function TrackingOrderDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $nomor_faktur, $user_id, $role_id, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/trackingorder';
         $header = ['Authorization' => $credential];
         $body = [
+            'page'          => $page,
+            'per_page'      => $per_page,
             'year'          => $year,
             'month'         => $month,
             'kode_sales'    => $kode_sales,
             'kode_dealer'   => $kode_dealer,
             'nomor_faktur'  => $nomor_faktur,
-            'page'          => $page,
             'user_id'       => $user_id,
             'role_id'       => $role_id,
             'companyid'     => $companyid,

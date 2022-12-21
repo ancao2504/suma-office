@@ -1,29 +1,37 @@
 @foreach($data_tracking as $data)
-<div class="card card-flush mt-4">
-    <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
+<div class="card card-flush mt-6">
+    <div class="card-body ribbon ribbon-top ribbon-vertical pt-6">
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
-                    <span class="text-muted fw-bold d-block fs-7">Nomor Faktur :</span>
-                    <span class="fw-bolder fs-6 text-gray-800">{{ trim($data->nomor_faktur) }}</span>
+                    <span class="fw-bold fs-7 text-gray-600">Nomor Faktur:</span>
+                    <span class="fw-bold fs-6 text-dark mt-1">{{ trim($data->nomor_faktur) }}</span>
                 </div>
-                <div class="row mt-4">
-                    <span class="text-muted fw-bold d-block fs-7">Tanggal Faktur :</span>
-                    <span class="fw-bolder fs-6 text-gray-800">{{ date('j F Y', strtotime($data->tanggal)) }}</span>
+                <div class="row mt-6">
+                    <span class="fw-bold fs-7 text-gray-600">Tanggal Faktur:</span>
+                    <span class="fw-bold fs-6 text-dark mt-1">{{ date('j F Y', strtotime($data->tanggal)) }}</span>
                 </div>
-                <div class="row mt-4">
-                    <span class="text-muted fw-bold d-block fs-7">Salesman :</span>
-                    <span class="fw-bolder">
-                        <span class="fs-6 fw-bolder text-info text-uppercase">{{ trim($data->kode_sales) }}</span>
-                        <span class="fw-bolder fs-6 text-gray-800 ms-2">{{ trim($data->nama_sales) }}</span>
-                    </span>
+                <div class="row mt-6">
+                    <span class="fw-bold fs-7 text-gray-600">Salesman:</span>
+                    <div class="d-flex align-items-center flex-wrap mt-1">
+                        <span class="fs-7 fw-boldest text-info d-flex align-items-center">{{ $data->kode_sales }}
+                            <span class="bullet bullet-dot bg-info ms-2 me-2"></span>
+                            <span class="fw-bold fs-6 text-dark">{{ $data->nama_sales }}</span>
+                        </span>
+                    </div>
                 </div>
-                <div class="row mt-4">
-                    <span class="text-muted fw-bold d-block fs-7">Dealer :</span>
-                    <span class="fw-bolder">
-                        <span class="fs-7 fw-bolder text-primary text-uppercase">{{ trim($data->kode_dealer) }}</span>
-                        <span class="fw-bolder fs-6 text-gray-800 ms-2">{{ trim($data->nama_dealer) }}</span>
-                    </span>
+                <div class="row mt-6">
+                    <span class="fw-bold fs-7 text-gray-600">Dealer:</span>
+                    <div class="d-flex align-items-center flex-wrap mt-1">
+                        <span class="fs-7 fw-boldest text-primary d-flex align-items-center">{{ $data->kode_dealer }}
+                            <span class="bullet bullet-dot bg-primary ms-2 me-2"></span>
+                            <span class="fw-bold fs-6 text-dark">{{ $data->nama_dealer }}</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-6">
+                    <span class="fw-bold fs-7 text-gray-600">Keterangan:</span>
+                    <span class="fw-bold fs-6 text-dark mt-1">@if(trim($data->keterangan) == '') - @else {{ trim($data->keterangan) }} @endif</span>
                 </div>
             </div>
             <div class="col-md-6">
@@ -122,7 +130,7 @@
             </div>
         </div>
         <div class="separator my-5"></div>
-        <a href="{{ route('orders.tracking-order-view', trim($data->nomor_faktur)) }}" class="btn btn-primary" id="viewPof" role="button">
+        <a href="{{ route('orders.trackingorder.view', trim($data->nomor_faktur)) }}" class="btn btn-primary" id="viewPof" role="button">
             <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Detail Tracking
         </a>
     </div>
