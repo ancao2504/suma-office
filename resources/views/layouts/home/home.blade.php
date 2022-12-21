@@ -148,7 +148,7 @@
                     </div>
                     <h1 class="mb-2">Tracking Order</h1>
                     <div class="fs-4 fw-bold text-gray-600">Daftar tracking order</div>
-                    <a href="{{ route('orders.tracking-order') }}" class="btn btn-lg btn-flex btn-link btn-color-primary">Lihat</a>
+                    <a href="{{ route('orders.trackingorder.daftar') }}" class="btn btn-lg btn-flex btn-link btn-color-primary">Lihat</a>
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                     <span class="svg-icon ms-2 svg-icon-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
