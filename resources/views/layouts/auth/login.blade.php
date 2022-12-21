@@ -48,19 +48,33 @@
 							<div class="fv-row mb-10">
 								<label class="form-label fs-6 fw-bolder text-dark">Email</label>
 								<input class="form-control form-control-lg form-control-solid" type="text" name="email" autocomplete="off"
-                                    @if(isset($email)) value="{{ $email }}" @else value="{{ old('email') }}"@endif/>
+                                    @if(old('email'))
+                                        value="{{ old('email') }}"
+                                    @else
+                                        @if(Cookie::has('email'))
+                                            value="{{ Cookie::get('email') }}"
+                                        @endif
+                                    @endif/>
 							</div>
 
 							<div class="fv-row mb-10">
 								<div class="d-flex flex-stack mb-2">
 									<label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
 								</div>
-								<input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" />
+								<input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off"
+                                    @if(Cookie::has('password')) value="{{ Cookie::get('password') }}" @endif/>
 							</div>
 
                             <div class="fv-row mb-10">
                                 <label class="form-check form-check-custom form-check-solid form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="remember_me" value="1">
+                                    <input class="form-check-input" type="checkbox" name="remember_me" value="1"
+                                        @if(old('remember_me') == 1)
+                                            checked
+                                        @else
+                                            @if(Cookie::has('remember_me'))
+                                                checked
+                                            @endif
+                                        @endif>
                                     <span class="form-check-label fw-bold text-gray-700 fs-6">Remember me</span>
                                 </label>
                             </div>

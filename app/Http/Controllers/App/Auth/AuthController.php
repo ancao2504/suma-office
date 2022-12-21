@@ -6,6 +6,7 @@ use App\Helpers\ApiService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 
 class AuthController extends Controller {
@@ -23,6 +24,16 @@ class AuthController extends Controller {
             $data = json_decode($responseApi)->data;
 
             $request->session()->flush();
+
+            Cookie::queue(Cookie::forget('email'));
+            Cookie::queue(Cookie::forget('password'));
+            Cookie::queue(Cookie::forget('remember_me'));
+
+            if($request->has('remember_me')) {
+                Cookie::queue('email', trim($request->get('email')), 1440);
+                Cookie::queue('password', trim($request->get('password')), 1440);
+                Cookie::queue('remember_me', trim($request->get('remember_me')), 1440);
+            }
 
             session()->put('authenticated', trim($data->companyid).trim($data->user_id).trim($data->email));
             session()->put('app_user_id', trim($data->user_id));
