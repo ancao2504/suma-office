@@ -1,50 +1,57 @@
-// dokumen ready
-
 $(document).ready(function () {
-
-    $('.select2').on('select2:select', function (e) {
-        $(this).focus();
-    });
-
-    // jika terdapat form submit
-    $('form').submit(function () {
+// ===============================================================
+    // Daftar
+    // ===============================================================
+    function loadMasterData(page = 1, per_page = 10, year = '', month = '', salesman = '', dealer = '', nomor_faktur = '') {
         loading.block();
-    });
-    // end jika terdapat form submit
+        window.location.href = window.location.origin + window.location.pathname + '?year=' + year + '&month=' + month +
+            '&salesman=' + salesman + '&dealer=' + dealer + '&nomor_faktur=' + nomor_faktur + '&per_page=' + per_page +
+            '&page=' + page;
+    }
 
-    // ajax start
-    $(document).ajaxStart(function () {
-        loading.block();
-    });
-    // end ajax start
-    // ajax stop
-    $(document).ajaxStop(function () {
-        loading.release();
-    });
-    // end ajax stop
-    // change
-    $('#selectPerPageForm').change(function () {
-        loading.block();
-    });
-    // end change
-    // page - item click kecuali yang ada active
-    $('.page-item, td a.btn').not('.active').click(function () {
-        loading.block();
-    });
-    // end page - item click kecuali yang ada active
+    $('#inputFilterNomorFaktur').on('change keydown', function (e) {
+        if (e.keyCode == 13 || e.type == 'change') {
+            var per_page = $('#selectPerPage').val();
+            var year = $('#inputFilterYear').val();
+            var month = $('#selectFilterMonth').val();
+            var salesman = $('#inputFilterSalesman').val();
+            var dealer = $('#selectFilterDealer').val();
+            var nomor_faktur = $('#inputFilterNomorFaktur').val();
 
-    $('#btnFilterFaktur').on('click', function (e) {
-        e.preventDefault();
-
-        $('#selectFilterMonth').prop('selectedIndex', data_filter.month - 1).change();
-        $('#inputFilterYear').val(data_filter.year);
-        $('#inputFilterSalesman').val(data_filter.salesman);
-        $('#inputFilterDealer').val(data_filter.dealer);
-        $('#inputFilterNomorFaktur').val(data_filter.nomor_faktur);
-
-        $('#modalFilter').modal('show');
+            loadMasterData(1, per_page, year, month, salesman, dealer, nomor_faktur);
+        }
     });
 
+    $('#selectPerPage').change(function() {
+        var start_record = data_page.start_record;
+        var per_page = $('#selectPerPage').val();
+        var year = $('#inputFilterYear').val();
+        var month = $('#selectFilterMonth').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#selectFilterDealer').val();
+        var nomor_faktur = $('#inputFilterNomorFaktur').val();
+        var page = Math.ceil(start_record / per_page);
+
+        loadMasterData(page, per_page, year, month, salesman, dealer, nomor_faktur);
+    });
+
+    $(document).on('click', '.page-item a', function () {
+        var page_link = $(this)[0].getAttribute('data-page');
+        var page = page_link.split('?page=')[1];
+
+        var per_page = $('#selectPerPage').val();
+        var year = $('#inputFilterYear').val();
+        var month = $('#selectFilterMonth').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#selectFilterDealer').val();
+        var nomor_faktur = $('#inputFilterNomorFaktur').val();
+
+        loadMasterData(page, per_page, year, month, salesman, dealer, nomor_faktur);
+    });
+
+    // ===============================================================
+    // Filter
+    // ===============================================================
     $('#inputFilterSalesman').on('click', function (e) {
         e.preventDefault();
         loadDataSalesman();
@@ -114,7 +121,17 @@ $(document).ready(function () {
 
         $('#selectFilterMonth').prop('selectedIndex', month - 1).change();
         $('#inputFilterYear').val(year);
+        $('#inputFilterSalesman').val('');
+        $('#selectFilterDealer').val('');
+        $('#inputFilterNomorFaktur').val('');
 
-        input_kososng();
+        var per_page = $('#selectPerPage').val();
+        var year = $('#inputFilterYear').val();
+        var month = $('#selectFilterMonth').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#selectFilterDealer').val();
+        var nomor_faktur = $('#inputFilterNomorFaktur').val();
+
+        loadMasterData(1, per_page, year, month, salesman, dealer, nomor_faktur);
     });
 });

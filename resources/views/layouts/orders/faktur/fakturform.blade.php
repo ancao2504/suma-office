@@ -3,238 +3,212 @@
 @section('subtitle','Faktur')
 @section('container')
     <div class="row g-0">
-        <form action="#" method="get">
-            <div class="card card-flush">
-                <div class="card-header align-items-center border-0 mt-4">
-                    <h3 class="card-title align-items-start flex-column">
-                        <span class="fw-bolder mb-2 text-dark">Faktur</span>
-                        <span class="text-muted fw-bold fs-7">Data faktur penjualan</span>
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 mt-2">
-                            <div class="row">
-                                <span class="text-muted fw-bold d-block fs-7">Nomor Faktur :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($nomor_faktur)) {{ $nomor_faktur }} @else {{ old('nomor_faktur') }}@endif</span>
-                            </div>
-                            <div class="row mt-4">
-                                <span class="text-muted fw-bold d-block fs-7">Tanggal Faktur :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($tanggal_faktur)) {{ $tanggal_faktur }} @else {{ old('tanggal_faktur') }}@endif</span>
-                            </div>
-                            <div class="row mt-4">
-                                <span class="text-muted fw-bold d-block fs-7">Nomor Purchase Order :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($nomor_pof)) {{ $nomor_pof }} @else {{ old('nomor_pof') }}@endif</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <div class="row">
-                                <span class="text-muted fw-bold d-block fs-7">Kode Sales :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($kode_sales)) {{ $kode_sales }} @else {{ old('kode_sales') }}@endif</span>
-                            </div>
-                            <div class="row mt-4">
-                                <span class="text-muted fw-bold d-block fs-7">Kode Dealer :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($kode_dealer)) {{ $kode_dealer }} @else {{ old('kode_dealer') }}@endif</span>
-                            </div>
-                            <div class="row mt-4">
-                                <span class="text-muted fw-bold d-block fs-7">Keterangan :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($keterangan)) {{ $keterangan }} @else - @endif</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mt-2">
-                            <div class="row">
-                                <span class="text-muted fw-bold d-block fs-7">Kode TPC :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if(isset($kode_tpc)) {{ $kode_tpc }} @else {{ old('kode_sales') }}@endif</span>
-                            </div>
-                            <div class="row mt-4">
-                                <span class="text-muted fw-bold d-block fs-7">BO / Tidak BO :</span>
-                                <span class="text-gray-800 fs-6 fw-bolder">@if($bo == 'B') BO @else Tidak BO @endif</span>
-                            </div>
-                            <div class="row mt-4">
-                                <span class="text-muted fw-bold d-block fs-7">Total Faktur :</span>
-                                <span class="text-danger fs-6 fw-bolder">@if(isset($grand_total)) {{ number_format($grand_total) }} @else {{ old('grand_total') }}@endif</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="card card-flush">
+            <div class="card-header align-items-center border-0 mt-4">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="fw-bolder mb-2 text-dark">Faktur</span>
+                    <span class="text-muted fw-bold fs-7">Data faktur penjualan</span>
+                </h3>
             </div>
-            @if (strtoupper(trim($device)) == 'DESKTOP')
-            <div class="card card-flush mt-5">
-                <div class="card-header align-items-center border-0 mt-4">
-                    <h3 class="card-title align-items-start flex-column">
-                        <span class="fw-bolder mb-2 text-dark">Detail Faktur</span>
-                        <span class="text-muted fw-bold fs-7">Daftar barang faktur</span>
-                    </h3>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="table-responsive">
-                        <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
-                            <thead>
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-100px">Part Number</th>
-                                    <th class="min-w-80px text-end">Jml Order</th>
-                                    <th class="min-w-80px text-end">Jml Jual</th>
-                                    <th class="min-w-80px text-end">Harga</th>
-                                    <th class="min-w-70px text-end">Disc</th>
-                                    <th class="min-w-90px text-end">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody class="fw-bold text-gray-600">
-                                @forelse ($detail_faktur as $data)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <span class="symbol symbol-50px">
-                                                <span class="symbol-label" style="background-image:url({{ $data->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
-                                            </span>
-                                            <div class="ms-5">
-                                                <span class="fw-bolder text-dark">{{ $data->nama_part }}</a>
-                                                <div class="fs-7 text-muted">{{ $data->part_number }}</div>
+            <div class="card-body">
+                <div class="d-flex flex-column flex-xl-row">
+                    <div class="flex-lg-row-fluid me-xl-18 mb-10 mb-xl-0">
+                        <div class="mt-n1">
+                            <div class="m-0">
+                                <div class="row g-5 mb-8">
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">Nomor Faktur:</div>
+                                        <div class="fw-bolder text-dark">{{ $data->nomor_faktur }}</div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">Tanggal Faktur:</div>
+                                        <div class="fw-bolder text-dark">{{ date('j F Y', strtotime($data->tanggal_faktur)) }}</div>
+                                    </div>
+                                </div>
+                                <div class="row g-5 mb-8">
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">Salesman:</div>
+                                        <div class="fw-bolder text-dark">
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <span class="pe-2">{{ $data->nama_sales }}</span>
+                                                <span class="fs-7 fw-boldest text-info d-flex align-items-center">
+                                                    <span class="bullet bullet-dot bg-info me-2"></span>{{ $data->kode_sales }}
+                                                </span>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td class="text-end">{{ number_format($data->jml_order) }}</td>
-                                    <td class="text-end">{{ number_format($data->jml_jual) }}</td>
-                                    <td class="text-end">{{ number_format($data->harga) }}</td>
-                                    <td class="text-end">{{ number_format($data->disc_detail, 2) }}</td>
-                                    <td class="text-end">{{ number_format($data->total_detail) }}</td>
-                                </tr>
-                                @empty
-                                <center>
-                                    <tr>
-                                        <img src="{{ asset('assets/media/illustrations/sketchy-1/4.png') }}" alt="" class="mw-100 mh-150px mb-7">
-                                        <div class="fw-bolder fs-3 text-gray-600 text-hover-primary">Data Not Found</div>
-                                    </tr>
-                                </center>
-                                @endforelse
-                                <tr>
-                                    <td class="text-end fw-bolder text-dark">Total Item</td>
-                                    <td colspan="1" class="text-end fw-bolder">{{ number_format($total_order) }}</td>
-                                    <td class="text-end">{{ number_format($total_jual) }}</td>
-                                    <td colspan="1" class="text-end fw-bolder text-dark">Subtotal</td>
-                                    <td colspan="2" class="text-end fw-bolder">{{ number_format($sub_total) }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-end fw-bolder text-dark">Discount (%)</td>
-                                    <td class="text-end fw-bolder">{{ number_format($disc_header, 2) }}</td>
-                                    <td class="text-end fw-bolder">{{ number_format($nominal_disc_header) }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-end fw-bolder text-dark">Discount (Rp.)</td>
-                                    <td colspan="2" class="text-end fw-bolder">{{ number_format($disc_rupiah) }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="fs-3 text-dark text-end fw-bolder text-dark">Grand Total</td>
-                                    <td colspan="2" class="fs-3 text-end fw-bolder text-danger">{{ number_format($grand_total) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            @else
-            @forelse ($detail_faktur as $data)
-            <div class="card card-flush mt-5">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="symbol symbol-50px me-5">
-                            <span class="symbol-label" style="background-image:url({{ $data->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
-                        </div>
-                        <div class="flex-grow-1">
-                            <span class="text-dark fw-bolder text-hover-primary fs-6">{{ trim($data->part_number) }}</span>
-                            <span class="text-muted d-block fw-bold descriptionpart">{{ $data->nama_part }}</span>
-                            <div class="flex-grow-1 mt-4">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <span class="text-muted d-block fw-bold">Jml Order :</span>
-                                        <span class="text-dark fw-bold">{{ number_format($data->jml_order) }}</span>
                                     </div>
-                                    <div class="col-6">
-                                        <span class="text-muted d-block fw-bold">Jml Jual :</span>
-                                        @if ($data->jml_order > $data->jml_jual)
-                                            @if($data->jml_jual > 0)
-                                            <span class="text-primary fw-bold">{{ number_format($data->jml_jual) }}</span>
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">Dealer:</div>
+                                        <div class="fw-bolder text-dark">
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <span class="pe-2">{{ $data->nama_dealer }}</span>
+                                                <span class="fs-7 fw-boldest text-primary d-flex align-items-center">
+                                                    <span class="bullet bullet-dot bg-primary me-2"></span>{{ $data->kode_dealer }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-5 mb-8">
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">No Purchase Order:</div>
+                                        <div class="fw-bolder text-dark">{{ $data->nomor_pof }}</div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">Keterangan:</div>
+                                        <div class="fw-bolder text-dark">@if(isset($data->keterangan)) {{ $data->keterangan }} @else - @endif</div>
+                                    </div>
+                                </div>
+                                <div class="row g-5 mb-8">
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">Kode TPC:</div>
+                                        <div class="fw-bolder text-dark">{{ $data->kode_tpc }}</div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="fw-bold fs-7 text-gray-600 mb-1">BO / Tidak BO:</div>
+                                        <div class="fw-bolder text-dark">@if($data->bo == 'B') BO @else Tidak BO @endif</div>
+                                    </div>
+                                </div>
+                                @if(strtoupper(trim($device)) == 'DESKTOP')
+                                <div class="flex-grow-1">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-row-bordered fs-6">
+                                            <thead>
+                                                <tr class="text-gray-400 fw-boldest fs-7 text-uppercase gy-5 mb-0">
+                                                    <th class="min-w-175px">Part Number</th>
+                                                    <th class="min-w-70px text-end">Order</th>
+                                                    <th class="min-w-70px text-end">Jual</th>
+                                                    <th class="min-w-100px text-end">Harga</th>
+                                                    <th class="min-w-70px text-end">Disc</th>
+                                                    <th class="min-w-100px text-end">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="fs-7 fw-bold text-dark">
+                                                @foreach($data->detail_faktur as $data_detail)
+                                                <tr class="text-dark">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="symbol symbol-50px">
+                                                                <span class="symbol-label" style="background-image:url({{ $data_detail->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
+                                                            </span>
+                                                            <div class="ms-5">
+                                                                <span class="fs-7">{{ $data_detail->nama_part }}</a>
+                                                                <div class="fs-7 text-muted">{{ $data_detail->part_number }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-end">{{ number_format($data_detail->jml_order) }}</td>
+                                                    <td class="text-end">{{ number_format($data_detail->jml_jual) }}</td>
+                                                    <td class="text-end">{{ number_format($data_detail->harga) }}</td>
+                                                    <td class="text-end">{{ number_format($data_detail->disc_detail, 2) }}</td>
+                                                    <td class="text-end">{{ number_format($data_detail->total_detail) }}</td>
+                                                </tr>
+                                                @endforeach
+                                                <tr>
+                                                    <td colspan="4" class="text-end fw-bolder text-muted text-uppercase fs-7">Subtotal</td>
+                                                    <td colspan="2" class="text-end fw-bold">{{ number_format($data->sub_total) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="text-end fw-bolder text-muted text-uppercase fs-7">Discount (%)</td>
+                                                    <td class="text-end fw-bold">{{ number_format($data->disc_header, 2) }}</td>
+                                                    <td class="text-end fw-bold">{{ number_format($data->nominal_disc_header) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="text-end fw-bolder text-muted text-uppercase fs-7">Discount (Rp.)</td>
+                                                    <td colspan="2" class="text-end fw-bold">{{ number_format($data->disc_rupiah) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="text-end fw-bolder text-muted text-uppercase fs-7">Grand Total</td>
+                                                    <td colspan="2" class="text-end fw-bold text-danger">{{ number_format($data->grand_total) }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-0">
+                        <div class="d-print-none border border-dashed border-gray-300 card-rounded h-lg-100 min-w-md-350px p-9 bg-lighten">
+                            <h6 class="mb-8 fw-boldest text-gray-600">STATUS FAKTUR</h6>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Jenis Beli:</div>
+                                <div class="fw-boldest text-gray-800 fs-7">
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <span class="pe-2">{{ $data->kode_beli }}</span>
+                                        <span class="fs-8 fw-boldest text-danger d-flex align-items-center">
+                                            <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data->keterangan_beli }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Jenis Order:</div>
+                                <div class="fw-boldest text-gray-800 fs-7">
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <span class="pe-2">{{ $data->rh }}</span>
+                                        <span class="fs-7 fw-boldest text-primary d-flex align-items-center">
+                                            @if($data->rh == 'H')
+                                            <span class="bullet bullet-dot bg-danger me-2"></span>
+                                            <span class="fs-8 fw-boldest text-danger">HOTLINE</span>
+                                            @elseif($data->rh == 'P')
+                                            <span class="bullet bullet-dot bg-info me-2"></span>
+                                            <span class="fs-8 fw-boldest text-info">PMO</span>
                                             @else
-                                            <span class="text-danger fw-bold">{{ number_format($data->jml_jual) }}</span>
+                                                @if($data->status_pof == 1)
+                                                <span class="bullet bullet-dot bg-primary me-2"></span>
+                                                <span class="fs-8 fw-boldest text-primary">POF</span>
+                                                @else
+                                                <span class="bullet bullet-dot bg-success me-2"></span>
+                                                <span class="fs-8 fw-boldest text-success">REGULER</span>
+                                                @endif
                                             @endif
-                                        @else
-                                        <span class="text-success fw-bold">{{ number_format($data->jml_jual) }}</span>
-                                        @endif
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex-grow-1 mt-4">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <span class="text-muted d-block fw-bold">Harga :</span>
-                                        <span class="text-danger fw-bold">Rp. {{ number_format($data->harga) }}</span>
-                                    </div>
-                                    <div class="col-6">
-                                        <span class="text-muted d-block fw-bold">Disc(%) :</span>
-                                        <span class="text-dark fw-bold">{{ number_format($data->disc_detail, 2) }}</span>
+                            <div class="mb-14">
+                                <div class="fw-bold text-gray-600 fs-7">TOP:</div>
+                                <div class="fw-boldest text-gray-800 fs-7">
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        <span class="pe-2">{{ $data->umur_faktur }} Hari</span>
+                                        <span class="fs-7 fw-boldest text-primary d-flex align-items-center">
+                                            <span class="bullet bullet-dot bg-primary me-2"></span>{{ $data->tanggal_akhir_faktur }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <span class="text-muted d-block fw-bold mt-4">Total :</span>
-                            <span class="text-danger fw-bold">Rp. {{ number_format($data->total_detail) }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @empty
-            <center>
-                <tr>
-                    <img src="{{ asset('assets/media/illustrations/sketchy-1/4.png') }}" alt="" class="mw-100 mh-150px mb-7">
-                    <div class="fw-bolder fs-3 text-gray-600 text-hover-primary">Data Not Found</div>
-                </tr>
-            </center>
-            @endforelse
-            <div class="card card-flush mt-5">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                            <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                <span class="text-muted d-block fw-bold">Total Detail</span>
+                            <h6 class="mb-8 fw-boldest text-gray-600">SURAT JALAN</h6>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Nama Dealer SJ:</div>
+                                <div class="fw-bolder text-gray-800 fs-7">{{ trim($data->dealer_sj->nama_dealer) }}</div>
                             </div>
-                            <div class="text-end py-lg-0 py-2">
-                                <span class="text-gray-800 fw-boldest fs-6">Rp. {{ number_format($sub_total) }}</span>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Alamat SJ:</div>
+                                <div class="fw-bolder text-gray-800 fs-7">{{ trim($data->dealer_sj->alamat) }}</div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                            <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                <span class="text-muted d-block fw-bold">Discount(%)</span>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Kota SJ:</div>
+                                <div class="fw-bolder text-gray-800 fs-7">{{ trim($data->dealer_sj->kota) }}</div>
                             </div>
-                            <div class="text-end py-lg-0 py-2">
-                                <span class="text-gray-800 fw-boldest fs-6">{{ number_format($disc_header, 2) }}</span>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Keterangan 1:</div>
+                                <div class="fw-bolder text-gray-800 fs-7">
+                                    @if(trim($data->dealer_sj->keterangan1) == '') - @else {{ trim($data->dealer_sj->keterangan1) }} @endif
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                            <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                <span class="text-muted d-block fw-bold">Discount(Rp.)</span>
-                            </div>
-                            <div class="text-end py-lg-0 py-2">
-                                <span class="text-gray-800 fw-boldest fs-6">Rp. {{ number_format($disc_rupiah) }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                            <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                                <span class="text-muted d-block fw-bold">Grand Total</span>
-                            </div>
-                            <div class="text-end py-lg-0 py-2">
-                                <span class="text-danger fw-boldest fs-6">Rp. {{ number_format($grand_total) }}</span>
+                            <div class="mb-6">
+                                <div class="fw-bold text-gray-600 fs-7">Keterangan 2:</div>
+                                <div class="fw-bolder text-gray-800 fs-7">
+                                    @if(trim($data->dealer_sj->keterangan2) == '') - @else {{ trim($data->dealer_sj->keterangan2) }} @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            @endif
-        </form>
+        </div>
     </div>
     @push('scripts')
         <script type="text/javascript">

@@ -336,7 +336,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('orders/faktur*')) ? 'active' : '' }}" href="{{ url('/orders/faktur') }}">
+                    <a class="menu-link {{ (Request::is('orders/faktur/*')) ? 'active' : '' }}" href="{{ url('/orders/faktur/daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -345,11 +345,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ (Request::is('orders/faktur*')) ? 'active' : '' }}">Faktur</span>
+                        <span class="menu-title {{ (Request::is('orders/faktur/*')) ? 'active' : '' }}">Faktur</span>
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('orders/tracking*')) ? 'active' : '' }}" href="{{ url('/orders/tracking') }}">
+                    <a class="menu-link {{ (Request::is('orders/tracking/*')) ? 'active' : '' }}" href="{{ url('/orders/tracking/daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -358,7 +358,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ (Request::is('orders/tracking*')) ? 'active' : '' }}">Tracking Order</span>
+                        <span class="menu-title {{ (Request::is('orders/tracking/*')) ? 'active' : '' }}">Tracking Order</span>
                     </a>
                 </div>
                 <div class="menu-item">

@@ -107,13 +107,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             Route::get('/orders/cart/checkout/result', 'App\Orders\CartController@cartCheckOutResult')->name('cart-check-out-result');
             Route::post('/orders/cart/checkout/cekaturanharga', 'App\Orders\CartController@cartCheckOutCekAturanHarga')->name('cart-check-out-cek-aturan-harga');
 
-
-
-            Route::get('/orders/faktur', 'App\Orders\FakturController@index')->name('faktur');
-            Route::get('/orders/faktur/view/{no_faktur}', 'App\Orders\FakturController@fakturView')->where('no_faktur', '(.*)')->name('faktur-view');
+            Route::name('faktur.')->group(function () {
+                Route::get('/orders/faktur/daftar', 'App\Orders\FakturController@index')->name('daftar');
+                Route::get('/orders/faktur/view/{no_faktur}', 'App\Orders\FakturController@fakturView')->where('no_faktur', '(.*)')->name('view');
+            });
 
             Route::name('trackingorder.')->group(function () {
-                Route::get('/orders/tracking', 'App\Orders\TrackingOrderController@index')->name('daftar');
+                Route::get('/orders/tracking/daftar', 'App\Orders\TrackingOrderController@index')->name('daftar');
                 Route::get('/orders/tracking/view/{no_faktur}', 'App\Orders\TrackingOrderController@trackingOrderView')->where('no_faktur', '(.*)')->name('view');
             });
 

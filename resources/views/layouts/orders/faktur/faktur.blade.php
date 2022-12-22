@@ -7,31 +7,33 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Faktur</span>
-                    <span class="text-muted fw-boldest fs-7">Daftar faktur penjualan
-                        @if($month == 1) Januari
-                        @elseif($month == 2) Februari
-                        @elseif($month == 3) Maret
-                        @elseif($month == 4) April
-                        @elseif($month == 5) Mei
-                        @elseif($month == 6) Juni
-                        @elseif($month == 7) Juli
-                        @elseif($month == 8) Agustus
-                        @elseif($month == 9) September
-                        @elseif($month == 10) Oktober
-                        @elseif($month == 11) November
-                        @elseif($month == 12) Desember
-                        @endif {{ $year }}
+                    <span class="text-muted fw-bold fs-7">Daftar faktur penjualan
+                        <span class="text-dark fw-bolder fs-7">
+                            @if($data_filter->month == 1) Januari
+                            @elseif($data_filter->month == 2) Februari
+                            @elseif($data_filter->month == 3) Maret
+                            @elseif($data_filter->month == 4) April
+                            @elseif($data_filter->month == 5) Mei
+                            @elseif($data_filter->month == 6) Juni
+                            @elseif($data_filter->month == 7) Juli
+                            @elseif($data_filter->month == 8) Agustus
+                            @elseif($data_filter->month == 9) September
+                            @elseif($data_filter->month == 10) Oktober
+                            @elseif($data_filter->month == 11) November
+                            @elseif($data_filter->month == 12) Desember
+                            @endif {{ $data_filter->year }}
+                        </span>
                     </span>
-                    @if(trim($kode_sales) != '' || trim($kode_dealer) != '' || trim($nomor_faktur) != '')
+                    @if(trim($data_filter->kode_sales) != '' || trim($data_filter->kode_dealer) != '' || trim($data_filter->nomor_faktur) != '')
                     <div class="d-flex align-items-center mt-4">
-                        @if(trim($kode_sales) != '')
-                        <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ strtoupper(trim($kode_sales)) }}</span>
+                        @if(trim($data_filter->kode_sales) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ strtoupper(trim($data_filter->kode_sales)) }}</span>
                         @endif
-                        @if(trim($kode_dealer) != '')
-                        <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ strtoupper(trim($kode_dealer)) }}</span>
+                        @if(trim($data_filter->kode_dealer) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ strtoupper(trim($data_filter->kode_dealer)) }}</span>
                         @endif
-                        @if(trim($nomor_faktur) != '')
-                        <span class="badge badge-secondary fs-8 fw-boldest me-2">FAKTUR : {{ strtoupper(trim($nomor_faktur)) }}</span>
+                        @if(trim($data_filter->nomor_faktur) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">FAKTUR : {{ strtoupper(trim($data_filter->nomor_faktur)) }}</span>
                         @endif
                     </div>
                     @endif
@@ -45,19 +47,244 @@
         </div>
 
         @if(strtoupper(trim($device)) == 'DESKTOP')
-            @include('layouts.orders.faktur.desktop.fakturlist')
+            <div class="card card-flush mt-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-row-dashed table-row-gray-300 align-middle">
+                            <thead class="border">
+                                <tr class="fs-8 fw-bolder text-muted">
+                                    <th class="w-50px ps-3 pe-3 text-center">No</th>
+                                    <th class="w-200px ps-3 pe-3 text-center">No Faktur</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">AFO</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">Cetak</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">Sales</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">Dealer</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">TMKR</th>
+                                    <th class="min-w-150px ps-3 pe-3 text-center">Keterangan</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">TPC</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">TOP</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">BO</th>
+                                    <th class="w-100px text-end ps-3 pe-3 text-center">Total</th>
+                                    <th class="w-50px ps-3 pe-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border">
+                                @forelse($data_faktur as $data)
+                                <tr>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                        <span class="fs-7 fw-bold text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                        <div class="row align-items-start">
+                                            <a href="{{ route('orders.faktur.view', trim($data->nomor_faktur)) }}" class="fs-7 fw-boldest text-gray-800 text-hover-primary">{{ trim($data->nomor_faktur) }}</a>
+                                            <span class="fs-7 fw-bolder text-muted">{{ date('d F Y', strtotime($data->tanggal)) }}</span>
+                                        </div>
+                                        <div class="row align-items-end">
+                                            <div class="mt-6"></div>
+                                        </div>
+                                        <div class="row align-items-end">
+                                            <span class="fs-7 fw-bolder text-gray-800">{{ trim($data->nomor_pof) }}</span>
+                                            <div class="d-flex align-items-center flex-wrap">
+                                                <span class="fs-8 fw-boldest text-info d-flex align-items-center">{{ trim($data->kode_beli) }}
+                                                    <span class="bullet bullet-dot bg-info ms-2 me-2"></span>
+                                                    @if($data->jenis_order == 'H')
+                                                    <span class="fs-8 fw-boldest text-danger">HOTLINE</span>
+                                                    @elseif($data->jenis_order == 'P')
+                                                    <span class="fs-8 fw-boldest text-info">PMO</span>
+                                                    @else
+                                                        @if($data->status_pof == 1)
+                                                        <span class="fs-8 fw-boldest text-primary">POF</span>
+                                                        @else
+                                                        <span class="fs-8 fw-boldest text-success">REGULER</span>
+                                                        @endif
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <span class="fs-8 fw-boldest text-danger mt-6">@if(trim($data->usertime) == '') - @else {{ $data->usertime }} @endif</span>
+                                        </div>
+                                    </td>
+                                    <td class="ps-3 pe-3 text-center" style="text-align:center;vertical-align:top;">
+                                        @if((int)$data->approve_online == 1)
+                                        <i class="fa fa-check text-success"></i>
+                                        @endif
+                                    </td>
+                                    <td class="ps-3 pe-3 text-center" style="text-align:center;vertical-align:top;">
+                                        @if((int)$data->status_cetak == 1)
+                                        <i class="fa fa-check text-success"></i>
+                                        @endif
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                        <span class="fs-8 fw-boldest text-info text-uppercase">{{ trim($data->kode_sales) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                        <span class="fs-8 fw-boldest text-primary text-uppercase">{{ trim($data->kode_dealer) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                        <span class="fs-8 fw-boldest text-danger text-uppercase">{{ trim($data->kode_telemarketing) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                        <p class="fs-7 fw-bold text-gray-800">@if(trim($data->keterangan) == '') - @else {{ $data->keterangan }} @endif</p>
+                                    </td>
+                                    <td class="ps-3 pe-3 text-center" style="text-align:center;vertical-align:top;">
+                                        @if(trim($data->kode_tpc) == '14')
+                                        <span class="fs-8 fw-boldest text-info">14</span>
+                                        @else
+                                        <span class="fs-8 fw-boldest text-danger">20</span>
+                                        @endif
+                                    </td>
+                                    <td class="ps-3 pe-3 text-center" style="text-align:center;vertical-align:top;">
+                                        <span class="fs-8 fw-boldest text-primary">{{ number_format($data->umur_faktur) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3 text-center" style="text-align:center;vertical-align:top;">
+                                        @if($data->bo == 'B')
+                                        <span class="fs-8 fw-boldest text-danger">BO</span>
+                                        @else
+                                        <span class="fs-8 fw-boldest text-warning">TIDAK BO</span>
+                                        @endif
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->total) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                        <a href="{{ route('orders.faktur.view', trim($data->nomor_faktur)) }}" class="btn btn-icon btn-primary btn-sm">
+                                            <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="11" class="fs-7 fw-bolder text-gray-500 text-center pt-10 pb-10">- TIDAK ADA DATA YANG DITAMPILKAN -</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         @else
-        <div id="dataFaktur">
-            @include('layouts.orders.faktur.mobile.fakturlist')
-        </div>
-        <div id="dataLoadFaktur"></div>
+            @foreach ($data_faktur as $data)
+            <div class="card card-flush mt-4">
+                <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
+                    @if (trim($data->kode_tpc) == '14')
+                    <div class="ribbon-label fw-bold bg-primary">
+                        <i class="bi bi-percent fs-2 text-white"></i>
+                    </div>
+                    @else
+                    <div class="ribbon-label fw-bold bg-danger">
+                        <i class="bi bi-currency-dollar fs-2 text-white"></i>
+                    </div>
+                    @endif
+                    <div class="row mt-4">
+                        <span class="fw-bold fs-7 text-gray-600">Nomor Faktur:</span>
+                        <span class="fw-bolder text-dark mt-1">{{ trim($data->nomor_faktur) }}</span>
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Tanggal Faktur:</span>
+                        <span class="fw-bolder text-dark mt-1">{{ date('j F Y', strtotime($data->tanggal)) }}</span>
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Salesman:</span>
+                        <div class="d-flex align-items-center flex-wrap mt-1">
+                            <span class="fs-7 fw-boldest text-info d-flex align-items-center">{{ $data->kode_sales }}
+                                <span class="bullet bullet-dot bg-info ms-2 me-2"></span>
+                                <span class="fw-bolder text-dark">{{ $data->nama_sales }}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Dealer:</span>
+                        <div class="d-flex align-items-center flex-wrap mt-1">
+                            <span class="fs-7 fw-boldest text-primary d-flex align-items-center">{{ $data->kode_dealer }}
+                                <span class="bullet bullet-dot bg-primary ms-2 me-2"></span>
+                                <span class="fw-bolder text-dark">{{ $data->nama_dealer }}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Jenis Order:</span>
+                        @if ($data->jenis_order == 'R')
+                        <span class="fs-8 fw-boldest text-success text-uppercase">REGULER</span>
+                        @else
+                        <span class="fs-8 fw-boldest text-danger text-uppercase">HOTLINE</span>
+                        @endif
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Status BO:</span>
+                        @if ($data->bo == 'B')
+                        <span class="fs-8 fw-boldest text-danger text-uppercase">BO</span>
+                        @else
+                        <span class="fs-8 fw-boldest text-warning text-uppercase">TIDAK BO</span>
+                        @endif
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Keterangan:</span>
+                        <span class="fw-bolder text-dark mt-1">@if(trim($data->keterangan) == '') - @else {{ trim($data->keterangan) }} @endif</span>
+                    </div>
+                    <div class="row mt-6">
+                        <span class="fw-bold fs-7 text-gray-600">Total:</span>
+                        <span class="fw-bolder fs-6 text-danger mt-1">Rp. {{ number_format($data->total) }}</span>
+                    </div>
+                    <div class="separator my-5"></div>
+                    <a href="{{ route('orders.faktur.view', trim($data->nomor_faktur)) }}" class="btn btn-primary mb-2" id="viewFaktur" role="button">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z" fill="currentColor"></path>
+                                <path opacity="0.3" d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z" fill="currentColor"></path>
+                            </svg>
+                        </span> Detail Faktur
+                    </a>
+                </div>
+            </div>
+            @endforeach
         @endif
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start mt-8">
+            <div class="dataTables_length">
+                <label>
+                    <select id="selectPerPage" name="per_page" class="form-select form-select-sm" data-control="select2" data-hide-search="true"
+                        onchange="this.form.submit()">
+                        <option value="10" @if($data_page->per_page == '10') {{'selected'}} @endif>10</option>
+                        <option value="25" @if($data_page->per_page == '25') {{'selected'}} @endif>25</option>
+                        <option value="50" @if($data_page->per_page == '50') {{'selected'}} @endif>50</option>
+                        <option value="100" @if($data_page->per_page == '100') {{'selected'}} @endif>100</option>
+                    </select>
+                </label>
+            </div>
+            <div class="dataTables_info" id="selectPerPageDealerInfo" role="status" aria-live="polite">Showing <span id="startRecordSalesman">{{ $data_page->from }}</span> to {{ $data_page->to }} of {{ $data_page->total }} records</div>
+        </div>
+        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end mt-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="kt_datatable_example_5_paginate">
+                <ul class="pagination">
+                    @foreach ($data_page->links as $link)
+                    <li class="page-item @if($link->active == true) active @endif
+                        @if($link->url == '') disabled @endif
+                        @if($data_page->current_page == $link->label) active @endif">
+                        @if($link->active == true)
+                        <span class="page-link">{{ $link->label }}</span>
+                        @else
+                        <a href="#" class="page-link" data-page="{{ $link->url }}">
+                            @if(Str::contains(strtolower($link->label), 'previous'))
+                            <i class="previous"></i>
+                            @elseif(Str::contains(strtolower($link->label), 'next'))
+                            <i class="next"></i>
+                            @else
+                            {{ $link->label }}
+                            @endif
+                        </a>
+                        @endif
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" tabindex="-2" id="modalFilter">
         <div class="modal-dialog">
             <div class="modal-content" id="modalFilterContent">
-                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('orders.faktur') }}">
+                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('orders.faktur.daftar') }}">
                     <div class="modal-header">
                         <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Faktur</h5>
                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -73,32 +300,32 @@
                         <div class="fv-row">
                             <label class="form-label required">Bulan:</label>
                             <select id="selectFilterMonth" name="month" class="form-select">
-                                <option value="1" @if($month == 1) {{"selected"}} @endif>Januari</option>
-                                <option value="2" @if($month == 2) {{"selected"}} @endif>Februari</option>
-                                <option value="3" @if($month == 3) {{"selected"}} @endif>Maret</option>
-                                <option value="4" @if($month == 4) {{"selected"}} @endif>April</option>
-                                <option value="5" @if($month == 5) {{"selected"}} @endif>Mei</option>
-                                <option value="6" @if($month == 6) {{"selected"}} @endif>Juni</option>
-                                <option value="7" @if($month == 7) {{"selected"}} @endif>Juli</option>
-                                <option value="8" @if($month == 8) {{"selected"}} @endif>Agustus</option>
-                                <option value="9" @if($month == 9) {{"selected"}} @endif>September</option>
-                                <option value="10" @if($month == 10) {{"selected"}} @endif>Oktober</option>
-                                <option value="11" @if($month == 11) {{"selected"}} @endif>November</option>
-                                <option value="12" @if($month == 12) {{"selected"}} @endif>Desember</option>
+                                <option value="1" @if($data_filter->month == 1) {{"selected"}} @endif>Januari</option>
+                                <option value="2" @if($data_filter->month == 2) {{"selected"}} @endif>Februari</option>
+                                <option value="3" @if($data_filter->month == 3) {{"selected"}} @endif>Maret</option>
+                                <option value="4" @if($data_filter->month == 4) {{"selected"}} @endif>April</option>
+                                <option value="5" @if($data_filter->month == 5) {{"selected"}} @endif>Mei</option>
+                                <option value="6" @if($data_filter->month == 6) {{"selected"}} @endif>Juni</option>
+                                <option value="7" @if($data_filter->month == 7) {{"selected"}} @endif>Juli</option>
+                                <option value="8" @if($data_filter->month == 8) {{"selected"}} @endif>Agustus</option>
+                                <option value="9" @if($data_filter->month == 9) {{"selected"}} @endif>September</option>
+                                <option value="10" @if($data_filter->month == 10) {{"selected"}} @endif>Oktober</option>
+                                <option value="11" @if($data_filter->month == 11) {{"selected"}} @endif>November</option>
+                                <option value="12" @if($data_filter->month == 12) {{"selected"}} @endif>Desember</option>
                             </select>
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label required">Tahun:</label>
                             <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun"
-                                @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
+                                @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label">Salesman:</label>
                             <div class="input-group">
                                 <input id="inputFilterSalesman" name="salesman" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Salesman" readonly
-                                    @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
-                                @if($role_id != 'MD_H3_SM')
-                                    @if($role_id != 'D_H3')
+                                    @if(isset($data_filter->kode_sales)) value="{{ $data_filter->kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
+                                @if($data_user->role_id != 'MD_H3_SM')
+                                    @if($data_user->role_id != 'D_H3')
                                     <button id="btnFilterPilihSalesman" name="btnFilterPilihSalesman" class="btn btn-icon btn-primary" type="button"
                                         data-toggle="modal" data-target="#salesmanSearchModal">
                                         <i class="fa fa-search"></i>
@@ -111,8 +338,8 @@
                             <label class="form-label">Dealer:</label>
                             <div class="input-group">
                                 <input id="inputFilterDealer" name="dealer" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Dealer" readonly
-                                    @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
-                                @if($role_id != 'D_H3')
+                                    @if(isset($data_filter->kode_dealer)) value="{{ $data_filter->kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
+                                @if($data_user->role_id != 'D_H3')
                                 <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
                                     data-toggle="modal" data-target="#dealerSearchModal">
                                     <i class="fa fa-search"></i>
@@ -124,7 +351,7 @@
                             <label class="form-label">Nomor Faktur:</label>
                             <div class="input-group has-validation mb-2">
                                 <input id="inputFilterNomorFaktur" name="nomor_faktur" type="search" class="form-control" placeholder="Semua Nomor Faktur"
-                                    @if(isset($nomor_faktur)) value="{{ $nomor_faktur }}" @else value="{{ old('nomor_faktur') }}"@endif>
+                                    @if(isset($data_filter->nomor_faktur)) value="{{ $data_filter->nomor_faktur }}" @else value="{{ old('nomor_faktur') }}"@endif>
                             </div>
                         </div>
                     </div>
@@ -148,31 +375,17 @@
         <script>
             const url = {
                 'setting_clossing_marketing': "{{ route('setting.setting-clossing-marketing') }}",
-                'orders_faktur': "{{ route('orders.faktur') }}",
+                'orders_faktur': "{{ route('orders.faktur.daftar') }}",
             }
             const data_filter = {
-                month: "{{ $month }}",
-                year: "{{ $year }}",
-                salesman: '{{$kode_sales}}',
-                dealer: '{{$kode_dealer}}',
-                nomor_faktur: '{{$nomor_faktur}}',
+                year: '{{ $data_filter->year }}',
+                month: '{{ $data_filter->month }}',
+                salesman: '{{ $data_filter->kode_sales }}',
+                dealer: '{{ $data_filter->kode_dealer }}',
+                nomor_faktur: '{{ $data_filter->nomor_faktur }}',
             }
-        </script>
-        @if(strtoupper(trim($device)) != 'DESKTOP')
-            <script src="{{ asset('assets/js/suma/orders/faktur/fakturmobile.js') }}?v={{ time() }}"></script>
-        @endif
-        <script type="text/javascript">
-            function input_kososng(){
-                @if ($role_id == 'MD_H3_SM')
-                    $('#inputFilterDealer').val('');
-                    $('#inputFilterNomorFaktur').val('');
-                @elseif($role_id == 'D_H3')
-                    $('#inputFilterNomorFaktur').val('');
-                @else
-                    $('#inputFilterSalesman').val('');
-                    $('#inputFilterDealer').val('');
-                    $('#inputFilterNomorFaktur').val('');
-                @endif;
+            const data_page = {
+                'start_record': '{{ $data_page->from }}'
             }
         </script>
         <script src="{{ asset('assets/js/suma/orders/faktur/faktur.js') }}?v={{ time() }}"></script>

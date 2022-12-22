@@ -50,7 +50,16 @@ class TrackingOrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::TrackingOrderDaftar($request->get('page'), $request->get('per_page'),
+        $per_page = 10;
+        if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
+            if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
+                $per_page = $request->get('per_page');
+            } else {
+                $per_page = 10;
+            }
+        }
+
+        $responseApi = ApiService::TrackingOrderDaftar($request->get('page'), $per_page,
                                         $year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
                                         strtoupper(trim($request->session()->get('app_user_id'))),
                                         strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -62,6 +71,7 @@ class TrackingOrderController extends Controller
             $data = json_decode($responseApi)->data;
 
             $data_tracking = $data->data;
+
             $data_page = new Collection();
             $data_page->push((object) [
                 'from'          => $data->from,
@@ -118,23 +128,7 @@ class TrackingOrderController extends Controller
             return view('layouts.orders.trackingorder.trackingorderform', [
                 'title_menu'    => 'Tracking Order',
                 'device'        => $device,
-                'nomor_faktur'  => $data->nomor_faktur,
-                'nomor_pof'     => $data->nomor_pof,
-                'tanggal_faktur' => $data->tanggal_faktur,
-                'kode_sales'    => $data->kode_sales,
-                'nama_sales'    => $data->nama_sales,
-                'kode_dealer'   => $data->kode_dealer,
-                'nama_dealer'   => $data->nama_dealer,
-                'kode_tpc'      => $data->kode_tpc,
-                'bo'            => $data->bo,
-                'total_jual'    => (double)$data->total_jual,
-                'sub_total'     => (double)$data->sub_total,
-                'disc_header'   => (double)$data->disc_header,
-                'nominal_disc_header' => (double)$data->nominal_disc_header,
-                'disc_rupiah'   => (double)$data->disc_rupiah,
-                'grand_total'   => (double)$data->grand_total,
-                'detail_faktur' => $data->detail_faktur,
-                'detail_pengiriman' => $data->detail_pengiriman
+                'data'          => $data
             ]);
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);

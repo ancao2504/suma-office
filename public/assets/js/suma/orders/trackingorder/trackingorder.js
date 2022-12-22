@@ -28,7 +28,7 @@ $(document).ready(function () {
 
     $('#inputFilterNomorFaktur').on('change keydown', function (e) {
         if (e.keyCode == 13 || e.type == 'change') {
-            var per_page = $('#selectPerPageForm').val();
+            var per_page = $('#selectPerPage').val();
             var year = $('#inputFilterYear').val();
             var month = $('#selectFilterMonth').val();
             var salesman = $('#inputFilterSalesman').val();
@@ -39,9 +39,9 @@ $(document).ready(function () {
         }
     });
 
-    $('#selectPerPageForm').change(function() {
+    $('#selectPerPage').change(function() {
         var start_record = data_page.start_record;
-        var per_page = $('#selectPerPageForm').val();
+        var per_page = $('#selectPerPage').val();
         var year = $('#inputFilterYear').val();
         var month = $('#selectFilterMonth').val();
         var salesman = $('#inputFilterSalesman').val();
@@ -56,7 +56,7 @@ $(document).ready(function () {
         var page_link = $(this)[0].getAttribute('data-page');
         var page = page_link.split('?page=')[1];
 
-        var per_page = $('#selectPerPageForm').val();
+        var per_page = $('#selectPerPage').val();
         var year = $('#inputFilterYear').val();
         var month = $('#selectFilterMonth').val();
         var salesman = $('#inputFilterSalesman').val();
@@ -142,7 +142,7 @@ $(document).ready(function () {
         $('#selectFilterDealer').val('');
         $('#inputFilterNomorFaktur').val('');
 
-        var per_page = $('#selectPerPageForm').val();
+        var per_page = $('#selectPerPage').val();
         var year = $('#inputFilterYear').val();
         var month = $('#selectFilterMonth').val();
         var salesman = $('#inputFilterSalesman').val();
