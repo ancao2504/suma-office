@@ -13,6 +13,4 @@ yarn-error.log
 /public/assets/images/parts/*
 /public/assets/images/sj/*
 /public/assets/images/penagihan_pembayaran/*
-/config/constants.php
-
 config/constants.php
