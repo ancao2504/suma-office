@@ -15,3 +15,4 @@ yarn-error.log
 /public/assets/images/penagihan_pembayaran/*
 /config/constants.php
 
+config/constants.php
