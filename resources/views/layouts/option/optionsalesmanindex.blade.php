@@ -1,7 +1,7 @@
-<div class="modal fade" id="salesmanSearchModalIndex" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionSalesmanIndex" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchSalesmanFormIndex" name="searchSalesmanFormIndex" autofill="off" autocomplete="off">
+            <form id="formOptionSalesmanIndex" name="formOptionSalesmanIndex" autofill="off" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title">Pilih Data Salesman</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -18,17 +18,13 @@
                         <label class="form-label">Cari berdasarkan kode sales:</label>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchSalesmanIndex" name="search_salesman_index" type="text" class="form-control" placeholder="Input kode salesman">
-                            <button id="btnSearchSalesmanIndex" name="btnSearchSalesmanIndex" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionSalesmanIndex" type="text" class="form-control" placeholder="Input Data Salesman">
+                            <button id="btnSearchOptionSalesmanIndex" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="salesmanContentModalIndex"></div>
+                    <div id="optionSalesmanIndexContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-</script>

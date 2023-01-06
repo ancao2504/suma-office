@@ -24,180 +24,245 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
     });
 
     Route::group(['middleware' => 'authLogin'], function () {
-        Route::name('header.')->group(function () {
-            Route::post('/header/carttotal', 'App\Orders\CartController@cartInformation')->name('cart-total');
-        });
 
         Route::name('home.')->group(function () {
             Route::get('/', 'App\Home\HomeController@index')->name('index');
         });
 
         Route::name('dashboard.')->group(function () {
-            Route::get('/dashboard/salesman', 'App\Dashboard\DashboardSalesmanController@index')->name('dashboard-salesman');
-            Route::get('/dashboard/salesman/penjualanharian', 'App\Dashboard\DashboardSalesmanController@dashboardPenjualanHarian')->name('dashboard-salesman-penjualan-harian');
-            Route::get('/dashboard/salesman/penjualangrouplevel', 'App\Dashboard\DashboardSalesmanController@dashboardPenjualanGroupLevel')->name('dashboard-salesman-penjualan-group-level');
+            Route::name('salesman.')->group(function () {
+                Route::get('/dashboard/salesman', 'App\Dashboard\DashboardSalesmanController@index')->name('salesman');
+                Route::get('/dashboard/salesman/penjualanharian', 'App\Dashboard\DashboardSalesmanController@dashboardPenjualanHarian')->name('penjualan-harian');
+                Route::get('/dashboard/salesman/penjualangrouplevel', 'App\Dashboard\DashboardSalesmanController@dashboardPenjualanGroupLevel')->name('penjualan-group-level');
+            });
 
-            Route::get('/dashboard/dealer', 'App\Dashboard\DashboardDealerController@index')->name('dashboard-dealer');
+            Route::name('dealer.')->group(function () {
+                Route::get('/dashboard/dealer', 'App\Dashboard\DashboardDealerController@index')->name('dealer');
+            });
 
-            Route::get('/dashboard/management', 'App\Dashboard\Management\DashboardManagementController@index')->name('dashboard-management');
-            Route::get('/dashboard/management/sales', 'App\Dashboard\Management\DashboardManagementSalesController@index')->name('dashboard-management-sales');
-            Route::get('/dashboard/management/stock', 'App\Dashboard\Management\DashboardManagementStockController@index')->name('dashboard-management-stock');
+            Route::name('management.')->group(function () {
+                Route::get('/dashboard/management', 'App\Dashboard\Management\DashboardManagementController@index')->name('management');
+                Route::get('/dashboard/management/sales', 'App\Dashboard\Management\DashboardManagementSalesController@index')->name('sales');
+                Route::get('/dashboard/management/stock', 'App\Dashboard\Management\DashboardManagementStockController@index')->name('stock');
+            });
 
-            Route::get('/dashboard/marketing/pencapaian/perlevel', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerLevel')->name('dashboard-marketing-pencapaian-perlevel');
-            Route::get('/dashboard/marketing/pencapaian/growth', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianGrowth')->name('dashboard-marketing-pencapaian-growth');
-            Route::get('/dashboard/marketing/pencapaian/perproduk', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerProduk')->name('dashboard-marketing-pencapaian-perproduk');
+            Route::name('marketing.')->group(function () {
+                Route::name('pencapaian.')->group(function () {
+                    Route::get('/dashboard/marketing/pencapaian/perlevel', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerLevel')->name('perlevel');
+                    Route::get('/dashboard/marketing/pencapaian/growth', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianGrowth')->name('growth');
+                    Route::get('/dashboard/marketing/pencapaian/perproduk', 'App\Dashboard\Marketing\DashboardMarketingController@dashboardPencapaianPerProduk')->name('produk');
+                });
+            });
         });
 
         Route::name('profile.')->group(function () {
-            Route::get('/profile/dealer', 'App\Profile\DealerController@index')->name('dealer');
-            Route::get('/profile/dealer/view/{kode}', 'App\Profile\DealerController@dealerProfile')->where('kode', '(.*)')->name('dealer-profile');
+            Route::name('dealer.')->group(function () {
+                Route::get('/profile/dealer/daftar', 'App\Profile\DealerController@daftarDealer')->name('daftar');
+                Route::get('/profile/dealer/form/{kode}', 'App\Profile\DealerController@formDealer')->where('kode', '(.*)')->name('form');
+            });
 
-            Route::get('/profile/account', 'App\Profile\AccountController@index')->name('account-profile');
-            Route::post('/profile/account/save', 'App\Profile\AccountController@saveAccount')->name('save-account-profile');
-            Route::get('/profile/account/changepassword', 'App\Profile\AccountController@changePassword')->name('account-change-password-profile');
-            Route::post('/profile/account/changepassword/save', 'App\Profile\AccountController@saveChangePassword')->name('save-change-password-profile');
+            Route::name('users.')->group(function () {
+                Route::get('/profile/users/daftar', 'App\Profile\UserController@daftarUser')->name('daftar');
+                Route::get('/profile/users/tambah', 'App\Profile\UserController@tambahUser')->name('tambah');
+                Route::get('/profile/users/form/{user_id}', 'App\Profile\UserController@formUser')->name('form');
+                Route::post('/profile/users/simpan', 'App\Profile\UserController@simpanUser')->name('simpan');
+            });
 
-            Route::get('/profile/users', 'App\Profile\UserController@index')->name('users');
-            Route::get('/profile/users/add', 'App\Profile\UserController@userAdd')->name('add-users');
-            Route::post('/profile/users/save', 'App\Profile\UserController@userSave')->name('save-users');
-            Route::get('/profile/users/edit/{user_id}', 'App\Profile\UserController@userEdit')->name('edit-users');
+            Route::name('account.')->group(function () {
+                Route::get('/profile/account/index', 'App\Profile\AccountController@index')->name('index');
+                Route::post('/profile/account/simpan', 'App\Profile\AccountController@saveAccount')->name('simpan');
+                Route::get('/profile/account/changepassword', 'App\Profile\AccountController@changePassword')->name('change-password');
+                Route::post('/profile/account/changepassword/simpan', 'App\Profile\AccountController@saveChangePassword')->name('simpan-password');
+            });
+
+
         });
 
         Route::name('parts.')->group(function () {
-            Route::get('/parts/partnumber', 'App\Parts\PartNumberController@index')->name('part-number');
-            Route::post('/parts/partnumber/viewcart', 'App\Parts\PartNumberController@partNumberViewCart')->name('view-cart-part-number');
-            Route::post('/parts/partnumber/viewcart/add', 'App\Parts\PartNumberController@partNumberAddCart')->name('add-cart-part-number');
+            Route::name('partnumber.')->group(function () {
+                Route::get('/parts/partnumber/daftar', 'App\Parts\PartNumberController@daftarPartNumber')->name('daftar');
+                Route::post('/parts/partnumber/cart/tambah', 'App\Parts\PartNumberController@tambahCartPartNumber')->name('tambah');
+                Route::post('/parts/partnumber/cart/proses', 'App\Parts\PartNumberController@prosesCartPartNumber')->name('proses');
+            });
 
+            Route::name('backorder.')->group(function () {
+                Route::get('/parts/backorder/daftar', 'App\Parts\BackOrderController@index')->name('daftar');
+            });
 
-            Route::get('/parts/backorder', 'App\Parts\BackOrderController@index')->name('back-order');
-
-            Route::get('/parts/stockharian', 'App\Parts\StockHarianController@index')->name('stock-harian');
-            Route::get('/parts/stockharian/proses', 'App\Parts\StockHarianController@proses')->name('stock-harian-proses');
+            Route::name('stockharian.')->group(function () {
+                Route::get('/parts/stockharian/form', 'App\Parts\StockHarianController@index')->name('form');
+                Route::get('/parts/stockharian/proses', 'App\Parts\StockHarianController@proses')->name('proses');
+            });
         });
 
         Route::name('orders.')->group(function () {
-            Route::get('/orders/purchaseorder', 'App\Orders\PurchaseOrderController@index')->name('purchase-order');
-            Route::get('/orders/purchaseorder/view/{nomor_pof}', 'App\Orders\PurchaseOrderController@purchaseOrderForm')->name('purchase-order-form');
-            Route::get('/orders/purchaseorder/view/detail/{kode_key}', 'App\Orders\PurchaseOrderController@purchaseOrderFormDetail')->name('purchase-order-form-edit-detail');
-            Route::post('/orders/purchaseorder/view/detail/updatetpc', 'App\Orders\PurchaseOrderController@purchaseOrderFormUpdateTpc')->name('purchase-order-form-update-tpc');
-            Route::post('/orders/purchaseorder/view/detail/editdiscount', 'App\Orders\PurchaseOrderController@purchaseOrderFormEditDiscount')->name('purchase-order-form-edit-discount');
-            Route::post('/orders/purchaseorder/view/detail/updatediscount', 'App\Orders\PurchaseOrderController@purchaseOrderFormUpdateDiscount')->name('purchase-order-form-update-discount');
-            Route::post('/orders/purchaseorder/view/detail/editpartnumber', 'App\Orders\PurchaseOrderController@purchaseOrderFormEditPart')->name('purchase-order-form-edit-part');
-            Route::post('/orders/purchaseorder/view/detail/simpanpartnumber', 'App\Orders\PurchaseOrderController@purchaseOrderFormSimpanPart')->name('purchase-order-form-simpan-part');
-            Route::post('/orders/purchaseorder/view/detail/hapuspartnumber', 'App\Orders\PurchaseOrderController@purchaseOrderFormHapusPart')->name('purchase-order-form-hapus-part');
-            Route::post('/orders/purchaseorder/view/detail/save', 'App\Orders\PurchaseOrderController@purchaseOrderFormSave')->name('purchase-order-form-save');
-            Route::post('/orders/purchaseorder/view/detail/batalapprove', 'App\Orders\PurchaseOrderController@purchaseOrderFormBatalApprove')->name('purchase-order-form-batal-approve');
-            Route::post('/orders/purchaseorder/terlayani', 'App\Orders\PurchaseOrderController@viewDetailPofTerlayani')->name('purchase-order-form-terlayani');
+            Route::name('purchaseorderform.')->group(function () {
+                Route::get('/orders/purchaseorderform/daftar', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@index')->name('daftar');
+                Route::post('/orders/purchaseorderform/terlayani', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@viewDetailPofTerlayani')->name('terlayani');
 
+                Route::name('form.')->group(function () {
+                    Route::get('/orders/purchaseorderform/form/{nomor_pof}', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@purchaseOrderForm')->name('detail');
+                    Route::post('/orders/purchaseorderform/form/updatetpc', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@purchaseOrderFormUpdateTpc')->name('update-tpc');
+                    Route::post('/orders/purchaseorderform/form/editdiscount', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@purchaseOrderFormEditDiscount')->name('edit-discount');
+                    Route::post('/orders/purchaseorderform/form/updatediscount', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@purchaseOrderFormUpdateDiscount')->name('update-discount');
+                    Route::post('/orders/purchaseorderform/form/simpan', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@purchaseOrderFormSimpan')->name('simpan');
+                    Route::post('/orders/purchaseorderform/form/batalapprove', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormController@purchaseOrderFormBatalApprove')->name('batal-approve');
 
-            Route::post('/orders/cart/editheader', 'App\Orders\CartController@cartEditHeader')->name('edit-header-cart');
-            Route::post('/orders/cart/importexcel', 'App\Orders\CartController@cartImportExcel')->name('import-excel-cart');
-            Route::post('/orders/cart/resetdata', 'App\Orders\CartController@cartResetData')->name('reset-cart');
+                    Route::name('detail.')->group(function () {
+                        Route::get('/orders/purchaseorderform/form/detail/daftar', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController@purchaseOrderFormDetailDaftar')->name('daftar');
+                        Route::post('/orders/purchaseorderform/form/detail/editpartnumber', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController@purchaseOrderFormDetailEditPart')->name('edit');
+                        Route::post('/orders/purchaseorderform/form/detail/simpanpartnumber', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController@purchaseOrderFormDetailSimpanPart')->name('simpan');
+                        Route::post('/orders/purchaseorderform/form/detail/hapuspartnumber', 'App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController@purchaseOrderFormDetailHapusPart')->name('hapus');
+                    });
+                });
+            });
 
-            Route::get('/orders/cart/cartdetail', 'App\Orders\CartController@daftarCartDetail')->name('daftar-cart-detail');
-            Route::post('/orders/cart/cartdetail/insert', 'App\Orders\CartController@cartSimpanPart')->name('insert-cart-detail');
-            Route::post('/orders/cart/cartdetail/delete', 'App\Orders\CartController@cartHapusPart')->name('delete-cart-detail');
+            Route::name('cart.')->group(function () {
+                Route::name('index.')->group(function () {
+                    Route::get('/orders/cart/index/index', 'App\Orders\Cart\Index\CartIndexController@index')->name('index');
+                    Route::get('/orders/cart/index/estimasi', 'App\Orders\Cart\Index\CartIndexController@estimasiCart')->name('estimasi-cart');
+                });
+                Route::get('/orders/cart/index', 'App\Orders\Cart\CartController@index')->name('index');
+                Route::post('/orders/cart/importexcel', 'App\Orders\Cart\CartController@cartImportExcel')->name('import-excel');
+                Route::post('/orders/cart/resetdata', 'App\Orders\Cart\CartController@cartResetData')->name('reset');
+                Route::post('/orders/cart/simpandraft', 'App\Orders\Cart\CartController@cartSimpanDraft')->name('simpan-draft');
 
-            Route::get('/orders/cart', 'App\Orders\CartController@index')->name('cart');
-            Route::post('/orders/cart/edit/', 'App\Orders\CartController@cartEditDetail')->name('cart-detail-edit');
-            Route::post('/orders/cart/simpandraft', 'App\Orders\CartController@cartSimpanDraft')->name('cart-simpan-draft');
+                Route::name('detail.')->group(function () {
+                    Route::get('/orders/cart/cartdetail', 'App\Orders\Cart\CartController@daftarCartDetail')->name('daftar');
+                    Route::post('/orders/cart/cartdetail/edit/', 'App\Orders\Cart\CartController@cartEditDetail')->name('cart-detail-edit');
+                    Route::post('/orders/cart/cartdetail/simpan', 'App\Orders\Cart\CartController@cartSimpanPart')->name('simpan');
+                    Route::post('/orders/cart/cartdetail/hapus', 'App\Orders\Cart\CartController@cartHapusPart')->name('hapus');
+                });
 
-            Route::get('/orders/cart/checkout/prepare', 'App\Orders\CartController@cartCheckOutPrepare')->name('cart-prepare-check-out');
-            Route::post('/orders/cart/checkout/checkout', 'App\Orders\CartController@cartCheckOut')->name('cart-check-out');
-            Route::get('/orders/cart/checkout/result', 'App\Orders\CartController@cartCheckOutResult')->name('cart-check-out-result');
-            Route::post('/orders/cart/checkout/cekaturanharga', 'App\Orders\CartController@cartCheckOutCekAturanHarga')->name('cart-check-out-cek-aturan-harga');
+                Route::name('checkout.')->group(function () {
+                    Route::get('/orders/cart/checkout/prepare', 'App\Orders\CartController@cartCheckOutPrepare')->name('prepare');
+                    Route::post('/orders/cart/checkout/checkout', 'App\Orders\CartController@cartCheckOut')->name('check-out');
+                    Route::get('/orders/cart/checkout/result', 'App\Orders\CartController@cartCheckOutResult')->name('result');
+                    Route::post('/orders/cart/checkout/cekaturanharga', 'App\Orders\CartController@cartCheckOutCekAturanHarga')->name('cek-aturan-harga');
+                });
+            });
+
 
             Route::name('faktur.')->group(function () {
                 Route::get('/orders/faktur/daftar', 'App\Orders\FakturController@index')->name('daftar');
-                Route::get('/orders/faktur/view/{no_faktur}', 'App\Orders\FakturController@fakturView')->where('no_faktur', '(.*)')->name('view');
+                Route::get('/orders/faktur/form/{no_faktur}', 'App\Orders\FakturController@fakturForm')->where('no_faktur', '(.*)')->name('form');
             });
 
             Route::name('trackingorder.')->group(function () {
-                Route::get('/orders/tracking/daftar', 'App\Orders\TrackingOrderController@index')->name('daftar');
-                Route::get('/orders/tracking/view/{no_faktur}', 'App\Orders\TrackingOrderController@trackingOrderView')->where('no_faktur', '(.*)')->name('view');
+                Route::get('/orders/tracking/daftar', 'App\Orders\TrackingOrderController@daftarTrackingOrder')->name('daftar');
+                Route::get('/orders/tracking/form/{no_faktur}', 'App\Orders\TrackingOrderController@formTrackingOrder')->where('no_faktur', '(.*)')->name('form');
             });
 
-            Route::get('/orders/pembayaranfaktur', 'App\Orders\PembayaranFakturController@index')->name('pembayaran-faktur');
-            Route::get('/orders/pembayaranfaktur/belumterbayar', 'App\Orders\PembayaranFakturController@pembayaranFakturBelumTerbayar')->name('pembayaran-faktur-belum-terbayar');
-            Route::get('/orders/pembayaranfaktur/terbayar', 'App\Orders\PembayaranFakturController@pembayaranFakturTerbayar')->name('pembayaran-faktur-terbayar');
-            Route::post('/orders/pembayaranfaktur/detailperfaktur', 'App\Orders\PembayaranFakturController@pembayaranFakturDetailPerFaktur')->name('pembayaran-faktur-detail-per-faktur');
-            Route::post('/orders/pembayaranfaktur/detailperbpk', 'App\Orders\PembayaranFakturController@pembayaranFakturDetailPerBpk')->name('pembayaran-faktur-detail-per-bpk');
+            Route::name('pembayaranfaktur.')->group(function () {
+                Route::get('/orders/pembayaranfaktur', 'App\Orders\PembayaranFaktur\PembayaranFakturController@index')->name('index');
+                Route::get('/orders/pembayaranfaktur/belumterbayar', 'App\Orders\PembayaranFaktur\PembayaranFakturController@pembayaranFakturBelumTerbayar')->name('daftar-belum-terbayar');
+                Route::get('/orders/pembayaranfaktur/terbayar', 'App\Orders\PembayaranFaktur\PembayaranFakturController@pembayaranFakturTerbayar')->name('daftar-terbayar');
 
-            // surat jalan
-            Route::get('/orders/penerimaan/ceksj', 'App\Orders\Penerimaan\SuratJalanController@CekPenerimaanSJ')->name('cek_penerimaan_sj');
+                Route::name('detail.')->group(function () {
+                    Route::post('/orders/pembayaranfaktur/detail/faktur', 'App\Orders\PembayaranFaktur\PembayaranFakturController@pembayaranFakturDetailPerFaktur')->name('faktur');
+                    Route::post('/orders/pembayaranfaktur/detail/bpk', 'App\Orders\PembayaranFaktur\PembayaranFakturController@pembayaranFakturDetailPerBpk')->name('bpk');
+                });
+            });
 
-            Route::get('/orders/penerimaan/sj', 'App\Orders\Penerimaan\SuratJalanController@create')->name('surat_jalan');
-            Route::post('/orders/penerimaan/sj/simpan', 'App\Orders\Penerimaan\SuratJalanController@store')->name('surat_jalan_simpan');
-            Route::post('/orders/penerimaan/sj/hapus', 'App\Orders\Penerimaan\SuratJalanController@destroy')->name('surat_jalan_hapus');
+            Route::name('penerimaanpembayaran.')->group(function () {
+                Route::get('/warehouse/penerimaan/pembayaran/daftar', 'App\Orders\Penerimaan\PembayaranController@daftarPembayaranDealer')->name('daftar-pembayaran');
+                Route::post('/warehouse/penerimaan/pembayaran/simpan', 'App\Orders\Penerimaan\PembayaranController@store')->name('simpan-pembayaran');
+                Route::get('/warehouse/penerimaan/pembayaran', 'App\Orders\Penerimaan\PembayaranController@index')->name('pembayaran');
+            });
 
-            Route::get('/orders/penerimaan/sj/filter', 'App\Orders\Penerimaan\SuratJalanController@filter')->name('surat_jalan_filter');
-            Route::get('/orders/penerimaan/sj/report', 'App\Orders\Penerimaan\SuratJalanController@report')->name('surat_jalan_report');
+        });
 
-            // pembayaran
-            Route::get('/orders/penerimaan/pembayaran/daftar', 'App\Orders\Penerimaan\PembayaranController@daftarPembayaranDealer')->name('daftar-pembayaran');
-            Route::post('/orders/penerimaan/pembayaran/simpan', 'App\Orders\Penerimaan\PembayaranController@store')->name('simpan-pembayaran');
-            Route::get('/orders/penerimaan/pembayaran', 'App\Orders\Penerimaan\PembayaranController@index')->name('pembayaran');
+        Route::name('warehouse.')->group(function () {
+            Route::name('suratjalan.')->group(function () {
+                Route::name('penerimaan.')->group(function () {
+                    Route::get('/warehouse/suratjalan/penerimaan/ceksj', 'App\Orders\Penerimaan\SuratJalanController@CekPenerimaanSJ')->name('cek_penerimaan_sj');
+                    Route::get('/warehouse/suratjalan/penerimaan/sj', 'App\Orders\Penerimaan\SuratJalanController@create')->name('surat_jalan');
+                    Route::post('/warehouse/suratjalan/penerimaan/sj/simpan', 'App\Orders\Penerimaan\SuratJalanController@store')->name('surat_jalan_simpan');
+                    Route::post('/warehouse/suratjalan/penerimaan/sj/hapus', 'App\Orders\Penerimaan\SuratJalanController@destroy')->name('surat_jalan_hapus');
+                    Route::get('/warehouse/suratjalan/penerimaan/sj/filter', 'App\Orders\Penerimaan\SuratJalanController@filter')->name('surat_jalan_filter');
+                    Route::get('/warehouse/suratjalan/penerimaan/sj/report', 'App\Orders\Penerimaan\SuratJalanController@report')->name('surat_jalan_report');
+                });
+            });
         });
 
         Route::name('option.')->group(function () {
-            Route::get('/option/dealer', 'App\Option\OptionController@optionDealer')->name('option-dealer');
-            Route::get('/option/dealerindex', 'App\Option\OptionController@optionDealerIndex')->name('option-dealer-index');
-            Route::get('/option/dealersalesman', 'App\Option\OptionController@optionDealerSalesman')->name('option-dealer-salesman');
-            Route::get('/option/salesman', 'App\Option\OptionController@optionSalesman')->name('option-salesman');
-            Route::get('/option/supervisor', 'App\Option\OptionController@optionSupervisor')->name('option-supervisor');
-            Route::get('/option/partnumber', 'App\Option\OptionController@optionPartNumber')->name('option-part-number');
-            Route::get('/option/tipemotor', 'App\Option\OptionController@optionTipeMotor')->name('option-tipe-motor');
-            Route::get('/option/groupproduk', 'App\Option\OptionController@OptionGroupProduk')->name('option-group-produk');
+            Route::get('/option/dealer', 'App\Option\OptionController@optionDealer')->name('dealer');
+            Route::get('/option/dealersalesman', 'App\Option\OptionController@optionDealerSalesman')->name('dealer-salesman');
+            Route::get('/option/salesman', 'App\Option\OptionController@optionSalesman')->name('salesman');
+            Route::get('/option/supervisor', 'App\Option\OptionController@optionSupervisor')->name('supervisor');
+            Route::get('/option/partnumber', 'App\Option\OptionController@optionPartNumber')->name('part-number');
+            Route::get('/option/tipemotor', 'App\Option\OptionController@optionTipeMotor')->name('tipe-motor');
+            Route::get('/option/groupproduk', 'App\Option\OptionController@OptionGroupProduk')->name('group-produk');
         });
 
         Route::name('setting.')->group(function () {
-            Route::get('/setting/clossingmkr', 'App\Setting\SettingController@clossingMarketing')->name('setting-clossing-marketing');
+            Route::name('default.')->group(function () {
+                Route::get('/setting/clossingmkr', 'App\Setting\SettingController@clossingMarketing')->name('clossing-marketing');
+            });
 
-            Route::get('/setting/cetakulang', 'App\Setting\CetakUlang\CetakUlangController@index')->name('setting-cetak-ulang');
-            Route::post('/setting/cetakulang/cekdokumen', 'App\Setting\CetakUlang\CetakUlangController@cekNomorDokumen')->name('setting-cetak-ulang-cek-dokumen');
-            Route::post('/setting/cetakulang/simpan', 'App\Setting\CetakUlang\CetakUlangController@simpanCetakUlang')->name('setting-cetak-ulang-simpan');
+            Route::name('cetakulang.')->group(function () {
+                Route::get('/setting/cetakulang', 'App\Setting\CetakUlang\CetakUlangController@index')->name('daftar');
+                Route::post('/setting/cetakulang/cekdokumen', 'App\Setting\CetakUlang\CetakUlangController@cekNomorDokumen')->name('cek-dokumen');
+                Route::post('/setting/cetakulang/simpan', 'App\Setting\CetakUlang\CetakUlangController@simpanCetakUlang')->name('simpan');
+            });
 
-            // diskon Produk
-            Route::get('/setting/diskon/produk', 'App\Setting\Diskon\DiskonProdukController@index')->name('setting-diskon-produk');
-            Route::post('/setting/diskon/produk/simpan', 'App\Setting\Diskon\DiskonProdukController@store')->name('setting-diskon-produk-simpan');
-            Route::post('/setting/diskon/produk/hapus', 'App\Setting\Diskon\DiskonProdukController@destroy')->name('setting-diskon-produk-hapus');
+            Route::name('diskon.')->group(function () {
+                Route::name('prosentase.')->group(function () {
+                    Route::name('produk.')->group(function () {
+                        Route::get('/setting/diskon/produk', 'App\Setting\Diskon\DiskonProdukController@index')->name('daftar');
+                        Route::post('/setting/diskon/produk/cekproduk', 'App\Setting\Diskon\DiskonProdukController@cekDiskonProduk')->name('validasi');
+                        Route::post('/setting/diskon/produk/simpan', 'App\Setting\Diskon\DiskonProdukController@store')->name('simpan');
+                        Route::post('/setting/diskon/produk/hapus', 'App\Setting\Diskon\DiskonProdukController@destroy')->name('hapus');
 
-            Route::post('/setting/diskon/produk/cekproduk', 'App\Setting\Diskon\DiskonProdukController@cekDiskonProduk')->name('setting-validasi-diskon-produk');
+                        Route::name('dealer.')->group(function () {
+                            Route::get('/setting/diskon/dealer/produk', 'App\Setting\Diskon\DiskonProdukDealerController@index')->name('daftar');
+                            Route::post('/setting/diskon/dealer/produk/simpan', 'App\Setting\Diskon\DiskonProdukDealerController@store')->name('simpan');
+                            Route::post('/setting/diskon/dealer/produk/hapus', 'App\Setting\Diskon\DiskonProdukDealerController@destroy')->name('hapus');
+                        });
+                    });
 
-            // diskon Produk Dealer
-            Route::get('/setting/diskon/dealer/produk', 'App\Setting\Diskon\DiskonProdukDealerController@index')->name('setting-diskon-produk-dealer');
-            Route::post('/setting/diskon/dealer/produk/simpan', 'App\Setting\Diskon\DiskonProdukDealerController@store')->name('setting-diskon-produk-dealer-simpan');
-            Route::post('/setting/diskon/dealer/produk/hapus', 'App\Setting\Diskon\DiskonProdukDealerController@destroy')->name('setting-diskon-produk-dealer-hapus');
+                    Route::name('dealer.')->group(function () {
+                        Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('daftar');
+                        Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('simpan');
+                        Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('hapus');
+                    });
 
-            // diskon Dealer
-            Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('setting-diskon-dealer');
-            Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('setting-diskon-dealer-simpan');
-            Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('setting-diskon-dealer-hapus');
+                    Route::name('part.')->group(function () {
+                        Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('daftar');
+                        Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('simpan');
+                        Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('hapus');
+                    });
+                });
 
-            // part Netto
-            Route::get('/setting/harga/netto/part', 'App\Setting\HargaNetto\HargaNettoPartsControllers@index')->name('setting-harga-netto-parts');
-            Route::post('/setting/harga/netto/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsControllers@storeDestroy')->name('setting-harga-netto-parts-simpan');
+                Route::name('netto.')->group(function () {
+                    Route::name('dealer.')->group(function () {
+                        Route::get('/setting/harga/netto/dealer/part', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@index')->name('daftar');
+                        Route::post('/setting/harga/netto/dealer/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@store')->name('simpan');
+                        Route::post('/setting/harga/netto/dealer/part/hapus', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@destroy')->name('hapus');
+                    });
 
-            // part Netto Dealer
-            Route::get('/setting/harga/netto/dealer/part', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@index')->name('setting-harga-netto-parts-dealer');
-            Route::post('/setting/harga/netto/dealer/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@store')->name('setting-harga-netto-parts-dealer-simpan');
-            Route::post('/setting/harga/netto/dealer/part/hapus', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@destroy')->name('setting-harga-netto-parts-dealer-hapus');
+                    Route::name('part.')->group(function () {
+                        Route::get('/setting/harga/netto/part', 'App\Setting\HargaNetto\HargaNettoPartsControllers@index')->name('daftar');
+                        Route::post('/setting/harga/netto/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsControllers@storeDestroy')->name('simpan');
+                    });
+                });
+            });
         });
 
         Route::name('validasi.')->group(function () {
-            Route::post('/validasi/salesman', 'App\Validasi\ValidasiController@validasiSalesman')->name('validasi-salesman');
-            Route::post('/validasi/dealer', 'App\Validasi\ValidasiController@validasiDealer')->name('validasi-dealer');
-            Route::post('/validasi/dealersalesman', 'App\Validasi\ValidasiController@validasiDealerSalesman')->name('validasi-dealer-salesman');
-            Route::post('/validasi/partnumber', 'App\Validasi\ValidasiController@validasiPartNumber')->name('validasi-part-number');
-
-            // validasiProduk
-            Route::post('/validasi/produk', 'App\Validasi\ValidasiController@validasiProduk')->name('validasi-produk');
+            Route::post('/validasi/salesman', 'App\Validasi\ValidasiController@validasiSalesman')->name('salesman');
+            Route::post('/validasi/dealer', 'App\Validasi\ValidasiController@validasiDealer')->name('dealer');
+            Route::post('/validasi/dealersalesman', 'App\Validasi\ValidasiController@validasiDealerSalesman')->name('dealer-salesman');
+            Route::post('/validasi/partnumber', 'App\Validasi\ValidasiController@validasiPartNumber')->name('part-number');
+            Route::post('/validasi/produk', 'App\Validasi\ValidasiController@validasiProduk')->name('produk');
         });
 
         Route::name('visit.')->group(function () {
-            Route::get('/visit/planningvisit', 'App\Visit\PlanningVisitController@index')->name('planning-visit');
-            Route::post('/visit/planningvisit/save', 'App\Visit\PlanningVisitController@savePlanningVisit')->name('save-planning-visit');
-            Route::post('/visit/planningvisit/delete', 'App\Visit\PlanningVisitController@deletePlanningVisit')->name('delete-planning-visit');
+            Route::name('planning.')->group(function () {
+                Route::get('/visit/planningvisit', 'App\Visit\PlanningVisitController@index')->name('daftar');
+                Route::post('/visit/planningvisit/simpan', 'App\Visit\PlanningVisitController@savePlanningVisit')->name('simpan');
+                Route::post('/visit/planningvisit/hapus', 'App\Visit\PlanningVisitController@deletePlanningVisit')->name('hapus');
+            });
         });
     });
 

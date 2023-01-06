@@ -1,9 +1,9 @@
-<div class="modal fade" id="tipeMotorSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionTipeMotor" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchTipeMotorForm" name="searchTipeMotorForm" autofill="off" autocomplete="off">
+            <form id="formOptionTipeMotor" name="formOptionTipeMotor" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitleTipeMotor" name="modalTitleTipeMotor" class="modal-title">Pilih Data Tipe Motor</h5>
+                    <h5 class="modal-title">Pilih Data Tipe Motor</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -15,16 +15,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="fv-row mb-5">
-                        <label class="form-label">Cari berdasarkan keterangan motor:</label>
+                        <label class="form-label">Cari berdasarkan tipe motor:</label>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchTipeMotor" name="search_tipe_motor" type="text" class="form-control" placeholder="Input Keterangan Motor">
-                            <button id="btnSearchTipeMotor" name="btnSearchTipeMotor" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionTipeMotor" type="text" class="form-control" placeholder="Input Data Tipe Motor">
+                            <button id="btnSearchOptionTipeMotor" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="tipeMotorContentModal"></div>
+                    <div id="optionTipeMotorContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/tipemotor.js') }}?v={{ time() }}"></script>
+@endpush

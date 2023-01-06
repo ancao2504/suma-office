@@ -84,7 +84,7 @@
         <div class="modal fade" tabindex="-1" id="modalSalesmanDealerIndex">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="formSalesmanDealerIndex" name="formSalesmanDealerIndex" autofill="off" autocomplete="off" method="POST" action="{{ route('orders.cart-simpan-draft') }}">
+                    <form id="formSalesmanDealerIndex" name="formSalesmanDealerIndex" autofill="off" autocomplete="off" method="POST" action="{{ route('orders.cart.simpan-draft') }}">
                         @csrf
                         <div class="modal-header">
                             <h5 id="modalTitle" name="modalTitle" class="modal-title">Entry Salesman & Dealer</h5>
@@ -99,14 +99,14 @@
                         </div>
                         <div class="modal-body">
                             <div class="fv-row">
-                                <label class="required form-label">Salesman</label>
+                                <label class="required form-label">Salesman:</label>
                                 <div class="input-group">
-                                    <input id="inputKodeSalesIndex" name="salesmanIndex" type="text" class="form-control @if(session()->get('app_user_role_id') == 'MD_H3_SM') form-control-solid @endif"
+                                    <input id="inputKodeSalesIndex" name="salesmanIndex" type="text" style="cursor: pointer;" placeholder="Pilih Data Salesman"
+                                        class="form-control @if(session()->get('app_user_role_id') == 'MD_H3_SM') form-control-solid @endif"
                                         @if(session()->get('app_user_role_id') == 'MD_H3_SM') value="{{ session()->get('app_user_id') }}" @endif readonly required>
                                         @if(strtoupper(trim(session()->get('app_user_role_id'))) != 'D_H3')
                                             @if(strtoupper(trim(session()->get('app_user_role_id'))) != 'MD_H3_SM')
-                                            <button id="btnPilihSalesmanIndex" name="btnPilihSalesmanIndex" class="btn btn-icon btn-primary" type="button"
-                                                data-toggle="modal" data-target="#salesmanSearchModalIndex"
+                                            <button id="btnPilihSalesmanIndex" name="btnPilihSalesmanIndex" class="btn btn-icon btn-primary" type="button" role="button"
                                                 @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'D_H3') disabled
                                                 @elseif(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM') disabled @endif>
                                                 <i class="fa fa-search"></i>
@@ -116,19 +116,19 @@
                                 </div>
                             </div>
                             <div class="fv-row mt-8">
-                                <label class="required form-label">Dealer</label>
+                                <label class="required form-label">Dealer:</label>
                                 <div class="input-group">
-                                    <input id="inputKodeDealerIndex" name="dealerIndex" style="text-transform: uppercase" type="text" class="form-control" readonly required>
-                                    <button id="btnPilihDealerIndex" name="btnPilihDealerIndex" class="btn btn-icon btn-primary" type="button"
-                                        data-toggle="modal" data-target="#dealerSearchModalIndex">
+                                    <input id="inputKodeDealerIndex" name="dealerIndex" type="text" style="cursor: pointer;" class="form-control"
+                                        placeholder="Pilih Data Dealer" readonly required>
+                                    <button id="btnPilihDealerIndex" name="btnPilihDealerIndex" class="btn btn-icon btn-primary" type="button" role="button">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="form" value="index" class="btn btn-primary">Simpan</button>
-                            <button id="btnClose" name="btnClose" type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" role="button" name="form" value="index" class="btn btn-primary">Simpan</button>
+                            <button id="btnClose" name="btnClose" type="button" role="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>
@@ -166,214 +166,151 @@
         @include('layouts.option.optionsalesmanindex')
         @include('layouts.option.optiondealerindex')
 
+        <script src="{{ asset('assets/js/suma/option/salesmanindex.js') }}?v={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/option/dealerindex.js') }}?v={{ time() }}"></script>
+
         <script type="text/javascript">
-            // window.onbeforeunload = function(e) {
-            //     loading.block();
-            // };
+            function estimasiTotalCart() {
+                loading.block();
+                $.ajax({
+                    url: "{{ route('orders.cart.index.estimasi-cart') }}",
+                    method: "get",
 
-            $(document).ready(function() {
-                loading.release();
-                @if ($title_menu != 'Cart')
-                    getInfoDataCart();
-                @else
-                    $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                    document.getElementById('kt_body').removeAttribute("style");
-                @endif
+                    success: function(response) {
+                        loading.release();
 
-                function getInfoDataCart() {
-                    var _token = $('input[name="_token"]').val();
-                    $.ajax({
-                        url: "{{ route('header.cart-total') }}",
-                        method: "POST",
-                        data: { _token: _token },
-
-                        success:function(response) {
-                            if (response.status == true) {
-                                $('#infoCartTotal').html(response.view_total_estimate_cart);
-                                if(response.view_total_item_cart > 0) {
-                                    $('#infoItemCart').html(response.view_total_item_cart);
-                                } else {
-                                    $('#infoItemCart').html('');
-                                }
-                                $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed');
-                                document.getElementById('kt_body').style.cssText = '--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px';
+                        if (response.status == true) {
+                            $('#infoCartTotal').html(response.view_estimate_cart);
+                            if(response.view_total_item_cart > 0) {
+                                $('#infoItemCart').html(response.view_item_cart);
                             } else {
                                 $('#infoItemCart').html('');
-                                $('#infoCartTotal').html('');
-                                $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                                document.getElementById('kt_body').removeAttribute("style");
                             }
+                            $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed');
+                            document.getElementById('kt_body').style.cssText = '--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px';
+                        } else {
+                            $('#infoItemCart').html('');
+                            $('#infoCartTotal').html('');
+                            $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
+                            document.getElementById('kt_body').removeAttribute("style");
                         }
-                    });
-                }
+                    },
+                    error: function() {
+                        loading.release();
+                    }
+                });
+            }
 
-                function openModalSalesDealer() {
-                    var _token = $('input[name="_token"]').val();
+            function cekSalesmanDealerIndex() {
+                loading.block();
+                $.ajax({
+                    url: "{{ route('orders.cart.index.index') }}",
+                    method: "get",
 
-                    $.ajax({
-                        url: "{{ route('orders.edit-header-cart') }}",
-                        method: "POST",
-                        data: { _token: _token },
-                        success:function(response) {
-                            if (response.status == false) {
-                                Swal.fire({
-                                    text: response.message,
-                                    icon: "error",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger"
-                                    }
-                                });
-                            } else {
-                                if(response.data != null) {
-                                    $('#inputKodeSalesIndex').val(response.data.salesman);
-                                    $('#inputKodeDealerIndex').val(response.data.dealer);
+                    success: function(response) {
+                        loading.release();
+                        if (response.status == false) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-danger"
                                 }
-
-                                $('#modalSalesmanDealerIndex').modal({backdrop: 'static', keyboard: false});
-                                $('#modalSalesmanDealerIndex').modal('show');
+                            });
+                        } else {
+                            if(response.data != null) {
+                                $('#inputKodeSalesIndex').val(response.data.salesman);
+                                $('#inputKodeDealerIndex').val(response.data.dealer);
                             }
-                        }
-                    });
-                }
 
+                            $('#modalSalesmanDealerIndex').modal({backdrop: 'static', keyboard: false});
+                            $('#modalSalesmanDealerIndex').modal('show');
+                        }
+                    },
+                    error: function() {
+                        loading.release();
+                    }
+                });
+            }
+
+            $(document).ready(function() {
                 $('body').on('click', '.menu-item a', function(e) {
                     loading.block();
                 });
 
-                $('body').on('keypress', '#searchHeaderParts', function(e) {
-                    if (e.which == 13) {
-                        loading.block();
-                    }
+                // $('body').on('keypress', '#modalOptionSalesmanIndex', function(e) {
+                //     if(e.which == 13) {
+                //         var self = $(this), form = self.parents('#formOptionSalesmanIndex'), focusable, next;
+                //         focusable = form.find('input,a,select,button,textarea').filter(':visible');
+                //         next = focusable.eq(focusable.index(this)+1);
+                //         if (next.length) {
+                //             next.focus();
+                //         } else {
+                //             form.submit();
+                //         }
+                //         return false;
+                //     }
+                // });
+
+                @if ($title_menu != 'Cart')
+                estimasiTotalCart();
+                @else
+                $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
+                document.getElementById('kt_body').removeAttribute("style");
+                @endif
+
+                $('body').on('click', '#btnSalesmanDealerHeaderIndex', function(e) {
+                    cekSalesmanDealerIndex();
                 });
 
-                $('body').on('click', '#btnSalesmanDealerIndex', function(e) {
-                    openModalSalesDealer();
-                });
-
-                function loadDataSalesmanIndex(page = 1, per_page = 10, search = '') {
-                    $.ajax({
-                        url: "{{ route('option.option-salesman') }}?search="+search+"&per_page="+per_page+"&page="+page,
-                        method: "get",
-                        success:function(response) {
-                            if (response.status == false) {
-                                Swal.fire({
-                                    text: response.message,
-                                    icon: "error",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger"
-                                    }
-                                });
-                            } else {
-                                $('#salesmanContentModalIndex').html(response.data);
-                            }
-                        }
-                    });
-                }
-
-                $(document).on('click', '#searchSalesmanFormIndex  #pagesalesman .pagination .page-item a', function() {
-                    pagesIndex = $(this)[0].getAttribute("data-page");
-                    pageIndex = pagesIndex.split('?page=')[1];
-
-                    var search_sales_index = $('#searchSalesmanFormIndex #inputSearchSalesmanIndex').val();
-                    var per_page_sales_index = $('#searchSalesmanFormIndex #salesmanContentModalIndex #pagesalesman #selectPerPageSalesman').val();
-
-                    loadDataSalesmanIndex(pageIndex, per_page_sales_index, search_sales_index);
-                });
-
-                $('body').on('change', '#searchSalesmanFormIndex #salesmanContentModalIndex #pagesalesman #selectPerPageSalesman', function(e) {
-                    e.preventDefault();
-                    pagesIndex = $('#searchSalesmanFormIndex #pagesalesman .pagination .page-item a')[0].getAttribute("data-page");
-                    pageIndex = pagesIndex.split('?page=')[1];
-
-                    var start_record_sales_index = $('#searchSalesmanFormIndex #salesmanContentModalIndex #pagesalesman #selectPerPageSalesmanInfo #startRecordSalesman').html();
-                    var search_sales_index = $('#searchSalesmanFormIndex #inputSearchSalesmanIndex').val();
-                    var per_page_sales_index = $('#searchSalesmanFormIndex #salesmanContentModalIndex #pagesalesman #selectPerPageSalesman').val();
-
-                    var page = Math.ceil(start_record_sales_index / per_page_sales_index);
-
-                    loadDataSalesmanIndex(pageIndex, per_page_sales_index, search_sales_index);
-                });
-
-                $('body').on('click', '#searchSalesmanFormIndex #btnSearchSalesmanIndex', function(e) {
-                    e.preventDefault();
-                    var search_sales_index = $('#searchSalesmanFormIndex #inputSearchSalesmanIndex').val();
-                    var per_page_sales_index = $('#searchSalesmanFormIndex #salesmanContentModalIndex #pagesalesman #selectPerPageSalesman').val();
-
-                    loadDataSalesmanIndex(1, per_page_sales_index, search_sales_index);
+                //===========================================================
+                // SALESMAN
+                //===========================================================
+                $('body').on('click', '#inputKodeSalesIndex', function(e) {
+                    loadDataOptionSalesmanIndex();
+                    $('#formOptionSalesmanIndex').trigger('reset');
+                    $('#modalOptionSalesmanIndex').modal('show');
                 });
 
                 $('body').on('click', '#btnPilihSalesmanIndex', function(e) {
-                    loadDataSalesmanIndex();
-                    $('#searchSalesmanFormIndex').trigger('reset');
-                    $('#salesmanSearchModalIndex').modal('show');
+                    loadDataOptionSalesmanIndex();
+                    $('#formOptionSalesmanIndex').trigger('reset');
+                    $('#modalOptionSalesmanIndex').modal('show');
                 });
 
-                $('body').on('click', '#searchSalesmanFormIndex #salesmanContentModalIndex #selectSalesman', function(e) {
+                $('body').on('click', '#formOptionSalesmanIndex #selectSalesman', function(e) {
                     e.preventDefault();
                     var salesman_index = $(this).data('kode_sales');
 
                     $('#inputKodeSalesIndex').val(salesman_index);
                     $('#inputKodeDealerIndex').val('');
-                    $('#salesmanSearchModalIndex').modal('hide');
-                    $('#inputKodeSalesIndex').focus();
+
+                    $('#modalOptionSalesmanIndex').modal('hide');
                 });
 
-                function loadDataDealerIndex(salesman = '', page = 1, per_page = 10, search = '') {
-                    $.ajax({
-                        url: "{{ route('option.option-dealer-index') }}?salesman="+salesman+"&search="+search+"&per_page="+per_page+"&page="+page,
-                        method: "get",
-                        success:function(response) {
-                            if (response.status == false) {
-                                Swal.fire({
-                                    text: response.message,
-                                    icon: "error",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger"
-                                    }
-                                });
-                            } else {
-                                $('#dealerContentModalIndex').html(response.data);
+                //===========================================================
+                // DEALER
+                //===========================================================
+                $('body').on('click', '#modalSalesmanDealerIndex #inputKodeDealerIndex', function(e) {
+                    var salesmanIndex = $('#inputKodeSalesIndex').val();
+
+                    if(salesmanIndex == '') {
+                        Swal.fire({
+                            text: "Pilih kode sales terlebih dahulu",
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-danger"
                             }
-                        }
-                    });
-                }
-
-                $(document).on('click', '#searchDealerFormIndex #pageDealerIndex .pagination .page-item a', function() {
-                    pagesIndex = $(this)[0].getAttribute("data-page");
-                    pageIndex = pagesIndex.split('?page=')[1];
-
-                    var salesmanIndex = $('#inputKodeSalesIndex').val();
-                    var search_dealer_index = $('#searchDealerFormIndex #inputSearchDealerIndex').val();
-                    var per_page_dealer_index = $('#searchDealerFormIndex #dealerContentModalIndex #pageDealerIndex #selectPerPageDealerIndex').val();
-
-                    loadDataDealerIndex(salesmanIndex, pageIndex, per_page_dealer_index, search_dealer_index);
-                });
-
-                $('body').on('change', '#searchDealerFormIndex #dealerContentModalIndex #pageDealerIndex #selectPerPageDealerIndex', function(e) {
-                    e.preventDefault();
-                    var salesmanIndex = $('#inputKodeSalesIndex').val();
-                    var start_record_dealer_index = $('#searchDealerFormIndex #dealerContentModalIndex #pageDealerIndex #selectPerPageDealerInfo #startRecordDealer').html();
-                    var search_dealer_index = $('#searchDealerFormIndex #inputSearchDealerIndex').val();
-                    var per_page_dealer_index = $('#searchDealerFormIndex #dealerContentModalIndex #pageDealerIndex #selectPerPageDealerIndex').val();
-
-                    var pageIndex = Math.ceil(start_record_dealer_index / per_page_dealer_index);
-
-                    loadDataDealerIndex(salesmanIndex, pageIndex, per_page_dealer_index, search_dealer_index);
-                });
-
-                $('body').on('click', '#searchDealerFormIndex #btnSearchDealerIndex', function(e) {
-                    e.preventDefault();
-                    var salesmanIndex = $('#inputKodeSalesIndex').val();
-                    var search_dealer_index = $('#searchDealerFormIndex #inputSearchDealerIndex').val();
-                    var per_page_dealer_index = $('#searchDealerFormIndex #dealerContentModalIndex #pageDealerIndex #selectPerPageDealerIndex').val();
-
-                    loadDataDealerIndex(salesmanIndex, 1, per_page_dealer_index, search_dealer_index);
+                        });
+                    } else {
+                        $('#formOptionDealerIndex').trigger('reset');
+                        loadDataOptionDealerIndex(salesmanIndex.trim(), 1, 10, '');
+                        $('#modalOptionDealerIndex').modal('show');
+                    }
                 });
 
                 $('body').on('click', '#modalSalesmanDealerIndex #btnPilihDealerIndex', function(e) {
@@ -390,19 +327,17 @@
                             }
                         });
                     } else {
-                        loadDataDealerIndex(salesmanIndex, 1, 10, '');
-                        $('#searchDealerFormIndex').trigger('reset');
-                        $('#dealerSearchModalIndex').modal('show');
+                        $('#formOptionDealerIndex').trigger('reset');
+                        loadDataOptionDealerIndex(salesmanIndex.trim(), 1, 10, '');
+                        $('#modalOptionDealerIndex').modal('show');
                     }
                 });
 
-                $('body').on('click', '#searchDealerFormIndex #dealerContentModalIndex #selectDealerIndex', function(e) {
+                $('body').on('click', '#formOptionDealerIndex #selectDealerSalesman', function(e) {
                     e.preventDefault();
                     var dealerIndex = $(this).data('kode_dealer');
-
                     $('#inputKodeDealerIndex').val(dealerIndex);
-                    $('#dealerSearchModalIndex').modal('hide');
-                    $('#inputKodeDealerIndex').focus();
+                    $('#modalOptionDealerIndex').modal('hide');
                 });
             });
         </script>

@@ -1,49 +1,33 @@
 $(document).ready(function () {
-// ===============================================================
+    // ===============================================================
     // Daftar
     // ===============================================================
     function loadMasterData(page = 1, per_page = 10, year = '', month = '', salesman = '', dealer = '', nomor_faktur = '') {
         loading.block();
-        window.location.href = window.location.origin + window.location.pathname + '?year=' + year + '&month=' + month +
-            '&salesman=' + salesman + '&dealer=' + dealer + '&nomor_faktur=' + nomor_faktur + '&per_page=' + per_page +
-            '&page=' + page;
+        window.location.href = window.location.origin + window.location.pathname + '?year=' + year.trim() + '&month=' + month.trim() +
+            '&salesman=' + salesman.trim() + '&dealer=' + dealer.trim() + '&nomor_faktur=' + nomor_faktur.trim() + '&per_page=' + per_page + '&page=' + page;
     }
 
-    $('#inputFilterNomorFaktur').on('change keydown', function (e) {
-        if (e.keyCode == 13 || e.type == 'change') {
-            var per_page = $('#selectPerPage').val();
-            var year = $('#inputFilterYear').val();
-            var month = $('#selectFilterMonth').val();
-            var salesman = $('#inputFilterSalesman').val();
-            var dealer = $('#selectFilterDealer').val();
-            var nomor_faktur = $('#inputFilterNomorFaktur').val();
-
-            loadMasterData(1, per_page, year, month, salesman, dealer, nomor_faktur);
-        }
-    });
-
-    $('#selectPerPage').change(function() {
+    $('#selectPerPageMasterData').change(function() {
         var start_record = data_page.start_record;
-        var per_page = $('#selectPerPage').val();
+        var per_page = $('#selectPerPageMasterData').val();
         var year = $('#inputFilterYear').val();
         var month = $('#selectFilterMonth').val();
         var salesman = $('#inputFilterSalesman').val();
-        var dealer = $('#selectFilterDealer').val();
+        var dealer = $('#inputFilterDealer').val();
         var nomor_faktur = $('#inputFilterNomorFaktur').val();
         var page = Math.ceil(start_record / per_page);
 
         loadMasterData(page, per_page, year, month, salesman, dealer, nomor_faktur);
     });
 
-    $(document).on('click', '.page-item a', function () {
-        var page_link = $(this)[0].getAttribute('data-page');
-        var page = page_link.split('?page=')[1];
-
-        var per_page = $('#selectPerPage').val();
+    $(document).on('click', '#paginationMasterData .page-item a', function () {
+        var page = $(this)[0].getAttribute('data-page');
+        var per_page = $('#selectPerPageMasterData').val();
         var year = $('#inputFilterYear').val();
         var month = $('#selectFilterMonth').val();
         var salesman = $('#inputFilterSalesman').val();
-        var dealer = $('#selectFilterDealer').val();
+        var dealer = $('#inputFilterDealer').val();
         var nomor_faktur = $('#inputFilterNomorFaktur').val();
 
         loadMasterData(page, per_page, year, month, salesman, dealer, nomor_faktur);
@@ -52,44 +36,28 @@ $(document).ready(function () {
     // ===============================================================
     // Filter
     // ===============================================================
-    $('#inputFilterSalesman').on('click', function (e) {
+    $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
-        loadDataSalesman();
-        $('#searchSalesmanForm').trigger('reset');
-        $('#salesmanSearchModal').modal('show');
+
+        $('#inputFilterYear').val(data_filter.year);
+        $('#selectFilterMonth').prop('selectedIndex', data_filter.month - 1).change();
+        $('#inputFilterSalesman').val(data_filter.salesman);
+        $('#inputFilterDealer').val(data_filter.dealer);
+        $('#inputFilterNomorFaktur').val(data_filter.nomor_faktur);
+
+        $('#modalFilter').modal('show');
     });
 
-    $('#btnFilterPilihSalesman').on('click', function (e) {
+    $('#btnFilterProses').on('click', function (e) {
         e.preventDefault();
-        loadDataSalesman();
-        $('#searchSalesmanForm').trigger('reset');
-        $('#salesmanSearchModal').modal('show');
-    });
+        var per_page = $('#selectPerPageMasterData').val();
+        var year = $('#inputFilterYear').val();
+        var month = $('#selectFilterMonth').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#inputFilterDealer').val();
+        var nomor_faktur = $('#inputFilterNomorFaktur').val();
 
-    $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
-        e.preventDefault();
-        $('#inputFilterSalesman').val($(this).data('kode_sales'));
-        $('#salesmanSearchModal').modal('hide');
-    });
-
-    $('#inputFilterDealer').on('click', function (e) {
-        e.preventDefault();
-        loadDataDealer(1, 10, '');
-        $('#searchDealerForm').trigger('reset');
-        $('#dealerSearchModal').modal('show');
-    });
-
-    $('#btnFilterPilihDealer').on('click', function (e) {
-        e.preventDefault();
-        loadDataDealer(1, 10, '');
-        $('#searchDealerForm').trigger('reset');
-        $('#dealerSearchModal').modal('show');
-    });
-
-    $('body').on('click', '#dealerContentModal #selectDealer', function (e) {
-        e.preventDefault();
-        $('#inputFilterDealer').val($(this).data('kode_dealer'));
-        $('#dealerSearchModal').modal('hide');
+        loadMasterData(1, per_page, year, month, salesman, dealer, nomor_faktur);
     });
 
     $('#btnFilterReset').on('click', function (e) {
@@ -98,40 +66,208 @@ $(document).ready(function () {
         var month = dateObj.getUTCMonth() + 1;
         var year = dateObj.getUTCFullYear();
 
+        loading.block();
         $.ajax({
-            url: url.setting_clossing_marketing,
+            url: url.clossing_marketing,
             method: "get",
-            success: function (response) {
+            success: function(response) {
+                loading.release();
                 if (response.status == false) {
                     Swal.fire({
                         text: response.message,
-                        icon: "error",
+                        icon: "warning",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
                         customClass: {
-                            confirmButton: "btn btn-danger"
+                            confirmButton: "btn btn-warning"
                         }
                     });
                 } else {
                     month = response.data.bulan_aktif;
                     year = response.data.tahun_aktif;
+
+                    $('#selectFilterMonth').prop('selectedIndex', month - 1).change();
+                    $('#inputFilterYear').val(year);
+
+                    if(data_user.role_id == 'D_H3') {
+                        $('#inputFilterNomorFaktur').val('');
+                    } else if(data_user.role_id == 'MD_H3_SM') {
+                        $('#inputFilterDealer').val('');
+                        $('#inputFilterNomorFaktur').val('');
+                    } else {
+                        $('#inputFilterSalesman').val('');
+                        $('#inputFilterDealer').val('');
+                        $('#inputFilterNomorFaktur').val('');
+                    }
                 }
+            },
+            error: function() {
+                loading.release();
+                Swal.fire({
+                    text: 'Server tidak merespon, coba lagi',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
             }
         });
+    });
 
-        $('#selectFilterMonth').prop('selectedIndex', month - 1).change();
-        $('#inputFilterYear').val(year);
-        $('#inputFilterSalesman').val('');
-        $('#selectFilterDealer').val('');
-        $('#inputFilterNomorFaktur').val('');
+    // ===============================================================
+    // Filter
+    // ===============================================================
+    $('#btnFilterMasterData').on('click', function (e) {
+        e.preventDefault();
 
-        var per_page = $('#selectPerPage').val();
-        var year = $('#inputFilterYear').val();
-        var month = $('#selectFilterMonth').val();
+        $('#inputFilterSalesman').val(data_filter.salesman);
+        $('#inputFilterDealer').val(data_filter.dealer);
+        $('#inputFilterPartNumber').val(data_filter.part_number);
+
+        $('#modalFilter').modal('show');
+    });
+
+    $('#btnFilterProses').on('click', function (e) {
+        e.preventDefault();
+        var per_page = $('#selectPerPageMasterData').val();
         var salesman = $('#inputFilterSalesman').val();
-        var dealer = $('#selectFilterDealer').val();
-        var nomor_faktur = $('#inputFilterNomorFaktur').val();
+        var dealer = $('#inputFilterDealer').val();
+        var part_number = $('#inputFilterPartNumber').val();
 
-        loadMasterData(1, per_page, year, month, salesman, dealer, nomor_faktur);
+        loadMasterData(1, per_page, salesman, dealer, part_number);
+    });
+
+    $('#btnFilterReset').on('click', function (e) {
+        e.preventDefault();
+        if(data_user.role_id == 'D_H3') {
+            $('#inputFilterPartNumber').val('');
+        } else if(data_user.role_id == 'MD_H3_SM') {
+            $('#inputFilterDealer').val('');
+            $('#inputFilterPartNumber').val('');
+        } else {
+            $('#inputFilterSalesman').val('');
+            $('#inputFilterDealer').val('');
+            $('#inputFilterPartNumber').val('');
+        }
+    });
+
+    // ===============================================================
+    // Filter Salesman
+    // ===============================================================
+    $('#inputFilterSalesman').on('click', function (e) {
+        e.preventDefault();
+        if(data_user.role_id != 'D_H3' && data_user.role_id != 'MD_H3_SM') {
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
+        }
+    });
+
+    $('#btnFilterPilihSalesman').on('click', function (e) {
+        e.preventDefault();
+        if(data_user.role_id != 'D_H3' && data_user.role_id != 'MD_H3_SM') {
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
+        }
+    });
+
+    $('body').on('click', '#optionSalesmanContentModal #selectedOptionSalesman', function (e) {
+        e.preventDefault();
+        $('#inputFilterSalesman').val($(this).data('kode_sales'));
+        $('#modalOptionSalesman').modal('hide');
+    });
+
+    // ===============================================================
+    // Filter Dealer
+    // ===============================================================
+    $('#inputFilterDealer').on('click', function (e) {
+        e.preventDefault();
+        var kode_sales = $('#inputFilterSalesman').val();
+
+        if(data_user.role_id != 'D_H3') {
+            if(data_user.role_id == 'MD_H3_SM' || data_user.role_id == 'MD_H3_KORSM') {
+                if(kode_sales == '') {
+                    Swal.fire({
+                        text: 'Data salesman tidak boleh kosong',
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    $('#formOptionDealerSalesman').trigger('reset');
+                    loadDataOptionDealerSalesman(kode_sales.trim(), 1, 10, '');
+                    $('#modalOptionDealerSalesman').modal('show');
+                }
+            } else {
+                $('#formOptionDealer').trigger('reset');
+                loadDataOptionDealer(1, 10, '');
+                $('#modalOptionDealer').modal('show');
+            }
+        }
+    });
+
+    $('#btnFilterPilihDealer').on('click', function (e) {
+        e.preventDefault();
+        var kode_sales = $('#inputFilterSalesman').val();
+
+        if(data_user.role_id != 'D_H3') {
+            if(data_user.role_id == 'MD_H3_SM' || data_user.role_id == 'MD_H3_KORSM') {
+                if(kode_sales == '') {
+                    Swal.fire({
+                        text: 'Data salesman tidak boleh kosong',
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    $('#formOptionDealerSalesman').trigger('reset');
+                    loadDataOptionDealerSalesman(kode_sales.trim(), 1, 10, '');
+                    $('#modalOptionDealerSalesman').modal('show');
+                }
+            } else {
+                $('#formOptionDealer').trigger('reset');
+                loadDataOptionDealer(1, 10, '');
+                $('#modalOptionDealer').modal('show');
+            }
+        }
+    });
+
+    $('body').on('click', '#optionDealerContentModal #selectedOptionDealer', function (e) {
+        e.preventDefault();
+        $('#inputFilterDealer').val($(this).data('kode_dealer'));
+        $('#modalOptionDealer').modal('hide');
+    });
+
+    $('body').on('click', '#optionDealerSalesmanContentModal #selectedOptionDealerSalesman', function (e) {
+        e.preventDefault();
+        $('#inputFilterDealer').val($(this).data('kode_dealer'));
+        $('#modalOptionDealerSalesman').modal('hide');
+    });
+
+    // ===============================================================
+    // Filter Nomor Faktur
+    // ===============================================================
+    $('#inputFilterNomorFaktur').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  {
+            e.preventDefault();
+            var per_page = $('#selectPerPageMasterData').val();
+            var year = $('#inputFilterYear').val();
+            var month = $('#selectFilterMonth').val();
+            var salesman = $('#inputFilterSalesman').val();
+            var dealer = $('#inputFilterDealer').val();
+            var nomor_faktur = $('#inputFilterNomorFaktur').val();
+
+            loadMasterData(1, per_page, year, month, salesman, dealer, nomor_faktur);
+        }
     });
 });

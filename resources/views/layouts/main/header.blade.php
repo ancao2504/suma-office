@@ -56,7 +56,7 @@
 
                     <div class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px" data-kt-menu="true" id="kt_menu_6244763d95a3a" style="">
                         <div data-kt-search-element="wrapper">
-                            <form data-kt-search-element="form" class="w-100 position-relative mb-3" action="{{ route('parts.part-number') }}" method="get" autocomplete="off">
+                            <form data-kt-search-element="form" class="w-100 position-relative mb-3" action="{{ route('parts.partnumber.daftar') }}" method="get" autocomplete="off">
                                 <span class="svg-icon svg-icon-2 svg-icon-lg-1 svg-icon-gray-500 position-absolute top-50 translate-middle-y ms-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                         <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"></rect>
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="d-flex align-items-center ms-1 me-4 ms-lg-3">
-                        <a class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative" href="{{ route('orders.cart') }}">
+                        <a class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative" href="{{ route('orders.cart.index') }}">
                             <span class="svg-icon svg-icon-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path opacity="0.3" d="M18.041 22.041C18.5932 22.041 19.041 21.5932 19.041 21.041C19.041 20.4887 18.5932 20.041 18.041 20.041C17.4887 20.041 17.041 20.4887 17.041 21.041C17.041 21.5932 17.4887 22.041 18.041 22.041Z" fill="currentColor"/>
@@ -103,14 +103,14 @@
                             </div>
                             <div class="separator my-2"></div>
                             <div class="menu-item px-5">
-                                <a href="{{ route('profile.account-profile') }}" class="menu-link {{ (str_contains($title_menu, 'My Account')) ? 'active' : '' }} px-5">My Account</a>
+                                <a href="{{ route('profile.account.index') }}" class="menu-link {{ (str_contains($title_menu, 'My Account')) ? 'active' : '' }} px-5">My Account</a>
                             </div>
                             <div class="menu-item px-5">
-                                <a href="{{ route('orders.cart') }}" class="menu-link {{ (str_contains($title_menu, 'Cart')) ? 'active' : '' }} px-5">My Orders</a>
+                                <a href="{{ route('orders.cart.index') }}" class="menu-link {{ (str_contains($title_menu, 'Cart')) ? 'active' : '' }} px-5">My Orders</a>
                             </div>
                             <div class="separator my-2"></div>
                             <div class="menu-item px-5">
-                                <a href="{{ route('profile.account-change-password-profile') }}" class="menu-link {{ (str_contains($title_menu, 'Change Password')) ? 'active' : '' }}">Change Password</a>
+                                <a href="{{ route('profile.account.change-password') }}" class="menu-link {{ (str_contains($title_menu, 'Change Password')) ? 'active' : '' }}">Change Password</a>
                             </div>
                             <div class="separator my-2"></div>
                             <div class="menu-item px-5">

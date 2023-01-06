@@ -10,17 +10,46 @@ use Jenssegers\Agent\Agent as Agent;
 
 class TrackingOrderController extends Controller
 {
-    public function index(Request $request) {
+    public function daftarTrackingOrder(Request $request) {
         $year = date('Y');
         $month = date('m');
         $kode_sales = '';
         $kode_dealer = '';
 
-        if(!empty($request->get('year'))) {
-            $year = $request->get('year');
+        $Agent = new Agent();
+        $device = 'Desktop';
+        if ($Agent->isMobile()) {
+            $device = 'Mobile';
         }
-        if(!empty($request->get('month'))) {
-            $month = $request->get('month');
+
+        $per_page = 10;
+        if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
+            if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
+                $per_page = $request->get('per_page');
+            } else {
+                $per_page = 10;
+            }
+        }
+
+        $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+
+            if(!empty($request->get('year'))) {
+                $year = $request->get('year');
+            } else {
+                $year = $data->tahun_aktif;
+            }
+            if(!empty($request->get('month'))) {
+                $month = $request->get('month');
+            } else {
+                $month = $data->bulan_aktif;
+            }
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
@@ -50,20 +79,11 @@ class TrackingOrderController extends Controller
             }
         }
 
-        $per_page = 10;
-        if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
-            if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
-                $per_page = $request->get('per_page');
-            } else {
-                $per_page = 10;
-            }
-        }
-
         $responseApi = ApiService::TrackingOrderDaftar($request->get('page'), $per_page,
-                                        $year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
-                                        strtoupper(trim($request->session()->get('app_user_id'))),
-                                        strtoupper(trim($request->session()->get('app_user_role_id'))),
-                                        strtoupper(trim($request->session()->get('app_user_company_id'))));
+                            $year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
+                            strtoupper(trim($request->session()->get('app_user_id'))),
+                            strtoupper(trim($request->session()->get('app_user_role_id'))),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -98,8 +118,14 @@ class TrackingOrderController extends Controller
                 'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
             ]);
 
+            $data_device = new Collection();
+            $data_device->push((object) [
+                'device'        => $device
+            ]);
+
             return view('layouts.orders.trackingorder.trackingorder', [
                 'title_menu'    => 'Tracking Order',
+                'data_device'   => $data_device->first(),
                 'data_page'     => $data_page->first(),
                 'data_filter'   => $data_filter->first(),
                 'data_user'     => $data_user->first(),
@@ -110,8 +136,8 @@ class TrackingOrderController extends Controller
         }
     }
 
-    public function trackingOrderView($nomor_faktur, Request $request) {
-        $responseApi = ApiService::TrackingOrderDetail(strtoupper(trim($nomor_faktur)), strtoupper(trim($request->session()->get('app_user_id'))),
+    public function formTrackingOrder($nomor_faktur, Request $request) {
+        $responseApi = ApiService::TrackingOrderForm(strtoupper(trim($nomor_faktur)), strtoupper(trim($request->session()->get('app_user_id'))),
                                         strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

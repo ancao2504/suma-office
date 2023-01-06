@@ -92,7 +92,7 @@
                                                                 <span class="symbol-label" style="background-image:url({{ $data_detail->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
                                                             </span>
                                                             <div class="ms-5">
-                                                                <span class="fs-7">{{ $data_detail->nama_part }}</a>
+                                                                <span class="fs-7">{{ trim($data_detail->nama_part) }}</a>
                                                                 <div class="fs-7 text-muted">{{ $data_detail->part_number }}</div>
                                                             </div>
                                                         </div>
@@ -209,6 +209,76 @@
                 </div>
             </div>
         </div>
+        @if(strtoupper(trim($device)) == 'MOBILE')
+        <div class="card card-flush mt-8">
+            <div class="card-header align-items-center border-0 mt-4">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="fw-bolder mb-2 text-dark">Detail Faktur</span>
+                    <span class="text-muted fw-bold fs-7">Daftar detail part number</span>
+                </h3>
+            </div>
+            <div class="card-body">
+                @foreach($data->detail_faktur as $data_detail)
+                <div class="d-flex mb-7">
+                    <span class="symbol symbol-100px me-5">
+                        <span class="symbol-label" style="background-image:url({{ $data_detail->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
+                    </span>
+                    <div class="flex-grow-1">
+                        <div class="row">
+                            <span class="fs-6 text-dark fw-bolder">{{ trim($data_detail->part_number) }}</span>
+                            <span class="fs-7 text-muted fw-bold ">{{ trim($data_detail->nama_part) }}</span>
+                            <span class="fs-5 text-dark fw-bolder mt-4">Rp. {{ number_format($data_detail->harga) }}</span>
+                            @if((double)$data_detail->harga != (double)$data_detail->het)
+                            <div class="d-flex align-items-center">
+                                @if((double)$data_detail->disc_detail > 0)
+                                <div class="badge badge-light-danger fw-bolder fs-7 p-1">{{ number_format($data_detail->disc_detail, 2) }}%</div>
+                                @endif
+                                <del class="text-gray-600 fw-bolder fs-7 ms-2">Rp. {{ number_format($data_detail->het) }}</del>
+                            </div>
+                            @endif
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <span class="text-muted d-block fw-bold">Order:</span>
+                                    <div class="align-items-center">
+                                        <span class="fs-6 text-gray-800 fw-bolder">{{ number_format($data_detail->jml_order) }}</span>
+                                        <span class="fs-7 text-gray-600 fw-bolder ms-2">PCS</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <span class="text-muted d-block fw-bold">Terlayani:</span>
+                                    <div class="align-items-center">
+                                        <span class="fs-6 @if((double)$data_detail->jml_order > (double)$data_detail->jml_jual) text-danger @else text-gray-800 @endif fw-bolder">{{ number_format($data_detail->jml_jual) }}</span>
+                                        <span class="fs-7 text-gray-600 fw-bolder ms-2">PCS</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="fs-5 text-danger fw-boldest mt-4">Rp. {{ number_format($data_detail->total_detail) }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator my-10"></div>
+                @endforeach
+                <div class="row">
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">SUBTOTAL:</div>
+                        <div class="text-end fw-bolder fs-6 text-gray-800">Rp. {{ number_format($data->sub_total) }}</div>
+                    </div>
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">DISCOUNT (%):</div>
+                        <div class="text-end fw-bolder fs-6 text-gray-800">{{ number_format($data->disc_header, 2) }} % / Rp. {{ number_format($data->nominal_disc_header) }}</div>
+                    </div>
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">DISCOUNT (Rp.):</div>
+                        <div class="text-end fw-bolder fs-6 text-gray-800">Rp. {{ number_format($data->disc_rupiah) }}</div>
+                    </div>
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">TOTAL:</div>
+                        <div class="text-end fw-boldest fs-6 text-danger">Rp. {{ number_format($data->grand_total) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
     @push('scripts')
         <script type="text/javascript">

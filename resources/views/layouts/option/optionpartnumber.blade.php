@@ -1,10 +1,9 @@
-<div class="modal fade" id="partNumberSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionPartNumber" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchPartNumberForm" name="searchPartNumberForm" autofill="off" autocomplete="off">
-                {{ csrf_field() }}
+            <form id="formOptionPartNumber" name="formOptionPartNumber" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitlePartNumber" name="modalTitlePartNumber" class="modal-title"></h5>
+                    <h5 class="modal-title">Pilih Data Part Number</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -15,21 +14,20 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                        <table id="tableSearchPartNumber" class="table align-middle table-row-dashed fs-6">
-                            <thead>
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-120px">Part Number</th>
-                                    <th class="min-w-200px">Description</th>
-                                    <th class="min-w-100px">Produk</th>
-                                    <th class="min-w-100px">HET</th>
-                                    <th class="min-w-50px">Action</th>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="fv-row mb-5">
+                        <label class="form-label">Cari berdasarkan part number:</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Pencarian</span>
+                            <input id="inputSearchOptionPartNumber" type="search" class="form-control" placeholder="Input Data Part Number">
+                            <button id="btnSearchOptionPartNumber" class="btn btn-primary">Cari</button>
+                        </div>
                     </div>
+                    <div id="optionPartNumberContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/partnumber.js') }}?v={{ time() }}"></script>
+@endpush

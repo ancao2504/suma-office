@@ -1,9 +1,9 @@
-<div class="modal fade" id="salesmanSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionSalesman" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchSalesmanForm" name="searchSalesmanForm" autofill="off" autocomplete="off">
+            <form id="formOptionSalesman" name="formOptionSalesman" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitleSalesman" name="modalTitleSalesman" class="modal-title">Pilih Data Salesman</h5>
+                    <h5 class="modal-title">Pilih Data Salesman</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -18,17 +18,16 @@
                         <label class="form-label">Cari berdasarkan kode sales:</label>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchSalesman" name="search_salesman" type="search" class="form-control" placeholder="Input kode salesman">
-                            <button id="btnSearchSalesman" name="btnSearchSalesman" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionSalesman" type="search" class="form-control" placeholder="Input Data Salesman">
+                            <button id="btnSearchOptionSalesman" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="salesmanContentModal"></div>
+                    <div id="optionSalesmanContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-</script>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/salesman.js') }}?v={{ time() }}"></script>
+@endpush

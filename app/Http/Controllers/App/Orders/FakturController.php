@@ -18,11 +18,40 @@ class FakturController extends Controller
         $year = date('Y');
         $month = date('m');
 
-        if(!empty($request->get('year'))) {
-            $year = $request->get('year');
+        $per_page = 10;
+        if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
+            if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
+                $per_page = $request->get('per_page');
+            } else {
+                $per_page = 10;
+            }
         }
-        if(!empty($request->get('month'))) {
-            $month = $request->get('month');
+
+        $Agent = new Agent();
+        $device = 'Desktop';
+        if($Agent->isMobile()) {
+            $device = 'Mobile';
+        }
+
+        $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+
+            if(!empty($request->get('year'))) {
+                $year = $request->get('year');
+            } else {
+                $year = $data->tahun_aktif;
+            }
+            if(!empty($request->get('month'))) {
+                $month = $request->get('month');
+            } else {
+                $month = $data->bulan_aktif;
+            }
+        } else {
+            return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
@@ -50,21 +79,6 @@ class FakturController extends Controller
             if(!empty($request->get('dealer'))) {
                 $kode_dealer = trim($request->get('dealer'));
             }
-        }
-
-        $per_page = 10;
-        if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
-            if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
-                $per_page = $request->get('per_page');
-            } else {
-                $per_page = 10;
-            }
-        }
-
-        $Agent = new Agent();
-        $device = 'Desktop';
-        if($Agent->isMobile()) {
-            $device = 'Mobile';
         }
 
         $responseApi = ApiService::FakturDaftar($request->get('page'), $per_page, $year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
@@ -97,6 +111,11 @@ class FakturController extends Controller
                 'nomor_faktur'  => $request->get('nomor_faktur'),
             ]);
 
+            $data_device = new Collection();
+            $data_device->push((object) [
+                'device'    => $device
+            ]);
+
             $data_user = new Collection();
             $data_user->push((object) [
                 'user_id'       => strtoupper(trim($request->session()->get('app_user_id'))),
@@ -105,7 +124,7 @@ class FakturController extends Controller
 
             return view('layouts.orders.faktur.faktur', [
                 'title_menu'    => 'Faktur',
-                'device'        => $device,
+                'data_device'   => $data_device->first(),
                 'data_filter'   => $data_filter->first(),
                 'data_page'     => $data_page->first(),
                 'data_user'     => $data_user->first(),
@@ -116,8 +135,8 @@ class FakturController extends Controller
         }
     }
 
-    public function fakturView($nomor_faktur, Request $request) {
-        $responseApi = ApiService::FakturDetail(strtoupper(trim($nomor_faktur)), strtoupper(trim($request->session()->get('app_user_id'))),
+    public function fakturForm($nomor_faktur, Request $request) {
+        $responseApi = ApiService::FakturForm(strtoupper(trim($nomor_faktur)), strtoupper(trim($request->session()->get('app_user_id'))),
                                         strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

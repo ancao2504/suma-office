@@ -1,68 +1,36 @@
-// dokumen ready
 $(document).ready(function () {
-    // jika terdapat form submit
-    $('form').submit(function () {
+    // ===============================================================
+    // Daftar
+    // ===============================================================
+    function loadMasterData(page = 1, per_page = 10, kode_dealer = '') {
         loading.block();
-    });
-    // end jika terdapat form submit
-    // jika terdapat button click
-    $('#btnFilterReset').click(function () {
-        loading.block();
-    });
-    // end jika terdapat button click
+        window.location.href = window.location.origin + window.location.pathname + '?kode_dealer=' + kode_dealer +
+            '&per_page=' + per_page + '&page=' + page;
+    }
 
-    // pegination scroll
-    var pages = 1;
+    $('#searchFilterDealer').on('change', function (e) {
+        if (e.keyCode == 13 || e.type == 'change') {
+            var per_page = $('#selectPerPageDealer').val();
+            var kode_dealer = $('#searchFilterDealer').val();
 
-    $(window).scroll(function () {
-        if (loading.isBlocked() === false) {
-            if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                const params = new URLSearchParams(window.location.search)
-                for (const param of params) {
-                    var search = params.get('search');
-                }
-                pages++;
-                loadMoreData(search, pages);
-            }
+            loadMasterData(1, per_page, kode_dealer);
         }
     });
 
-    window.onbeforeunload = function () {
-        window.scrollTo(0, 0);
-    }
-    // end pegination scroll
+    $('#selectPerPageDealer').change(function() {
+        var start_record = data_page.start_record;
+        var per_page = $('#selectPerPageDealer').val();
+        var kode_dealer = $('#searchFilterDealer').val();
+        var page = Math.ceil(start_record / per_page);
 
-    // fungsi menampilkan data
-    async function loadMoreData(search, pages) {
-        loading.block();
-        $.ajax({
-            url: url_profile_dealer,
-            type: "get",
-            data: { search: search, page: pages },
-            success: function (response) {
-                if (response.html == '') {
-                    $('#dataLoadDealer').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                    loading.release();
-                    return;
-                }
-                $("#dataDealer").append(response.html);
-                loading.release();
-            },
-            error: function () {
-                loading.release();
-                pages = pages - 1;
+        loadMasterData(page, per_page, kode_dealer);
+    });
 
-                Swal.fire({
-                    text: "Gagal mengambil data ke dalam server, Coba lagi",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
-                    customClass: {
-                        confirmButton: "btn btn-danger"
-                    }
-                });
-            }
-        });
-    }
-    // end fungsi menampilkan data
+    $(document).on('click', '#paginationDealer .page-item a', function () {
+        var page = $(this)[0].getAttribute('data-page');
+        var per_page = $('#selectPerPageDealer').val();
+        var kode_dealer = $('#searchFilterDealer').val();
+
+        loadMasterData(page, per_page, kode_dealer);
+    });
 });

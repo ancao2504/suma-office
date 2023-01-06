@@ -1,7 +1,7 @@
-<div class="modal fade" id="dealerSearchModalIndex" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionDealerIndex" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchDealerFormIndex" name="searchDealerFormIndex" autofill="off" autocomplete="off">
+            <form id="formOptionDealerIndex" name="formOptionDealerIndex" autofill="off" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title">Pilih Data Dealer</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -16,13 +16,14 @@
                 <div class="modal-body">
                     <div class="fv-row mb-5">
                         <label class="form-label">Cari berdasarkan kode dealer:</label>
+                        <input id="inputKodeSalesDealerIndex" type="text" class="form-control" placeholder="Input Data Dealer" readonly hidden>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchDealerIndex" name="search_dealer_index" type="text" class="form-control" placeholder="Input kode dealer">
-                            <button id="btnSearchDealerIndex" name="btnSearchDealerIndex" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionDealerIndex" type="text" class="form-control" placeholder="Input Data Dealer">
+                            <button id="btnSearchOptionDealerIndex" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="dealerContentModalIndex"></div>
+                    <div id="optionDealerIndexContentModal"></div>
                 </div>
             </form>
         </div>

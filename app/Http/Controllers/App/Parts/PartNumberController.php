@@ -5,27 +5,32 @@ namespace App\Http\Controllers\App\Parts;
 use App\Helpers\ApiService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Jenssegers\Agent\Agent as Agent;
 
 class PartNumberController extends Controller
 {
-    public function index(Request $request)
+    public function daftarPartNumber(Request $request)
     {
+        $per_page = 12;
+        if((double)$request->get('per_page') == 12 || (double)$request->get('per_page') == 28 ||
+            (double)$request->get('per_page') == 56 || (double)$request->get('per_page') == 112) {
+            $per_page = $request->get('per_page');
+        }
+
         $Agent = new Agent();
+        $device = 'Desktop';
+        if ($Agent->isMobile()) {
+            $device = 'Mobile';
+        }
+
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::PartDaftar(
-            $request->get('page'),
-            $request->get('type_motor'),
-            $request->get('group_level'),
-            $request->get('group_produk'),
-            $request->get('part_number'),
-            $user_id,
-            $role_id,
-            $companyid
-        );
+        $responseApi = ApiService::PartNumberDaftar($request->get('page'), $per_page, $request->get('type_motor'),
+                            $request->get('group_level'), $request->get('group_produk'),
+                            $request->get('part_number'), $user_id, $role_id, $companyid);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -33,46 +38,58 @@ class PartNumberController extends Controller
             $data = json_decode($responseApi)->data;
             $data_part = $data->data;
 
-            if ($request->ajax()) {
-                if ($Agent->isMobile()) {
-                    $view = view('layouts.parts.partnumber.mobile.partnumberlist', compact('data_part'))->render();
-                } else {
-                    $view = view('layouts.parts.partnumber.desktop.partnumberlist', compact('data_part'))->render();
-                }
+            $data_page = new Collection();
+            $data_page->push((object) [
+                'from'          => $data->from,
+                'to'            => $data->to,
+                'total'         => $data->total,
+                'current_page'  => $data->current_page,
+                'per_page'      => $data->per_page,
+                'links'         => $data->links
+            ]);
 
-                return response()->json(['html' => $view]);
-            }
-
-            $device = 'Desktop';
-            if ($Agent->isMobile()) {
-                $device = 'Mobile';
-            }
-
-            return view('layouts.parts.partnumber.partnumber', [
-                'title_menu'    => 'Part Number',
-                'device'        => $device,
+            $data_filter = new Collection();
+            $data_filter->push((object) [
                 'kode_produk'   => $request->get('group_produk'),
                 'kode_level'    => $request->get('group_level'),
                 'kode_motor'    => $request->get('type_motor'),
                 'part_number'   => $request->get('part_number'),
-                'tipe_motor'    => $request->get('tipe_motor'),
-                'data_part'     => $data_part
+                'type_motor'    => $request->get('type_motor'),
+            ]);
+
+            $data_user = new Collection();
+            $data_user->push((object) [
+                'user_id'   => strtoupper(trim($request->session()->get('app_user_id'))),
+                'role_id'   => strtoupper(trim($request->session()->get('app_user_role_id'))),
+            ]);
+
+            $data_device = new Collection();
+            $data_device->push((object) [
+                'device'    => $device
+            ]);
+
+            return view('layouts.parts.partnumber.partnumber', [
+                'title_menu'    => 'Part Number',
+                'data_device'   => $data_device->first(),
+                'data_page'     => $data_page->first(),
+                'data_filter'   => $data_filter->first(),
+                'data_user'     => $data_user->first(),
+                'data_part'     => $data_part,
             ]);
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
     }
 
-    public function partNumberViewCart(Request $request)
+    public function tambahCartPartNumber(Request $request)
     {
-        $responseApi = ApiService::PartToCart(
+        $responseApi = ApiService::PartNumberFormCart(
             strtoupper(trim($request->get('part_number'))),
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_role_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
         $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
 
         if ($statusApi == 1) {
             $data =  json_decode($responseApi)->data;
@@ -163,15 +180,12 @@ class PartNumberController extends Controller
         }
     }
 
-    public function partNumberAddCart(Request $request)
+    public function prosesCartPartNumber(Request $request)
     {
-        $responseApi = ApiService::PartAddToCart(
-            strtoupper(trim($request->get('part_number'))),
-            $request->get('jumlah_order'),
-            strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = ApiService::PartNumberTambahCart(strtoupper(trim($request->get('part_number'))),
+            $request->get('jumlah_order'), strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_role_id'))),
-            strtoupper(trim($request->session()->get('app_user_company_id')))
-        );
+            strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }

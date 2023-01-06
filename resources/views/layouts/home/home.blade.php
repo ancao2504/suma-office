@@ -81,7 +81,7 @@
                     </div>
                     <h1 class="mb-2">Part Number</h1>
                     <div class="fs-4 fw-bold text-gray-600">Daftar part number suma-honda</div>
-                    <a href="{{ route('parts.part-number') }}" class="btn btn-lg btn-flex btn-link btn-color-info">Lihat</a>
+                    <a href="{{ route('parts.partnumber.daftar') }}" class="btn btn-lg btn-flex btn-link btn-color-info">Lihat</a>
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                     <span class="svg-icon ms-2 svg-icon-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -103,7 +103,7 @@
                     </div>
                     <h1 class="mb-2">Back Order</h1>
                     <div class="fs-4 fw-bold text-gray-600">Daftar part number back order</div>
-                    <a href="{{ route('parts.back-order') }}" class="btn btn-lg btn-flex btn-link btn-color-danger">Lihat</a>
+                    <a href="{{ route('parts.backorder.daftar') }}" class="btn btn-lg btn-flex btn-link btn-color-danger">Lihat</a>
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                     <span class="svg-icon ms-2 svg-icon-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -126,7 +126,7 @@
                     </div>
                     <h1 class="mb-2">Pembayaran</h1>
                     <div class="fs-4 fw-bold text-gray-600">Daftar faktur belum terbayar dan sudah terbayar</div>
-                    <a href="{{ route('orders.pembayaran-faktur') }}" class="btn btn-lg btn-flex btn-link btn-color-success">Lihat</a>
+                    <a href="{{ route('orders.pembayaranfaktur.index') }}" class="btn btn-lg btn-flex btn-link btn-color-success">Lihat</a>
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                     <span class="svg-icon ms-2 svg-icon-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

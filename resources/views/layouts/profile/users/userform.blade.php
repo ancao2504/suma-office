@@ -3,7 +3,7 @@
 @section('subtitle','Users')
 @section('container')
 <div class="row g-0">
-    <form enctype="multipart/form-data" id="usersForm" name="usersForm" autofill="off" autocomplete="off" method="POST" action="{{ route('profile.save-users') }}">
+    <form enctype="multipart/form-data" id="usersForm" name="usersForm" autofill="off" autocomplete="off" method="POST" action="{{ route('profile.users.simpan') }}">
         @csrf
         <div class="card card-flush">
             <div class="card-header ribbon ribbon-top ribbon-vertical pt-5">
@@ -173,15 +173,10 @@
                     </div>
                     <div class="separator separator-dashed my-5"></div>
                 </div>
-                <button type="submit" class="btn btn-primary" id="btnSimpan" name="btnSimpan">Simpan</button>
-                <a href="{{ route('profile.users') }}" role="button" class="btn btn-danger">Close</a>
+                <button type="submit" role="button" class="btn btn-primary" id="btnSimpan" name="btnSimpan">Simpan</button>
+                <a href="{{ route('profile.users.daftar') }}" role="button" class="btn btn-danger">Close</a>
             </div>
         </div>
     </form>
 </div>
 @endsection
-@push('scripts')
-<script type="text/javascript">
-
-</script>
-@endpush

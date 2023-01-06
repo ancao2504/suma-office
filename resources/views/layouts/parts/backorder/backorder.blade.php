@@ -7,42 +7,82 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Back Order</span>
-                    <span class="text-muted fw-boldest fs-7">Daftar back order suma honda</span>
-                    @if(trim($kode_sales) != '' || trim($kode_dealer) != '' || trim($part_number) != '')
-                    <div class="d-flex align-items-center mt-4">
-                        @if(isset($kode_sales) && trim($kode_sales) != '')
-                        <span class="badge badge-secondary fs-8 fw-boldest me-2">SALESMAN : {{ trim($kode_sales) }}</span>
+                    <span class="text-muted fw-bold fs-7">Daftar back order suma honda</span>
+                    @if(trim($data_filter->salesman) != '' || trim($data_filter->dealer) != '' || trim($data_filter->part_number) != '')
+                    <div class="d-flex flex-wrap mt-4">
+                        @if(isset($data_filter->salesman) && trim($data_filter->salesman) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest mt-2 me-2">SALESMAN : {{ trim($data_filter->salesman) }}</span>
                         @endif
-                        @if(isset($kode_dealer) && trim($kode_dealer) != '')
-                        <span class="badge badge-secondary fs-8 fw-boldest me-2">DEALER : {{ trim($kode_dealer) }}</span>
+                        @if(isset($data_filter->dealer) && trim($data_filter->dealer) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest mt-2 me-2">DEALER : {{ trim($data_filter->dealer) }}</span>
                         @endif
-                        @if(isset($part_number) && trim($part_number) != '')
-                        <span class="badge badge-secondary fs-8 fw-boldest me-2">PART NUMBER : {{ trim($part_number) }}</span>
+                        @if(isset($data_filter->part_number) && trim($data_filter->part_number) != '')
+                        <span class="badge badge-secondary fs-8 fw-boldest mt-2 me-2">PART NUMBER : {{ trim($data_filter->part_number) }}</span>
                         @endif
                     </div>
                     @endif
                 </h3>
                 <div class="card-toolbar">
-                    <button id="btnFilterBackOrder" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
+                    <button id="btnFilterMasterData" type="button" role="button" class="btn btn-primary">
                         <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-5" id="dataBackOrder">
-        @if(strtoupper(trim($device)) == "DESKTOP")
-            @include('layouts.parts.backorder.desktop.backorderlist')
+    <div class="row mt-5">
+        @if(strtoupper(trim($data_device->device)) == "DESKTOP")
+            @include('layouts.parts.backorder.list.backorderdesktop')
         @else
-            @include('layouts.parts.backorder.mobile.backorderlist')
+            @include('layouts.parts.backorder.list.backordermobile')
         @endif
     </div>
-    <div id="dataLoadBackOrder"></div>
+    <div class="row">
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start mt-8">
+            <div class="dataTables_length">
+                <label>
+                    <select id="selectPerPageMasterData" name="per_page" class="form-select form-select-sm" data-control="select2" data-hide-search="true">
+                        <option value="12" @if($data_page->per_page == '12') {{'selected'}} @endif>12</option>
+                        <option value="28" @if($data_page->per_page == '28') {{'selected'}} @endif>28</option>
+                        <option value="56" @if($data_page->per_page == '56') {{'selected'}} @endif>56</option>
+                        <option value="112" @if($data_page->per_page == '112') {{'selected'}} @endif>112</option>
+                    </select>
+                </label>
+            </div>
+            <div class="dataTables_info" id="selectPerPageMasterDataInfo" role="status" aria-live="polite">Showing <span id="startRecordMasterData">{{ $data_page->from }}</span> to {{ $data_page->to }} of {{ $data_page->total }} records</div>
+        </div>
+        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end mt-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="paginationMasterData">
+                <ul class="pagination">
+                    @foreach ($data_page->links as $link)
+                    <li class="page-item @if($link->active == true) active @endif
+                        @if($link->url == '') disabled @endif
+                        @if($data_page->current_page == $link->label) active @endif">
+                        @if($link->active == true)
+                        <span class="page-link">{{ $link->label }}</span>
+                        @else
+                        <a href="#" class="page-link" data-page="@if(trim($link->url) != ''){{ explode("?page=" , $link->url)[1] }}@endif"
+                            @if(trim($link->url) == '') disabled @endif>
+                            @if(Str::contains(strtolower($link->label), 'previous'))
+                            <i class="previous"></i>
+                            @elseif(Str::contains(strtolower($link->label), 'next'))
+                            <i class="next"></i>
+                            @else
+                            {{ $link->label }}
+                            @endif
+                        </a>
+                        @endif
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" tabindex="-1" id="modalFilter">
         <div class="modal-dialog">
             <div class="modal-content" id="modalFilterContent">
-                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('parts.back-order') }}">
+                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('parts.backorder.daftar') }}">
                     <div class="modal-header">
                         <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Back Order</h5>
                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -58,12 +98,13 @@
                         <div class="fv-row">
                             <label class="form-label">Salesman:</label>
                             <div class="input-group">
-                                <input id="inputFilterSalesman" name="salesman" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Salesman" readonly
-                                    @if(isset($kode_sales)) value="{{ $kode_sales }}" @else value="{{ old('kode_sales') }}"@endif>
-                                @if($role_id != 'MD_H3_SM')
-                                    @if($role_id != 'D_H3')
-                                    <button id="btnFilterPilihSalesman" name="btnFilterPilihSalesman" class="btn btn-icon btn-primary" type="button"
-                                        data-toggle="modal" data-target="#salesmanSearchModal">
+                                <input id="inputFilterSalesman" name="salesman" type="text" placeholder="Semua Salesman" readonly
+                                    class="form-control @if(trim($data_user->role_id) == 'D_H3' || trim($data_user->role_id) == 'MD_H3_SM') form-control-solid @endif"
+                                    @if(trim($data_user->role_id) != 'D_H3' && trim($data_user->role_id) != 'MD_H3_SM') style="cursor: pointer;" @endif
+                                    @if(isset($data_filter->salesman)) value="{{ $data_filter->salesman }}" @else value="{{ old('salesman') }}"@endif>
+                                @if(trim($data_user->role_id) != 'MD_H3_SM')
+                                    @if(trim($data_user->role_id) != 'D_H3')
+                                    <button id="btnFilterPilihSalesman" name="btnFilterPilihSalesman" class="btn btn-icon btn-primary" type="button" role="button">
                                         <i class="fa fa-search"></i>
                                     </button>
                                     @endif
@@ -73,11 +114,12 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Dealer:</label>
                             <div class="input-group">
-                                <input id="inputFilterDealer" name="dealer" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Dealer" readonly
-                                    @if(isset($kode_dealer)) value="{{ $kode_dealer }}" @else value="{{ old('kode_dealer') }}"@endif>
-                                @if($role_id != 'D_H3')
-                                <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button"
-                                    data-toggle="modal" data-target="#dealerSearchModal">
+                                <input id="inputFilterDealer" name="dealer" type="text" placeholder="Semua Dealer" readonly
+                                    class="form-control @if(trim($data_user->role_id) == 'D_H3') form-control-solid @endif"
+                                    @if(trim($data_user->role_id) != 'D_H3') style="cursor: pointer;" @endif
+                                    @if(isset($data_filter->dealer)) value="{{ $data_filter->dealer }}" @else value="{{ old('dealer') }}"@endif>
+                                @if(trim($data_user->role_id) != 'D_H3')
+                                <button id="btnFilterPilihDealer" name="btnFilterPilihDealer" class="btn btn-icon btn-primary" type="button" role="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                                 @endif
@@ -86,16 +128,16 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Part Number:</label>
                             <div class="input-group has-validation mb-2">
-                                <input id="inputFilterPartNumber" name="part_number" type="search" class="form-control" placeholder="Semua Part Number"
-                                    @if(isset($part_number)) value="{{ $part_number }}" @else value="{{ old('part_number') }}"@endif>
+                                <input id="inputFilterPartNumber" name="part_number" type="text" class="form-control" placeholder="Semua Part Number"
+                                    @if(isset($data_filter->part_number)) value="{{ $data_filter->part_number }}" @else value="{{ old('part_number') }}"@endif>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button id="btnFilterReset" class="btn btn-danger" role="button">Reset Filter</button>
                         <div class="text-end">
-                            <button id="btnFilterProses" type="submit" class="btn btn-primary">Terapkan</button>
-                            <button id="btnFilterClose" name="btnClose" type="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
+                            <button id="btnFilterProses" type="button" role="button" class="btn btn-primary">Terapkan</button>
+                            <button id="btnFilterClose" name="btnClose" type="button" role="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </form>
@@ -105,34 +147,22 @@
 
     @include('layouts.option.optionsalesman')
     @include('layouts.option.optiondealer')
+    @include('layouts.option.optiondealersalesman')
 
     @push('scripts')
-        <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
-            const url = {
-                'back_order': "{{ route('parts.back-order') }}"
-            }
-
             const data_filter = {
-                'kode_sales': '{{ $kode_sales }}',
-                'kode_dealer': '{{ $kode_dealer }}',
-                'part_number': '{{ $part_number }}'
+                'salesman': '{{ trim($data_filter->salesman) }}',
+                'dealer': '{{ trim($data_filter->dealer) }}',
+                'part_number': '{{ trim($data_filter->part_number) }}'
             }
-            $(document).ready(function() {
-                $('#btnFilterReset').on('click', function (e) {
-                    e.preventDefault();
-                    @if ($role_id == 'MD_H3_SM')
-                        $('#inputFilterDealer').val('');
-                    $('#inputFilterPartNumber').val('');
-                    @elseif($role_id == 'D_H3')
-                    $('#inputFilterPartNumber').val('');
-                    @else
-                    $('#inputFilterSalesman').val('');
-                    $('#inputFilterDealer').val('');
-                    $('#inputFilterPartNumber').val('');
-                    @endif;
-                });
-            });
+            const data_user = {
+                'user_id': '{{ trim($data_user->user_id) }}',
+                'role_id': '{{ trim($data_user->role_id) }}',
+            }
+            const data_page = {
+                'start_record': '{{ $data_page->from }}'
+            }
         </script>
         <script src="{{ asset('assets/js/suma/parts/backorder.js') }}?v={{ time() }}"></script>
     @endpush

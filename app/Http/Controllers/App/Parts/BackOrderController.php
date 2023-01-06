@@ -5,11 +5,26 @@ namespace App\Http\Controllers\App\Parts;
 use App\Http\Controllers\Controller;
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Jenssegers\Agent\Agent as Agent;
 
 class BackOrderController extends Controller
 {
     public function index(Request $request) {
+        $Agent = new Agent();
+        $device = '';
+        if($Agent->isMobile()) {
+            $device = 'Mobile';
+        } else {
+            $device = 'Desktop';
+        }
+
+        $per_page = 12;
+        if((double)$request->get('per_page') == 12 || (double)$request->get('per_page') == 28 ||
+            (double)$request->get('per_page') == 56 || (double)$request->get('per_page') == 112) {
+            $per_page = $request->get('per_page');
+        }
+
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
@@ -45,8 +60,9 @@ class BackOrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::BackOrderDaftar($kode_sales, $kode_dealer, $request->get('part_number'),
-                                $request->get('page'), $user_id, $role_id, $companyid);
+        $responseApi = ApiService::BackOrderDaftar($request->get('page'), $per_page,
+                            $kode_sales, $kode_dealer, $request->get('part_number'),
+                            $user_id, $role_id, $companyid);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -54,31 +70,40 @@ class BackOrderController extends Controller
             $data = json_decode($responseApi)->data;
             $data_bo = $data->data;
 
-            $Agent = new Agent();
+            $data_page = new Collection();
+            $data_page->push((object) [
+                'from'          => $data->from,
+                'to'            => $data->to,
+                'total'         => $data->total,
+                'current_page'  => $data->current_page,
+                'per_page'      => $data->per_page,
+                'links'         => $data->links
+            ]);
 
-            if($request->ajax()) {
-                if($Agent->isMobile()) {
-                    $view = view('layouts.parts.backorder.mobile.backorderlist', compact('data_bo'))->render();
-                } else {
-                    $view = view('layouts.parts.backorder.desktop.backorderlist', compact('data_bo'))->render();
-                }
-                return response()->json([ 'html' => $view ]);
-            }
+            $data_filter = new Collection();
+            $data_filter->push((object) [
+                'salesman'      => trim($kode_sales),
+                'dealer'        => trim($kode_dealer),
+                'part_number'   => trim($request->get('part_number')),
+            ]);
 
-            $device = '';
-            if($Agent->isMobile()) {
-                $device = 'Mobile';
-            } else {
-                $device = 'Desktop';
-            }
+            $data_user = new Collection();
+            $data_user->push((object) [
+                'user_id'   => strtoupper(trim($request->session()->get('app_user_id'))),
+                'role_id'   => strtoupper(trim($request->session()->get('app_user_role_id'))),
+            ]);
+
+            $data_device = new Collection();
+            $data_device->push((object) [
+                'device'    => $device
+            ]);
 
             return view ('layouts.parts.backorder.backorder', [
                 'title_menu'    => 'Back Order',
-                'device'        => $device,
-                'role_id'       => trim($request->session()->get('app_user_role_id')),
-                'kode_sales'    => trim($kode_sales),
-                'kode_dealer'   => trim($kode_dealer),
-                'part_number'   => trim($request->get('part_number')),
+                'data_device'   => $data_device->first(),
+                'data_page'     => $data_page->first(),
+                'data_filter'   => $data_filter->first(),
+                'data_user'     => $data_user->first(),
                 'data_bo'       => $data_bo
             ]);
         } else {

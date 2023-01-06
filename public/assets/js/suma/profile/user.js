@@ -1,83 +1,38 @@
 // dokumen ready
 $(document).ready(function () {
-
-    // jika terdapat form submit
-    $('form').submit(function () {
+    // ===============================================================
+    // Daftar
+    // ===============================================================
+    function loadMasterData(page = 1, per_page = 10, role_id = '', user_id = '') {
         loading.block();
-    });
-    // end jika terdapat form submit
-    // jika terdapat button click
-    $('#btnFilterReset').click(function () {
-        loading.block();
-    });
-    // end jika terdapat button click
-
-    // page scroll
-    var pages = 1;
-
-    $(window).scroll(function () {
-        if (loading.isBlocked() === false) {
-            if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                const params = new URLSearchParams(window.location.search)
-                for (const param of params) {
-                    var user_id = params.get('search');
-                    var role_filter = params.get('role_filter');
-                }
-                pages++;
-                loadMoreData(user_id, pages, role_filter);
-            }
-        }
-    });
-
-    window.onbeforeunload = function () {
-        window.scrollTo(0, 0);
+        window.location.href = window.location.origin + window.location.pathname + '?role_id=' + role_id + '&user_id=' + user_id +
+            '&per_page=' + per_page + '&page=' + page;
     }
-    // end page scroll
 
-    // load more data
-    async function loadMoreData(user_id, pages, role_filter) {
-        loading.block();
-        $.ajax({
-            url: url_profile_user,
-            type: "get",
-            data: { user_id: user_id, page: pages, role_filter: role_filter },
+    $('#inputFilterUserId').on('change', function (e) {
+        var per_page = $('#selectPerPageUser').val();
+        var role_id = $('#selectFilterRoleId').val();
+        var user_id = $('#inputFilterUserId').val();
 
-            success: function (response) {
-                if (response.html == '') {
-                    $('#dataLoadUsers').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                    loading.release();
-                    return;
-                }
-                $("#dataUsers").append(response.html);
-                loading.release();
-            },
-            error: function () {
-                loading.release();
-                pages = pages - 1;
+        loadMasterData(1, per_page, role_id, user_id);
+    });
 
-                Swal.fire({
-                    text: "Gagal mengambil data ke dalam server, Coba lagi",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
-                    customClass: {
-                        confirmButton: "btn btn-danger"
-                    }
-                });
-            }
-        });
-    }
-    // end load more data
+    $('#selectPerPageUser').change(function() {
+        var start_record = data_page.start_record;
+        var per_page = $('#selectPerPageUser').val();
+        var role_id = $('#selectFilterRoleId').val();
+        var user_id = $('#inputFilterUserId').val();
+        var page = Math.ceil(start_record / per_page);
 
-    // $(document).ready(function() {
-    //     $('body').on('click', '#modalUser', function () {
-    //         $("#userModalForm").modal({ backdrop: "static ", keyboard: false });
-    //         // var _token = $('input[name="_token"]').val();
-    //         $('#userModalForm').modal('show');
+        loadMasterData(page, per_page, role_id, user_id);
+    });
 
-    //         $('#userModalForm').on('shown.bs.modal', function () {
-    //         });
-    //     });
+    $(document).on('click', '#paginationUser .page-item a', function () {
+        var page = $(this)[0].getAttribute('data-page');
+        var per_page = $('#selectPerPageUser').val();
+        var role_id = $('#selectFilterRoleId').val();
+        var user_id = $('#inputFilterUserId').val();
 
-    // });
+        loadMasterData(page, per_page, role_id, user_id);
+    });
 });

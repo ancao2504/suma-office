@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('/')) ? 'active' : '' }}" href="{{ url('/') }}">
+                    <a class="menu-link {{ (Request::is('/')) ? 'active' : '' }}" href="{{ route('home.index') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -47,7 +47,7 @@
                 </div>
                 @if (Session::get('app_user_role_id') == 'D_H3')
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ url('/dashboard/dealer') }}">
+                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ route('dashboard.dealer.dealer') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -61,7 +61,7 @@
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_SM')
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
+                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ route('dashboard.salesman.salesman') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -75,7 +75,7 @@
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_KORSM')
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
+                    <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ route('dashboard.salesman.salesman') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -114,7 +114,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a id="menuDashboardManagementSales" class="menu-link {{ (Request::is('dashboard/management/sales')) ? 'active' : '' }}" href="{{ url('/dashboard/management/sales') }}">
+                                    <a id="menuDashboardManagementSales" class="menu-link {{ (Request::is('dashboard/management/sales')) ? 'active' : '' }}" href="{{ route('dashboard.management.sales') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -122,7 +122,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('dashboard/management/stock')) ? 'active' : '' }}" href="{{ url('/dashboard/management/stock') }}">
+                                    <a class="menu-link {{ (Request::is('dashboard/management/stock')) ? 'active' : '' }}" href="{{ route('dashboard.management.stock') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -141,7 +141,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a id="menuDashboardMarketingPencapaianPerProduk" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/perproduk')) ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perproduk') }}">
+                                    <a id="menuDashboardMarketingPencapaianPerProduk" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/perproduk')) ? 'active' : '' }}" href="{{ route('dashboard.marketing.pencapaian.produk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -151,7 +151,7 @@
                             </div>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a id="menuDashboardMarketingPencapaianPerLevel" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/perlevel')) ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/perlevel') }}">
+                                    <a id="menuDashboardMarketingPencapaianPerLevel" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/perlevel')) ? 'active' : '' }}" href="{{ route('dashboard.marketing.pencapaian.perlevel') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -161,7 +161,7 @@
                             </div>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a id="menuDashboardMarketingGrowthPencapaian" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/growth')) ? 'active' : '' }}" href="{{ url('/dashboard/marketing/pencapaian/growth') }}">
+                                    <a id="menuDashboardMarketingGrowthPencapaian" class="menu-link {{ (Request::is('dashboard/marketing/pencapaian/growth')) ? 'active' : '' }}" href="{{ route('dashboard.marketing.pencapaian.growth') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -171,7 +171,7 @@
                             </div>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('dashboard/salesman')) ? 'active' : '' }}" href="{{ url('/dashboard/salesman') }}">
+                            <a class="menu-link {{ (Request::is('dashboard/salesman')) ? 'active' : '' }}" href="{{ route('dashboard.salesman.salesman') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -179,7 +179,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('dashboard/dealer')) ? 'active' : '' }}" href="{{ url('/dashboard/dealer') }}">
+                            <a class="menu-link {{ (Request::is('dashboard/dealer')) ? 'active' : '' }}" href="{{ route('dashboard.dealer.dealer') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -196,7 +196,7 @@
                 </div>
                 @if (Session::get('app_user_role_id') == "D_H3")
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ route('profile.dealer-profile', strtoupper(trim(Session::get('app_user_id')))) }}">
+                    <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ route('profile.dealer.form', strtoupper(trim(Session::get('app_user_id')))) }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -217,7 +217,7 @@
                 @endif
                 @if (Session::get('app_user_role_id') != "D_H3")
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ url('/profile/dealer') }}">
+                    <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ route('profile.dealer.daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -238,7 +238,7 @@
                 @endif
                 @if (Session::get('app_user_role_id') == "MD_H3_MGMT")
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('profile/users*')) ? 'active' : '' }}" href="{{ url('/profile/users') }}">
+                    <a class="menu-link {{ (Request::is('profile/users*')) ? 'active' : '' }}" href="{{ route('profile.users.daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -257,7 +257,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}" href="{{ url('/parts/partnumber') }}">
+                    <a class="menu-link {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}" href="{{ route('parts.partnumber.daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -276,7 +276,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('parts/backorder*')) ? 'active' : '' }}" href="{{ route('parts.back-order') }}">
+                    <a class="menu-link {{ (Request::is('parts/backorder*')) ? 'active' : '' }}" href="{{ route('parts.backorder.daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -289,7 +289,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}" href="{{ url('/parts/stockharian') }}">
+                    <a class="menu-link {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}" href="{{ route('parts.stockharian.form') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
@@ -307,7 +307,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('orders/cart*')) ? 'active' : '' }}" href="{{ url('/orders/cart') }}">
+                    <a class="menu-link {{ (Request::is('orders/cart*')) ? 'active' : '' }}" href="{{ route('orders.cart.index') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -322,7 +322,7 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ (Request::is('orders/purchaseorder*')) ? 'active' : '' }}" href="{{ url('/orders/purchaseorder') }}">
+                    <a class="menu-link {{ (Request::is('orders/purchaseorderform*')) ? 'active' : '' }}" href="{{ url('/orders/purchaseorderform/daftar') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -332,7 +332,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="menu-title {{ (Request::is('orders/purchaseorder*')) ? 'active' : '' }}">Purchase Order</span>
+                        <span class="menu-title {{ (Request::is('orders/purchaseorderform*')) ? 'active' : '' }}">Purchase Order Form</span>
                     </a>
                 </div>
                 <div class="menu-item">

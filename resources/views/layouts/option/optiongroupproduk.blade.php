@@ -1,9 +1,9 @@
-<div class="modal fade" id="produkSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionGroupProduk" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchProdukForm" name="searchProdukForm" autofill="off" autocomplete="off">
+            <form id="formOptionGroupProduk" name="formOptionGroupProduk" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitleProduk" name="modalTitleProduk" class="modal-title">Pilih Data Produk</h5>
+                    <h5 class="modal-title">Pilih Data Produk</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -16,17 +16,20 @@
                 <div class="modal-body">
                     <div class="fv-row mb-5">
                         <label class="form-label">Cari berdasarkan Produk:</label>
-                        <span id="inputFilterLevelProduk" class="input-group-text" hidden>Pencarian</span>
+                        <span id="inputOptionLevelProduk" class="input-group-text" hidden>Pencarian</span>
 
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchProduk" name="search_produk" type="search" class="form-control" placeholder="Cari Data Produk">
-                            <button id="btnSearchProduk" name="btnSearchProduk" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionProduk" type="search" class="form-control" placeholder="Input Data Produk">
+                            <button id="btnSearchOptionProduk" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="produkContentModal"></div>
+                    <div id="optionProdukContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/produk.js') }}?v={{ time() }}"></script>
+@endpush

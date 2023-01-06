@@ -1,9 +1,9 @@
-<div class="modal fade" id="dealerSalesmanSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionDealerSalesman" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchDealerSalesmanForm" name="searchDealerSalesmanForm" autofill="off" autocomplete="off">
+            <form id="formOptionDealerSalesman" name="formOptionDealerSalesman" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitleDealerSalesman" name="modalTitleDealerSalesman" class="modal-title">Pilih Data Dealer</h5>
+                    <h5 class="modal-title">Pilih Data Dealer</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -16,15 +16,19 @@
                 <div class="modal-body">
                     <div class="fv-row mb-5">
                         <label class="form-label">Cari berdasarkan kode dealer:</label>
+                        <input id="inputKodeSalesDealerSalesman" type="text" class="form-control" placeholder="Input Data Dealer" readonly hidden>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchDealerSalesman" name="search_dealer_salesman" type="text" class="form-control" placeholder="Input kode dealer">
-                            <button id="btnSearchDealerSalesman" name="btnSearchDealerSalesman" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionDealerSalesman" type="text" class="form-control" placeholder="Input Data Dealer">
+                            <button id="btnSearchOptionDealerSalesman" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="dealerSalesmanContentModal"></div>
+                    <div id="optionDealerSalesmanContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/dealersalesman.js') }}?v={{ time() }}"></script>
+@endpush

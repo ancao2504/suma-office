@@ -1,118 +1,184 @@
-// dokumen rady
 $(document).ready(function () {
-
-    // jika terdapat form submit
-    $('form').submit(function () {
+    // ===============================================================
+    // Daftar
+    // ===============================================================
+    function loadMasterData(page = 1, per_page = 10, salesman = '', dealer = '', part_number = '') {
         loading.block();
-    });
-    // end jika terdapat form submit
+        window.location.href = window.location.origin + window.location.pathname + '?salesman=' + salesman.trim() + '&dealer=' + dealer.trim() +
+            '&part_number=' + part_number.trim() + '&per_page=' + per_page + '&page=' + page;
+    }
 
-    // pageination
-    var pages = 1;
+    $('#selectPerPageMasterData').change(function() {
+        var start_record = data_page.start_record;
+        var per_page = $('#selectPerPageMasterData').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#inputFilterDealer').val();
+        var part_number = $('#inputFilterPartNumber').val();
+        var page = Math.ceil(start_record / per_page);
 
-    $(window).scroll(function () {
-        if (loading.isBlocked() === false) {
-            if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                const params = new URLSearchParams(window.location.search)
-                for (const param of params) {
-                    var salesman = params.get('salesman');
-                    var dealer = params.get('dealer');
-                    var part_number = params.get('part_number');
-                }
-                pages++;
-                loadMoreData(salesman, dealer, part_number, pages);
-            }
-        }
+        loadMasterData(page, per_page, salesman, dealer, part_number);
     });
 
-    window.onbeforeunload = function () {
-        window.scrollTo(0, 0);
-    }
-    // end pageination
+    $(document).on('click', '#paginationMasterData .page-item a', function () {
+        var page = $(this)[0].getAttribute('data-page');
+        var per_page = $('#selectPerPageMasterData').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#inputFilterDealer').val();
+        var part_number = $('#inputFilterPartNumber').val();
 
-    // data more
-    async function loadMoreData(salesman, dealer, part_number, pages) {
-        loading.block();
+        loadMasterData(page, per_page, salesman, dealer, part_number);
+    });
 
-        $.ajax({
-            url: url.back_order,
-            type: "get",
-            data: { salesman: salesman, dealer: dealer, part_number: part_number, page: pages },
-
-            success: function (response) {
-                if (response.html == '') {
-                    $('#dataLoadBackOrder').html('<center><div class="fw-bolder fs-3 text-gray-600 text-hover-primary mt-10 mb-10">- No more record found -</div><center>');
-                    loading.release();
-                    return;
-                }
-                $("#dataBackOrder").append(response.html);
-                loading.release();
-            },
-            error: function () {
-                loading.release();
-                pages = pages - 1;
-
-                Swal.fire({
-                    text: "Gagal mengambil data ke dalam server, Coba lagi",
-                    icon: "error",
-                    buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
-                    customClass: {
-                        confirmButton: "btn btn-danger"
-                    }
-                });
-            }
-        });
-    }
-    // end data more
-
-    $('#btnFilterBackOrder').on('click', function (e) {
+    // ===============================================================
+    // Filter
+    // ===============================================================
+    $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
 
-        $('#inputFilterSalesman').val(data_filter.kode_sales);
-        $('#inputFilterDealer').val(data_filter.kode_dealer);
+        $('#inputFilterSalesman').val(data_filter.salesman);
+        $('#inputFilterDealer').val(data_filter.dealer);
         $('#inputFilterPartNumber').val(data_filter.part_number);
 
         $('#modalFilter').modal('show');
     });
 
+    $('#btnFilterProses').on('click', function (e) {
+        e.preventDefault();
+        var per_page = $('#selectPerPageMasterData').val();
+        var salesman = $('#inputFilterSalesman').val();
+        var dealer = $('#inputFilterDealer').val();
+        var part_number = $('#inputFilterPartNumber').val();
+
+        loadMasterData(1, per_page, salesman, dealer, part_number);
+    });
+
+    $('#btnFilterReset').on('click', function (e) {
+        e.preventDefault();
+        if(data_user.role_id == 'D_H3') {
+            $('#inputFilterPartNumber').val('');
+        } else if(data_user.role_id == 'MD_H3_SM') {
+            $('#inputFilterDealer').val('');
+            $('#inputFilterPartNumber').val('');
+        } else {
+            $('#inputFilterSalesman').val('');
+            $('#inputFilterDealer').val('');
+            $('#inputFilterPartNumber').val('');
+        }
+    });
+
+    // ===============================================================
+    // Filter Salesman
+    // ===============================================================
     $('#inputFilterSalesman').on('click', function (e) {
         e.preventDefault();
-        loadDataSalesman();
-        $('#searchSalesmanForm').trigger('reset');
-        $('#salesmanSearchModal').modal('show');
+        if(data_user.role_id != 'D_H3' && data_user.role_id != 'MD_H3_SM') {
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
+        }
     });
 
     $('#btnFilterPilihSalesman').on('click', function (e) {
         e.preventDefault();
-        loadDataSalesman();
-        $('#searchSalesmanForm').trigger('reset');
-        $('#salesmanSearchModal').modal('show');
+        if(data_user.role_id != 'D_H3' && data_user.role_id != 'MD_H3_SM') {
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
+        }
     });
 
-    $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
+    $('body').on('click', '#optionSalesmanContentModal #selectedOptionSalesman', function (e) {
         e.preventDefault();
         $('#inputFilterSalesman').val($(this).data('kode_sales'));
-        $('#salesmanSearchModal').modal('hide');
+        $('#modalOptionSalesman').modal('hide');
     });
 
+    // ===============================================================
+    // Filter Dealer
+    // ===============================================================
     $('#inputFilterDealer').on('click', function (e) {
         e.preventDefault();
-        loadDataDealer(1, 10, '');
-        $('#searchDealerForm').trigger('reset');
-        $('#dealerSearchModal').modal('show');
+        var kode_sales = $('#inputFilterSalesman').val();
+
+        if(data_user.role_id != 'D_H3') {
+            if(data_user.role_id == 'MD_H3_SM' || data_user.role_id == 'MD_H3_KORSM') {
+                if(kode_sales == '') {
+                    Swal.fire({
+                        text: 'Data salesman tidak boleh kosong',
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    $('#formOptionDealerSalesman').trigger('reset');
+                    loadDataOptionDealerSalesman(kode_sales.trim(), 1, 10, '');
+                    $('#modalOptionDealerSalesman').modal('show');
+                }
+            } else {
+                $('#formOptionDealer').trigger('reset');
+                loadDataOptionDealer(1, 10, '');
+                $('#modalOptionDealer').modal('show');
+            }
+        }
     });
 
     $('#btnFilterPilihDealer').on('click', function (e) {
         e.preventDefault();
-        loadDataDealer(1, 10, '');
-        $('#searchDealerForm').trigger('reset');
-        $('#dealerSearchModal').modal('show');
+        var kode_sales = $('#inputFilterSalesman').val();
+
+        if(data_user.role_id != 'D_H3') {
+            if(data_user.role_id == 'MD_H3_SM' || data_user.role_id == 'MD_H3_KORSM') {
+                if(kode_sales == '') {
+                    Swal.fire({
+                        text: 'Data salesman tidak boleh kosong',
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    $('#formOptionDealerSalesman').trigger('reset');
+                    loadDataOptionDealerSalesman(kode_sales.trim(), 1, 10, '');
+                    $('#modalOptionDealerSalesman').modal('show');
+                }
+            } else {
+                $('#formOptionDealer').trigger('reset');
+                loadDataOptionDealer(1, 10, '');
+                $('#modalOptionDealer').modal('show');
+            }
+        }
     });
 
-    $('body').on('click', '#dealerContentModal #selectDealer', function (e) {
+    $('body').on('click', '#optionDealerContentModal #selectedOptionDealer', function (e) {
         e.preventDefault();
         $('#inputFilterDealer').val($(this).data('kode_dealer'));
-        $('#dealerSearchModal').modal('hide');
+        $('#modalOptionDealer').modal('hide');
+    });
+
+    $('body').on('click', '#optionDealerSalesmanContentModal #selectedOptionDealerSalesman', function (e) {
+        e.preventDefault();
+        $('#inputFilterDealer').val($(this).data('kode_dealer'));
+        $('#modalOptionDealerSalesman').modal('hide');
+    });
+
+    // ===============================================================
+    // Filter Part Number
+    // ===============================================================
+    $('#inputFilterPartNumber').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  {
+            e.preventDefault();
+            var per_page = $('#selectPerPageMasterData').val();
+            var salesman = $('#inputFilterSalesman').val();
+            var dealer = $('#inputFilterDealer').val();
+            var part_number = $('#inputFilterPartNumber').val();
+
+            loadMasterData(1, per_page, salesman, dealer, part_number);
+        }
     });
 });

@@ -1,9 +1,9 @@
-<div class="modal fade" id="dealerSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionDealer" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchDealerForm" name="searchDealerForm" autofill="off" autocomplete="off">
+            <form id="formOptionDealer" name="formOptionDealer" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitleDealer" name="modalTitleDealer" class="modal-title">Pilih Data Dealer</h5>
+                    <h5 class="modal-title">Pilih Data Dealer</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -18,13 +18,16 @@
                         <label class="form-label">Cari berdasarkan kode dealer:</label>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchDealer" name="search_dealer" type="text" class="form-control" placeholder="Input kode dealer">
-                            <button id="btnSearchDealer" name="btnSearchDealer" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionDealer" type="text" class="form-control" placeholder="Input Data Dealer">
+                            <button id="btnSearchOptionDealer" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="dealerContentModal"></div>
+                    <div id="optionDealerContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/dealer.js') }}?v={{ time() }}"></script>
+@endpush

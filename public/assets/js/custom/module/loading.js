@@ -8,15 +8,25 @@ let loading = {
         `);
         $('#loading').css('display', '');
         // matikan fungsi scroll
-        //$('body').css('overflow', 'hidden');
+        // $('body').css('overflow', 'hidden');
+
+        // window.onbeforeunload = function (event) {
+        //     if (loading.isBlocked) {
+        //         event.preventDefault();
+        //         return event.returnValue = "Apakah anda yakin refresh halaman ?, merefresh halaman saat loading dapat mengagalkan prosess !";
+        //     }
+        // }
+
     },
     release: function () {
         $('#loading #loading-message').html('');
         $('#loading').css('display', 'none');
         // aktifkan fungsi scroll
-       // $('body').css('overflow', '');
+        // $('body').css('overflow', 'scroll');
     },
     isBlocked: function () {
         return $('#loading').css('display') == 'none' ? false : true;
     }
 };
+
+

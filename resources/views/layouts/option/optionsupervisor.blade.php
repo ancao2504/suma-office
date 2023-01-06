@@ -1,9 +1,9 @@
-<div class="modal fade" id="supervisorSearchModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalOptionSupervisor" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="searchSupervisorForm" name="searchSupervisorForm" autofill="off" autocomplete="off">
+            <form id="formOptionSupervisor" name="formOptionSupervisor" autofill="off" autocomplete="off">
                 <div class="modal-header">
-                    <h5 id="modalTitleSupervisor" name="modalTitleSupervisor" class="modal-title">Pilih Data Supervisor</h5>
+                    <h5 class="modal-title">Pilih Data Supervisor</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <span class="svg-icon svg-icon-muted svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -18,17 +18,16 @@
                         <label class="form-label">Cari berdasarkan supervisor:</label>
                         <div class="input-group">
                             <span class="input-group-text">Pencarian</span>
-                            <input id="inputSearchSupervisor" name="search_supervisor" type="search" class="form-control" placeholder="Input kode salesman">
-                            <button id="btnSearchSupervisor" name="btnSearchSupervisor" class="btn btn-primary">Cari</button>
+                            <input id="inputSearchOptionSupervisor" type="search" class="form-control" placeholder="Input Data Supervisor">
+                            <button id="btnSearchOptionSupervisor" class="btn btn-primary">Cari</button>
                         </div>
                     </div>
-                    <div id="supervisorContentModal"></div>
+                    <div id="optionSupervisorContentModal"></div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-</script>
+@push('scripts')
+<script src="{{ asset('assets/js/suma/option/supervisor.js') }}?v={{ time() }}"></script>
+@endpush

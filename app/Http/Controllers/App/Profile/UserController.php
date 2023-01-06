@@ -7,17 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Helpers\ApiService;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
-    public function index(Request $request) {
+    public function daftarUser(Request $request) {
         $data_role = [];
 
         $responseApi = ApiService::OptionRoleUser();
@@ -30,7 +26,16 @@ class UserController extends Controller
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
-        $responseApi = ApiService::UserDaftar($request->get('user_id'), $request->get('role_filter'), $request->get('page'), strtoupper(trim($request->session()->get('app_user_role_id'))));
+        $per_page = 10;
+
+        if((double)$request->get('per_page') == 10 || (double)$request->get('per_page') == 25 ||
+            (double)$request->get('per_page') == 50 || (double)$request->get('per_page') == 100) {
+            $per_page = $request->get('per_page');
+        }
+
+        $responseApi = ApiService::UserDaftar($request->get('page'), $per_page,
+                            $request->get('role_id'), $request->get('user_id'),
+                            strtoupper(trim($request->session()->get('app_user_role_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -38,15 +43,27 @@ class UserController extends Controller
             $data = json_decode($responseApi)->data;
             $data_user = $data->data;
 
-            if ($request->ajax()) {
-                $view = view('layouts.profile.users.userlist', compact('data_user'))->render();
-                return response()->json([ 'html' => $view ]);
-            }
+            $data_page = new Collection();
+            $data_page->push((object) [
+                'from'          => $data->from,
+                'to'            => $data->to,
+                'total'         => $data->total,
+                'current_page'  => $data->current_page,
+                'per_page'      => $data->per_page,
+                'links'         => $data->links
+            ]);
+
+            $data_filter = new Collection();
+            $data_filter->push((object) [
+                'role_id'   => $request->get('role_id'),
+                'user_id'   => $request->get('user_id'),
+            ]);
 
             return view('layouts.profile.users.user', [
                 'title_menu'        => 'Users',
-                'role_filter'       => $request->get('role_filter'),
                 'data_role'         => $data_role,
+                'data_page'         => $data_page->first(),
+                'data_filter'       => $data_filter->first(),
                 'data_user'         => $data_user
             ]);
         } else {
@@ -54,7 +71,7 @@ class UserController extends Controller
         }
     }
 
-    public function userAdd(Request $request) {
+    public function tambahUser(Request $request) {
         $data_role = [];
         $responseApi = ApiService::OptionRoleUser();
         $statusApi = json_decode($responseApi)->status;
@@ -86,7 +103,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function userEdit($user_id, Request $request) {
+    public function formUser($user_id, Request $request) {
         $data_role = [];
         $responseApi = ApiService::OptionRoleUser();
         $statusApi = json_decode($responseApi)->status;
@@ -109,7 +126,7 @@ class UserController extends Controller
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
-        $responseApi = ApiService::UserDetail(strtoupper(trim($user_id)));
+        $responseApi = ApiService::UserForm(strtoupper(trim($user_id)));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -137,7 +154,7 @@ class UserController extends Controller
          }
     }
 
-    public function userSave(Request $request) {
+    public function simpanUser(Request $request) {
         $validate = Validator::make($request->all(), [
             'user_id'       => 'required|string',
             'name'          => 'required|string',
@@ -179,7 +196,7 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->with('failed', $messageApi);
             }
         } else {
-            $responseApi = ApiService::UserDetail(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
+            $responseApi = ApiService::UserForm(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -228,7 +245,8 @@ class UserController extends Controller
 
         if($statusApi == 1) {
             session()->flash('success', $messageApi);
-            return redirect()->route('profile.users');
+
+            return redirect()->route('profile.users.daftar');
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }

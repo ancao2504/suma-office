@@ -339,76 +339,59 @@
 
     <div class="row g-0">
         @if(strtoupper(trim($device)) == 'MOBILE')
-        @foreach($data->detail_faktur as $detail)
-        <div class="card card-flush mt-5">
-            <div class="card-body">
-                <div class="d-flex">
-                    <div class="symbol symbol-50px me-5">
-                        <span class="symbol-label" style="background-image:url({{ $detail->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
-                    </div>
-                    <div class="flex-grow-1">
-                        <span class="fs-6 text-dark fw-bolder text-hover-primary mb-2">{{ trim($detail->part_number) }}</span>
-                        <span class="fs-6 text-dark fw-bold d-block descriptionpart mb-2">{{ $detail->nama_part }}</span>
-                        <span class="fs-6 text-danger fw-bolder">Rp. {{ number_format($detail->harga) }}</span>
-                        <div class="flex-grow-1 mt-4">
-                            <div class="row">
-                                <div class="col-6">
-                                    <span class="text-muted fs-7 d-block fw-bold">Quantity :</span>
-                                    <span class="text-dark fs-6 fw-bold">{{ number_format($detail->jml_jual) }}</span>
-                                </div>
-                                <div class="col-6">
-                                    <span class="text-muted fs-7 d-block fw-bold">Disc(%) :</span>
-                                    <span class="text-dark fs-6 fw-bold">{{ number_format($detail->disc_detail, 2) }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="text-muted fs-7 d-block fw-bold mt-4">Total :</span>
-                        <span class="text-danger fs-6 fw-bolder">Rp. {{ number_format($detail->total_detail) }}</span>
-                    </div>
-                </div>
+        <div class="card card-flush mt-8">
+            <div class="card-header align-items-center border-0 mt-4">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="fw-bolder mb-2 text-dark">Detail Tracking Order</span>
+                    <span class="text-muted fw-bold fs-7">Daftar detail part number</span>
+                </h3>
             </div>
-        </div>
-        @endforeach
-        <div class="card card-flush mt-5">
             <div class="card-body">
-                <div class="d-flex">
-                    <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                            <span class="text-muted fs-7 d-block fw-bold">Total Detail</span>
-                        </div>
-                        <div class="text-end py-lg-0 py-2">
-                            <span class="text-dark fs-6 fw-bold">Rp. {{ number_format($data->sub_total) }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                            <span class="text-muted fs-7 d-block fw-bold">Discount(%)</span>
-                        </div>
-                        <div class="text-end py-lg-0 py-2">
-                            <span class="text-dark fs-6 fw-bold">{{ number_format($data->disc_header, 2) }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                            <span class="text-muted fs-7 d-block fw-bold">Discount(Rp.)</span>
-                        </div>
-                        <div class="text-end py-lg-0 py-2">
-                            <span class="text-dark fs-6 fw-bold">Rp. {{ number_format($data->disc_rupiah) }}</span>
+                @foreach($data->detail_faktur as $data_detail)
+                <div class="d-flex mb-7">
+                    <span class="symbol symbol-100px me-5">
+                        <span class="symbol-label" style="background-image:url({{ $data_detail->image_part }}), url({{ URL::asset('assets/images/background/part_image_not_found.png') }});"></span>
+                    </span>
+                    <div class="flex-grow-1">
+                        <div class="row">
+                            <span class="fs-6 text-dark fw-bolder">{{ trim($data_detail->part_number) }}</span>
+                            <span class="fs-7 text-muted fw-bold ">{{ trim($data_detail->nama_part) }}</span>
+                            <span class="fs-5 text-dark fw-bolder mt-4">Rp. {{ number_format($data_detail->harga) }}</span>
+
+                            @if((double)$data_detail->harga != (double)$data_detail->het)
+                            <div class="d-flex align-items-center">
+                                @if((double)$data_detail->disc_detail > 0)
+                                <div class="badge badge-light-danger fw-bolder fs-7 p-1">{{ number_format($data_detail->disc_detail, 2) }}%</div>
+                                @endif
+                                <del class="text-gray-600 fw-bolder fs-7 ms-2">Rp. {{ number_format($data_detail->het) }}</del>
+                            </div>
+                            @endif
+                            <div class="align-items-center mt-4">
+                                <span class="fs-6 text-gray-800 fw-bolder">{{ number_format($data_detail->jml_jual) }}</span>
+                                <span class="fs-7 text-gray-600 fw-bolder ms-2">PCS</span>
+                            </div>
+                            <span class="fs-5 text-danger fw-boldest mt-4">Rp. {{ number_format($data_detail->total_detail) }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex">
-                    <div class="d-flex align-items-center flex-wrap flex-grow-1 mt-n2 mt-lg-n1">
-                        <div class="d-flex flex-column flex-grow-1 my-lg-0 my-2 pe-3">
-                            <span class="text-muted fs-7 d-block fw-bold">Grand Total</span>
-                        </div>
-                        <div class="text-end py-lg-0 py-2">
-                            <span class="text-danger fs-6 fw-bolder">Rp. {{ number_format($data->grand_total) }}</span>
-                        </div>
+                <div class="separator my-10"></div>
+                @endforeach
+                <div class="row">
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">SUBTOTAL:</div>
+                        <div class="text-end fw-bolder fs-6 text-gray-800">Rp. {{ number_format($data->sub_total) }}</div>
+                    </div>
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">DISCOUNT (%):</div>
+                        <div class="text-end fw-bolder fs-6 text-gray-800">{{ number_format($data->disc_header, 2) }} % / Rp. {{ number_format($data->nominal_disc_header) }}</div>
+                    </div>
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">DISCOUNT (Rp.):</div>
+                        <div class="text-end fw-bolder fs-6 text-gray-800">Rp. {{ number_format($data->disc_rupiah) }}</div>
+                    </div>
+                    <div class="d-flex flex-stack mb-3">
+                        <div class="fw-boldest pe-10 text-gray-600 fs-7">TOTAL:</div>
+                        <div class="text-end fw-boldest fs-6 text-danger">Rp. {{ number_format($data->grand_total) }}</div>
                     </div>
                 </div>
             </div>
