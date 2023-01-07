@@ -212,7 +212,7 @@
     <div id="modalEntryCetakUlang" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div id="modalContentCetakUlang" class="modal-content">
-                <form id="formEntryCetakUlang" name="formEntryCetakUlang" autofill="off" autocomplete="off" method="post" action="{{ route('setting.setting-cetak-ulang-simpan') }}">
+                <form id="formEntryCetakUlang" name="formEntryCetakUlang" autofill="off" autocomplete="off" method="post" action="{{ route('setting.cetakulang.simpan') }}">
                     @csrf
                     <div class="modal-header">
                         <h3 id="modalTitleCetakUlang" class="modal-title">Entry Data Cetak Ulang</h3>
@@ -323,8 +323,8 @@
             'month': "{{ $data_filter->month }}",
         }
         const url = {
-            'data_cetak_ulang': "{{ route('setting.setting-cetak-ulang') }}",
-            'cek_dokumen': "{{ route('setting.setting-cetak-ulang-cek-dokumen') }}",
+            'data_cetak_ulang': "{{ route('setting.cetakulang.daftar') }}",
+            'cek_dokumen': "{{ route('setting.cetakulang.cek-dokumen') }}",
         }
     </script>
     <script src="{{ asset('assets/js/suma/settings/cetakulang/cetakulang.js') }}?v={{ time() }}"></script>

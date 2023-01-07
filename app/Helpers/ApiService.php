@@ -1041,7 +1041,7 @@ class ApiService
     public static function SettingClossingMarketing($companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'setting/clossingmkr';
+        $request = 'setting/default/clossingmkr';
         $header = ['Authorization' => $credential];
         $body = [
             'companyid'     => $companyid
@@ -1678,7 +1678,7 @@ class ApiService
     public static function SettingCetakUlangDaftar($year, $month, $jenis, $page, $per_page, $role_id, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'setting/cetakulang';
+        $request = 'setting/cetakulang/daftar';
         $header = ['Authorization' => $credential];
         $body = [
             'year'      => trim($year),

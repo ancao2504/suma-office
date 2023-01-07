@@ -88,9 +88,9 @@ class CetakUlangController extends Controller
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
-            return redirect()->route('setting.setting-cetak-ulang')->with('success', $messageApi);
+            return redirect()->route('setting.cetakulang.daftar')->with('success', $messageApi);
         } else {
-            return redirect()->route('setting.setting-cetak-ulang')->with('failed', $messageApi);
+            return redirect()->route('setting.cetakulang.daftar')->with('failed', $messageApi);
         }
     }
 }
