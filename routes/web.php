@@ -259,9 +259,9 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         Route::name('visit.')->group(function () {
             Route::name('planning.')->group(function () {
-                Route::get('/visit/planningvisit', 'App\Visit\PlanningVisitController@index')->name('daftar');
-                Route::post('/visit/planningvisit/simpan', 'App\Visit\PlanningVisitController@savePlanningVisit')->name('simpan');
-                Route::post('/visit/planningvisit/hapus', 'App\Visit\PlanningVisitController@deletePlanningVisit')->name('hapus');
+                Route::get('/visit/planningvisit/daftar', 'App\Visit\PlanningVisitController@daftarPlanningVisit')->name('daftar');
+                Route::post('/visit/planningvisit/simpan', 'App\Visit\PlanningVisitController@simpanPlanningVisit')->name('simpan');
+                Route::post('/visit/planningvisit/hapus', 'App\Visit\PlanningVisitController@hapusPlanningVisit')->name('hapus');
             });
         });
     });

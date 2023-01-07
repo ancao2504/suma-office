@@ -20,7 +20,7 @@
                     @forelse($data_pembayaran as $data)
                     <tr>
                         <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                            <span class="fs-7 fw-bold text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
+                            <span class="fs-7 fw-bolder text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
                         </td>
                         <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                             <div class="row align-items-start">
