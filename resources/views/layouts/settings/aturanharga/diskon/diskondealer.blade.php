@@ -24,7 +24,7 @@
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Diskon Dealer</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon">Tambah Diskon Dealer</button>
             </div>
             <!--end:Action-->
         </div>
@@ -33,14 +33,14 @@
 </div>
 
 <!-- Modal tambah diskon-->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="tambah_diskon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="tambah_diskonLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Dealer</h1>
+                <h1 class="modal-title fs-5" id="tambah_diskonLabel">Tambah Diskon Dealer</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-diskon-dealer-simpan') }}" method="POST">
+            <form action="{{ route('setting.diskon.prosentase.dealer.simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -84,7 +84,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" id="kirim">Simpan</button>
                 </div>
             </form>
         </div>
@@ -146,6 +146,7 @@
     <div id="kt_project_users_card_pane" class="tab-pane fade">
         <!--begin::Row-->
         <div class="row g-3" id="dataDiskon">
+        @if ( $data_disc_dealer->total != 0)
         @foreach ( $data_disc_dealer->data as $data)
             <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                 <!--begin::Card-->
@@ -194,6 +195,17 @@
             </div>
 
         @endforeach
+        @else
+            <div class="col-12">
+                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                    <div class="d-flex flex-column py-2 w-100">
+                        <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
+                            <span class="text-gray-800">Data Tidak Ditemukan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         </div>
         <!--end::Row-->
         <!--begin::Pagination-->
@@ -256,6 +268,7 @@
                                 <!--end::Head-->
                                 <!--begin::Body-->
                                 <tbody class="fs-6">
+                                    @if ( $data_disc_dealer->total != 0)
                                     @foreach ( $data_disc_dealer->data as $data)
                                     <tr class="odd">
                                         <td class="fw-bold">{{ $loop->iteration }}</td>
@@ -274,6 +287,11 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @else
+                                    <tr class="odd">
+                                        <td class="fw-bold" colspan="6">Data tidak ditemukan</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                                 <!--end::Body-->
                             </table>
@@ -345,7 +363,7 @@
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-diskon-dealer-hapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.diskon.prosentase.dealer.hapus') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >

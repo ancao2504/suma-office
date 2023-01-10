@@ -24,7 +24,7 @@
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Diskon Produk</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon_produk">Tambah Diskon Produk</button>
             </div>
             <!--end:Action-->
         </div>
@@ -33,14 +33,14 @@
 </div>
 
 <!-- Modal tambah diskon-->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="tambah_diskon_produk" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="tambah_diskon_produkLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Produk</h1>
+                <h1 class="modal-title fs-5" id="tambah_diskon_produkLabel">Tambah Diskon Produk</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-diskon-produk-simpan') }}" method="POST">
+            <form action="{{ route('setting.diskon.prosentase.produk.simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -101,7 +101,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" id="kirim">Simpan</button>
                 </div>
             </form>
         </div>
@@ -224,7 +224,6 @@
                     <!--end::Info-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}">Delete</button>
                         <button class="btn btn-sm btn-light btn-light-warning btn-edit"
                         data-array="{{
                                     json_encode([
@@ -239,6 +238,7 @@
                                     ])
                                 }}">
                         Edit</button>
+                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}">Delete</button>
                     </div>
                     <!--end::Actions-->
                 </div>
@@ -322,7 +322,7 @@
                                             {{ $data->nama_produk }}
                                         </td>
                                         <td>
-                                            <span class="text-info fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
+                                            <span class="fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
                                         </td>
                                         <td>
                                             <span class="text-success fw-bolder fs-5">{{ $data->disc_normal == '.00' ? '0' : $data->disc_normal }}</span>
@@ -340,9 +340,6 @@
                                             <span class="fw-bolder fs-5">{{ $data->cabang }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <button type="reset" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}" data-bs-toggle="modal" data-bs-target="#delet_model">
-                                                <span class="bi bi-trash"></span>
-                                            </button>
                                             <button class="btn btn-sm btn-icon btn-primary d-inline-block mt-1 btn-edit"
                                             data-array="{{
                                                             json_encode([
@@ -358,6 +355,9 @@
                                                         }}"
                                             >
                                                 <span class="bi bi-pencil"></span>
+                                            </button>
+                                            <button type="reset" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}" data-bs-toggle="modal" data-bs-target="#delet_model">
+                                                <span class="bi bi-trash"></span>
                                             </button>
                                         </td>
                                     </tr>
@@ -434,7 +434,7 @@
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-diskon-produk-hapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.diskon.prosentase.produk.hapus') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >

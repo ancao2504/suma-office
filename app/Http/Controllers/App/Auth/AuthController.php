@@ -17,6 +17,7 @@ class AuthController extends Controller {
 
     public function login(Request $request) {
         $responseApi = ApiService::AuthLogin($request->get('email'), $request->get('password'), $request->get('remember_me'));
+
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 

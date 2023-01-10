@@ -1,7 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\authLogin;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\authLogin;
+use app\Option\OptionController;
+use app\Validasi\ValidasiController;
+use app\Visit\PlanningVisitController;
+use app\Setting\Diskon\DiskonDealerController;
+use app\Setting\Diskon\DiskonProdukController;
+use app\Orders\Penerimaan\PembayaranController;
+use app\Orders\Penerimaan\SuratJalanController;
+use app\Setting\CetakUlang\CetakUlangController;
+use app\setting\Diskon\DiskonProdukDealerController;
+use app\Setting\HargaNetto\HargaNettoPartsControllers;
+use app\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +46,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/dashboard/salesman/penjualanharian', 'App\Dashboard\DashboardSalesmanController@dashboardPenjualanHarian')->name('penjualan-harian');
                 Route::get('/dashboard/salesman/penjualangrouplevel', 'App\Dashboard\DashboardSalesmanController@dashboardPenjualanGroupLevel')->name('penjualan-group-level');
             });
+
 
             Route::name('dealer.')->group(function () {
                 Route::get('/dashboard/dealer', 'App\Dashboard\DashboardDealerController@index')->name('dealer');
@@ -83,6 +95,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/parts/partnumber/daftar', 'App\Parts\PartNumberController@daftarPartNumber')->name('daftar');
                 Route::post('/parts/partnumber/cart/tambah', 'App\Parts\PartNumberController@tambahCartPartNumber')->name('tambah');
                 Route::post('/parts/partnumber/cart/proses', 'App\Parts\PartNumberController@prosesCartPartNumber')->name('proses');
+            });
+            
+            Route::name('uploadimage.')->group(function () {
+                Route::post('/parts/uploadimage/part', 'App\Parts\uplooadImageController@daftarImagePart')->name('daftar');
+                Route::get('/parts/uploadimage/part/input', 'App\Parts\uplooadImageController@index')->name('form-input');
+                Route::post('/parts/uploadimage/part/simpan', 'App\Parts\uplooadImageController@store')->name('simpan');
             });
 
             Route::name('backorder.')->group(function () {
@@ -164,35 +182,41 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
 
-            Route::name('penerimaanpembayaran.')->group(function () {
-                Route::get('/warehouse/penerimaan/pembayaran/daftar', 'App\Orders\Penerimaan\PembayaranController@daftarPembayaranDealer')->name('daftar-pembayaran');
-                Route::post('/warehouse/penerimaan/pembayaran/simpan', 'App\Orders\Penerimaan\PembayaranController@store')->name('simpan-pembayaran');
-                Route::get('/warehouse/penerimaan/pembayaran', 'App\Orders\Penerimaan\PembayaranController@index')->name('pembayaran');
-            });
-
-        });
-
-        Route::name('warehouse.')->group(function () {
-            Route::name('suratjalan.')->group(function () {
+            Route::name('warehouse.')->group(function () {
                 Route::name('penerimaan.')->group(function () {
-                    Route::get('/warehouse/suratjalan/penerimaan/ceksj', 'App\Orders\Penerimaan\SuratJalanController@CekPenerimaanSJ')->name('cek_penerimaan_sj');
-                    Route::get('/warehouse/suratjalan/penerimaan/sj', 'App\Orders\Penerimaan\SuratJalanController@create')->name('surat_jalan');
-                    Route::post('/warehouse/suratjalan/penerimaan/sj/simpan', 'App\Orders\Penerimaan\SuratJalanController@store')->name('surat_jalan_simpan');
-                    Route::post('/warehouse/suratjalan/penerimaan/sj/hapus', 'App\Orders\Penerimaan\SuratJalanController@destroy')->name('surat_jalan_hapus');
-                    Route::get('/warehouse/suratjalan/penerimaan/sj/filter', 'App\Orders\Penerimaan\SuratJalanController@filter')->name('surat_jalan_filter');
-                    Route::get('/warehouse/suratjalan/penerimaan/sj/report', 'App\Orders\Penerimaan\SuratJalanController@report')->name('surat_jalan_report');
+                    
+                    Route::name('pembayaran.')->group(function () {
+                        Route::controller(PembayaranController::class)->group(function () {
+                            Route::get('/orders/warehouse/penerimaan/pembayaran/dealer/daftar', 'daftarPembayaranDealer')->name('daftar');
+                            Route::post('/orders/warehouse/penerimaan/pembayaran/dealer/simpan', 'store')->name('simpan');
+                            Route::get('/orders/warehouse/penerimaan/pembayaran/dealer/input', 'index')->name('form-input');
+                        });
+                    });
+                    Route::name('suratjalan.')->group(function () {
+                        Route::controller(SuratJalanController::class)->group(function () {
+                            Route::get('/orders/warehouse/penerimaan/suratjalan/create', 'create')->name('form-input');
+                            Route::get('/orders/warehouse/penerimaan/suratjalan/cek', 'CekPenerimaanSJ')->name('cek');
+                            Route::post('/orders/warehouse/penerimaan/suratjalan/simpan', 'store')->name('simpan');
+                            Route::post('/orders/warehouse/penerimaan/suratjalan/hapus', 'destroy')->name('hapus');
+                            Route::get('/orders/warehouse/penerimaan/suratjalan/filter', 'filter')->name('filter');
+                            Route::get('/orders/warehouse/penerimaan/suratjalan/report', 'report')->name('report');
+                        });
+                    });
                 });
             });
+            
         });
 
         Route::name('option.')->group(function () {
-            Route::get('/option/dealer', 'App\Option\OptionController@optionDealer')->name('dealer');
-            Route::get('/option/dealersalesman', 'App\Option\OptionController@optionDealerSalesman')->name('dealer-salesman');
-            Route::get('/option/salesman', 'App\Option\OptionController@optionSalesman')->name('salesman');
-            Route::get('/option/supervisor', 'App\Option\OptionController@optionSupervisor')->name('supervisor');
-            Route::get('/option/partnumber', 'App\Option\OptionController@optionPartNumber')->name('part-number');
-            Route::get('/option/tipemotor', 'App\Option\OptionController@optionTipeMotor')->name('tipe-motor');
-            Route::get('/option/groupproduk', 'App\Option\OptionController@OptionGroupProduk')->name('group-produk');
+            Route::controller(OptionController::class)->group(function () {
+                Route::get('/option/dealer', 'optionDealer')->name('dealer');
+                Route::get('/option/dealersalesman', 'optionDealerSalesman')->name('dealer-salesman');
+                Route::get('/option/salesman', 'optionSalesman')->name('salesman');
+                Route::get('/option/supervisor', 'optionSupervisor')->name('supervisor');
+                Route::get('/option/partnumber', 'optionPartNumber')->name('part-number');
+                Route::get('/option/tipemotor', 'optionTipeMotor')->name('tipe-motor');
+                Route::get('/option/groupproduk', 'OptionGroupProduk')->name('group-produk');
+            });
         });
 
         Route::name('setting.')->group(function () {
@@ -201,60 +225,82 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             });
 
             Route::name('cetakulang.')->group(function () {
-                Route::get('/setting/cetakulang', 'App\Setting\CetakUlang\CetakUlangController@index')->name('daftar');
-                Route::post('/setting/cetakulang/cekdokumen', 'App\Setting\CetakUlang\CetakUlangController@cekNomorDokumen')->name('cek-dokumen');
-                Route::post('/setting/cetakulang/simpan', 'App\Setting\CetakUlang\CetakUlangController@simpanCetakUlang')->name('simpan');
+                Route::controller(CetakUlangController::class)->group(function () {
+                    Route::get('/setting/cetakulang', 'index')->name('daftar');
+                    Route::post('/setting/cetakulang/cekdokumen', 'cekNomorDokumen')->name('cek-dokumen');
+                    Route::post('/setting/cetakulang/simpan', 'simpanCetakUlang')->name('simpan');
+                });
             });
-
+            
             Route::name('diskon.')->group(function () {
                 Route::name('prosentase.')->group(function () {
                     Route::name('produk.')->group(function () {
-                        Route::get('/setting/diskon/produk', 'App\Setting\Diskon\DiskonProdukController@index')->name('daftar');
-                        Route::post('/setting/diskon/produk/cekproduk', 'App\Setting\Diskon\DiskonProdukController@cekDiskonProduk')->name('validasi');
-                        Route::post('/setting/diskon/produk/simpan', 'App\Setting\Diskon\DiskonProdukController@store')->name('simpan');
-                        Route::post('/setting/diskon/produk/hapus', 'App\Setting\Diskon\DiskonProdukController@destroy')->name('hapus');
+                        // diskon produk
+                        Route::controller(DiskonProdukController::class)->group(function () {
+                            Route::get('/setting/diskon/prosentase/produk', 'index')->name('daftar');
+                            Route::post('/setting/diskon/prosentase/produk/cek', 'cekDiskonProduk')->name('cek');
+                            Route::post('/setting/diskon/prosentase/produk/simpan', 'store')->name('simpan');
+                            Route::post('/setting/diskon/prosentase/produk/hapus', 'destroy')->name('hapus');
+                        });
 
                         Route::name('dealer.')->group(function () {
-                            Route::get('/setting/diskon/dealer/produk', 'App\Setting\Diskon\DiskonProdukDealerController@index')->name('daftar');
-                            Route::post('/setting/diskon/dealer/produk/simpan', 'App\Setting\Diskon\DiskonProdukDealerController@store')->name('simpan');
-                            Route::post('/setting/diskon/dealer/produk/hapus', 'App\Setting\Diskon\DiskonProdukDealerController@destroy')->name('hapus');
+                            // diskon produk dealer
+                            Route::controller(DiskonProdukDealerController::class)->group(function () {
+                                Route::get('/setting/diskon/prosentase/dealer/produk', 'index')->name('daftar');
+                                Route::post('/setting/diskon/prosentase/dealer/produk/simpan', 'store')->name('simpan');
+                                Route::post('/setting/diskon/prosentase/dealer/produk/hapus', 'destroy')->name('hapus');
+                            });
                         });
                     });
 
                     Route::name('dealer.')->group(function () {
-                        Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('daftar');
-                        Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('simpan');
-                        Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('hapus');
+                        // diskon dealer
+                        Route::controller(DiskonDealerController::class)->group(function () {
+                            Route::get('/setting/diskon/prosentase/dealer/default', 'index')->name('daftar');
+                            Route::post('/setting/diskon/prosentase/dealer/default/simpan', 'store')->name('simpan');
+                            Route::post('/setting/diskon/prosentase/dealer/default/hapus', 'destroy')->name('hapus');
+                        });
                     });
 
+                    // Route::name('part.')->group(function () {
+                    //     Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('daftar');
+                    //     Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('simpan');
+                    //     Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('hapus');
+                    // });
+                });
+                
+            });
+            // setting.netto.dealer.part
+            Route::name('netto.')->group(function () {
+                Route::name('dealer.')->group(function () {
                     Route::name('part.')->group(function () {
-                        Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('daftar');
-                        Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('simpan');
-                        Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('hapus');
+                        // netto dealer
+                        Route::controller(HargaNettoPartsDealerControllers::class)->group(function () {
+                            Route::get('/setting/netto/dealer/part', 'index')->name('daftar');
+                            Route::post('/setting/netto/dealer/part/simpan', 'store')->name('simpan');
+                            Route::post('/setting/netto/dealer/part/hapus', 'destroy')->name('hapus');
+                        });
                     });
                 });
-
-                Route::name('netto.')->group(function () {
-                    Route::name('dealer.')->group(function () {
-                        Route::get('/setting/harga/netto/dealer/part', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@index')->name('daftar');
-                        Route::post('/setting/harga/netto/dealer/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@store')->name('simpan');
-                        Route::post('/setting/harga/netto/dealer/part/hapus', 'App\Setting\HargaNetto\HargaNettoPartsDealerControllers@destroy')->name('hapus');
-                    });
-
-                    Route::name('part.')->group(function () {
-                        Route::get('/setting/harga/netto/part', 'App\Setting\HargaNetto\HargaNettoPartsControllers@index')->name('daftar');
-                        Route::post('/setting/harga/netto/part/simpan', 'App\Setting\HargaNetto\HargaNettoPartsControllers@storeDestroy')->name('simpan');
+                // setting.netto.part
+                Route::name('part.')->group(function () {
+                    // netto part
+                    Route::controller(HargaNettoPartsControllers::class)->group(function () {
+                        Route::get('/setting/netto/part', 'index')->name('daftar');
+                        Route::post('/setting/netto/part/simpan', 'storeDestroy')->name('simpan');
                     });
                 });
             });
         });
 
         Route::name('validasi.')->group(function () {
-            Route::post('/validasi/salesman', 'App\Validasi\ValidasiController@validasiSalesman')->name('salesman');
-            Route::post('/validasi/dealer', 'App\Validasi\ValidasiController@validasiDealer')->name('dealer');
-            Route::post('/validasi/dealersalesman', 'App\Validasi\ValidasiController@validasiDealerSalesman')->name('dealer-salesman');
-            Route::post('/validasi/partnumber', 'App\Validasi\ValidasiController@validasiPartNumber')->name('part-number');
-            Route::post('/validasi/produk', 'App\Validasi\ValidasiController@validasiProduk')->name('produk');
+            Route::controller(ValidasiController::class)->group(function () {
+                Route::post('/validasi/salesman', 'validasiSalesman')->name('salesman');
+                Route::post('/validasi/dealer', 'validasiDealer')->name('dealer');
+                Route::post('/validasi/dealersalesman', 'validasiDealerSalesman')->name('dealer-salesman');
+                Route::post('/validasi/partnumber', 'validasiPartNumber')->name('part-number');
+                Route::post('/validasi/produk', 'validasiProduk')->name('produk');
+            });
         });
 
         Route::name('visit.')->group(function () {

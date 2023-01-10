@@ -9,6 +9,7 @@
 		<meta property="og:locale" content="en_US" />
 		<meta property="og:type" content="article" />
 		<meta property="og:title" content="{{ env('APP_NAME') }}" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta property="og:url" content="{{ env('APP_URL') }}" />
 		<meta property="og:site_name" content="Suma | Honda" />
 		<link rel="shortcut icon" href="{{ asset('assets/images/logo/ic_suma.png') }}" />

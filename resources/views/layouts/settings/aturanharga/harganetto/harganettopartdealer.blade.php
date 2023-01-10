@@ -40,7 +40,7 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Part Netto Dealer</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-harga-netto-parts-dealer-simpan') }}" method="POST">
+            <form action="{{ route('setting.netto.dealer.part.simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -77,7 +77,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="cabang" class="form-label mt-1">Cabang</label>
-                                <input type="text" class="form-control" id="cabang" name="cabang" placeholder="cabang" value="{{ $companyid }}" disabled>
+                                <input type="text" class="form-control bg-secondary" id="cabang" name="cabang" placeholder="cabang" value="{{ $companyid }}"  readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -275,7 +275,7 @@
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-harga-netto-parts-dealer-hapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.netto.dealer.part.hapus') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >

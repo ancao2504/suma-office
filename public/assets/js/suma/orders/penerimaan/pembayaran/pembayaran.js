@@ -182,15 +182,23 @@ $(document).ready(function () {
 
     $('#btnFilterPilihDealer').on('click', function (e) {
         e.preventDefault();
-        loadDataDealer(1, 10, '');
+        loadDataOptionDealer(1, 10, '');
         $('#searchDealerForm').trigger('reset');
-        $('#dealerSearchModal').modal('show');
+        $('#modalOptionDealer').modal('show');
     });
 
-    $('#dealerContentModal').on('click', '#selectDealer.btn', function () {
+    // $('#dealerContentModal').on('click', '#selectDealer.btn', function () {
+    //     $('#form_pp #kd_dealer').val($(this).data('kode_dealer'));
+    //     $('#form_pp #nm_dealer').val($(this).data('nama_dealer'));
+    //     $('#modalOptionDealer').modal('hide');
+    //     $('#form_pp #kd_dealer').trigger('change');
+    // });
+
+    $('body').on('click', '#optionDealerContentModal #selectedOptionDealer', function (e) {
+        e.preventDefault();
         $('#form_pp #kd_dealer').val($(this).data('kode_dealer'));
-        $('#form_pp #nm_dealer').val($(this).data('nama_dealer'));
-        $('#dealerSearchModal').modal('hide');
+        $('#form_pp #nm_dealer').val($(this).closest('tr').find('td').eq(1).text());
+        $('#modalOptionDealer').modal('hide');
         $('#form_pp #kd_dealer').trigger('change');
     });
     // end modal search dealer
@@ -198,7 +206,7 @@ $(document).ready(function () {
         if ($(this).val() != '') {
             // ambil data dengan ajax
             $.ajax({
-                url: base_url + '/orders/penerimaan/pembayaran/daftar',
+                url: base_url + '/orders/warehouse/penerimaan/pembayaran/dealer/daftar',
                 type: 'GET',
                 dataType: 'json',
                 data: {
@@ -420,7 +428,7 @@ $(document).ready(function () {
                                 `);
                                 $('#form_pp input[name="image[]"]').prop('files', file_bukti.files);
                                 // dikirim ke controller
-                                $('#form_pp').attr('action', base_url + '/orders/penerimaan/pembayaran/simpan').submit();
+                                $('#form_pp').attr('action', base_url + '/orders/warehouse/penerimaan/pembayaran/dealer/simpan').submit();
                             } else if (result.dismiss === "cancel") {
                             }
                         });
@@ -451,7 +459,7 @@ $(document).ready(function () {
         $('#form_pp #total').trigger('keyup');
 
         if(old.detail.length != 0){
-            old.detail = JSON.parse(old.detail);
+            // old.detail = old.detail;
             $(document).ajaxStop(function () {
                 data_akandibayar = old.detail;
                 $('#PenerimaanPembayaran').html('');

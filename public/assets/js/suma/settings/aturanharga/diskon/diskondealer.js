@@ -1,39 +1,75 @@
 // dokumen ready
 $(document).ready(function () {
 
-    // agar tombol menu aktif
-    function viewCard() {
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a')[0].click();
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a').removeClass('active');
-    }
-    function viewTabel() {
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a')[0].click();
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a').removeClass('active');
-    }
-    // end tombol menu aktif
-
     // jika terdapat submit pada form
     $('form').submit(function (e) {
         loading.block();
     });
     // end form
+    // ajax start loading
+    $(document).ajaxStart(function () {
+        loading.block();
+    });
+    // ajax stop loading
+    $(document).ajaxStop(function () {
+        loading.release();
+    });
+    // end ajax
+    
+    $('#tambah_diskon form .modal-body').find('input').on('keydown', function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            var index = $('#tambah_diskon form .modal-body').find('input').index(this) + 1;
+            if ($('#tambah_diskon form .modal-body').find('input').eq(index).attr('readonly') || $('#tambah_diskon form .modal-body').find('input').eq(index).hasClass('bg-secondary')) {
+                for (let i = index; i < $('#tambah_diskon form .modal-body').find('input').length; i++) {
+                    if (!$('#tambah_diskon form .modal-body').find('input').eq(i).attr('readonly') || !$('#tambah_diskon form .modal-body').find('input').eq(i).hasClass('bg-secondary')) {
+                        $('#tambah_diskon form .modal-body').find('input').eq(i).focus();
+                        break;
+                    }
+                }
+            } else {
+                $('#tambah_diskon form .modal-body').find('input').eq(index).focus();
+            }
+        }
+    });
 
-    // saat tambah diskon di klik focus ke pruduk dan merubah tombol enter menjadi tab
-    $('#staticBackdrop').on('shown.bs.modal', function () {
-        $('#dealer').focus();
-        $('#staticBackdrop').find('input').on('keydown', function (e) {
-            if (e.which == 13) {
-                e.preventDefault();
-                var index = $('#staticBackdrop').find('input').index(this) + 1;
-                $('#staticBackdrop').find('input').eq(index).focus();
+    $('#tambah_diskon form .modal-footer #kirim').on('click', function (e) {
+        $('#tambah_diskon form .modal-body').find('input[required]').each(function () {
+            if ($(this).val() == '') {
+                $(this).addClass('is-invalid');
+                if (!$(this).next().hasClass('invalid-feedback')) {
+                    $(this).after('<div class="invalid-feedback">Tidak boleh kosong</div>');
+                }
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).next().remove();
             }
         });
+
+        // swal fire confirm apakah yakin akan mengirim data ambil inputan kode dealer pada carbang jika iya triger submit pada #tambah_diskon form
+        if (!$('#tambah_diskon form .modal-body').find('input[required]').hasClass('is-invalid')) {
+            swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah yakin akan mengirim data?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false,
+            }).then(function (result) {
+                if (result.value) {
+                    $('#tambah_diskon form').submit();
+                }
+            });
+        }
     });
-    // end saat tambah diskon
 
     // validasi dealer
     $('#dealer').on('change', function () {
-        loading.block();
         $.ajax({
             url: base_url + '/validasi/dealer',
             type: "POST",
@@ -48,23 +84,22 @@ $(document).ready(function () {
                     $('#dealer').addClass('is-valid');
 
                     if (this.value != '' && $('#dealer').val() != '') {
-                        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
+                        $('#tambah_diskon > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
                     }
                 } else if (data.status == 0) {
                     $('#nama_dealer').val('');
                     $('#dealer').removeClass('is-valid');
                     $('#dealer').addClass('is-invalid');
-                    $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
+                    $('#tambah_diskon > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
                 }
             },
             error: function (data) {
                 $('#nama_dealer').val('');
                 $('#dealer').removeClass('is-valid');
                 $('#dealer').addClass('is-invalid');
-                $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'button');
+                $('#tambah_diskon > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
             }
         });
-        loading.release();
     });
     // end validasi dealer
 
@@ -78,12 +113,7 @@ $(document).ready(function () {
     }
     //  end search di url
 
-    // merubah url dengan parameter yang baru + reload
-    function gantiUrl(page = current_page, data = '') {
-        loading.block();
-        window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val() + "&data=" + data;
-    }
-    // end pagination,search,per_page
+
 
     // search
     $('#filterSearch').val(search);
@@ -134,8 +164,8 @@ $(document).ready(function () {
 
     //  add data hanya menganti label di modal dan mengosongkan inputan
     $('#btn-adddiskonproduk').on('click', function () {
-        $('#staticBackdropLabel').html('Tambah Diskon Dealer');
-        $('#staticBackdrop > div > div > form').trigger('reset');
+        $('#tambah_diskonLabel').html('Tambah Diskon Dealer');
+        $('#tambah_diskon > div > div > form').trigger('reset');
         $('#dealer').removeAttr('readonly');
         $('#dealer').removeClass('bg-secondary');
         $('#dealer').removeClass('is-valid');
@@ -145,13 +175,28 @@ $(document).ready(function () {
 
     // edit data
     $('.btn-edit').on('click', function () {
-        $('#staticBackdropLabel').html('Edit Diskon Dealer');
+        $('#tambah_diskonLabel').html('Edit Diskon Dealer');
         var data = $(this).data('array');
         editData(data);
     });
 
+
+});
+
+
+
+    // agar tombol menu aktif
+    function viewCard() {
+        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a')[0].click();
+        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a').removeClass('active');
+    }
+    function viewTabel() {
+        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a')[0].click();
+        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a').removeClass('active');
+    }
+    // end tombol menu aktif
+
     function editData(data) {
-        console.log(data);
         $('#dealer').val(data.kode_dealer);
         $('#dealer').attr('readonly', true);
         $('#dealer').addClass('bg-secondary');
@@ -162,8 +207,27 @@ $(document).ready(function () {
         $('#disc_plus').val(data.disc_plus == '.00' ? 0 : data.disc_plus);
         $('#umur_faktur').val(data.umur_faktur == '.00' ? 0 : data.umur_faktur);
 
-        $('#staticBackdrop').modal('show');
-        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('type', 'submit');
+        // hapus is-valid dan invalid-feedback pada semua input kecuali kode dealer
+        $('#tambah_diskon form .modal-body').find('input[required]').each(function () {
+            if ($(this).val() == '') {
+                $(this).addClass('is-invalid');
+                if (!$(this).next().hasClass('invalid-feedback')) {
+                    $(this).after('<div class="invalid-feedback">Tidak boleh kosong</div>');
+                }
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).next().remove();
+            }
+        });
+
+        $('#tambah_diskon').modal('show');
+        $('#tambah_diskon > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
     }
     // end edit data
-});
+
+    // merubah url dengan parameter yang baru + reload
+    function gantiUrl(page = current_page, data = '') {
+        loading.block();
+        window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val() + "&data=" + data;
+    }
+    // end pagination,search,per_page

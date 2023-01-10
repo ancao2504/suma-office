@@ -133,6 +133,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="SuratJalanBody">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Tidak ada data</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -151,19 +154,13 @@
     
         <script type="text/javascript">
             let url = {
-                'cek_penerimaan_sj':"{{ route('orders.cek_penerimaan_sj') }}",
-                'surat_jalan_simpan':"{{ route('orders.surat_jalan_simpan') }}",
-                'surat_jalan_hapus':"{{ route('orders.surat_jalan_hapus') }}",
+                'cek_penerimaan_sj':"{{ route('orders.warehouse.penerimaan.suratjalan.cek') }}",
+                'surat_jalan_simpan':"{{ route('orders.warehouse.penerimaan.suratjalan.simpan') }}",
+                'surat_jalan_hapus':"{{ route('orders.warehouse.penerimaan.suratjalan.hapus') }}",
                 'url_image': "{{ asset('assets/images/sj/') }}",
             }
 
             let data_sj;
-        </script>
-
-        <script>
-            $(document).ready(function() {
-                
-            });
         </script>
         <script src="{{ asset('assets/js/suma/orders/penerimaan/suratjalan.js') }}?v={{ time() }}"></script>
     @endpush

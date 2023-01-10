@@ -71,6 +71,7 @@ class PembayaranController extends Controller
     public function store(Request $request)
     {
         $names_files = [];
+        // jika ada gambar bukti pembayaran
         if(!empty($request->image)){
             foreach ($request->image as $key => $value) {
                 $nama_file =  'Bukti_Penagihan_'.strtoupper(trim($request->session()->get('app_user_id'))).'_'.strtoupper(trim($request->session()->get('app_user_company_id'))).'_'. date('YmdHis'). '.' . $value->getClientOriginalExtension();
@@ -90,8 +91,8 @@ class PembayaranController extends Controller
                     return redirect()->back()->withInput()->with('failed', 'Bukti Pembayaran Gagal diterima !');
                 }
             }
-        }
-        return redirect()->back()->withInput()->with('failed', 'Bukti Pembayaran Gagal diterima !');
+        } 
+        // kirim data ke api
         $responseApi = ApiService::PembayaranDealerSimpan(
             trim($request->get('kd_dealer')),
             trim($request->get('jenis_transaksi')),
