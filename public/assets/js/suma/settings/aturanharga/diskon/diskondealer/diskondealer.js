@@ -1,6 +1,50 @@
-// dokumen ready
-$(document).ready(function () {
+// search di url
+const params = new URLSearchParams(window.location.search)
+for (const param of params) {
+    var search = params.get('search');
+    var per_page = params.get('per_page');
+    var page = params.get('page');
+}
+//  end search di url
 
+function editData(data) {
+    $('#dealer').val(data.kode_dealer);
+    $('#dealer').attr('readonly', true);
+    $('#dealer').addClass('bg-secondary');
+    $('#dealer').trigger('change');
+
+    // $('#nama_dealer').val();
+    $('#disc_default').val(data.disc_default == '.00' ? 0 : data.disc_default);
+    $('#disc_plus').val(data.disc_plus == '.00' ? 0 : data.disc_plus);
+    $('#umur_faktur').val(data.umur_faktur == '.00' ? 0 : data.umur_faktur);
+
+    // hapus is-valid dan invalid-feedback pada semua input kecuali kode dealer
+    $('#tambah_diskon form .modal-body').find('input[required]').each(function () {
+        if ($(this).val() == '') {
+            $(this).addClass('is-invalid');
+            if (!$(this).next().hasClass('invalid-feedback')) {
+                $(this).after('<div class="invalid-feedback">Tidak boleh kosong</div>');
+            }
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).next().remove();
+        }
+    });
+
+    $('#tambah_diskon').modal('show');
+    $('#tambah_diskon > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
+}
+// end edit data
+
+// merubah url dengan parameter yang baru + reload
+function gantiUrl(page = current_page) {
+    loading.block();
+    window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
+}
+// end pagination,search,per_page
+
+
+$(document).ready(function () {
     // jika terdapat submit pada form
     $('form').submit(function (e) {
         loading.block();
@@ -103,53 +147,14 @@ $(document).ready(function () {
     });
     // end validasi dealer
 
-    // search di url
-    const params = new URLSearchParams(window.location.search)
-    for (const param of params) {
-        var search = params.get('search');
-        var per_page = params.get('per_page');
-        var page = params.get('page');
-        var menuview = params.get('data');
-    }
-    //  end search di url
-
-
-
     // search
     $('#filterSearch').val(search);
     $('#filterSearch').on('change keydown', function (e) {
         if (e.keyCode == 13 || e.type == 'change') {
-            gantiUrl(1, menuview);
+            gantiUrl(1);
         }
     });
     // end search
-
-    // per_page
-    $('#kt_project_users_table_length > label > select > option[value="' + per_page + '"]').prop('selected', true);
-    $('#kt_project_users_table_length > label > select').on('change', function () {
-        gantiUrl(1, 'tabel');
-    });
-    // end per_page
-
-    // pagination, card & tabel
-    $('#kt_project_users_table_paginate > ul > li').on('click', function () {
-        if ($(this).hasClass('disabled') === false) {
-            gantiUrl($(this).find('a').data('page'), 'tabel');
-        }
-    });
-    $('#kt_project_users_card_pane > div.d-flex.flex-stack.flex-wrap.pt-10 > ul > li').on('click', function () {
-        if ($(this).hasClass('disabled') === false) {
-            gantiUrl($(this).find('a').data('page'), 'card');
-        }
-    });
-    if (params.has('data')) {
-        if (params.get('data') == 'tabel') {
-            viewTabel();
-        } else if (params.get('data') == 'card') {
-            viewCard();
-        }
-    }
-    // end pagination
 
 
     // delete data
@@ -179,55 +184,4 @@ $(document).ready(function () {
         var data = $(this).data('array');
         editData(data);
     });
-
-
 });
-
-
-
-    // agar tombol menu aktif
-    function viewCard() {
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a')[0].click();
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a').removeClass('active');
-    }
-    function viewTabel() {
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(2) > a')[0].click();
-        $('#kt_content_container > div.d-flex.flex-wrap.flex-stack.pb-7 > div:nth-child(2) > ul > li:nth-child(1) > a').removeClass('active');
-    }
-    // end tombol menu aktif
-
-    function editData(data) {
-        $('#dealer').val(data.kode_dealer);
-        $('#dealer').attr('readonly', true);
-        $('#dealer').addClass('bg-secondary');
-        $('#dealer').trigger('change');
-
-        // $('#nama_dealer').val();
-        $('#disc_default').val(data.disc_default == '.00' ? 0 : data.disc_default);
-        $('#disc_plus').val(data.disc_plus == '.00' ? 0 : data.disc_plus);
-        $('#umur_faktur').val(data.umur_faktur == '.00' ? 0 : data.umur_faktur);
-
-        // hapus is-valid dan invalid-feedback pada semua input kecuali kode dealer
-        $('#tambah_diskon form .modal-body').find('input[required]').each(function () {
-            if ($(this).val() == '') {
-                $(this).addClass('is-invalid');
-                if (!$(this).next().hasClass('invalid-feedback')) {
-                    $(this).after('<div class="invalid-feedback">Tidak boleh kosong</div>');
-                }
-            } else {
-                $(this).removeClass('is-invalid');
-                $(this).next().remove();
-            }
-        });
-
-        $('#tambah_diskon').modal('show');
-        $('#tambah_diskon > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
-    }
-    // end edit data
-
-    // merubah url dengan parameter yang baru + reload
-    function gantiUrl(page = current_page, data = '') {
-        loading.block();
-        window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val() + "&data=" + data;
-    }
-    // end pagination,search,per_page

@@ -97,129 +97,13 @@
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
-    <!--begin::Controls-->
-    <div class="d-flex flex-wrap my-1">
-        <!--begin::Tab nav-->
-        <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary me-3" data-bs-toggle="tab" href="#kt_project_users_card_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="5" y="5" width="5" height="5" rx="1" fill="currentColor"></rect>
-                                <rect x="14" y="5" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="5" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="14" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                            </g>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"></path>
-                            <path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"></path>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-        </ul>
-        <!--end::Tab nav-->
-        <!--begin::Actions-->
-        <div class="d-flex my-0">
-        </div>
-        <!--end::Actions-->
-    </div>
-    <!--end::Controls-->
 </div>
 
 <div class="tab-content">
-    <!--begin::Tab pane-->
-    <div id="kt_project_users_card_pane" class="tab-pane fade">
-        <!--begin::Row-->
-        <div class="row g-3" id="dataDiskon">
-        @foreach ( $data->data as $dta)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
-                <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
-                    <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
-                    <!--begin::Info-->
-                    <div class="d-flex flex-column py-2">
-                        <!--begin::Owner-->
-                        {{-- <div class="d-flex align-items-center fs-4 fw-bolder mb-5">Jhon Larson</div> --}}
-                        <!--end::Owner-->
-                        <!--begin::Wrapper-->
-                        <div class="d-flex align-items-center">
-                            <!--begin::Icon-->
-                            <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4">
-                            <!--end::Icon-->
-                            <!--begin::Details-->
-                            <div>
-                                <div class="fs-4 fw-bolder">{{ $dta->part_number }}</div>
-                                <div class="fs-6 fw-bold text-gray-400">{{ $dta->keterangan }}</div>
-                            </div>
-                            <!--end::Details-->
-                        </div>
-                        <!--end::Wrapper-->
-                    </div>
-                    <!--end::Info-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
-                        data-array = "{{ json_encode($dta) }}">
-                            Delete
-                        </button>
-                    </div>
-                    <!--end::Actions-->
-                </div>
-                <!--end::Card-->
-            </div>
-        @endforeach
-        </div>
-        <!--end::Row-->
-        <!--begin::Pagination-->
-        <div class="d-flex flex-stack flex-wrap pt-10">
-            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data->from }} to {{ $data->to }} of {{ $data->total }} entries</div>
-            <!--begin::Pages-->
-            <ul class="pagination">
-                @foreach ($data->links as $dta)
-                    @if (strpos($dta->label, 'Next') !== false)
-                        <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ (string)((int)($data->current_page) + 1) }}" class="page-link">
-                                <i class="next"></i>
-                            </a>
-                        </li>
-                    @elseif (strpos($dta->label, 'Previous') !== false)
-                        <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ (string)((int)($data->current_page) - 1) }}" class="page-link">
-                                <i class="previous"></i>
-                            </a>
-                        </li>
-                    @elseif ($dta->active == true)
-                        <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
-                        </li>
-                    @elseif ($dta->active == false)
-                        <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
-            <!--end::Pages-->
-        </div>
-        <!--end::Pagination-->
-    </div>
-    <!--end::Tab pane-->
-    <!--begin::Tab pane-->
+    
+    @if (\Agent::isDesktop())
+    <!--begin::Table-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
-    <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card body-->
             <div class="card-body pt-0">
@@ -243,9 +127,13 @@
                                 <!--end::Head-->
                                 <!--begin::Body-->
                                 <tbody class="fs-6">
+                                    @if ($data->total > 0)
+                                    @php
+                                        $no = $data->from;
+                                    @endphp
                                     @foreach ( $data->data as $dta)
                                     <tr class="odd">
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $no }}</td>
                                         <td>
                                             {{ $dta->part_number }}
                                         </td>
@@ -266,7 +154,15 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    @php
+                                        $no++;
+                                    @endphp
                                     @endforeach
+                                    @else
+                                    <tr class="odd">
+                                        <td colspan="5" class="text-center">Data tidak ditemukan</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                                 <!--end::Body-->
                             </table>
@@ -321,9 +217,96 @@
             </div>
         <!--end::Card body-->
         </div>
-    <!--end::Card-->
     </div>
-<!--end::Tab pane-->
+    <!--end::Table-->
+    @else
+    <!--begin::Tab pane-->
+    <div id="kt_project_users_card_pane" class="tab-pane fade active show">
+        <!--begin::Row-->
+        <div class="row g-3" id="dataDiskon">
+            
+        @if ($data->total > 0)
+        @foreach ( $data->data as $dta)
+            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+                <!--begin::Card-->
+                <div class="card h-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                    <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
+                    <!--begin::Info-->
+                    <div class="d-flex flex-column py-2">
+                        <!--begin::Owner-->
+                        {{-- <div class="d-flex align-items-center fs-4 fw-bolder mb-5">Jhon Larson</div> --}}
+                        <!--end::Owner-->
+                        <!--begin::Wrapper-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Icon-->
+                            <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4">
+                            <!--end::Icon-->
+                            <!--begin::Details-->
+                            <div>
+                                <div class="fs-4 fw-bolder">{{ $dta->part_number }}</div>
+                                <div class="fs-6 fw-bold text-gray-400">{{ $dta->keterangan }}</div>
+                            </div>
+                            <!--end::Details-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Info-->
+                    <!--begin::Actions-->
+                    <div class="d-flex align-items-center py-2">
+                        <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
+                        data-array = "{{ json_encode($dta) }}">
+                            Delete
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                </div>
+                <!--end::Card-->
+            </div>
+        @endforeach
+        @else
+            <div class="col-12">
+                <div class="card h-100 flex-row flex-stack flex-wrap p-6">
+                    <div class="ribbon-label bg-success">Data Kosong</div>
+                </div>
+            </div>
+        @endif
+        </div>
+        <!--end::Row-->
+        <!--begin::Pagination-->
+        <div class="d-flex flex-stack flex-wrap pt-10">
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data->from }} to {{ $data->to }} of {{ $data->total }} entries</div>
+            <!--begin::Pages-->
+            <ul class="pagination">
+                @foreach ($data->links as $dta)
+                    @if (strpos($dta->label, 'Next') !== false)
+                        <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ (string)((int)($data->current_page) + 1) }}" class="page-link">
+                                <i class="next"></i>
+                            </a>
+                        </li>
+                    @elseif (strpos($dta->label, 'Previous') !== false)
+                        <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ (string)((int)($data->current_page) - 1) }}" class="page-link">
+                                <i class="previous"></i>
+                            </a>
+                        </li>
+                    @elseif ($dta->active == true)
+                        <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
+                        </li>
+                    @elseif ($dta->active == false)
+                        <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+            <!--end::Pages-->
+        </div>
+        <!--end::Pagination-->
+    </div>
+    <!--end::Tab pane-->
+    @endif
 </div>
 
 <!--begin::Modal delet data-->
@@ -363,10 +346,6 @@
 </div>
 <!--end::Modal delet data-->
 
-
-
-    {{-- <div id="dataLoadDiskon"></div> --}}
-
     @push('scripts')
     <script type="text/javascript">
     let old = {
@@ -374,6 +353,11 @@
     }
             const current_page = "{{ $data->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart/harganettopart.js') }}?v={{ time() }}"></script>
+    @if (\Agent::isDesktop())
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart/harganettopartTable.js') }}?v={{ time() }}"></script>
+    @else
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart/harganettopartCard.js') }}?v={{ time() }}"></script>
+    @endif
     @endpush
 @endsection

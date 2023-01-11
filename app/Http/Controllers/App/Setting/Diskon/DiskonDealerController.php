@@ -30,6 +30,7 @@ class DiskonDealerController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
+
             return view(
                 'layouts.settings.aturanharga.diskon.diskondealer',
                 [

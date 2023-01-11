@@ -105,30 +105,6 @@
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
-    <!--begin::Controls-->
-    <div class="d-flex flex-wrap my-1">
-        <!--begin::Tab nav-->
-        <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"></path>
-                            <path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"></path>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-        </ul>
-        <!--end::Tab nav-->
-        <!--begin::Actions-->
-        <div class="d-flex my-0">
-        </div>
-        <!--end::Actions-->
-    </div>
-    <!--end::Controls-->
 </div>
 
 <div class="tab-content">
@@ -163,9 +139,13 @@
                                 <!--end::Head-->
                                 <!--begin::Body-->
                                 <tbody class="fs-6">
+                                    @if ($data_part_netto_dealer->total != 0)
+                                    @php
+                                        $no = $data_part_netto_dealer->from;
+                                    @endphp
                                     @foreach ( $data_part_netto_dealer->data as $dta)
                                     <tr class="odd">
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $no }}</td>
                                         <td>
                                             {{ $dta->part_number }}
                                         </td>
@@ -185,6 +165,11 @@
                                             {!! $dta->keterangan !!}
                                         </td>
                                         <td class="text-center">
+                                            <button class="btn btn-sm btn-icon btn-primary d-inline-block mt-1 btn-edit"
+                                            data-array="{{ json_encode($dta) }}"
+                                            >
+                                                <span class="bi bi-pencil"></span>
+                                            </button>
                                             <button type="button" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete"
                                             data-array = "{{ json_encode(
                                                 [
@@ -195,14 +180,17 @@
                                             data-bs-toggle="modal" data-bs-target="#delet_model">
                                                 <span class="bi bi-trash"></span>
                                             </button>
-                                            <button class="btn btn-sm btn-icon btn-primary d-inline-block mt-1 btn-edit"
-                                            data-array="{{ json_encode($dta) }}"
-                                            >
-                                                <span class="bi bi-pencil"></span>
-                                            </button>
                                         </td>
                                     </tr>
+                                    @php
+                                        $no++;
+                                    @endphp
                                     @endforeach
+                                    @else
+                                    <tr>
+                                        <td colspan="8" class="text-center">Tidak ada data</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                                 <!--end::Body-->
                             </table>

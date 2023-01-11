@@ -95,7 +95,7 @@ function listGambar(page){
         url: base_url + "/parts/uploadimage/part",
         type: "POST",
         data: {
-            _token: $('meta[name="csrf-token"]').attr('content'),
+            _token: $('input[name="_token"]').val(),
             page: page
         },
         dataType: "json",
