@@ -353,15 +353,17 @@
 
         @endforeach
         @else
-            <div class="col-12">
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
-                    <div class="d-flex flex-column py-2 w-100">
-                        <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
-                            <span class="text-gray-800">Tidak ada data</span>
-                        </div>
-                    </div>
+        <div class="col-12">
+            <!--begin::Card-->
+            <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                <!--begin::Owner-->
+                <div class="text-center w-100">
+                    <span class="fw-bold text-gray-800">Tidak ada data</span>
                 </div>
+                <!--end::Owner-->
             </div>
+            <!--end::Card-->
+        </div>
         @endif
         </div>
         <!--end::Row-->

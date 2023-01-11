@@ -227,7 +227,7 @@
             
         @if ($data->total > 0)
         @foreach ( $data->data as $dta)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+            <div class="col-sm-4 col-6">
                 <!--begin::Card-->
                 <div class="card h-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
                     <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
@@ -265,9 +265,15 @@
         @endforeach
         @else
             <div class="col-12">
-                <div class="card h-100 flex-row flex-stack flex-wrap p-6">
-                    <div class="ribbon-label bg-success">Tidak ada data</div>
+                <!--begin::Card-->
+                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                    <!--begin::Owner-->
+                    <div class="text-center w-100">
+                        <span class="fw-bold text-gray-800">Tidak ada data</span>
+                    </div>
+                    <!--end::Owner-->
                 </div>
+                <!--end::Card-->
             </div>
         @endif
         </div>

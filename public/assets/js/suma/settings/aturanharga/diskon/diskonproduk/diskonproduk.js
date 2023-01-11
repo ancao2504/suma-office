@@ -1,9 +1,10 @@
 // pagination,search,per_page
 const params = new URLSearchParams(window.location.search)
 for (const param of params) {
-    var search = params.get('search');
-    var per_page = params.get('per_page');
-    var page = params.get('page');
+    let request = JSON.parse(atob(params.get('param')));
+    var search = request.search;
+    var per_page = request.per_page;
+    var page = request.page;
 }
 
 function editData(data) {
@@ -39,7 +40,8 @@ function editData(data) {
 // merubah url dengan parameter yang baru + reload
 function gantiUrl(page = current_page, data = '') {
     loading.block();
-    window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
+    window.location.href = window.location.origin + window.location.pathname + "?param=" + btoa(JSON.stringify({page: page, per_page: $('#kt_project_users_table_length > label > select').val(), search: $('#filterSearch').val()}));
+    // "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
 }
 // end pagination,search,per_page
 

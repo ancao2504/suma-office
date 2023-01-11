@@ -322,12 +322,12 @@
         </div>
         @endforeach
         @else
-        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+        <div class="col-12">
             <!--begin::Card-->
             <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
                 <!--begin::Owner-->
-                <div class="d-flex align-items-center fs-2 fw-bolder mb-5">
-                    <span class="text-gray-800"> Data tidak ditemukan </span>
+                <div class="text-center w-100">
+                    <span class="fw-bold text-gray-800">Tidak ada data</span>
                 </div>
                 <!--end::Owner-->
             </div>
