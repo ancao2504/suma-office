@@ -52,11 +52,9 @@ class PembayaranController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            return response()->json([
-                'status' => 1,
-                'message' => $messageApi,
-                'data' => $data
-            ]);
+            return response()->json(
+            base64_encode(json_encode(['status' => 1, 'message' => $messageApi, 'data' =>  $data]))
+        );
         } else {
             return response()->json(['status' => 0, 'message' => $messageApi]);
         }

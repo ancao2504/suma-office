@@ -136,8 +136,8 @@
                                     <tr class="odd">
                                         <td class="fw-bold">{{ $no }}</td>
                                         <td class="fw-bold">{{ $data->kode_dealer }}</td>
-                                        <td class="fw-boldest text-primary text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
-                                        <td class="fw-boldest text-danger text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
+                                        <td class="fw-boldest text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
+                                        <td class="fw-boldest text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
                                         <td class="fw-boldest text-end">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
                                         <td class="text-end">
                                             <button class="btn btn-sm btn-icon btn-primary mt-1 btn-edit" data-array="{{json_encode($data)}}">

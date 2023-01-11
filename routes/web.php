@@ -187,7 +187,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     
                     Route::name('pembayaran.')->group(function () {
                         Route::controller(PembayaranController::class)->group(function () {
-                            Route::get('/orders/warehouse/penerimaan/pembayaran/dealer/daftar', 'daftarPembayaranDealer')->name('daftar');
+                            Route::post('/orders/warehouse/penerimaan/pembayaran/dealer/daftar', 'daftarPembayaranDealer')->name('daftar');
                             Route::post('/orders/warehouse/penerimaan/pembayaran/dealer/simpan', 'store')->name('simpan');
                             Route::get('/orders/warehouse/penerimaan/pembayaran/dealer/input', 'index')->name('form-input');
                         });

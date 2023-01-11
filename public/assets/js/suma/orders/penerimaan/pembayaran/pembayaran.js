@@ -207,12 +207,14 @@ $(document).ready(function () {
             // ambil data dengan ajax
             $.ajax({
                 url: base_url + '/orders/warehouse/penerimaan/pembayaran/dealer/daftar',
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 data: {
-                    kd_dealer: $(this).val()
+                    kd_dealer: $(this).val(),
+                    _token: $('input[name=_token]').val()
                 },
                 success: function (data) {
+                    data = JSON.parse(atob(data));
                     if (data.status == 0) {
                         $('#PenerimaanPembayaran').html(`
                             <tr>
