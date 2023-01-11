@@ -1,3 +1,64 @@
+const params = new URLSearchParams(window.location.search)
+for (const param of params) {
+    var search = params.get('search');
+    var per_page = params.get('per_page');
+    var page = params.get('page');
+}
+
+// merubah url dengan parameter yang baru + reload
+function gantiUrl(page = current_page) {
+    loading.block();
+    window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
+}
+// end pagination,search,per_page
+
+/* Fungsi */
+function formatRupiah(angka, prefix) {
+    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split = number_string.split(','),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+    return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+}
+
+function editData(data) {
+    // console.log(data);
+    $('#part_number').val(data.part_number.trim());
+    $('#part_number').attr('readonly', true);
+    $('#part_number').addClass('bg-secondary');
+    $('#part_number').trigger('change');
+
+    $('#dealer').val(data.kode_dealer.trim());
+    $('#dealer').attr('readonly', true);
+    $('#dealer').addClass('bg-secondary');
+    $('#dealer').trigger('change');
+
+    $('#harga').val(data.harga_jual.trim());
+
+    $('#keterangan').val(data.keterangan);
+    $('#staticBackdrop form .modal-body').find('input[required], select[required]').each(function () {
+        if ($(this).val() == '') {
+            $(this).addClass('is-invalid');
+            if (!$(this).next().hasClass('invalid-feedback')) {
+                $(this).after('<div class="invalid-feedback">Tidak boleh kosong</div>');
+            }
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).next().remove();
+        }
+    });
+    $('#staticBackdrop').modal('show');
+    $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id','kirim');
+}
+
 $(document).ready(function () {
     //  jika terdapat kesalahan dan kembali ke halaman maka otomatis terdapat variabel old agar button pada model dapat bisa di submit tanpa lagi menunggu verivikasi part dan dealer
     if (old.part_number != null) {
@@ -20,22 +81,6 @@ $(document).ready(function () {
     });
     // end ajax
 
-    // pagination,search,per_page
-    const params = new URLSearchParams(window.location.search)
-    for (const param of params) {
-        var search = params.get('search');
-        var per_page = params.get('per_page');
-        var page = params.get('page');
-    }
-
-    // per_page
-    $('#kt_project_users_table_length > label > select > option[value="' + per_page + '"]').prop('selected', true);
-
-    $('#kt_project_users_table_length > label > select').on('change', function () {
-        gantiUrl(1);
-    });
-    // end per_page
-
     // search
     $('#filterSearch').val(search);
     $('#filterSearch').on('change keydown', function (e) {
@@ -45,18 +90,9 @@ $(document).ready(function () {
     });
     // end search
 
-    // pagination
-    $('#kt_project_users_table_paginate > ul > li').on('click', function () {
-        if ($(this).hasClass('disabled') === false) {
-            gantiUrl($(this).find('a').data('page'));
-        }
-    });
-    // end pagination
-
 
     // validasi inputan kode produk
     $('#part_number').on('change', function () {
-        loading.block();
         $.ajax({
             url: base_url + '/validasi/partnumber',
             type: "POST",
@@ -85,13 +121,11 @@ $(document).ready(function () {
                 $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', '');
             }
         });
-        loading.release();
     });
     // end validasi inputan kode produk
 
     // validasi dealer
     $('#dealer').on('change', function () {
-        loading.block();
         $.ajax({
             url: base_url + '/validasi/dealer',
             type: "POST",
@@ -122,7 +156,6 @@ $(document).ready(function () {
                 $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', '');
             }
         });
-        loading.release();
     });
     // end validasi dealer
 
@@ -221,58 +254,3 @@ $(document).ready(function () {
         }
     });
 });
-
-
-    // merubah url dengan parameter yang baru + reload
-    function gantiUrl(page = current_page) {
-        loading.block();
-        window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
-    }
-    // end pagination,search,per_page
-
-    /* Fungsi */
-    function formatRupiah(angka, prefix) {
-        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-        if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-    }
-
-    function editData(data) {
-        // console.log(data);
-        $('#part_number').val(data.part_number.trim());
-        $('#part_number').attr('readonly', true);
-        $('#part_number').addClass('bg-secondary');
-        $('#part_number').trigger('change');
-
-        $('#dealer').val(data.kode_dealer.trim());
-        $('#dealer').attr('readonly', true);
-        $('#dealer').addClass('bg-secondary');
-        $('#dealer').trigger('change');
-
-        $('#harga').val(data.harga_jual.trim());
-
-        $('#keterangan').val(data.keterangan);
-        $('#staticBackdrop form .modal-body').find('input[required], select[required]').each(function () {
-            if ($(this).val() == '') {
-                $(this).addClass('is-invalid');
-                if (!$(this).next().hasClass('invalid-feedback')) {
-                    $(this).after('<div class="invalid-feedback">Tidak boleh kosong</div>');
-                }
-            } else {
-                $(this).removeClass('is-invalid');
-                $(this).next().remove();
-            }
-        });
-        $('#staticBackdrop').modal('show');
-        $('#staticBackdrop > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id','kirim');
-    }

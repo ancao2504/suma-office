@@ -23,7 +23,7 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center ms-3">
                 <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon">Tambah Diskon Dealer</button>
             </div>
             <!--end:Action-->
@@ -221,9 +221,9 @@
         <div class="row g-3" id="dataDiskon">
         @if ( $data_disc_dealer->total > 0)
         @foreach ( $data_disc_dealer->data as $data)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
+            <div class="col-sm-4 col-6">
                 <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                <div class="card h-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
                     <!--begin::Info-->
                     <div class="d-flex flex-column py-2 w-100">
                         <!--begin::Owner-->
@@ -233,23 +233,20 @@
                             {{-- <span class="text-muted fs-6 fw-bold ms-2">{{ $data->nama_produk }}</span> --}}
                         </div>
                         <!--end::Owner-->
-                        <div class="d-flex align-items-center w-100">
-                            <table class="table table-borderless table-sm">
+                        <div class="d-flex align-items-center w-100 rounded border border-gray-300 p-3">
+                            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                <thead>
+                                    <tr class="fs-7 fw-bolder text-gray-400 border-bottom-1">
+                                        <th>Umur Faktur</th>
+                                        <th>Diskon</th>
+                                        <th>Diskon +</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="fw-bolder">Diskon</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="text-end text-primary fw-bolder fs-6">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Diskon +</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="text-end text-danger fw-bolder fs-6">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Umur Faktur</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="text-end text-info fw-bolder fs-6">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</span></td>
+                                        <td>{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
+                                        <td><span class="fw-bolder">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
+                                        <td><span class="fw-bolder">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -258,8 +255,8 @@
                     <!--end::Info-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">Delete</button>
-                        <button class="btn btn-sm btn-light btn-light-warning btn-edit"
+                        <button type="reset" class="btn btn-sm btn-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">Delete</button>
+                        <button class="btn btn-sm btn-primary btn-edit"
                         data-array="{{json_encode($data)}}">
                         Edit</button>
                     </div>
@@ -267,7 +264,6 @@
                 </div>
                 <!--end::Card-->
             </div>
-
         @endforeach
         @else
             <div class="col-12">

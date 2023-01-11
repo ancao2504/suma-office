@@ -23,7 +23,7 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center ms-3">
                 <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Part Netto Dealer</button>
             </div>
             <!--end:Action-->
@@ -108,11 +108,9 @@
 </div>
 
 <div class="tab-content">
-    <!--begin::Tab pane-->
-    <!--end::Tab pane-->
-    <!--begin::Tab pane-->
+    @if (\Agent::isDesktop())
+    <!--begin::Table-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
-    <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card body-->
             <div class="card-body pt-0">
@@ -139,7 +137,7 @@
                                 <!--end::Head-->
                                 <!--begin::Body-->
                                 <tbody class="fs-6">
-                                    @if ($data_part_netto_dealer->total != 0)
+                                    @if ($data_part_netto_dealer->total > 0)
                                     @php
                                         $no = $data_part_netto_dealer->from;
                                     @endphp
@@ -245,9 +243,131 @@
             </div>
         <!--end::Card body-->
         </div>
-    <!--end::Card-->
     </div>
-<!--end::Tab pane-->
+    <!--end::Table-->
+    @else
+    <!--begin::Tab pane-->
+    <div id="kt_project_users_card_pane" class="tab-pane fade active show">
+        <!--begin::Row-->
+        <div class="row g-3" id="dataDiskon">
+            @if ($data_part_netto_dealer->total > 0)
+            @foreach ( $data_part_netto_dealer->data as $dta)
+            <div class="col-sm-6 col-12">
+                <!--begin::Card-->
+                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                    <!--begin::Info-->
+                    <div class="d-flex flex-column py-2 w-100">
+                        <!--begin::Owner-->
+                        <div class="d-flex align-items-center fs-2 fw-bolder mb-5">
+                            <div class="ribbon-label bg-success">{{ $dta->kode_dealer }}</div>
+                            <span class="text-gray-800">{{ $dta->part_number }}</span>
+                        </div>
+                        <!--end::Owner-->
+                        <!--begin::Wrapper-->
+                        <div class="d-flex align-items-center w-100 rounded border border-gray-300 p-3">
+                            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                <thead>
+                                    <tr class="fs-7 fw-bolder text-gray-400 border-bottom-1">
+                                        <th>HET</th>
+                                        <th>TPC 20</th>
+                                        <th>Harga Jual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="fw-bolder">{{ number_format($dta->het) }}</span></td>
+                                        <td><span class="fw-bolder">{{ number_format($dta->harga_tpc_20) }}</span></td>
+                                        <td><span class="fw-bolder">{{ number_format($dta->harga_jual) }}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--end::Wrapper-->
+                        <div class="d-flex align-items-center w-100 p-3">
+                            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                <thead>
+                                    <tr class="fs-7 fw-bolder text-gray-400 border-bottom-1">
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bolder">{!! $dta->keterangan !!}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--end::Info-->
+                    <!--begin::Actions-->
+                    <div class="d-flex align-items-center justify-content-cente py-2 w-100">
+                        <button class="btn btn-sm btn-primary me-3 btn-edit"
+                        data-array="{{ json_encode($dta) }}"
+                        >
+                            Edit
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger me-3 btn-delete"
+                        data-array = "{{ json_encode(
+                            [
+                                'part_number' => $dta->part_number,
+                                'kode_dealer' => $dta->kode_dealer,
+                            ]
+                        ) }}"
+                        data-bs-toggle="modal" data-bs-target="#delet_model">
+                            Delete
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                </div>
+                <!--end::Card-->
+            </div>
+            @endforeach
+            @else
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                <!--begin::Card-->
+                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                    <!--begin::Owner-->
+                    <div class="d-flex align-items-center fs-2 fw-bolder mb-5">
+                        <span class="text-gray-800"> Data tidak ditemukan </span>
+                    </div>
+                    <!--end::Owner-->
+                </div>
+                <!--end::Card-->
+            </div>
+            @endif
+        </div>
+        <div class="d-flex flex-stack flex-wrap pt-10">
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_part_netto_dealer->from }} to {{ $data_part_netto_dealer->to }} of {{ $data_part_netto_dealer->total }} entries</div>
+            <!--begin::Pages-->
+                <ul class="pagination">
+                    @foreach ($data_part_netto_dealer->links as $data)
+                        @if (strpos($data->label, 'Next') !== false)
+                            <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ (string)((int)($data_part_netto_dealer->current_page) + 1) }}" class="page-link">
+                                    <i class="next"></i>
+                                </a>
+                            </li>
+                        @elseif (strpos($data->label, 'Previous') !== false)
+                            <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ (string)((int)($data_part_netto_dealer->current_page) - 1) }}" class="page-link">
+                                    <i class="previous"></i>
+                                </a>
+                            </li>
+                        @elseif ($data->active == true)
+                            <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                            </li>
+                        @elseif ($data->active == false)
+                            <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
+            <!--end::Pages-->
+        </div>
+    </div>
+    @endif
 </div>
 
 <!--begin::Modal delet data-->
@@ -294,6 +414,12 @@
                 part_number: '{{ old('part_number') }}',
             }
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer.js') }}?v={{ time() }}"></script>
+    
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer/harganettopartdealer.js') }}?v={{ time() }}"></script>
+    @if (\Agent::isDesktop())
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer/harganettopartdealerTable.js') }}?v={{ time() }}"></script>
+    @else
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopartdealer/harganettopartdealerCard.js') }}?v={{ time() }}"></script>
+    @endif
     @endpush
 @endsection

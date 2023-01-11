@@ -23,7 +23,7 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center ms-3">
                 <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon_produk">Tambah Diskon Produk</button>
             </div>
             <!--end:Action-->
@@ -314,13 +314,13 @@
                                 <tbody>
                                     <tr>
                                         <td class="fw-bolder">Disc</td>
-                                        <td class="fw-bolder"><span class="fw-bolder px-4 py-3">{{ $data->disc_normal == '.00'? '0' : $data->disc_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="fw-bolder px-4 py-3">{{ $data->disc_max == '.00'? '0' : $data->disc_max }}</span></td>
+                                        <td><span class="fw-bolder">{{ $data->disc_normal == '.00'? '0' : $data->disc_normal }}</span></td>
+                                        <td><span class="fw-bolder">{{ $data->disc_max == '.00'? '0' : $data->disc_max }}</span></td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bolder">Disc +</td>
-                                        <td class="fw-bolder"><span class="fw-bolder px-4 py-3">{{ $data->disc_plus_normal == '.00'? '0' : $data->disc_plus_normal }}</span></td>
-                                        <td class="fw-bolder"><span class="fw-bolder px-4 py-3">{{ $data->disc_plus_max == '.00'? '0' : $data->disc_plus_max }}</span></td>
+                                        <td>Disc +</td>
+                                        <td><span class="fw-bolder">{{ $data->disc_plus_normal == '.00'? '0' : $data->disc_plus_normal }}</span></td>
+                                        <td><span class="fw-bolder">{{ $data->disc_plus_max == '.00'? '0' : $data->disc_plus_max }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -330,7 +330,7 @@
                     <!--end::Info-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button class="btn btn-sm btn-light btn-light-warning me-2 btn-edit"
+                        <button class="btn btn-sm btn-primary me-2 btn-edit"
                         data-array="{{
                                     json_encode([
                                         'kode_produk' => $data->kode_produk,
@@ -344,7 +344,7 @@
                                     ])
                                 }}">
                         Edit</button>
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}">Delete</button>
+                        <button type="reset" class="btn btn-sm btn-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-p="{{ $data->kode_produk }}" data-c="{{ $data->cabang }}">Delete</button>
                     </div>
                     <!--end::Actions-->
                 </div>
@@ -357,7 +357,7 @@
                 <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
                     <div class="d-flex flex-column py-2 w-100">
                         <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
-                            <span class="text-gray-800">Data tidak ditemukan</span>
+                            <span class="text-gray-800">Tidak ada data</span>
                         </div>
                     </div>
                 </div>

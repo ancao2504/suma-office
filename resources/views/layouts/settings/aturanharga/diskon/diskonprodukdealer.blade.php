@@ -23,7 +23,7 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center ms-3">
                 <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon_dealer">Tambah Diskon Dealer</button>
             </div>
             <!--end:Action-->
@@ -104,9 +104,9 @@
 <div class="tab-content">
     <!--begin::Tab pane-->
     <!--end::Tab pane-->
-    <!--begin::Tab pane-->
+    @if (\Agent::isDesktop())
+    <!--begin::table-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
-    <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card body-->
             <div class="card-body pt-0">
@@ -167,7 +167,6 @@
                                             {{
                                                 date('d:F:Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))
                                             }}
-                                            {{-- . '/' . substr($data->usertime,strpos($data->usertime,"=")+1,12) --}}
                                         </td>
                                         <td class="text-center">
                                             <button type="reset" class="btn btn-sm btn-icon btn-danger d-inline-block mt-1 btn-delete" data-array="{{
@@ -187,7 +186,7 @@
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="9" class="text-center">Data Tidak Ditemukan</td>
+                                        <td colspan="9" class="text-center">Tidak ada data</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -244,9 +243,130 @@
             </div>
         <!--end::Card body-->
         </div>
-    <!--end::Card-->
     </div>
-<!--end::Tab pane-->
+    <!--end::table-->
+    @else
+    <!--begin::Tab pane-->
+    <div id="kt_project_users_card_pane" class="tab-pane fade active show">
+        <!--begin::Row-->
+        <div class="row g-3" id="dataDiskon">
+        @if ($data_disc->total > 0)
+        @foreach ( $data_disc->data as $data)
+        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+            <!--begin::Card-->
+            <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                <!--begin::Info-->
+                <div class="d-flex flex-column py-2 w-100">
+                    <!--begin::Owner-->
+                    <div class="d-flex align-items-center fs-2 fw-bolder mb-5">
+                        <span class="text-gray-800"> {{ $data->kode_produk }} </span>
+                        <span class="text-muted fs-3 fw-bold ms-2">({{ $data->nama_produk }})</span>
+                    </div>
+                    <!--end::Owner-->
+                    <!--begin::Wrapper-->
+                    <div class="d-flex align-items-center w-100 rounded border border-gray-300 p-3">
+                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                            <thead>
+                                <tr class="fs-7 fw-bolder text-gray-400 border-bottom-1">
+                                    <th>Kd Dealer</th>
+                                    <th>Company</th>
+                                    <th>Diskon</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bolder">{{ $data->kode_dealer }}</td>
+                                    <td><span class="fw-bolder">{{ $data->companyid }}</span></td>
+                                    <td><span class="fw-bolder">{{ $data->disc == '.00' ? '0' : $data->disc }}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end::Wrapper-->
+                    <div class="d-flex align-items-center w-100 p-3">
+                        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                            <thead>
+                                <tr class="fs-7 fw-bolder text-gray-400 border-bottom-1">
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bolder">{{ $data->keterangan }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--end::Info-->
+                <!--begin::Actions-->
+                <div class="d-flex align-items-center justify-content-between py-2 w-100">
+                    <button type="reset" class="btn btn-sm btn-danger me-3 btn-delete" data-array="{{
+                                    json_encode([
+                                        'produk' => $data->kode_produk,
+                                        'dealer' => $data->kode_dealer,
+                                        'cabang' => $data->companyid,
+                                    ])
+                                }}" data-bs-toggle="modal" data-bs-target="#delet_model">
+                        Delete
+                    </button>
+                    <div>
+                        <span class="badge badge-info">{{substr(substr($data->usertime,strpos($data->usertime,"=")+1),strpos(substr($data->usertime,strpos($data->usertime,"=")+1),"=")+1)}}</span>
+                        <br>
+                        <span class="fw-bold">{{date('d:F:Y', date_timestamp_get(date_create(substr($data->usertime,0,10))))}}</span>
+                    </div>
+                </div>
+                <!--end::Actions-->
+            </div>
+            <!--end::Card-->
+        </div>
+        @endforeach
+        @else
+        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+            <!--begin::Card-->
+            <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                <!--begin::Owner-->
+                <div class="d-flex align-items-center fs-2 fw-bolder mb-5">
+                    <span class="text-gray-800"> Data tidak ditemukan </span>
+                </div>
+                <!--end::Owner-->
+            </div>
+            <!--end::Card-->
+        </div>
+        @endif
+        </div>
+        <div class="d-flex flex-stack flex-wrap pt-10">
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_disc->from }} to {{ $data_disc->to }} of {{ $data_disc->total }} entries</div>
+            <!--begin::Pages-->
+                <ul class="pagination">
+                    @foreach ($data_disc->links as $data)
+                        @if (strpos($data->label, 'Next') !== false)
+                            <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ (string)((int)($data_disc->current_page) + 1) }}" class="page-link">
+                                    <i class="next"></i>
+                                </a>
+                            </li>
+                        @elseif (strpos($data->label, 'Previous') !== false)
+                            <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ (string)((int)($data_disc->current_page) - 1) }}" class="page-link">
+                                    <i class="previous"></i>
+                                </a>
+                            </li>
+                        @elseif ($data->active == true)
+                            <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                            </li>
+                        @elseif ($data->active == false)
+                            <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
+                                <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
+            <!--end::Pages-->
+        </div>
+    </div>
+    @endif
 </div>
 
 <!--begin::Modal delet data-->
@@ -295,6 +415,12 @@
                 'produk': '{{ old('produk') }}',
             }
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonprodukdealer.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonprodukdealer/diskonprodukdealer.js') }}?v={{ time() }}"></script>
+    
+    @if (\Agent::isDesktop())
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonprodukdealer/diskonprodukdealerTable.js') }}?v={{ time() }}"></script>
+    @else
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskonprodukdealer/diskonprodukdealerCard.js') }}?v={{ time() }}"></script>
+    @endif
     @endpush
 @endsection

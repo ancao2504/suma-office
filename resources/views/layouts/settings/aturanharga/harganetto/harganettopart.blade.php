@@ -23,7 +23,7 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center ms-3">
                 <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Part Netto</button>
             </div>
             <!--end:Action-->
@@ -160,7 +160,7 @@
                                     @endforeach
                                     @else
                                     <tr class="odd">
-                                        <td colspan="5" class="text-center">Data tidak ditemukan</td>
+                                        <td colspan="5" class="text-center">Tidak ada data</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -253,7 +253,7 @@
                     <!--end::Info-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
+                        <button type="reset" class="btn btn-sm btn-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
                         data-array = "{{ json_encode($dta) }}">
                             Delete
                         </button>
@@ -266,7 +266,7 @@
         @else
             <div class="col-12">
                 <div class="card h-100 flex-row flex-stack flex-wrap p-6">
-                    <div class="ribbon-label bg-success">Data Kosong</div>
+                    <div class="ribbon-label bg-success">Tidak ada data</div>
                 </div>
             </div>
         @endif

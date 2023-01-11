@@ -1,19 +1,26 @@
+// search di url
+const params = new URLSearchParams(window.location.search)
+for (const param of params) {
+    var search = params.get('search');
+    var per_page = params.get('per_page');
+    var page = params.get('page');
+    var menuview = params.get('data');
+}
+//  end search di url
+
+// merubah url dengan parameter yang baru + reload
+function gantiUrl(page = current_page) {
+    loading.block();
+    window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
+}
+// end pagination,search,per_page
+
 $(document).ready(function () {
     // jika terdapat variabel old maka data bisa langsung di submit tanpalagi menunggu validasi produk
     if (old.produk != null) {
         $('#tambah_diskon_dealer > div > div > form > div.modal-footer > button.btn.btn-primary').attr('id', 'kirim');
     }
     // end 
-
-    // search di url
-    const params = new URLSearchParams(window.location.search)
-    for (const param of params) {
-        var search = params.get('search');
-        var per_page = params.get('per_page');
-        var page = params.get('page');
-        var menuview = params.get('data');
-    }
-    //  end search di url
 
     // jika terdapat submit pada form
     $('form').submit(function (e) {
@@ -127,14 +134,6 @@ $(document).ready(function () {
     });
     // end delete data
 
-    // pagination tabel
-    $('#kt_project_users_table_paginate > ul > li').on('click', function () {
-        if ($(this).hasClass('disabled') === false) {
-            gantiUrl($(this).find('a').data('page'));
-        }
-    });
-    // end pagination
-
     // search
     $('#filterSearch').val(search);
     $('#filterSearch').on('change keydown', function (e) {
@@ -144,12 +143,6 @@ $(document).ready(function () {
     });
     // end search
 
-    // per_page
-    $('#kt_project_users_table_length > label > select > option[value="' + per_page + '"]').prop('selected', true);
-    $('#kt_project_users_table_length > label > select').on('change', function () {
-        gantiUrl(1);
-    });
-    // end per_page
 
     $('#tambah_diskon_dealer form .modal-footer').find('#kirim').on('click', function (e) {
         $('#tambah_diskon_dealer form .modal-body').find('input[required], select[required]').each(function () {
@@ -186,11 +179,3 @@ $(document).ready(function () {
         }
     });
 });
-
-
-    // merubah url dengan parameter yang baru + reload
-    function gantiUrl(page = current_page) {
-        loading.block();
-        window.location.href = window.location.origin + window.location.pathname + "?page=" + page + "&per_page=" + $('#kt_project_users_table_length > label > select').val() + "&search=" + $('#filterSearch').val();
-    }
-    // end pagination,search,per_page
