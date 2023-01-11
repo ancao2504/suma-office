@@ -221,7 +221,7 @@
         <div class="row g-3" id="dataDiskon">
         @if ( $data_disc_dealer->total > 0)
         @foreach ( $data_disc_dealer->data as $data)
-            <div class="col-sm-4 col-6">
+            <div class="col-sm-4 col-12">
                 <!--begin::Card-->
                 <div class="card h-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
                     <!--begin::Info-->
