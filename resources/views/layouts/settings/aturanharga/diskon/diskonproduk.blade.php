@@ -126,55 +126,55 @@
             <!--begin::Card body-->
             <div class="card-body pt-0">
                 <!--begin::Table container-->
-                <div class="table-responsive">
+                <div class="table-responsive mt-10">
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
-                            <table id="kt_project_users_table" class="table table-sm table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
+                            <table id="kt_project_users_table" class="table table-row-dashed table-row-gray-300 align-middle">
                                 <!--begin::Head-->
-                                <thead class="fs-7 text-gray-400 text-uppercase">
-                                    <tr>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No Part</th>
-                                        <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Umur Faktur</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc Normal</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc Max</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc plus normal</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">disc plus max</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Cabang</th>
-                                        <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
+                                <thead class="border">
+                                    <tr class="fw-bolder text-muted text-center">
+                                        <th>No</th>
+                                        <th>No Part</th>
+                                        <th>nama Part</th>
+                                        <th>Umur Faktur</th>
+                                        <th>disc Normal</th>
+                                        <th>disc Max</th>
+                                        <th>disc plus normal</th>
+                                        <th>disc plus max</th>
+                                        <th>Cabang</th>
+                                        <th class="min-w-60px">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
                                 <!--begin::Body-->
-                                <tbody class="fs-6">
+                                <tbody class="fs-6 border">
                                     @if ($data_disc->total > 0)
                                     @php
                                         $no = $data_disc->from;
                                     @endphp
                                     @foreach ( $data_disc->data as $data)
-                                    <tr class="odd">
-                                        <td>{{ $no }}</td>
+                                    <tr class="fs-6 fw-bold text-gray-700">
+                                        <td class="text-center">{{ $no }}</td>
                                         <td>
                                             {{ $data->kode_produk }}
                                         </td>
                                         <td>
                                             {{ $data->nama_produk }}
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="fw-bolder fs-5">{{ number_format($data->umur_faktur) }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-success fw-bolder fs-5">{{ $data->disc_normal == '.00' ? '0' : $data->disc_normal }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-warning fw-bolder fs-5">{{ $data->disc_max == '.00' ? '0' : $data->disc_max }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-success fw-bolder fs-5">{{ $data->disc_plus_normal == '.00' ? '0' : $data->disc_plus_normal }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-warning fw-bolder fs-5">{{ $data->disc_plus_max == '.00' ? '0' : $data->disc_plus_max }}</span>
                                         </td>
                                         <td>

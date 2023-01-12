@@ -115,48 +115,47 @@
             <!--begin::Card body-->
             <div class="card-body pt-0">
                 <!--begin::Table container-->
-                <div class="table-responsive">
+                <div class="table-responsive mt-10">
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
-                            <table id="kt_project_users_table" class="table table-sm table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
+                            <table id="kt_project_users_table" class="table table-row-dashed table-row-gray-300 align-middle">
                                 <!--begin::Head-->
-                                <thead class="fs-7 text-gray-400 text-uppercase">
-                                    <tr>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Part Number</th>
-                                        {{-- <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th> --}}
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Dealer</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">HET</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">TPC 20</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Harga Jual</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Keterangan</th>
-                                        <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
+                                <thead class="border">
+                                    <tr class="fw-bolder text-muted text-center">
+                                        <th>No</th>
+                                        <th>Part Number</th>
+                                        <th>Dealer</th>
+                                        <th>HET</th>
+                                        <th>TPC 20</th>
+                                        <th>Harga Jual</th>
+                                        <th>Keterangan</th>
+                                        <th class="min-w-60px">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
                                 <!--begin::Body-->
-                                <tbody class="fs-6">
+                                <tbody class="fs-6 border">
                                     @if ($data_part_netto_dealer->total > 0)
                                     @php
                                         $no = $data_part_netto_dealer->from;
                                     @endphp
                                     @foreach ( $data_part_netto_dealer->data as $dta)
-                                    <tr class="odd">
-                                        <td>{{ $no }}</td>
+                                    <tr class="fs-6 fw-bold text-gray-700">
+                                        <td class="text-center">{{ $no }}</td>
                                         <td>
                                             {{ $dta->part_number }}
                                         </td>
                                         <td>
                                             {{ $dta->kode_dealer }}
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-success fw-bolder fs-5">{{ number_format($dta->het) }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-success fw-bolder fs-5">{{ number_format($dta->harga_tpc_20) }}</span>
                                         </td>
-                                        <td>
+                                        <td class="text-end">
                                             <span class="text-success fw-bolder fs-5">{{ number_format($dta->harga_jual) }}</span>
                                         </td>
                                         <td>

@@ -109,37 +109,37 @@
             <!--begin::Card body-->
             <div class="card-body">
                 <!--begin::Table container-->
-                <div class="table-responsive">
+                <div class="table-responsive mt-10">
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
                             <table id="kt_project_users_table" class="table table-row-dashed table-row-gray-300 align-middle">
                                 <!--begin::Head-->
-                                <thead class="fw-boldest fs-7 text-gray-400 text-uppercase">
-                                    <tr>
+                                <thead class="border">
+                                    <tr class="fw-bolder text-muted text-center">
                                         <th style="width: 0px;">No</th>
                                         <th style="width: 0px;">kode Dealer</th>
-                                        <th class="text-end" style="width: 0px;">Diskon</th>
-                                        <th class="text-end" style="width: 0px;">Diskon (+)</th>
-                                        <th class="text-end" style="width: 0px;">Umur Faktur</th>
-                                        <th class="text-end" class="min-w-60px" style="width: 0px;">Action</th>
+                                        <th style="width: 0px;">Diskon</th>
+                                        <th style="width: 0px;">Diskon (+)</th>
+                                        <th style="width: 0px;">Umur Faktur</th>
+                                        <th class="min-w-60px" style="width: 0px;">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
                                 <!--begin::Body-->
-                                <tbody class="fs-6">
+                                <tbody class="fs-6 border">
                                     @if ( $data_disc_dealer->total > 0)
                                     @php
                                         $no = $data_disc_dealer->from;
                                     @endphp
                                     @foreach ( $data_disc_dealer->data as $data)
-                                    <tr class="odd">
-                                        <td class="fw-bold">{{ $no }}</td>
-                                        <td class="fw-bold">{{ $data->kode_dealer }}</td>
-                                        <td class="fw-boldest text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
-                                        <td class="fw-boldest text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
-                                        <td class="fw-boldest text-end">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
-                                        <td class="text-end">
+                                    <tr class="fs-6 fw-bold text-gray-700">
+                                        <td class="text-center">{{ $no }}</td>
+                                        <td>{{ $data->kode_dealer }}</td>
+                                        <td class="text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
+                                        <td class="text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
+                                        <td class="text-end">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
+                                        <td class="text-center">
                                             <button class="btn btn-sm btn-icon btn-primary mt-1 btn-edit" data-array="{{json_encode($data)}}">
                                                 <span class="bi bi-pencil"></span>
                                             </button>
