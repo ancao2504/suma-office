@@ -244,7 +244,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
+                                        <td class="fw-bolder">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
                                         <td><span class="fw-bolder">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
                                         <td><span class="fw-bolder">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
                                     </tr>

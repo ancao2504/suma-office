@@ -318,7 +318,7 @@
                                         <td><span class="fw-bolder">{{ $data->disc_max == '.00'? '0' : $data->disc_max }}</span></td>
                                     </tr>
                                     <tr>
-                                        <td>Disc +</td>
+                                        <td class="fw-bolder">Disc +</td>
                                         <td><span class="fw-bolder">{{ $data->disc_plus_normal == '.00'? '0' : $data->disc_plus_normal }}</span></td>
                                         <td><span class="fw-bolder">{{ $data->disc_plus_max == '.00'? '0' : $data->disc_plus_max }}</span></td>
                                     </tr>
