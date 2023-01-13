@@ -1,24 +1,25 @@
 <?php
 
-use app\Option\OptionController;
+use app\Auth\AuthController;
 
+use app\Profile\UserController;
+use app\Option\OptionController;
+use app\Profile\DealerController;
+use app\Profile\AccountController;
+use app\Parts\PartNumberController;
 use app\Validasi\ValidasiController;
 use Illuminate\Support\Facades\Route;
+use app\Dashboard\DashboardSalesmanController;
 use app\Setting\Diskon\DiskonDealerController;
 use app\Setting\Diskon\DiskonProdukController;
 use app\Orders\Penerimaan\PembayaranController;
 use app\Orders\Penerimaan\SuratJalanController;
 use app\Setting\CetakUlang\CetakUlangController;
-use app\Auth\AuthController;
-use app\Profile\UserController;
 use app\setting\Diskon\DiskonProdukDealerController;
-use app\Profile\DealerController;
 use app\Setting\HargaNetto\HargaNettoPartsControllers;
-use app\Profile\AccountController;
-use app\Parts\PartNumberController;
-use app\Setting\HargaNetto\HargaNettoPartsDealerControllers;
-use app\Dashboard\DashboardSalesmanController;
 use app\Dashboard\Marketing\DashboardMarketingController;
+use app\Parts\uplooadImageController;
+use app\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 
 /*
 |--------------------------------------------------------------------------
