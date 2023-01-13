@@ -39,7 +39,7 @@ class CartIndexController extends Controller
                                         <span class="text-danger fs-6 fw-bolder ms-4">Rp. ' . number_format($data->total) . '</span>
                                     </h1>
                                 </div>
-                                <a href="' . url('/orders/cart') . '" class="btn btn-sm btn-success ms-2" role="button">Lihat Cart</a>
+                                <a href="' . route('orders.cart.index') . '" class="btn btn-sm btn-success ms-2" role="button">Lihat Cart</a>
                             </div>
                         </div>
                     </div>';

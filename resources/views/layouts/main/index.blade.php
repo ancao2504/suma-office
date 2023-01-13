@@ -170,6 +170,7 @@
                 @endif
             });
         </script>
+        <script src="{{ asset('assets/js/suma/main/index.js') }}?v={{ time() }}"></script>
 		<script src="{{ asset('assets/js/custom/module/loading.js') }}?v={{ time() }}"></script>
         <!-- App scripts -->
         @stack('scripts')
@@ -183,6 +184,5 @@
         <script src="{{ asset('assets/js/suma/option/salesmanindex.js') }}?v={{ time() }}"></script>
         <script src="{{ asset('assets/js/suma/option/dealerindex.js') }}?v={{ time() }}"></script>
         
-        <script src="{{ asset('assets/js/suma/main/index.js') }}?v={{ time() }}"></script>
 	</body>
 </html>

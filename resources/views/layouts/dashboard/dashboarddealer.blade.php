@@ -2,7 +2,7 @@
 @section('title','Home')
 @section('subtitle','Dashboard')
 @section('container')
-    <form id="formDashboardDealer" action="{{ route('dashboard.dashboard-dealer') }}" method="get">
+    <form id="formDashboardDealer" action="{{ route('dashboard.dealer.dealer') }}" method="get">
         <div class="card card-flush">
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
@@ -68,7 +68,7 @@
                             <div class="mb-5">
                                 <div class="d-flex align-items-center">
                                     <button id="btnFilterProses" class="btn btn-sm btn-primary me-2" type="submit">Terapkan</button>
-                                    <a id="btnFilterReset" href="{{ route('dashboard.dashboard-dealer') }}" class="btn btn-sm btn-danger me-2" role="button">Reset Filter</a>
+                                    <a id="btnFilterReset" href="{{ route('dashboard.dealer.dealer') }}" class="btn btn-sm btn-danger me-2" role="button">Reset Filter</a>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +215,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="text-center">
-                                <a href="{{ route('orders.pembayaran-faktur-belum-terbayar') }}" class="btn btn-danger">Lihat Pembayaran</a>
+                                <a href="{{ route('orders.pembayaranfaktur.daftar-belum-terbayar') }}" class="btn btn-danger">Lihat Pembayaran</a>
                             </div>
                         </div>
                     </div>
