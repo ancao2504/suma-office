@@ -6,8 +6,10 @@ use app\Profile\UserController;
 use app\Option\OptionController;
 use app\Profile\DealerController;
 use app\Profile\AccountController;
+use app\Orders\Cart\CartController;
 use app\Parts\PartNumberController;
 use app\Validasi\ValidasiController;
+use app\Parts\uplooadImageController;
 use Illuminate\Support\Facades\Route;
 use app\Dashboard\DashboardSalesmanController;
 use app\Setting\Diskon\DiskonDealerController;
@@ -16,10 +18,17 @@ use app\Orders\Penerimaan\PembayaranController;
 use app\Orders\Penerimaan\SuratJalanController;
 use app\Setting\CetakUlang\CetakUlangController;
 use app\setting\Diskon\DiskonProdukDealerController;
+use app\Orders\FakturController;
 use app\Setting\HargaNetto\HargaNettoPartsControllers;
 use app\Dashboard\Marketing\DashboardMarketingController;
-use app\Parts\uplooadImageController;
+use app\Parts\StockHarianController;
+use app\Visit\PlanningVisitController;
+use app\Orders\TrackingOrderController;
 use app\Setting\HargaNetto\HargaNettoPartsDealerControllers;
+use app\Orders\Cart\Index\CartIndexController;
+use app\Orders\PembayaranFaktur\PembayaranFakturController;
+use app\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use app\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 
 /*
 |--------------------------------------------------------------------------

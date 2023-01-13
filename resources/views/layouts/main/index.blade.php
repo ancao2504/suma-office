@@ -135,24 +135,6 @@
             </div>
         </div>
 
-		<!--begin::Javascript-->
-		<script>
-            const base_url = "{{ url('/') }}";
-            const url_dsb = {
-                estimasi_cart: "{{ route('orders.cart.index.estimasi-cart') }}",
-                cart_index: "{{ route('orders.cart.index.index') }}"
-            };
-            // dokumen ready
-            $(document).ready(function() {
-                @if ($title_menu != 'Cart')
-                    estimasiTotalCart();
-                @else
-                    $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                    document.getElementById('kt_body').removeAttribute("style");
-                @endif
-            });
-        </script>
-
 		<!--begin::Global Javascript Bundle(used by all pages)-->
 		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
 		<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
@@ -170,7 +152,24 @@
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-
+        
+		<!--begin::Javascript-->
+		<script>
+            const base_url = "{{ url('/') }}";
+            const url_dsb = {
+                estimasi_cart: "{{ route('orders.cart.index.estimasi-cart') }}",
+                cart_index: "{{ route('orders.cart.index.index') }}"
+            };
+            // dokumen ready
+            $(document).ready(function() {
+                @if ($title_menu != 'Cart')
+                    estimasiTotalCart();
+                @else
+                    $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
+                    document.getElementById('kt_body').removeAttribute("style");
+                @endif
+            });
+        </script>
 		<script src="{{ asset('assets/js/custom/module/loading.js') }}?v={{ time() }}"></script>
         <!-- App scripts -->
         @stack('scripts')
