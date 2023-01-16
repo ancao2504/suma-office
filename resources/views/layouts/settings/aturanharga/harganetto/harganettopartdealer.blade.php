@@ -24,7 +24,7 @@
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center ms-3">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Part Netto Dealer</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus-circle fs-1"></i> Tambah</button>
             </div>
             <!--end:Action-->
         </div>
@@ -101,7 +101,7 @@
 <div class="d-flex flex-wrap flex-stack pb-7" data-select2-id="select2-data-131-enac">
     <!--begin::Title-->
     <div class="d-flex flex-wrap align-items-center my-1">
-        <h3 class="fw-bolder me-5 my-1">{{ $data_part_netto_dealer->total }} Data harga Part Netto
+        <h3 class="fw-bolder me-5 my-1">{{ $data_part_netto_dealer->total }} Data harga Part Netto Dealer
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->

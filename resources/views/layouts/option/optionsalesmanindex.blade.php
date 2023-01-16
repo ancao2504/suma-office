@@ -1,7 +1,7 @@
 <div class="modal fade" id="modalOptionSalesmanIndex" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="formOptionSalesmanIndex" name="formOptionSalesmanIndex" autofill="off" autocomplete="off">
+            <div id="formOptionSalesmanIndex" name="formOptionSalesmanIndex" autofill="off" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title">Pilih Data Salesman</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -24,7 +24,7 @@
                     </div>
                     <div id="optionSalesmanIndexContentModal"></div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

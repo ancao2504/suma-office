@@ -160,7 +160,7 @@
 
 {{-- Modal List Pembayaran --}}
         <div class="modal fade" id="Modallistpembayaran" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true" tabindex="-1" role="dialog">
-            <div class="modal-dialog @if ($device != 'Mobile') modal-xl @endif">
+            <div class="modal-dialog @if ($device != 'Mobile') modal-xl @else modal-fullscreen-sm-down @endif">
                 <div class="modal-content" style="@if ($device == 'Mobile') background-color: #f5f8fa; @endif">
                     <div class="modal-header @if ($device == 'Mobile') bg-white rounded-3 @endif">
                         <h5 id="modalTitlelistpembayaran" name="modalTitlelistpembayaran" class="modal-title">List Pembayaran</h5>

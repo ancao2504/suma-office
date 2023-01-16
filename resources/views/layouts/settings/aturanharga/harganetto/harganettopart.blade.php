@@ -24,7 +24,7 @@
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center ms-3">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Part Netto</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus-circle fs-1"></i> Tambah</button>
             </div>
             <!--end:Action-->
         </div>

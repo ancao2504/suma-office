@@ -1,5 +1,13 @@
-
+// jika terdapat ajax maka loading
+$(document).ajaxStart(function () {
+    loading.block();
+});
+// ajax selesai maka loading di release
+$(document).ajaxStop(function () {
+    loading.release();
+});
 $(document).ready(function () {
+
     $('#modalEntryPartNumber').modal({
         backdrop: 'static', keyboard: false
     });
@@ -45,7 +53,6 @@ $(document).ready(function () {
             data: { nomor_pof: nomor_pof, _token: _token },
 
             success: function (response) {
-                loading.release();
                 if (response.status == true) {
                     $('#modalDiscountTitle').html("Edit Discount");
                     $('#modalPofDiscountInputDiscount').val(Number(response.data.discount).toFixed(2));
@@ -68,7 +75,6 @@ $(document).ready(function () {
                 }
             },
             error: function() {
-                loading.release();
                 Swal.fire({
                     text: 'Server tidak merespon, coba lagi',
                     icon: "danger",
@@ -94,7 +100,6 @@ $(document).ready(function () {
             data: { nomor_pof: nomor_pof, discount: discount, _token: _token },
 
             success: function (response) {
-                loading.release();
                 if (response.status == true) {
                     Swal.fire({
                         text: response.message,
@@ -120,7 +125,6 @@ $(document).ready(function () {
                 }
             },
             error: function() {
-                loading.release();
                 Swal.fire({
                     text: 'Server tidak merespon, coba lagi',
                     icon: "danger",
@@ -162,7 +166,6 @@ $(document).ready(function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                loading.block();
                 $.ajax({
                     url: url_route.pof_update_tpc,
                     method: "POST",
@@ -170,7 +173,6 @@ $(document).ready(function () {
                         nomor_pof: nomor_pof, tpc: tpc, _token: _token
                     },
                     success: function (response) {
-                        loading.release();
                         if (response.status == true) {
                             Swal.fire({
                                 text: response.message,
@@ -202,7 +204,6 @@ $(document).ready(function () {
                         }
                     },
                     error: function() {
-                        loading.release();
                         Swal.fire({
                             text: 'Server tidak merespon, coba lagi',
                             icon: "danger",
@@ -244,14 +245,12 @@ $(document).ready(function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                loading.block();
                 $.ajax({
                     url: url_route.pof_batal_approve,
                     method: "POST",
                     data: { nomor_pof: nomor_pof, _token: _token },
 
                     success: function (response) {
-                        loading.release();
                         if (response.status == true) {
                             Swal.fire({
                                 text: response.message,
@@ -280,7 +279,6 @@ $(document).ready(function () {
                         }
                     },
                     error: function() {
-                        loading.release();
                         Swal.fire({
                             text: 'Server tidak merespon, coba lagi',
                             icon: "danger",
@@ -304,7 +302,6 @@ $(document).ready(function () {
         $('#modalTitle').html(nomor_pof);
         $('#modalSubTitle').html(part_number);
 
-        loading.block();
         $.ajax({
             url: url_route.pof_terlayani,
             method: "POST",
@@ -330,7 +327,6 @@ $(document).ready(function () {
                 }
             },
             error: function() {
-               loading.release();
                Swal.fire({
                     text: 'Server tidak merespon, coba lagi',
                     icon: "danger",
@@ -342,5 +338,13 @@ $(document).ready(function () {
                 });
             }
         })
+    });
+
+    // modalEntryPartNumber modalPofPartBtnPartNumber on click
+    $('#modalEntryPartNumber #modalPofPartBtnPartNumber').click(function (e) {
+        // show modal modalOptionPartNumber
+        $('#modalOptionPartNumber').modal('show');
+        loadDataPartNumber(1,10,'');
+        
     });
 });

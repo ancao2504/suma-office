@@ -75,4 +75,9 @@ $(document).ready(function () {
 
         loadDataOptionDealerSalesman(salesman, 1, per_page, search);
     });
+
+    $('#modalOptionDealerSalesman').on('click', '#selectedOptionDealerSalesman', function () {
+        $('#inputDealer').val($(this).data('kode_dealer'));
+        $('#modalOptionDealerSalesman').modal('hide');
+    });
 });

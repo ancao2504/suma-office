@@ -36,7 +36,7 @@ function loadDataOptionSalesmanIndex(page = 1, per_page = 10, search = '') {
 }
 
 $(document).ready(function () {
-    $(document).on('click', '#formOptionSalesmanIndex #paginationOptionSalesman .page-item a', function () {
+    $('#modalOptionSalesmanIndex').on('click', '#paginationOptionSalesman .page-item a', function () {
         var page = $(this)[0].getAttribute("data-page");
         var per_page = $('#formOptionSalesmanIndex #selectPerPageOptionSalesman').val();
         var search = $('#formOptionSalesmanIndex #inputSearchOptionSalesmanIndex').val();
@@ -68,5 +68,10 @@ $(document).ready(function () {
         var search = $('#formOptionSalesmanIndex #inputSearchOptionSalesmanIndex').val();
 
         loadDataOptionSalesmanIndex(1, per_page, search);
+    });
+
+    $('#modalOptionSalesmanIndex').on('click', '#selectedOptionSalesman', function () {
+        $('#inputKodeSalesIndex').val($(this).data('kode_sales'));
+        $('#modalOptionSalesmanIndex').modal('hide');
     });
 });

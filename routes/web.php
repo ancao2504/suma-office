@@ -66,7 +66,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
 
-
             Route::name('dealer.')->group(function () {
                 Route::get('/dashboard/dealer', 'App\Dashboard\DashboardDealerController@index')->name('dealer');
             });

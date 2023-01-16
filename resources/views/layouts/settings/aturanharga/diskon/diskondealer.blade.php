@@ -24,7 +24,7 @@
             <!--end::Input group-->
             <!--begin:Action-->
             <div class="d-flex align-items-center ms-3">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon">Tambah Diskon Dealer</button>
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon"><i class="bi bi-plus-circle fs-1"></i> Tambah</button>
             </div>
             <!--end:Action-->
         </div>

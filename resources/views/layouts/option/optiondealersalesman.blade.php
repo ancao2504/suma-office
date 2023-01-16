@@ -1,7 +1,7 @@
 <div class="modal fade" id="modalOptionDealerSalesman" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="formOptionDealerSalesman" name="formOptionDealerSalesman" autofill="off" autocomplete="off">
+            <div id="formOptionDealerSalesman" name="formOptionDealerSalesman" autofill="off" autocomplete="off">
                 <div class="modal-header">
                     <h5 class="modal-title">Pilih Data Dealer</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -25,7 +25,7 @@
                     </div>
                     <div id="optionDealerSalesmanContentModal"></div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
