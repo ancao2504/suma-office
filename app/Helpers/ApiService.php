@@ -319,7 +319,7 @@ class ApiService
     public static function DashboardManagementSalesByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'dashboard/management/sales/salesbyproduct';
+        $request = 'dashboard/management/sales/byproduct';
         $header = ['Authorization' => $credential];
         $body = [
             'year'          => $year,
@@ -338,7 +338,7 @@ class ApiService
     public static function DashboardManagementSalesByDate($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'dashboard/management/sales/salesbydate';
+        $request = 'dashboard/management/sales/bydate';
         $header = ['Authorization' => $credential];
         $body = [
             'year'          => $year,

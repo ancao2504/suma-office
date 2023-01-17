@@ -15,17 +15,16 @@
                             </h3>
                         </div>
                         <div class="card-body pt-0">
-
-                                <div class="fv-row mt-4">
-                                    <label class="form-label required">Nomor Purchase Order:</label>
-                                    <input id="inputNomorPof" name="nomor_pof" type="text" class="form-control form-control-solid" readonly
-                                        @if(isset($nomor_pof)) value="{{ $nomor_pof }}" @else value="{{ old('nomor_pof') }}"@endif>
-                                </div>
-                                <div class="fv-row mt-8">
-                                    <label class="form-label required">Tanggal:</label>
-                                    <input id="inputTanggal" name="tanggal_pof" type="text" class="form-control form-control-solid" readonly
-                                        @if(isset($tanggal_pof)) value="{{ $tanggal_pof }}" @else value="{{ old('tanggal_pof') }}"@endif>
-                                </div>
+                            <div class="fv-row mt-6">
+                                <label class="form-label required">Nomor Purchase Order:</label>
+                                <input id="inputNomorPof" name="nomor_pof" type="text" class="form-control form-control-solid" readonly
+                                    @if(isset($nomor_pof)) value="{{ $nomor_pof }}" @else value="{{ old('nomor_pof') }}"@endif>
+                            </div>
+                            <div class="fv-row mt-8">
+                                <label class="form-label required">Tanggal:</label>
+                                <input id="inputTanggal" name="tanggal_pof" type="text" class="form-control form-control-solid" readonly
+                                    @if(isset($tanggal_pof)) value="{{ $tanggal_pof }}" @else value="{{ old('tanggal_pof') }}"@endif>
+                            </div>
                         </div>
                     </div>
                     <div class="card card-flush py-4 mt-8">

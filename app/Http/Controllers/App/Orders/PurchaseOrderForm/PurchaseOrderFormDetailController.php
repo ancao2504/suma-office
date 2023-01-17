@@ -182,9 +182,15 @@ class PurchaseOrderFormDetailController extends Controller
                                     <div class="fw-boldest pe-10 text-gray-600 fs-7">SUBTOTAL:</div>
                                     <div class="text-end fw-bolder fs-6 text-gray-800">Rp. '.number_format($data->sub_total).'</div>
                                 </div>
-                                <div class="d-flex flex-stack mb-3">
-                                    <div class="fw-boldest pe-10 text-gray-600 fs-7">DISCOUNT (%):</div>
-                                    <div class="text-end fw-bolder fs-6 text-gray-800">'.number_format($data->disc_header, 2).' % / Rp. '.number_format(((double)$data->sub_total * (double)$data->disc_header) / 100).'</div>
+                                <div class="d-flex flex-stack mb-3">';
+
+                if((int)$data->status_faktur == 0 && (int)$data->approve == 0) {
+                    $table_detail .= '<button class="btn btn-sm btn-primary" id="btnEditPofDiscount" type="button">Discount (%)</button>';
+                } else {
+                    $table_detail .= '<div class="fw-boldest pe-10 text-gray-600 fs-7">DISCOUNT (%):</div>';
+                }
+
+                $table_detail .= '<div class="text-end fw-bolder fs-6 text-gray-800">'.number_format($data->disc_header, 2).' % / Rp. '.number_format(((double)$data->sub_total * (double)$data->disc_header) / 100).'</div>
                                 </div>
                                 <div class="d-flex flex-stack mb-3">
                                     <div class="fw-boldest pe-10 text-gray-600 fs-7">TOTAL:</div>
