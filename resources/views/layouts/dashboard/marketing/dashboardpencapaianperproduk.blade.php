@@ -58,7 +58,7 @@
 <div class="modal fade" tabindex="-2" id="modalFilter">
     <div class="modal-dialog">
         <div class="modal-content" id="modalFilterContent">
-            <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('dashboard.dashboard-marketing-pencapaian-perproduk') }}">
+            <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('dashboard.marketing.pencapaian.produk') }}">
                 <div class="modal-header">
                     <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Faktur</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">

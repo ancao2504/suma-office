@@ -23,8 +23,8 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Diskon Dealer</button>
+            <div class="d-flex align-items-center ms-3">
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#tambah_diskon"><i class="bi bi-plus-circle fs-1"></i> Tambah</button>
             </div>
             <!--end:Action-->
         </div>
@@ -33,14 +33,14 @@
 </div>
 
 <!-- Modal tambah diskon-->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="tambah_diskon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="tambah_diskonLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Diskon Dealer</h1>
+                <h1 class="modal-title fs-5" id="tambah_diskonLabel">Tambah Diskon Dealer</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-diskon-dealer-simpan') }}" method="POST">
+            <form action="{{ route('setting.diskon.prosentase.dealer.simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -84,7 +84,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-primary" id="kirim">Simpan</button>
                 </div>
             </form>
         </div>
@@ -99,171 +99,47 @@
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
-    <!--begin::Controls-->
-    <div class="d-flex flex-wrap my-1">
-        <!--begin::Tab nav-->
-        <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary me-3" data-bs-toggle="tab" href="#kt_project_users_card_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="5" y="5" width="5" height="5" rx="1" fill="currentColor"></rect>
-                                <rect x="14" y="5" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="5" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="14" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                            </g>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"></path>
-                            <path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"></path>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-        </ul>
-        <!--end::Tab nav-->
-        <!--begin::Actions-->
-        <div class="d-flex my-0">
-        </div>
-        <!--end::Actions-->
-    </div>
-    <!--end::Controls-->
 </div>
 
 <div class="tab-content">
-    <!--begin::Tab pane-->
-    <div id="kt_project_users_card_pane" class="tab-pane fade">
-        <!--begin::Row-->
-        <div class="row g-3" id="dataDiskon">
-        @foreach ( $data_disc_dealer->data as $data)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
-                <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
-                    <!--begin::Info-->
-                    <div class="d-flex flex-column py-2 w-100">
-                        <!--begin::Owner-->
-                        <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
-                            <span class="text-gray-800">{{ $data->kode_dealer }}</span>
-                            {{-- <span class="text-muted fs-6 fw-bold ms-2">{{ $data->nama_produk }}</span> --}}
-                        </div>
-                        <!--end::Owner-->
-                        <div class="d-flex align-items-center w-100">
-                            <table class="table table-borderless table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td class="fw-bolder">Diskon</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="text-end text-primary fw-bolder fs-6">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Diskon +</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="text-end text-danger fw-bolder fs-6">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bolder">Umur Faktur</td>
-                                        <td class="fw-bolder">:</td>
-                                        <td><span class="text-end text-info fw-bolder fs-6">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!--end::Info-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center justify-content-cente py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">Delete</button>
-                        <button class="btn btn-sm btn-light btn-light-warning btn-edit"
-                        data-array="{{json_encode($data)}}">
-                        Edit</button>
-                    </div>
-                    <!--end::Actions-->
-                </div>
-                <!--end::Card-->
-            </div>
-
-        @endforeach
-        </div>
-        <!--end::Row-->
-        <!--begin::Pagination-->
-        <div class="d-flex flex-stack flex-wrap pt-10">
-            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_disc_dealer->from }} to {{ $data_disc_dealer->to }} of {{ $data_disc_dealer->total }} entries</div>
-            <!--begin::Pages-->
-            <ul class="pagination">
-                @foreach ($data_disc_dealer->links as $data)
-                    @if (strpos($data->label, 'Next') !== false)
-                        <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ (string)((int)($data_disc_dealer->current_page) + 1) }}" class="page-link">
-                                <i class="next"></i>
-                            </a>
-                        </li>
-                    @elseif (strpos($data->label, 'Previous') !== false)
-                        <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ (string)((int)($data_disc_dealer->current_page) - 1) }}" class="page-link">
-                                <i class="previous"></i>
-                            </a>
-                        </li>
-                    @elseif ($data->active == true)
-                        <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
-                        </li>
-                    @elseif ($data->active == false)
-                        <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
-            <!--end::Pages-->
-        </div>
-        <!--end::Pagination-->
-    </div>
-    <!--end::Tab pane-->
-    <!--begin::Tab pane-->
-    <div id="kt_project_users_table_pane" class="tab-pane fade active show">
+    @if (\Agent::isDesktop())
     <!--begin::Card-->
+    <div id="kt_project_users_table_pane" class="tab-pane fade active show">
         <div class="card card-flush">
             <!--begin::Card body-->
             <div class="card-body">
                 <!--begin::Table container-->
-                <div class="table-responsive">
+                <div class="table-responsive mt-10">
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
                             <table id="kt_project_users_table" class="table table-row-dashed table-row-gray-300 align-middle">
                                 <!--begin::Head-->
-                                <thead class="fw-boldest fs-7 text-gray-400 text-uppercase">
-                                    <tr>
+                                <thead class="border">
+                                    <tr class="fw-bolder text-muted text-center">
                                         <th style="width: 0px;">No</th>
                                         <th style="width: 0px;">kode Dealer</th>
-                                        <th class="text-end" style="width: 0px;">Diskon</th>
-                                        <th class="text-end" style="width: 0px;">Diskon (+)</th>
-                                        <th class="text-end" style="width: 0px;">Umur Faktur</th>
-                                        <th class="text-end" class="min-w-60px" style="width: 0px;">Action</th>
+                                        <th style="width: 0px;">Diskon</th>
+                                        <th style="width: 0px;">Diskon (+)</th>
+                                        <th style="width: 0px;">Umur Faktur</th>
+                                        <th class="min-w-60px" style="width: 0px;">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
                                 <!--begin::Body-->
-                                <tbody class="fs-6">
+                                <tbody class="fs-6 border">
+                                    @if ( $data_disc_dealer->total > 0)
+                                    @php
+                                        $no = $data_disc_dealer->from;
+                                    @endphp
                                     @foreach ( $data_disc_dealer->data as $data)
-                                    <tr class="odd">
-                                        <td class="fw-bold">{{ $loop->iteration }}</td>
-                                        <td class="fw-bold">{{ $data->kode_dealer }}</td>
-                                        <td class="fw-boldest text-primary text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
-                                        <td class="fw-boldest text-danger text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
-                                        <td class="fw-boldest text-info text-end">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
-                                        <td class="text-end">
+                                    <tr class="fs-6 fw-bold text-gray-700">
+                                        <td class="text-center">{{ $no }}</td>
+                                        <td>{{ $data->kode_dealer }}</td>
+                                        <td class="text-end">{{ $data->disc_default == '.00' ? '0.00' : $data->disc_default }}</td>
+                                        <td class="text-end">{{ $data->disc_plus == '.00' ? '0.00' : $data->disc_plus }}</td>
+                                        <td class="text-end">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
+                                        <td class="text-center">
                                             <button class="btn btn-sm btn-icon btn-primary mt-1 btn-edit" data-array="{{json_encode($data)}}">
                                                 <span class="bi bi-pencil"></span>
                                             </button>
@@ -273,7 +149,15 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    @php
+                                        $no++;
+                                    @endphp
                                     @endforeach
+                                    @else
+                                    <tr class="odd">
+                                        <td class="fw-bold" colspan="6">Tidak ada data</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                                 <!--end::Body-->
                             </table>
@@ -328,9 +212,109 @@
             </div>
         <!--end::Card body-->
         </div>
-    <!--end::Card-->
     </div>
-<!--end::Tab pane-->
+    <!--end::Card-->
+    @else
+    <!--begin::Tab pane-->
+    <div id="kt_project_users_card_pane" class="tab-pane fade active show">
+        <!--begin::Row-->
+        <div class="row g-3" id="dataDiskon">
+        @if ( $data_disc_dealer->total > 0)
+        @foreach ( $data_disc_dealer->data as $data)
+            <div class="col-sm-4 col-12">
+                <!--begin::Card-->
+                <div class="card h-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                    <!--begin::Info-->
+                    <div class="d-flex flex-column py-2 w-100">
+                        <!--begin::Owner-->
+                        <div class="d-flex align-items-center fs-4 fw-bolder mb-5">
+                            <div class="ribbon-label bg-success">{{ $data->kode_dealer }}</div>
+                            {{-- <span class="text-gray-800">{{ $data->kode_dealer }}</span> --}}
+                            {{-- <span class="text-muted fs-6 fw-bold ms-2">{{ $data->nama_produk }}</span> --}}
+                        </div>
+                        <!--end::Owner-->
+                        <div class="d-flex align-items-center w-100 rounded border border-gray-300 p-3">
+                            <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                <thead>
+                                    <tr class="fs-7 fw-bolder text-gray-400 border-bottom-1">
+                                        <th>Umur Faktur</th>
+                                        <th>Diskon</th>
+                                        <th>Diskon +</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-bolder">{{ $data->umur_faktur == '.00' ? '0' : $data->umur_faktur }}</td>
+                                        <td><span class="fw-bolder">{{ $data->disc_default == '.00' ? '0' : $data->disc_default  }}</span></td>
+                                        <td><span class="fw-bolder">{{  $data->disc_plus == '.00' ? '0' : $data->disc_plus  }}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--end::Info-->
+                    <!--begin::Actions-->
+                    <div class="d-flex align-items-center justify-content-cente py-2">
+                        <button type="reset" class="btn btn-sm btn-danger me-3 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model" data-array="{{json_encode(['kode_dealer' => $data->kode_dealer])}}">Delete</button>
+                        <button class="btn btn-sm btn-primary btn-edit"
+                        data-array="{{json_encode($data)}}">
+                        Edit</button>
+                    </div>
+                    <!--end::Actions-->
+                </div>
+                <!--end::Card-->
+            </div>
+        @endforeach
+        @else
+        <div class="col-12">
+            <!--begin::Card-->
+            <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                <!--begin::Owner-->
+                <div class="text-center w-100">
+                    <span class="fw-bold text-gray-800">Tidak ada data</span>
+                </div>
+                <!--end::Owner-->
+            </div>
+            <!--end::Card-->
+        </div>
+        @endif
+        </div>
+        <!--end::Row-->
+        <!--begin::Pagination-->
+        <div class="d-flex flex-stack flex-wrap pt-10">
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data_disc_dealer->from }} to {{ $data_disc_dealer->to }} of {{ $data_disc_dealer->total }} entries</div>
+            <!--begin::Pages-->
+            <ul class="pagination">
+                @foreach ($data_disc_dealer->links as $data)
+                    @if (strpos($data->label, 'Next') !== false)
+                        <li class="page-item next {{ ($data->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ (string)((int)($data_disc_dealer->current_page) + 1) }}" class="page-link">
+                                <i class="next"></i>
+                            </a>
+                        </li>
+                    @elseif (strpos($data->label, 'Previous') !== false)
+                        <li class="page-item previous {{ ($data->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ (string)((int)($data_disc_dealer->current_page) - 1) }}" class="page-link">
+                                <i class="previous"></i>
+                            </a>
+                        </li>
+                    @elseif ($data->active == true)
+                        <li class="page-item active {{ ($data->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                        </li>
+                    @elseif ($data->active == false)
+                        <li class="page-item {{ ($data->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ $data->label }}" class="page-link">{{ $data->label }}</a>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+            <!--end::Pages-->
+        </div>
+        <!--end::Pagination-->
+    </div>
+    <!--end::Tab pane-->
+    @endif
 </div>
 
 <!--begin::Modal delet data-->
@@ -345,7 +329,7 @@
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-diskon-dealer-hapus') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.diskon.prosentase.dealer.hapus') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >
@@ -377,6 +361,13 @@
                 'produk': '{{ old('dealer') }}',
             }
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskondealer.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskondealer/diskondealer.js') }}?v={{ time() }}"></script>
+    
+    @if (\Agent::isDesktop())
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskondealer/diskondealerTable.js') }}?v={{ time() }}"></script>
+    @else
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/diskon/diskondealer/diskondealerCard.js') }}?v={{ time() }}"></script>
+    @endif
+
     @endpush
 @endsection

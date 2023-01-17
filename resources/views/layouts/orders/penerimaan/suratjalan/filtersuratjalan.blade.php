@@ -10,7 +10,7 @@
     {{-- end include  --}}
             <div class="row">
                 <div class="card card-xl-stretch shadow">
-                    <form action="{{ route('orders.surat_jalan_report') }}" method="GET" enctype="multipart/form-data" id="form_sj" target="_blank">
+                    <form action="{{ route('orders.warehouse.penerimaan.suratjalan.report') }}" method="GET" enctype="multipart/form-data" id="form_sj" target="_blank">
                         @csrf
                         <div class="card-body">
                             <div class="form-group row mb-2">

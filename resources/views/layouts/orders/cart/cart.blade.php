@@ -77,7 +77,7 @@
                             <div class="fv-row mt-2">
                                 <label class="form-label">Tambah item atau kosongkan data cart:</label>
                                 <div class="fv-row">
-                                    <a class="btn btn-primary waves-effect text-left" role="button" href="{{ route('parts.part-number') }}" id="btnTambahCart" name="btnTambahCart">Tambah Item</a>
+                                    <a class="btn btn-primary waves-effect text-left" role="button" href="{{ route('parts.partnumber.daftar') }}" id="btnTambahCart" name="btnTambahCart">Tambah Item</a>
                                     <button type="button" class="btn btn-danger waves-effect text-left" id="btnResetCart" name="btnResetCart">Kosongkan Cart</button>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
     <div class="modal fade" tabindex="-1" id="modalCartHeader">
         <div class="modal-dialog">
             <div class="modal-content" id="modalContentCartHeader">
-                <form id="formModalCartHeader" name="formModalCartHeader" autofill="off" autocomplete="off" method="post" action="{{ route('orders.cart-simpan-draft') }}">
+                <form id="formModalCartHeader" name="formModalCartHeader" autofill="off" autocomplete="off" method="post" action="{{ route('orders.cart.simpan-draft') }}">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Cart</h5>
@@ -542,7 +542,7 @@
     <div class="modal fade" tabindex="-1" id="modalCartCheckOut">
         <div class="modal-dialog">
             <div class="modal-content" id="modalContentCartCheckOut">
-                <form id="formModalCartCheckOut" name="formModalCartCheckOut" enctype="multipart/form-data" autofill="off" autocomplete="off" method="post" action="{{ route('orders.cart-check-out') }}">
+                <form id="formModalCartCheckOut" name="formModalCartCheckOut" enctype="multipart/form-data" autofill="off" autocomplete="off" method="post" action="{{ route('orders.cart.checkout.check-out') }}">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title">Konfirmasi Check Out</h5>
@@ -581,16 +581,19 @@
         <script src="{{ asset('assets/js/suma/option/option.js') }}"></script>
         <script type="text/javascript">
             const url_route = {
-                'daftar_cart_detail':"{{ route('orders.daftar-cart-detail') }}",
-                'cart_detail_edit':"{{ route('orders.cart-detail-edit') }}",
-                'insert_cart_detail':"{{ route('orders.insert-cart-detail') }}",
-                'delete_cart_detail':"{{ route('orders.delete-cart-detail') }}",
-                'reset_cart':"{{ route('orders.reset-cart') }}",
-                'import_excel_cart':"{{ route('orders.import-excel-cart') }}",
-                'cart_check_out_cek_aturan_harga':"{{ route('orders.cart-check-out-cek-aturan-harga') }}",
+                'daftar_cart_detail':"{{ route('orders.cart.detail.daftar') }}",
+                'cart_detail_edit':"{{ route('orders.cart.detail.cart-detail-edit') }}",
+                'insert_cart_detail':"{{ route('orders.cart.detail.simpan') }}",
+                'delete_cart_detail':"{{ route('orders.cart.detail.hapus') }}",
+                'reset_cart':"{{ route('orders.cart.reset') }}",
+                'import_excel_cart':"{{ route('orders.cart.import-excel') }}",
+                'cart_check_out_cek_aturan_harga':"{{ route('orders.cart.checkout.cek-aturan-harga') }}",
             }
             const image_notfound = "'{{ URL::asset('assets/images/background/part_image_not_found.png') }}'";
         </script>
         <script src="{{ asset('assets/js/suma/orders/cart.js') }}?v={{ time() }}"></script>
+        
+        <script src="{{ asset('assets/js/suma/option/salesmanindex.js') }}?v={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/option/dealerindex.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

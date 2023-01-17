@@ -3,7 +3,7 @@
 @section('subtitle','My Account')
 @section('container')
 <div class="row g-0">
-    <form enctype="multipart/form-data" id="usersForm" name="usersForm" autofill="off" autocomplete="off" method="POST" action="{{ route('profile.save-account-profile') }}">
+    <form enctype="multipart/form-data" id="usersForm" name="usersForm" autofill="off" autocomplete="off" method="POST" action="{{ route('profile.account.simpan') }}">
         @csrf
         <div class="card card-flush">
             <div class="card-header">
@@ -57,7 +57,7 @@
                         value="{{ isset($telepon) ? trim($telepon) : old('telepon') }}" required>
                 </div>
                 <button type="submit" class="btn btn-primary" id="btnSimpan" name="btnSimpan">Simpan</button>
-                <a href="{{ route('profile.account-profile') }}" role="button" class="btn btn-danger">Batal</a>
+                <a href="{{ route('profile.account.index') }}" role="button" class="btn btn-danger">Batal</a>
             </div>
         </div>
     </form>

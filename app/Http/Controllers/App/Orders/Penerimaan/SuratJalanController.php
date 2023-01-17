@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\app\Orders\Penerimaan;
+namespace App\Http\Controllers\App\Orders\Penerimaan;
 
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;

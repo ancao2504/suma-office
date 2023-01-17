@@ -161,7 +161,7 @@
     <div class="modal fade" tabindex="-1" id="modalEntryPartNumber" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="modalEntryPartNumber" name="modalEntryPartNumber" autofill="off" autocomplete="off" method="POST" action="#">
+                <form id="modalFormPartNumber" autofill="off" autocomplete="off" method="POST" action="#">
                     {{ csrf_field() }}
                     <div class="modal-header">
                         <h5 id="modalEntryPartTitle" name="modalEntryPartTitle" class="modal-title"></h5>

@@ -302,6 +302,21 @@
                     </a>
                 </div>
                 <div class="menu-item">
+                    <a class="menu-link {{ (Request::is('parts/uploadimage/part*')) ? 'active' : '' }}" href="{{ route('parts.uploadimage.form-input') }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen006.svg-->
+                            <span class="svg-icon svg-icon-muted svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M22 5V19C22 19.6 21.6 20 21 20H19.5L11.9 12.4C11.5 12 10.9 12 10.5 12.4L3 20C2.5 20 2 19.5 2 19V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5ZM7.5 7C6.7 7 6 7.7 6 8.5C6 9.3 6.7 10 7.5 10C8.3 10 9 9.3 9 8.5C9 7.7 8.3 7 7.5 7Z" fill="currentColor"/>
+                                <path d="M19.1 10C18.7 9.60001 18.1 9.60001 17.7 10L10.7 17H2V19C2 19.6 2.4 20 3 20H21C21.6 20 22 19.6 22 19V12.9L19.1 10Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                                <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title {{ (Request::is('parts/uploadimage/part*')) ? 'active' : '' }}">Upload Gambar Part</span>
+                    </a>
+                </div>
+                <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ORDERS</span>
                     </div>
@@ -376,7 +391,7 @@
                     </a>
                 </div>
 
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('orders/penerimaan*')) ? 'here hover show' : '' }}">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('orders/warehouse/penerimaan*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: assets/media/icons/duotune/communication/com014.svg-->
@@ -390,12 +405,12 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title {{ (Request::is('orders/penerimaan*')) ? 'active' : '' }}">Penerimaan</span>
+                        <span class="menu-title {{ (Request::is('orders/warehouse/penerimaan*')) ? 'active' : '' }}">Penerimaan</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/penerimaan/sj*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/warehouse/penerimaan/suratjalan*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('orders/penerimaan/sj*')) ? 'active' : '' }}" href="{{ url('/orders/penerimaan/sj') }}">
+                            <a class="menu-link {{ (Request::is('orders/warehouse/penerimaan/suratjalan*')) ? 'active' : '' }}" href="{{ url('/orders/warehouse/penerimaan/suratjalan/create') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -403,9 +418,9 @@
                             </a>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/penerimaan/pembayaran*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/warehouse/penerimaan/pembayaran/dealer*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('orders/penerimaan/pembayaran*')) ? 'active' : '' }}" href="{{ url('/orders/penerimaan/pembayaran') }}">
+                            <a class="menu-link {{ (Request::is('orders/warehouse/penerimaan/pembayaran/dealer*')) ? 'active' : '' }}" href="{{ url('/orders/warehouse/penerimaan/pembayaran/dealer/input') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -445,7 +460,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('setting/diskon/default/dealer*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/default/dealer') }}">
+                                    <a class="menu-link {{ (Request::is('setting/diskon/prosentase/dealer/default*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/prosentase/dealer/default') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -453,7 +468,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('setting/diskon/produk*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/produk') }}">
+                                    <a class="menu-link {{ (Request::is('setting/diskon/prosentase/produk*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/prosentase/produk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -461,7 +476,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('setting/diskon/dealer/produk*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/dealer/produk') }}">
+                                    <a class="menu-link {{ (Request::is('setting/diskon/prosentase/dealer/produk*')) ? 'active' : '' }}" href="{{ url('/setting/diskon/prosentase/dealer/produk') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -471,18 +486,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting/harga/netto*')) ? 'show' : '' }}">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/netto/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting/netto/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title {{ (Request::is('setting/harga/netto*')) ? 'active' : '' }}">Harga Netto</span>
+                                <span class="menu-title {{ (Request::is('setting/netto/*')) ? 'active' : '' }}">Harga Netto</span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('setting/harga/netto/part*')) ? 'active' : '' }}" href="{{ url('/setting/harga/netto/part') }}">
+                                    <a class="menu-link {{ (Request::is('setting/netto/part*')) ? 'active' : '' }}" href="{{ url('/setting/netto/part') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -490,7 +505,7 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('setting/harga/netto/dealer/part*')) ? 'active' : '' }}" href="{{ url('/setting/harga/netto/dealer/part') }}">
+                                    <a class="menu-link {{ (Request::is('setting/netto/dealer*')) ? 'active' : '' }}" href="{{ url('/setting/netto/dealer/part') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>

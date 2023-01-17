@@ -58,23 +58,31 @@ $(document).ready(function () {
     function createListModal(data) {
         $('#form_sj div.modal-footer > button').addClass('disabled');
         $('#tableSuratJalan #SuratJalanBody').html('');
-        data.belum_terima.forEach(function (item) {
+        if(data.belum_terima.length > 0){
+            data.belum_terima.forEach(function (item) {
+                $('#tableSuratJalan #SuratJalanBody').append(`
+                    <tr>
+                        <td>
+                            <div class="form-check form-check-custom form-check-solid form-check-lg">
+                                <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
+                            </div>
+                        </td>
+                        <td>${item.no_sj}</td>
+                        <td>${moment(item.tanggal_sj).format('DD/MM/YYYY')}</td>
+                        <td>${item.kode_dealer}</td>
+                        <td>${item.nama_dealer}</td>
+                        <td>${item.alamat}</td>
+                        <td>${item.kota}</td>
+                    </tr>
+                `);
+            });
+        }else{
             $('#tableSuratJalan #SuratJalanBody').append(`
                 <tr>
-                    <td>
-                        <div class="form-check form-check-custom form-check-solid form-check-lg">
-                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">
-                        </div>
-                    </td>
-                    <td>${item.no_sj}</td>
-                    <td>${moment(item.tanggal_sj).format('DD/MM/YYYY')}</td>
-                    <td>${item.kode_dealer}</td>
-                    <td>${item.nama_dealer}</td>
-                    <td>${item.alamat}</td>
-                    <td>${item.kota}</td>
+                    <td colspan="7" class="text-center">Tidak ada data</td>
                 </tr>
             `);
-        });
+        }
         function search() {
             var keyword = $('#input_search').val();
             $('#tableSuratJalan tr td:nth-child(2)').each(function () {
@@ -190,7 +198,7 @@ $(document).ready(function () {
             if ($('#no_st').val() == '') {
                 $('#no_st').addClass('is-invalid');
                 $('#no_st').next('span').remove();
-                $('#no_st').after('<span class="invalid-feedback">No Surat Terima tidak boleh kosong</span>');
+                $('#no_st').after('<span class="invalid-feedback">No Serah Terima tidak boleh kosong</span>');
 
                 // reset form
                 $('#no_sj').val('');

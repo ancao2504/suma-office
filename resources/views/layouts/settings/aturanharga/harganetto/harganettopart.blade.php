@@ -23,8 +23,8 @@
             </div>
             <!--end::Input group-->
             <!--begin:Action-->
-            <div class="d-flex align-items-center">
-                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Part Netto</button>
+            <div class="d-flex align-items-center ms-3">
+                <button type="reset" class="btn btn-primary" id="btn-adddiskonproduk" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus-circle fs-1"></i> Tambah</button>
             </div>
             <!--end:Action-->
         </div>
@@ -40,7 +40,7 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Part Netto</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('setting.setting-harga-netto-parts-simpan') }}" method="POST">
+            <form action="{{ route('setting.netto.part.simpan') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -97,165 +97,49 @@
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->
-    <!--begin::Controls-->
-    <div class="d-flex flex-wrap my-1">
-        <!--begin::Tab nav-->
-        <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary me-3" data-bs-toggle="tab" href="#kt_project_users_card_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/general/gen024.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="5" y="5" width="5" height="5" rx="1" fill="currentColor"></rect>
-                                <rect x="14" y="5" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="5" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                                <rect x="14" y="14" width="5" height="5" rx="1" fill="currentColor" opacity="0.3"></rect>
-                            </g>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-            <li class="nav-item m-0">
-                <a class="btn btn-sm btn-icon btn-light btn-color-muted btn-active-primary active" data-bs-toggle="tab" href="#kt_project_users_table_pane">
-                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
-                    <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z" fill="currentColor"></path>
-                            <path opacity="0.3" d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z" fill="currentColor"></path>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                </a>
-            </li>
-        </ul>
-        <!--end::Tab nav-->
-        <!--begin::Actions-->
-        <div class="d-flex my-0">
-        </div>
-        <!--end::Actions-->
-    </div>
-    <!--end::Controls-->
 </div>
 
 <div class="tab-content">
-    <!--begin::Tab pane-->
-    <div id="kt_project_users_card_pane" class="tab-pane fade">
-        <!--begin::Row-->
-        <div class="row g-3" id="dataDiskon">
-        @foreach ( $data->data as $dta)
-            <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
-                <!--begin::Card-->
-                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
-                    <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
-                    <!--begin::Info-->
-                    <div class="d-flex flex-column py-2">
-                        <!--begin::Owner-->
-                        {{-- <div class="d-flex align-items-center fs-4 fw-bolder mb-5">Jhon Larson</div> --}}
-                        <!--end::Owner-->
-                        <!--begin::Wrapper-->
-                        <div class="d-flex align-items-center">
-                            <!--begin::Icon-->
-                            <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4">
-                            <!--end::Icon-->
-                            <!--begin::Details-->
-                            <div>
-                                <div class="fs-4 fw-bolder">{{ $dta->part_number }}</div>
-                                <div class="fs-6 fw-bold text-gray-400">{{ $dta->keterangan }}</div>
-                            </div>
-                            <!--end::Details-->
-                        </div>
-                        <!--end::Wrapper-->
-                    </div>
-                    <!--end::Info-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center py-2">
-                        <button type="reset" class="btn btn-sm btn-light btn-light-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
-                        data-array = "{{ json_encode($dta) }}">
-                            Delete
-                        </button>
-                    </div>
-                    <!--end::Actions-->
-                </div>
-                <!--end::Card-->
-            </div>
-        @endforeach
-        </div>
-        <!--end::Row-->
-        <!--begin::Pagination-->
-        <div class="d-flex flex-stack flex-wrap pt-10">
-            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data->from }} to {{ $data->to }} of {{ $data->total }} entries</div>
-            <!--begin::Pages-->
-            <ul class="pagination">
-                @foreach ($data->links as $dta)
-                    @if (strpos($dta->label, 'Next') !== false)
-                        <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ (string)((int)($data->current_page) + 1) }}" class="page-link">
-                                <i class="next"></i>
-                            </a>
-                        </li>
-                    @elseif (strpos($dta->label, 'Previous') !== false)
-                        <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ (string)((int)($data->current_page) - 1) }}" class="page-link">
-                                <i class="previous"></i>
-                            </a>
-                        </li>
-                    @elseif ($dta->active == true)
-                        <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
-                        </li>
-                    @elseif ($dta->active == false)
-                        <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
-                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
-                        </li>
-                    @endif
-                @endforeach
-            </ul>
-            <!--end::Pages-->
-        </div>
-        <!--end::Pagination-->
-    </div>
-    <!--end::Tab pane-->
-    <!--begin::Tab pane-->
+    
+    @if (\Agent::isDesktop())
+    <!--begin::Table-->
     <div id="kt_project_users_table_pane" class="tab-pane fade active show">
-    <!--begin::Card-->
         <div class="card card-flush">
             <!--begin::Card body-->
             <div class="card-body pt-0">
                 <!--begin::Table container-->
-                <div class="table-responsive">
+                <div class="table-responsive mt-10">
                     <!--begin::Table-->
                     <div id="kt_project_users_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="table-responsive">
-                            <table id="kt_project_users_table" class="table table-sm table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
+                            <table id="kt_project_users_table" class="table table-row-dashed table-row-gray-300 align-middle">
                                 <!--begin::Head-->
-                                <thead class="fs-7 text-gray-400 text-uppercase">
-                                    <tr>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">No</th>
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Part Number</th>
-                                        <th class="min-w-100px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Manager: activate to sort column ascending" style="width: 0px;">nama Part</th>
-                                        {{-- <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Status (TPC20)</th> --}}
-                                        <th tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 0px;">Harga</th>
-                                        <th class="min-w-60px" tabindex="0" aria-controls="kt_project_users_table" rowspan="1" colspan="1" aria-label="Amount: activate to sort column ascending" style="width: 0px;">Action</th>
+                                <thead class="border">
+                                    <tr class="fw-bolder text-muted text-center">
+                                        <th>No</th>
+                                        <th style="max-width: 10ch">Part Number</th>
+                                        <th>nama Part</th>
+                                        <th style="max-width: 10ch">Harga</th>
+                                        <th class="min-w-60px">Action</th>
                                     </tr>
                                 </thead>
                                 <!--end::Head-->
                                 <!--begin::Body-->
-                                <tbody class="fs-6">
+                                <tbody class="fs-6 border">
+                                    @if ($data->total > 0)
+                                    @php
+                                        $no = $data->from;
+                                    @endphp
                                     @foreach ( $data->data as $dta)
-                                    <tr class="odd">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
+                                    <tr class="fs-6 fw-bold text-gray-700">
+                                        <td class="text-center">{{ $no }}</td>
+                                        <td style="max-width: 10ch">
                                             {{ $dta->part_number }}
                                         </td>
                                         <td>
                                             {{ $dta->keterangan }}
                                         </td>
-                                        {{-- <td>
-                                            {{ $dta->tpc20 == "Y" ? "IYA" : "Tidak" }}
-                                        </td> --}}
-                                        <td>
+                                        <td class="text-end" style="max-width: 10ch">
                                             <span class="text-success fw-bolder fs-5">{{ number_format($dta->harga) }}</span>
                                         </td>
                                         <td class="text-center">
@@ -266,7 +150,15 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    @php
+                                        $no++;
+                                    @endphp
                                     @endforeach
+                                    @else
+                                    <tr class="odd">
+                                        <td colspan="5" class="text-center">Tidak ada data</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                                 <!--end::Body-->
                             </table>
@@ -321,9 +213,102 @@
             </div>
         <!--end::Card body-->
         </div>
-    <!--end::Card-->
     </div>
-<!--end::Tab pane-->
+    <!--end::Table-->
+    @else
+    <!--begin::Tab pane-->
+    <div id="kt_project_users_card_pane" class="tab-pane fade active show">
+        <!--begin::Row-->
+        <div class="row g-3" id="dataDiskon">
+            
+        @if ($data->total > 0)
+        @foreach ( $data->data as $dta)
+            <div class="col-sm-4 col-6">
+                <!--begin::Card-->
+                <div class="card h-100 flex-row flex-stack flex-wrap p-6 ribbon ribbon-top">
+                    <div class="ribbon-label bg-success">{{ number_format($dta->harga) }}</div>
+                    <!--begin::Info-->
+                    <div class="d-flex flex-column py-2">
+                        <!--begin::Owner-->
+                        {{-- <div class="d-flex align-items-center fs-4 fw-bolder mb-5">Jhon Larson</div> --}}
+                        <!--end::Owner-->
+                        <!--begin::Wrapper-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Icon-->
+                            <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4">
+                            <!--end::Icon-->
+                            <!--begin::Details-->
+                            <div>
+                                <div class="fs-4 fw-bolder">{{ $dta->part_number }}</div>
+                                <div class="fs-6 fw-bold text-gray-400">{{ $dta->keterangan }}</div>
+                            </div>
+                            <!--end::Details-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::Info-->
+                    <!--begin::Actions-->
+                    <div class="d-flex align-items-center py-2">
+                        <button type="reset" class="btn btn-sm btn-danger d-inline-block mt-1 btn-delete" data-bs-toggle="modal" data-bs-target="#delet_model"
+                        data-array = "{{ json_encode($dta) }}">
+                            Delete
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                </div>
+                <!--end::Card-->
+            </div>
+        @endforeach
+        @else
+            <div class="col-12">
+                <!--begin::Card-->
+                <div class="card h-xl-100 flex-row flex-stack flex-wrap p-6">
+                    <!--begin::Owner-->
+                    <div class="text-center w-100">
+                        <span class="fw-bold text-gray-800">Tidak ada data</span>
+                    </div>
+                    <!--end::Owner-->
+                </div>
+                <!--end::Card-->
+            </div>
+        @endif
+        </div>
+        <!--end::Row-->
+        <!--begin::Pagination-->
+        <div class="d-flex flex-stack flex-wrap pt-10">
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ $data->from }} to {{ $data->to }} of {{ $data->total }} entries</div>
+            <!--begin::Pages-->
+            <ul class="pagination">
+                @foreach ($data->links as $dta)
+                    @if (strpos($dta->label, 'Next') !== false)
+                        <li class="page-item next {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ (string)((int)($data->current_page) + 1) }}" class="page-link">
+                                <i class="next"></i>
+                            </a>
+                        </li>
+                    @elseif (strpos($dta->label, 'Previous') !== false)
+                        <li class="page-item previous {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ (string)((int)($data->current_page) - 1) }}" class="page-link">
+                                <i class="previous"></i>
+                            </a>
+                        </li>
+                    @elseif ($dta->active == true)
+                        <li class="page-item active {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
+                        </li>
+                    @elseif ($dta->active == false)
+                        <li class="page-item {{ ($dta->url == null)?'disabled':'' }}">
+                            <a role="button" data-page="{{ $dta->label }}" class="page-link">{{ $dta->label }}</a>
+                        </li>
+                    @endif
+                @endforeach
+            </ul>
+            <!--end::Pages-->
+        </div>
+        <!--end::Pagination-->
+    </div>
+    <!--end::Tab pane-->
+    @endif
 </div>
 
 <!--begin::Modal delet data-->
@@ -339,7 +324,7 @@
 				</div>
 				<!--end::Close-->
 			</div>
-			<form id="form" action="{{ route('setting.setting-harga-netto-parts-simpan') }}" method="POST" enctype="multipart/form-data">
+			<form id="form" action="{{ route('setting.netto.part.simpan') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
 					<div div class= "mx-auto text-center" >
@@ -363,10 +348,6 @@
 </div>
 <!--end::Modal delet data-->
 
-
-
-    {{-- <div id="dataLoadDiskon"></div> --}}
-
     @push('scripts')
     <script type="text/javascript">
     let old = {
@@ -374,6 +355,11 @@
     }
             const current_page = "{{ $data->current_page }}"
     </script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart/harganettopart.js') }}?v={{ time() }}"></script>
+    @if (\Agent::isDesktop())
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart/harganettopartTable.js') }}?v={{ time() }}"></script>
+    @else
+    <script language="JavaScript" src="{{ asset('assets/js/suma/settings/aturanharga/harganetto/harganettopart/harganettopartCard.js') }}?v={{ time() }}"></script>
+    @endif
     @endpush
 @endsection

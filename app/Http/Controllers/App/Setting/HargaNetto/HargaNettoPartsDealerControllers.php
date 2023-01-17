@@ -17,13 +17,13 @@ class HargaNettoPartsDealerControllers extends Controller
     {
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
-
+        $param = json_decode(base64_decode($request->get('param')));
         $responseApi = ApiService::HargaNettoPartDealerDaftar(
-            $request->get('page'),
-            $request->get('per_page'),
+            $param->page??1,
+            $param->per_page??10,
             $role_id,
             $companyid,
-            $request->get('search')
+            $param->search??''
         );
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

@@ -38,7 +38,9 @@ function loadDataOptionDealerIndex(salesman = '', page = 1, per_page = 10, searc
 }
 
 $(document).ready(function () {
-    $(document).on('click', '#formOptionDealerIndex #paginationOptionDealerSalesman .page-item a', function () {
+    
+    // $('#modalOptionSalesmanIndex').on('click', '#paginationOptionSalesman .page-item a', function () {
+    $('#modalOptionDealerIndex').on('click', '#paginationOptionDealerSalesman .page-item a', function () {
         var salesman = $('#inputKodeSalesDealerIndex').val();
         var page = $(this)[0].getAttribute("data-page");
         var per_page = $('#formOptionDealerIndex #selectPerPageOptionDealer').val();
@@ -74,5 +76,10 @@ $(document).ready(function () {
         var search = $('#formOptionDealerIndex #inputSearchOptionDealerIndex').val();
 
         loadDataOptionDealerIndex(salesman, 1, per_page, search);
+    });
+
+    $('#modalOptionDealerIndex').on('click', '#selectedOptionDealerSalesman', function () {
+        $('#inputKodeDealerIndex').val($(this).data('kode_dealer'));
+        $('#modalOptionDealerIndex').modal('hide');
     });
 });

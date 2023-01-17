@@ -128,12 +128,12 @@ $(document).ready(function () {
 
     $('body').on('click', '#btnPilihSalesman', function (e) {
         e.preventDefault();
-        loadDataSalesman();
-        $('#searchSalesmanForm').trigger('reset');
-        $('#salesmanSearchModal').modal('show');
+        loadDataOptionSalesmanIndex();
+        $('#modalOptionSalesmanIndex #inputSearchOptionSalesmanIndex').val('');
+        $('#modalOptionSalesmanIndex').modal('show');
     });
 
-    $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
+    $('body').on('click', '#modalOptionSalesmanIndex #selectedOptionSalesman', function (e) {
         e.preventDefault();
         $('#inputSalesman').val($(this).data('kode_sales'));
         $('#inputDealer').val('');
@@ -156,16 +156,16 @@ $(document).ready(function () {
                 }
             });
         } else {
-            loadDataDealerSalesman(salesman, 1, 10, '');
-            $('#searchDealerSalesmanForm').trigger('reset');
-            $('#dealerSalesmanSearchModal').modal('show');
+            loadDataOptionDealerSalesman(salesman, 1, 10, '');
+            $('#modalOptionDealerSalesman #inputSearchOptionDealerSalesman').val('');
+            $('#modalOptionDealerSalesman').modal('show');
         }
     });
 
     $('body').on('click', '#dealerSalesmanContentModal #selectDealerSalesman', function (e) {
         e.preventDefault();
         $('#inputDealer').val($(this).data('kode_dealer'));
-        $('#dealerSalesmanSearchModal').modal('hide');
+        $('#modalOptionDealerSalesman').modal('hide');
     });
 
     $('body').on('click', '#btnEditPartCart', function () {
