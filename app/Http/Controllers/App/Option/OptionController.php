@@ -435,12 +435,6 @@ class OptionController extends Controller
         } else {
             $table_header = '';
             foreach ($dataPartNumber as $data) {
-                $param = json_encode([
-                    'part_number' => strtoupper(trim($data->part_number)),
-                    'nama_part' => trim($data->description),
-                    'produk' => strtoupper(trim($data->produk)),
-                    'het' => number_format($data->het),
-                ]);
             $table_header .= '<div id="selectedOptionPartNumber" class="card mb-3 border-2 shadow-sm" style="max-width: 540px;" data-part_number="'.strtoupper(trim($data->part_number)).'" data-nama_part="'.trim($data->description).'"data-produk="'.strtoupper(trim($data->produk)).'" data-het="'.number_format($data->het).'">
                                 <div class="row g-0">
                                     <div class="col-md-4 col-4">
