@@ -44,6 +44,10 @@ function loadDataPartNumber(page = 1, per_page = 10, search = '') {
     });
 }
 
+function defaultImage(img) {
+    img.src = base_url + '/assets/images/background/part_image_not_found.png';
+}
+
 $(document).ready(function () {
 
     $('#modalOptionPartNumber').on('change', '#selectPerPageOptionPartNumber', function (e) {

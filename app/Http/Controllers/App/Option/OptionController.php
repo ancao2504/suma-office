@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\App\Option;
 
 use App\Helpers\ApiService;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
+use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class OptionController extends Controller
 {
@@ -182,6 +183,8 @@ class OptionController extends Controller
             $table_row = '';
             $table_pagination = '';
 
+            
+        
             foreach ($dataDealerSales as $data) {
                 $table_row .= '<tr>
                         <td>'.$data->kode_dealer.'</td>
@@ -194,6 +197,7 @@ class OptionController extends Controller
                         </td>
                     </tr>';
             }
+        
 
             foreach ($data_link_page as $data) {
                 $page = '';
@@ -259,7 +263,7 @@ class OptionController extends Controller
                         </td>
                     </tr>';
             }
-
+        
             $table_header = '<table id="tableSearchDealerSalesman" class="table align-middle table-row-bordered fs-6">
                         <thead>
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
@@ -269,7 +273,7 @@ class OptionController extends Controller
                             </tr>
                         </thead>
                         <tbody class="fs-7 fw-bold text-gray-800">'.$table_row.'</tbody>
-                    </table>
+                    </table> 
                     <div id="pageDealerSalesman" class="mt-5">
                         <div class="row">
                             <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
@@ -302,6 +306,8 @@ class OptionController extends Controller
 
     public function optionPartNumber(Request $request)
     {
+        
+        $Agent = new Agent();
         $responseApi = ApiService::optionPartNumber($request->get('search'),
                             $request->get('page'), $request->get('per_page'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -328,6 +334,7 @@ class OptionController extends Controller
             $table_row = '';
             $table_pagination = '';
 
+        if ($Agent->isDesktop()) {
             foreach ($dataPartNumber as $data) {
                 $table_row .= '<tr>
                         <td>'.strtoupper(trim($data->part_number)).'</td>
@@ -343,6 +350,8 @@ class OptionController extends Controller
                         </td>
                     </tr>';
             }
+        } else {
+        }
 
             foreach ($data_link_page as $data) {
                 $page = '';
@@ -409,6 +418,8 @@ class OptionController extends Controller
                     </tr>';
             }
 
+            // cek apakah isdektrop
+        if ($Agent->isDesktop()) {
             $table_header = '<table id="tableSearchPartNumber" class="table align-middle table-row-bordered fs-6">
                     <thead>
                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
@@ -420,8 +431,35 @@ class OptionController extends Controller
                         </tr>
                     </thead>
                     <tbody class="fs-7 fw-bold text-gray-800">'.$table_row.'</tbody>
-                </table>
-                <div id="pagePartNumber" class="mt-5">
+                </table>';
+        } else {
+            $table_header = '';
+            foreach ($dataPartNumber as $data) {
+                $param = json_encode([
+                    'part_number' => strtoupper(trim($data->part_number)),
+                    'nama_part' => trim($data->description),
+                    'produk' => strtoupper(trim($data->produk)),
+                    'het' => number_format($data->het),
+                ]);
+            $table_header .= '<div id="selectedOptionPartNumber" class="card mb-3 border-2 shadow-sm" style="max-width: 540px;" data-part_number="'.strtoupper(trim($data->part_number)).'" data-nama_part="'.trim($data->description).'"data-produk="'.strtoupper(trim($data->produk)).'" data-het="'.number_format($data->het).'">
+                                <div class="row g-0">
+                                    <div class="col-md-4 col-4">
+                                    <img src="http://43.252.9.117/suma-images/'.strtoupper(trim($data->part_number)).'.jpg" class="img-fluid rounded-start max-width-540 overflow-hidden" alt="'.strtoupper(trim($data->part_number)).'" onerror="defaultImage(this)">
+                                    </div>
+                                    <div class="col-md-8 col-8">
+                                        <div class="card-body">
+                                        <span class="card-title fs-5 text-dark fw-bolder">'.strtoupper(trim($data->part_number)).'</span>
+                                        <span class="card-title fs-6 text-muted fw-bold d-block">'.trim($data->description).'</span>
+                                        <span class="card-text fs-4 text-dark fw-bolder mt-4 d-block">HET : Rp '.number_format($data->het).'</span>
+                                        <span class="card-text fs-6 text-muted fw-bold d-block">Produk : '.strtoupper(trim($data->produk)).'</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+            }
+        }
+
+            $table_header .= '<div id="pagePartNumber" class="mt-5">
                     <div class="row">
                         <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
                             <div class="dataTables_length">
