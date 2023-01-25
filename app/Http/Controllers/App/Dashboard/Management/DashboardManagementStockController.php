@@ -43,13 +43,18 @@ class DashboardManagementStockController extends Controller
         if($statusApi == 1) {
             $dataStockByProduct = json_decode($responseApi)->data;
 
+            $data_filter = new Collection();
+            $data_filter->push((object) [
+                'year'      => $year,
+                'month'     => $month,
+                'fields'    => $fields,
+                'level'     => $request->get('level'),
+                'produk'    => $request->get('produk'),
+            ]);
+
             return view('layouts.dashboard.management.dashboardmanagementstock', [
                 'title_menu'    => 'Dashboard Management Stock',
-                'year'          => $year,
-                'month'         => $month,
-                'fields'        => $fields,
-                'produk'        => $request->get('produk'),
-                'level'         => $request->get('level'),
+                'data_filter'   => $data_filter->first(),
                 'stock_total'   => $dataStockByProduct->total_stock,
                 'pembelian'     => $dataStockByProduct->pembelian,
                 'total'         => $dataStockByProduct->company,

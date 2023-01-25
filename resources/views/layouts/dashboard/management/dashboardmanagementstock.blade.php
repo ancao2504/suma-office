@@ -6,24 +6,26 @@
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Management Stock</span>
-                <span class="text-muted fw-boldest fs-7">Dashboard Management Stock
-                    @if($month == 1) Januari
-                    @elseif($month == 2) Februari
-                    @elseif($month == 3) Maret
-                    @elseif($month == 4) April
-                    @elseif($month == 5) Mei
-                    @elseif($month == 6) Juni
-                    @elseif($month == 7) Juli
-                    @elseif($month == 8) Agustus
-                    @elseif($month == 9) September
-                    @elseif($month == 10) Oktober
-                    @elseif($month == 11) November
-                    @elseif($month == 12) Desember
-                    @endif {{ $year }}
+                <span class="text-muted fw-bold fs-7">Dashboard Management Stock
+                    <span class="text-dark fw-bolder fs-7">
+                        @if($data_filter->month == 1) Januari
+                        @elseif($data_filter->month == 2) Februari
+                        @elseif($data_filter->month == 3) Maret
+                        @elseif($data_filter->month == 4) April
+                        @elseif($data_filter->month == 5) Mei
+                        @elseif($data_filter->month == 6) Juni
+                        @elseif($data_filter->month == 7) Juli
+                        @elseif($data_filter->month == 8) Agustus
+                        @elseif($data_filter->month == 9) September
+                        @elseif($data_filter->month == 10) Oktober
+                        @elseif($data_filter->month == 11) November
+                        @elseif($data_filter->month == 12) Desember
+                        @endif {{ $data_filter->year }}
+                    </span>
                 </span>
             </h3>
             <div class="card-toolbar">
-                <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
+                <button id="btnFilterMasterData" class="btn btn-primary">
                     <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
                 </button>
             </div>
@@ -37,14 +39,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Stock All</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
-                            @if($level == "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">@if(strtoupper($data_filter->fields) == 'AMOUNT') Amount @else Quantity @endif</span>
+                            @if($data_filter->level == "")
                             <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level }}</span>
                             @endif
-                            @if($produk != "")
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @if($data_filter->produk != "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -61,14 +63,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Pembelian</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
-                            @if($level == "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">@if(strtoupper($data_filter->fields) == 'AMOUNT') Amount @else Quantity @endif</span>
+                            @if($data_filter->level == "")
                             <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level }}</span>
                             @endif
-                            @if($produk != "")
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @if($data_filter->produk != "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -87,14 +89,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">FS</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
-                            @if($level == "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">@if(strtoupper($data_filter->fields) == 'AMOUNT') Amount @else Quantity @endif</span>
+                            @if($data_filter->level == "")
                             <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level }}</span>
                             @endif
-                            @if($produk != "")
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @if($data_filter->produk != "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -111,14 +113,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">CNO</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
-                            @if($level == "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">@if(strtoupper($data_filter->fields) == 'AMOUNT') Amount @else Quantity @endif</span>
+                            @if($data_filter->level == "")
                             <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level }}</span>
                             @endif
-                            @if($produk != "")
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @if($data_filter->produk != "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -137,14 +139,14 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Sales By Product</span>
                         <div class="d-flex align-items-center mt-2">
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $fields }}</span>
-                            @if($level == "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">@if(strtoupper($data_filter->fields) == 'AMOUNT') Amount @else Quantity @endif</span>
+                            @if($data_filter->level == "")
                             <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                             @else
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level }}</span>
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level }}</span>
                             @endif
-                            @if($produk != "")
-                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $produk }}</span>
+                            @if($data_filter->produk != "")
+                            <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->produk }}</span>
                             @endif
                         </div>
                     </h3>
@@ -174,51 +176,50 @@
                     </div>
                     <div class="modal-body">
                         <div class="fv-row">
-                            <label class="form-label required">Tahun:</label>
-                            <input type="text" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun" autocomplete="off"
-                                @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
-                        </div>
-                        <div class="fv-row mt-8">
                             <label class="form-label required">Bulan:</label>
                             <select id="selectFilterMonth" name="month" class="form-select" data-hide-search="true">
-                                <option value="1" @if($month == 1) {{"selected"}} @endif>Januari</option>
-                                <option value="2" @if($month == 2) {{"selected"}} @endif>Februari</option>
-                                <option value="3" @if($month == 3) {{"selected"}} @endif>Maret</option>
-                                <option value="4" @if($month == 4) {{"selected"}} @endif>April</option>
-                                <option value="5" @if($month == 5) {{"selected"}} @endif>Mei</option>
-                                <option value="6" @if($month == 6) {{"selected"}} @endif>Juni</option>
-                                <option value="7" @if($month == 7) {{"selected"}} @endif>Juli</option>
-                                <option value="8" @if($month == 8) {{"selected"}} @endif>Agustus</option>
-                                <option value="9" @if($month == 9) {{"selected"}} @endif>September</option>
-                                <option value="10" @if($month == 10) {{"selected"}} @endif>Oktober</option>
-                                <option value="11" @if($month == 11) {{"selected"}} @endif>November</option>
-                                <option value="12" @if($month == 12) {{"selected"}} @endif>Desember</option>
+                                <option value="1" @if($data_filter->month == 1) {{"selected"}} @endif>Januari</option>
+                                <option value="2" @if($data_filter->month == 2) {{"selected"}} @endif>Februari</option>
+                                <option value="3" @if($data_filter->month == 3) {{"selected"}} @endif>Maret</option>
+                                <option value="4" @if($data_filter->month == 4) {{"selected"}} @endif>April</option>
+                                <option value="5" @if($data_filter->month == 5) {{"selected"}} @endif>Mei</option>
+                                <option value="6" @if($data_filter->month == 6) {{"selected"}} @endif>Juni</option>
+                                <option value="7" @if($data_filter->month == 7) {{"selected"}} @endif>Juli</option>
+                                <option value="8" @if($data_filter->month == 8) {{"selected"}} @endif>Agustus</option>
+                                <option value="9" @if($data_filter->month == 9) {{"selected"}} @endif>September</option>
+                                <option value="10" @if($data_filter->month == 10) {{"selected"}} @endif>Oktober</option>
+                                <option value="11" @if($data_filter->month == 11) {{"selected"}} @endif>November</option>
+                                <option value="12" @if($data_filter->month == 12) {{"selected"}} @endif>Desember</option>
                             </select>
+                        </div>
+                        <div class="fv-row mt-8">
+                            <label class="form-label required">Tahun:</label>
+                            <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun" autocomplete="off"
+                                @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label required">Data yang ditampilkan:</label>
                             <select id="selectFields" name="fields" class="form-select" data-hide-search="true">
-                                <option value="QUANTITY" @if($fields == 'QUANTITY') {{"selected"}} @endif>Quantity</option>
-                                <option value="AMOUNT" @if($fields == 'AMOUNT') {{"selected"}} @endif>Amount</option>
+                                <option value="QUANTITY" @if($data_filter->fields == 'QUANTITY') {{"selected"}} @endif>Quantity</option>
+                                <option value="AMOUNT" @if($data_filter->fields == 'AMOUNT') {{"selected"}} @endif>Amount</option>
                             </select>
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label">Level Produk:</label>
                             <select id="selectFilterLevelProduk" name="level" class="form-select" data-placeholder="Semua Level Produk" data-allow-clear="true">
-                                <option value="" @if($level != 'HANDLE' && $level != 'NON_HANDLE' && $level != 'TUBE' && $level != 'OLI') selected @endif>Semua Level Produk</option>
-                                <option value="HANDLE" @if($level == 'HANDLE') selected @endif>Handle</option>
-                                <option value="NON_HANDLE" @if($level == 'NON_HANDLE') selected @endif>Non-Handle</option>
-                                <option value="TUBE" @if($level == 'TUBE') selected @endif>Tube</option>
-                                <option value="OLI" @if($level == 'OLI') selected @endif>Oli</option>
+                                <option value="" @if($data_filter->level != 'HANDLE' && $data_filter->level != 'NON_HANDLE' && $data_filter->level != 'TUBE' && $data_filter->level != 'OLI') selected @endif>Semua Level Produk</option>
+                                <option value="HANDLE" @if($data_filter->level == 'HANDLE') selected @endif>Handle</option>
+                                <option value="NON_HANDLE" @if($data_filter->level == 'NON_HANDLE') selected @endif>Non-Handle</option>
+                                <option value="TUBE" @if($data_filter->level == 'TUBE') selected @endif>Tube</option>
+                                <option value="OLI" @if($data_filter->level == 'OLI') selected @endif>Oli</option>
                             </select>
                         </div>
                         <div class="fv-row mt-8">
                             <label class="form-label">Produk:</label>
                             <div class="input-group">
-                                <input id="inputFilterKodeProduk" name="produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
-                                    @if(isset($produk)) value="{{ $produk }}" @else value="{{ old('produk') }}"@endif>
-                                <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
-                                    data-toggle="modal" data-target="#produkSearchModalForm">
+                                <input id="inputFilterProduk" name="produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
+                                    @if(isset($data_filter->produk)) value="{{ $data_filter->produk }}" @else value="{{ old('produk') }}"@endif>
+                                <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -235,7 +236,9 @@
             </div>
         </div>
     </div>
+
     @include('layouts.option.optiongroupproduk')
+
     @push('scripts')
         <script src="{{ asset('assets/js/suma/option/option.js') }}?time={{ time() }}"></script>
         <script src="{{ asset('assets/media/charts/amcharts/index.js') }}"></script>
@@ -246,19 +249,25 @@
 
         <script type="text/javascript">
             let data_chart = {
-                'month': {{ $month }},
                 'total': {!!json_encode($total)!!},
-                'pembelian':{!!json_encode($pembelian)!!},
-                'fs':{!!json_encode($fs)!!},
-                'cno':{!!json_encode($cno)!!},
-                'product':{!!json_encode($product)!!},
+                'pembelian': {!!json_encode($pembelian)!!},
+                'fs': {!!json_encode($fs)!!},
+                'cno': {!!json_encode($cno)!!},
+                'product': {!!json_encode($product)!!},
+            }
+            const data_filter = {
+                'year': '{{ trim($data_filter->year) }}',
+                'month': '{{ trim($data_filter->month) }}',
+                'fields': '{{ trim($data_filter->fields) }}',
+                'level': '{{ trim($data_filter->level) }}',
+                'produk': '{{ trim($data_filter->produk) }}',
             }
         </script>
-        <script src="{{ asset('assets/js/suma/dashboard/management/stock/dashboardmanagementstock.js') }}?time={{ time() }}"></script>
-        @if($fields == 'QUANTITY')
-            <script src="{{ asset('assets/js/suma/dashboard/management/stock/dashboardmanagementstockQuantity.js') }}?time={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/dashboard/management/stock/index.js') }}?time={{ time() }}"></script>
+        @if($data_filter->fields == 'QUANTITY')
+        <script src="{{ asset('assets/js/suma/dashboard/management/stock/quantity.js') }}?time={{ time() }}"></script>
         @else
-            <script src="{{ asset('assets/js/suma/dashboard/management/stock/dashboardmanagementstockAmount.js') }}?time={{ time() }}"></script>
+        <script src="{{ asset('assets/js/suma/dashboard/management/stock/amount.js') }}?time={{ time() }}"></script>
         @endif
     @endpush
 @endsection

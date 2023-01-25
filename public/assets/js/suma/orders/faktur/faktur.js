@@ -34,7 +34,7 @@ $(document).ready(function () {
     });
 
     // ===============================================================
-    // Filter
+    // Filter Proses
     // ===============================================================
     $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
@@ -116,42 +116,6 @@ $(document).ready(function () {
         });
     });
 
-    // ===============================================================
-    // Filter
-    // ===============================================================
-    $('#btnFilterMasterData').on('click', function (e) {
-        e.preventDefault();
-
-        $('#inputFilterSalesman').val(data_filter.salesman);
-        $('#inputFilterDealer').val(data_filter.dealer);
-        $('#inputFilterPartNumber').val(data_filter.part_number);
-
-        $('#modalFilter').modal('show');
-    });
-
-    $('#btnFilterProses').on('click', function (e) {
-        e.preventDefault();
-        var per_page = $('#selectPerPageMasterData').val();
-        var salesman = $('#inputFilterSalesman').val();
-        var dealer = $('#inputFilterDealer').val();
-        var part_number = $('#inputFilterPartNumber').val();
-
-        loadMasterData(1, per_page, salesman, dealer, part_number);
-    });
-
-    $('#btnFilterReset').on('click', function (e) {
-        e.preventDefault();
-        if(data_user.role_id == 'D_H3') {
-            $('#inputFilterPartNumber').val('');
-        } else if(data_user.role_id == 'MD_H3_SM') {
-            $('#inputFilterDealer').val('');
-            $('#inputFilterPartNumber').val('');
-        } else {
-            $('#inputFilterSalesman').val('');
-            $('#inputFilterDealer').val('');
-            $('#inputFilterPartNumber').val('');
-        }
-    });
 
     // ===============================================================
     // Filter Salesman

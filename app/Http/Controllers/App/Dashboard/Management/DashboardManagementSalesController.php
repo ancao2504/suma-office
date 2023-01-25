@@ -57,13 +57,18 @@ class DashboardManagementSalesController extends Controller
             if($statusApi == 1) {
                 $dataSalesByDate = json_decode($responseApi)->data;
 
+                $data_filter = new Collection();
+                $data_filter->push((object) [
+                    'year'      => $year,
+                    'month'     => $month,
+                    'fields'    => $fields,
+                    'level'     => $request->get('level'),
+                    'produk'    => $request->get('produk'),
+                ]);
+
                 return view('layouts.dashboard.management.dashboardmanagementsales', [
                     'title_menu'            => 'Dashboard Management Sales',
-                    'year'                  => $year,
-                    'month'                 => $month,
-                    'fields'                => $fields,
-                    'level'                 => $request->get('level'),
-                    'produk'                => $request->get('produk'),
+                    'data_filter'           => $data_filter->first(),
                     'selling'       => [
                         'selling_total'             => $dataSalesByProduct->selling->selling_total,
                         'selling_total_status'      => $dataSalesByProduct->selling->selling_total_status,

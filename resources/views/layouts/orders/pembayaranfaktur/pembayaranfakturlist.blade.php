@@ -69,9 +69,10 @@
                             <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->total_pembayaran) }}</span>
                         </td>
                         <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                            <a href="{{ route('orders.faktur.form', trim($data->nomor_faktur)) }}" class="btn btn-icon btn-primary btn-sm">
+                            <button class="btn btn-icon @if($data->status == 'LUNAS') btn-success @else @if($data->status_sisa_hari == 'LEBIH') btn-danger @else btn-info @endif @endif btn-sm mb-2"
+                                id="btnFormPembayaranFaktur" type="button" data-kode="{{ $data->nomor_faktur }}" data-status="{{ $data->status }}">
                                 <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                     @empty
