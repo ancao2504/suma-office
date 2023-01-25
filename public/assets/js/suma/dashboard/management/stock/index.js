@@ -33,7 +33,7 @@ $(document).ready(function () {
     $('#inputFilterProduk').on('click', function (e) {
         e.preventDefault();
         var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
-        loadDataOptionProduk(1, 10, '', selectFilterLevelProduk);
+        loadDataOptionProduk(1, 10, selectFilterLevelProduk, '');
         $('#formOptionGroupProduk').trigger('reset');
         $('#modalOptionGroupProduk').modal('show');
     });
@@ -41,7 +41,7 @@ $(document).ready(function () {
     $('#btnFilterProduk').on('click', function (e) {
         e.preventDefault();
         var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
-        loadDataOptionProduk(1, 10, '', selectFilterLevelProduk);
+        loadDataOptionProduk(1, 10, selectFilterLevelProduk, '');
         $('#formOptionGroupProduk').trigger('reset');
         $('#modalOptionGroupProduk').modal('show');
     });
