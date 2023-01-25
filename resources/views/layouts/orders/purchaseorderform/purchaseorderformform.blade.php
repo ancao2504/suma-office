@@ -180,7 +180,7 @@
                             <div class="fv-row mb-6">
                                 <label class="form-label required">Part Number:</label>
                                 <div class="input-group">
-                                    <input id="modalPofPartInputPartNumber" name="part_number" type="text" class="form-control" style="cursor: pointer;" required readonly>
+                                    <input id="modalPofPartInputPartNumber" name="part_number" type="text" class="form-control" required>
                                     <button id="modalPofPartBtnPartNumber" name="btnFilterPilihPartNumber" class="btn btn-icon btn-primary" type="button">
                                             <i class="fa fa-search"></i>
                                     </button>

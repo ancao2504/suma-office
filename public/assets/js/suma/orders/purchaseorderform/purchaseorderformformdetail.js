@@ -60,13 +60,6 @@ $(document).ready(function () {
         $('#partNumberSearchModal').modal('show');
     });
 
-    $('#modalPofPartInputPartNumber').on('click', function (e) {
-        e.preventDefault();
-        loadDataPartNumber(1, 10, $('#modalPofPartInputPartNumber').val());
-        $('#searchPartNumberForm').trigger('reset');
-        $('#partNumberSearchModal').modal('show');
-    });
-
     $('#modalPofPartInputPartNumber').change(function () {
         var part_number = $('#modalPofPartInputPartNumber').val();
         var _token = $('input[name="_token"]').val();
@@ -376,6 +369,14 @@ $(document).ready(function () {
                 });
             }
         })
+    });
+
+    $('#modalOptionPartNumber').on('click', '#selectedOptionPartNumber' ,function () {
+        $('#modalEntryPartNumber #modalPofPartInputPartNumber').val($(this).data('part_number'));
+        $('#modalEntryPartNumber #modalPofPartInputNamaPart').val($(this).data('nama_part'));
+        $('#modalEntryPartNumber #modalPofPartInputProduk').val($(this).data('produk'));
+        $('#modalEntryPartNumber #modalPofPartInputHarga').val($(this).data('het'));
+        $('#modalOptionPartNumber').modal('hide');
     });
 
 });
