@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers\App\Dashboard\Marketing;
 
-use App\Helpers\ApiRequest;
-use App\Http\Controllers\App\Dashboard\DashboardSalesmanController;
 use App\Http\Controllers\Controller;
 use App\Helpers\ApiService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Stmt\Return_;
 
 class DashboardMarketingController extends Controller
 {
@@ -31,11 +25,16 @@ class DashboardMarketingController extends Controller
         if($statusApi == 1) {
             $data = json_decode($responseApi)->data;
 
-            return view('layouts.dashboard.marketing.dashboardpencapaianperlevel', [
-                'title_menu'    => 'Dashboard Marketing Pencapaian Per-Level',
+            $data_filter = new Collection();
+            $data_filter->push((object) [
                 'year'          => $year,
                 'jenis_mkr'     => $request->get('jenis_mkr'),
                 'kode_mkr'      => $request->get('kode_mkr'),
+            ]);
+
+            return view('layouts.dashboard.marketing.dashboardpencapaianperlevel', [
+                'title_menu'    => 'Dashboard Marketing Pencapaian Per-Level',
+                'data_filter'   => $data_filter->first(),
                 'total'         => $data->total,
                 'handle'        => $data->handle,
                 'non_handle'    => $data->non_handle,
@@ -63,13 +62,18 @@ class DashboardMarketingController extends Controller
         if($statusApi == 1) {
             $data = json_decode($responseApi)->data;
 
-            return view('layouts.dashboard.marketing.dashboardpencapaiangrowth', [
-                'title_menu'    => 'Dashboard Marketing Growth Pencapaian',
+            $data_filter = new Collection();
+            $data_filter->push((object) [
                 'year'          => $year,
                 'level_produk'  => $request->get('level_produk'),
                 'kode_produk'   => $request->get('kode_produk'),
                 'jenis_mkr'     => $request->get('jenis_mkr'),
                 'kode_mkr'      => $request->get('kode_mkr'),
+            ]);
+
+            return view('layouts.dashboard.marketing.dashboardpencapaiangrowth', [
+                'title_menu'    => 'Dashboard Marketing Growth Pencapaian',
+                'data_filter'   => $data_filter->first(),
                 'total'         => $data->total,
                 'marketing'     => $data->marketing
             ]);
@@ -100,6 +104,16 @@ class DashboardMarketingController extends Controller
             $data = json_decode($responseApi)->data;
             $data_product = $data;
 
+            $data_filter = new Collection();
+            $data_filter->push((object) [
+                'year'          => $year,
+                'month'         => $month,
+                'level_produk'  => $request->get('level_produk'),
+                'kode_produk'   => $request->get('kode_produk'),
+                'jenis_mkr'     => $request->get('jenis_mkr'),
+                'kode_mkr'      => $request->get('kode_mkr'),
+            ]);
+
             $jumlah_data = 0;
             foreach($data as $data) {
                 $jumlah_data = (double)$jumlah_data + 1;
@@ -107,12 +121,7 @@ class DashboardMarketingController extends Controller
 
             return view('layouts.dashboard.marketing.dashboardpencapaianperproduk', [
                 'title_menu'    => 'Dashboard Marketing Pencapaian Per-Produk',
-                'year'          => $year,
-                'month'         => $month,
-                'level_produk'  => $request->get('level_produk'),
-                'kode_produk'   => $request->get('kode_produk'),
-                'jenis_mkr'     => $request->get('jenis_mkr'),
-                'kode_mkr'      => $request->get('kode_mkr'),
+                'data_filter'   => $data_filter->first(),
                 'product_count' => (double)$jumlah_data * 135,
                 'product'       => $data_product
             ]);

@@ -7,10 +7,12 @@
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Dashboard Marketing</span>
-                <span class="text-muted fw-boldest fs-7">Pencapaian Per-Level {{ $year }}</span>
+                <span class="text-muted fw-bold fs-7">Pencapaian Per-Level
+                    <span class="text-dark fw-bolder fs-7">{{ $data_filter->year }}</span>
+                </span>
             </h3>
             <div class="card-toolbar">
-                <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
+                <button id="btnFilterMasterData" class="btn btn-primary">
                     <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
                 </button>
             </div>
@@ -21,8 +23,8 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-boldest mb-2 text-dark">Level Total</span>
                 <div class="d-flex align-items-center">
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -38,8 +40,8 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-boldest mb-2 text-dark">Level Handle</span>
                 <div class="d-flex align-items-center">
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -55,8 +57,8 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Level Non-Handle</span>
                 <div class="d-flex align-items-center">
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -72,8 +74,8 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Level Tube</span>
                 <div class="d-flex align-items-center">
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -89,8 +91,8 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Level Oli</span>
                 <div class="d-flex align-items-center">
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -106,7 +108,7 @@
 <div class="modal fade" tabindex="-2" id="modalFilter">
     <div class="modal-dialog">
         <div class="modal-content" id="modalFilterContent">
-            <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('dashboard.marketing.pencapaian.perlevel') }}">
+            <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="#">
                 <div class="modal-header">
                     <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Faktur</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -122,21 +124,21 @@
                     <div class="fv-row">
                         <label class="form-label required">Tahun:</label>
                         <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun"
-                            @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
+                            @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
                     </div>
                     <div class="fv-row mt-8">
                         <label class="form-label">Salesman:</label>
                         <select id="selectFilterJenisMkr" name="jenis_mkr" class="form-select" data-placeholder="Semua Jenis Marketing" data-allow-clear="true">
-                            <option value="" @if($jenis_mkr != 'SALESMAN' && $jenis_mkr != 'SUPERVISOR') selected @endif>Semua Marketing</option>
-                            <option value="SALESMAN" @if($jenis_mkr == 'SALESMAN') selected @endif>SALESMAN</option>
-                            <option value="SUPERVISOR" @if($jenis_mkr == 'SUPERVISOR') selected @endif>SUPERVISOR</option>
+                            <option value="" @if($data_filter->jenis_mkr != 'SALESMAN' && $data_filter->jenis_mkr != 'SUPERVISOR') selected @endif>Semua Marketing</option>
+                            <option value="SALESMAN" @if($data_filter->jenis_mkr == 'SALESMAN') selected @endif>SALESMAN</option>
+                            <option value="SUPERVISOR" @if($data_filter->jenis_mkr == 'SUPERVISOR') selected @endif>SUPERVISOR</option>
                         </select>
                     </div>
                     <div class="fv-row mt-8">
                         <label id="labelKodeMkr" class="form-label">Kode Marketing:</label>
                         <div class="input-group">
                             <input id="inputFilterKodeMkr" name="kode_mkr" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Marketing" readonly
-                                @if(isset($kode_mkr)) value="{{ $kode_mkr }}" @else value="{{ old('kode_mkr') }}"@endif>
+                                @if(isset($data_filter->kode_mkr)) value="{{ $data_filter->kode_mkr }}" @else value="{{ old('kode_mkr') }}"@endif>
                             <button id="btnFilterMarketing" name="btnFilterMarketing" class="btn btn-icon btn-primary" type="button"
                                 data-toggle="modal" data-target="#tipeMotorSearchModal">
                                 <i class="fa fa-search"></i>
@@ -167,17 +169,20 @@
 <script src="{{ asset('assets/media/charts/amcharts/Animated.js') }}"></script>
 
 <script type="text/javascript">
+    const url = {
+        'clossing_marketing': "{{ route('setting.default.clossing-marketing') }}",
+    }
     let data_chart = {
-        'marketing': "@if($jenis_mkr != '') {{$jenis_mkr}} @endif",
         'total': {!!json_encode($total)!!},
         'handle': {!!json_encode($handle)!!},
         'non_handle': {!!json_encode($non_handle)!!},
         'tube': {!!json_encode($tube)!!},
         'oli': {!!json_encode($oli)!!}
     }
-    const data = {
-        'jenis_mkr': "{{$jenis_mkr}}",
-        'kode_mkr': "{{$kode_mkr}}",
+    const data_filter = {
+        'year': "{{ $data_filter->year }}",
+        'jenis_mkr': "{{ $data_filter->jenis_mkr }}",
+        'kode_mkr': "{{ $data_filter->kode_mkr }}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/dashboard/marketing/dashboardpencapaianperlevel.js') }}?v={{ time() }}"></script>

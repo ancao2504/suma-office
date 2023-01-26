@@ -1,92 +1,144 @@
-window.onload = function () {
-    var marketing = data.jenis_mkr;
-
-    getJenisMkr(marketing);
-}
-
-var btnFilterProses = document.querySelector("#btnFilterProses");
-btnFilterProses.addEventListener("click", function (e) {
-    e.preventDefault();
-    loading.block();
-    document.getElementById("formFilter").submit();
-});
-
-function getJenisMkr(selectFilterJenisMkr = '') {
-    if (selectFilterJenisMkr == 'SUPERVISOR') {
-        $("#labelKodeMkr").html("Supervisor");
-        $("#btnFilterMarketing").prop("disabled", false);
-    } else if (selectFilterJenisMkr == 'SALESMAN') {
-        $("#labelKodeMkr").html("Salesman");
-        $("#btnFilterMarketing").prop("disabled", false);
-    } else {
-        $("#labelKodeMkr").html("Marketing");
-        $("#btnFilterMarketing").prop("disabled", true);
-    }
-}
-
 $(document).ready(function () {
-    $('#btnFilter').on('click', function (e) {
+    // ===============================================================
+    // Load Data
+    // ===============================================================
+    function loadMasterData(year = '', jenis_mkr = '', kode_mkr = '') {
+        loading.block();
+        window.location.href = window.location.origin + window.location.pathname + '?year=' + year.trim() + '&jenis_mkr=' + jenis_mkr.trim() + '&kode_mkr=' + kode_mkr.trim();
+    }
+
+    function getJenisMkr(selectFilterJenisMkr = '') {
+        if (selectFilterJenisMkr == 'SUPERVISOR') {
+            $("#labelKodeMkr").html("Supervisor");
+            $("#btnFilterMarketing").prop("disabled", false);
+        } else if (selectFilterJenisMkr == 'SALESMAN') {
+            $("#labelKodeMkr").html("Salesman");
+            $("#btnFilterMarketing").prop("disabled", false);
+        } else {
+            $("#labelKodeMkr").html("Marketing");
+            $('#inputFilterKodeMkr').val('');
+            $("#btnFilterMarketing").prop("disabled", true);
+        }
+    }
+
+    // ===============================================================
+    // Filter
+    // ===============================================================
+    $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
+
+        $('#inputFilterYear').val(data_filter.year);
+        $('#selectFilterJenisMkr').val(data_filter.jenis_mkr);
+        $('#inputFilterKodeMkr').val(data_filter.kode_mkr);
+
         $('#modalFilter').modal('show');
+    });
+
+    $('#btnFilterProses').on('click', function (e) {
+        e.preventDefault();
+
+        var year = $('#inputFilterYear').val();
+        var jenis_mkr = $('#selectFilterJenisMkr').val();
+        var kode_mkr = $('#inputFilterKodeMkr').val();
+
+        loading.block();
+        loadMasterData(year, jenis_mkr, kode_mkr);
     });
 
     $('#btnFilterReset').on('click', function (e) {
         e.preventDefault();
         var dateObj = new Date();
         var year = dateObj.getUTCFullYear();
-        $('#inputYear').val(year);
-        $('#selectFilterJenisMkr').prop('selectedIndex', 0).change();
-        $('#inputFilterKodeMkr').val('');
+
+        loading.block();
+        $.ajax({
+            url: url.clossing_marketing,
+            method: "get",
+            success: function(response) {
+                loading.release();
+                if (response.status == false) {
+                    Swal.fire({
+                        text: response.message,
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    month = response.data.bulan_aktif;
+                    year = response.data.tahun_aktif;
+
+                    $('#inputFilterYear').val(year);
+                    $('#selectFilterJenisMkr').prop('selectedIndex', 0).change();
+                    $('#inputFilterKodeMkr').val('');
+                }
+            },
+            error: function() {
+                loading.release();
+                Swal.fire({
+                    text: 'Server tidak merespon, coba lagi',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            }
+        });
+    });
+
+    // ===============================================================
+    // Filter MKR
+    // ===============================================================
+    $('#btnFilterMarketing').on('click', function (e) {
+        e.preventDefault();
+        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
+
+        if (jenis_mkr == "SALESMAN") {
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
+        } else if (jenis_mkr == "SUPERVISOR") {
+            loadDataOptionSupervisor();
+            $('#formOptionSupervisor').trigger('reset');
+            $('#modalOptionSupervisor').modal('show');
+        }
+    });
+
+    $('#inputFilterKodeMkr').on('click', function (e) {
+        e.preventDefault();
+        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
+
+        if (jenis_mkr == "SALESMAN") {
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
+        } else if (jenis_mkr == "SUPERVISOR") {
+            loadDataOptionSupervisor();
+            $('#formOptionSupervisor').trigger('reset');
+            $('#modalOptionSupervisor').modal('show');
+        }
+    });
+
+    $('body').on('click', '#optionSalesmanContentModal #selectedOptionSalesman', function (e) {
+        e.preventDefault();
+        $('#inputFilterKodeMkr').val($(this).data('kode_sales'));
+        $('#modalOptionSalesman').modal('hide');
+    });
+
+    $('body').on('click', '#optionSupervisorContentModal #selectedOptionSupervisor', function (e) {
+        e.preventDefault();
+        $('#inputFilterKodeMkr').val($(this).data('kode_spv'));
+        $('#modalOptionSupervisor').modal('hide');
     });
 
     $('#selectFilterJenisMkr').change(function () {
         var selectFilterJenisMkr = $('#selectFilterJenisMkr').val();
         getJenisMkr(selectFilterJenisMkr);
         $('#inputFilterKodeMkr').val('');
-    });
-
-    $('#btnFilterMarketing').on('click', function (e) {
-        e.preventDefault();
-
-        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
-
-        if (jenis_mkr == "SALESMAN") {
-            loadDataSalesman();
-            $('#searchSalesmanForm').trigger('reset');
-            $('#salesmanSearchModal').modal('show');
-        } else if (jenis_mkr == "SUPERVISOR") {
-            loadDataSupervisor();
-            $('#searchSupervisorForm').trigger('reset');
-            $('#supervisorSearchModal').modal('show');
-        }
-    });
-
-    $('#inputFilterKodeMkr').on('click', function (e) {
-        e.preventDefault();
-
-        var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
-
-        if (jenis_mkr == "SALESMAN") {
-            loadDataSalesman();
-            $('#searchSalesmanForm').trigger('reset');
-            $('#salesmanSearchModal').modal('show');
-        } else if (jenis_mkr == "SUPERVISOR") {
-            loadDataSupervisor();
-            $('#searchSupervisorForm').trigger('reset');
-            $('#supervisorSearchModal').modal('show');
-        }
-    });
-
-    $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
-        e.preventDefault();
-        $('#inputFilterKodeMkr').val($(this).data('kode_sales'));
-        $('#salesmanSearchModal').modal('hide');
-    });
-
-    $('body').on('click', '#supervisorContentModal #selectSupervisor', function (e) {
-        e.preventDefault();
-        $('#inputFilterKodeMkr').val($(this).data('kode_spv'));
-        $('#supervisorSearchModal').modal('hide');
     });
 });
 

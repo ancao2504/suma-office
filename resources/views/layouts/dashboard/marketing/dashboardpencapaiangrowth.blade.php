@@ -7,11 +7,12 @@
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Dashboard Marketing</span>
-                <span class="text-muted fw-boldest fs-7">Growth Pencapaian {{ $year }}
+                <span class="text-muted fw-bold fs-7">Growth Pencapaian
+                    <span class="text-dark fw-bolder fs-7">{{ $data_filter->year }}</span>
                 </span>
             </h3>
             <div class="card-toolbar">
-                <button id="btnFilter" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
+                <button id="btnFilterMasterData" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
                     <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
                 </button>
             </div>
@@ -22,21 +23,21 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Grand Total</span>
                 <div class="d-flex align-items-center">
-                    @if($jenis_mkr == "")
+                    @if($data_filter->jenis_mkr == "")
                     <span class="badge badge-secondary fs-8 fw-boldest me-2">MKR : ALL</span>
                     @else
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">MKR : {{ $jenis_mkr }}</span>
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">MKR : {{ $data_filter->jenis_mkr }}</span>
                     @endif
-                    @if($level_produk == "")
+                    @if($data_filter->level_produk == "")
                     <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                     @else
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level_produk }}</span>
                     @endif
-                    @if($kode_produk != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
+                    @if($data_filter->kode_produk != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->kode_produk }}</span>
                     @endif
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -52,21 +53,21 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Total Marketing</span>
                 <div class="d-flex align-items-center">
-                    @if($jenis_mkr == "")
+                    @if($data_filter->jenis_mkr == "")
                     <span class="badge badge-secondary fs-8 fw-boldest me-2">MKR : ALL</span>
                     @else
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">MKR : {{ $jenis_mkr }}</span>
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">MKR : {{ $data_filter->jenis_mkr }}</span>
                     @endif
-                    @if($level_produk == "")
+                    @if($data_filter->level_produk == "")
                     <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : ALL</span>
                     @else
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $level_produk }}</span>
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">LEVEL : {{ $data_filter->level_produk }}</span>
                     @endif
-                    @if($kode_produk != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $kode_produk }}</span>
+                    @if($data_filter->kode_produk != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">PRODUK : {{ $data_filter->kode_produk }}</span>
                     @endif
-                    @if($kode_mkr != "")
-                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $jenis_mkr }} : {{ $kode_mkr }}</span>
+                    @if($data_filter->kode_mkr != "")
+                    <span class="badge badge-secondary fs-8 fw-boldest me-2">{{ $data_filter->jenis_mkr }} : {{ $data_filter->kode_mkr }}</span>
                     @endif
                 </div>
             </h3>
@@ -82,7 +83,7 @@
 <div class="modal fade" tabindex="-2" id="modalFilter">
     <div class="modal-dialog">
         <div class="modal-content" id="modalFilterContent">
-            <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('dashboard.marketing.pencapaian.growth') }}">
+            <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="#">
                 <div class="modal-header">
                     <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Faktur</h5>
                     <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -98,23 +99,23 @@
                     <div class="fv-row">
                         <label class="form-label required">Tahun:</label>
                         <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun"
-                            @if(isset($year)) value="{{ $year }}" @else value="{{ old('year') }}"@endif>
+                            @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
                     </div>
                     <div class="fv-row mt-8">
                         <label class="form-label">Level Produk:</label>
                         <select id="selectFilterLevelProduk" name="level_produk" class="form-select" data-placeholder="Semua Level Produk" data-allow-clear="true">
-                            <option value="" @if($level_produk != 'HANDLE' && $level_produk != 'NON_HANDLE' && $level_produk != 'TUBE' && $level_produk != 'OLI') selected @endif>Semua Level Produk</option>
-                            <option value="HANDLE" @if($level_produk == 'HANDLE') selected @endif>Handle</option>
-                            <option value="NON_HANDLE" @if($level_produk == 'NON_HANDLE') selected @endif>Non-Handle</option>
-                            <option value="TUBE" @if($level_produk == 'TUBE') selected @endif>Tube</option>
-                            <option value="OLI" @if($level_produk == 'OLI') selected @endif>Oli</option>
+                            <option value="" @if($data_filter->level_produk != 'HANDLE' && $data_filter->level_produk != 'NON_HANDLE' && $data_filter->level_produk != 'TUBE' && $data_filter->level_produk != 'OLI') selected @endif>Semua Level Produk</option>
+                            <option value="HANDLE" @if($data_filter->level_produk == 'HANDLE') selected @endif>Handle</option>
+                            <option value="NON_HANDLE" @if($data_filter->level_produk == 'NON_HANDLE') selected @endif>Non-Handle</option>
+                            <option value="TUBE" @if($data_filter->level_produk == 'TUBE') selected @endif>Tube</option>
+                            <option value="OLI" @if($data_filter->level_produk == 'OLI') selected @endif>Oli</option>
                         </select>
                     </div>
                     <div class="fv-row mt-8">
                         <label class="form-label">Produk:</label>
                         <div class="input-group">
                             <input id="inputFilterKodeProduk" name="kode_produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
-                                @if(isset($kode_produk)) value="{{ $kode_produk }}" @else value="{{ old('kode_produk') }}"@endif>
+                                @if(isset($data_filter->kode_produk)) value="{{ $data_filter->kode_produk }}" @else value="{{ old('kode_produk') }}"@endif>
                             <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button"
                                 data-toggle="modal" data-target="#produkSearchModalForm">
                                 <i class="fa fa-search"></i>
@@ -124,16 +125,16 @@
                     <div class="fv-row mt-8">
                         <label class="form-label">Jenis Marketing:</label>
                         <select id="selectFilterJenisMkr" name="jenis_mkr" class="form-select" data-placeholder="Semua Jenis Marketing" data-allow-clear="true">
-                            <option value="" @if($jenis_mkr != 'SALESMAN' && $jenis_mkr != 'SUPERVISOR') selected @endif>Semua Marketing</option>
-                            <option value="SALESMAN" @if($jenis_mkr == 'SALESMAN') selected @endif>SALESMAN</option>
-                            <option value="SUPERVISOR" @if($jenis_mkr == 'SUPERVISOR') selected @endif>SUPERVISOR</option>
+                            <option value="" @if($data_filter->jenis_mkr != 'SALESMAN' && $data_filter->jenis_mkr != 'SUPERVISOR') selected @endif>Semua Marketing</option>
+                            <option value="SALESMAN" @if($data_filter->jenis_mkr == 'SALESMAN') selected @endif>SALESMAN</option>
+                            <option value="SUPERVISOR" @if($data_filter->jenis_mkr == 'SUPERVISOR') selected @endif>SUPERVISOR</option>
                         </select>
                     </div>
                     <div class="fv-row mt-8">
                         <label id="labelKodeMkr" class="form-label">Kode Marketing:</label>
                         <div class="input-group">
                             <input id="inputFilterKodeMkr" name="kode_mkr" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Marketing" readonly
-                                @if(isset($kode_mkr)) value="{{ $kode_mkr }}" @else value="{{ old('kode_mkr') }}"@endif>
+                                @if(isset($data_filter->kode_mkr)) value="{{ $data_filter->kode_mkr }}" @else value="{{ old('kode_mkr') }}"@endif>
                             <button id="btnFilterMarketing" name="btnFilterMarketing" class="btn btn-icon btn-primary" type="button"
                                 data-toggle="modal" data-target="#tipeMotorSearchModal">
                                 <i class="fa fa-search"></i>
@@ -144,7 +145,7 @@
                 <div class="modal-footer justify-content-between">
                     <button id="btnFilterReset" class="btn btn-danger" role="button">Reset Filter</button>
                     <div class="text-end">
-                        <button id="btnFilterProses" type="submit" class="btn btn-primary">Terapkan</button>
+                        <button id="btnFilterProses" type="button" class="btn btn-primary">Terapkan</button>
                         <button id="btnFilterClose" name="btnClose" type="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -164,12 +165,19 @@
 <script src="{{ asset('assets/media/charts/amcharts/Animated.js') }}"></script>
 
 <script type="text/javascript">
+    const url = {
+        'clossing_marketing': "{{ route('setting.default.clossing-marketing') }}",
+    }
     let data_chart = {
         'total':{!!json_encode($total)!!},
         'marketing':{!!json_encode($marketing)!!},
     }
-    const data = {
-        'jenis_mkr': "{{ $jenis_mkr }}",
+    const data_filter = {
+        'year': "{{ $data_filter->year }}",
+        'level_produk': "{{ $data_filter->level_produk }}",
+        'kode_produk': "{{ $data_filter->kode_produk }}",
+        'jenis_mkr': "{{ $data_filter->jenis_mkr }}",
+        'kode_mkr': "{{ $data_filter->kode_mkr }}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/dashboard/marketing/dashboardpencapaiangrowth.js') }}?time={{ time() }}"></script>

@@ -1,10 +1,11 @@
-function loadDataSupervisor(page = 1, per_page = 10, search = '') {
+function loadDataOptionSupervisor(page = 1, per_page = 10, search = '') {
     loading.block();
     $.ajax({
         url: base_url + '/option/supervisor' + "?search=" + search + "&per_page=" + per_page + "&page=" + page,
         method: "get",
-        success: function (response) {
+        success: function(response) {
             loading.release();
+
             if (response.status == false) {
                 Swal.fire({
                     text: response.message,
@@ -16,7 +17,7 @@ function loadDataSupervisor(page = 1, per_page = 10, search = '') {
                     }
                 });
             } else {
-                $('#supervisorContentModal').html(response.data);
+                $('#optionSupervisorContentModal').html(response.data);
             }
         },
         error: function() {
@@ -35,41 +36,37 @@ function loadDataSupervisor(page = 1, per_page = 10, search = '') {
 }
 
 $(document).ready(function () {
-    $(document).on('click', '#searchSupervisorForm #pageSupervisor .pagination .page-item a', function () {
-        pages = $(this)[0].getAttribute("data-page");
-        page = pages.split('?page=')[1];
+    $(document).on('click', '#formOptionSupervisor #paginationOptionSupervisor .page-item a', function () {
+        var page = $(this)[0].getAttribute("data-page");
+        var per_page = $('#formOptionSupervisor #selectPerPageOptionSupervisor').val();
+        var search = $('#formOptionSupervisor #inputSearchOptionSupervisor').val();
 
-        var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
-        var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
-
-        loadDataSupervisor(page, per_page_spv, search_spv);
+        loadDataOptionSupervisor(page, per_page, search);
     });
 
-    $('body').on('change', '#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor', function (e) {
+    $('body').on('change', '#formOptionSupervisor #selectPerPageOptionSupervisor', function (e) {
         e.preventDefault();
+        var per_page = $('#formOptionSupervisor #selectPerPageOptionSupervisor').val();
+        var start_record = $('#formOptionSupervisor #startRecordOptionSupervisor').html();
+        var page = Math.ceil(start_record / per_page);
+        var search = $('#formOptionSupervisor #inputSearchOptionSupervisor').val();
 
-        var start_record_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisorInfo #startRecordSupervisor').html();
-        var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
-        var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
-
-        var page = Math.ceil(start_record_spv / per_page_spv);
-
-        loadDataSupervisor(page, per_page_spv, search_spv);
+        loadDataOptionSupervisor(page, per_page, search);
     });
 
-    $('body').on('click', '#searchSupervisorForm #btnSearchSupervisor', function (e) {
+    $('body').on('click', '#formOptionSupervisor #btnSearchOptionSupervisor', function (e) {
         e.preventDefault();
-        var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
-        var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
+        var per_page = $('#formOptionSupervisor #selectPerPageSupervisor').val();
+        var search = $('#formOptionSupervisor #inputSearchOptionSupervisor').val();
 
-        loadDataSupervisor(1, per_page_spv, search_spv);
+        loadDataOptionSupervisor(1, per_page, search);
     });
 
-    $('#searchSupervisorForm #inputSearchSupervisor').on('change', function (e) {
+    $('#formOptionSupervisor #inputSearchOptionSupervisor').on('change', function (e) {
         e.preventDefault();
-        var search_spv = $('#searchSupervisorForm #inputSearchSupervisor').val();
-        var per_page_spv = $('#searchSupervisorForm #supervisorContentModal #pageSupervisor #selectPerPageSupervisor').val();
+        var per_page = $('#formOptionSupervisor #selectPerPageSupervisor').val();
+        var search = $('#formOptionSupervisor #inputSearchOptionSupervisor').val();
 
-        loadDataSupervisor(1, per_page_spv, search_spv);
+        loadDataOptionSupervisor(1, per_page, search);
     });
 });
