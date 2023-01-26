@@ -1,34 +1,34 @@
 <?php
 
-use app\Auth\AuthController;
+use app\Http\Controllers\Auth\AuthController;
 
-use app\Profile\UserController;
-use app\Option\OptionController;
-use app\Profile\DealerController;
-use app\Profile\AccountController;
-use app\Orders\Cart\CartController;
-use app\Parts\PartNumberController;
-use app\Validasi\ValidasiController;
-use app\Parts\uplooadImageController;
+use app\Http\Controllers\Profile\UserController;
+use app\Http\Controllers\Option\OptionController;
+use app\Http\Controllers\Profile\DealerController;
+use app\Http\Controllers\Profile\AccountController;
+use app\Http\Controllers\Orders\Cart\CartController;
+use app\Http\Controllers\Parts\PartNumberController;
+use app\Http\Controllers\Validasi\ValidasiController;
+use app\Http\Controllers\Parts\uplooadImageController;
 use Illuminate\Support\Facades\Route;
-use app\Dashboard\DashboardSalesmanController;
-use app\Setting\Diskon\DiskonDealerController;
-use app\Setting\Diskon\DiskonProdukController;
-use app\Orders\Penerimaan\PembayaranController;
-use app\Orders\Penerimaan\SuratJalanController;
-use app\Setting\CetakUlang\CetakUlangController;
-use app\setting\Diskon\DiskonProdukDealerController;
-use app\Orders\FakturController;
-use app\Setting\HargaNetto\HargaNettoPartsControllers;
-use app\Dashboard\Marketing\DashboardMarketingController;
-use app\Parts\StockHarianController;
-use app\Visit\PlanningVisitController;
-use app\Orders\TrackingOrderController;
-use app\Setting\HargaNetto\HargaNettoPartsDealerControllers;
-use app\Orders\Cart\Index\CartIndexController;
-use app\Orders\PembayaranFaktur\PembayaranFakturController;
-use app\Orders\PurchaseOrderForm\PurchaseOrderFormController;
-use app\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use app\Http\Controllers\Dashboard\DashboardSalesmanController;
+use app\Http\Controllers\Setting\Diskon\DiskonDealerController;
+use app\Http\Controllers\Setting\Diskon\DiskonProdukController;
+use app\Http\Controllers\Orders\Penerimaan\PembayaranController;
+use app\Http\Controllers\Orders\Penerimaan\SuratJalanController;
+use app\Http\Controllers\Setting\CetakUlang\CetakUlangController;
+use app\Http\Controllers\setting\Diskon\DiskonProdukDealerController;
+use app\Http\Controllers\Orders\FakturController;
+use app\Http\Controllers\Setting\HargaNetto\HargaNettoPartsControllers;
+use app\Http\Controllers\Dashboard\Marketing\DashboardMarketingController;
+use app\Http\Controllers\Parts\StockHarianController;
+use app\Http\Controllers\Visit\PlanningVisitController;
+use app\Http\Controllers\Orders\TrackingOrderController;
+use app\Http\Controllers\Setting\HargaNetto\HargaNettoPartsDealerControllers;
+use app\Http\Controllers\Orders\Cart\Index\CartIndexController;
+use app\Http\Controllers\Orders\PembayaranFaktur\PembayaranFakturController;
+use app\Http\Controllers\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use app\Http\Controllers\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 
 /*
 |--------------------------------------------------------------------------
