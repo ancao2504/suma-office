@@ -1,34 +1,34 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Auth\AuthController;
+use App\Auth\AuthController;
 
-use Profile\UserController;
-use Option\OptionController;
-use Profile\DealerController;
-use Profile\AccountController;
-use Orders\Cart\CartController;
-use Parts\PartNumberController;
-use Validasi\ValidasiController;
-use Parts\uplooadImageController;
-use Dashboard\DashboardSalesmanController;
-use Setting\Diskon\DiskonDealerController;
-use Setting\Diskon\DiskonProdukController;
-use Orders\Penerimaan\PembayaranController;
-use Orders\Penerimaan\SuratJalanController;
-use Setting\CetakUlang\CetakUlangController;
-use setting\Diskon\DiskonProdukDealerController;
-use Orders\FakturController;
-use Setting\HargaNetto\HargaNettoPartsControllers;
-use Dashboard\Marketing\DashboardMarketingController;
-use Parts\StockHarianController;
-use Visit\PlanningVisitController;
-use Orders\TrackingOrderController;
-use Setting\HargaNetto\HargaNettoPartsDealerControllers;
-use Orders\Cart\Index\CartIndexController;
-use Orders\PembayaranFaktur\PembayaranFakturController;
-use Orders\PurchaseOrderForm\PurchaseOrderFormController;
-use Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use App\Profile\UserController;
+use App\Option\OptionController;
+use App\Profile\DealerController;
+use App\Profile\AccountController;
+use App\Orders\Cart\CartController;
+use App\Parts\PartNumberController;
+use App\Validasi\ValidasiController;
+use App\Parts\uplooadImageController;
+use App\Dashboard\DashboardSalesmanController;
+use App\Setting\Diskon\DiskonDealerController;
+use App\Setting\Diskon\DiskonProdukController;
+use App\Orders\Penerimaan\PembayaranController;
+use App\Orders\Penerimaan\SuratJalanController;
+use App\Setting\CetakUlang\CetakUlangController;
+use App\setting\Diskon\DiskonProdukDealerController;
+use App\Orders\FakturController;
+use App\Setting\HargaNetto\HargaNettoPartsControllers;
+use App\Dashboard\Marketing\DashboardMarketingController;
+use App\Parts\StockHarianController;
+use App\Visit\PlanningVisitController;
+use App\Orders\TrackingOrderController;
+use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
+use App\Orders\Cart\Index\CartIndexController;
+use App\Orders\PembayaranFaktur\PembayaranFakturController;
+use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 
 /*
 |--------------------------------------------------------------------------
