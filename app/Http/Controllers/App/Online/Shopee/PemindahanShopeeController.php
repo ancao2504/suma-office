@@ -8,12 +8,12 @@ use App\Http\Controllers\Controller;
 
 class PemindahanShopeeController extends Controller
 {
-    public function daftarPemindahanStok(Request $request){
-        $responseApi = ApiService::dafrarPemindahanStok(
+    public function daftarPemindahan(Request $request){
+        $responseApi = ApiService::OnlinePemindahanShopeeDaftar('2023-01-01','2023-01-31',
             $request->get('search'),
-            $request->get('tanggal'),
-            $request->get('page'), 
-            $request->get('per_page')
+            $request->get('page'),
+            $request->get('per_page'),
+            'PD',
         );
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -47,7 +47,7 @@ class PemindahanShopeeController extends Controller
                     $data_dtl = base64_encode(
                         json_encode(
                             array(
-                                $data->no_dokumen => $data->detail
+                                $data->nomor_dokumen => $data->detail
                             )
                         )
                     );
@@ -55,12 +55,11 @@ class PemindahanShopeeController extends Controller
                                 <tr class="fs-6 fw-bold text-gray-700 klikdokumen"
                                     data-dtl='.$data_dtl.'>
                                     <td class="text-center">'.$no.'</td>
-                                    <td>'.$data->no_dokumen.'</td>
+                                    <td>'.$data->nomor_dokumen.'</td>
                                     <td>'.date('d/m/Y', strtotime($data->tanggal)).'</td>
-                                    <td>'.$data->dari_lokasi.'</td>
-                                    <td>'.$data->ke_lokasi.'</td>
+                                    <td>'.$data->lokasi_awal.'</td>
+                                    <td>'.$data->lokasi_tujuan.'</td>
                                     <td>'.$data->keterangan.'</td>
-                                    <td>'.preg_replace('/[^a-zA-Z]+/', '', $data->usertime).'</td>
                                     <td class="text-center">
                                         <div class="form-check form-check-custom form-check-solid form-check-md d-flex align-items-center">
                                             <input class="form-check-input" type="checkbox" value="1" id="filter_select_all" checked>

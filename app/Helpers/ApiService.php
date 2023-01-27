@@ -1733,18 +1733,18 @@ class ApiService
         return $response;
     }
 
-    public static function DafrarPemindahanStok($search, $tanggal, $page, $per_page)
+    public static function OnlinePemindahanShopeeDaftar($start_date, $end_date, $search, $page, $per_page, $companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
-        $request = 'online/pemindahanstok/daftar';
+        $request = 'online/pemindahan/shopee/daftar';
         $header = ['Authorization' => $credential];
-        $tanggal[0] = '2023-01-20';
-        $tanggal[1] = '2023-01-26';
         $body = [
-            'search'    => trim($search),
-            'tanggal'   => $tanggal,
-            'page'      => $page ?? 1,
-            'per_page'  => $per_page ?? 10,
+            'search'        => trim($search),
+            'start_date'    => trim($start_date),
+            'end_date'      => trim($end_date),
+            'companyid'     => trim($companyid),
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 10,
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
