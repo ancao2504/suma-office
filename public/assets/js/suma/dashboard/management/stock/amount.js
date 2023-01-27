@@ -46,6 +46,10 @@ $(function chartStockAll() {
 
             legend.data.setAll(series.dataItems);
             series.appear(1000, 100);
+
+            // series.slices.template.events.on("click", function(ev) {
+            //     console.log("Clicked on a column", ev.target);
+            // });
         });
     }
 });

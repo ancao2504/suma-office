@@ -1,34 +1,35 @@
 <?php
 
-use app\Auth\AuthController;
+use App\Auth\AuthController;
 
-use app\Profile\UserController;
-use app\Option\OptionController;
-use app\Profile\DealerController;
-use app\Profile\AccountController;
-use app\Orders\Cart\CartController;
-use app\Parts\PartNumberController;
-use app\Validasi\ValidasiController;
-use app\Parts\uplooadImageController;
+use App\Profile\UserController;
+use App\Option\OptionController;
+use App\Orders\FakturController;
+use App\Profile\DealerController;
+use App\Profile\AccountController;
+use App\Orders\Cart\CartController;
+use App\Parts\PartNumberController;
+use App\Parts\StockHarianController;
+use App\Validasi\ValidasiController;
+use App\Parts\uplooadImageController;
 use Illuminate\Support\Facades\Route;
-use app\Dashboard\DashboardSalesmanController;
-use app\Setting\Diskon\DiskonDealerController;
-use app\Setting\Diskon\DiskonProdukController;
-use app\Orders\Penerimaan\PembayaranController;
-use app\Orders\Penerimaan\SuratJalanController;
-use app\Setting\CetakUlang\CetakUlangController;
-use app\setting\Diskon\DiskonProdukDealerController;
-use app\Orders\FakturController;
-use app\Setting\HargaNetto\HargaNettoPartsControllers;
-use app\Dashboard\Marketing\DashboardMarketingController;
-use app\Parts\StockHarianController;
-use app\Visit\PlanningVisitController;
-use app\Orders\TrackingOrderController;
-use app\Setting\HargaNetto\HargaNettoPartsDealerControllers;
-use app\Orders\Cart\Index\CartIndexController;
-use app\Orders\PembayaranFaktur\PembayaranFakturController;
-use app\Orders\PurchaseOrderForm\PurchaseOrderFormController;
-use app\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use App\Visit\PlanningVisitController;
+use App\Orders\TrackingOrderController;
+use App\Dashboard\DashboardSalesmanController;
+use App\Orders\Cart\Index\CartIndexController;
+use App\Setting\Diskon\DiskonDealerController;
+use App\Setting\Diskon\DiskonProdukController;
+use App\Orders\Penerimaan\PembayaranController;
+use App\Orders\Penerimaan\SuratJalanController;
+use App\Setting\CetakUlang\CetakUlangController;
+use App\setting\Diskon\DiskonProdukDealerController;
+use App\Http\Controllers\app\Online\ShopeeController;
+use App\Setting\HargaNetto\HargaNettoPartsControllers;
+use App\Dashboard\Marketing\DashboardMarketingController;
+use App\Orders\PembayaranFaktur\PembayaranFakturController;
+use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
+use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -265,7 +266,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/option/groupproduk', 'OptionGroupProduk')->name('group-produk');
             });
         });
-
         Route::name('setting.')->group(function () {
             Route::name('default.')->group(function () {
                 Route::get('/setting/clossingmkr', 'App\Setting\SettingController@clossingMarketing')->name('clossing-marketing');
@@ -357,6 +357,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::post('/visit/planningvisit/hapus', 'hapusPlanningVisit')->name('hapus');
                 });
             });
+        });
+
+        // buat route group online.
+        Route::name('online.')->group(function(){
+            // Route::controller(ShopeeController::class)->group(function () {
+                Route::get('/online/pemindahan/stok', [ShopeeController::class,'daftarPemindahanStok'])->name('daftar');
+            // });
         });
     });
 

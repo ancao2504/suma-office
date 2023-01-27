@@ -3,7 +3,7 @@
 @section('subtitle','Stock Harian')
 @section('container')
     <div class="row g-0">
-        <form id="formStockHarian" action="{{ route('parts.stock-harian-proses') }}" method="get" autocomplete="off">
+        <form id="formStockHarian" action="{{ route('parts.stockharian.proses') }}" method="get" autocomplete="off">
             <div class="card card-flush">
                 <div class="card-header align-items-center border-0 mt-4">
                     <h3 class="card-title align-items-start flex-column">
@@ -166,7 +166,7 @@
 
             //     $.ajax({
             //         type: "get",
-            //         url: "{{ route('parts.stock-harian-proses') }}",
+            //         url: "{{ route('parts.stockharian.proses') }}",
             //         success: function (d){
             //             var a = document.createElement("a");
             //             a.download = "filename.xls";
