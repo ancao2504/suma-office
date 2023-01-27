@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\app\Online;
+namespace App\Http\Controllers\app\Online\Pindahlokasi;
 
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ShopeeController extends Controller
+class PindahlokasiShopeeController extends Controller
 {
     public function daftarPemindahanStok(Request $request){
         $responseApi = ApiService::dafrarPemindahanStok(
@@ -46,8 +46,8 @@ class ShopeeController extends Controller
                 foreach($data->data as $data){
                     $data_dtl = base64_encode(
                         json_encode(
-
                             array(
+                                $data->no_dokumen => $data->detail
                             )
                         )
                     );
@@ -96,7 +96,7 @@ class ShopeeController extends Controller
         }
 
 
-        return view('layouts.online.shopee', [
+        return view('layouts.online.pindahlokasi.shopee', [
             'title_menu'    => 'Update Stok Shopee',
             'table'         => $view_table,
         ]);

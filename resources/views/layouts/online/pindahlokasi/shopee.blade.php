@@ -404,7 +404,10 @@
                 // ssat list doble klik
                 tboady.on("dblclick", "tr.klikdokumen", function(event) {
                     if (!$(event.target).is("button.btn-edit, span.bi.bi-pencil")){
-                        var data_dok = JSON.parse($(this).attr('data-dtl'));
+                        // decode_base64
+                        // var data_dok = btoa(JSON.parse($(this).attr('data-dtl')));
+                        var data_dok = $(this).attr('data-dtl');
+                        console.log(btoa(data_dok));
                         $('#card-detail tbody').html('');
                         for (var key in data_dok) {
                             // cek apakah object tersebut ada dalam data_dok
