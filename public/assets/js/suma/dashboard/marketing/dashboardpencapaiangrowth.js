@@ -1,87 +1,146 @@
-window.onload = function () {
-    var marketing = data.jenis_mkr;
-
-    getJenisMkr(marketing);
-}
-
-var btnFilterProses = document.querySelector("#btnFilterProses");
-btnFilterProses.addEventListener("click", function (e) {
-    e.preventDefault();
-    loading.block();
-    document.getElementById("formFilter").submit();
-});
-
-function getJenisMkr(selectFilterJenisMkr = '') {
-    if (selectFilterJenisMkr == 'SUPERVISOR') {
-        $("#labelKodeMkr").html("Supervisor");
-        $("#btnFilterMarketing").prop("disabled", false);
-    } else if (selectFilterJenisMkr == 'SALESMAN') {
-        $("#labelKodeMkr").html("Salesman");
-        $("#btnFilterMarketing").prop("disabled", false);
-    } else {
-        $("#labelKodeMkr").html("Marketing");
-        $('#inputFilterKodeMkr').val('');
-        $("#btnFilterMarketing").prop("disabled", true);
-    }
-}
-
 $(document).ready(function () {
-    $('#btnFilter').on('click', function (e) {
+    // ===============================================================
+    // Load Data
+    // ===============================================================
+    function loadMasterData(year = '', level = '', produk = '', jenis_mkr = '', kode_mkr = '') {
+        loading.block();
+        window.location.href = window.location.origin + window.location.pathname + '?year=' + year.trim() +
+            '&level_produk=' + level.trim() + '&kode_produk=' + produk.trim() + '&jenis_mkr=' + jenis_mkr.trim() + '&kode_mkr=' + kode_mkr.trim();
+    }
+
+    function getJenisMkr(selectFilterJenisMkr = '') {
+        if (selectFilterJenisMkr == 'SUPERVISOR') {
+            $("#labelKodeMkr").html("Supervisor");
+            $("#btnFilterMarketing").prop("disabled", false);
+        } else if (selectFilterJenisMkr == 'SALESMAN') {
+            $("#labelKodeMkr").html("Salesman");
+            $("#btnFilterMarketing").prop("disabled", false);
+        } else {
+            $("#labelKodeMkr").html("Marketing");
+            $('#inputFilterKodeMkr').val('');
+            $("#btnFilterMarketing").prop("disabled", true);
+        }
+    }
+
+    // ===============================================================
+    // Filter
+    // ===============================================================
+    $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
+
+        $('#inputFilterYear').val(data_filter.year);
+        $('#selectFilterLevelProduk').val(data_filter.level_produk);
+        $('#inputFilterKodeProduk').val(data_filter.kode_produk);
+        $('#selectFilterJenisMkr').val(data_filter.jenis_mkr);
+        $('#inputFilterKodeMkr').val(data_filter.kode_mkr);
+
         $('#modalFilter').modal('show');
+    });
+
+    $('#btnFilterProses').on('click', function (e) {
+        e.preventDefault();
+
+        var year = $('#inputFilterYear').val();
+        var level_produk = $('#selectFilterLevelProduk').val();
+        var kode_produk = $('#inputFilterKodeProduk').val();
+        var jenis_mkr = $('#selectFilterJenisMkr').val();
+        var kode_mkr = $('#inputFilterKodeMkr').val();
+
+        loading.block();
+        loadMasterData(year, level_produk, kode_produk, jenis_mkr, kode_mkr);
     });
 
     $('#btnFilterReset').on('click', function (e) {
         e.preventDefault();
         var dateObj = new Date();
         var year = dateObj.getUTCFullYear();
-        $('#inputYear').val(year);
-        $('#selectFilterLevelProduk').prop('selectedIndex', 0).change();
-        $('#inputFilterKodeProduk').val('');
-        $('#selectFilterJenisMkr').prop('selectedIndex', 0).change();
-        $('#inputFilterKodeMkr').val('');
+
+        loading.block();
+        $.ajax({
+            url: url.clossing_marketing,
+            method: "get",
+            success: function(response) {
+                loading.release();
+                if (response.status == false) {
+                    Swal.fire({
+                        text: response.message,
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    month = response.data.bulan_aktif;
+                    year = response.data.tahun_aktif;
+
+                    $('#inputFilterYear').val(year);
+                    $('#selectFilterLevelProduk').prop('selectedIndex', 0).change();
+                    $('#inputFilterKodeProduk').val('');
+                    $('#selectFilterJenisMkr').prop('selectedIndex', 0).change();
+                    $('#inputFilterKodeMkr').val('');
+                }
+            },
+            error: function() {
+                loading.release();
+                Swal.fire({
+                    text: 'Server tidak merespon, coba lagi',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            }
+        });
     });
 
-    $('#btnFilterProduk').on('click', function (e) {
-        e.preventDefault();
-
-        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
-        loadDataProduk(1, 10, '', selectFilterLevelProduk);
-        $('#searchProdukForm').trigger('reset');
-        $('#produkSearchModal').modal('show');
-    });
-
-    $('#inputFilterKodeProduk').on('click', function (e) {
-        e.preventDefault();
-
-        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
-        loadDataProduk(1, 10, '', selectFilterLevelProduk);
-        $('#searchProdukForm').trigger('reset');
-        $('#produkSearchModal').modal('show');
-    });
-
-    $('body').on('click', '#produkContentModal #selectProduk', function (e) {
-        e.preventDefault();
-        $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
-        $('#produkSearchModal').modal('hide');
-    });
-
+    // ===============================================================
+    // Filter Produk
+    // ===============================================================
     $('#selectFilterLevelProduk').change(function () {
         $('#inputFilterKodeProduk').val('');
     });
 
+    $('#inputFilterKodeProduk').on('click', function (e) {
+        e.preventDefault();
+        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
+        loadDataOptionProduk(1, 10, selectFilterLevelProduk, '');
+        $('#formOptionGroupProduk').trigger('reset');
+        $('#modalOptionGroupProduk').modal('show');
+    });
+
+    $('#btnFilterProduk').on('click', function (e) {
+        e.preventDefault();
+        var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
+        loadDataOptionProduk(1, 10, selectFilterLevelProduk, '');
+        $('#formOptionGroupProduk').trigger('reset');
+        $('#modalOptionGroupProduk').modal('show');
+    });
+
+    $('body').on('click', '#optionProdukContentModal #selectedOptionProduk', function (e) {
+        e.preventDefault();
+        $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
+        $('#modalOptionGroupProduk').modal('hide');
+    });
+
+    // ===============================================================
+    // Filter MKR
+    // ===============================================================
     $('#btnFilterMarketing').on('click', function (e) {
         e.preventDefault();
         var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
 
         if (jenis_mkr == "SALESMAN") {
-            loadDataSalesman();
-            $('#searchSalesmanForm').trigger('reset');
-            $('#salesmanSearchModal').modal('show');
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
         } else if (jenis_mkr == "SUPERVISOR") {
-            loadDataSupervisor();
-            $('#searchSupervisorForm').trigger('reset');
-            $('#supervisorSearchModal').modal('show');
+            loadDataOptionSupervisor();
+            $('#formOptionSupervisor').trigger('reset');
+            $('#modalOptionSupervisor').modal('show');
         }
     });
 
@@ -90,26 +149,26 @@ $(document).ready(function () {
         var jenis_mkr = document.getElementById("selectFilterJenisMkr").value;
 
         if (jenis_mkr == "SALESMAN") {
-            loadDataSalesman();
-            $('#searchSalesmanForm').trigger('reset');
-            $('#salesmanSearchModal').modal('show');
+            loadDataOptionSalesman();
+            $('#formOptionSalesman').trigger('reset');
+            $('#modalOptionSalesman').modal('show');
         } else if (jenis_mkr == "SUPERVISOR") {
-            loadDataSupervisor();
-            $('#searchSupervisorForm').trigger('reset');
-            $('#supervisorSearchModal').modal('show');
+            loadDataOptionSupervisor();
+            $('#formOptionSupervisor').trigger('reset');
+            $('#modalOptionSupervisor').modal('show');
         }
     });
 
-    $('body').on('click', '#salesmanContentModal #selectSalesman', function (e) {
+    $('body').on('click', '#optionSalesmanContentModal #selectedOptionSalesman', function (e) {
         e.preventDefault();
         $('#inputFilterKodeMkr').val($(this).data('kode_sales'));
-        $('#salesmanSearchModal').modal('hide');
+        $('#modalOptionSalesman').modal('hide');
     });
 
-    $('body').on('click', '#supervisorContentModal #selectSupervisor', function (e) {
+    $('body').on('click', '#optionSupervisorContentModal #selectedOptionSupervisor', function (e) {
         e.preventDefault();
         $('#inputFilterKodeMkr').val($(this).data('kode_spv'));
-        $('#supervisorSearchModal').modal('hide');
+        $('#modalOptionSupervisor').modal('hide');
     });
 
     $('#selectFilterJenisMkr').change(function () {

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-     // ===============================================================
+    // ===============================================================
     // Load Data
     // ===============================================================
     function loadMasterData(year = '', month = '', fields = '', level = '', produk = '') {
@@ -18,19 +18,79 @@ $(document).ready(function () {
         $('#selectFilterMonth').prop('selectedIndex', data_filter.month - 1).change();
         $('#selectFilterFields').val(data_filter.fields);
         $('#selectFilterLevelProduk').val(data_filter.level);
-        $('#inputFilterProduk').val(data_filter.produk);
+        $('#inputFilterKodeProduk').val(data_filter.produk);
 
         $('#modalFilter').modal('show');
+    });
+
+    $('#btnFilterProses').on('click', function (e) {
+        e.preventDefault();
+
+        var year = $('#inputFilterYear').val();
+        var month = $('#selectFilterMonth').val();
+        var fields = $('#selectFilterFields').val();
+        var level = $('#selectFilterLevelProduk').val();
+        var produk = $('#inputFilterKodeProduk').val();
+
+        loading.block();
+        loadMasterData(year, month, fields, level, produk);
+    });
+
+    $('#btnFilterReset').on('click', function (e) {
+        e.preventDefault();
+        var dateObj = new Date();
+        var year = dateObj.getUTCFullYear();
+
+        loading.block();
+        $.ajax({
+            url: url.clossing_marketing,
+            method: "get",
+            success: function(response) {
+                loading.release();
+                if (response.status == false) {
+                    Swal.fire({
+                        text: response.message,
+                        icon: "warning",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-warning"
+                        }
+                    });
+                } else {
+                    month = response.data.bulan_aktif;
+                    year = response.data.tahun_aktif;
+
+                    $('#selectFilterMonth').prop('selectedIndex', month - 1).change();
+                    $('#inputFilterYear').val(year);
+                    $('#selectFilterFields').prop('selectedIndex', 2).change();
+                    $('#selectFilterLevelProduk').prop('selectedIndex', 0).change();
+                    $('#inputFilterKodeProduk').val('');
+                }
+            },
+            error: function() {
+                loading.release();
+                Swal.fire({
+                    text: 'Server tidak merespon, coba lagi',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            }
+        });
     });
 
     // ===============================================================
     // Filter Produk
     // ===============================================================
     $('#selectFilterLevelProduk').change(function () {
-        $('#inputFilterProduk').val('');
+        $('#inputFilterKodeProduk').val('');
     });
 
-    $('#inputFilterProduk').on('click', function (e) {
+    $('#inputFilterKodeProduk').on('click', function (e) {
         e.preventDefault();
         var selectFilterLevelProduk = $('#selectFilterLevelProduk').val();
         loadDataOptionProduk(1, 10, selectFilterLevelProduk, '');
@@ -48,35 +108,7 @@ $(document).ready(function () {
 
     $('body').on('click', '#optionProdukContentModal #selectedOptionProduk', function (e) {
         e.preventDefault();
-        $('#inputFilterProduk').val($(this).data('kode_produk'));
+        $('#inputFilterKodeProduk').val($(this).data('kode_produk'));
         $('#modalOptionGroupProduk').modal('hide');
-    });
-
-    // ===============================================================
-    // Filter Proses
-    // ===============================================================
-    var btnFilterProses = document.querySelector("#btnFilterProses");
-    btnFilterProses.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        var year = $('#inputFilterYear').val();
-        var month = $('#selectFilterMonth').val();
-        var fields = $('#selectFilterFields').val();
-        var level = $('#selectFilterLevelProduk').val();
-        var produk = $('#inputFilterProduk').val();
-
-        loading.block();
-        loadMasterData(year, month, fields, level, produk);
-    });
-
-    $('#btnFilterReset').on('click', function (e) {
-        e.preventDefault();
-        var dateObj = new Date();
-        var year = dateObj.getUTCFullYear();
-        $('#selectFilterMonth').prop('selectedIndex', data_chart.month - 1).change();
-        $('#inputFilterYear').val(year);
-        $('#selectFilterFields').prop('selectedIndex', 2).change();
-        $('#selectFilterLevelProduk').prop('selectedIndex', 0).change();
-        $('#inputFilterProduk').val('');
     });
 });

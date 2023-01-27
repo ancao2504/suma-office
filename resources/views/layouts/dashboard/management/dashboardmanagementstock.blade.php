@@ -162,7 +162,7 @@
     <div class="modal fade" tabindex="-2" id="modalFilter">
         <div class="modal-dialog">
             <div class="modal-content" id="modalFilterContent">
-                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('dashboard.management.stock') }}">
+                <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="#">
                     <div class="modal-header">
                         <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Faktur</h5>
                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -217,7 +217,7 @@
                         <div class="fv-row mt-8">
                             <label class="form-label">Produk:</label>
                             <div class="input-group">
-                                <input id="inputFilterProduk" name="produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
+                                <input id="inputFilterKodeProduk" name="produk" type="search" class="form-control" style="cursor: pointer;" placeholder="Semua Produk" readonly
                                     @if(isset($data_filter->produk)) value="{{ $data_filter->produk }}" @else value="{{ old('produk') }}"@endif>
                                 <button id="btnFilterProduk" name="btnFilterProduk" class="btn btn-icon btn-primary" type="button">
                                     <i class="fa fa-search"></i>
