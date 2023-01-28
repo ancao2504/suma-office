@@ -63,36 +63,6 @@ $( function() {
         $(this).css('cursor', 'pointer');
     });
 
-    // ssat list doble klik
-    tboady.on("dblclick", "tr.klikdokumen", function(event) {
-        if (!$(event.target).is("button.btn-edit, span.bi.bi-pencil")){
-            // decode_base64
-            // var data_dok = btoa(JSON.parse($(this).attr('data-dtl')));
-            var data_dok = $(this).attr('data-dtl');
-            console.log(btoa(data_dok));
-            $('#card-detail tbody').html('');
-            for (var key in data_dok) {
-                // cek apakah object tersebut ada dalam data_dok
-                if (data_dok.hasOwnProperty(key)) {
-                    $('#card-detail .modal-title').html(key);
-                    for (var i = 0; i < data_dok[key].length; i++) {
-                        $('#card-detail tbody').append(`
-                            <tr>
-                                <td>${i + 1}</td>
-                                <td>${data_dok[key][i].part_number}</td>
-                                <td>${data_dok[key][i].nama_part}</td>
-                                <td class="text-end">${data_dok[key][i].qty}</td>
-                            </tr>
-                        `);
-                    }
-                }
-            }
-            if ($('#card-detail').attr('hidden') == 'hidden') {
-                $('#card-detail').removeAttr('hidden');
-            }
-        }
-    });
-
     // list klik kecuali
     tboady.on("click", "tr.klikdokumen", function(event) {
         if (!$(event.target).is("button.btn-edit, span.bi.bi-pencil")){
