@@ -174,7 +174,7 @@ $( function() {
             url: base_url + "/online/pemindahan/shopee/detail",
             data: { 
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                nomer_dokumen: key 
+                nomor_dokumen: key 
             },
             success: function(response) {
                 // kode yang akan dijalankan jika request berhasil

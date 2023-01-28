@@ -1739,7 +1739,7 @@ class ApiService
         $request = 'online/pemindahan/shopee/daftar';
         $header = ['Authorization' => $credential];
         $body = [
-            'search'        => trim($search),
+            'nomor_dokumen' => trim($search),
             'start_date'    => empty(trim($start_date))?date('Y-m-d'):trim($start_date),
             'end_date'      => empty(trim($end_date))?date('Y-m-d'):trim($end_date),
             'companyid'     => trim($companyid),
@@ -1749,13 +1749,14 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
     public static function OnlinePemindahanTokopediaDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'online/pemindahan/tokopedia/daftar';
         $header = ['Authorization' => $credential];
         $body = [
-            'search'        => trim($search),
+            'nomor_dokumen' => trim($search),
             'start_date'    => empty(trim($start_date))?date('Y-m-d'):trim($start_date),
             'end_date'      => empty(trim($end_date))?date('Y-m-d'):trim($end_date),
             'companyid'     => trim($companyid),
@@ -1765,13 +1766,14 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
-    public static function OnlinePemindahanDetail($nomer_dokumen ,$companyid)
+
+    public static function OnlinePemindahanDetail($nomor_dokumen ,$companyid)
     {
         $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'online/pemindahan/shopee/detail';
         $header = ['Authorization' => $credential];
         $body = [
-            'nomer_dokumen'        => trim($nomer_dokumen),
+            'nomor_dokumen'        => trim($nomor_dokumen),
             'companyid'     => trim($companyid)
         ];
         $response = ApiRequest::requestPost($request, $header, $body);

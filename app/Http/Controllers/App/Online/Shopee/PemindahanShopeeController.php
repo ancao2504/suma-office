@@ -49,29 +49,29 @@ class PemindahanShopeeController extends Controller
                 $no = $data_all->from;
                 foreach($data_all->data as $data){
                     $view_tbBoady .='
-                                <tr class="fs-6 fw-bold text-gray-700 klikdokumen">
-                                    <td class="text-center">'.$no.'</td>
-                                    <td>'.$data->nomor_dokumen.'</td>
-                                    <td>'.date('d/m/Y', strtotime($data->tanggal)).'</td>
-                                    <td>'.$data->lokasi_awal.'</td>
-                                    <td>'.$data->lokasi_tujuan.'</td>
-                                    <td>'.$data->keterangan.'</td>
-                                    <td class="text-center">
-                                        '.($data->status_cetak==1?'<span class="badge badge-success"><i class="bi bi-check text-white fs-3"></i></span>':'<span class="badge badge-secondary"><i class="bi bi-dash text-white fs-3"></i></span>').'
-                                    </td>
-                                    <td class="text-center">
-                                        '.($data->status_in==1?'<span class="badge badge-success"><i class="bi bi-check text-white fs-3"></i></span>':'<span class="badge badge-secondary"><i class="bi bi-dash text-white fs-3"></i></span>').'
-                                    </td>
-                                    <td class="text-center">
-                                        '.($data->status_marketplace==1?'<span class="badge badge-success"><i class="bi bi-check text-white fs-3"></i></span>':'<span class="badge badge-secondary"><i class="bi bi-dash text-white fs-3"></i></span>').'
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-icon btn-primary mt-1 d-lg-inline btn-edit" data-key="'.$data->nomor_dokumen.'">
-                                            <span class="bi bi-pencil"></span>
-                                        </button>
-                                        <button class="btn btn-sm btn-primary d-lg-inline btn-update">Update</button>
-                                    </td>
-                                </tr>
+                        <tr class="fs-6 fw-bold text-gray-700 klikdokumen">
+                            <td class="text-center">'.$no.'</td>
+                            <td>'.$data->nomor_dokumen.'</td>
+                            <td>'.date('d/m/Y', strtotime($data->tanggal)).'</td>
+                            <td>'.$data->lokasi_awal.'</td>
+                            <td>'.$data->lokasi_tujuan.'</td>
+                            <td>'.$data->keterangan.'</td>
+                            <td class="text-center">
+                                '.($data->status_cetak==1?'<span class="badge badge-success"><i class="bi bi-check text-white fs-3"></i></span>':'<span class="badge badge-secondary"><i class="bi bi-dash text-white fs-3"></i></span>').'
+                            </td>
+                            <td class="text-center">
+                                '.($data->status_in==1?'<span class="badge badge-success"><i class="bi bi-check text-white fs-3"></i></span>':'<span class="badge badge-secondary"><i class="bi bi-dash text-white fs-3"></i></span>').'
+                            </td>
+                            <td class="text-center">
+                                '.($data->status_marketplace==1?'<span class="badge badge-success"><i class="bi bi-check text-white fs-3"></i></span>':'<span class="badge badge-secondary"><i class="bi bi-dash text-white fs-3"></i></span>').'
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-icon btn-primary mt-1 d-lg-inline btn-edit" data-key="'.$data->nomor_dokumen.'">
+                                    <span class="bi bi-pencil"></span>
+                                </button>
+                                <button class="btn btn-sm btn-primary d-lg-inline btn-update">Update</button>
+                            </td>
+                        </tr>
                     ';
                     $no++;
                 }
@@ -127,7 +127,7 @@ class PemindahanShopeeController extends Controller
     
     public function detailPemindahan(Request $request){
         $responseApi = ApiService::OnlinePemindahanDetail(
-            $request->get('nomer_dokumen'),
+            $request->get('nomor_dokumen'),
             'PD'
         );
         
