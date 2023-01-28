@@ -7,17 +7,47 @@ for (const param of params) {
     var search = params.get('search');
 }
 
-// terdapat ajax start maka loadaing.block()
 $(document).ajaxStart(function() {
     loading.block();
 });
-// terdapat ajax stop maka loadaing.release()
+
 $(document).ajaxStop(function() {
     loading.release();
 });
 
 $('body').attr('data-kt-aside-minimize', 'on');
 $('#kt_aside_toggle').addClass('active');
+
+
+function updateStok(){
+    // ajax post update
+}
+
+function gantiUrl(url_search, url_start_date, url_end_date, url_page = 1, url_per_page = 10){
+    loading.block();
+    window.location.href = window.location.href.split('?')[0] + '?page=' + url_page + (url_per_page?'&per_page=' + url_per_page:'') + (url_search?'&search=' + url_search:'') + (url_start_date?'&start_date=' + url_start_date:'') + (url_end_date?'&end_date=' + url_end_date:'');
+}
+
+function getDetail(key){
+    // buat ajax post url: base_url + online/pemindahan/shopee/detail dengan data: no_dokumen
+    $.ajax({
+        type: "POST",
+        url: base_url + "/online/pemindahan/shopee/detail",
+        data: { 
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            nomor_dokumen: key 
+        },
+        success: function(response) {
+            // kode yang akan dijalankan jika request berhasil
+            $('#update_stok .modal-boady').html(response.data);
+            $('#update_stok').modal('show');
+        },
+        error: function(xhr, status, error) {
+            // kode yang akan dijalankan jika request gagal
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 $( function() {
     let tboady = $("#kt_project_users_table > tbody");
@@ -86,7 +116,7 @@ $( function() {
 
     $('#update_stok').on('click','button.btn-update',function(event) {
         swal.fire({
-            title: "Apakah anda yakin Update Stock Shopee ?",
+            title: "Apakah anda yakin Update Stock Tokopedia ?",
             text: "Data akan diupdate!",
             icon: "warning",
             showCancelButton: true,
@@ -107,7 +137,7 @@ $( function() {
 
     $('button.btn-update').on('click',function(event) {
         swal.fire({
-            title: "Apakah anda yakin Update Stock Shopee ?",
+            title: "Apakah anda yakin Update Stock Tokopedia ?",
             text: "Data akan diupdate!",
             icon: "warning",
             showCancelButton: true,
@@ -128,7 +158,6 @@ $( function() {
 
     // per_page
     $('#per_page').on('change', function () {
-        // window.location.href = window.location.href.split('?')[0] + '?per_page=' + $(this).val() +  (start_date?'&start_date=' + start_date:'') + (end_date?'&end_date=' + end_date:'');
         gantiUrl(search, start_date, end_date, 1, $(this).val());
     });
     $('#per_page option[value="' + per_page + '"]').prop('selected', true);
@@ -139,7 +168,6 @@ $( function() {
         cange++;
         var tgl_dokumen = $(this).val().split(' to ');
         if(cange == 2){
-            // window.location.href = window.location.href.split('?')[0] + '?start_date=' + tgl_dokumen[0] + (tgl_dokumen[1]?'&end_date='+ tgl_dokumen[1]:'') + (per_page!=''?'&per_page=' + per_page:'');
             gantiUrl(search, tgl_dokumen[0], tgl_dokumen[1], 1, per_page);
             cange = 0;
         }
@@ -157,35 +185,4 @@ $( function() {
         gantiUrl(search, start_date, end_date, $(this).find('.page-link').attr('data-page'), per_page);
     });
 
-    function updateStok(){
-        // ajax post update
-    }
-
-    function gantiUrl(url_search, url_start_date, url_end_date, url_page = 1, url_per_page = 10){
-        loading.block();
-        window.location.href = window.location.href.split('?')[0] + '?page=' + url_page + (url_per_page?'&per_page=' + url_per_page:'') + (url_search?'&search=' + url_search:'') + (url_start_date?'&start_date=' + url_start_date:'') + (url_end_date?'&end_date=' + url_end_date:'');
-    }
-
-    function getDetail(key){
-        console.log(base_url + "online/pemindahan/shopee/detail");
-        // buat ajax post url: base_url + online/pemindahan/shopee/detail dengan data: no_dokumen
-        $.ajax({
-            type: "POST",
-            url: base_url + "/online/pemindahan/shopee/detail",
-            data: { 
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                nomor_dokumen: key 
-            },
-            success: function(response) {
-                // kode yang akan dijalankan jika request berhasil
-                console.log(response);
-                $('#update_stok .modal-boady').html(response.data);
-                $('#update_stok').modal('show');
-            },
-            error: function(xhr, status, error) {
-                // kode yang akan dijalankan jika request gagal
-                console.log(xhr.responseText);
-            }
-        });
-    }
 });
