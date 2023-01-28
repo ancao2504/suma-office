@@ -367,10 +367,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             Route::name('pemindahan.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
                     Route::get('/online/pemindahan/tokopedia/daftar', [PemindahanTokopediaController::class,'daftarPemindahan'])->name('daftar');
+                    Route::post('/online/pemindahan/tokopedia/detail', [PemindahanTokopediaController::class,'detailPemindahan'])->name('detail');
                 });
 
                 Route::name('shopee.')->group(function () {
                     Route::get('/online/pemindahan/shopee/daftar', [PemindahanShopeeController::class,'daftarPemindahan'])->name('daftar');
+                    Route::post('/online/pemindahan/shopee/detail', [PemindahanShopeeController::class,'detailPemindahan'])->name('detail');
                 });
             });
             // });

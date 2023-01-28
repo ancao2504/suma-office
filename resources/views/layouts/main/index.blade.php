@@ -11,6 +11,7 @@
 		<meta property="og:title" content="{{ env('APP_NAME') }}" />
 		<meta property="og:url" content="{{ env('APP_URL') }}" />
 		<meta property="og:site_name" content="Suma | Honda" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 		<link rel="shortcut icon" href="{{ asset('assets/images/logo/ic_suma.png') }}" />
 
 		<!--begin::Fonts-->
