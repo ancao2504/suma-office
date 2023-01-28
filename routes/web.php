@@ -26,6 +26,7 @@ use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Http\Controllers\app\Online\Shopee\PemindahanShopeeController;
+use App\Http\Controllers\app\Online\Tokopedia\PemindahanTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -361,13 +362,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         // buat route group online.
         Route::name('online.')->group(function(){
-            // Route::controller(ShopeeController::class)->group(function () {
-
 
             Route::name('pemindahan.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
                     Route::get('/online/pemindahan/tokopedia/daftar', [PemindahanTokopediaController::class,'daftarPemindahan'])->name('daftar');
-                    Route::post('/online/pemindahan/tokopedia/detail', [PemindahanTokopediaController::class,'detailPemindahan'])->name('detail');
                 });
 
                 Route::name('shopee.')->group(function () {
@@ -375,7 +373,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::post('/online/pemindahan/shopee/detail', [PemindahanShopeeController::class,'detailPemindahan'])->name('detail');
                 });
             });
-            // });
         });
     });
 

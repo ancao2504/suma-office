@@ -1,5 +1,5 @@
 @extends('layouts.main.index')
-@section('title','Tokopedia')
+@section('title','Shopee')
 @section('subtitle','Dashboard')
 @push('styles')
 @endpush
@@ -45,7 +45,7 @@
     <!--begin::Title-->
     <div class="d-flex flex-wrap align-items-center my-1">
                             {{-- $data_disc_dealer->total --}}
-        <h3 class="fw-bolder me-5 my-1"> 1000  Daftar Pemindahan Stock Antar lokasi
+        <h3 class="fw-bolder me-5 my-1">Daftar Pemindahan Stock Antar lokasi Shopee
         <span class="text-gray-400 fs-6">↓</span></h3>
     </div>
     <!--end::Title-->

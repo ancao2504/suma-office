@@ -126,14 +126,13 @@ class PemindahanShopeeController extends Controller
 
     
     public function detailPemindahan(Request $request){
-        $responseApi = ApiService::OnlinePemindahanShopeeDetail(
+        $responseApi = ApiService::OnlinePemindahanDetail(
             $request->get('nomer_dokumen'),
             'PD'
         );
         
         $statusApi = json_decode($responseApi)->status;
 
-        
         $view_table = '';
         $page_view='';
         if($statusApi == 1) {
