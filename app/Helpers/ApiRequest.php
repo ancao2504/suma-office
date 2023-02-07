@@ -9,6 +9,7 @@ class ApiRequest {
         $results = Http::withHeaders($header)
                     ->post($url.$request, $body)
                     ->body();
+
         return $results;
     }
 

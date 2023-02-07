@@ -6,16 +6,27 @@ use App\Helpers\ApiRequest;
 
 class ApiService
 {
-
-    public static function AuthLogin($email, $password, $remember_me)
+    public static function OauthToken()
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+        $credential = 'Basic '.base64_encode(config('constants.api_key.api_username').':'.config('constants.api_key.api_password'));
+        $request = 'oauth/token';
+        $header = [ 'Authorization' => $credential ];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function AuthLogin($email, $password, $remember_me, $user_agent, $ip_address, $token)
+    {
         $request = 'auth/login';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'email'         => $email,
             'password'      => $password,
             'remember_me'   => $remember_me,
+            'user_agent'    => $user_agent,
+            'ip_address'    => $ip_address,
+            'token'         => $token,
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -23,9 +34,8 @@ class ApiService
 
     public static function AccountProfile($user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'account/profile';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'companyid'     => $companyid,
@@ -36,9 +46,8 @@ class ApiService
 
     public static function AccountProfileSimpan($user_id, $name, $email, $telepon, $photo, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'account/profile/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'name'          => $name,
@@ -53,9 +62,8 @@ class ApiService
 
     public static function AccountChangePassword($user_id, $email, $old_password, $new_password, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'account/profile/changepassword';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'email'         => $email,
@@ -69,9 +77,8 @@ class ApiService
 
     public static function BackOrderDaftar($page, $per_page, $kode_sales, $kode_dealer, $part_number, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'parts/backorder/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
             'per_page'      => $per_page,
@@ -91,9 +98,8 @@ class ApiService
     // ============================================================================
     public static function CartHeader($user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/header';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -105,9 +111,8 @@ class ApiService
 
     public static function CartEstimasi($user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/estimasi';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -119,9 +124,8 @@ class ApiService
 
     public static function CartCheckOutCekAturanHarga($user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/checkout/cekaturanharga';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'companyid'     => $companyid
@@ -132,9 +136,8 @@ class ApiService
 
     public static function CartCheckOutProses($password, $password_confirm, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/checkout/proses';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'password'      => $password,
             'password_confirm'  => $password_confirm,
@@ -147,9 +150,8 @@ class ApiService
 
     public static function CartCheckOutResult($role_id, $kode, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/checkout/result';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'role_id'       => $role_id,
             'kode'          => $kode,
@@ -161,9 +163,8 @@ class ApiService
 
     public static function CartDetail($user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/detail';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -175,9 +176,8 @@ class ApiService
 
     public static function CartDeletePart($part_number, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/deletepart';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
             'user_id'       => $user_id,
@@ -189,9 +189,8 @@ class ApiService
 
     public static function CartEditPart($part_number, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/editpart';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
             'user_id'       => $user_id,
@@ -204,9 +203,8 @@ class ApiService
 
     public static function CartHapusTemporary($user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/deleteall';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'role_id'       => $role_id,
@@ -218,9 +216,8 @@ class ApiService
 
     public static function CartImportExcel($nama_file, $part_excel, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/importexcel';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nama_file'     => $nama_file,
             'part_excel'    => $part_excel,
@@ -234,9 +231,8 @@ class ApiService
 
     public static function CartProsesExcel($file_excel, $perbandingan, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/prosesexcel';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'file_excel'    => $file_excel,
             'perbandingan'  => $perbandingan,
@@ -250,9 +246,8 @@ class ApiService
 
     public static function CartReset($user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/reset';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'companyid'     => $companyid
@@ -263,9 +258,8 @@ class ApiService
 
     public static function CartSimpanDraft($kode_sales, $kode_dealer, $back_order, $keterangan, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/simpandraft';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
             'kode_dealer'   => $kode_dealer,
@@ -281,9 +275,8 @@ class ApiService
 
     public static function CartSimpanPart($part_number, $tpc, $jml_order, $harga, $discount, $discount_plus, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/cart/simpanpart';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
             'tpc'           => $tpc,
@@ -301,9 +294,8 @@ class ApiService
 
     public static function DashboardDealerPenjualanBulanan($year, $month, $kode_dealer, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/dealer/penjualanbulanan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'month'         => $month,
@@ -318,9 +310,8 @@ class ApiService
 
     public static function DashboardManagementSalesByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/management/sales/byproduct';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'month'         => $month,
@@ -337,9 +328,8 @@ class ApiService
 
     public static function DashboardManagementSalesByDate($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/management/sales/bydate';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'month'         => $month,
@@ -356,9 +346,8 @@ class ApiService
 
     public static function DashboardManagementStockByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/management/stock/stockbyproduct';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'month'         => $month,
@@ -375,9 +364,8 @@ class ApiService
 
     public static function DashboardMarketingGroupPerProduk($year, $month, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/marketing/pencapaian/perproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'month'         => $month,
@@ -394,9 +382,8 @@ class ApiService
 
     public static function DashboardMarketingGroupPerLevel($year, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/marketing/pencapaian/perlevel';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'jenis_mkr'     => $jenis_mkr,
@@ -410,9 +397,8 @@ class ApiService
 
     public static function DashboardMarketingGrowth($year, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/marketing/pencapaian/growth';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
             'level_produk'  => $level_produk,
@@ -428,9 +414,8 @@ class ApiService
 
     public static function DashboardSalesmanPenjualanBulanan($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/salesman/penjualanbulanan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'              => $year,
             'month'             => $month,
@@ -446,9 +431,8 @@ class ApiService
 
     public static function DashboardSalesmanPenjualanHarian($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'dashboard/salesman/penjualanharian';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'              => $year,
             'month'             => $month,
@@ -464,9 +448,8 @@ class ApiService
 
     public static function DealerDaftar($page, $per_page, $kode_dealer, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'profile/dealer/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
             'per_page'      => $per_page ?? 10,
@@ -481,9 +464,8 @@ class ApiService
 
     public static function DealerForm($kode_dealer, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'profile/dealer/form';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_dealer' => $kode_dealer,
             'user_id'   => $user_id,
@@ -496,9 +478,8 @@ class ApiService
 
     public static function FakturDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/faktur';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
             'per_page'      => $per_page,
@@ -517,9 +498,8 @@ class ApiService
 
     public static function FakturForm($nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/faktur/form';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur' => $nomor_faktur,
             'user_id'   => $user_id,
@@ -532,9 +512,8 @@ class ApiService
 
     public static function OptionCompany()
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/company';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -542,9 +521,8 @@ class ApiService
 
     public static function OptionClassProduk()
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/classproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -552,9 +530,8 @@ class ApiService
 
     public static function OptionDealer($search, $page, $per_page, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/dealer';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
             'page'          => $page,
@@ -567,9 +544,8 @@ class ApiService
 
     public static function OptionDealerSalesman($kode_sales, $search, $page, $per_page, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/dealersalesman';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
             'search'        => $search,
@@ -583,9 +559,8 @@ class ApiService
 
     public static function OptionGroupProduk($level, $search, $page, $per_page)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/groupproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'level'     => $level,
             'search'    => $search,
@@ -598,9 +573,8 @@ class ApiService
 
     public static function OptionPartNumber($search, $page, $per_page, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/partnumber';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'    => $search,
             'page'      => $page,
@@ -613,9 +587,8 @@ class ApiService
 
     public static function OptionProdukLevel()
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/levelproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -623,9 +596,8 @@ class ApiService
 
     public static function OptionSalesman($search, $page, $per_page, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/salesman';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
             'page'          => $page,
@@ -638,9 +610,8 @@ class ApiService
 
     public static function OptionSupervisor($search, $page, $per_page, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/supervisor';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
             'page'          => $page,
@@ -653,9 +624,8 @@ class ApiService
 
     public static function OptionSubProduk()
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/subproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -663,9 +633,8 @@ class ApiService
 
     public static function OptionTipeMotor($search, $page, $per_page)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/typemotor';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
             'page'          => $page,
@@ -677,9 +646,8 @@ class ApiService
 
     public static function OptionRoleUser()
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'options/roleuser';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -687,9 +655,8 @@ class ApiService
 
     public static function PartNumberDaftar($page, $per_page, $type_motor, $level_produk, $kode_produk, $part_number, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'parts/partnumber/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
             'per_page'      => $per_page ?? 12,
@@ -707,9 +674,8 @@ class ApiService
 
     public static function PartNumberFormCart($part_number, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'parts/partnumber/form/cart';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number' => $part_number,
             'user_id'   => $user_id,
@@ -722,9 +688,8 @@ class ApiService
 
     public static function PartNumberTambahCart($part_number, $jumlah_order, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'parts/partnumber/form/cart/proses';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
             'jumlah_order'  => $jumlah_order,
@@ -738,9 +703,9 @@ class ApiService
 
     public static function PembayaranFakturDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer,
         $status_pembayaran, $nomor_faktur, $user_id, $role_id, $companyid) {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+
         $request = 'orders/pembayaranfaktur';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'              => $page,
             'per_page'          => $per_page,
@@ -760,9 +725,8 @@ class ApiService
 
     public static function PembayaranFakturDetailPerFaktur($nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/pembayaranfaktur/detailperfaktur';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur'      => $nomor_faktur,
             'user_id'           => $user_id,
@@ -775,9 +739,8 @@ class ApiService
 
     public static function PembayaranFakturDetailPerBpk($nomor_bpk, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/pembayaranfaktur/detailperbpk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_bpk'         => $nomor_bpk,
             'user_id'           => $user_id,
@@ -790,9 +753,8 @@ class ApiService
 
     public static function PurchaseOrderFormDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $role_id, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
             'per_page'      => $per_page,
@@ -810,9 +772,8 @@ class ApiService
 
     public static function PurchaseOrderFormBatalApprove($nomor_pof, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/batalapprove';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'companyid'     => $companyid,
@@ -824,9 +785,8 @@ class ApiService
 
     public static function PurchaseOrderFormEditDiscount($nomor_pof, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/discount';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'user_id'       => $user_id,
@@ -839,9 +799,8 @@ class ApiService
 
     public static function PurchaseOrderFormUpdateTpc($nomor_pof, $kode_tpc, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/tpc/update';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'kode_tpc'      => $kode_tpc,
@@ -855,9 +814,8 @@ class ApiService
 
     public static function PurchaseOrderFormUpdateDiscount($nomor_pof, $discount, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/discount/update';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'discount'      => $discount,
@@ -871,9 +829,8 @@ class ApiService
 
     public static function PurchaseOrderFormDetail($nomor_pof, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/detail';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'user_id'       => $user_id,
@@ -887,9 +844,8 @@ class ApiService
 
     public static function PurchaseOrderFormDetailDaftar($nomor_pof, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/detail/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'user_id'       => $user_id,
@@ -902,9 +858,8 @@ class ApiService
 
     public static function PurchaseOrderFormDetailEditPart($nomor_pof, $part_number, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/detail/partnumber';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'part_number'   => $part_number,
@@ -918,9 +873,8 @@ class ApiService
 
     public static function PurchaseOrderFormDetailSimpanPart($nomor_pof, $part_number, $jml_order, $harga, $discount, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/detail/partnumber/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'part_number'   => $part_number,
@@ -937,9 +891,8 @@ class ApiService
 
     public static function PurchaseOrderFormDetailHapusPart($nomor_pof, $part_number, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/detail/partnumber/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'part_number'   => $part_number,
@@ -953,9 +906,8 @@ class ApiService
 
     public static function PurchaseOrderFormFaktur($nomor_pof, $part_number, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/faktur';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'part_number'   => $part_number,
@@ -967,9 +919,8 @@ class ApiService
 
     public static function PurchaseOrderFormSimpan($nomor_pof, $kode_sales, $kode_dealer, $kode_tpc, $umur_pof, $bo, $approve, $keterangan, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/purchaseorderform/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
             'kode_sales'    => $kode_sales,
@@ -989,9 +940,8 @@ class ApiService
 
     public static function PlanningVisitDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'visit/planningvisit/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
             'per_page'      => $per_page,
@@ -1009,9 +959,8 @@ class ApiService
 
     public static function PlanningVisitSimpan($tanggal, $kode_sales, $kode_dealer, $keterangan, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'visit/planningvisit/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'tanggal'       => $tanggal,
             'kode_sales'    => $kode_sales,
@@ -1027,9 +976,8 @@ class ApiService
 
     public static function PlanningVisitHapus($kode_visit, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'visit/planningvisit/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_visit'    => $kode_visit,
             'companyid'     => $companyid,
@@ -1040,9 +988,8 @@ class ApiService
 
     public static function SettingClossingMarketing($companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/default/clossingmkr';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => $companyid
         ];
@@ -1052,9 +999,8 @@ class ApiService
 
     public static function StockHarianOption($companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'parts/stockharian/option';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => $companyid
         ];
@@ -1075,9 +1021,8 @@ class ApiService
         $option_stock_sedia,
         $nilai_stock_sedia
     ) {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'parts/stockharian/proses';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'             => $companyid,
             'role_id'               => $role_id,
@@ -1097,9 +1042,8 @@ class ApiService
 
     public static function TrackingOrderDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/trackingorder';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
             'per_page'      => $per_page,
@@ -1118,9 +1062,8 @@ class ApiService
 
     public static function TrackingOrderForm($nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/trackingorder/form';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur' => $nomor_faktur,
             'user_id'   => $user_id,
@@ -1133,9 +1076,8 @@ class ApiService
 
     public static function UserDaftar($page, $per_page, $role, $user_id, $role_id)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'profile/users/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
             'per_page'      => $per_page,
@@ -1149,9 +1091,8 @@ class ApiService
 
     public static function UserForm($user_id)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'profile/users/form';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'   => $user_id
         ];
@@ -1161,9 +1102,8 @@ class ApiService
 
     public static function UserSimpan($user_id, $role_id, $name, $jabatan, $telepon, $photo, $email, $password, $status_user, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'profile/users/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'   => $user_id,
             'role_id'   => $role_id,
@@ -1182,9 +1122,8 @@ class ApiService
 
     public static function ValidasiSalesman($kode_sales, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/salesman';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
             'companyid'     => $companyid,
@@ -1195,9 +1134,8 @@ class ApiService
 
     public static function ValidasiDealer($kode_dealer, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/dealer';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_dealer'   => $kode_dealer,
             'companyid'     => $companyid,
@@ -1208,9 +1146,8 @@ class ApiService
 
     public static function ValidasiDealerSalesman($kode_sales, $kode_dealer, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/dealersalesman';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
             'kode_dealer'   => $kode_dealer,
@@ -1222,9 +1159,8 @@ class ApiService
 
     public static function ValidasiPartNumber($part_number, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/partnumber';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
             'companyid'     => $companyid,
@@ -1235,9 +1171,8 @@ class ApiService
 
     public static function ValidasiUserIdTidakTerdaftar($user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/userid/tidakterdaftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
             'companyid'     => $companyid,
@@ -1248,9 +1183,8 @@ class ApiService
 
     public static function ValidasiEmailTidakTerdaftar($email, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/email/tidakterdaftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'email'         => $email,
             'companyid'     => $companyid,
@@ -1261,9 +1195,8 @@ class ApiService
 
     public static function DiskonProdukDaftar($companyid, $page, $per_page, $role_id, $search)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => trim($companyid),
             'page'          => trim($page ?? 1),
@@ -1278,9 +1211,8 @@ class ApiService
 
     public static function ValidasiProduk($kd_produk)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'validasi/produk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_produk'            => $kd_produk,
         ];
@@ -1289,9 +1221,8 @@ class ApiService
     }
     public static function ValidasiDiskonProduk($produk, $cabang)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/cekproduk';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'cabang'        => $cabang,
             'produk'   => $produk,
@@ -1308,9 +1239,9 @@ class ApiService
         $validasiProduk = json_decode($validasiProduk)->status;
 
         if ($validasiProduk == 1) {
-            $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+
             $request = 'setting/diskonproduk/simpan';
-            $header = ['Authorization' => $credential];
+            $header = ['Authorization' => session()->get('Authorization')];
             $body = [
                 'cabang'            => trim($cabang),
                 'produk'            => trim($produk),
@@ -1331,9 +1262,8 @@ class ApiService
 
     public static function DiskonProdukHapus($cabang, $produk)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'cabang'        => trim($cabang),
             'produk'        => trim($produk),
@@ -1344,9 +1274,8 @@ class ApiService
 
     public static function DiskonProdukDealerDaftar($companyid, $page, $per_page, $role_id, $search)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/dealer';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => trim($companyid),
             'page'          => trim($page ?? 1),
@@ -1360,22 +1289,18 @@ class ApiService
 
     public static function DiskonProdukDealerSimpan($produk, $dealer, $keterangan, $companyid, $user_id)
     {
-
-        // cek produk pada funsction ValidasiProduk
+        // cek produk pada function ValidasiProduk
         $validasiProduk = ApiService::ValidasiProduk($produk);
         $validasiProduk = json_decode($validasiProduk)->status;
 
         if ($validasiProduk == 1) {
-
-            // cek dealer pada funsction ValidasiDealer
+            // cek dealer pada function ValidasiDealer
             $validasiDealer = ApiService::ValidasiDealer($dealer, $companyid);
             $validasiDealer = json_decode($validasiDealer)->status;
 
             if ($validasiDealer == 1) {
-
-                $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
                 $request = 'setting/diskonproduk/dealer/simpan';
-                $header = ['Authorization' => $credential];
+                $header = ['Authorization' => session()->get('Authorization')];
                 $body = [
                     'produk'        => trim($produk),
                     'dealer'        => trim($dealer),
@@ -1396,9 +1321,8 @@ class ApiService
 
     public static function DiskonProdukDealerHapus($produk, $dealer, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskonproduk/dealer/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'produk'            => trim($produk),
             'dealer'            => trim($dealer),
@@ -1410,9 +1334,8 @@ class ApiService
 
     public static function DiskonDealerDaftar($page, $per_page, $role_id, $companyid, $search)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskon/dealer';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => trim($page ?? 1),
             'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
@@ -1431,10 +1354,8 @@ class ApiService
         $validasiDealer = json_decode($validasiDealer)->status;
 
         if ($validasiDealer == 1) {
-
-            $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
             $request = 'setting/diskon/dealer/simpan';
-            $header = ['Authorization' => $credential];
+            $header = ['Authorization' => session()->get('Authorization')];
             $body = [
                 'dealer'            => trim($dealer),
                 'disc_default'      => trim($disc_default),
@@ -1452,9 +1373,8 @@ class ApiService
 
     public static function DiskonDealerHapus($dealer, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/diskon/dealer/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'dealer'            => trim($dealer),
             'companyid'         => trim($companyid),
@@ -1467,9 +1387,8 @@ class ApiService
 
     public static function HargaNettoPartDaftar($page, $per_page, $companyid, $role_id, $search)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/harga/partnetto';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => trim($page ?? 1),
             'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
@@ -1489,10 +1408,8 @@ class ApiService
         $validasiPart = json_decode($validasiPart)->status;
 
         if ($validasiPart == 1) {
-
-            $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
             $request = 'setting/harga/partnetto/simpan';
-            $header = ['Authorization' => $credential];
+            $header = ['Authorization' => session()->get('Authorization')];
             $body = [
                 'part_number'   => trim($part_number),
                 'status'        => trim($status),
@@ -1510,9 +1427,8 @@ class ApiService
 
     public static function HargaNettoPartDealerDaftar($page, $per_page, $role_id, $companyid, $search)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/harga/partnetto/dealer';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => trim($page ?? 1),
             'per_page'      => in_array(trim($per_page), [10, 25, 50, 100]) ? $per_page : 10,
@@ -1537,11 +1453,9 @@ class ApiService
             $validasiDealer = ApiService::ValidasiDealer($dealer, $companyid);
             $validasiDealer = json_decode($validasiDealer)->status;
 
-            if ($validasiDealer == 1) {
-
-                $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
+            if ($validasiDealer == 1)  {
                 $request = 'setting/harga/partnetto/dealer/simpan';
-                $header = ['Authorization' => $credential];
+                $header = ['Authorization' => session()->get('Authorization')];
                 $body = [
                     'part_number'   => trim($part_number),
                     'dealer'        => trim($dealer),
@@ -1564,9 +1478,8 @@ class ApiService
 
     public static function HargaNettoPartDealerHapus($part_number, $dealer, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/harga/partnetto/dealer/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'       => trim($part_number),
             'dealer'            => trim($dealer),
@@ -1578,9 +1491,8 @@ class ApiService
 
     public static function CekPenerimaanSuratJalan($nomor_serah_terima, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/sj';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_serah_terima'        => trim($nomor_serah_terima),
             'companyid'   => trim($companyid),
@@ -1593,9 +1505,8 @@ class ApiService
 
     public static function PenerimaanSuratJalanSimpan($nomor_sj, $tanggal, $jam, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/sj/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_sj'   => trim($nomor_sj),
             'tanggal'        => trim($tanggal),
@@ -1609,9 +1520,8 @@ class ApiService
 
     public static function PenerimaanSuratJalanHapus($nomor_sj, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/sj/hapus';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_sj'       => trim($nomor_sj),
             'companyid'      => trim($companyid),
@@ -1624,9 +1534,8 @@ class ApiService
 
     public static function PenerimaanSuratJalanReport($start_date, $end_date, $companyid, $no_serah_terima, $driver)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/sj/report';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'start_date'           => date('Y-m-d', strtotime(trim($start_date))),
             'end_date'           => date('Y-m-d', strtotime(trim($end_date))),
@@ -1643,9 +1552,8 @@ class ApiService
 
     public static function pembayaranDealerDaftar($kd_dealer, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/pembayaran/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'dealer'        => trim($kd_dealer),
             'cabang'        => strtoupper(trim($companyid)),
@@ -1658,9 +1566,8 @@ class ApiService
 
     public static function PembayaranDealerSimpan($kd_dealer,$jenis_transaksi, $total, $detail,$file_names, $user_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'orders/penerimaan/pembayaran/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kd_dealer'         => trim($kd_dealer),
             'jenis_transaksi'   => trim($jenis_transaksi),
@@ -1677,9 +1584,8 @@ class ApiService
 
     public static function SettingCetakUlangDaftar($year, $month, $jenis, $page, $per_page, $role_id, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/cetakulang/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'      => trim($year),
             'month'     => trim($month),
@@ -1696,9 +1602,8 @@ class ApiService
 
     public static function SettingCetakUlangCekDokumen($nomor_dokumen, $jenis_transaksi, $divisi, $role_id)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/cetakulang/cekdokumen';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'no_dokumen'        => trim($nomor_dokumen),
             'jenis_transaksi'   => trim($jenis_transaksi),
@@ -1712,9 +1617,8 @@ class ApiService
 
     public static function SettingCetakUlangSimpan($nomor_dokumen, $jenis_transaksi, $divisi, $kode_cabang, $company_dokumen, $approve, $edit, $alasan, $role_id, $companyid, $user_id)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'setting/cetakulang/simpan';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'no_dokumen'        => trim($nomor_dokumen),
             'jenis_transaksi'   => trim($jenis_transaksi),
@@ -1735,9 +1639,8 @@ class ApiService
 
     public static function OnlinePemindahanShopeeDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'online/pemindahan/shopee/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen' => trim($search),
             'start_date'    => empty(trim($start_date))?date('Y-m-d'):trim($start_date),
@@ -1750,18 +1653,66 @@ class ApiService
         return $response;
     }
 
-    public static function OnlinePemindahanTokopediaDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
+    public static function OnlinePemindahanTokopediaDaftar($page, $per_page, $start_date, $end_date, $nomor_dokumen, $companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'online/pemindahan/tokopedia/daftar';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'nomor_dokumen' => trim($search),
-            'start_date'    => empty(trim($start_date))?date('Y-m-d'):trim($start_date),
-            'end_date'      => empty(trim($end_date))?date('Y-m-d'):trim($end_date),
-            'companyid'     => trim($companyid),
             'page'          => $page ?? 1,
             'per_page'      => $per_page ?? 10,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanTokopediaForm($nomor_dokumen, $companyid)
+    {
+        $request = 'online/pemindahan/tokopedia/form';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanTokopediaFormDetail($nomor_dokumen, $companyid)
+    {
+        $request = 'online/pemindahan/tokopedia/form/detail';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanTokopediaUpdatePerPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/pemindahan/tokopedia/form/update/partnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanTokopediaUpdatePerNomorDokumen($nomor_dokumen, $companyid)
+    {
+        $request = 'online/pemindahan/tokopedia/form/update/dokumen';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
@@ -1769,9 +1720,8 @@ class ApiService
 
     public static function OnlinePemindahanDetail($nomor_dokumen ,$companyid)
     {
-        $credential = 'Basic ' . base64_encode(config('constants.api_key.api_username') . ':' . config('constants.api_key.api_password'));
         $request = 'online/pemindahan/shopee/detail';
-        $header = ['Authorization' => $credential];
+        $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen'        => trim($nomor_dokumen),
             'companyid'     => trim($companyid)

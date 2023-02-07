@@ -25,8 +25,8 @@ use App\Setting\CetakUlang\CetakUlangController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
-use App\Http\Controllers\app\Online\Shopee\PemindahanShopeeController;
-use App\Http\Controllers\app\Online\Tokopedia\PemindahanTokopediaController;
+use App\Http\Controllers\App\Online\Shopee\PemindahanShopeeController;
+use App\Http\Controllers\App\Online\Tokopedia\PemindahanTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -345,8 +345,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::post('/validasi/salesman', 'validasiSalesman')->name('salesman');
                 Route::post('/validasi/dealer', 'validasiDealer')->name('dealer');
                 Route::post('/validasi/dealersalesman', 'validasiDealerSalesman')->name('dealer-salesman');
-                Route::post('/validasi/partnumber', 'validasiPartNumber')->name('part-number');
                 Route::post('/validasi/produk', 'validasiProduk')->name('produk');
+                Route::post('/validasi/partnumber', 'validasiPartNumber')->name('part-number');
             });
         });
 
@@ -366,6 +366,15 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             Route::name('pemindahan.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
                     Route::get('/online/pemindahan/tokopedia/daftar', [PemindahanTokopediaController::class,'daftarPemindahan'])->name('daftar');
+
+                    Route::name('form.')->group(function () {
+                        Route::name('detail.')->group(function () {
+                            Route::get('/online/pemindahan/tokopedia/form/detail', [PemindahanTokopediaController::class,'formPemindahanDetail'])->name('detail');
+                            Route::post('/online/pemindahan/tokopedia/form/detail/update/partnumber', [PemindahanTokopediaController::class,'updateStockPerPartNumber'])->name('update-per-part-number');
+                            Route::post('/online/pemindahan/tokopedia/form/detail/update/dokumen', [PemindahanTokopediaController::class,'updateStockPerNomorDokumen'])->name('update-per-dokumen');
+                        });
+                        Route::get('/online/pemindahan/tokopedia/form/{nomor_dokumen}', [PemindahanTokopediaController::class,'formPemindahan'])->where('nomor_dokumen', '(.*)')->name('form');
+                    });
                 });
 
                 Route::name('shopee.')->group(function () {
