@@ -79,7 +79,7 @@ class PemindahanTokopediaController extends Controller
                     'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
                 ]);
 
-                return view('layouts.online.tokopedia.pemindahan', [
+                return view('layouts.online.tokopedia.pemindahan.pemindahan', [
                     'title_menu'        => 'Pemindahan Antar Lokasi',
                     'data_page'         => $data_page->first(),
                     'data_filter'       => $data_filter->first(),
@@ -104,7 +104,7 @@ class PemindahanTokopediaController extends Controller
         if($statusApi == 1) {
             $dataApi = json_decode($responseApi)->data;
 
-            return view('layouts.online.tokopedia.pemindahanform', [
+            return view('layouts.online.tokopedia.pemindahan.pemindahanform', [
                 'title_menu'    => 'Pemindahan Antar Lokasi',
                 'data'          => $dataApi
             ]);
@@ -188,6 +188,8 @@ class PemindahanTokopediaController extends Controller
 
                 if((int)$data->status_mp->update == 1) {
                     $table_detail .= '<i class="fa fa-check text-success"></i>';
+                } else {
+                    $table_detail .= '<i class="fa fa-minus-circle text-gray-400"></i>';
                 }
 
                 $table_detail .= '</td>
@@ -262,7 +264,7 @@ class PemindahanTokopediaController extends Controller
                             <th rowspan="2" class="min-w-150px ps-3 pe-3 text-center">Nama Part</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Status</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Pindah</th>
-                            <th colspan="3" class="w-100px ps-3 pe-3 text-center">Stock</th>
+                            <th colspan="3" class="w-150px ps-3 pe-3 text-center">Stock</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Action</th>
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted">

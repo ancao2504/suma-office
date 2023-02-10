@@ -27,6 +27,7 @@ use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Http\Controllers\App\Online\Shopee\PemindahanShopeeController;
 use App\Http\Controllers\App\Online\Tokopedia\PemindahanTokopediaController;
+use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -265,6 +266,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/option/partnumber', 'optionPartNumber')->name('part-number');
                 Route::get('/option/tipemotor', 'optionTipeMotor')->name('tipe-motor');
                 Route::get('/option/groupproduk', 'OptionGroupProduk')->name('group-produk');
+                Route::get('/option/updateharga', 'OptionUpdateHarga')->name('update-harga');
             });
         });
         Route::name('setting.')->group(function () {
@@ -380,6 +382,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::name('shopee.')->group(function () {
                     Route::get('/online/pemindahan/shopee/daftar', [PemindahanShopeeController::class,'daftarPemindahan'])->name('daftar');
                     Route::post('/online/pemindahan/shopee/detail', [PemindahanShopeeController::class,'detailPemindahan'])->name('detail');
+                });
+            });
+
+            Route::name('pemindahan.')->group(function () {
+                Route::name('tokopedia.')->group(function () {
+                    Route::get('/online/updateharga/tokopedia/daftar', [UpdateHargaTokopediaController::class,'daftarUpdateHarga'])->name('daftar');
                 });
             });
         });

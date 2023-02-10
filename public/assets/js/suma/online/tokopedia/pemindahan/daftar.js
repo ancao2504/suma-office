@@ -73,5 +73,71 @@ $(document).ready(function () {
     // ===============================================================
     // Modal Update
     // ===============================================================
+    $('body').on('click', '#btnUpdateStockAll', function (e) {
+        e.preventDefault();
+        var nomor_dokumen = $(this).data('nomor_dokumen');
+        var _token = $('input[name="_token"]').val();
 
+        Swal.fire({
+            html: `Apakah anda yakin akan mengupdate stock nomor dokumen
+                    <strong>`+ nomor_dokumen + `</strong> ?`,
+            icon: "info",
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: 'btn btn-primary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url.update_per_dokumen,
+                    method: "POST",
+                    data: { nomor_dokumen: nomor_dokumen, _token: _token },
+
+                    success: function (response) {
+                        loading.release();
+
+                        if (response.status == true) {
+                            $('#resultUpdateStock').html(response.data.update_stock);
+                            $('#resultUpdateStatus').html(response.data.update_status);
+                            $('#modalResultPindahLokasi').modal('show');
+                        } else {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'warning',
+                                buttonsStyling: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                confirmButtonText: 'Ok, got it!',
+                                customClass: {
+                                    confirmButton: 'btn btn-warning'
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        loading.release();
+                        Swal.fire({
+                            text: 'Server Not Responding',
+                            icon: 'error',
+                            buttonsStyling: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'Ok, got it!',
+                            customClass: {
+                                confirmButton: 'btn btn-danger'
+                            }
+                        });
+                    }
+                })
+            }
+        });
+    });
+
+    $('#modalResultPindahLokasi').on('hidden.bs.modal', function () {
+        location.reload();
+    });
 });

@@ -653,6 +653,19 @@ class ApiService
         return $response;
     }
 
+    public static function OptionUpdateHarga($page, $per_page, $companyid)
+    {
+        $request = 'options/updateharga';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'      => $page,
+            'per_page'  => $per_page,
+            'companyid' => $companyid,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function PartNumberDaftar($page, $per_page, $type_motor, $level_produk, $kode_produk, $part_number, $user_id, $role_id, $companyid)
     {
         $request = 'parts/partnumber/daftar';
@@ -1713,6 +1726,22 @@ class ApiService
         $body = [
             'nomor_dokumen' => trim($nomor_dokumen),
             'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineUpdateHargaTokopediaDaftar($page, $per_page, $year, $month, $search, $companyid)
+    {
+        $request = 'online/updateharga/tokopedia/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'      => $page,
+            'per_page'  => $per_page,
+            'year'      => $year,
+            'month'     => $month,
+            'search'    => $search,
+            'companyid' => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

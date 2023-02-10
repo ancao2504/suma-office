@@ -189,5 +189,5 @@ $(document).ready(function () {
 
     $('#modalResultPindahLokasi').on('hidden.bs.modal', function () {
         location.reload();
-   });
+    });
 });

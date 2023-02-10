@@ -107,39 +107,39 @@
                     <div class="fw-bold fs-7 text-gray-600">Status:</div>
                     <div class="d-flex">
                         @if((double)$data->status->cetak == 1)
-                        <span class="fs-8 fw-boldest badge badge-success me-2">
-                            <i class="fa fa-check text-white me-2"></i>CETAK
+                        <span class="fs-8 fw-boldest badge badge-light-success me-2">
+                            <i class="fa fa-check text-success me-2"></i>CETAK
                         </span>
                         @else
-                        <span class="fs-8 fw-boldest badge badge-danger me-2">
-                            <i class="fa fa-remove text-white me-2"></i>CETAK
+                        <span class="fs-8 fw-boldest badge badge-light-danger me-2">
+                            <i class="fa fa-remove text-danger me-2"></i>CETAK
                         </span>
                         @endif
                         @if((double)$data->status->sj == 1)
-                        <span class="fs-8 fw-boldest badge badge-success me-2">
-                            <i class="fa fa-check text-white me-2"></i>SURAT JALAN
+                        <span class="fs-8 fw-boldest badge badge-light-success me-2">
+                            <i class="fa fa-check text-success me-2"></i>SURAT JALAN
                         </span>
                         @else
-                        <span class="fs-8 fw-boldest badge badge-danger me-2">
-                            <i class="fa fa-remove text-white me-2"></i>SURAT JALAN
+                        <span class="fs-8 fw-boldest badge badge-light-danger me-2">
+                            <i class="fa fa-remove text-danger me-2"></i>SURAT JALAN
                         </span>
                         @endif
                         @if((double)$data->status->validasi == 1)
-                        <span class="fs-8 fw-boldest badge badge-success me-2">
-                            <i class="fa fa-check text-white me-2"></i>VALIDASI
+                        <span class="fs-8 fw-boldest badge badge-light-success me-2">
+                            <i class="fa fa-check text-success me-2"></i>VALIDASI
                         </span>
                         @else
-                        <span class="fs-8 fw-boldest badge badge-danger me-2">
-                            <i class="fa fa-remove text-white me-2"></i>VALIDASI
+                        <span class="fs-8 fw-boldest badge badge-light-danger me-2">
+                            <i class="fa fa-remove text-danger me-2"></i>VALIDASI
                         </span>
                         @endif
                         @if((double)$data->status->marketplace->update == 1)
-                        <span class="fs-8 fw-boldest badge badge-success me-2">
-                            <i class="fa fa-check text-white me-2"></i>UPDATE MARKETPLACE
+                        <span class="fs-8 fw-boldest badge badge-light-success me-2">
+                            <i class="fa fa-check text-success me-2"></i>UPDATE MARKETPLACE
                         </span>
                         @else
-                        <span class="fs-8 fw-boldest badge badge-danger me-2">
-                            <i class="fa fa-remove text-white me-2"></i>UPDATE MARKETPLACE
+                        <span class="fs-8 fw-boldest badge badge-light-danger me-2">
+                            <i class="fa fa-remove text-danger me-2"></i>UPDATE MARKETPLACE
                         </span>
                         @endif
                     </div>

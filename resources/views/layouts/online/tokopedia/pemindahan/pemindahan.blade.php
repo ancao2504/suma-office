@@ -44,17 +44,21 @@
                     <table class="table table-row-dashed table-row-gray-300 align-middle">
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted">
-                                <th class="w-50px ps-3 pe-3 text-center">No</th>
-                                <th class="w-150px ps-3 pe-3 text-center">No Dokumen</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Awal</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Tujuan</th>
-                                <th class="min-w-100px ps-3 pe-3 text-center">Keterangan</th>
-                                <th class="w-100px ps-3 pe-3 text-center">User</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Cetak</th>
-                                <th class="w-50px ps-3 pe-3 text-center">SJ</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Validasi</th>
-                                <th class="w-50px ps-3 pe-3 text-center">MarketPlace</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Action</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">No</th>
+                                <th rowspan="2" class="w-150px ps-3 pe-3 text-center">No Dokumen</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Awal</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Tujuan</th>
+                                <th rowspan="2" class="min-w-100px ps-3 pe-3 text-center">Keterangan</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">User</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Cetak</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">SJ</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Validasi</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Marketplace</th>
+                                <th colspan="2" class="w-100px ps-3 pe-3 text-center">Action</th>
+                            </tr>
+                            <tr class="fs-8 fw-bolder text-muted">
+                                <th class="w-50px ps-3 pe-3 text-center">Update</th>
+                                <th class="w-50px ps-3 pe-3 text-center">Detail</th>
                             </tr>
                         </thead>
                         <tbody class="border">
@@ -106,21 +110,38 @@
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     @if((double)$data->status_cetak == 1)
                                     <i class="fa fa-check text-success"></i>
+                                    @else
+                                    <i class="fa fa-minus-circle text-gray-400"></i>
                                     @endif
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     @if((double)$data->status_sj == 1)
                                     <i class="fa fa-check text-success"></i>
+                                    @else
+                                    <i class="fa fa-minus-circle text-gray-400"></i>
                                     @endif
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     @if((double)$data->status_validasi == 1)
                                     <i class="fa fa-check text-success"></i>
+                                    @else
+                                    <i class="fa fa-minus-circle text-gray-400"></i>
                                     @endif
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     @if((double)$data->status_marketplace == 1)
                                     <i class="fa fa-check text-success"></i>
+                                    @else
+                                    <i class="fa fa-minus-circle text-gray-400"></i>
+                                    @endif
+                                </td>
+                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                    @if((double)$data->status_validasi == 1)
+                                    @if((double)$data->status_marketplace == 0)
+                                    <button id="btnUpdateStockAll" class="btn btn-icon btn-sm btn-danger" type="button" data-nomor_dokumen="{{ strtoupper(trim($data->nomor_dokumen)) }}">
+                                        <i class="fa fa-refresh text-white"></i>
+                                    </button>
+                                    @endif
                                     @endif
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
@@ -195,8 +216,49 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-2" id="modalResultPindahLokasi">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modalResultPindahLokasiContent">
+            <div class="modal-header">
+                <h5 id="modalTitle" name="modalTitle" class="modal-title">Result Marketplace</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-muted svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M6 19.7C5.7 19.7 5.5 19.6 5.3 19.4C4.9 19 4.9 18.4 5.3 18L18 5.3C18.4 4.9 19 4.9 19.4 5.3C19.8 5.7 19.8 6.29999 19.4 6.69999L6.7 19.4C6.5 19.6 6.3 19.7 6 19.7Z" fill="currentColor"/>
+                            <path d="M18.8 19.7C18.5 19.7 18.3 19.6 18.1 19.4L5.40001 6.69999C5.00001 6.29999 5.00001 5.7 5.40001 5.3C5.80001 4.9 6.40001 4.9 6.80001 5.3L19.5 18C19.9 18.4 19.9 19 19.5 19.4C19.3 19.6 19 19.7 18.8 19.7Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="fv-row">
+                    <div class="fw-bolder fs-7 text-gray-600 mb-4">Update Stock Marketplace:</div>
+                    <div id="resultUpdateStock"></div>
+                </div>
+                <div class="fv-row mt-8">
+                    <div class="fw-bolder fs-7 text-gray-600 mb-4">Update Status Product Marketplace:</div>
+                    <div id="resultUpdateStatus"></div>
+                </div>
+                <div class="fv-row">
+                    <div class="fw-bold fs-7 text-danger mb-4">* Data status product hanya mengupdate
+                        <span class="fw-bolder fs-7 text-danger">"data update stock"</span> yang ber-status success
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-end">
+                    <button id="btnFilterClose" name="btnClose" type="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
+    const url = {
+        'update_per_dokumen': "{{ route('online.pemindahan.tokopedia.form.detail.update-per-dokumen') }}",
+    }
     const data_filter = {
         'start_date': '{{ trim($data_filter->start_date) }}',
         'end_date': '{{ trim($data_filter->end_date) }}',
