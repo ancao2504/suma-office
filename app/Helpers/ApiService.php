@@ -653,13 +653,14 @@ class ApiService
         return $response;
     }
 
-    public static function OptionUpdateHarga($page, $per_page, $companyid)
+    public static function OptionUpdateHarga($page, $per_page, $search, $companyid)
     {
         $request = 'options/updateharga';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'      => $page,
             'per_page'  => $per_page,
+            'search'    => $search,
             'companyid' => $companyid,
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
@@ -1719,6 +1720,19 @@ class ApiService
         return $response;
     }
 
+    public static function OnlinePemindahanTokopediaUpdateStatusPerPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/pemindahan/tokopedia/form/update/statuspartnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OnlinePemindahanTokopediaUpdatePerNomorDokumen($nomor_dokumen, $companyid)
     {
         $request = 'online/pemindahan/tokopedia/form/update/dokumen';
@@ -1742,6 +1756,32 @@ class ApiService
             'month'     => $month,
             'search'    => $search,
             'companyid' => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineUpdateHargaBuatDokumen($nomor_dokumen, $tanggal, $companyid, $user_id)
+    {
+        $request = 'online/updateharga/tokopedia/buatdokumen';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'kode'      => trim($nomor_dokumen),
+            'tanggal'   => trim($tanggal),
+            'companyid' => trim($companyid),
+            'user_id'   => trim($user_id)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineUpdateHargaTokopediaForm($nomor_dokumen, $companyid)
+    {
+        $request = 'online/updateharga/tokopedia/form';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid)
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

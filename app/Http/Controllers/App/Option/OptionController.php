@@ -1059,7 +1059,7 @@ class OptionController extends Controller
 
     public function optionUpdateHarga(Request $request)
     {
-        $responseApi = ApiService::OptionUpdateHarga($request->get('page'), $request->get('per_page'),
+        $responseApi = ApiService::OptionUpdateHarga($request->get('page'), $request->get('per_page'), $request->get('search'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

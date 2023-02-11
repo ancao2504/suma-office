@@ -13,6 +13,9 @@
                     <span class="text-dark fw-bolder fs-7">{{ date('d F Y', strtotime($data_filter->end_date))  }}</span>
                 </span>
             </h3>
+            <div class="card-toolbar">
+                <img src="{{ asset('assets/images/logo/tokopedia_lg.png') }}" class="h-75px" />
+            </div>
         </div>
         <div class="card-header align-items-center border-0">
             <div class="align-items-start flex-column">
