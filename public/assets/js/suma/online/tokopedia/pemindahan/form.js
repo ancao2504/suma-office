@@ -62,7 +62,7 @@ $(document).ready(function () {
                             }
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                loadDaftarDetailPemindahan();
+                                location.reload();
                             }
                         });
                     } else {
@@ -78,7 +78,7 @@ $(document).ready(function () {
                             }
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                loadDaftarDetailPemindahan();
+                                location.reload();
                             }
                         });
                     }
@@ -95,7 +95,74 @@ $(document).ready(function () {
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            loadDaftarDetailPemindahan();
+                            location.reload();
+                        }
+                    });
+                }
+            },
+            error: function () {
+                loading.release();
+                Swal.fire({
+                    text: 'Server Not Responding',
+                    icon: 'error',
+                    buttonsStyling: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonText: 'Ok, got it!',
+                    customClass: {
+                        confirmButton: 'btn btn-danger'
+                    }
+                });
+            }
+        })
+    });
+
+    $('body').on('click', '#btnUpdateStatusPartNumber', function (e) {
+        e.preventDefault();
+
+        var nomor_dokumen = $(this).data('nomor_dokumen');
+        var part_number = $(this).data('part_number');
+        var _token = $('input[name="_token"]').val();
+
+        loading.block();
+        $.ajax({
+            url: url.update_status_per_part_number,
+            method: "POST",
+            data: { nomor_dokumen: nomor_dokumen, part_number: part_number, _token: _token },
+
+            success: function (response) {
+                loading.release();
+
+                if (response.status == true) {
+                    Swal.fire({
+                        text: response.message,
+                        icon: 'success',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: response.message,
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-warning'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
                         }
                     });
                 }

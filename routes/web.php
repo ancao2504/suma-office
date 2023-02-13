@@ -373,6 +373,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::name('detail.')->group(function () {
                             Route::get('/online/pemindahan/tokopedia/form/detail', [PemindahanTokopediaController::class,'formPemindahanDetail'])->name('detail');
                             Route::post('/online/pemindahan/tokopedia/form/detail/update/partnumber', [PemindahanTokopediaController::class,'updateStockPerPartNumber'])->name('update-per-part-number');
+                            Route::post('/online/pemindahan/tokopedia/form/detail/update/statuspartnumber', [PemindahanTokopediaController::class,'updateStatusPerPartNumber'])->name('update-status-per-part-number');
                             Route::post('/online/pemindahan/tokopedia/form/detail/update/dokumen', [PemindahanTokopediaController::class,'updateStockPerNomorDokumen'])->name('update-per-dokumen');
                         });
                         Route::get('/online/pemindahan/tokopedia/form/{nomor_dokumen}', [PemindahanTokopediaController::class,'formPemindahan'])->where('nomor_dokumen', '(.*)')->name('form');
@@ -395,9 +396,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
 
-            Route::name('pemindahan.')->group(function () {
+            Route::name('updateharga.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
                     Route::get('/online/updateharga/tokopedia/daftar', [UpdateHargaTokopediaController::class,'daftarUpdateHarga'])->name('daftar');
+                    Route::post('/online/updateharga/tokopedia/daftar/buatdokumen', [UpdateHargaTokopediaController::class,'buatDokumen'])->name('buat-dokumen');
+                    Route::get('/online/updateharga/tokopedia/form/detail', [UpdateHargaTokopediaController::class,'formUpdateHargaDetail'])->name('form-detail');
+                    Route::get('/online/updateharga/tokopedia/form/{nomor_dokumen}', [UpdateHargaTokopediaController::class,'formUpdateHarga'])->name('form');
                 });
             });
         });

@@ -117,7 +117,6 @@ class PemindahanTokopediaController extends Controller
         $responseApi = ApiService::OnlinePemindahanTokopediaFormDetail($request->get('nomor_dokumen'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
-        $messageApi = json_decode($responseApi)->message;
 
         if($statusApi == 1) {
             $dataApi = json_decode($responseApi)->data;
@@ -134,6 +133,7 @@ class PemindahanTokopediaController extends Controller
                     </td>
                     <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                         <span class="fs-7 fw-boldest text-gray-800 d-block">'.strtoupper(trim($data->part_number)).'</span>
+                        <span class="fs-7 fw-bolder text-gray-700 d-block">'.trim($data->nama_part).'</span>
                         <span class="fs-8 fw-bolder text-gray-600 d-block">'.strtoupper(trim($data->product_id)).'</span>
                         <span class="fs-8 fw-boldest text-dark mt-10 d-block">MARKETPLACE:</span>
                         <span class="fs-8 fw-bold text-gray-600">
@@ -181,9 +181,6 @@ class PemindahanTokopediaController extends Controller
                 $table_detail .= '
                         </div>
                     </td>
-                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                        <span class="fs-7 fw-bolder text-gray-800">'.trim($data->nama_part).'</span>
-                    </td>
                     <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
 
                 if((int)$data->status_mp->update == 1) {
@@ -220,10 +217,10 @@ class PemindahanTokopediaController extends Controller
                     <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
 
                 if((int)$data->status_mp->show == 1) {
-                    $table_detail .= '<button id="btnUpdatePerPartNumber" class="btn btn-icon btn-sm btn-primary" type="button"
+                    $table_detail .= '<button id="btnUpdatePerPartNumber" class="btn btn-icon btn-sm btn-success" type="button"
                             data-nomor_dokumen="'.strtoupper(trim($data->nomor_dokumen)).'"
                             data-part_number="'.strtoupper(trim($data->part_number)).'">
-                            <i class="fa fa-check text-white"></i>
+                            <img src="'.asset('assets/images/logo/tokopedia.png').'" class="h-20px" />
                         </button>';
                 } else {
                     if(strtoupper(trim($data->status_mp->keterangan)) == 'DATA BELUM DI VALIDASI') {
@@ -231,6 +228,17 @@ class PemindahanTokopediaController extends Controller
                     } else {
                         $table_detail .= '<span class="fs-8 fw-boldest text-success">'.strtoupper(trim($data->status_mp->keterangan)).'</span>';
                     }
+                }
+
+                $table_detail .= '</td>
+                        <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
+
+                if((int)$data->status_mp->show == 1) {
+                    $table_detail .= '<button id="btnUpdateStatusPartNumber" class="btn btn-icon btn-sm btn-danger" type="button"
+                            data-nomor_dokumen="'.strtoupper(trim($data->nomor_dokumen)).'"
+                            data-part_number="'.strtoupper(trim($data->part_number)).'">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                        </button>';
                 }
 
                 $table_detail .= '</td>
@@ -260,17 +268,18 @@ class PemindahanTokopediaController extends Controller
                     <thead class="border">
                         <tr class="fs-8 fw-bolder text-muted">
                             <th rowspan="2" class="w-50px ps-3 pe-3 text-center">No</th>
-                            <th rowspan="2" class="w-200px ps-3 pe-3 text-center">Part Number</th>
-                            <th rowspan="2" class="min-w-150px ps-3 pe-3 text-center">Nama Part</th>
+                            <th rowspan="2" class="min-w-100px ps-3 pe-3 text-center">Part Number</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Status</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Pindah</th>
-                            <th colspan="3" class="w-150px ps-3 pe-3 text-center">Stock</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Action</th>
+                            <th colspan="3" class="ps-3 pe-3 text-center">Stock</th>
+                            <th colspan="2" class="ps-3 pe-3 text-center">Action</th>
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted">
                             <th class="w-100px ps-3 pe-3 text-center">Suma</th>
                             <th class="w-100px ps-3 pe-3 text-center">Tokopedia</th>
                             <th class="w-100px ps-3 pe-3 text-center">Total</th>
+                            <th class="w-100px ps-3 pe-3 text-center">Marketplace</th>
+                            <th class="w-100px ps-3 pe-3 text-center">Internal</th>
                         </tr>
                     </thead>
                     <tbody class="border">'.$table_detail.'</tbody>
@@ -398,6 +407,11 @@ class PemindahanTokopediaController extends Controller
         } else {
             return redirect()->back()->withInput()->with('failed', 'Server tidak merespon, coba lagi');
         }
+    }
 
+    public function updateStatusPerPartNumber(Request $request) {
+        $responseApi = ApiService::OnlinePemindahanTokopediaUpdateStatusPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+                        trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
     }
 }

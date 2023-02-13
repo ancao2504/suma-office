@@ -11,6 +11,9 @@
                     <span class="fw-bolder mb-2 text-dark">Pemindahan Antar Lokasi</span>
                     <span class="text-muted fw-bold fs-7">Form pemindahan antar lokasi tokopedia</span>
                 </h3>
+                <div class="card-toolbar">
+                    <img src="{{ asset('assets/images/logo/tokopedia_lg.png') }}" class="h-75px" />
+                </div>
             </div>
             <div class="card-body">
                 <div class="row g-5 mb-8">
@@ -202,6 +205,7 @@
     const url = {
         'daftar_pemindahan': "{{ route('online.pemindahan.tokopedia.form.detail.detail') }}",
         'update_per_part_number': "{{ route('online.pemindahan.tokopedia.form.detail.update-per-part-number') }}",
+        'update_status_per_part_number': "{{ route('online.pemindahan.tokopedia.form.detail.update-status-per-part-number') }}",
         'update_per_dokumen': "{{ route('online.pemindahan.tokopedia.form.detail.update-per-dokumen') }}",
     }
     const data = {
