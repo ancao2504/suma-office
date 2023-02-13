@@ -5,13 +5,12 @@ namespace App\Http\Controllers\app\Online\Shopee;
 use App\Helpers\ApiService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Crypt;
 use Jenssegers\Agent\Agent;
 
 class PemindahanShopeeController extends Controller
 {
     public function index(){
-        return view('layouts.online.shopee.shopee', [
+        return view('layouts.online.shopee.pemindahan.pemindahan', [
             'title_menu'    => 'Update Stok Shopee'
         ]);
     }
@@ -41,12 +40,11 @@ class PemindahanShopeeController extends Controller
                             <tr class="fs-8 fw-bolder text-muted">
                             <th class="w-50px ps-3 pe-3 text-center">No</th>
                             <th class="w-100px ps-3 pe-3 text-center">No Dokumen</th>
-                            <th class="w-50px ps-3 pe-3 text-center">Tanggal</th>
                             <th class="w-50px ps-3 pe-3 text-center">Lokasi Awal</th>
                             <th class="w-50px ps-3 pe-3 text-center">Lokasi Tujuan</th>
                             <th class="w-150px ps-3 pe-3 text-center">Keterangan</th>
+                            <th class="w-50px ps-3 pe-3 text-center">User</th>
                             <th class="w-50px ps-3 pe-3 text-center">Sts Cetak</th>
-                            <th class="w-50px ps-3 pe-3 text-center">Sts In</th>
                             <th class="w-50px ps-3 pe-3 text-center">Sts SJ</th>
                             <th class="w-50px ps-3 pe-3 text-center">Sts Validasi</th>
                             <th class="w-50px ps-3 pe-3 text-center">Sts Marketplace</th>
@@ -77,10 +75,8 @@ class PemindahanShopeeController extends Controller
                                     <span class="fs-7 fw-bolder text-gray-800">'.$no.'</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">'.$data->nomor_dokumen.'</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-muted">'.date('d/m/Y', strtotime($data->tanggal)).'</span>
+                                    <span class="fs-7 fw-bolder text-gray-800 d-block">'.$data->nomor_dokumen.'</span>
+                                    <span class="fs-8 fw-bolder text-gray-600">'.date('d F Y', strtotime($data->tanggal)).'</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     <span class="fs-7 fw-bolder text-muted">'.$data->lokasi_awal.'</span>
@@ -91,11 +87,11 @@ class PemindahanShopeeController extends Controller
                                 <td class="ps-3 pe-3" style="text-align:'.(!empty($data->keterangan)?'left':'center').';vertical-align:top;">
                                     <span class="fs-7 fw-bolder text-muted">'.(!empty($data->keterangan)?$data->keterangan:'-').'</span>
                                 </td>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    '.($data->status_cetak==1?'<i class="bi bi-check text-success fs-1"></i>':'-').'
+                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                    <span class="fs-7 fw-bolder text-dark">'.(!empty($data->usertime)?explode('=',$data->usertime)[2]:'-').'</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    '.($data->status_in==1?'<i class="bi bi-check text-success fs-1"></i>':'-').'
+                                    '.($data->status_cetak==1?'<i class="bi bi-check text-success fs-1"></i>':'-').'
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     '.($data->status_sj==1?'<i class="bi bi-check text-success fs-1"></i>':'-').'
@@ -261,9 +257,8 @@ class PemindahanShopeeController extends Controller
         ] , 200);
     }
 
-
     public function detailPemindahan($id){
-        return view('layouts.online.shopee.shopeeDetail', [
+        return view('layouts.online.shopee.pemindahan.pemindahanDetail', [
             'title_menu'    => 'Update Stok Shopee',
             'filter_header'         => json_decode(base64_decode($id))
         ]);
