@@ -1,17 +1,17 @@
 const params = new URLSearchParams(window.location.search)
 for (const param of params) {
-    var page = params.get('page');
-    var per_page = params.get('per_page');
-    var start_date = params.get('start_date')??moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
-    var end_date = params.get('end_date')??moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
-    var search = params.get('search');
+    let url = JSON.parse(atob(params.get('param')));
+    var page = url.page;
+    var per_page = url.per_page;
+    var start_date = url.start_date;
+    var end_date = url.end_date;
+    var search = url.search;
 }
 
-// terdapat ajax start maka loadaing.block()
 $(document).ajaxStart(function() {
     loading.block();
 });
-// terdapat ajax stop maka loadaing.release()
+
 $(document).ajaxStop(function() {
     loading.release();
 });
@@ -19,139 +19,132 @@ $(document).ajaxStop(function() {
 $('body').attr('data-kt-aside-minimize', 'on');
 $('#kt_aside_toggle').addClass('active');
 
-
-function updateStok(){
-    // ajax post update
-}
-
-function gantiUrl(url_search, url_start_date, url_end_date, url_page = 1, url_per_page = 10){
-    loading.block();
-    window.location.href = window.location.href.split('?')[0] + '?page=' + url_page + (url_per_page?'&per_page=' + url_per_page:'') + (url_search?'&search=' + url_search:'') + (url_start_date?'&start_date=' + url_start_date:'') + (url_end_date?'&end_date=' + url_end_date:'');
-}
-
-function getDetail(key){
-    // buat ajax post url: base_url + online/pemindahan/shopee/detail dengan data: no_dokumen
+function getDaftar(page = $('#view_daftar_paginat').find('.pagination').data('current_page')){
     $.ajax({
         type: "POST",
-        url: base_url + "/online/pemindahan/shopee/detail",
+        url: base_url + "/online/pemindahan/shopee/daftar",
         data: { 
             _token: $('meta[name="csrf-token"]').attr('content'),
-            nomor_dokumen: key 
+            search: $('#filterSearch').val(),
+            start_date: $("#get_start_date").val()??moment(new Date()).format('YYYY-MM-DD'),
+            end_date: $("#get_end_date").val()??moment(new Date()).format('YYYY-MM-DD'),
+            page: page??1,
+            per_page: $('#per_page option:selected').val(),
         },
         success: function(response) {
-            // kode yang akan dijalankan jika request berhasil
-            $('#update_stok .modal-boady').html(response.data);
-            $('#update_stok').modal('show');
+            console.log('sukses');
+            console.log(response);
+            $('#daftar_table #tabel').remove();
+            $('#daftar_table').prepend(response.table);
+            $('#view_daftar_paginat').html(response.pagination);
+            
+            // hapus parameter pada url setelah menerapkan filter sebelumnya
+            window.history.pushState("", "", window.location.href.split('?')[0]);
         },
         error: function(xhr, status, error) {
-            // kode yang akan dijalankan jika request gagal
             console.log(xhr.responseText);
         }
     });
 }
-$( function() {
-    let tboady = $("#kt_project_users_table > tbody");
-    $("#get_tgl_dokumen").flatpickr({
-        dateFormat: "Y-m-d",
-        mode: "range",
-        defaultDate: [start_date??moment(new Date()).format('YYYY-MM-DD'), (end_date??start_date)??moment(new Date()).format('YYYY-MM-DD')],
-    });
 
-    $("#card-detail, #update_stok .modal-dialog").draggable();
-
-    tboady.on('mouseenter', 'tr.klikdokumen', function() {
-        $(this).css('cursor', 'pointer');
-    });
-
-    // list klik kecuali
-    tboady.on("click", "tr.klikdokumen", function(event) {
-        if (!$(event.target).is("button.btn-edit, span.bi.bi-pencil")){
-            $('i.bi-caret-right-fill').remove();
-            $('.klikdokumen').removeClass('table-active');
-
-            $(this).addClass('table-active');
-            if ($(this).find('td').eq(0).find('i.bi-caret-right-fill').length == 0) {
-                $(this).find('td').eq(0).html(`<i class="bi bi-caret-right-fill"></i>${$(this).find('td').eq(0).html()}`);
-            }
-
-            if ($('#card-detail').attr('hidden') != 'hidden') {
-                $(this).trigger('dblclick');
-            }
-        }
-    });
-
-    tboady.on("click", "button.btn-edit", function(event) {
-        getDetail($(this).attr('data-key'));
-    });
-
-    $('#update_stok').on('click','button.btn-update',function(event) {
-        swal.fire({
-            title: "Apakah anda yakin Update Stock Shopee ?",
-            text: "Data akan diupdate!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Ya, update!",
-            cancelButtonText: "Tidak!",
-            reverseButtons: true,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-secondary"
-            }
-        }).then(function(result) {
-            if (result.isConfirmed) {
-                updateStok();
-            } else if (result.dismiss === "cancel") {
-            }
-        });
-    });
-
-    $('button.btn-update').on('click',function(event) {
-        swal.fire({
-            title: "Apakah anda yakin Update Stock Shopee ?",
-            text: "Data akan diupdate!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Ya, update!",
-            cancelButtonText: "Tidak!",
-            reverseButtons: true,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-secondary"
-            }
-        }).then(function(result) {
-            if (result.isConfirmed) {
-                updateStok();
-            } else if (result.dismiss === "cancel") {
-            }
-        });
-    });
-
-    // per_page
-    $('#per_page').on('change', function () {
-        gantiUrl(search, start_date, end_date, 1, $(this).val());
-    });
-    $('#per_page option[value="' + per_page + '"]').prop('selected', true);
-
-    // get_tgl_dokumen on change
-    let cange = 0;
-    $('#get_tgl_dokumen').on('change', function(){
-        cange++;
-        var tgl_dokumen = $(this).val().split(' to ');
-        if(cange == 2){
-            gantiUrl(search, tgl_dokumen[0], tgl_dokumen[1], 1, per_page);
-            cange = 0;
-        }
-    });
-
+$(document).ready(function() {
     $('#filterSearch').val(search);
-    // filterSearch on change
-    $('#filterSearch').on('change', function(){
-        var filter_search = $(this).val().replace(/\//g, '%2F');
-        gantiUrl(filter_search, start_date, end_date, 1, per_page);
+    $('#get_start_date').flatpickr({
+        defaultDate: start_date??moment(new Date()).format('YYYY-MM-DD'),
+    });
+    $('#get_end_date').flatpickr({
+        defaultDate: end_date??moment(new Date()).format('YYYY-MM-DD'),
     });
 
-    // kt_project_users_table_wrapper on click pagination .page-item kecuali ada atribut disabeld
-    $('#kt_project_users_table_wrapper').on('click', '.pagination .page-item:not(.disabled)', function(event) {
-        gantiUrl(search, start_date, end_date, $(this).find('.page-link').attr('data-page'), per_page);
+    $('#per_page option[value="'+per_page+'"]').prop('selected', true);
+    getDaftar(page);
+
+    $('#per_page').on('change', function () {
+        getDaftar(1);
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    });
+
+    $('#get_start_date, #get_end_date').on('change', function(){
+        if(moment($('#get_start_date').val()).isBefore($('#get_end_date').val()) || moment($('#get_start_date').val()).isSame($('#get_end_date').val())){
+            getDaftar(1);
+        }else{
+            Swal.fire({
+                text: "Tanggal awal harus lebih kecil dari tanggal akhir!",
+                icon: "warning",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-primary"
+                }
+            });
+        }
+    });
+
+    $('#filterSearch').on('change', function(){
+        getDaftar(1);
+    });
+
+    $('#view_daftar_paginat').on('click', '.pagination .page-item:not(.disabled)', function(event) {
+        getDaftar($(this).find('.page-link').attr('data-page'));
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    });
+
+    // daftar_table find tabel .btn_detail on click swal fire confirm ajax post
+    $('#daftar_table').on('click', '#tabel .btn_detail', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            text: "Apakah anda yakin Update Stok Semua Part dari Nomor Dokumen : " + $(this).parents('tr').attr('data-no') + " ?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Ya, Update Stok!",
+            cancelButtonText: "Tidak, batalkan!",
+            allowOutsideClick: false,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-secondary"
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: base_url + "/online/pemindahan/shopee/update/stock/dokumen",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        no_dok: $(this).parents('tr').attr('data-no'),
+                    },
+                    success: function(response) {
+                        console.log('sukses');
+                        console.log(response);
+                        if(response.status == 0){
+                            Swal.fire({
+                                text: response.message,
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok",
+                                allowOutsideClick: false,
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+
+                        if(response.status == 1){
+                            // $('#detail_modal .modal-body').html(response);
+                            // $('#detail_modal').modal('show');
+
+                            if(response.data.data_error){
+                                $('body').append(response.modal_respown);
+                                $('body').find('#modal_respown').modal('show');
+                            }
+                            getDaftar(page);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+        }.bind(this));
     });
 });

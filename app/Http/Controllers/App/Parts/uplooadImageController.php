@@ -39,11 +39,11 @@ class uplooadImageController extends Controller
 
     public function daftarImagePart()
     {
-        $data = DB::table('mspart')
-            ->lock('with (nolock)')->select('*', DB::raw("'http://localhost:2022/suma-pmo/public/assets/images/parts/' + RTRIM(mspart.kd_part) + '.png' as url"))
-            ->orderBy('kd_part', 'asc')
-            ->paginate(24);
-        return response()->json($data, 200);
+        // $data = DB::table('mspart')
+        //     ->lock('with (nolock)')->select('*', DB::raw("'http://localhost:2022/suma-pmo/public/assets/images/parts/' + RTRIM(mspart.kd_part) + '.png' as url"))
+        //     ->orderBy('kd_part', 'asc')
+        //     ->paginate(24);
+        // return response()->json($data, 200);
     }
 
 }

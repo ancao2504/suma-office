@@ -25,7 +25,7 @@ use App\Setting\CetakUlang\CetakUlangController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
-use App\Http\Controllers\App\Online\Shopee\PemindahanShopeeController;
+use App\Online\Shopee\PemindahanShopeeController;
 use App\Http\Controllers\App\Online\Tokopedia\PemindahanTokopediaController;
 use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
@@ -380,8 +380,18 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
 
                 Route::name('shopee.')->group(function () {
-                    Route::get('/online/pemindahan/shopee/daftar', [PemindahanShopeeController::class,'daftarPemindahan'])->name('daftar');
-                    Route::post('/online/pemindahan/shopee/detail', [PemindahanShopeeController::class,'detailPemindahan'])->name('detail');
+                    Route::controller(PemindahanShopeeController::class)->group(function () {
+                        Route::get('/online/pemindahan/shopee', 'index')->name('index');
+                        Route::post('/online/pemindahan/shopee/daftar', 'daftarPemindahan')->name('daftar');
+                        
+                        Route::post('/online/pemindahan/shopee/detail', 'detailPemindahanDaftar')->name('daftar-detail');
+                        Route::get('/online/pemindahan/shopee/detail/{id}', 'detailPemindahan')->name('detail-index');
+                        
+                        Route::name('update.')->group(function () {
+                            Route::post('/online/pemindahan/shopee/update/stock/dokumen', 'updateStockperDokumen')->name('stock-perdokumen');
+                            Route::post('/online/pemindahan/shopee/update/stock/part', 'updateStockperPart')->name('stock-perpart');
+                        });
+                    });
                 });
             });
 
