@@ -26,97 +26,118 @@
                 </span>
             </h3>
             <div class="card-toolbar">
+                <img src="{{ asset('assets/images/logo/tokopedia_lg.png') }}" class="h-75px" />
+            </div>
+        </div>
+        <div class="card-header align-items-center border-0">
+            <div class="align-items-start flex-column">
+                <div class="input-group">
+                    <select id="selectFilterMonth" name="month" class="form-select">
+                        <option value="1" @if($data_filter->month == 1) {{"selected"}} @endif>Januari</option>
+                        <option value="2" @if($data_filter->month == 2) {{"selected"}} @endif>Februari</option>
+                        <option value="3" @if($data_filter->month == 3) {{"selected"}} @endif>Maret</option>
+                        <option value="4" @if($data_filter->month == 4) {{"selected"}} @endif>April</option>
+                        <option value="5" @if($data_filter->month == 5) {{"selected"}} @endif>Mei</option>
+                        <option value="6" @if($data_filter->month == 6) {{"selected"}} @endif>Juni</option>
+                        <option value="7" @if($data_filter->month == 7) {{"selected"}} @endif>Juli</option>
+                        <option value="8" @if($data_filter->month == 8) {{"selected"}} @endif>Agustus</option>
+                        <option value="9" @if($data_filter->month == 9) {{"selected"}} @endif>September</option>
+                        <option value="10" @if($data_filter->month == 10) {{"selected"}} @endif>Oktober</option>
+                        <option value="11" @if($data_filter->month == 11) {{"selected"}} @endif>November</option>
+                        <option value="12" @if($data_filter->month == 12) {{"selected"}} @endif>Desember</option>
+                    </select>
+                    <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun"
+                        @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
+                    <button id="btnFilterProses" type="submit" class="btn btn-primary">Terapkan</button>
+                </div>
+            </div>
+            <div class="card-toolbar">
                 <button id="btnBuatDokumen" type="button" class="btn btn-light me-2" data-bs-toggle="modal" data-bs-target="#modalBuatDokumen">
                     Buat Dokumen
-                </button>
-                <button id="btnFilterMasterData" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFilter">
-                    <i class="bi bi-funnel-fill fs-4 me-2"></i>Filter
                 </button>
             </div>
         </div>
         <div class="card-body">
-            <div class="fv-row">
-                <div class="table-responsive">
-                    <table class="table table-row-dashed table-row-gray-300 align-middle">
-                        <thead class="border">
-                            <tr class="fs-8 fw-bolder text-muted">
-                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">No</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">No Dokumen</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Tanggal</th>
-                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Status</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Jml Item</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Terupdate</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Jml Selisih</th>
-                                <th colspan="2" class="w-100px ps-3 pe-3 text-center">Action</th>
-                            </tr>
-                            <tr class="fs-8 fw-bolder text-muted">
-                                <th class="w-50px ps-3 pe-3 text-center">Update</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Detail</th>
-                            </tr>
-                        </thead>
-                        <tbody class="border">
-                            @forelse ($data_update_harga as $data)
-                            <tr>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ trim($data->nomor_dokumen) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ date('d/m/Y', strtotime($data->tanggal)) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                    @if($data->status == 1)
-                                    <i class="fa fa-check text-success"></i>
-                                    @else
-                                    <i class="fa fa-minus-circle text-gray-400"></i>
-                                    @endif
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->item) }}
-                                        <span class="fs-7 fw-bolder text-gray-500 ms-2">Item</span>
+            <div class="table-responsive">
+                <table class="table table-row-dashed table-row-gray-300 align-middle">
+                    <thead class="border">
+                        <tr class="fs-8 fw-bolder text-muted">
+                            <th rowspan="2" class="w-50px ps-3 pe-3 text-center">No</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3 text-center">No Dokumen</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Tanggal</th>
+                            <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Status</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Jml Item</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Terupdate</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Jml Selisih</th>
+                            <th colspan="2" class="w-100px ps-3 pe-3 text-center">Action</th>
+                        </tr>
+                        <tr class="fs-8 fw-bolder text-muted">
+                            <th class="w-50px ps-3 pe-3 text-center">Update</th>
+                            <th class="w-50px ps-3 pe-3 text-center">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border">
+                        @forelse ($data_update_harga as $data)
+                        <tr>
+                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                <span class="fs-7 fw-bolder text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                <span class="fs-7 fw-bolder text-gray-800">{{ trim($data->nomor_dokumen) }}</span>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                <span class="fs-7 fw-bolder text-gray-800">{{ date('d/m/Y', strtotime($data->tanggal)) }}</span>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                @if($data->status == 1)
+                                <i class="fa fa-check text-success"></i>
+                                @else
+                                <i class="fa fa-minus-circle text-gray-400"></i>
+                                @endif
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->item) }}
+                                    <span class="fs-7 fw-bolder text-gray-500 ms-2">Item</span>
+                                </span>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->update) }}
+                                    <span class="fs-7 fw-bolder text-gray-500 ms-2">Item</span>
+                                </span>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->selisih) }}</span>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                <button id="btnUpdateHarga" class="btn btn-icon btn-sm btn-danger" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
+                                    <i class="fa fa-refresh text-white"></i>
+                                </button>
+                            </td>
+                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                <a href="{{ route('online.updateharga.tokopedia.form', trim($data->nomor_dokumen)) }}" class="btn btn-icon btn-sm btn-primary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
+                                    <i class="fa fa-check text-white"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="9" class="pt-12 pb-12">
+                                <div class="row text-center pe-10">
+                                    <span class="svg-icon svg-icon-muted">
+                                        <svg class="h-100px w-100px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="currentColor"/>
+                                            <path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="currentColor"/>
+                                        </svg>
                                     </span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->update) }}
-                                        <span class="fs-7 fw-bolder text-gray-500 ms-2">Item</span>
-                                    </span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->selisih) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                    <button id="btnUpdateHarga" class="btn btn-icon btn-sm btn-danger" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
-                                        <i class="fa fa-refresh text-white"></i>
-                                    </button>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                    <a href="{{ route('online.updateharga.tokopedia.form', trim($data->nomor_dokumen)) }}" class="btn btn-icon btn-sm btn-primary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
-                                        <i class="fa fa-check text-white"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="9" class="pt-12 pb-12">
-                                    <div class="row text-center pe-10">
-                                        <span class="svg-icon svg-icon-muted">
-                                            <svg class="h-100px w-100px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M21.7 18.9L18.6 15.8C17.9 16.9 16.9 17.9 15.8 18.6L18.9 21.7C19.3 22.1 19.9 22.1 20.3 21.7L21.7 20.3C22.1 19.9 22.1 19.3 21.7 18.9Z" fill="currentColor"/>
-                                                <path opacity="0.3" d="M11 20C6 20 2 16 2 11C2 6 6 2 11 2C16 2 20 6 20 11C20 16 16 20 11 20ZM11 4C7.1 4 4 7.1 4 11C4 14.9 7.1 18 11 18C14.9 18 18 14.9 18 11C18 7.1 14.9 4 11 4ZM8 11C8 9.3 9.3 8 11 8C11.6 8 12 7.6 12 7C12 6.4 11.6 6 11 6C8.2 6 6 8.2 6 11C6 11.6 6.4 12 7 12C7.6 12 8 11.6 8 11Z" fill="currentColor"/>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                    <div class="row text-center pt-8">
-                                        <span class="fs-6 fw-bolder text-gray-500">-  Tidak ada data yang ditampilkan -</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                                <div class="row text-center pt-8">
+                                    <span class="fs-6 fw-bolder text-gray-500">-  Tidak ada data yang ditampilkan -</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -198,56 +219,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" tabindex="-2" id="modalFilter">
-    <div class="modal-dialog">
-        <div class="modal-content" id="modalFilterContent">
-            <div class="modal-header">
-                <h5 id="modalTitle" name="modalTitle" class="modal-title">Filter Daftar Update Harga</h5>
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <span class="svg-icon svg-icon-muted svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path opacity="0.3" d="M6 19.7C5.7 19.7 5.5 19.6 5.3 19.4C4.9 19 4.9 18.4 5.3 18L18 5.3C18.4 4.9 19 4.9 19.4 5.3C19.8 5.7 19.8 6.29999 19.4 6.69999L6.7 19.4C6.5 19.6 6.3 19.7 6 19.7Z" fill="currentColor"/>
-                            <path d="M18.8 19.7C18.5 19.7 18.3 19.6 18.1 19.4L5.40001 6.69999C5.00001 6.29999 5.00001 5.7 5.40001 5.3C5.80001 4.9 6.40001 4.9 6.80001 5.3L19.5 18C19.9 18.4 19.9 19 19.5 19.4C19.3 19.6 19 19.7 18.8 19.7Z" fill="currentColor"/>
-                        </svg>
-                    </span>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="fv-row">
-                    <label class="form-label required">Bulan:</label>
-                    <select id="selectFilterMonth" name="month" class="form-select">
-                        <option value="1" @if($data_filter->month == 1) {{"selected"}} @endif>Januari</option>
-                        <option value="2" @if($data_filter->month == 2) {{"selected"}} @endif>Februari</option>
-                        <option value="3" @if($data_filter->month == 3) {{"selected"}} @endif>Maret</option>
-                        <option value="4" @if($data_filter->month == 4) {{"selected"}} @endif>April</option>
-                        <option value="5" @if($data_filter->month == 5) {{"selected"}} @endif>Mei</option>
-                        <option value="6" @if($data_filter->month == 6) {{"selected"}} @endif>Juni</option>
-                        <option value="7" @if($data_filter->month == 7) {{"selected"}} @endif>Juli</option>
-                        <option value="8" @if($data_filter->month == 8) {{"selected"}} @endif>Agustus</option>
-                        <option value="9" @if($data_filter->month == 9) {{"selected"}} @endif>September</option>
-                        <option value="10" @if($data_filter->month == 10) {{"selected"}} @endif>Oktober</option>
-                        <option value="11" @if($data_filter->month == 11) {{"selected"}} @endif>November</option>
-                        <option value="12" @if($data_filter->month == 12) {{"selected"}} @endif>Desember</option>
-                    </select>
-                </div>
-                <div class="fv-row mt-8">
-                    <label class="form-label required">Tahun:</label>
-                    <input type="number" id="inputFilterYear" name="year" class="form-control" placeholder="Tahun"
-                        @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button id="btnFilterReset" class="btn btn-danger" role="button">Reset Filter</button>
-                <div class="text-end">
-                    <button id="btnFilterProses" type="submit" class="btn btn-primary">Terapkan</button>
-                    <button id="btnFilterClose" name="btnClose" type="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 @include('layouts.option.optionupdateharga')
 

@@ -150,8 +150,16 @@ class UpdateHargaTokopediaController extends Controller
                     </td>
                     <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                         <span class="fs-7 fw-boldest text-gray-800 d-block">'.strtoupper(trim($data->part_number)).'</span>
-                        <span class="fs-8 fw-bolder text-gray-600">'.strtoupper(trim($data->nama_part)).'</span>
-                    </td>
+                        <span class="fs-8 fw-bolder text-gray-600 d-block">'.strtoupper(trim($data->nama_part)).'</span>
+                        <span class="fs-8 fw-bolder text-gray-400 mt-4 d-block">Product ID :</span>';
+
+                if(trim($data->product_id) == '') {
+                    $table_detail .= '<span class="fs-8 fw-boldest text-danger">(Product ID masih kosong)</span>';
+                } else {
+                    $table_detail .= '<span class="fs-8 fw-boldest text-gray-800">'.strtoupper(trim($data->product_id)).'</span>';
+                }
+
+                $table_detail .= '</td>
                     <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
 
                 if((int)$data->update == 1) {

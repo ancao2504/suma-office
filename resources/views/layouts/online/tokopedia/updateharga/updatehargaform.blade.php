@@ -11,6 +11,9 @@
                     <span class="fw-bolder mb-2 text-dark">Update Harga</span>
                     <span class="text-muted fw-bold fs-7">Form update harga tokopedia</span>
                 </h3>
+                <div class="card-toolbar">
+                    <img src="{{ asset('assets/images/logo/tokopedia_lg.png') }}" class="h-75px" />
+                </div>
             </div>
             <div class="card-body">
                 <div class="row g-5 mb-8">

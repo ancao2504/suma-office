@@ -204,11 +204,11 @@ class PemindahanTokopediaController extends Controller
                 if((int)$data->status_mp->update == 0) {
                     if(strtoupper(trim($data->indicator)) == 'INCREMENT') {
                         $table_detail .= '<span class="fs-7 fw-boldest text-success">
-                                <i class="fa fa-arrow-up me-2 text-success" aria-hidden="true"></i>'.((double)empty($data->marketplace->stock) ? 0 : $data->marketplace->stock + (double)$data->pindah).'
+                                <i class="fa fa-arrow-up me-2 text-success" aria-hidden="true"></i>'.number_format((double)((empty($data->marketplace->stock)) ? 0 : $data->marketplace->stock) + (double)$data->pindah).'
                             </span>';
                     } else {
                         $table_detail .= '<span class="fs-7 fw-boldest text-danger">
-                                <i class="fa fa-arrow-down me-2 text-danger" aria-hidden="true"></i>'.((double)empty($data->marketplace->stock) ? 0 : $data->marketplace->stock - (double)$data->pindah).'
+                                <i class="fa fa-arrow-down me-2 text-danger" aria-hidden="true"></i>'.number_format((double)((empty($data->marketplace->stock)) ? 0 : $data->marketplace->stock) - (double)$data->pindah).'
                             </span>';
                     }
                 }

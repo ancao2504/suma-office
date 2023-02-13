@@ -92,6 +92,7 @@ $(document).ready(function () {
             }
         }).then((result) => {
             if (result.isConfirmed) {
+                loading.block();
                 $.ajax({
                     url: url.update_per_dokumen,
                     method: "POST",
