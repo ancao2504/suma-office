@@ -1771,7 +1771,7 @@ class ApiService
         return $response;
     }
 
-    public static function OnlinePemindahanDetail($nomor_dokumen ,$companyid)
+    public static function OnlinePemindahanShopeeDetail($nomor_dokumen ,$companyid)
     {
         $request = 'online/pemindahan/shopee/detail';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -1799,7 +1799,7 @@ class ApiService
         return $response;
     }
     
-    public static function updateStockperDokumen($nomor_dokumen, $companyid){
+    public static function onlineuUpdateStockShopeeperDokumen($nomor_dokumen, $companyid){
         
         $request = 'online/pemindahan/shopee/update/stock/dokumen';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -1811,7 +1811,7 @@ class ApiService
         return $response;
     }
 
-    public static function updateStockperPart($nomor_dokumen, $kode_part, $companyid){
+    public static function onlineUpdateStockShopeeperPart($nomor_dokumen, $kode_part, $companyid){
         
         $request = 'online/pemindahan/shopee/update/stock/part';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -1819,6 +1819,19 @@ class ApiService
             'nomor_dokumen' => trim($nomor_dokumen),
             'kode_part'     => trim($kode_part),
             'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanShopeeUpdateStatusPerPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/pemindahan/shopee/form/update/statuspartnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

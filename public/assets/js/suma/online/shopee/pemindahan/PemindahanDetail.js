@@ -10,7 +10,6 @@ $('body').attr('data-kt-aside-minimize', 'on');
 $('#kt_aside_toggle').addClass('active');
 
 function getDaftar(){
-
     $.ajax({
         type: "POST",
         url: base_url + "/online/pemindahan/shopee/detail",
@@ -126,6 +125,74 @@ function updateDetail(part){
                             }
                         });
                     }
+
+                    if(response.status == 1){
+                        // if(response.data){
+                            $('body').append(response.modal_respown);
+                            $('body').find('#modal_respown').modal('show');
+                        // }
+                    }
+                    
+                    getDaftar();
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        } else if (result.dismiss === "cancel") {
+        }
+    });
+}
+
+function updateDetailInternal(data){
+    data = JSON.parse(atob(data));
+    console.log(data);
+    Swal.fire({
+        text: "Apakah anda yakin update internal, jika update internal maka anda harus update secara manual pada shopee ?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Ya, Update!",
+        cancelButtonText: "Tidak, batalkan!",
+        allowOutsideClick: false,
+        customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-secondary"
+        }
+    }).then(function(result) {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: base_url + "/online/pemindahan/shopee/update/stock/part/internal",
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    nomor_dokumen: data.nomor_dokumen,
+                    kode_part: data.kode_part,
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    if(response.status == 0){
+                        Swal.fire({
+                            text: response.message,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok",
+                            allowOutsideClick: false,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+
+                    if(response.status == 1){
+                        // if(response.data){
+                            $('body').append(response.modal_respown);
+                            $('body').find('#modal_respown').modal('show');
+                        // }
+                    }
+                    
+                    getDaftar();
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);

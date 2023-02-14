@@ -15,8 +15,8 @@
                     <span class="fw-bolder mb-2 text-dark">Pemindahan Antar Lokasi</span>
                     <span class="text-muted fw-bold fs-7">Daftar pemindahan antar lokasi Shopee</span>
                     <span class="text-muted fw-bold fs-7 mt-2">Periode
-                        <span class="text-dark fw-bolder fs-7">02 February 2023</span> s/d
-                        <span class="text-dark fw-bolder fs-7">02 February 2023</span>
+                        <span class="text-dark fw-bolder fs-7" id="text_start_date">-</span> s/d
+                        <span class="text-dark fw-bolder fs-7" id="text_end_date">-</span>
                     </span>
                 </h3>
                 <div class="card-toolbar">
@@ -41,7 +41,7 @@
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
-                        <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search">
+                        <input type="text" class="form-control form-control-solid ps-10" name="search" id="filterSearch" value="" oninput="this.value = this.value.toUpperCase()" placeholder="Search No Dokumen">
                     </div>
                 </div>
             </div>
@@ -108,10 +108,8 @@
     @endif
 </div>
 
-
-
     @push('scripts')
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script language="JavaScript" src="{{ asset('assets/js/suma/online/shopee/daftarPemindahan.js') }}?v={{ time() }}"></script>
+    <script language="JavaScript" src="{{ asset('assets/js/suma/online/shopee/pemindahan/Pemindahan.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

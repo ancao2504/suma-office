@@ -11,12 +11,21 @@
             <!--begin::Card-->
             <div id="view_table" class="tab-pane fade active show">
                 <div class="card card-flush">
+                    <div class="card-header align-items-center border-0 mt-4">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="fw-bolder mb-2 text-dark">Pemindahan Antar Lokasi</span>
+                            <span class="text-muted fw-bold fs-7">Form pemindahan antar lokasi Shopee</span>
+                        </h3>
+                        <div class="card-toolbar">
+                            <img src="{{ asset('assets/images/logo/shopee_lg.png') }}" class="h-75px" />
+                        </div>
+                    </div>
                     <!--begin::Card body-->
                     <div class="card-body">
                         <!--begin::Table container-->
                         <div class="table-responsive">
                             <!--begin::Table-->
-                            <div id="daftar_table" class="dataTables_wrapper dt-bootstrap4 no-footer" data-no="{{ trim($filter_header->nomor_dokumen) }}">
+                            <div id="daftar_table" data-no="{{ trim($filter_header->nomor_dokumen) }}">
                                 {{-- table --}}
                             </div>
                             <!--end::Table-->
@@ -31,7 +40,7 @@
                             <div class="col-6">
                                 @if ($filter_header->filter->marketplace == 0)
                                 <a class="btn btn-light-dark btn-hover-rise btn_detail" data-focus="0" onclick="updateSemuaDetail()">
-                                Update Semua <img alt="Logo" src="http://localhost:2022/suma-pmo/public/assets/images/logo/shopee.png" class="h-20px me-3"/>
+                                Update Semua <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3"/>
                                 </a>
                                 @endif
                             </div>
@@ -87,6 +96,6 @@
     @push('scripts')
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script language="JavaScript"
-            src="{{ asset('assets/js/suma/online/shopee/daftarDetailPemindahan.js') }}?v={{ time() }}"></script>
+            src="{{ asset('assets/js/suma/online/shopee/pemindahan/PemindahanDetail.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection

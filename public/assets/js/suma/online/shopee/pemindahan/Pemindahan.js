@@ -55,6 +55,9 @@ $(document).ready(function() {
     $('#get_end_date').flatpickr({
         defaultDate: end_date??moment(new Date()).format('YYYY-MM-DD'),
     });
+    
+    $('#text_start_date').text(start_date??moment(new Date()).format('DD MMMM YYYY'));
+    $('#text_end_date').text(end_date??moment(new Date()).format('DD MMMM YYYY'));
 
     $('#per_page option[value="'+per_page+'"]').prop('selected', true);
     getDaftar(page);
@@ -67,6 +70,8 @@ $(document).ready(function() {
     $('#get_start_date, #get_end_date').on('change', function(){
         if(moment($('#get_start_date').val()).isBefore($('#get_end_date').val()) || moment($('#get_start_date').val()).isSame($('#get_end_date').val())){
             getDaftar(1);
+            $('#text_start_date').text(moment($('#get_start_date').val()).format('DD MMMM YYYY'));
+            $('#text_end_date').text(moment($('#get_end_date').val()).format('DD MMMM YYYY'));
         }else{
             Swal.fire({
                 text: "Tanggal awal harus lebih kecil dari tanggal akhir!",
