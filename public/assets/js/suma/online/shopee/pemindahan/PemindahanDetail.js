@@ -70,11 +70,10 @@ function updateSemuaDetail(){
                             // $('#detail_modal .modal-body').html(response);
                             // $('#detail_modal').modal('show');
 
-                            if(response.data.data_error){
+                            if(response.data){
                                 $('body').append(response.modal_respown);
                                 $('body').find('#modal_respown').modal('show');
                             }
-                            
                             getDaftar();
                         }
                     },
@@ -172,27 +171,22 @@ function updateDetailInternal(data){
                 success: function(response) {
                     console.log(response);
 
-                    if(response.status == 0){
+                    if(response.status){
                         Swal.fire({
                             text: response.message,
-                            icon: "error",
+                            icon: "success",
                             buttonsStyling: false,
                             confirmButtonText: "Ok",
                             allowOutsideClick: false,
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
+                        }).then(function(result) {
+                            if (result.value) {
+                                getDaftar();
+                            }
                         });
                     }
-
-                    if(response.status == 1){
-                        // if(response.data){
-                            $('body').append(response.modal_respown);
-                            $('body').find('#modal_respown').modal('show');
-                        // }
-                    }
-                    
-                    getDaftar();
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);

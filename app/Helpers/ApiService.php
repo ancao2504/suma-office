@@ -1799,7 +1799,7 @@ class ApiService
         return $response;
     }
     
-    public static function onlineuUpdateStockShopeeperDokumen($nomor_dokumen, $companyid){
+    public static function onlineuUpdateStockShopeePerDokumen($nomor_dokumen, $companyid){
         
         $request = 'online/pemindahan/shopee/update/stock/dokumen';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -1811,7 +1811,7 @@ class ApiService
         return $response;
     }
 
-    public static function onlineUpdateStockShopeeperPart($nomor_dokumen, $kode_part, $companyid){
+    public static function onlineUpdateStockShopeePerPart($nomor_dokumen, $kode_part, $companyid){
         
         $request = 'online/pemindahan/shopee/update/stock/part';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -1826,7 +1826,7 @@ class ApiService
 
     public static function OnlinePemindahanShopeeUpdateStatusPerPartNumber($nomor_dokumen, $part_number, $companyid)
     {
-        $request = 'online/pemindahan/shopee/form/update/statuspartnumber';
+        $request = 'online/pemindahan/shopee/update/statuspartnumber';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen' => trim($nomor_dokumen),

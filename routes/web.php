@@ -391,6 +391,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::name('update.')->group(function () {
                             Route::post('/online/pemindahan/shopee/update/stock/dokumen', 'updateStockperDokumen')->name('stock-perdokumen');
                             Route::post('/online/pemindahan/shopee/update/stock/part', 'updateStockperPart')->name('stock-perpart');
+                            Route::post('/online/pemindahan/shopee/update/stock/part/internal', 'updateStatusPerPartNumber')->name('sts-perpart');
                         });
                     });
                 });

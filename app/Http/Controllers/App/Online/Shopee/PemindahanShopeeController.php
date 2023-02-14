@@ -84,10 +84,10 @@ class PemindahanShopeeController extends Controller
                                     <span class="fs-8 fw-bolder text-gray-600">'.date('d F Y', strtotime($data->tanggal)).'</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-muted">'.$data->lokasi_awal.'</span>
+                                    <span class="fs-7 fw-bolder '.(($data->lokasi_awal=='OS')?'text-success':'text-muted').'">'.$data->lokasi_awal.'</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-muted">'.$data->lokasi_tujuan.'</span>
+                                    <span class="fs-7 fw-bolder '.(($data->lokasi_tujuan=='OS')?'text-success':'text-muted').'">'.$data->lokasi_tujuan.'</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:'.(!empty($data->keterangan)?'left':'center').';vertical-align:top;">
                                     <span class="fs-7 fw-bolder text-muted">'.(!empty($data->keterangan)?$data->keterangan:'-').'</span>
@@ -272,7 +272,7 @@ class PemindahanShopeeController extends Controller
     }
 
     public function detailPemindahanDaftar(Request $request){
-        $responseApi = ApiService::OnlinePemindahanDetail(
+        $responseApi = ApiService::OnlinePemindahanShopeeDetail(
             $request->get('nomor_dokumen'),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -512,7 +512,7 @@ class PemindahanShopeeController extends Controller
     }
     
     public function updateStockperDokumen(Request $request){
-        $responseApi = ApiService::updateStockperDokumen(
+        $responseApi = ApiService::onlineuUpdateStockShopeePerDokumen(
             $request->no_dok,
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -603,7 +603,7 @@ class PemindahanShopeeController extends Controller
     }
 
     public function updateStockperPart(Request $request){
-        $responseApi = ApiService::updateStockperPart(
+        $responseApi = ApiService::onlineUpdateStockShopeePerPart(
             $request->nomor_dokumen,
             $request->kode_part,
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -674,7 +674,21 @@ class PemindahanShopeeController extends Controller
 
     public function updateStatusPerPartNumber(Request $request) {
         $responseApi = ApiService::OnlinePemindahanShopeeUpdateStatusPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
-                        trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
-        return json_decode($responseApi, true);
+                        trim($request->get('kode_part')), strtoupper(trim($request->session()->get('app_user_company_id'))));
+
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if (empty($statusApi) || $statusApi == 0) {
+            return response()->json([
+                'status' => 0,
+                'message' => $messageApi
+            ]);
+        } else {
+            return response()->json([
+                'status' => 1,
+                'message' => $messageApi
+            ]);
+        }
     }
 }
