@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Tokopedia;
+namespace App\Http\Controllers\App\Online\Tokopedia;
 
 use App\Helpers\ApiService;
 use App\Helpers\ApiServiceTokopedia;
