@@ -2,8 +2,8 @@
 
 return [
     'app' => [
-        'app_base_url'  => 'http://localhost:2022/',
-        'app_api_url'   => 'http://localhost:2022/suma-pmo-api/public/api',
+        'app_base_url'  => 'http://localhost:8888/',
+        'app_api_url'   => 'http://localhost:8888/suma-pmo-api/public/api',
         'app_images_url' => 'http://43.252.9.117/suma-images',
         // 'app_images_url_SJ' => 'http://192.168.1.47:2022/suma-pmo/public/assets/images/sj/',
     ],
@@ -23,5 +23,15 @@ return [
         'token'     => 'NDA5ZWRiOGRmZTc1NDkyOTliNThlNGYzZjI4YWE0MjU6ZjlkNDM0ZWVkOGNkNGI5MWFlYmRlOWYyMWJhYzRkMWU=',
         'fs_id'     => '15586',
         'shop_id'   => '5207422'
+    ],
+    'shopee' => [
+        'kode_lokasi'   => 'OS',
+        'url' => [
+            'base_url'  => 'https://fs.tokopedia.net',
+            'account'   => 'https://accounts.tokopedia.com'
+        ],
+        'access_token'  => 'NDA5ZWRiOGRmZTc1NDkyOTliNThlNGYzZjI4YWE0MjU6ZjlkNDM0ZWVkOGNkNGI5MWFlYmRlOWYyMWJhYzRkMWU=',
+        'partner_id'    => '15586',
+        'shop_id'       => '306648863'
     ]
 ];
