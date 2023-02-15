@@ -1652,22 +1652,6 @@ class ApiService
         return $response;
     }
 
-    public static function OnlinePemindahanShopeeDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
-    {
-        $request = 'online/pemindahan/shopee/daftar';
-        $header = ['Authorization' => session()->get('Authorization')];
-        $body = [
-            'nomor_dokumen' => trim($search),
-            'start_date'    => empty(trim($start_date))?date('Y-m-d'):trim($start_date),
-            'end_date'      => empty(trim($end_date))?date('Y-m-d'):trim($end_date),
-            'companyid'     => trim($companyid),
-            'page'          => $page ?? 1,
-            'per_page'      => $per_page ?? 10,
-        ];
-        $response = ApiRequest::requestPost($request, $header, $body);
-        return $response;
-    }
-
     public static function OnlinePemindahanTokopediaDaftar($page, $per_page, $start_date, $end_date, $nomor_dokumen, $companyid)
     {
         $request = 'online/pemindahan/tokopedia/daftar';
@@ -1870,6 +1854,60 @@ class ApiService
         $body = [
             'nomor_dokumen'        => trim($nomor_dokumen),
             'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanShopeeDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
+    {
+        $request = 'online/pemindahan/shopee/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($search),
+            'start_date'    => empty(trim($start_date))?date('Y-m-d'):trim($start_date),
+            'end_date'      => empty(trim($end_date))?date('Y-m-d'):trim($end_date),
+            'companyid'     => trim($companyid),
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function onlineuUpdateStockShopeePerDokumen($nomor_dokumen, $companyid){
+
+        $request = 'online/pemindahan/shopee/update/stock/dokumen';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function onlineUpdateStockShopeePerPart($nomor_dokumen, $kode_part, $companyid){
+
+        $request = 'online/pemindahan/shopee/update/stock/part';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'kode_part'     => trim($kode_part),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanShopeeUpdateStatusPerPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/pemindahan/shopee/update/statuspartnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
