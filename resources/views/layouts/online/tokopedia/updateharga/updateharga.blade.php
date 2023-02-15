@@ -109,12 +109,14 @@
                                 <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->selisih) }}</span>
                             </td>
                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                @if($data->status == 0)
                                 <button id="btnUpdateHarga" class="btn btn-icon btn-sm btn-danger" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
                                     <i class="fa fa-refresh text-white"></i>
                                 </button>
+                                @endif
                             </td>
                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                <a href="{{ route('online.updateharga.tokopedia.form', trim($data->nomor_dokumen)) }}" class="btn btn-icon btn-sm btn-primary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
+                                <a href="{{ route('online.updateharga.tokopedia.form.form', trim($data->nomor_dokumen)) }}" class="btn btn-icon btn-sm btn-primary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
                                     <i class="fa fa-check text-white"></i>
                                 </a>
                             </td>
@@ -228,12 +230,16 @@
         'clossing_marketing': "{{ route('setting.default.clossing-marketing') }}",
         'daftar_update_harga': "{{ route('online.updateharga.tokopedia.daftar') }}",
         'buat_dokumen': "{{ route('online.updateharga.tokopedia.buat-dokumen') }}",
+        'update_per_dokumen': "{{ route('online.updateharga.tokopedia.form.update.dokumen') }}",
     }
     const data_user = {
         'role_id': '{{ trim($data_user->role_id) }}'
     }
     const data_page = {
         'start_record': '{{ $data_page->from }}'
+    }
+    const data_filter = {
+        'kode_lokasi': '{{ $data_filter->kode_lokasi }}'
     }
 </script>
 <script src="{{ asset('assets/js/suma/online/tokopedia/updateharga/daftar.js') }}?v={{ time() }}"></script>

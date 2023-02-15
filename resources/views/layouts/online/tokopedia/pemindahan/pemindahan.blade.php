@@ -257,7 +257,7 @@
 @push('scripts')
 <script>
     const url = {
-        'update_per_dokumen': "{{ route('online.pemindahan.tokopedia.form.detail.update-per-dokumen') }}",
+        'update_per_dokumen': "{{ route('online.pemindahan.tokopedia.form.update.dokumen') }}",
     }
     const data_filter = {
         'start_date': '{{ trim($data_filter->start_date) }}',

@@ -203,10 +203,10 @@
 @push('scripts')
 <script>
     const url = {
-        'daftar_pemindahan': "{{ route('online.pemindahan.tokopedia.form.detail.detail') }}",
-        'update_per_part_number': "{{ route('online.pemindahan.tokopedia.form.detail.update-per-part-number') }}",
-        'update_status_per_part_number': "{{ route('online.pemindahan.tokopedia.form.detail.update-status-per-part-number') }}",
-        'update_per_dokumen': "{{ route('online.pemindahan.tokopedia.form.detail.update-per-dokumen') }}",
+        'daftar_pemindahan': "{{ route('online.pemindahan.tokopedia.form.detail') }}",
+        'update_per_part_number': "{{ route('online.pemindahan.tokopedia.form.update.part-number') }}",
+        'update_status_per_part_number': "{{ route('online.pemindahan.tokopedia.form.update.status-part-number') }}",
+        'update_per_dokumen': "{{ route('online.pemindahan.tokopedia.form.update.dokumen') }}",
     }
     const data = {
         'nomor_dokumen': "{{ strtoupper(trim($data->nomor_dokumen)) }}",

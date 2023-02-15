@@ -217,10 +217,10 @@ class PemindahanTokopediaController extends Controller
                     <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
 
                 if((int)$data->status_mp->show == 1) {
-                    $table_detail .= '<button id="btnUpdatePerPartNumber" class="btn btn-icon btn-sm btn-success" type="button"
+                    $table_detail .= '<button id="btnUpdatePerPartNumber" class="btn btn-icon btn-sm btn-secondary" type="button"
                             data-nomor_dokumen="'.strtoupper(trim($data->nomor_dokumen)).'"
                             data-part_number="'.strtoupper(trim($data->part_number)).'">
-                            <img src="'.asset('assets/images/logo/tokopedia.png').'" class="h-20px" />
+                            <img src="'.asset('assets/images/logo/tokopedia_lg.png').'" class="h-30px" />
                         </button>';
                 } else {
                     if(strtoupper(trim($data->status_mp->keterangan)) == 'DATA BELUM DI VALIDASI') {
@@ -293,15 +293,6 @@ class PemindahanTokopediaController extends Controller
     }
 
     public function updateStockPerPartNumber(Request $request) {
-        $validate = Validator::make($request->all(), [
-            'nomor_dokumen' => 'required',
-            'part_number'   => 'required',
-        ]);
-
-        if($validate->fails()) {
-            return response()->json([ 'status' => 0, 'message' => 'Pilih data part number yang ingin di update terlebih dahulu' ]);
-        }
-
         $responseApi = ApiService::OnlinePemindahanTokopediaUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
@@ -309,14 +300,6 @@ class PemindahanTokopediaController extends Controller
     }
 
     public function updateStockPerNomorDokumen(Request $request) {
-        $validate = Validator::make($request->all(), [
-            'nomor_dokumen' => 'required'
-        ]);
-
-        if($validate->fails()) {
-            return redirect()->back()->withInput()->with('failed', 'Pilih nomor dokumen terlebih dahulu');
-        }
-
         $responseApi = ApiService::OnlinePemindahanTokopediaUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;

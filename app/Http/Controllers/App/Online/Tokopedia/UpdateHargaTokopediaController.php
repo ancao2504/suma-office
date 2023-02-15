@@ -76,6 +76,7 @@ class UpdateHargaTokopediaController extends Controller
             $data_filter->push((object) [
                 'year'          => $year,
                 'month'         => $month,
+                'kode_lokasi'   => config('constants.tokopedia.kode_lokasi')
             ]);
 
             $data_device = new Collection();
@@ -169,10 +170,18 @@ class UpdateHargaTokopediaController extends Controller
                 }
 
                 $table_detail .= '</td>
-                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                        <span class="fs-7 fw-bolder text-gray-800">'.$data->keterangan.'</span>
-                    </td>
-                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">';
+
+                if((int)$data->update == 1) {
+                    $table_detail .= '<span class="fs-7 fw-boldest text-success">Data sudah diupdate</span>';
+                } else {
+                    $table_detail .= '<span class="fs-7 fw-boldest text-danger">'.$data->keterangan.'</span>';
+                }
+
+
+                $table_detail .= '</td>';
+
+                $table_detail .= '<td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
                         <span class="fs-7 fw-bolder text-gray-800">'.number_format($data->het_lama).'</span>
                     </td>
                     <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
@@ -194,13 +203,28 @@ class UpdateHargaTokopediaController extends Controller
                 }
 
                 $table_detail .= '</td>
-                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                        <button id="btnUpdatePerPartNumber" class="btn btn-icon btn-sm btn-primary" type="button"
+                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
+
+                if((int)$data->update == 0) {
+                    $table_detail .= '<button id="btnUpdatePerPartNumber" class="btn btn-icon btn-sm btn-secondary" type="button"
                             data-nomor_dokumen="'.strtoupper(trim($dataApi->nomor_dokumen)).'"
                             data-part_number="'.strtoupper(trim($data->part_number)).'">
-                        <i class="fa fa-check text-white"></i>
-                        </button>
-                    </td>
+                            <img src="'.asset('assets/images/logo/tokopedia_lg.png').'" class="h-30px" />
+                        </button>';
+                }
+
+                $table_detail .= '</td>
+                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">';
+
+                if((int)$data->update == 0) {
+                    $table_detail .= '<button id="btnUpdateStatusPerPartNumber" class="btn btn-icon btn-sm btn-danger" type="button"
+                            data-nomor_dokumen="'.strtoupper(trim($dataApi->nomor_dokumen)).'"
+                            data-part_number="'.strtoupper(trim($data->part_number)).'">
+                            <i class="fa fa-database" aria-hidden="true"></i>
+                    </button>';
+                }
+
+                $table_detail .= '</td>
                 </tr>';
             }
 
@@ -227,17 +251,19 @@ class UpdateHargaTokopediaController extends Controller
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted">
                                 <th rowspan="2" class="w-50px ps-3 pe-3 text-center">No</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Part Number</th>
+                                <th rowspan="2" class="w-200px ps-3 pe-3 text-center">Part Number</th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Status</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3 text-center">Keterangan</th>
+                                <th rowspan="2" class="min-w-100px ps-3 pe-3 text-center">Keterangan</th>
                                 <th colspan="4" class="w-100px ps-3 pe-3 text-center">HET</th>
-                                <th rowspan="2" class="w-50px ps-3 pe-3 text-center">Action</th>
+                                <th colspan="2" class="w-100px ps-3 pe-3 text-center">Action</th>
                             </tr>
                             <tr class="fs-8 fw-bolder text-muted">
-                                <th class="w-50px ps-3 pe-3 text-center">Lama</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Baru</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Selisih</th>
-                                <th class="w-50px ps-3 pe-3 text-center">Status</th>
+                                <th class="w-100px ps-3 pe-3 text-center">Lama</th>
+                                <th class="w-100px ps-3 pe-3 text-center">Baru</th>
+                                <th class="w-100px ps-3 pe-3 text-center">Selisih</th>
+                                <th class="w-100px ps-3 pe-3 text-center">Status</th>
+                                <th class="w-50px ps-3 pe-3 text-center">Marketplace</th>
+                                <th class="w-50px ps-3 pe-3 text-center">Internal</th>
                             </tr>
                         </thead>
                         <tbody class="border">'.$table_detail.'</tbody>
@@ -248,5 +274,25 @@ class UpdateHargaTokopediaController extends Controller
         } else {
             return json_decode($responseApi, true);
         }
+    }
+
+    public function updateHargaPerPartNumber(Request $request) {
+        $responseApi = ApiService::OnlineUpdateHargaTokopediaUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+                                trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
+
+        return json_decode($responseApi, true);
+    }
+
+    public function updateHargaStatusPerPartNumber(Request $request) {
+        $responseApi = ApiService::OnlineUpdateHargaTokopediaUpdateStatusPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+                trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
+
+        return json_decode($responseApi, true);
+    }
+
+    public function updateHargaPerNomorDokumen(Request $request) {
+        $responseApi = ApiService::OnlineUpdateHargaTokopediaUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
+                                strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
     }
 }

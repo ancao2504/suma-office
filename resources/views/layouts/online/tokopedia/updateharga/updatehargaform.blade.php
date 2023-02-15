@@ -29,11 +29,13 @@
                 <div class="row">
                     <div id="tableDetailUpdateHarga"></div>
                 </div>
+                @if($data->status_header == 0)
                 <div class="row g-5 mb-8">
                     <div class="d-flex">
-                        <button id="btnUpdateStockAll" class="btn btn-primary" data-nomor_dokumen="{{ strtoupper(trim($data->nomor_dokumen)) }}">UPDATE HARGA MARKETPLACE</button>
+                        <button id="btnUpdateHargaAll" class="btn btn-primary" data-nomor_dokumen="{{ strtoupper(trim($data->nomor_dokumen)) }}">UPDATE HARGA MARKETPLACE</button>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </form>
@@ -41,7 +43,10 @@
 @push('scripts')
 <script>
     const url = {
-        'daftar_update_harga': "{{ route('online.updateharga.tokopedia.form-detail') }}",
+        'daftar_update_harga': "{{ route('online.updateharga.tokopedia.form.detail') }}",
+        'update_per_part_number': "{{ route('online.updateharga.tokopedia.form.update.part-number') }}",
+        'update_status_per_part_number': "{{ route('online.updateharga.tokopedia.form.update.status-part-number') }}",
+        'update_per_dokumen': "{{ route('online.updateharga.tokopedia.form.update.dokumen') }}",
     }
     const data = {
         'nomor_dokumen': "{{ strtoupper(trim($data->nomor_dokumen)) }}",

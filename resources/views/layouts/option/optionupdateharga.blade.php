@@ -16,7 +16,8 @@
                 <div class="modal-body">
                     <div class="fv-row mb-5">
                         <label class="form-label">Cari berdasarkan update harga:</label>
-                        <div class="input-group">
+                        <span id="inputKodeLokasi" class="input-group-text" style="width: 100%;" hidden></span>
+                        <div class="input-group mt-6">
                             <span class="input-group-text">Pencarian</span>
                             <input id="inputSearchOptionUpdateHarga" type="text" class="form-control" placeholder="Input Data Pencarian">
                             <button id="btnSearchOptionUpdateHarga" class="btn btn-primary">Cari</button>

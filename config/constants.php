@@ -15,6 +15,7 @@ return [
         'disabled'  => 'NOT_ALLOWED',
     ],
     'tokopedia' => [
+        'kode_lokasi'   => 'OL',
         'url' => [
             'base_url'  => 'https://fs.tokopedia.net',
             'account'   => 'https://accounts.tokopedia.com'

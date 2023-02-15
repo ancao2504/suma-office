@@ -653,11 +653,12 @@ class ApiService
         return $response;
     }
 
-    public static function OptionUpdateHarga($page, $per_page, $search, $companyid)
+    public static function OptionUpdateHarga($kode_lokasi, $page, $per_page, $search, $companyid)
     {
         $request = 'options/updateharga';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
+            'kode_lokasi' => $kode_lokasi,
             'page'      => $page,
             'per_page'  => $per_page,
             'search'    => $search,
@@ -1782,6 +1783,81 @@ class ApiService
         $body = [
             'nomor_dokumen' => trim($nomor_dokumen),
             'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineUpdateHargaTokopediaUpdatePerPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/updateharga/tokopedia/update/partnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineUpdateHargaTokopediaUpdateStatusPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/updateharga/tokopedia/update/statuspartnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineUpdateHargaTokopediaUpdatePerNomorDokumen($nomor_dokumen, $companyid)
+    {
+        $request = 'online/updateharga/tokopedia/update/dokumen';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineProductTokopediaSearchPartNumber($part_number, $companyid)
+    {
+        $request = 'online/products/tokopedia/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineProductTokopediaCekProductId($product_id, $companyid)
+    {
+        $request = 'online/products/tokopedia/cek/productid';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'product_id'    => trim($product_id),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineProductTokopediaUpdateProductId($part_number, $product_id, $companyid)
+    {
+        $request = 'online/products/tokopedia/update';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'part_number'   => trim($part_number),
+            'product_id'    => trim($product_id),
+            'companyid'     => trim($companyid),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
