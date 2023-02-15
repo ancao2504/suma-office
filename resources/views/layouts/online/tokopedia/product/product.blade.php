@@ -54,10 +54,8 @@
                         <input id="modalEditProductInputProductId" name="product_id" type="text" class="form-control"
                             style="text-transform:uppercase" placeholder="Inputkan product id" autocomplete="off">
                     </div>
-                    <div class="mt-6">
-                        <span id="messageProductId"></span>
-                    </div>
                 </div>
+                <span id="messageProductId"></span>
             </div>
             <div class="modal-footer">
                 <button id="modalEditProductBtnSimpan" name="modalEditProductBtnSimpan" type="button" class="btn btn-primary">Simpan</button>

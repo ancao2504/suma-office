@@ -42,6 +42,51 @@ function loadDaftarPartNumber(part_number = '') {
     }
 }
 
+function loadDataProductID(product_id = '') {
+    var _token = $('input[name="_token"]').val();
+
+    loading.block();
+    $.ajax({
+        url: url.cek_product_id,
+        method: "post",
+        data: { product_id: product_id, _token: _token },
+
+        success: function (response) {
+            loading.release();
+            if (response.status == true) {
+                $('#messageProductId').html(response.data);
+            } else {
+                Swal.fire({
+                    text: response.message,
+                    icon: "warning",
+                    buttonsStyling: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-warning"
+                    }
+                });
+                $('#messageProductId').html('');
+            }
+        },
+        error: function () {
+            loading.release();
+            Swal.fire({
+                text: 'Server Not Responding',
+                icon: "warning",
+                buttonsStyling: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-warning"
+                }
+            });
+        }
+    });
+}
+
 $(document).ready(function () {
     loadDaftarPartNumber();
 
@@ -93,14 +138,18 @@ $(document).ready(function () {
         var product_id = $(this).data('product_id');
         var description = $(this).data('description');
 
-        if(product_id == 0) {
-            product_id = '';
-        }
-
         $('#modalEditProductPartNumber').html(part_number);
         $('#modalEditProductDescription').html(description);
         $('#modalEditProductInputProductId').val(product_id);
         $('#messageProductId').html('');
+
+        if(product_id == 0) {
+            product_id = '';
+        }
+
+        if(product_id != '' && product_id != null) {
+            loadDataProductID(product_id);
+        }
 
         $('#modalEditProduct').modal('show');
     });
@@ -108,39 +157,11 @@ $(document).ready(function () {
     $('#modalEditProductInputProductId').on('change',function(e) {
         e.preventDefault();
         var product_id = $('#modalEditProductInputProductId').val();
-        var _token = $('input[name="_token"]').val();
 
         if(product_id == '' || product_id == null) {
             $('#messageProductId').html('');
         } else {
-            loading.block();
-            $.ajax({
-                url: url.cek_product_id,
-                method: "post",
-                data: { product_id: product_id, _token: _token },
-
-                success: function (response) {
-                    loading.release();
-                    if (response.status == true) {
-                        $('#messageProductId').html('<div class="alert alert-success">'+
-                            '<div class="d-flex flex-column">'+
-                                '<h4 class="mb-1 text-success">Informasi</h4>'+
-                                '<span>'+response.message+'</span>'+
-                            '</div>'+
-                        '</div>');
-                    } else {
-                        $('#messageProductId').html('<div class="alert alert-danger">'+
-                            '<div class="d-flex flex-column">'+
-                                '<h4 class="mb-1 text-danger">Informasi</h4>'+
-                                '<span>'+response.message+'</span>'+
-                            '</div>'+
-                        '</div>');
-                    }
-                },
-                error: function () {
-                    loading.release();
-                }
-            });
+            loadDataProductID(product_id);
         }
     });
 
@@ -149,7 +170,6 @@ $(document).ready(function () {
         var part_number = $('#modalEditProductPartNumber').html();
         var product_id = $('#modalEditProductInputProductId').val();
         var _token = $('input[name="_token"]').val();
-        console.log(product_id);
 
         if(product_id == '' || product_id == null) {
             Swal.fire({

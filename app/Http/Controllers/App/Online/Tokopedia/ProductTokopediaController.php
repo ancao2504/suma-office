@@ -158,7 +158,58 @@ class ProductTokopediaController extends Controller
     public function cekProductId(Request $request) {
         $responseApi = ApiService::OnlineProductTokopediaCekProductId(strtoupper(trim($request->get('product_id'))),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
-        return json_decode($responseApi, true);
+        $statusApi = json_decode($responseApi)->status;
+
+        if($statusApi == 1) {
+            $dataApi = json_decode($responseApi)->data;
+
+            $image_not_found_url_part = "'" . asset('assets/images/background/part_image_not_found.png') . "'";
+
+            $data_tokopedia = '';
+
+            if($dataApi->internal->status == 0) {
+                $data_tokopedia = '<div class="fv-row mt-6">
+                        <div class="alert alert-danger">
+                            <div class="d-flex flex-column">
+                                <h4 class="mb-1 text-danger">Informasi</h4>
+                                <span>'.$dataApi->internal->message.'</span>
+                            </div>
+                        </div>
+                    </div>';
+            } else {
+                $data_tokopedia = '<div class="fv-row mt-6">
+                        <div class="alert alert-success">
+                            <div class="d-flex flex-column">
+                                <h4 class="mb-1 text-success">Informasi</h4>
+                                <span>'.$dataApi->internal->message.'</span>
+                            </div>
+                        </div>
+                    </div>';
+            }
+
+            $data_tokopedia .= '<div class="fv-row mt-6">
+                    <div class="d-flex mb-7">
+                        <span class="symbol symbol-200px me-5">
+                            <img src="'.trim($dataApi->marketplace->pictures).'" onerror="this.onerror=null; this.src='.$image_not_found_url_part.'"
+                                alt="'.trim($dataApi->marketplace->product_id).'">
+                        </span>
+                        <div class="flex-grow-1">
+                            <div class="row">
+                                <span class="fs-8 text-gray-400 fw-bolder">Nama Product:</span>
+                                <p class="fs-6 text-gray-800 fw-bolder descriptionpart">'.trim($dataApi->marketplace->name).'</p>
+                                <span class="fs-8 text-gray-400 fw-bolder mt-4">SKU:</span>
+                                <span class="fs-6 text-gray-700 fw-bolder">'.trim($dataApi->marketplace->sku).'</span>
+                                <span class="fs-8 text-gray-400 fw-bolder mt-4">Product ID:</span>
+                                <span class="fs-7 text-danger fw-boldest">'.trim($dataApi->marketplace->product_id).'</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>';
+
+            return ['status' => 1, 'message' => 'success', 'data' => $data_tokopedia];
+        } else {
+            return json_decode($responseApi, true);
+        }
     }
 
     public function updateProductId(Request $request) {
