@@ -1,7 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Auth\AuthController;
-
 use App\Profile\UserController;
 use App\Option\OptionController;
 use App\Orders\FakturController;
@@ -12,7 +12,6 @@ use App\Parts\PartNumberController;
 use App\Parts\StockHarianController;
 use App\Validasi\ValidasiController;
 use App\Parts\uplooadImageController;
-use Illuminate\Support\Facades\Route;
 use App\Visit\PlanningVisitController;
 use App\Orders\TrackingOrderController;
 use App\Dashboard\DashboardSalesmanController;
@@ -26,9 +25,9 @@ use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\PemindahanShopeeController;
-use App\Http\Controllers\App\Online\Tokopedia\PemindahanTokopediaController;
-use App\Http\Controllers\app\Online\Tokopedia\ProductTokopediaController;
-use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
+use App\Online\Tokopedia\PemindahanTokopediaController;
+use App\Online\Tokopedia\ProductTokopediaController;
+use App\Online\Tokopedia\UpdateHargaTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -386,10 +385,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::controller(PemindahanShopeeController::class)->group(function () {
                         Route::get('/online/pemindahan/shopee', 'index')->name('index');
                         Route::post('/online/pemindahan/shopee/daftar', 'daftarPemindahan')->name('daftar');
-                        
+
                         Route::post('/online/pemindahan/shopee/detail', 'detailPemindahanDaftar')->name('daftar-detail');
                         Route::get('/online/pemindahan/shopee/detail/{id}', 'detailPemindahan')->name('detail-index');
-                        
+
                         Route::name('update.')->group(function () {
                             Route::post('/online/pemindahan/shopee/update/stock/dokumen', 'updateStockperDokumen')->name('stock-perdokumen');
                             Route::post('/online/pemindahan/shopee/update/stock/part', 'updateStockperPart')->name('stock-perpart');
