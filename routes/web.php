@@ -367,16 +367,18 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
             Route::name('pemindahan.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
-                    Route::get('/online/pemindahan/tokopedia/daftar', [PemindahanTokopediaController::class,'daftarPemindahan'])->name('daftar');
+                    Route::controller(PemindahanTokopediaController::class)->group(function () {
+                        Route::get('/online/pemindahan/tokopedia/daftar', 'daftarPemindahan')->name('daftar');
 
-                    Route::name('form.')->group(function () {
-                        Route::get('/online/pemindahan/tokopedia/form/detail', [PemindahanTokopediaController::class,'formPemindahanDetail'])->name('detail');
-                        Route::get('/online/pemindahan/tokopedia/form/{nomor_dokumen}', [PemindahanTokopediaController::class,'formPemindahan'])->where('nomor_dokumen', '(.*)')->name('form');
+                        Route::name('form.')->group(function () {
+                            Route::get('/online/pemindahan/tokopedia/form/detail', 'formPemindahanDetail')->name('detail');
+                            Route::get('/online/pemindahan/tokopedia/form/{nomor_dokumen}', 'formPemindahan')->where('nomor_dokumen', '(.*)')->name('form');
 
-                        Route::name('update.')->group(function () {
-                            Route::post('/online/pemindahan/tokopedia/form/update/partnumber', [PemindahanTokopediaController::class,'updateStockPerPartNumber'])->name('part-number');
-                            Route::post('/online/pemindahan/tokopedia/form/update/statuspartnumber', [PemindahanTokopediaController::class,'updateStatusPerPartNumber'])->name('status-part-number');
-                            Route::post('/online/pemindahan/tokopedia/form/update/dokumen', [PemindahanTokopediaController::class,'updateStockPerNomorDokumen'])->name('dokumen');
+                            Route::name('update.')->group(function () {
+                                Route::post('/online/pemindahan/tokopedia/form/update/partnumber', 'updateStockPerPartNumber')->name('part-number');
+                                Route::post('/online/pemindahan/tokopedia/form/update/statuspartnumber', 'updateStatusPerPartNumber')->name('status-part-number');
+                                Route::post('/online/pemindahan/tokopedia/form/update/dokumen', 'updateStockPerNomorDokumen')->name('dokumen');
+                            });
                         });
                     });
                 });
@@ -400,17 +402,19 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
             Route::name('updateharga.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
-                    Route::get('/online/updateharga/tokopedia/daftar', [UpdateHargaTokopediaController::class,'daftarUpdateHarga'])->name('daftar');
-                    Route::post('/online/updateharga/tokopedia/daftar/buatdokumen', [UpdateHargaTokopediaController::class,'buatDokumen'])->name('buat-dokumen');
+                    Route::controller(UpdateHargaTokopediaController::class)->group(function () {
+                        Route::get('/online/updateharga/tokopedia/daftar', 'daftarUpdateHarga')->name('daftar');
+                        Route::post('/online/updateharga/tokopedia/daftar/buatdokumen', 'buatDokumen')->name('buat-dokumen');
 
-                    Route::name('form.')->group(function () {
-                        Route::get('/online/updateharga/tokopedia/form/detail', [UpdateHargaTokopediaController::class,'formUpdateHargaDetail'])->name('detail');
-                        Route::get('/online/updateharga/tokopedia/form/{nomor_dokumen}', [UpdateHargaTokopediaController::class,'formUpdateHarga'])->name('form');
+                        Route::name('form.')->group(function () {
+                            Route::get('/online/updateharga/tokopedia/form/detail', 'formUpdateHargaDetail')->name('detail');
+                            Route::get('/online/updateharga/tokopedia/form/{nomor_dokumen}', 'formUpdateHarga')->name('form');
 
-                        Route::name('update.')->group(function () {
-                            Route::post('/online/updateharga/tokopedia/form/detail/partnumber', [UpdateHargaTokopediaController::class,'updateHargaPerPartNumber'])->name('part-number');
-                            Route::post('/online/updateharga/tokopedia/form/detail/statuspartnumber', [UpdateHargaTokopediaController::class,'updateHargaStatusPerPartNumber'])->name('status-part-number');
-                            Route::post('/online/updateharga/tokopedia/form/detail/dokumen', [UpdateHargaTokopediaController::class,'updateHargaPerNomorDokumen'])->name('dokumen');
+                            Route::name('update.')->group(function () {
+                                Route::post('/online/updateharga/tokopedia/form/detail/partnumber', 'updateHargaPerPartNumber')->name('part-number');
+                                Route::post('/online/updateharga/tokopedia/form/detail/statuspartnumber', 'updateHargaStatusPerPartNumber')->name('status-part-number');
+                                Route::post('/online/updateharga/tokopedia/form/detail/dokumen', 'updateHargaPerNomorDokumen')->name('dokumen');
+                            });
                         });
                     });
                 });
@@ -418,10 +422,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
             Route::name('product.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
-                    Route::get('/online/product/tokopedia/index', [ProductTokopediaController::class,'index'])->name('index');
-                    Route::get('/online/product/tokopedia/index/daftar', [ProductTokopediaController::class,'daftarPartNumber'])->name('daftar');
-                    Route::post('/online/product/tokopedia/index/cek', [ProductTokopediaController::class,'cekProductId'])->name('cek');
-                    Route::post('/online/product/tokopedia/index/update', [ProductTokopediaController::class,'updateProductId'])->name('update');
+                    Route::controller(ProductTokopediaController::class)->group(function () {
+                        Route::get('/online/product/tokopedia/index', 'index')->name('index');
+                        Route::get('/online/product/tokopedia/index/daftar', 'daftarPartNumber')->name('daftar');
+                        Route::post('/online/product/tokopedia/index/cek', 'cekProductId')->name('cek');
+                        Route::post('/online/product/tokopedia/index/update', 'updateProductId')->name('update');
+                    });
                 });
             });
         });

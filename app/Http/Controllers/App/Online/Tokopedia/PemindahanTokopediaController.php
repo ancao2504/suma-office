@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\app\Online\Tokopedia;
 
 use App\Helpers\ApiService;
-use App\Helpers\ApiServiceTokopedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
 use Jenssegers\Agent\Agent as Agent;
 
 class PemindahanTokopediaController extends Controller
