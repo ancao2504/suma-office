@@ -21,13 +21,14 @@ use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
+use App\Online\Shopee\UpdateHargaShopeeController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Tokopedia\PemindahanTokopediaController;
-use App\Online\Tokopedia\ProductTokopediaController;
-use App\Online\Tokopedia\UpdateHargaTokopediaController;
+use App\Http\Controllers\app\Online\Tokopedia\ProductTokopediaController;
+use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -385,11 +386,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
                 Route::name('shopee.')->group(function () {
                     Route::controller(PemindahanShopeeController::class)->group(function () {
-                        Route::get('/online/pemindahan/shopee', 'index')->name('index');
-                        Route::post('/online/pemindahan/shopee/daftar', 'daftarPemindahan')->name('daftar');
-
-                        Route::post('/online/pemindahan/shopee/detail', 'detailPemindahanDaftar')->name('daftar-detail');
-                        Route::get('/online/pemindahan/shopee/detail/{id}', 'detailPemindahan')->name('detail-index');
+                        Route::get('/online/pemindahan/shopee', 'daftarPemindahan')->name('daftar');
+                        Route::get('/online/pemindahan/shopee/detail/{param}', 'detailPemindahan')->name('daftar-detail');
 
                         Route::name('update.')->group(function () {
                             Route::post('/online/pemindahan/shopee/update/stock/dokumen', 'updateStockperDokumen')->name('stock-perdokumen');
@@ -414,6 +412,24 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                                 Route::post('/online/updateharga/tokopedia/form/detail/partnumber', 'updateHargaPerPartNumber')->name('part-number');
                                 Route::post('/online/updateharga/tokopedia/form/detail/statuspartnumber', 'updateHargaStatusPerPartNumber')->name('status-part-number');
                                 Route::post('/online/updateharga/tokopedia/form/detail/dokumen', 'updateHargaPerNomorDokumen')->name('dokumen');
+                            });
+                        });
+                    });
+                });
+                
+                Route::name('shopee.')->group(function () {
+                    Route::controller(UpdateHargaShopeeController::class)->group(function () {
+                        Route::get('/online/updateharga/shopee/daftar', 'daftarUpdateHarga')->name('daftar');
+                        Route::post('/online/updateharga/shopee/daftar/buatdokumen', 'buatDokumen')->name('buat-dokumen');
+    
+                        Route::name('form.')->group(function () {
+                            // Route::get('/online/updateharga/shopee/form/detail', 'formUpdateHargaDetail')->name('detail');
+                            Route::get('/online/updateharga/shopee/form/{param}', 'formUpdateHarga')->name('form');
+    
+                            Route::name('update.')->group(function () {
+                                Route::post('/online/updateharga/shopee/form/detail/partnumber', 'updateHargaPerPartNumber')->name('part-number');
+                                Route::post('/online/updateharga/shopee/form/detail/statuspartnumber', 'updateHargaStatusPerPartNumber')->name('status-part-number');
+                                Route::post('/online/updateharga/shopee/form/detail/dokumen', 'updateHargaPerNomorDokumen')->name('dokumen');
                             });
                         });
                     });

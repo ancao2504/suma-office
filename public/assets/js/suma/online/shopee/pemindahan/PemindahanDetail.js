@@ -1,26 +1,10 @@
-$(document).ajaxStart(function() {
-    loading.block();
-});
-
-$(document).ajaxStop(function() {
-    loading.release();
-});
-
-$('body').attr('data-kt-aside-minimize', 'on');
-$('#kt_aside_toggle').addClass('active');
-
 function getDaftar(){
     $.ajax({
-        type: "POST",
-        url: base_url + "/online/pemindahan/shopee/detail",
-        data: { 
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            nomor_dokumen: $('#daftar_table').data('no'),
-        },
+        type: "GET",
+        url: window.location.href,
+        data: {},
         success: function(response) {
-            console.log(response);
-            $('#daftar_table .table_delete').remove();
-            $('#daftar_table').prepend(response.data);
+            $('#view_table .card').html(response.data.view);
         },
         error: function(xhr, status, error) {
             console.log(xhr.responseText);
@@ -51,8 +35,6 @@ function updateSemuaDetail(){
                         no_dok: $('#daftar_table').data('no'),
                     },
                     success: function(response) {
-                        console.log('sukses');
-                        console.log(response);
                         if(response.status == 0){
                             Swal.fire({
                                 text: response.message,
@@ -67,14 +49,14 @@ function updateSemuaDetail(){
                         }
 
                         if(response.status == 1){
-                            // $('#detail_modal .modal-body').html(response);
-                            // $('#detail_modal').modal('show');
-
                             if(response.data){
-                                $('body').append(response.modal_respown);
-                                $('body').find('#modal_respown').modal('show');
+                                $('#respon_container').html(response.data.modal_respown);
+                                $('#respon_container').find('#modal_respown').modal('show');
                             }
-                            getDaftar();
+                            // jika modal hide maka baru refresh
+                            $('#respon_container').find('#modal_respown').on('hidden.bs.modal', function (e) {
+                                getDaftar();
+                            });
                         }
                     },
                     error: function(xhr, status, error) {
@@ -110,8 +92,6 @@ function updateDetail(part){
                     kode_part: part.kode_part,
                 },
                 success: function(response) {
-                    console.log(response);
-
                     if(response.status == 0){
                         Swal.fire({
                             text: response.message,
@@ -126,13 +106,15 @@ function updateDetail(part){
                     }
 
                     if(response.status == 1){
-                        // if(response.data){
-                            $('body').append(response.modal_respown);
-                            $('body').find('#modal_respown').modal('show');
-                        // }
+                        if(response.data){
+                            $('#respon_container').html(response.data.modal_respown);
+                            $('#respon_container').find('#modal_respown').modal('show');
+                        }
+                        // jika modal hide maka baru refresh
+                        $('#respon_container').find('#modal_respown').on('hidden.bs.modal', function (e) {
+                            getDaftar();
+                        });
                     }
-                    
-                    getDaftar();
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
@@ -197,6 +179,15 @@ function updateDetailInternal(data){
     });
 }
 
-$( function() {
-    getDaftar();
+$(document).ready(function(){
+    $(document).ajaxStart(function() {
+        loading.block();
+    });
+    
+    $(document).ajaxStop(function() {
+        loading.release();
+    });
+    
+    $('body').attr('data-kt-aside-minimize', 'on');
+    $('#kt_aside_toggle').addClass('active');
 });

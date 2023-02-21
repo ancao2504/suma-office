@@ -19,24 +19,20 @@ $(document).ajaxStop(function() {
 $('body').attr('data-kt-aside-minimize', 'on');
 $('#kt_aside_toggle').addClass('active');
 
-function getDaftar(page = $('#view_daftar_paginat').find('.pagination').data('current_page')){
+function getDaftar(page = $('.card-body').find('.pagination').data('current_page'), start_date = moment($('#get_start_date').val()).format('YYYY-MM-DD'), end_date = moment($('#get_end_date').val()).format('YYYY-MM-DD')){
     $.ajax({
-        type: "POST",
-        url: base_url + "/online/pemindahan/shopee/daftar",
+        type: "GET",
+        url: base_url + "/online/pemindahan/shopee",
         data: { 
-            _token: $('meta[name="csrf-token"]').attr('content'),
             search: $('#filterSearch').val(),
-            start_date: $("#get_start_date").val()??moment(new Date()).format('YYYY-MM-DD'),
-            end_date: $("#get_end_date").val()??moment(new Date()).format('YYYY-MM-DD'),
-            page: page??1,
+            start_date: start_date,
+            end_date: end_date,
+            page: page,
             per_page: $('#per_page option:selected').val(),
         },
         success: function(response) {
-            console.log('sukses');
-            console.log(response);
-            $('#daftar_table #tabel').remove();
-            $('#daftar_table').prepend(response.table);
-            $('#view_daftar_paginat').html(response.pagination);
+            $('.card-body #tabel').remove();
+            $('.card-body').prepend(response.data.view);
             
             // hapus parameter pada url setelah menerapkan filter sebelumnya
             window.history.pushState("", "", window.location.href.split('?')[0]);
@@ -50,24 +46,18 @@ function getDaftar(page = $('#view_daftar_paginat').find('.pagination').data('cu
 $(document).ready(function() {
     $('#filterSearch').val(search);
     $('#get_start_date').flatpickr({
-        defaultDate: start_date??moment(new Date()).format('YYYY-MM-DD'),
+        defaultDate: start_date??($('#get_start_date').val()??moment(new Date()).format('YYYY-MM-DD')),
     });
     $('#get_end_date').flatpickr({
-        defaultDate: end_date??moment(new Date()).format('YYYY-MM-DD'),
+        defaultDate: end_date??($('#get_end_date').val()??moment(new Date()).format('YYYY-MM-DD')),
     });
-    
-    $('#text_start_date').text(start_date??moment(new Date()).format('DD MMMM YYYY'));
-    $('#text_end_date').text(end_date??moment(new Date()).format('DD MMMM YYYY'));
 
-    $('#per_page option[value="'+per_page+'"]').prop('selected', true);
-    getDaftar(page);
-
-    $('#per_page').on('change', function () {
+    $('.card-body').on('change', '#per_page',function () {
         getDaftar(1);
         $('html, body').animate({ scrollTop: 0 }, 'slow');
     });
 
-    $('#get_start_date, #get_end_date').on('change', function(){
+    $('#btnFilterMasterData').on('click', function(){
         if(moment($('#get_start_date').val()).isBefore($('#get_end_date').val()) || moment($('#get_start_date').val()).isSame($('#get_end_date').val())){
             getDaftar(1);
             $('#text_start_date').text(moment($('#get_start_date').val()).format('DD MMMM YYYY'));
@@ -89,13 +79,13 @@ $(document).ready(function() {
         getDaftar(1);
     });
 
-    $('#view_daftar_paginat').on('click', '.pagination .page-item:not(.disabled)', function(event) {
+    $('.card-body').on('click', '.pagination .page-item:not(.disabled)', function(event) {
         getDaftar($(this).find('.page-link').attr('data-page'));
         $('html, body').animate({ scrollTop: 0 }, 'slow');
     });
 
     // daftar_table find tabel .btn_detail on click swal fire confirm ajax post
-    $('#daftar_table').on('click', '#tabel .btn_detail', function(event) {
+    $('.card-body').on('click', '.btn_detail', function(event) {
         event.preventDefault();
         Swal.fire({
             text: "Apakah anda yakin Update Stok Semua Part dari Nomor Dokumen : " + $(this).parents('tr').attr('data-no') + " ?",
@@ -119,8 +109,6 @@ $(document).ready(function() {
                         no_dok: $(this).parents('tr').attr('data-no'),
                     },
                     success: function(response) {
-                        console.log('sukses');
-                        console.log(response);
                         if(response.status == 0){
                             Swal.fire({
                                 text: response.message,
@@ -134,15 +122,16 @@ $(document).ready(function() {
                             });
                         }
 
+                        
                         if(response.status == 1){
-                            // $('#detail_modal .modal-body').html(response);
-                            // $('#detail_modal').modal('show');
-
-                            if(response.data.data_error){
-                                $('body').append(response.modal_respown);
-                                $('body').find('#modal_respown').modal('show');
+                            if(response.data){
+                                $('#respon_container').html(response.data.modal_respown);
+                                $('#respon_container').find('#modal_respown').modal('show');
                             }
-                            getDaftar(page);
+                            // jika modal hide maka baru refresh
+                            $('#respon_container').find('#modal_respown').on('hidden.bs.modal', function (e) {
+                                getDaftar();
+                            });
                         }
                     },
                     error: function(xhr, status, error) {
