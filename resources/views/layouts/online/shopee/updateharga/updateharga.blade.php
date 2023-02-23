@@ -111,8 +111,8 @@
                             </td>
                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
                                 @if($data->status == 0)
-                                <button id="btnUpdateHarga" class="btn btn-icon btn-sm btn-danger" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
-                                    <i class="fa fa-refresh text-white"></i>
+                                <button id="btnUpdateHarga" class="btn btn-icon btn-sm btn-secondary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
+                                    <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px"/>
                                 </button>
                                 @endif
                             </td>
@@ -130,6 +130,7 @@
                                             )
                                     ));
                                 @endphp
+                                
                                 <a href="{{ route('online.updateharga.shopee.form.form', $data_param)}}" class="btn btn-icon btn-sm btn-primary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
                                     <i class="fa fa-check text-white"></i>
                                 </a>
