@@ -18,12 +18,6 @@ class UpdateHargaShopeeController extends Controller
 
         $per_page = 10;
         if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
-            // if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
-            //     $per_page = $request->get('per_page');
-            // } else {
-            //     $per_page = 10;
-            // }
-            
             in_array($request->get('per_page'), [10,25,50,100]) ? $per_page = $request->get('per_page') : $per_page = 10;
         }
 
@@ -130,17 +124,18 @@ class UpdateHargaShopeeController extends Controller
     }
 
     public function formUpdateHarga($param, Request $request) {
+        
         $data_param = base64_decode($param);
         $data_param = json_decode($data_param, true);
 
         $responseApi = ApiService::OnlineUpdateHargaShopeeForm($data_param['nomor_dokumen'],
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
+
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
             $dataApi = json_decode($responseApi)->data;
-            
             $view = view('layouts.online.shopee.updateharga.updatehargaform', [
                 'title_menu'    => 'Update Harga Shopee',
                 'filter_old'    => $data_param['filter'],
@@ -170,17 +165,68 @@ class UpdateHargaShopeeController extends Controller
         }
     }
 
-    public function updateHargaPerPartNumber(Request $request) {
-        $responseApi = ApiService::OnlineUpdateHargaShopeeUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
-                                trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
-
-        return json_decode($responseApi, true);
-    }
-
     public function updateHargaStatusPerPartNumber(Request $request) {
         $responseApi = ApiService::OnlineUpdateHargaShopeeUpdateStatusPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
+    }
+
+    public function updateHargaPerPartNumber(Request $request) {
+        $responseApi = ApiService::OnlineUpdateHargaShopeeUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+                                trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
+
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if (empty($statusApi) || $statusApi == 0) {
+            return response()->json([
+                'status' => 0,
+                'message' => $messageApi
+            ]);
+        }
+        
+        $data_all = json_decode($responseApi)->data;
+        
+        $view_respon = view('layouts.online.shopee.pemindahan.modal_respon_update', [
+            'data_all'      => $data_all
+        ]);
+
+        return response()->json([
+            'status' => 1,
+            'message' => $messageApi,
+            'data' => (object)[
+                'modal_respown' => $view_respon->render()
+                ]
+        ]);
+    }
+
+    public function updateHargaPerNomorDokumen(Request $request) {
+        $responseApi = ApiService::OnlineUpdateHargaShopeeUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
+                                strtoupper(trim($request->session()->get('app_user_company_id'))));
+        
+        $statusApi = json_decode($responseApi)->status;
+        $messageApi =  json_decode($responseApi)->message;
+
+        if (empty($statusApi) || $statusApi == 0) {
+            return response()->json([
+                'status' => 0,
+                'message' => $messageApi
+            ]);
+        }
+        
+        $data_all = json_decode($responseApi)->data;
+        
+        $view_respon = view('layouts.online.shopee.pemindahan.modal_respon_update', [
+            'data_all'      => $data_all
+        ]);
+
+        return response()->json([
+            'status' => 1,
+            'message' => $messageApi,
+            'data' => (object)[
+                'modal_respown' => $view_respon->render()
+                ]
+        ]);
     }
 }

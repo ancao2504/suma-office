@@ -27,7 +27,7 @@ use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Tokopedia\PemindahanTokopediaController;
-use App\Http\Controllers\app\Online\Tokopedia\ProductTokopediaController;
+use App\Online\Tokopedia\ProductTokopediaController;
 use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;

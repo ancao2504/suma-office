@@ -1878,6 +1878,18 @@ class ApiService
         return $response;
     }
 
+    public static function OnlineUpdateHargaShopeeUpdatePerNomorDokumen($nomor_dokumen, $companyid)
+    {
+        $request = 'online/updateharga/shopee/update/dokumen';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OnlineProductTokopediaSearchPartNumber($part_number, $companyid)
     {
         $request = 'online/products/tokopedia/daftar';

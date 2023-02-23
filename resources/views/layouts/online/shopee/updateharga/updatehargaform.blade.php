@@ -169,24 +169,23 @@
                             </div>
                         </div>
                     </div>
-                    @if ($dataApi->status_header == 0)
-                        <div class="row g-5 mb-8">
-                            <div class="d-flex justify-content-between">
-                                <button id="btnUpdateHargaAll" class="btn btn-primary"
-                                    data-nomor_dokumen="{{ strtoupper(trim($dataApi->nomor_dokumen)) }}">UPDATE HARGA
-                                    MARKETPLACE</button>
-                                {{-- button kembali dan membawa request dari variabel $filter_old --}}
-                                {{-- <button id="btnKembali" class="btn btn-light-primary ms-3"
-                                    onclick="window.location.href = '{{ route('online.updateharga.shopee.daftar', $filter_old) }}'">KEMBALI</button> --}}
-                                    <a href="{{ route('online.updateharga.shopee.daftar', $filter_old) }}" class="btn btn-secondary ms-3">KEMBALI</a>
-                            </div>
+                    <div class="row g-5 mb-8">
+                        <div class="d-flex justify-content-between">
+                            @if ($dataApi->status_header == 0)
+                            <button id="btnUpdateHargaAll" class="btn btn-light-dark btn-hover-rise"
+                                data-nomor_dokumen="{{ strtoupper(trim($dataApi->nomor_dokumen)) }}">Update Semua<img src="{{ asset('assets/images/logo/shopee_lg.png') }}" class="h-20px me-3"/></button>
+                            @endif
+                            <a href="{{ route('online.updateharga.shopee.daftar', $filter_old) }}" class="btn btn-secondary ms-3">KEMBALI</a>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </form>
     </div>
     <!--end::container-->
+
+</div>
+<div id="respon_container">
 @endsection
 {{-- // 'daftar_update_harga': "{{ route('online.updateharga.shopee.form.detail') }}", --}}
 @push('scripts')

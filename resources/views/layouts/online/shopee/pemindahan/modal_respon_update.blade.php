@@ -6,6 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('modal_respown').remove()"></button>
     </div>
     <div class="modal-body">
+        <h1 class="modal-title fs-5 text-gray-400">Nomer Dokumen :</h1>
         <h1 class="modal-title fs-5">{{ $data_all->nomer_dokumen }}</h1>
         <div class="table-responsive">
             <table class="table table-row-dashed table-row-gray-300 align-middle">
@@ -21,8 +22,8 @@
                     @php
                         $no = 1;
                     @endphp
-                    @if(!empty($data_all->data_sukses) && count($data_all->data_sukses) > 0)
-                        @foreach($data_all->data_sukses as $data)
+                    @if(!empty($data_all->success_list) && count($data_all->success_list) > 0)
+                        @foreach($data_all->success_list as $data)
                             <tr>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                                     <span class="fs-7 fw-bold text-gray-800">{{ $no }}</span>
@@ -50,8 +51,8 @@
                             @endphp
                         @endforeach
                     @endif
-                    @if(!empty($data_all->data_error) && count($data_all->data_error) > 0)
-                        @foreach($data_all->data_error as $data)
+                    @if(!empty($data_all->error_list) && count($data_all->error_list) > 0)
+                        @foreach($data_all->error_list as $data)
                             <tr>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                                     <span class="fs-7 fw-bold text-gray-800">{{ $no }}</span>
@@ -83,7 +84,8 @@
             </table>
         </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer justify-content-between">
+        <span class="text-gray-400 w-auto fs-8"><span class="required"></span>Jika status <span class="text-danger">Failed</span> dan tidak paham dengan <span class="text-dark">keterangan</span> yang diberikan maka hubunggi pihak IT Programmer</span>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('modal_respown').remove()">Close</button>
     </div>
     </div>
