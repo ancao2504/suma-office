@@ -153,13 +153,23 @@
                                                     <span class="fs-7 fw-bolder text-dark">{{ $data->stock_suma }}</span>
                                                 </td>
                                                 <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
-                                                    <span class="fs-7 fw-bolder text-dark">
-                                                        @if ($data->stok_shopee)
-                                                            {{ $data->stok_shopee }}
+                                                    @if ($data->stok_shopee)
+                                                        @if (trim($data_header->lokasi_tujuan->kode_lokasi) == 'OS')
+                                                            <span class="fs-7 fw-boldest text-success">
+                                                                <i class="fa fa-arrow-up me-2 text-success" aria-hidden="true"></i>
+                                                                {{ $data->stok_shopee + $data->pindah }}
+                                                            </span>
                                                         @else
-                                                            <i class="bi bi-database-slash fs-1 text-danger"></i>
+                                                            <span class="fs-7 fw-boldest text-danger">
+                                                                <i class="fa fa-arrow-down me-2 text-danger" aria-hidden="true"></i>
+                                                                {{ $data->stok_shopee - $data->pindah }}
+                                                            </span>
                                                         @endif
-                                                    </span>
+                                                    @else
+                                                        <span class="fs-7 fw-bolder text-dark">
+                                                            <i class="bi bi-database-slash fs-1 text-danger"></i>
+                                                        </span>
+                                                    @endif
                                                 </td>
                                                 <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
                                                     <span class="fs-7 fw-bolder text-dark">
