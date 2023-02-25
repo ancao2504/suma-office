@@ -106,64 +106,81 @@ $(document).ready(function () {
         var part_number = $(this).data('part_number');
         var _token = $('input[name="_token"]').val();
 
-        loading.block();
-        $.ajax({
-            url: url.update_status_per_part_number,
-            method: "POST",
-            data: { nomor_dokumen: nomor_dokumen, part_number: part_number, _token: _token },
-
-            success: function (response) {
-                loading.release();
-
-                if (response.status == true) {
-                    Swal.fire({
-                        text: response.message,
-                        icon: 'success',
-                        buttonsStyling: false,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        confirmButtonText: 'Ok, got it!',
-                        customClass: {
-                            confirmButton: 'btn btn-success'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        text: response.message,
-                        icon: 'warning',
-                        buttonsStyling: false,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        confirmButtonText: 'Ok, got it!',
-                        customClass: {
-                            confirmButton: 'btn btn-warning'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    });
-                }
-            },
-            error: function () {
-                loading.release();
-                Swal.fire({
-                    text: 'Server Not Responding',
-                    icon: 'error',
-                    buttonsStyling: false,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    confirmButtonText: 'Ok, got it!',
-                    customClass: {
-                        confirmButton: 'btn btn-danger'
-                    }
-                });
+        Swal.fire({
+            html: `Apakah anda yakin hanya akan mengupdate status update harga
+                    nomor dokumen <strong>`+ nomor_dokumen + `</strong> pada
+                    part number <strong>`+ part_number + `</strong>?`,
+            icon: "info",
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: 'btn btn-primary'
             }
-        })
+        }).then((result) => {
+            if (result.isConfirmed) {
+                loading.block();
+                $.ajax({
+                    url: url.update_status_per_part_number,
+                    method: "POST",
+                    data: { nomor_dokumen: nomor_dokumen, part_number: part_number, _token: _token },
+
+                    success: function (response) {
+                        loading.release();
+
+                        if (response.status == true) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'success',
+                                buttonsStyling: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                confirmButtonText: 'Ok, got it!',
+                                customClass: {
+                                    confirmButton: 'btn btn-success'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'warning',
+                                buttonsStyling: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                confirmButtonText: 'Ok, got it!',
+                                customClass: {
+                                    confirmButton: 'btn btn-warning'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error: function () {
+                        loading.release();
+                        Swal.fire({
+                            text: 'Server Not Responding',
+                            icon: 'error',
+                            buttonsStyling: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'Ok, got it!',
+                            customClass: {
+                                confirmButton: 'btn btn-danger'
+                            }
+                        });
+                    }
+                })
+            }
+        });
     });
 
     $('#btnUpdateHargaAll').on('click', function (e) {
