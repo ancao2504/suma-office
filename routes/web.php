@@ -21,9 +21,7 @@ use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
-use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Shopee\UpdateHargaShopeeController;
-use App\Online\Tokopedia\ProductTokopediaController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
@@ -37,7 +35,6 @@ use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
 use App\Online\Shopee\ProductShopeeController;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
-use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
 
 /*
 |--------------------------------------------------------------------------
