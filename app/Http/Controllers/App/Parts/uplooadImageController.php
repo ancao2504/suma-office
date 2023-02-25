@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\app\Parts;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class uplooadImageController extends Controller
