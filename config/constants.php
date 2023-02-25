@@ -27,8 +27,7 @@ return [
     'shopee' => [
         'kode_lokasi'   => 'OS',
         'url' => [
-            'base_url'  => 'https://fs.tokopedia.net',
-            'account'   => 'https://accounts.tokopedia.com'
+            'host'      => 'https://partner.shopeemobile.com'
         ],
         'access_token'  => 'NDA5ZWRiOGRmZTc1NDkyOTliNThlNGYzZjI4YWE0MjU6ZjlkNDM0ZWVkOGNkNGI5MWFlYmRlOWYyMWJhYzRkMWU=',
         'partner_id'    => '15586',
