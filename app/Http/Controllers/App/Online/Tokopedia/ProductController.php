@@ -10,6 +10,9 @@ use Illuminate\Support\Collection;
 class ProductController extends Controller
 {
     public function index(Request $request) {
+        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
+            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
+        }
         $data_filter = new Collection();
         $data_filter->push((object) [
             'part_number'   => $request->get('part_number')

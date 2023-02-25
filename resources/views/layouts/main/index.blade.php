@@ -165,8 +165,14 @@
             };
             // dokumen ready
             $(document).ready(function() {
-                @if ($title_menu != 'Cart')
+                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
+                    session()->get('app_user_role_id') == 'MD_H3_SM')
+                    @if ($title_menu != 'Cart')
                     estimasiTotalCart();
+                    @else
+                        $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
+                        document.getElementById('kt_body').removeAttribute("style");
+                    @endif
                 @else
                     $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
                     document.getElementById('kt_body').removeAttribute("style");

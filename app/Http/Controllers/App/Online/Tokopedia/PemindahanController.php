@@ -12,6 +12,9 @@ use Jenssegers\Agent\Agent as Agent;
 class PemindahanController extends Controller
 {
     public function daftarPemindahan(Request $request) {
+        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
+            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
+        }
         $start_date = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end_date = Carbon::now()->format('Y-m-d');
 

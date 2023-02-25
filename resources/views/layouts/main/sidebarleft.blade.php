@@ -40,12 +40,12 @@
                         <span class="menu-title {{ (Request::is('/')) ? 'active' : '' }}">Home</span>
                     </a>
                 </div>
+                @if (Session::get('app_user_role_id') == 'D_H3')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">DASHBOARD</span>
                     </div>
                 </div>
-                @if (Session::get('app_user_role_id') == 'D_H3')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ route('dashboard.dealer.dealer') }}">
                         <span class="menu-icon">
@@ -61,6 +61,11 @@
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_SM')
                 <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">DASHBOARD</span>
+                    </div>
+                </div>
+                <div class="menu-item">
                     <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ route('dashboard.salesman.salesman') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -75,6 +80,11 @@
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_KORSM')
                 <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">DASHBOARD</span>
+                    </div>
+                </div>
+                <div class="menu-item">
                     <a class="menu-link {{ (Request::is('dashboard/*')) ? 'active' : '' }}" href="{{ route('dashboard.salesman.salesman') }}">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -88,6 +98,11 @@
                     </a>
                 </div>
                 @elseif(Session::get('app_user_role_id') == 'MD_H3_MGMT')
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">DASHBOARD</span>
+                    </div>
+                </div>
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('dashboard/*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -189,12 +204,13 @@
                     </div>
                 </div>
                 @endif
+
+                @if (Session::get('app_user_role_id') == "D_H3")
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">PROFILE</span>
                     </div>
                 </div>
-                @if (Session::get('app_user_role_id') == "D_H3")
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ route('profile.dealer.form', strtoupper(trim(Session::get('app_user_id')))) }}">
                         <span class="menu-icon">
@@ -216,6 +232,13 @@
                 </div>
                 @endif
                 @if (Session::get('app_user_role_id') != "D_H3")
+                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
+                    session()->get('app_user_role_id') == 'MD_H3_SM')
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">PROFILE</span>
+                    </div>
+                </div>
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('profile/dealer*')) ? 'active' : '' }}" href="{{ route('profile.dealer.daftar') }}">
                         <span class="menu-icon">
@@ -235,6 +258,7 @@
                         <span class="menu-title">Dealer</span>
                     </a>
                 </div>
+                @endif
                 @endif
                 @if (Session::get('app_user_role_id') == "MD_H3_MGMT")
                 <div class="menu-item">
@@ -275,6 +299,8 @@
                         <span class="menu-title {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}">Part Number</span>
                     </a>
                 </div>
+                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
+                    session()->get('app_user_role_id') == 'MD_H3_SM')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('parts/backorder*')) ? 'active' : '' }}" href="{{ route('parts.backorder.daftar') }}">
                         <span class="menu-icon">
@@ -301,6 +327,7 @@
                         <span class="menu-title {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}">Stock Harian</span>
                     </a>
                 </div>
+                @endif
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('parts/uploadimage/part*')) ? 'active' : '' }}" href="{{ route('parts.uploadimage.form-input') }}">
                         <span class="menu-icon">
@@ -316,11 +343,15 @@
                         <span class="menu-title {{ (Request::is('parts/uploadimage/part*')) ? 'active' : '' }}">Upload Gambar Part</span>
                     </a>
                 </div>
+                @if(session()->get('app_user_role_id') != 'MD_REQ_API')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ORDERS</span>
                     </div>
                 </div>
+                @endif
+                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
+                    session()->get('app_user_role_id') == 'MD_H3_SM')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/cart*')) ? 'active' : '' }}" href="{{ route('orders.cart.index') }}">
                         <span class="menu-icon">
@@ -350,6 +381,9 @@
                         <span class="menu-title {{ (Request::is('orders/purchaseorderform*')) ? 'active' : '' }}">Purchase Order Form</span>
                     </a>
                 </div>
+                @endif
+
+                @if(session()->get('app_user_role_id') != 'MD_REQ_API')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/faktur/*')) ? 'active' : '' }}" href="{{ url('/orders/faktur/daftar') }}">
                         <span class="menu-icon">
@@ -376,6 +410,10 @@
                         <span class="menu-title {{ (Request::is('orders/tracking/*')) ? 'active' : '' }}">Tracking Order</span>
                     </a>
                 </div>
+                @endif
+
+                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
+                    session()->get('app_user_role_id') == 'MD_H3_SM')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}" href="{{ url('/orders/pembayaranfaktur/belumterbayar') }}">
                         <span class="menu-icon">
@@ -390,7 +428,6 @@
                         <span class="menu-title {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}">Pembayaran</span>
                     </a>
                 </div>
-
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('orders/warehouse/penerimaan*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -429,6 +466,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
+                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_OL_SPV' ||
+                    session()->get('app_user_role_id') == 'MD_OL_ADMIN' || session()->get('app_user_role_id') == 'MD_REQ_API')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ONLINE</span>
@@ -542,7 +582,7 @@
                         </div>
                     </div>
                 </div>
-
+                @endif
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/orders/*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -725,7 +765,7 @@
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <span class="menu-link" href="#">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -735,7 +775,7 @@
                             </span>
                         </span>
                         <span class="menu-title">Version 1.0.0</span>
-                    </a>
+                    </span>
                 </div>
             </div>
         </div>

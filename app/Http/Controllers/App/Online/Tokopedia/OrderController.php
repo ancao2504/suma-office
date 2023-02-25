@@ -13,6 +13,9 @@ use Jenssegers\Agent\Agent as Agent;
 class OrderController extends Controller
 {
     public function daftarOrder(Request $request) {
+        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
+            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
+        }
         $start_date = Carbon::now();
         $end_date = Carbon::now()->addDays(3);
 
@@ -71,6 +74,9 @@ class OrderController extends Controller
     }
 
     public function singleOrder(Request $request) {
+        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
+            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
+        }
         $data_order = [];
         $data_filter = new Collection();
         $data_filter->push((object) [
