@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Auth\AuthController;
 use App\Profile\UserController;
 use App\Option\OptionController;
@@ -12,6 +11,7 @@ use App\Parts\PartNumberController;
 use App\Parts\StockHarianController;
 use App\Validasi\ValidasiController;
 use App\Parts\uplooadImageController;
+use Illuminate\Support\Facades\Route;
 use App\Visit\PlanningVisitController;
 use App\Orders\TrackingOrderController;
 use App\Dashboard\DashboardSalesmanController;
@@ -21,7 +21,9 @@ use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
+use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Shopee\UpdateHargaShopeeController;
+use App\Online\Tokopedia\ProductTokopediaController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
@@ -33,7 +35,9 @@ use App\Online\Tokopedia\OrderController as OrderTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use App\Online\Shopee\ProductShopeeController;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use App\Http\Controllers\app\Online\Tokopedia\UpdateHargaTokopediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -444,6 +448,15 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::get('/online/product/tokopedia/index/daftar', 'daftarPartNumber')->name('daftar');
                         Route::post('/online/product/tokopedia/index/cek', 'cekProductId')->name('cek');
                         Route::post('/online/product/tokopedia/index/update', 'updateProductId')->name('update');
+                    });
+                });
+
+                Route::name('shopee.')->group(function () {
+                    Route::controller(ProductShopeeController::class)->group(function () {
+                        // Route::get('/online/product/shopee/index', 'index')->name('index');
+                        Route::get('/online/product/shopee/daftar', 'daftarPartNumber')->name('daftar');
+                        Route::post('/online/product/shopee/cek', 'cekProductId')->name('cek');
+                        Route::post('/online/product/shopee/update', 'updateProductId')->name('update');
                     });
                 });
             });

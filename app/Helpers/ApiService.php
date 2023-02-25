@@ -1902,9 +1902,33 @@ class ApiService
         return $response;
     }
 
+    public static function OnlineProductShopeeSearchPartNumber($part_number, $companyid)
+    {
+        $request = 'online/products/shopee/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OnlineProductTokopediaCekProductId($product_id, $companyid)
     {
         $request = 'online/products/tokopedia/cek/productid';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'product_id'    => trim($product_id),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineProductShopeeCekProductId($product_id, $companyid)
+    {
+        $request = 'online/products/shopee/cek/productid';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'product_id'    => trim($product_id),
