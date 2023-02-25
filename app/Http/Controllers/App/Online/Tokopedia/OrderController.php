@@ -115,6 +115,7 @@ class OrderController extends Controller
     }
 
     public function prosesOrder(Request $request) {
+        dd($request->get('tanggal'));
         $responseApi = ApiService::OnlineOrderTokopediaProses($request->get('nomor_invoice'),
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
