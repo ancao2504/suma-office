@@ -533,7 +533,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('online/product/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/product/shopee/index') }}">
+                            <a class="menu-link {{ (Request::is('online/product/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/product/shopee/daftar') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
