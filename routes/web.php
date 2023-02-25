@@ -25,9 +25,10 @@ use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\PemindahanShopeeController;
-use App\Online\Tokopedia\PemindahanTokopediaController;
-use App\Online\Tokopedia\ProductTokopediaController;
-use App\Online\Tokopedia\UpdateHargaTokopediaController;
+use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
+use App\Online\Tokopedia\ProductController as ProductTokopediaController;
+use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
+use App\Online\Tokopedia\OrderController as OrderTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -427,6 +428,19 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::get('/online/product/tokopedia/index/daftar', 'daftarPartNumber')->name('daftar');
                         Route::post('/online/product/tokopedia/index/cek', 'cekProductId')->name('cek');
                         Route::post('/online/product/tokopedia/index/update', 'updateProductId')->name('update');
+                    });
+                });
+            });
+
+            Route::name('orders.')->group(function () {
+                Route::name('tokopedia.')->group(function () {
+                    Route::controller(OrderTokopediaController::class)->group(function () {
+                        Route::name('form.')->group(function () {
+                            Route::post('/online/orders/tokopedia/single/form/proses', 'prosesOrder')->name('proses');
+                            Route::get('/online/orders/tokopedia/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
+                        });
+                        Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
+                        Route::get('/online/orders/tokopedia/single', 'singleOrder')->name('single');
                     });
                 });
             });

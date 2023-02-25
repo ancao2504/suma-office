@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 
-class ProductTokopediaController extends Controller
+class ProductController extends Controller
 {
     public function index(Request $request) {
         $data_filter = new Collection();

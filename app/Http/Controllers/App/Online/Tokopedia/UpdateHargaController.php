@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use Jenssegers\Agent\Agent as Agent;
 
-class UpdateHargaTokopediaController extends Controller
+class UpdateHargaController extends Controller
 {
     public function daftarUpdateHarga(Request $request) {
         $year = date('Y');

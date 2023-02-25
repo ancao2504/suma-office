@@ -153,7 +153,7 @@
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-        
+
 		<!--begin::Javascript-->
 		<script>
             const base_url = "{{ url('/') }}";
@@ -184,6 +184,6 @@
 
         <script src="{{ asset('assets/js/suma/option/salesmanindex.js') }}?v={{ time() }}"></script>
         <script src="{{ asset('assets/js/suma/option/dealerindex.js') }}?v={{ time() }}"></script>
-        
+
 	</body>
 </html>

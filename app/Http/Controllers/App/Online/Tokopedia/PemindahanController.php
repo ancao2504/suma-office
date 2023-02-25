@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Jenssegers\Agent\Agent as Agent;
 
-class PemindahanTokopediaController extends Controller
+class PemindahanController extends Controller
 {
     public function daftarPemindahan(Request $request) {
         $start_date = Carbon::now()->startOfMonth()->format('Y-m-d');

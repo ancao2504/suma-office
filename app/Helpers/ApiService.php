@@ -1847,6 +1847,61 @@ class ApiService
         return $response;
     }
 
+    public static function OnlineOrderTokopediaDaftar($page, $per_page, $start_date, $end_date, $status, $companyid)
+    {
+        $request = 'online/orders/tokopedia/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 10,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'status'        => $status,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineOrderTokopediaSingle($nomor_invoice, $companyid)
+    {
+        $request = 'online/orders/tokopedia/single';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineOrderTokopediaForm($nomor_invoice, $companyid, $user_id)
+    {
+        $request = 'online/orders/tokopedia/form';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid),
+            'user_id'       => trim($user_id),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineOrderTokopediaProses($nomor_invoice, $tanggal, $companyid, $user_id)
+    {
+        $request = 'online/orders/tokopedia/proses';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'tanggal'       => $tanggal,
+            'companyid'     => trim($companyid),
+            'user_id'       => trim($user_id),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OnlinePemindahanDetail($nomor_dokumen ,$companyid)
     {
         $request = 'online/pemindahan/shopee/detail';
