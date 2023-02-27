@@ -21,7 +21,6 @@ class ProductShopeeController extends Controller
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id')))
             );
-            dd($responseApi);
             $statusApi = json_decode($responseApi)->status;
 
             if ($statusApi == 1) {
