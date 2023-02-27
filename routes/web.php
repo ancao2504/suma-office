@@ -33,8 +33,8 @@ use App\Online\Tokopedia\OrderController as OrderTokopediaController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
-use App\Online\Shopee\ProductShopeeController;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use App\Online\Shopee\ProductShopeeController;
 
 /*
 |--------------------------------------------------------------------------

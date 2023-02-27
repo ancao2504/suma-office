@@ -5,10 +5,8 @@ namespace App\Http\Controllers\app\Online\Shopee;
 use Carbon\Carbon;
 use App\Helpers\ApiService;
 use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Svg\Tag\Rect;
 
 class PemindahanShopeeController extends Controller
 {

@@ -2006,7 +2006,20 @@ class ApiService
         return $response;
     }
 
-    public static function OnlinePemindahanDetail($nomor_dokumen ,$companyid)
+    public static function OnlineProductShopeeUpdateProductId($part_number, $product_id, $companyid)
+    {
+        $request = 'online/products/shopee/update';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'part_number'   => trim($part_number),
+            'product_id'    => trim($product_id),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlinePemindahanShopeeDetail($nomor_dokumen ,$companyid)
     {
         $request = 'online/pemindahan/shopee/detail';
         $header = ['Authorization' => session()->get('Authorization')];

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\app\Online\Shopee;
 use App\Helpers\ApiService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 
 class ProductShopeeController extends Controller
@@ -22,9 +21,8 @@ class ProductShopeeController extends Controller
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id')))
             );
-
+            dd($responseApi);
             $statusApi = json_decode($responseApi)->status;
-            
 
             if ($statusApi == 1) {
                 return response()->json([
@@ -54,7 +52,6 @@ class ProductShopeeController extends Controller
             strtoupper(trim($request->get('product_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
-        
         $statusApi = json_decode($responseApi)->status;
 
         if ($statusApi == 1) {
