@@ -17,12 +17,13 @@ class ProductShopeeController extends Controller
         ]);
 
         if (!empty($request->get('part_number')) && $request->get('part_number') != '' && $request->ajax()) {
+            
             $responseApi = ApiService::OnlineProductShopeeSearchPartNumber(
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id')))
             );
+            
             $statusApi = json_decode($responseApi)->status;
-
             if ($statusApi == 1) {
                 return response()->json([
                     'status'    => 1,
