@@ -2112,4 +2112,15 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function PartImageDaftar($search, $page){
+        $request = 'parts/partnumber/image/list';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'search' => trim($search),
+            'page'      => $page ?? 1,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

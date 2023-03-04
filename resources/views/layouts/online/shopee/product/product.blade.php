@@ -38,6 +38,7 @@
                                 <tbody class="border">
                                     @if (!empty($data_all->data) || collect($data_all->data)->count() > 0)
                                     @foreach ($data_all->data as $key => $data)
+                                    
                                         <tr>
                                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                                 <span class="fs-6 fw-bolder text-gray-800">{{ $key + 1 }}</span>
@@ -52,7 +53,7 @@
                                                     <div class="flex-grow-1">
                                                         <div class="row">
                                                             <p class="fs-6 text-gray-800 fw-bolder descriptionpart">
-                                                                {{ strtoupper(trim($data->description)) }}</p>
+                                                                {{ strtoupper($data->description) }}</p>
                                                             <span
                                                                 class="fs-6 text-gray-700 fw-bolder">{{ strtoupper(trim($data->part_number)) }}</span>
                                                             @if (strtoupper(trim($data->product_id)) == 0)
@@ -83,18 +84,18 @@
                                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                                                     <div class="d-flex mb-7">
                                                         <span class="symbol symbol-100px me-5">
-                                                            <img src="{{ trim($data->marketplace->pictures) }}"
-                                                                onerror="this.onerror=null; this.src={{ $image_not_found_url_part }}"
-                                                                alt="{{ trim($data->marketplace->product_id) }}">
+                                                            <img src="{{ trim($data->marketplace->pictures[0]) }}"
+                                                                onerror="this.onerror=null; this.src={{ asset('assets/images/background/part_image_not_found.png') }}"
+                                                                alt="{{ $data->marketplace->product_id }}">
                                                         </span>
                                                         <div class="flex-grow-1">
                                                             <div class="row">
                                                                 <p class="fs-6 text-gray-800 fw-bolder descriptionpart">
-                                                                    {{ trim($data->marketplace->name) }}</p>
+                                                                    {{ $data->marketplace->name }}</p>
                                                                 <span
                                                                     class="fs-6 text-gray-700 fw-bolder">{{ trim($data->marketplace->sku) }}</span>
                                                                 <span
-                                                                    class="fs-7 text-danger fw-boldest">{{ trim($data->marketplace->product_id) }}</span>
+                                                                    class="fs-7 text-danger fw-boldest">{{ $data->marketplace->product_id }}</span>
                                                                 <span
                                                                     class="fs-8 text-gray-400 fw-bolder mt-4">Harga:</span>
                                                                 <span class="fs-5 text-dark fw-bolder">Rp.

@@ -9,17 +9,17 @@
 <div class="fv-row mt-6">
     <div class="d-flex mb-7">
         <span class="symbol symbol-200px me-5">
-            <img src="{{ trim($dataApi->marketplace->pictures) }}" onerror="this.onerror=null; this.src={{  asset('assets/images/background/part_image_not_found.png') }}"
-                alt="{{ trim($dataApi->marketplace->product_id) }}">
+            <img src="{{ trim($dataApi->marketplace->pictures[0]) }}" onerror="this.onerror=null; this.src={{  asset('assets/images/background/part_image_not_found.png') }}"
+                alt="{{ $dataApi->marketplace->product_id }}">
         </span>
         <div class="flex-grow-1">
             <div class="row">
                 <span class="fs-8 text-gray-400 fw-bolder">Nama Product:</span>
-                <p class="fs-6 text-gray-800 fw-bolder descriptionpart">{{ trim($dataApi->marketplace->name) }}</p>
+                <p class="fs-6 text-gray-800 fw-bolder descriptionpart">{{ $dataApi->marketplace->name }}</p>
                 <span class="fs-8 text-gray-400 fw-bolder mt-4">SKU:</span>
                 <span class="fs-6 text-gray-700 fw-bolder">{{ trim($dataApi->marketplace->sku) }}</span>
                 <span class="fs-8 text-gray-400 fw-bolder mt-4">Product ID:</span>
-                <span class="fs-7 text-danger fw-boldest">{{ trim($dataApi->marketplace->product_id) }}</span>
+                <span class="fs-7 text-danger fw-boldest">{{ $dataApi->marketplace->product_id }}</span>
             </div>
         </div>
     </div>
