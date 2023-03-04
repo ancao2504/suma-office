@@ -25,6 +25,7 @@ use App\Online\Shopee\UpdateHargaShopeeController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
+use App\Online\SerahTerimaController;
 use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
@@ -467,6 +468,16 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         });
                         Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
                         Route::get('/online/orders/tokopedia/single', 'singleOrder')->name('single');
+                    });
+                });
+            });
+
+            Route::name('serahterima.')->group(function () {
+                Route::controller(SerahTerimaController::class)->group(function () {
+                    Route::get('/online/serahterima/daftar', 'daftarSerahTerima')->name('daftar');
+
+                    Route::name('form.')->group(function () {
+                        Route::get('/online/serahterima/form/{nomor_dokumen}', 'formSerahTerima')->where('nomor_dokumen', '(.*)')->name('form');
                     });
                 });
             });

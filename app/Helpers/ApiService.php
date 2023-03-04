@@ -1746,6 +1746,34 @@ class ApiService
         return $response;
     }
 
+    public static function OnlineSerahTerimaDaftar($page, $per_page, $start_date, $end_date, $search, $companyid)
+    {
+        $request = 'online/serahterima/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 10,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'search'        => trim($search),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineSerahTerimaForm($nomor_dokumen, $companyid)
+    {
+        $request = 'online/serahterima/form';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => $nomor_dokumen,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OnlineUpdateHargaShopeeDaftar($page, $per_page, $year, $month, $search, $companyid)
     {
         $request = 'online/updateharga/shopee/daftar';

@@ -163,6 +163,11 @@
                 estimasi_cart: "{{ route('orders.cart.index.estimasi-cart') }}",
                 cart_index: "{{ route('orders.cart.index.index') }}"
             };
+
+            window.onbeforeunload = function(event) {
+                loading.block();
+            };
+
             // dokumen ready
             $(document).ready(function() {
                 @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
