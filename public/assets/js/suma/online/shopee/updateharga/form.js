@@ -33,7 +33,12 @@ $(document).ready(function () {
     $('body').attr('data-kt-aside-minimize', 'on');
     $('#kt_aside_toggle').addClass('active');
     // loadDaftarDetailUpdateHarga();
-
+    $(document).ajaxStart(function () {
+        loading.block();
+    });
+    $(document).ajaxStop(function () {
+        loading.release();
+    });
     
     $('body').on('click', '#btnUpdatePerPartNumber', function (e) {
         e.preventDefault();

@@ -147,7 +147,7 @@
                                                                 <img src="{{ asset('assets/images/logo/shopee_lg.png') }}" class="h-30px" />
                                                             </button>
                                                         @else
-                                                            <span class="badge badge-light-success">diupdate</span>
+                                                        -
                                                         @endif
                                                     </td>
                                                     <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
@@ -158,7 +158,7 @@
                                                                     <i class="fa fa-database" aria-hidden="true"></i>
                                                             </button>
                                                         @else
-                                                            <span class="badge badge-light-success">diupdate</span>
+                                                        -
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -184,8 +184,8 @@
     </div>
     <!--end::container-->
 
-</div>
-<div id="respon_container">
+    <div id="respon_container">
+    </div>
 @endsection
 {{-- // 'daftar_update_harga': "{{ route('online.updateharga.shopee.form.detail') }}", --}}
 @push('scripts')

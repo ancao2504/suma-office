@@ -5,13 +5,13 @@ namespace App\Http\Controllers\app\Online\Shopee;
 use App\Helpers\ApiService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Helpers\ApiServiceShopee;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
-class UpdateHargaShopeeController extends Controller
+class UpdateHargaController extends Controller
 {
-    
     public function daftarUpdateHarga(Request $request) {
         $year = date('Y');
         $month = date('m');
@@ -48,7 +48,7 @@ class UpdateHargaShopeeController extends Controller
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
-        $responseApi = ApiService::OnlineUpdateHargaShopeeDaftar($request->get('page'), $per_page, $year, $month,
+        $responseApi = ApiServiceShopee::UpdateHargaDaftar($request->get('page'), $per_page, $year, $month,
                         $request->get('search'), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -117,7 +117,7 @@ class UpdateHargaShopeeController extends Controller
     }
     
     public function buatDokumen(Request $request) {
-        $responseApi = ApiService::OnlineUpdateHargaShopeeBuatDokumen($request->get('kode'), date('Y-m-d'),
+        $responseApi = ApiServiceShopee::BuatDokumenUpdateHarga($request->get('kode'), date('Y-m-d'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))),
                         strtoupper(trim($request->session()->get('app_user_id'))));
         return json_decode($responseApi, true);
@@ -128,7 +128,7 @@ class UpdateHargaShopeeController extends Controller
         $data_param = base64_decode($param);
         $data_param = json_decode($data_param, true);
 
-        $responseApi = ApiService::OnlineUpdateHargaShopeeForm($data_param['nomor_dokumen'],
+        $responseApi = ApiServiceShopee::UpdateHargaDetail($data_param['nomor_dokumen'],
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         $statusApi = json_decode($responseApi)->status;
@@ -166,14 +166,14 @@ class UpdateHargaShopeeController extends Controller
     }
 
     public function updateHargaStatusPerPartNumber(Request $request) {
-        $responseApi = ApiService::OnlineUpdateHargaShopeeUpdateStatusPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ApiServiceShopee::UpdateHargaStatusPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }
 
     public function updateHargaPerPartNumber(Request $request) {
-        $responseApi = ApiService::OnlineUpdateHargaShopeeUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ApiServiceShopee::UpdateHargaPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         $statusApi = json_decode($responseApi)->status;
@@ -202,7 +202,7 @@ class UpdateHargaShopeeController extends Controller
     }
 
     public function updateHargaPerNomorDokumen(Request $request) {
-        $responseApi = ApiService::OnlineUpdateHargaShopeeUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ApiServiceShopee::UpdateHargaPerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         
         $statusApi = json_decode($responseApi)->status;
