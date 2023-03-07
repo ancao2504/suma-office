@@ -432,7 +432,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::post('/online/updateharga/shopee/daftar/buatdokumen', 'buatDokumen')->name('buat-dokumen');
 
                         Route::name('form.')->group(function () {
-                            // Route::get('/online/updateharga/shopee/form/detail', 'formUpdateHargaDetail')->name('detail');
                             Route::get('/online/updateharga/shopee/form/{param}', 'formUpdateHarga')->name('form');
 
                             Route::name('update.')->group(function () {
@@ -457,7 +456,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
                 Route::name('shopee.')->group(function () {
                     Route::controller(ProductShopee::class)->group(function () {
-                        // Route::get('/online/product/shopee/index', 'index')->name('index');
                         Route::get('/online/product/shopee/daftar', 'daftarPartNumber')->name('daftar');
                         Route::post('/online/product/shopee/cek', 'cekProductId')->name('cek');
                         Route::post('/online/product/shopee/update', 'updateProductId')->name('update');

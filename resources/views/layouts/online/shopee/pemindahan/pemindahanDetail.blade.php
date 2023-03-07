@@ -199,7 +199,7 @@
                                                 </td>
                                                 <td style="text-align:center;vertical-align:top;">
                                                     @if ($data->status_mp_detail == 0 && $data_header->status->validasi == 1)
-                                                        <a href="#" class="btn btn-sm btn-danger btn_detail"
+                                                        <a href="#" class="btn btn-icon btn-sm btn-danger"
                                                             onclick="updateDetailInternal('{{ $data_update }}')">
                                                             <i class="fa fa-database" aria-hidden="true"></i>
                                                         </a>
