@@ -1,20 +1,12 @@
-// function loadMasterData(page = 1, per_page = 10, year = '', month = '') {
-//     loading.block();
-//     window.location.href = window.location.origin + window.location.pathname + '?year=' + year.trim() + '&month=' + month.trim() +
-//         '&per_page=' + per_page + '&page=' + page;
-// }
-
 function relodPage(page, per_page, year, month){
     $.ajax({
         url: base_url + '/online/updateharga/shopee/daftar',
         method: "GET",
         data: { page: page, per_page: per_page, year: year, month: month },
         success: function (response) {
-                console.log(response);
                 $('#kt_content_container').html(response.data);
         },
         error: function (response) {
-            console.log(response);
         }
     });
 }
@@ -181,7 +173,6 @@ $(document).ready(function () {
                     data: { nomor_dokumen: nomor_dokumen, _token: _token },
 
                     success: function (response) {
-                        console.log(response);
                         loading.release();
                         if (response.status == true) {
                             if(response.data) {

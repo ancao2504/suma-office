@@ -7,7 +7,6 @@ function loadDaftarPartNumber(part_number = '') {
             data: { part_number: part_number },
 
             success: function (response) {
-                console.log(response);
                 loading.release();
                 if (response.status == true) {
                     $('#tableResultPartNumber').html(response.data);
@@ -53,7 +52,6 @@ function loadDataProductID(product_id = '') {
         data: { product_id: product_id, _token: _token },
 
         success: function (response) {
-            console.log(response);
             loading.release();
             if (response.status == true) {
                 $('#messageProductId').html(response.data);
@@ -154,10 +152,9 @@ $(document).ready(function () {
         $('#modalEditProduct').modal('show');
     });
 
-    $('#modalEditProductInputProductId').on('change',function(e) {
+    $('#modalEditProductContent #modalEditProductInputProductId').on('change',function(e) {
         e.preventDefault();
-        var product_id = $('#modalEditProductInputProductId').val();
-
+        var product_id = $(this).val();
         if(product_id == '' || product_id == null) {
             $('#messageProductId').html('');
         } else {
@@ -168,7 +165,7 @@ $(document).ready(function () {
     $('#modalEditProductBtnSimpan').on('click', function(e) {
         e.preventDefault();
         var part_number = $('#modalEditProductPartNumber').html();
-        var product_id = $('#modalEditProductInputProductId').val();
+        var product_id = $('#modalEditProductContent #modalEditProductInputProductId').val();
         var _token = $('input[name="_token"]').val();
 
         if(product_id == '' || product_id == null) {

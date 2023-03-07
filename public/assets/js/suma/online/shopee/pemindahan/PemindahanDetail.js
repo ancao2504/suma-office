@@ -7,7 +7,6 @@ function getDaftar(){
             $('#view_table .card').html(response.data.view);
         },
         error: function(xhr, status, error) {
-            console.log(xhr.responseText);
         }
     });
 }
@@ -60,7 +59,6 @@ function updateSemuaDetail(){
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.log(xhr.responseText);
                     }
                 });
             }
@@ -117,7 +115,6 @@ function updateDetail(part){
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
                 }
             });
         } else if (result.dismiss === "cancel") {
@@ -127,7 +124,6 @@ function updateDetail(part){
 
 function updateDetailInternal(data){
     data = JSON.parse(atob(data));
-    console.log(data);
     Swal.fire({
         text: "Apakah anda yakin update internal, jika update internal maka anda harus update secara manual pada shopee ?",
         icon: "warning",
@@ -151,7 +147,6 @@ function updateDetailInternal(data){
                     kode_part: data.kode_part,
                 },
                 success: function(response) {
-                    console.log(response);
 
                     if(response.status){
                         Swal.fire({
@@ -171,7 +166,6 @@ function updateDetailInternal(data){
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
                 }
             });
         } else if (result.dismiss === "cancel") {

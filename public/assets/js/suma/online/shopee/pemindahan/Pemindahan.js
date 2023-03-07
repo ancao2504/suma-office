@@ -38,7 +38,6 @@ function getDaftar(page = $('.card-body').find('.pagination').data('current_page
             window.history.pushState("", "", window.location.href.split('?')[0]);
         },
         error: function(xhr, status, error) {
-            console.log(xhr.responseText);
         }
     });
 }
@@ -135,7 +134,6 @@ $(document).ready(function() {
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.log(xhr.responseText);
                     }
                 });
             }

@@ -65,7 +65,6 @@ $(document).ready(function () {
                     method: "POST",
                     data: { nomor_dokumen: nomor_dokumen, part_number: part_number, _token: _token },
                     success: function (response) {
-                        console.log(response);
                         loading.release();
                         if (response.status == true) {
                             if(response.data) {
@@ -233,7 +232,6 @@ $(document).ready(function () {
                     method: "POST",
                     data: { nomor_dokumen: nomor_dokumen, _token: _token },
                     success: function (response) {
-                        console.log(response);
                         loading.release();
                         if (response.status == true) {
                             if(response.data) {
