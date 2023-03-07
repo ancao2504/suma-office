@@ -109,6 +109,24 @@
                                 <a href="{{ route('orders.cart.index') }}" class="menu-link {{ (str_contains($title_menu, 'Cart')) ? 'active' : '' }} px-5">My Orders</a>
                             </div>
                             <div class="separator my-2"></div>
+                            <div class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
+                                <span class="menu-link px-5">
+                                    <span class="menu-title">Authorization</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <div class="menu-sub menu-sub-dropdown w-175px py-4" style="">
+                                    <div class="menu-item px-3">
+                                        <a href="{{ route('online.auth.auth-shopee') }}" class="menu-link px-5">Shopee</a>
+                                    </div>
+                                    <div class="menu-item px-3">
+                                        <a href="#" class="menu-link px-5">Lazada</a>
+                                    </div>
+                                    <div class="menu-item px-3">
+                                        <a href="#" class="menu-link px-5">Tiktok</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="separator my-2"></div>
                             <div class="menu-item px-5">
                                 <a href="{{ route('profile.account.change-password') }}" class="menu-link {{ (str_contains($title_menu, 'Change Password')) ? 'active' : '' }}">Change Password</a>
                             </div>

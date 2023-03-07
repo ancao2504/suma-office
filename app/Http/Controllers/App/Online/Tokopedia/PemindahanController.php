@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\app\Online\Tokopedia;
 
 use App\Helpers\ApiService;
+use App\Helpers\ApiServiceTokopedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -43,7 +44,7 @@ class PemindahanController extends Controller
             $start_date = (empty($request->get('start_date'))) ? $dataApi->tanggal_aktif : $request->get('start_date');
             $end_date = (empty($request->get('end_date'))) ? Carbon::now()->format('Y-m-d') : $request->get('end_date');
 
-            $responseApi = ApiService::OnlinePemindahanTokopediaDaftar($request->get('page'), $per_page,
+            $responseApi = ApiServiceTokopedia::PemindahanDaftar($request->get('page'), $per_page,
                         $start_date, $end_date, $request->get('search'), strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
@@ -97,7 +98,7 @@ class PemindahanController extends Controller
     }
 
     public function formPemindahan($nomor_dokumen, Request $request) {
-        $responseApi = ApiService::OnlinePemindahanTokopediaForm($nomor_dokumen,
+        $responseApi = ApiServiceTokopedia::PemindahanForm($nomor_dokumen,
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi = json_decode($responseApi)->message;
@@ -115,7 +116,7 @@ class PemindahanController extends Controller
     }
 
     public function formPemindahanDetail(Request $request) {
-        $responseApi = ApiService::OnlinePemindahanTokopediaFormDetail($request->get('nomor_dokumen'),
+        $responseApi = ApiServiceTokopedia::PemindahanFormDetail($request->get('nomor_dokumen'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
 
@@ -294,14 +295,14 @@ class PemindahanController extends Controller
     }
 
     public function updateStockPerPartNumber(Request $request) {
-        $responseApi = ApiService::OnlinePemindahanTokopediaUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ApiServiceTokopedia::PemindahanUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }
 
     public function updateStockPerNomorDokumen(Request $request) {
-        $responseApi = ApiService::OnlinePemindahanTokopediaUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ApiServiceTokopedia::PemindahanUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi = json_decode($responseApi)->message;
@@ -394,7 +395,7 @@ class PemindahanController extends Controller
     }
 
     public function updateStatusPerPartNumber(Request $request) {
-        $responseApi = ApiService::OnlinePemindahanTokopediaUpdateStatusPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ApiServiceTokopedia::PemindahanUpdateStatusPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                         trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

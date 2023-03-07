@@ -1,6 +1,7 @@
 <?php
 
 use App\Auth\AuthController;
+use App\Auth\AuthMarketplaceController;
 use App\Profile\UserController;
 use App\Option\OptionController;
 use App\Orders\FakturController;
@@ -25,6 +26,7 @@ use App\Online\Shopee\UpdateHargaShopeeController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
+use App\Auth\AuthShopeeController;
 use App\Online\SerahTerimaController;
 use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
@@ -59,7 +61,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
     });
 
     Route::group(['middleware' => 'authLogin'], function () {
-
         Route::name('home.')->group(function () {
             Route::get('/', 'App\Home\HomeController@index')->name('index');
         });
@@ -368,6 +369,11 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         // buat route group online.
         Route::name('online.')->group(function(){
+            Route::name('auth.')->group(function () {
+                Route::controller(AuthShopeeController::class)->group(function () {
+                    Route::get('/online/auth/marketplace/shopee', 'index')->name('auth-shopee');
+                });
+            });
 
             Route::name('pemindahan.')->group(function () {
                 Route::name('tokopedia.')->group(function () {

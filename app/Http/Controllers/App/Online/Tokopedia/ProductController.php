@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Online\Tokopedia;
 
 use App\Helpers\ApiService;
+use App\Helpers\ApiServiceTokopedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
@@ -24,7 +25,7 @@ class ProductController extends Controller
     }
 
     public function daftarPartNumber(Request $request) {
-        $responseApi = ApiService::OnlineProductTokopediaSearchPartNumber(strtoupper(trim($request->get('part_number'))),
+        $responseApi = ApiServiceTokopedia::ProductSearchPartNumber(strtoupper(trim($request->get('part_number'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
 
@@ -155,7 +156,7 @@ class ProductController extends Controller
     }
 
     public function cekProductId(Request $request) {
-        $responseApi = ApiService::OnlineProductTokopediaCekProductId(strtoupper(trim($request->get('product_id'))),
+        $responseApi = ApiServiceTokopedia::ProductCekProductId(strtoupper(trim($request->get('product_id'))),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
 
@@ -212,7 +213,7 @@ class ProductController extends Controller
     }
 
     public function updateProductId(Request $request) {
-        $responseApi = ApiService::OnlineProductTokopediaUpdateProductId(strtoupper(trim($request->get('part_number'))),
+        $responseApi = ApiServiceTokopedia::ProductUpdateProductId(strtoupper(trim($request->get('part_number'))),
                         strtoupper(trim($request->get('product_id'))),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);

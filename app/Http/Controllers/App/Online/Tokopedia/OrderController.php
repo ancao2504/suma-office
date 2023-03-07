@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\app\Online\Tokopedia;
 
-use App\Helpers\ApiService;
+use App\Helpers\ApiServiceTokopedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -36,7 +36,7 @@ class OrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::OnlineOrderTokopediaDaftar($request->get('page'), $per_page,
+        $responseApi = ApiServiceTokopedia::OrderDaftar($request->get('page'), $per_page,
                         $start_date, $end_date, $request->get('status'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -84,7 +84,7 @@ class OrderController extends Controller
         ]);
 
         if(!empty($request->get('nomor_invoice'))) {
-            $responseApi = ApiService::OnlineOrderTokopediaSingle($request->get('nomor_invoice'),
+            $responseApi = ApiServiceTokopedia::OrderSingle($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
 
@@ -101,7 +101,7 @@ class OrderController extends Controller
     }
 
     public function formOrder($nomor_invoice, Request $request) {
-        $responseApi = ApiService::OnlineOrderTokopediaForm($nomor_invoice,
+        $responseApi = ApiServiceTokopedia::OrderForm($nomor_invoice,
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -121,7 +121,7 @@ class OrderController extends Controller
     }
 
     public function prosesOrder(Request $request) {
-        $responseApi = ApiService::OnlineOrderTokopediaProses($request->get('nomor_invoice'),
+        $responseApi = ApiServiceTokopedia::OrderProses($request->get('nomor_invoice'),
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
