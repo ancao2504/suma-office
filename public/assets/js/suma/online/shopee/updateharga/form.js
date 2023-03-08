@@ -33,7 +33,12 @@ $(document).ready(function () {
     $('body').attr('data-kt-aside-minimize', 'on');
     $('#kt_aside_toggle').addClass('active');
     // loadDaftarDetailUpdateHarga();
-
+    $(document).ajaxStart(function () {
+        loading.block();
+    });
+    $(document).ajaxStop(function () {
+        loading.release();
+    });
     
     $('body').on('click', '#btnUpdatePerPartNumber', function (e) {
         e.preventDefault();
@@ -60,7 +65,6 @@ $(document).ready(function () {
                     method: "POST",
                     data: { nomor_dokumen: nomor_dokumen, part_number: part_number, _token: _token },
                     success: function (response) {
-                        console.log(response);
                         loading.release();
                         if (response.status == true) {
                             if(response.data) {
@@ -228,7 +232,6 @@ $(document).ready(function () {
                     method: "POST",
                     data: { nomor_dokumen: nomor_dokumen, _token: _token },
                     success: function (response) {
-                        console.log(response);
                         loading.release();
                         if (response.status == true) {
                             if(response.data) {

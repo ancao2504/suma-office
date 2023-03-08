@@ -1,20 +1,12 @@
-// function loadMasterData(page = 1, per_page = 10, year = '', month = '') {
-//     loading.block();
-//     window.location.href = window.location.origin + window.location.pathname + '?year=' + year.trim() + '&month=' + month.trim() +
-//         '&per_page=' + per_page + '&page=' + page;
-// }
-
 function relodPage(page, per_page, year, month){
     $.ajax({
         url: base_url + '/online/updateharga/shopee/daftar',
         method: "GET",
         data: { page: page, per_page: per_page, year: year, month: month },
         success: function (response) {
-                console.log(response);
                 $('#kt_content_container').html(response.data);
         },
         error: function (response) {
-            console.log(response);
         }
     });
 }
@@ -182,28 +174,18 @@ $(document).ready(function () {
 
                     success: function (response) {
                         loading.release();
-
                         if (response.status == true) {
-                            if(response.data.update.harga.error.jumlah > 0) {
-                                Swal.fire({
-                                    text: 'Data yang berhasil disimpan sejumlah : '+response.data.update.harga.success.jumlah+' Item.'
-                                            +' Dan gagal disimpan sejumlah : '+response.data.update.harga.error.jumlah+' Item',
-                                    icon: 'warning',
-                                    buttonsStyling: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                    confirmButtonText: 'Ok, got it!',
-                                    customClass: {
-                                        confirmButton: 'btn btn-warning'
-                                    }
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        var page = $('body').find('#paginationMasterData .page-item.active .page-link').text();
-                                        var per_page = $('body').find('#selectPerPageMasterData').val();
-                                        var year = $('body').find('#inputFilterYear').val();
-                                        var month = $('body').find('#selectFilterMonth').val();
-                                        relodPage(page, per_page, year, month);
-                                    }
+                            if(response.data) {
+                                $('#respon_container').html(response.data.modal_respown);
+                                $('#respon_container').find('#modal_respown').modal('show');
+
+                                $('#respon_container').find('#modal_respown').on('hidden.bs.modal', function (e) {
+                                    
+                                    var page = $('body').find('#paginationMasterData .page-item.active .page-link').text();
+                                    var per_page = $('body').find('#selectPerPageMasterData').val();
+                                    var year = $('body').find('#inputFilterYear').val();
+                                    var month = $('body').find('#selectFilterMonth').val();
+                                    relodPage(page, per_page, year, month);
                                 });
                             } else {
                                 Swal.fire({
@@ -218,6 +200,7 @@ $(document).ready(function () {
                                     }
                                 }).then((result) => {
                                     if (result.isConfirmed) {
+                                        
                                         var page = $('body').find('#paginationMasterData .page-item.active .page-link').text();
                                         var per_page = $('body').find('#selectPerPageMasterData').val();
                                         var year = $('body').find('#inputFilterYear').val();
@@ -226,7 +209,6 @@ $(document).ready(function () {
                                     }
                                 });
                             }
-
                         } else {
                             Swal.fire({
                                 text: response.message,
@@ -240,6 +222,7 @@ $(document).ready(function () {
                                 }
                             }).then((result) => {
                                 if (result.isConfirmed) {
+                                    
                                     var page = $('body').find('#paginationMasterData .page-item.active .page-link').text();
                                     var per_page = $('body').find('#selectPerPageMasterData').val();
                                     var year = $('body').find('#inputFilterYear').val();
@@ -249,7 +232,7 @@ $(document).ready(function () {
                             });
                         }
                     },
-                    error: function () {
+                    error: function (error) {
                         loading.release();
                         Swal.fire({
                             text: 'Server Not Responding',

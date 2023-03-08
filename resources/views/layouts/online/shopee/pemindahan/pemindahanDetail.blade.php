@@ -75,8 +75,8 @@
                                         <span class="fs-8 fw-boldest badge badge-light-{{ $data_header->status->sj == 1 ? 'success' : 'danger' }} me-2">
                                             <i class="fa fa-check text-{{ $data_header->status->sj == 1 ? 'success' : 'danger' }} me-2"></i>SJ
                                         </span>
-                                        <span class="fs-8 fw-boldest badge badge-light-{{ !empty($data_header->validasi) && $data_header->validasi == 1 ? 'success' : 'danger' }} me-2">
-                                            <i class="fa fa-check text-{{ !empty($data_header->validasi) && $data_header->validasi == 1 ? 'success' : 'danger' }} me-2"></i>VALIDASI
+                                        <span class="fs-8 fw-boldest badge badge-light-{{ !empty($data_header->status->validasi) && $data_header->status->validasi == 1 ? 'success' : 'danger' }} me-2">
+                                            <i class="fa fa-check text-{{ !empty($data_header->status->validasi) && $data_header->status->validasi == 1 ? 'success' : 'danger' }} me-2"></i>VALIDASI
                                         </span>
                                         <span class="fs-8 fw-boldest badge badge-light-{{ $data_header->status->mp_header == 1 ? 'success' : 'danger' }} me-2">
                                             <i class="fa fa-check text-{{ $data_header->status->mp_header == 1 ? 'success' : 'danger' }} me-2"></i>MARKETPLACE
@@ -104,6 +104,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="border">
+                                    {{-- {{dd($data_header->detail)}} --}}
                                     @if (count($data_header->detail) < 0 || empty($data_header->detail))
                                         <tr class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                             <td class="fs-7 fw-bolder text-gray-800 text-center" colspan="6"> Data Tidak Ditemukan </td>
@@ -153,8 +154,19 @@
                                                     <span class="fs-7 fw-bolder text-dark">{{ $data->stock_suma }}</span>
                                                 </td>
                                                 <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
-                                                    @if ($data->stok_shopee)
-                                                        @if (trim($data_header->lokasi_tujuan->kode_lokasi) == 'OS')
+                                                    @if ($data->stok_shopee !== null)
+                                                        <span class="fs-7 fw-boldest text-dark">
+                                                            {{ $data->stok_shopee }}
+                                                        </span>
+                                                    @else
+                                                        <span class="fs-7 fw-bolder text-dark">
+                                                            <i class="bi bi-database-slash fs-1 text-danger"></i>
+                                                        </span>
+                                                    @endif
+                                                </td>
+                                                <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
+                                                    @if ($data->stok_shopee !== null)
+                                                        @if (trim($data_header->lokasi_tujuan->kode_lokasi) === 'OS')
                                                             <span class="fs-7 fw-boldest text-success">
                                                                 <i class="fa fa-arrow-up me-2 text-success" aria-hidden="true"></i>
                                                                 {{ $data->stok_shopee + $data->pindah }}
@@ -171,17 +183,8 @@
                                                         </span>
                                                     @endif
                                                 </td>
-                                                <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
-                                                    <span class="fs-7 fw-bolder text-dark">
-                                                        @if ($data->stok_update)
-                                                            {{ $data->stok_update }}
-                                                        @else
-                                                            <i class="bi bi-database-slash fs-1 text-danger"></i>
-                                                        @endif
-                                                    </span>
-                                                </td>
                                                 <td style="text-align:center;vertical-align:top;">
-                                                    @if ($data->status_mp_detail == 0)
+                                                    @if ($data->status_mp_detail == 0 && $data_header->status->validasi == 1)
                                                         <a href="#"
                                                             class="btn btn-sm btn-light-dark btn-hover-rise btn_detail"
                                                             data-focus="0"
@@ -195,9 +198,8 @@
                                                     @endif
                                                 </td>
                                                 <td style="text-align:center;vertical-align:top;">
-                                                    @if ($data->status_mp_detail == 0)
-                                                        <a href="#" class="btn btn-sm btn-danger btn_detail"
-                                                            data-focus="0"
+                                                    @if ($data->status_mp_detail == 0 && $data_header->status->validasi == 1)
+                                                        <a href="#" class="btn btn-icon btn-sm btn-danger"
                                                             onclick="updateDetailInternal('{{ $data_update }}')">
                                                             <i class="fa fa-database" aria-hidden="true"></i>
                                                         </a>
@@ -220,11 +222,13 @@
                             <div class="col-6">
                                 {{-- @if ($data_header->status->cetak == 1 && $data_header->status->sj == 1 && $data_header->status->validasi == 1 && $data_header->status->mp_header == 0) --}}
                                 @if ($data_header->status->mp_header == 0)
-                                    <a class="btn btn-light-dark btn-hover-rise btn_detail" data-focus="0"
+                                    @if ($data_header->status->validasi == 1)
+                                        <a class="btn btn-light-dark btn-hover-rise btn_detail" data-focus="0"
                                         onclick="updateSemuaDetail()">
-                                        Update Semua <img alt="Logo"
-                                            src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3" />
-                                    </a>
+                                            Update Semua <img alt="Logo"
+                                                src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3" />
+                                        </a>
+                                    @endif
                                 @endif
                             </div>
                             <div class="col-6 text-end">
@@ -285,7 +289,6 @@
         {{-- @endif --}}
     </div>
     <div id="respon_container">
-
     </div>
 @endsection
 @push('scripts')

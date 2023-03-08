@@ -114,6 +114,8 @@
                                 <button id="btnUpdateHarga" class="btn btn-icon btn-sm btn-secondary" type="button" data-nomor_dokumen="{{ trim($data->nomor_dokumen) }}">
                                     <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px"/>
                                 </button>
+                                @else
+                                -
                                 @endif
                             </td>
                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
@@ -236,6 +238,8 @@
             </div>
         </div>
     </div>
+</div>
+<div id="respon_container">
 </div>
 
     @include('layouts.option.optionupdateharga')

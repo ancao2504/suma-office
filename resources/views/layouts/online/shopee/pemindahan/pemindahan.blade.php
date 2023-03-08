@@ -178,11 +178,13 @@
                                                                 <span
                                                                     class="fs-7 fw-bolder badge badge-light-success">success</span>
                                                             @else
-                                                                <button
+                                                                @if ($data->validasi == 1)
+                                                                    <button
                                                                     class="btn btn-sm btn-light-dark btn-hover-rise btn_detail"
                                                                     data-focus="0"><img alt="Logo"
                                                                         src="{{ asset('assets/images/logo/shopee.png') }}"
                                                                         class="h-20px" /></button>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                         <td class="ps-3 pe-3"
@@ -274,8 +276,8 @@
         {{-- @else
 
         @endif --}}
-        </div>
-        <div id="respon_container">
+    </div>
+    <div id="respon_container">
     </div>
 @endsection
 

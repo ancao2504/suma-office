@@ -22,14 +22,15 @@ use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
-use App\Online\Shopee\UpdateHargaShopeeController;
+use App\Online\Shopee\PemindahanController as PemindahanShopee;
+use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
+use App\Online\Shopee\ProductController as ProductShopee;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Auth\AuthShopeeController;
 use App\Online\Tokopedia\EkspedisiController;
 use App\Online\SerahTerimaController;
-use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
 use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
@@ -38,7 +39,6 @@ use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
-use App\Online\Shopee\ProductShopeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -399,7 +399,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
 
                 Route::name('shopee.')->group(function () {
-                    Route::controller(PemindahanShopeeController::class)->group(function () {
+                    Route::controller(PemindahanShopee::class)->group(function () {
                         Route::get('/online/pemindahan/shopee', 'daftarPemindahan')->name('daftar');
                         Route::get('/online/pemindahan/shopee/detail/{param}', 'detailPemindahan')->name('daftar-detail');
 
@@ -432,12 +432,11 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
 
                 Route::name('shopee.')->group(function () {
-                    Route::controller(UpdateHargaShopeeController::class)->group(function () {
+                    Route::controller(UpdateHargaShopee::class)->group(function () {
                         Route::get('/online/updateharga/shopee/daftar', 'daftarUpdateHarga')->name('daftar');
                         Route::post('/online/updateharga/shopee/daftar/buatdokumen', 'buatDokumen')->name('buat-dokumen');
 
                         Route::name('form.')->group(function () {
-                            // Route::get('/online/updateharga/shopee/form/detail', 'formUpdateHargaDetail')->name('detail');
                             Route::get('/online/updateharga/shopee/form/{param}', 'formUpdateHarga')->name('form');
 
                             Route::name('update.')->group(function () {
@@ -461,8 +460,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
 
                 Route::name('shopee.')->group(function () {
-                    Route::controller(ProductShopeeController::class)->group(function () {
-                        // Route::get('/online/product/shopee/index', 'index')->name('index');
+                    Route::controller(ProductShopee::class)->group(function () {
                         Route::get('/online/product/shopee/daftar', 'daftarPartNumber')->name('daftar');
                         Route::post('/online/product/shopee/cek', 'cekProductId')->name('cek');
                         Route::post('/online/product/shopee/update', 'updateProductId')->name('update');

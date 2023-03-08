@@ -5,20 +5,24 @@ namespace App\Http\Controllers\app\Online\Shopee;
 use App\Helpers\ApiService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Helpers\ApiServiceShopee;
 use App\Http\Controllers\Controller;
 
-class ProductShopeeController extends Controller
+class ProductController extends Controller
 {
     public function daftarPartNumber(Request $request)
     {
 
+        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
+            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
+        }
         $view = view('layouts.online.shopee.product.product', [
             'title_menu'    => 'Products'
         ]);
 
         if (!empty($request->get('part_number')) && $request->get('part_number') != '' && $request->ajax()) {
             
-            $responseApi = ApiService::OnlineProductShopeeSearchPartNumber(
+            $responseApi = ApiServiceShopee::SearchProductByPartNumber(
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id')))
             );
@@ -48,7 +52,7 @@ class ProductShopeeController extends Controller
 
     public function cekProductId(Request $request)
     {
-        $responseApi = ApiService::OnlineProductShopeeCekProductId(
+        $responseApi = ApiServiceShopee::CekProductId(
             strtoupper(trim($request->get('product_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -74,7 +78,7 @@ class ProductShopeeController extends Controller
 
     public function updateProductId(Request $request)
     {
-        $responseApi = ApiService::OnlineProductShopeeUpdateProductId(
+        $responseApi = ApiServiceShopee::UpdateShopeeidInPart(
             strtoupper(trim($request->get('part_number'))),
             strtoupper(trim($request->get('product_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
