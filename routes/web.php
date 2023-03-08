@@ -467,6 +467,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::post('/online/product/shopee/update', 'updateProductId')->name('update');
                     });
                 });
+
+                Route::controller(ProductShopee::class)->group(function () {
+                    Route::get('/online/product/marketplace/daftar', 'daftarProduct')->name('daftar');
+                });
             });
 
             Route::name('orders.')->group(function () {

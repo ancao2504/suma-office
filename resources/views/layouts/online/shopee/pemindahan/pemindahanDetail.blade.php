@@ -90,7 +90,7 @@
                                     <tr class="fs-8 fw-bolder text-muted">
                                         <th rowspan="2" class="w-20px text-center">No</th>
                                         <th rowspan="2" class="w-50px text-center">Kode Part</th>
-                                        <th rowspan="2" class="w-20px text-center">Status Marketplace</th>
+                                        <th rowspan="2" class="w-20px text-center">Status</th>
                                         <th rowspan="2" class="w-50px text-center">Pindah</th>
                                         <th colspan="3" class="w-50px text-center">Stock</th>
                                         <th colspan="2" class="w-50px text-center">Action</th>
@@ -112,6 +112,7 @@
                                     @else
                                         @php
                                             $no = 1;
+                                            // dd($data_header->detail);
                                         @endphp
                                         @foreach ($data_header->detail as $data)
                                             @php
@@ -127,24 +128,49 @@
                                                     <span class="fs-7 fw-bolder text-dark">{{ $no }}</span>
                                                 </td>
                                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                                    <span
-                                                        class="fs-7 fw-boldest text-gray-800 d-block">{{ strtoupper(trim($data->part_number)) }}</span>
-                                                    <span
-                                                        class="fs-7 fw-bolder text-gray-700 d-block">{{ trim($data->nama_part) }}</span>
-                                                    <span class="fs-8 fw-bolder text-gray-400 mt-4 d-block">Product ID :</span>
-                                                    <span class="fs-8 fw-bolder text-gray-600 d-block">
-                                                        @if (empty($data->product_id) || $data->product_id == '')
-                                                        <span class="badge badge-light-danger">(Product ID masih kosong)</span>
-                                                        @else
-                                                        {{ strtoupper(trim($data->product_id)) }}
-                                                        @endif
+                                                    <span class="fs-7 fw-boldest text-gray-800 d-block">{{ strtoupper(trim($data->part_number)) }}</span>
+                                                    <span class="fs-7 fw-bolder text-gray-700 d-block">{{ trim($data->nama_part) }}</span>
+                                                    <span class="fs-8 fw-bolder text-gray-600 d-block">{{ strtoupper(trim($data->product_id)) }}</span>
+
+                                                    <span class="fs-8 fw-boldest text-dark mt-10 d-block">MARKETPLACE:</span>
+                                                    <span class="fs-8 fw-bold text-gray-600">
+                                                        SKU :<span class="fs-7 fw-bolder text-danger ms-2">{{ strtoupper(trim((empty($data->marketplace->sku)) ? '' : $data->marketplace->sku)) }}</span>
+                                                        <br>
+                                                        ProductID :<span class="fs-7 fw-bolder text-danger ms-2">{{ strtoupper(trim((empty($data->marketplace->product_id)) ? '' : $data->marketplace->product_id)) }}</span>
+                                                        <br>
+                                                        Status :
+                                                            @if(strtoupper(trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status)) == 'BANNED') 
+                                                                <span class="fs-8 fw-boldest badge badge-danger ms-2">{{ trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status) }}</span>
+                                                            @elseif(strtoupper(trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status)) == 'UNLIST')
+                                                                <span class="fs-8 fw-boldest badge badge-warning ms-2">{{ trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status) }}</span>
+                                                            @elseif(strtoupper(trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status)) == 'DELETED')
+                                                                <span class="fs-8 fw-boldest badge badge-danger ms-2">{{ trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status) }}</span>
+                                                            @elseif(strtoupper(trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status)) == 'NORMAL')
+                                                                <span class="fs-8 fw-boldest badge badge-success ms-2">{{ trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status) }}</span>
+                                                            @else
+                                                                <span class="fs-8 fw-boldest badge badge-danger ms-2">{{ trim((empty($data->marketplace->status)) ? '' : $data->marketplace->status) }}</span>
+                                                            @endif
                                                     </span>
+                                                    @if(trim((empty($data->marketplace->sku)) ? '' : $data->marketplace->sku) != '')
+                                                        @if(strtoupper(trim($data->part_number)) != strtoupper(trim((empty($data->marketplace->sku)) ? '' : $data->marketplace->sku)))
+                                                            <span class="badge badge-danger fs-8 fw-boldest animation-blink">PART NUMBER DAN SKU TIDAK SAMA</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="badge badge-danger fs-8 fw-boldest animation-blink">PART NUMBER DAN SKU TIDAK SAMA</span>
+                                                    @endif
+                                                    @if(trim((empty($data->marketplace->product_id)) ? '' : $data->marketplace->product_id) != '')
+                                                        @if(strtoupper(trim($data->product_id)) != strtoupper(trim((empty($data->marketplace->product_id)) ? '' : $data->marketplace->product_id)))
+                                                            <span class="badge badge-danger fs-8 fw-boldest animation-blink mt-2">PRODUCT ID MASTER DAN MARKETPLACE TIDAK SAMA</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="badge badge-danger fs-8 fw-boldest animation-blink mt-2">PRODUCT ID MASTER DAN MARKETPLACE TIDAK SAMA</span>
+                                                    @endif
                                                 </td>
                                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                                    @if ($data->status_mp_detail == 1)
-                                                        <span class="fs-7 fw-bolder badge badge-light-success">Sudah di Perbarui</span>
+                                                    @if ($data->status_mp->detail == 1)
+                                                        <span class="fs-7 fw-bolder badge badge-light-success"><i class="fa fa-check text-success"></i></span>
                                                     @else
-                                                        <span class="fs-7 fw-bolder badge badge-light-danger">Belum di Perbarui</span>
+                                                        <span class="fs-7 fw-bolder badge badge-light-danger"><i class="fa fa-minus-circle text-gray-400"></i></span>
                                                     @endif
                                                 </td>
                                                 <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
@@ -154,9 +180,9 @@
                                                     <span class="fs-7 fw-bolder text-dark">{{ $data->stock_suma }}</span>
                                                 </td>
                                                 <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
-                                                    @if ($data->stok_shopee !== null)
+                                                    @if ($data->marketplace->stock !== null)
                                                         <span class="fs-7 fw-boldest text-dark">
-                                                            {{ $data->stok_shopee }}
+                                                            {{ $data->marketplace->stock }}
                                                         </span>
                                                     @else
                                                         <span class="fs-7 fw-bolder text-dark">
@@ -165,16 +191,16 @@
                                                     @endif
                                                 </td>
                                                 <td class="ps-3 pe-3 text-end" style="vertical-align:top;">
-                                                    @if ($data->stok_shopee !== null)
+                                                    @if ($data->marketplace->stock !== null)
                                                         @if (trim($data_header->lokasi_tujuan->kode_lokasi) === 'OS')
                                                             <span class="fs-7 fw-boldest text-success">
                                                                 <i class="fa fa-arrow-up me-2 text-success" aria-hidden="true"></i>
-                                                                {{ $data->stok_shopee + $data->pindah }}
+                                                                {{ $data->stock_update }}
                                                             </span>
                                                         @else
                                                             <span class="fs-7 fw-boldest text-danger">
                                                                 <i class="fa fa-arrow-down me-2 text-danger" aria-hidden="true"></i>
-                                                                {{ $data->stok_shopee - $data->pindah }}
+                                                                {{ $data->stock_update }}
                                                             </span>
                                                         @endif
                                                     @else
@@ -184,7 +210,7 @@
                                                     @endif
                                                 </td>
                                                 <td style="text-align:center;vertical-align:top;">
-                                                    @if ($data->status_mp_detail == 0 && $data_header->status->validasi == 1)
+                                                    @if ($data->status_mp->detail == 0 && $data_header->status->validasi == 1)
                                                         <a href="#"
                                                             class="btn btn-sm btn-light-dark btn-hover-rise btn_detail"
                                                             data-focus="0"
@@ -194,11 +220,15 @@
                                                                 class="h-20px" />
                                                         </a>
                                                     @else
-                                                        -
+                                                        @if(strtoupper(trim($data->status_mp->keterangan)) == 'DATA BELUM DI VALIDASI')
+                                                            <span class="fs-8 fw-boldest text-danger">{{ strtoupper(trim($data->status_mp->keterangan)) }}</span>
+                                                        @else
+                                                            <span class="fs-8 fw-boldest text-success">{{ strtoupper(trim($data->status_mp->keterangan)) }}</span>
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td style="text-align:center;vertical-align:top;">
-                                                    @if ($data->status_mp_detail == 0 && $data_header->status->validasi == 1)
+                                                    @if ($data->status_mp->detail == 0 && $data_header->status->validasi == 1)
                                                         <a href="#" class="btn btn-icon btn-sm btn-danger"
                                                             onclick="updateDetailInternal('{{ $data_update }}')">
                                                             <i class="fa fa-database" aria-hidden="true"></i>
@@ -220,7 +250,6 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6">
-                                {{-- @if ($data_header->status->cetak == 1 && $data_header->status->sj == 1 && $data_header->status->validasi == 1 && $data_header->status->mp_header == 0) --}}
                                 @if ($data_header->status->mp_header == 0)
                                     @if ($data_header->status->validasi == 1)
                                         <a class="btn btn-light-dark btn-hover-rise btn_detail" data-focus="0"
