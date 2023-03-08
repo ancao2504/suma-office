@@ -37,6 +37,30 @@ class ApiServiceShopee
         return $response;
     }
 
+    public static function EkspedisiDaftar()
+    {
+        $request = 'online/ekspedisi/shopee/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function EkspedisiSimpan($id, $shopeeId, $kode, $nama, $user_id)
+    {
+        $request = 'online/ekspedisi/shopee/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'id_internal' => strtoupper(trim($id)),
+            'shopee_id'   => strtoupper(trim($shopeeId)),
+            'kode'        => strtoupper(trim($kode)),
+            'nama'        => strtoupper(trim($nama)),
+            'user_id'     => strtoupper(trim($user_id)),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     // PEMINDAHAN
     public static function PemindahanDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
     {

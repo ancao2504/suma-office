@@ -29,7 +29,8 @@ use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Auth\AuthShopeeController;
-use App\Online\Tokopedia\EkspedisiController;
+use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
+use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
 use App\Online\SerahTerimaController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
@@ -483,10 +484,16 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
             Route::name('ekspedisi.')->group(function () {
                 Route::name('tokopedia.')->group(function () {
-                    Route::controller(EkspedisiController::class)->group(function () {
+                    Route::controller(EkspedisiTokopedia::class)->group(function () {
                         Route::get('/online/ekspedisi/tokopedia/daftar', 'daftarEkspedisi')->name('daftar');
                         Route::post('/online/ekspedisi/tokopedia/simpan', 'simpanEkspedisi')->name('simpan');
+                    });
+                });
 
+                Route::name('shopee.')->group(function () {
+                    Route::controller(EkspedisiShopee::class)->group(function () {
+                        Route::get('/online/ekspedisi/shopee/daftar', 'daftarEkspedisi')->name('daftar');
+                        Route::post('/online/ekspedisi/shopee/simpan', 'simpanEkspedisi')->name('simpan');
                     });
                 });
             });

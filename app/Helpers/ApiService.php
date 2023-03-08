@@ -557,6 +557,15 @@ class ApiService
         return $response;
     }
 
+    public static function OptionEkspedisiOnline()
+    {
+        $request = 'options/ekspedisionline';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OptionGroupProduk($level, $search, $page, $per_page)
     {
         $request = 'options/groupproduk';

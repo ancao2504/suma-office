@@ -20,13 +20,13 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 gy-10">
                 @foreach ($data->aktif as $data_aktif)
                 <div class="col text-center mb-9">
-                    <div class="octagon mx-auto mb-2 d-flex w-150px h-150px bgi-no-repeat bgi-size-contain bgi-position-center"
+                    <div class="mx-auto mb-2 d-flex w-150px h-150px bgi-no-repeat bgi-size-contain bgi-position-center"
                         style="background-image:url('{{ $data_aktif->ShipmentImage }}')">
                     </div>
                     <div class="mb-0">
                         <span class="text-dark fw-boldest text-hover-primary fs-3">{{ $data_aktif->ShipmentName }}</span>
-                        <div class="text-muted fs-6 fw-bolder">Code : {{ $data_aktif->ShipmentCode }}</div>
-                        <div class="text-primary fs-6 fw-boldest">ID : {{ $data_aktif->ShipmentID }}</div>
+                        <div class="text-muted fs-7 fw-bolder">Tokopedia Code : {{ $data_aktif->ShipmentCode }}</div>
+                        <div class="text-primary fs-7 fw-boldest">Tokopedia ID : {{ $data_aktif->ShipmentID }}</div>
                         @if(empty($data_aktif->internal->tokopedia_id))
                         <button id="btnSimpanEkspedisi" name="btnSimpanEkspedisi" class="btn btn-sm btn-danger mt-6"
                             data-kode="{{ $data_aktif->ShipmentCode }}" data-nama="{{ $data_aktif->ShipmentName }}"
@@ -34,7 +34,7 @@
                         @else
                         <button id="btnDetailEkspedisi" name="btnDetailEkspedisi" class="btn btn-sm btn-secondary mt-6"
                             data-kode="{{ $data_aktif->internal->kode }}" data-nama="{{ $data_aktif->internal->nama }}"
-                            data-id="{{ $data_aktif->internal->tokopedia_id }}" data-images="{{ $data_aktif->ShipmentImage }}">Sudah Terhubung</button>
+                            data-id="{{ $data_aktif->internal->tokopedia_id }}" data-images="{{ $data_aktif->ShipmentImage }}">Terhubung</button>
                         @endif
                     </div>
                 </div>
@@ -47,12 +47,12 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 gy-10">
                 @foreach ($data->list as $data_list)
                 <div class="col text-center mb-9">
-                    <div class="octagon mx-auto mb-2 d-flex w-150px h-150px bgi-no-repeat bgi-size-contain bgi-position-center"
+                    <div class="mx-auto mb-2 d-flex w-150px h-150px bgi-no-repeat bgi-size-contain bgi-position-center"
                         style="background-image:url('{{ $data_list->logo }}')"></div>
                     <div class="mb-0">
                         <span class="text-dark fw-boldest text-hover-primary fs-3">{{ $data_list->shipper_name }}</span>
-                        <div class="text-muted fs-6 fw-bolder">Code : {{ $data_list->shipper_code }}</div>
-                        <div class="text-primary fs-6 fw-boldest">ID : {{ $data_list->shipper_id }}</div>
+                        <div class="text-muted fs-7 fw-bolder">Tokopedia Code : {{ $data_list->shipper_code }}</div>
+                        <div class="text-primary fs-7 fw-boldest">Tokopedia ID : {{ $data_list->shipper_id }}</div>
                         @if(empty($data_list->internal->tokopedia_id))
                         <button id="btnSimpanEkspedisi" name="btnSimpanEkspedisi" class="btn btn-sm btn-danger mt-6"
                             data-kode="{{ $data_list->shipper_code }}" data-nama="{{ $data_list->shipper_name }}"
@@ -60,7 +60,7 @@
                         @else
                         <button id="btnDetailEkspedisi" name="btnDetailEkspedisi" class="btn btn-sm btn-secondary mt-6"
                             data-kode="{{ $data_list->internal->kode }}" data-nama="{{ $data_list->internal->nama }}"
-                            data-id="{{ $data_list->internal->tokopedia_id }}" data-images="{{ $data_list->logo }}">Sudah Terhubung</button>
+                            data-id="{{ $data_list->internal->tokopedia_id }}" data-images="{{ $data_list->logo }}">Terhubung</button>
                         @endif
                     </div>
                 </div>
