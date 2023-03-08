@@ -2,8 +2,8 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/sumahond/public_html/assets
-    - /bin/cp -R public/assets/* $DEPLOYPATH
+    - /bin/cp -R /home/sumahond/repositories/suma-pmo/public/assets/* $DEPLOYPATH
     - export DEPLOYPATH=/home/sumahond/public_html/vendor
-    - /bin/cp -R public/vendor/* $DEPLOYPATH
+    - /bin/cp -R /home/sumahond/repositories/suma-pmo/public/vendor/* $DEPLOYPATH
     - export DEPLOYPATH=/home/sumahond/public_html/storage
-    - /bin/cp -R public/storage/* $DEPLOYPATH
+    - /bin/cp -R /home/sumahond/repositories/suma-pmo/public/storage/* $DEPLOYPATH
