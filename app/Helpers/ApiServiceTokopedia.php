@@ -7,6 +7,29 @@ use Illuminate\Support\Facades\Http;
 use App\Helpers\ApiRequestTokopedia;
 
 class ApiServiceTokopedia {
+    public static function EkspedisiDaftar()
+    {
+        $request = 'online/ekspedisi/tokopedia/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function EkspedisiSimpan($id, $kode, $nama, $user_id)
+    {
+        $request = 'online/ekspedisi/tokopedia/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'id'        => strtoupper(trim($id)),
+            'kode'      => strtoupper(trim($kode)),
+            'nama'      => strtoupper(trim($nama)),
+            'user_id'   => strtoupper(trim($user_id)),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function PemindahanDaftar($page, $per_page, $start_date, $end_date, $nomor_dokumen, $companyid)
     {
         $request = 'online/pemindahan/tokopedia/daftar';

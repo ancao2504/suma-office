@@ -6,12 +6,32 @@ use App\Helpers\ApiRequest;
 
 class ApiServiceShopee
 {
-    public static function authPartnerCek($companyid)
+    public static function Authorization()
     {
-        $request = 'auth/shopee/cek/authpartner';
+        $request = 'auth/shopee/token/access';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function AuthorizationGenerateLink()
+    {
+        $request = 'auth/shopee/token/access/generate';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function AuthorizationSimpan($access_code, $companyid, $user_id)
+    {
+        $request = 'auth/shopee/token/access/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
+            'access_code'   => trim($access_code),
             'companyid'     => trim($companyid),
+            'user_id'       => trim($user_id)
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

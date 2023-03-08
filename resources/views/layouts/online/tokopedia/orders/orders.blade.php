@@ -63,6 +63,23 @@
     </div>
 </div>
 
+<div class="row g-0 mt-6">
+    <div class="card card-flush">
+        <div class="ms-8">
+            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
+                <li class="nav-item mt-2">
+                    <div id="navSemuaProses" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status != '220') active @endif"
+                        style="cursor: pointer;">Semua Invoice</div>
+                </li>
+                <li class="nav-item mt-2">
+                    <div id="navBelumProses" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status == '220') active @endif"
+                        style="cursor: pointer;">Belum Diproses</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <div id="postOrder">
     <!--Start List Order-->
     @foreach($data_order as $data)
@@ -95,7 +112,7 @@
                             @elseif($data->order_status->kode == 103)
                             <span class="fs-7 fw-boldest badge badge-warning">{{ strtoupper($data->order_status->keterangan) }}</span>
                             @elseif($data->order_status->kode == 220)
-                            <span class="fs-7 fw-boldest badge badge-primary">{{ strtoupper($data->order_status->keterangan) }}</span>
+                            <span class="fs-7 fw-boldest badge badge-success">{{ strtoupper($data->order_status->keterangan) }}</span>
                             @elseif($data->order_status->kode == 221)
                             <span class="fs-7 fw-boldest badge badge-primary">{{ strtoupper($data->order_status->keterangan) }}</span>
                             @elseif($data->order_status->kode == 400)
@@ -190,7 +207,8 @@
             <div class="row pt-4 pb-4 ps-6 pe-6">
                 <div class="d-flex align-items-center">
                     <div class="col-lg-6 text-start">
-                        <a href="{{ route('online.orders.tokopedia.form.form', trim($data->nomor_invoice)) }}" class="btn btn-primary w-250px">
+                        <a href="{{ route('online.orders.tokopedia.form.form', trim($data->nomor_invoice)) }}"
+                            class="btn @if($data_filter->status != '220') btn-primary @else btn-success @endif w-250px">
                             <i class="fa fa-check text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Lihat Detail Transaksi
                         </a>
                     </div>

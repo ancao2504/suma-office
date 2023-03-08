@@ -116,7 +116,7 @@
                                 </span>
                                 <div class="menu-sub menu-sub-dropdown w-175px py-4" style="">
                                     <div class="menu-item px-3">
-                                        <a href="{{ route('online.auth.auth-shopee') }}" class="menu-link px-5">Shopee</a>
+                                        <a href="{{ route('online.auth.shopee.auth') }}" class="menu-link px-5">Shopee</a>
                                     </div>
                                     <div class="menu-item px-3">
                                         <a href="#" class="menu-link px-5">Lazada</a>

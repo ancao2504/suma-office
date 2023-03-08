@@ -100,7 +100,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="pt-12 pb-12">
+                            <td colspan="8" class="pt-12 pb-12">
                                 <div class="row text-center pe-10">
                                     <span class="svg-icon svg-icon-muted">
                                         <svg class="h-100px w-100px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

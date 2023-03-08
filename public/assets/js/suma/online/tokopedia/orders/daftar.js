@@ -115,4 +115,18 @@ $(document).ready(function () {
         var status = $('#selectStatus').val();
         reloadDaftarOrders(1, 10, start_date, end_date, status);
     });
+
+    $('#navSemuaProses').on('click', function (e) {
+        e.preventDefault();
+        var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
+        var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
+        reloadDaftarOrders(1, 10, start_date, end_date, '');
+    });
+
+    $('#navBelumProses').on('click', function (e) {
+        e.preventDefault();
+        var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
+        var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
+        reloadDaftarOrders(1, 10, start_date, end_date, 220);
+    });
 });

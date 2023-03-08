@@ -27,6 +27,7 @@ use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Auth\AuthShopeeController;
+use App\Online\Tokopedia\EkspedisiController;
 use App\Online\SerahTerimaController;
 use App\Online\Shopee\PemindahanShopeeController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
@@ -370,8 +371,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         // buat route group online.
         Route::name('online.')->group(function(){
             Route::name('auth.')->group(function () {
-                Route::controller(AuthShopeeController::class)->group(function () {
-                    Route::get('/online/auth/marketplace/shopee', 'index')->name('auth-shopee');
+                Route::name('shopee.')->group(function () {
+                    Route::controller(AuthShopeeController::class)->group(function () {
+                        Route::get('/online/auth/marketplace/shopee', 'index')->name('auth');
+                        Route::get('/online/auth/marketplace/shopee/generatelink', 'generateLink')->name('generate-link');
+                        Route::post('/online/auth/marketplace/shopee/simpan', 'simpanAccessCode')->name('simpan');
+                    });
                 });
             });
 
@@ -474,6 +479,16 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         });
                         Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
                         Route::get('/online/orders/tokopedia/single', 'singleOrder')->name('single');
+                    });
+                });
+            });
+
+            Route::name('ekspedisi.')->group(function () {
+                Route::name('tokopedia.')->group(function () {
+                    Route::controller(EkspedisiController::class)->group(function () {
+                        Route::get('/online/ekspedisi/tokopedia/daftar', 'daftarEkspedisi')->name('daftar');
+                        Route::post('/online/ekspedisi/tokopedia/simpan', 'simpanEkspedisi')->name('simpan');
+
                     });
                 });
             });
