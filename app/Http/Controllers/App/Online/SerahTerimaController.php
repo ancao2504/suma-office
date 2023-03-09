@@ -108,6 +108,19 @@ class SerahTerimaController extends Controller
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
-
     }
+
+    public function requestPickupPerNomorFaktur(Request $request) {
+        $responseApi = ApiService::OnlineSerahTerimaRequestPickupPerNomorFaktur(strtoupper(trim($request->get('nomor_faktur'))),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function updateStatusPerNomorFaktur(Request $request) {
+        $responseApi = ApiService::OnlineSerahTerimaUpdateStatusPerNomorFaktur(strtoupper(trim($request->get('nomor_faktur'))),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
+
+
 }

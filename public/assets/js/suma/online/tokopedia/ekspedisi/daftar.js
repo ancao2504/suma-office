@@ -1,15 +1,10 @@
 $(document).ready(function () {
     $('body').on('click', '#btnDetailEkspedisi', function (e) {
         e.preventDefault();
-
-        var images = '<div class="mx-auto mb-2 d-flex w-200px h-200px bgi-no-repeat bgi-size-contain bgi-position-center"'+
-            'style="background-image:url('+$(this).data("images")+')">'+
-        '</div>';
-
-        $('#modalImages').html(images);
-        $('#modalID').text($(this).data("id"));
-        $('#modalKode').text($(this).data("kode"));
-        $('#modalNama').text($(this).data("nama"));
+        $('#inputKeterangan').val($(this).data("keterangan"));
+        $('#inputTokopediaID').val($(this).data("tokopedia_id"));
+        $('#inputIDInternal').val($(this).data("id"));
+        $('#selectKodeEkspedisi').val($(this).data("kode")).change();
 
         $('#modalDetailEkspedisi').modal('show');
     });
@@ -17,17 +12,18 @@ $(document).ready(function () {
     $.ajaxSetup({
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
-    $('body').on('click', '#btnSimpanEkspedisi', function (e) {
+    $('#btnSimpanEkspedisi').on('click', function (e) {
         e.preventDefault();
 
-        var id = $(this).data("id");
-        var kode = $(this).data("kode");
-        var nama = $(this).data("nama");
+        var tokopediaId = $('#inputTokopediaID').val();
+        var kode = $('#selectKodeEkspedisi').find(":selected").val();
+        var nama = $('#inputKeterangan').val();
+        var idInternal = $('#inputIDInternal').val();
         var _token = $('input[name="_token"]').val();
 
-        if(id == '' || kode == '' || nama == '') {
+        if(kode == '' || nama == '' || tokopediaId == '') {
             Swal.fire({
-                text: 'Isi data secara lengkap atau pilih data logistic terlebih dahulu',
+                text: 'Isi data secara lengkap',
                 icon: 'warning',
                 buttonsStyling: false,
                 allowOutsideClick: false,
@@ -43,10 +39,12 @@ $(document).ready(function () {
                 url: url.simpan_ekspedisi,
                 method: "post",
                 data: {
-                    id: id, kode: kode, nama: nama, token: _token
+                    id: idInternal, tokopedia_id: tokopediaId, kode: kode, nama: nama,
+                    _token: _token
                 },
                 success: function(response) {
                     loading.release();
+
                     if (response.status == true) {
                         Swal.fire({
                             text: response.message,

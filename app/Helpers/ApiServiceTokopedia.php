@@ -16,15 +16,16 @@ class ApiServiceTokopedia {
         return $response;
     }
 
-    public static function EkspedisiSimpan($id, $kode, $nama, $user_id)
+    public static function EkspedisiSimpan($id, $tokopedia_id, $kode, $nama, $user_id)
     {
         $request = 'online/ekspedisi/tokopedia/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'id'        => strtoupper(trim($id)),
-            'kode'      => strtoupper(trim($kode)),
-            'nama'      => strtoupper(trim($nama)),
-            'user_id'   => strtoupper(trim($user_id)),
+            'id_internal'   => strtoupper(trim($id)),
+            'tokopedia_id'  => strtoupper(trim($tokopedia_id)),
+            'kode'          => strtoupper(trim($kode)),
+            'nama'          => strtoupper(trim($nama)),
+            'user_id'       => strtoupper(trim($user_id)),
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

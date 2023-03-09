@@ -40,7 +40,7 @@ $(document).ready(function () {
                 method: "post",
                 data: {
                     id: idInternal, shopee_id: shopeeId, kode: kode, nama: nama,
-                    token: _token
+                    _token: _token
                 },
                 success: function(response) {
                     loading.release();

@@ -507,7 +507,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::get('/online/serahterima/daftar', 'daftarSerahTerima')->name('daftar');
 
                     Route::name('form.')->group(function () {
+                        Route::post('/online/serahterima/form/proses/requestpickup', 'requestPickupPerNomorFaktur')->name('request-pickup');
+                        Route::post('/online/serahterima/form/proses/updatestatus', 'updateStatusPerNomorFaktur')->name('update-status');
                         Route::get('/online/serahterima/form/{nomor_dokumen}', 'formSerahTerima')->where('nomor_dokumen', '(.*)')->name('form');
+
                     });
                 });
             });

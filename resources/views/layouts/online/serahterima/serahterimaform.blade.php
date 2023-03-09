@@ -32,12 +32,6 @@
                                 <span class="bullet bullet-dot bg-danger me-2"></span>{{ strtoupper(trim($data->ekspedisi->kode)) }}
                             </span>
                         </div>
-                        <div class="fw-bolder fs-6 text-gray-800 d-flex align-items-center flex-wrap">
-                            <span class="pe-2">{{ trim($data->rit) }}</span>
-                            <span class="fs-7 text-info d-flex align-items-center">
-                                <span class="bullet bullet-dot bg-info me-2"></span>RIT
-                            </span>
-                        </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="fs-7 fw-bold text-gray-600 mb-1">Keterangan:</div>
@@ -84,31 +78,40 @@
                             <tbody class="border">
                                 @foreach($data->detail as $data_detail)
                                 <tr>
-                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
                                         <span class="fs-7 fw-bolder text-gray-800">{{ $loop->iteration }}</span>
                                     </td>
-                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:center;">
                                         <span class="fs-7 fw-bolder text-gray-800">{{ $data_detail->nomor_sj }}</span>
                                     </td>
-                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:center;">
                                         <span class="fs-7 fw-bolder text-gray-800">{{ $data_detail->nomor_faktur }}</span>
                                     </td>
-                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:tcenterop;">
                                         <span class="fs-7 fw-bolder text-gray-800">{{ $data_detail->nomor_invoice }}</span>
                                     </td>
-                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
                                         <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_detail->jumlah_koli) }}</span>
                                     </td>
-                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                        <button id="btnUpdateStatusPartNumber" class="btn btn-icon btn-sm btn-danger" type="button" data-nomor_dokumen="PL12527/III/23" data-part_number="06141KWB505">
-                                            <i class="fa fa-database" aria-hidden="true"></i>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                    @if($data_detail->status_mp_detail == 0)
+                                    @if($data_detail->status_mp_aktif == 1)
+                                        <button id="btnRequestPickup" class="btn btn-icon btn-sm btn-success" type="button"
+                                            data-nomor_dokumen="{{ strtoupper(trim($data->nomor_dokumen)) }}"
+                                            data-nomor_faktur="{{ strtoupper(trim($data_detail->nomor_faktur)) }}">
+                                            <i class="fa fa-truck" aria-hidden="true"></i>
                                         </button>
+                                    @endif
+                                    @endif
                                     </td>
-                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                        <button id="btnUpdateStatusPartNumber" class="btn btn-icon btn-sm btn-danger" type="button"
-                                            data-nomor_dokumen="{{ strtoupper(trim($data->nomor_dokumen)) }}" data-no_faktur="{{ strtoupper(trim($data->nomor_dokumen)) }}">
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
+                                        @if($data_detail->status_mp_detail == 0)
+                                        <button id="btnUpdateStatus" class="btn btn-icon btn-sm btn-danger" type="button"
+                                            data-nomor_dokumen="{{ strtoupper(trim($data->nomor_dokumen)) }}"
+                                            data-nomor_faktur="{{ strtoupper(trim($data_detail->nomor_faktur)) }}">
                                             <i class="fa fa-database" aria-hidden="true"></i>
                                         </button>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -120,4 +123,13 @@
         </div>
     </form>
 </div>
+@push('scripts')
+<script>
+    const url = {
+        'proses_request_pickup': "{{ route('online.serahterima.form.request-pickup') }}",
+        'proses_update_status': "{{ route('online.serahterima.form.update-status') }}"
+    }
+</script>
+<script src="{{ asset('assets/js/suma/online/serahterima/form.js') }}?v={{ time() }}"></script>
+@endpush
 @endsection

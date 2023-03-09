@@ -1699,4 +1699,28 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function OnlineSerahTerimaRequestPickupPerNomorFaktur($nomor_faktur, $companyid)
+    {
+        $request = 'online/serahterima/request/pickup';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_faktur'  => $nomor_faktur,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OnlineSerahTerimaUpdateStatusPerNomorFaktur($nomor_faktur, $companyid)
+    {
+        $request = 'online/serahterima/update/status';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_faktur'  => $nomor_faktur,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

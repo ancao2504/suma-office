@@ -29,18 +29,18 @@
                     <div class="mb-0">
                         <span class="text-dark fw-boldest text-hover-primary fs-4">{{ $data_aktif->logistics_channel_name }}</span>
                         <div class="text-primary fs-7 fw-boldest">Shopee ID : {{ $data_aktif->logistics_channel_id }}</div>
-                        @if(empty($data_aktif->internal->shopee_id))
+                        @if(empty($data_aktif->internal->marketplace_id))
                         <div class="text-danger fs-7 fw-boldest">Code : TIDAK TERHUBUNG</div>
                         @else
-                        <div class="text-info fs-7 fw-boldest">Code: {{ $data_aktif->internal->kode }}</div>
+                        <div class="text-info fs-7 fw-boldest">Code: {{ $data_aktif->internal->kode_ekspedisi }}</div>
                         @endif
-                        @if(empty($data_aktif->internal->shopee_id))
+                        @if(empty($data_aktif->internal->marketplace_id))
                         <button id="btnDetailEkspedisi" name="btnDetailEkspedisi" class="btn btn-sm btn-danger mt-6"
                             data-shopee_id="{{ $data_aktif->logistics_channel_id }}" data-keterangan="{{ $data_aktif->logistics_channel_name }}">Hubungkan</button>
                         @else
                         <button id="btnDetailEkspedisi" name="btnDetailEkspedisi" class="btn btn-sm btn-secondary mt-6"
                             data-shopee_id="{{ $data_aktif->logistics_channel_id }}" data-keterangan="{{ $data_aktif->logistics_channel_name }}"
-                            data-id="{{ $data_aktif->internal->id }}" data-kode="{{ $data_aktif->internal->kode }}">Terhubung</button>
+                            data-id="{{ $data_aktif->internal->id }}" data-kode="{{ $data_aktif->internal->kode_ekspedisi }}">Terhubung</button>
                         @endif
                     </div>
                 </div>
@@ -62,18 +62,18 @@
                     <div class="mb-0">
                         <span class="text-dark fw-boldest text-hover-primary fs-4">{{ $data_list->logistics_channel_name }}</span>
                         <div class="text-primary fs-7 fw-boldest">Shopee ID : {{ $data_list->logistics_channel_id }}</div>
-                        @if(empty($data_list->internal->shopee_id))
+                        @if(empty($data_list->internal->marketplace_id))
                         <div class="text-danger fs-7 fw-boldest">Code : TIDAK TERHUBUNG</div>
                         @else
-                        <div class="text-info fs-7 fw-boldest">Code: {{ $data_list->internal->kode }}</div>
+                        <div class="text-info fs-7 fw-boldest">Code: {{ $data_list->internal->kode_ekspedisi }}</div>
                         @endif
-                        @if(empty($data_list->internal->shopee_id))
+                        @if(empty($data_list->internal->marketplace_id))
                         <button id="btnDetailEkspedisi" name="btnDetailEkspedisi" class="btn btn-sm btn-danger mt-6"
                             data-shopee_id="{{ $data_list->logistics_channel_id }}" data-keterangan="{{ $data_list->logistics_channel_name }}">Hubungkan</button>
                         @else
                         <button id="btnDetailEkspedisi" name="btnDetailEkspedisi" class="btn btn-sm btn-secondary mt-6"
                             data-shopee_id="{{ $data_list->logistics_channel_id }}" data-keterangan="{{ $data_list->logistics_channel_name }}"
-                            data-id="{{ $data_list->internal->id }}" data-kode="{{ $data_list->internal->kode }}">Terhubung</button>
+                            data-id="{{ $data_list->internal->id }}" data-kode="{{ $data_list->internal->kode_ekspedisi }}">Terhubung</button>
                         @endif
                     </div>
                 </div>

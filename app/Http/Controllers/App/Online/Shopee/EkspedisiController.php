@@ -14,7 +14,7 @@ use Jenssegers\Agent\Agent as Agent;
 
 class EkspedisiController extends Controller
 {
-    public function daftarEkspedisi(Request $request) {
+    public function daftarEkspedisi() {
         $responseApi = ApiService::OptionEkspedisiOnline();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
