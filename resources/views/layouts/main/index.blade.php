@@ -30,7 +30,7 @@
         <!-- PWA  -->
         <meta name="theme-color" content="#F1416C"/>
         <link rel="apple-touch-icon" href="{{ asset('assets/images/logo/ic_suma.png') }}">
-        <link rel="manifest" href="{{ asset('assets/manifest.json') }}">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
 
         @stack('styles')
     </head>
@@ -143,10 +143,10 @@
         </div>
 
         @yield('after-container')
-        <script src="{{ asset('assets/sw.js') }}"></script>
+        <script src="{{ asset('sw.js') }}"></script>
         <script>
             if (!navigator.serviceWorker.controller) {
-                navigator.serviceWorker.register("{{ asset('assets/sw.js') }}").then(function (reg) {
+                navigator.serviceWorker.register("{{ asset('sw.js') }}").then(function (reg) {
                     console.log("Service worker has been registered for scope: " + reg.scope);
                 });
             }
