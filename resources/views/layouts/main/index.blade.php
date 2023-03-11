@@ -28,9 +28,9 @@
 		<link href="{{ asset('assets/css/stylesuma.css') }}" rel="stylesheet" type="text/css" />
 
         <!-- PWA  -->
-        <meta name="theme-color" content="#6777ef"/>
-        <link rel="apple-touch-icon" href="{{ asset('logo.PNG') }}">
-        <link rel="manifest" href="{{ asset('/manifest.json') }}">
+        <meta name="theme-color" content="#F1416C"/>
+        <link rel="apple-touch-icon" href="{{ asset('iamges/logo/ic_suma.png') }}">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
 
         @stack('styles')
     </head>
