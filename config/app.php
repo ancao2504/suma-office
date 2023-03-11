@@ -161,6 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Ladumor\LaravelPwa\PWAServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -235,6 +236,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'LaravelPwa' => \Ladumor\LaravelPwa\LaravelPwa::class,
     ],
 
 ];

@@ -143,6 +143,14 @@
         </div>
 
         @yield('after-container')
+        <script src="{{ asset('sw.js') }}"></script>
+        <script>
+            if (!navigator.serviceWorker.controller) {
+                navigator.serviceWorker.register("{{ asset('sw.js') }}").then(function (reg) {
+                    console.log("Service worker has been registered for scope: " + reg.scope);
+                });
+            }
+        </script>
 		<!--begin::Global Javascript Bundle(used by all pages)-->
 		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
 		<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
@@ -205,11 +213,3 @@
 
 	</body>
 </html>
-<script src="{{ asset('sw.js') }}"></script>
-        <script>
-            if (!navigator.serviceWorker.controller) {
-                navigator.serviceWorker.register("{{ asset('sw.js') }}").then(function (reg) {
-                    console.log("Service worker has been registered for scope: " + reg.scope);
-                });
-            }
-        </script>
