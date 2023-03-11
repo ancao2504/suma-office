@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Tokopedia;
+namespace App\Http\Controllers\app\Online\Shopee;
 
+use App\Helpers\ApiServiceShopee;
 use App\Helpers\ApiServiceTokopedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,7 +17,7 @@ class OrderController extends Controller
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
             return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
         }
-        $start_date = Carbon::now()->format('Y-m-d');
+        $start_date = Carbon::now()->addDay(-2)->format('Y-m-d');
         $end_date = Carbon::now()->format('Y-m-d');
 
         if(!empty($request->get('start_date'))) {
@@ -27,17 +28,19 @@ class OrderController extends Controller
             $end_date = $request->get('end_date');
         }
 
-        $per_page = 10;
-        if(!empty($request->get('per_page')) && $request->get('per_page') != '') {
-            if($request->get('per_page') == 10 || $request->get('per_page') == 25 || $request->get('per_page') == 50 || $request->get('per_page') == 100) {
-                $per_page = $request->get('per_page');
+        $fields = (empty($request->get('fields'))) ? 'create_time' : $request->get('fields');
+
+        $page_size = 10;
+        if(!empty($request->get('page_size')) && $request->get('page_size') != '') {
+            if($request->get('page_size') == 10 || $request->get('page_size') == 25 || $request->get('page_size') == 50) {
+                $page_size = $request->get('page_size');
             } else {
-                $per_page = 10;
+                $page_size = 10;
             }
         }
 
-        $responseApi = ApiServiceTokopedia::OrderDaftar($request->get('page'), $per_page,
-                        $start_date, $end_date, $request->get('status'),
+        $responseApi = ApiServiceShopee::OrderDaftar($fields, $start_date, $end_date, $page_size,
+                        $request->get('cursor'), $request->get('status'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -47,13 +50,14 @@ class OrderController extends Controller
 
             $data_filter = new Collection();
             $data_filter->push((object) [
+                'fields'        => $fields,
                 'start_date'    => $start_date,
                 'end_date'      => $end_date,
                 'status'        => trim($request->get('status')),
             ]);
 
-            $view = view('layouts.online.tokopedia.orders.orders', [
-                'title_menu'    => 'Orders Tokopedia',
+            $view = view('layouts.online.shopee.orders.orders', [
+                'title_menu'    => 'Orders Shopee',
                 'data_filter'   => $data_filter->first(),
                 'data_order'    => $dataApi
             ]);
@@ -84,7 +88,7 @@ class OrderController extends Controller
         ]);
 
         if(!empty($request->get('nomor_invoice'))) {
-            $responseApi = ApiServiceTokopedia::OrderSingle($request->get('nomor_invoice'),
+            $responseApi = ApiServiceShopee::OrderSingle($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
 
@@ -93,15 +97,15 @@ class OrderController extends Controller
             }
         }
 
-        return view ('layouts.online.tokopedia.orders.ordersingle', [
-            'title_menu'    => 'Orders Tokopedia',
+        return view ('layouts.online.shopee.orders.ordersingle', [
+            'title_menu'    => 'Orders Shopee',
             'data_filter'   => $data_filter->first(),
             'data_order'    => $data_order
         ]);
     }
 
     public function formOrder($nomor_invoice, Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderForm($nomor_invoice,
+        $responseApi = ApiServiceShopee::OrderForm($nomor_invoice,
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -110,7 +114,7 @@ class OrderController extends Controller
         if($statusApi == 1) {
             $dataApi = json_decode($responseApi)->data;
 
-            return view ('layouts.online.tokopedia.orders.orderform', [
+            return view ('layouts.online.shopee.orders.orderform', [
                 'title_menu'    => 'Orders Tokopedia',
                 'tanggal'       => date('Y-m-d'),
                 'data'          => $dataApi
@@ -121,7 +125,7 @@ class OrderController extends Controller
     }
 
     public function prosesOrder(Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderProses($request->get('nomor_invoice'),
+        $responseApi = ApiServiceShopee::OrderProses($request->get('nomor_invoice'),
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));

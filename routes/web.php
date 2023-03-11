@@ -36,6 +36,7 @@ use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
 use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
 use App\Online\Tokopedia\OrderController as OrderTokopediaController;
+use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
@@ -482,6 +483,17 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         });
                         Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
                         Route::get('/online/orders/tokopedia/single', 'singleOrder')->name('single');
+                    });
+                });
+
+                Route::name('shopee.')->group(function () {
+                    Route::controller(OrderShopeeController::class)->group(function () {
+                        Route::name('form.')->group(function () {
+                            Route::post('/online/orders/shopee/single/form/proses', 'prosesOrder')->name('proses');
+                            Route::get('/online/orders/shopee/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
+                        });
+                        Route::get('/online/orders/shopee/daftar', 'daftarOrder')->name('daftar');
+                        Route::get('/online/orders/shopee/single', 'singleOrder')->name('single');
                     });
                 });
             });

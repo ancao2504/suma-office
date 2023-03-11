@@ -630,13 +630,32 @@
                         </div>
                     </div>
                     <div class="menu-sub menu-sub-accordion {{ (Request::is('online/orders/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
-                        <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('online/orders/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/orders/shopee/daftar') }}">
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/orders/shopee/*')) ? 'show' : '' }}">
+                            <span class="menu-link">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Shopee</span>
-                            </a>
+                                <span class="menu-title {{ (Request::is('online/orders/shopee/*')) ? 'active' : '' }}">Shopee</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion">
+                                <div class="menu-item">
+                                    <a class="menu-link {{ (Request::is('online/orders/shopee/daftar*')) ? 'active' : '' }}" href="{{ url('/online/orders/shopee/daftar') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">List Order</span>
+                                    </a>
+                                </div>
+                                <div class="menu-item">
+                                    <a class="menu-link {{ (Request::is('online/orders/shopee/single*')) ? 'active' : '' }}" href="{{ url('/online/orders/shopee/single') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Single Order</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

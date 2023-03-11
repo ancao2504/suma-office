@@ -1,0 +1,17 @@
+{
+    "name": "Suma-PMO",
+    "short_name": "PMO",
+    "start_url": "index.php",
+    "background_color": "#F1416C",
+    "description": "Suma Parts Mobile Ordering",
+    "display": "fullscreen",
+    "theme_color": "#F1416C",
+    "icons": [
+        {
+            "src": "ic_suma.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

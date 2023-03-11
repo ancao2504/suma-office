@@ -61,6 +61,62 @@ class ApiServiceShopee
         return $response;
     }
 
+    public static function OrderDaftar($fields, $start_date, $end_date, $page_size, $cursor, $status, $companyid)
+    {
+        $request = 'online/orders/shopee/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'fields'        => $fields,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'page_size'     => $page_size,
+            'cursor'        => $cursor,
+            'status'        => $status,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OrderSingle($nomor_invoice, $companyid)
+    {
+        $request = 'online/orders/shopee/single';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OrderForm($nomor_invoice, $companyid, $user_id)
+    {
+        $request = 'online/orders/shopee/form';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid),
+            'user_id'       => trim($user_id),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OrderProses($nomor_invoice, $tanggal, $companyid, $user_id)
+    {
+        $request = 'online/orders/shopee/proses';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'tanggal'       => $tanggal,
+            'companyid'     => trim($companyid),
+            'user_id'       => trim($user_id),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     // PEMINDAHAN
     public static function PemindahanDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
     {

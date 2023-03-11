@@ -46,8 +46,6 @@ function getMinDateFaktur() {
 
 $(document).ready(function () {
     getMinDateFaktur();
-
-
     $('#btnSimulasiFaktur').on('click', function (e) {
         e.preventDefault();
         $('#modalSimulasiOrder').modal('show');
@@ -60,6 +58,7 @@ $(document).ready(function () {
         var close_mkr = moment(new Date()).format('YYYY-MM-DD');
         var _token = $('input[name="_token"]').val();
 
+        loading.block();
         $.ajax({
             url: url.clossing_marketing,
             method: "get",
@@ -173,6 +172,7 @@ $(document).ready(function () {
                 }
             },
             error: function() {
+                loading.release();
                 Swal.fire({
                     text: 'Server not responding',
                     icon: "danger",

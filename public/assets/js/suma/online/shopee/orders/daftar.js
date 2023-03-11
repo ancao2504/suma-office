@@ -1,16 +1,19 @@
-function reloadDaftarOrders(page = 1, per_page = 10, start_date = '', end_date = '', status = '') {
+function reloadDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time', start_date = '', end_date = '', status = '') {
     loading.block();
-    window.location.href = window.location.origin + window.location.pathname + '?page=' + page + '&per_page=' + per_page +
-        '&start_date=' + start_date + '&end_date=' + end_date + '&status=' + status;
+    window.location.href = window.location.origin + window.location.pathname + '?fields=' + fields +
+        '&start_date=' + start_date + '&end_date=' + end_date + '&status=' + status +
+        '&page_size=' + page_size + '&cursor=' + cursor;
+
 }
 
-function loadDaftarOrders(page = 1, per_page = 10, start_date = '', end_date = '', status = '') {
+function loadDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time', start_date = '', end_date = '', status = '') {
     loading.block();
     $.ajax({
         url: url.daftar_order,
         method: "get",
-        data: { page: page, per_page: per_page, start_date: start_date,
-                end_date: end_date, status: status },
+        data: { cursor: cursor, page_size: page_size, fields: fields,
+                start_date: start_date, end_date: end_date,
+                status: status },
 
         success: function (response) {
             loading.release();
@@ -60,14 +63,14 @@ $(document).ready(function () {
         clickOpens: true,
         dateFormat: 'Y-m-d',
         minDate: moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD'),
-        maxDate: moment(new Date($("#inputStartDate").val()).fp_incr(2)).format('YYYY-MM-DD'),
-        defaultDate: moment(new Date($("#inputStartDate").val()).fp_incr(2)).format('YYYY-MM-DD')
+        maxDate: moment(new Date($("#inputStartDate").val()).fp_incr(14)).format('YYYY-MM-DD'),
+        defaultDate: moment(new Date($("#inputStartDate").val()).fp_incr(14)).format('YYYY-MM-DD')
     });
 
     // ===============================================================
     // Scroll
     // ===============================================================
-    var pages = 1;
+    var pages = 0;
 
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
@@ -76,12 +79,13 @@ $(document).ready(function () {
     $(window).scroll(function () {
         if (loading.isBlocked() === false) {
             if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+                var fields = $('#selectFields').val();
                 var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
                 var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
                 var status = $('#selectStatus').val();
 
                 pages++;
-                loadDaftarOrders(pages, 10, start_date, end_date, status);
+                loadDaftarOrders(pages, 10, fields, start_date, end_date, status);
             }
         }
     });
@@ -95,38 +99,43 @@ $(document).ready(function () {
             clickOpens: true,
             dateFormat: 'Y-m-d',
             minDate: moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD'),
-            maxDate: moment(new Date($("#inputStartDate").val()).fp_incr(2)).format('YYYY-MM-DD'),
-            defaultDate: moment(new Date($("#inputStartDate").val()).fp_incr(2)).format('YYYY-MM-DD')
+            maxDate: moment(new Date($("#inputStartDate").val()).fp_incr(14)).format('YYYY-MM-DD'),
+            defaultDate: moment(new Date($("#inputStartDate").val()).fp_incr(14)).format('YYYY-MM-DD')
         });
     });
 
     $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
+        var fields = $('#selectFields').val();
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
         var status = $('#selectStatus').val();
-        reloadDaftarOrders(1, 10, start_date, end_date, status);
+        reloadDaftarOrders(0, 10, fields, start_date, end_date, status);
     });
 
     $('#selectStatus').on('change', function (e) {
         e.preventDefault();
+        var fields = $('#selectFields').val();
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
         var status = $('#selectStatus').val();
-        reloadDaftarOrders(1, 10, start_date, end_date, status);
+        reloadDaftarOrders(0, 10, fields, start_date, end_date, status);
     });
 
     $('#navSemuaProses').on('click', function (e) {
         e.preventDefault();
+        var fields = $('#selectFields').val();
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-        reloadDaftarOrders(1, 10, start_date, end_date, '');
+        var status = $('#selectStatus').val();
+        reloadDaftarOrders(0, 10, fields, start_date, end_date, status);
     });
 
     $('#navBelumProses').on('click', function (e) {
         e.preventDefault();
+        var fields = $('#selectFields').val();
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-        reloadDaftarOrders(1, 10, start_date, end_date, 220);
+        reloadDaftarOrders(0, 10, fields, start_date, end_date, 'READY_TO_SHIP');
     });
 });
