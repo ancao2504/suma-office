@@ -60,11 +60,13 @@ $(document).ready(function () {
         var close_mkr = moment(new Date()).format('YYYY-MM-DD');
         var _token = $('input[name="_token"]').val();
 
+        loading.block();
         $.ajax({
             url: url.clossing_marketing,
             method: "get",
             success: function(response) {
                 loading.release();
+
                 if (response.status == false) {
                     Swal.fire({
                         text: response.message,
@@ -173,6 +175,7 @@ $(document).ready(function () {
                 }
             },
             error: function() {
+                loading.release();
                 Swal.fire({
                     text: 'Server not responding',
                     icon: "danger",

@@ -479,6 +479,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::controller(OrderTokopediaController::class)->group(function () {
                         Route::name('form.')->group(function () {
                             Route::post('/online/orders/tokopedia/single/form/proses', 'prosesOrder')->name('proses');
+                            Route::post('/online/orders/tokopedia/single/form/pickup', 'prosesPickup')->name('pickup');
+                            Route::post('/online/orders/tokopedia/single/form/cetaklabel', 'prosesCetakLabel')->name('cetak-label');
                             Route::get('/online/orders/tokopedia/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
                         });
                         Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
@@ -490,6 +492,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::controller(OrderShopeeController::class)->group(function () {
                         Route::name('form.')->group(function () {
                             Route::post('/online/orders/shopee/single/form/proses', 'prosesOrder')->name('proses');
+                            Route::post('/online/orders/shopee/single/form/pickup', 'prosesPickup')->name('pickup');
+                            Route::post('/online/orders/shopee/single/form/cetaklabel', 'prosesCetakLabel')->name('cetak-label');
                             Route::get('/online/orders/shopee/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
                         });
                         Route::get('/online/orders/shopee/daftar', 'daftarOrder')->name('daftar');

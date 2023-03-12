@@ -64,6 +64,7 @@ $(document).ready(function () {
             method: "get",
             success: function(response) {
                 loading.release();
+
                 if (response.status == false) {
                     Swal.fire({
                         text: response.message,

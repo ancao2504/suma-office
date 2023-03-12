@@ -289,4 +289,28 @@ class ApiServiceTokopedia {
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function OrderPickup($nomor_invoice, $companyid)
+    {
+        $request = 'online/orders/tokopedia/pickup';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OrderCetakLabel($nomor_invoice, $companyid)
+    {
+        $request = 'online/orders/tokopedia/cetak-label';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

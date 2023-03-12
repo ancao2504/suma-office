@@ -1,14 +1,14 @@
 {
-    "name": "Laravel Package Tutorial",
+    "name": "Suma-PMO",
     "short_name": "LPT",
     "start_url": "/index.php",
-    "background_color": "#6777ef",
-    "description": "Tutorial of Laravel Package",
+    "background_color": "#F1416C",
+    "description": "Suma Parts Mobile Ordering",
     "display": "fullscreen",
-    "theme_color": "#6777ef",
+    "theme_color": "#F1416C",
     "icons": [
         {
-            "src": "logo.PNG",
+            "src": "assets/images/logo/ic_suma.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"

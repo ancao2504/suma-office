@@ -90,10 +90,13 @@ class OrderController extends Controller
         if(!empty($request->get('nomor_invoice'))) {
             $responseApi = ApiServiceShopee::OrderSingle($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
+            $messageApi = json_decode($responseApi)->message;
             $statusApi = json_decode($responseApi)->status;
 
             if($statusApi == 1) {
                 $data_order = json_decode($responseApi)->data;
+            } else {
+                return redirect()->back()->withInput()->with('failed', $messageApi);
             }
         }
 
@@ -129,6 +132,18 @@ class OrderController extends Controller
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function prosesPickup(Request $request) {
+        $responseApi = ApiServiceShopee::OrderPickup($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function prosesCetakLabel(Request $request) {
+        $responseApi = ApiServiceShopee::OrderCetakLabel($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 }

@@ -67,7 +67,6 @@ class OrderController extends Controller
             } else {
                 return $view;
             }
-
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
@@ -87,9 +86,12 @@ class OrderController extends Controller
             $responseApi = ApiServiceTokopedia::OrderSingle($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
+            $messageApi = json_decode($responseApi)->message;
 
             if($statusApi == 1) {
                 $data_order = json_decode($responseApi)->data;
+            } else {
+                return redirect()->back()->withInput()->with('failed', $messageApi);
             }
         }
 
@@ -125,6 +127,18 @@ class OrderController extends Controller
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function prosesPickup(Request $request) {
+        $responseApi = ApiServiceTokopedia::OrderPickup($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function prosesCetakLabel(Request $request) {
+        $responseApi = ApiServiceTokopedia::OrderCetakLabel($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 }

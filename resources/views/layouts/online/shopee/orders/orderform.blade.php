@@ -141,7 +141,7 @@
     </div>
 </div>
 <div class="row g-0">
-    @if($data->faktur->status == 0 && strtoupper(trim($data->shopee->status)) == 'READY_TO_SHIP')
+    @if($data->faktur->status == 0)
     <div class="d-block">
         <button id="btnSimulasiFaktur" name="simulasi_faktur" type="button" class="btn btn-primary mt-6">Simulasi Faktur</button>
     </div>
