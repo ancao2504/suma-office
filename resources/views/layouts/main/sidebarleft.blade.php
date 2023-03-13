@@ -561,6 +561,16 @@
                         <span class="menu-title {{ (Request::is('online/product/*')) ? 'active' : '' }}">Products</span>
                         <span class="menu-arrow"></span>
                     </span>
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/marketplace/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                        <div class="menu-item">
+                            <a class="menu-link {{ (Request::is('online/product/marketplace/*')) ? 'active' : '' }}" href="{{ url('/online/product/marketplace/daftar') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Marketplace</span>
+                            </a>
+                        </div>
+                    </div>
                     <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/product/tokopedia/*')) ? 'active' : '' }}" href="{{ url('/online/product/tokopedia/index') }}">

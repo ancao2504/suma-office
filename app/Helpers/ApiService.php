@@ -1407,8 +1407,6 @@ class ApiService
         return $response;
     }
 
-
-
     public static function HargaNettoPartDaftar($page, $per_page, $companyid, $role_id, $search)
     {
         $request = 'setting/harga/partnetto';
@@ -1719,6 +1717,20 @@ class ApiService
         $body = [
             'nomor_faktur'  => $nomor_faktur,
             'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function SearchProductMarketplaceByPartNumber($part_number, $companyid, $page, $per_page)
+    {
+        $request = 'online/products/marketplace/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
+            'page'          => $page,
+            'per_page'      => $per_page,
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

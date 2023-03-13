@@ -38,7 +38,6 @@
                                 <tbody class="border">
                                     @if (!empty($data_all->data) || collect($data_all->data)->count() > 0)
                                     @foreach ($data_all->data as $key => $data)
-                                    
                                         <tr>
                                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                                 <span class="fs-6 fw-bolder text-gray-800">{{ $key + 1 }}</span>
@@ -201,15 +200,14 @@
             </div>
         </div>
     </div>
-
-    @push('scripts')
-        <script>
-            const url = {
-                'daftar_product_id': "{{ route('online.product.shopee.daftar') }}",
-                'cek_product_id': "{{ route('online.product.shopee.cek') }}",
-                'update_product_id': "{{ route('online.product.shopee.update') }}",
-            }
-        </script>
-        <script src="{{ asset('assets/js/suma/online/shopee/products/form.js') }}?v={{ time() }}"></script>
-    @endpush
 @endsection
+@push('scripts')
+    <script>
+        const url = {
+            'daftar_product_id': "{{ route('online.product.shopee.daftar') }}",
+            'cek_product_id': "{{ route('online.product.shopee.cek') }}",
+            'update_product_id': "{{ route('online.product.shopee.update') }}",
+        };
+    </script>
+    <script src="{{ asset('assets/js/suma/online/shopee/products/form.js') }}?v={{ time() }}"></script>
+@endpush
