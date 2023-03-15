@@ -42,6 +42,7 @@
                                     @php
                                         $no = $data_all->from;
                                     @endphp
+                                    
                                     @foreach ($data_all->data as $key => $data)
                                     <tr>
                                         <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
@@ -66,11 +67,12 @@
                                                 @endif
                                             </span>
                                         </td>
-                                    @if ($data->tokopedia->sku === null)
+                                    @if ($data->tokopedia->sku == null)
                                         <td class="ps-3 pe-3"
                                             style="text-align:center;vertical-align:center;">
                                             <P class="fs-6 fw-boldest descriptionpart text-dark">
-                                                PRODUK BELUM ADA PADA <span style="color: #008000;">TOKOPEDIA</span>
+                                                {{-- PRODUK BELUM ADA PADA <span style="color: #008000;">TOKOPEDIA</span> --}}
+                                                {{ strtoupper($data->tokopedia->messages) }}
                                             </p>
                                         </td>
                                     @else
@@ -104,11 +106,12 @@
                                                 </td>
                                                 @endif
 
-                                        @if ($data->shopee->sku === null)
+                                        @if ($data->shopee->sku == null)
                                             <td class="ps-3 pe-3"
                                                 style="text-align:center;vertical-align:center;">
                                                 <p class="fs-6 fw-boldest descriptionpart text-dark">
-                                                    PRODUK BELUM ADA PADA <span style="color: #EE4D2D;">SHOPEE</span>
+                                                    {{-- PRODUK BELUM ADA PADA <span style="color: #EE4D2D;">SHOPEE</span> --}}
+                                                    {{ strtoupper($data->shopee->messages) }}
                                                 </p>
                                             </td>
                                         @else
@@ -143,21 +146,19 @@
                                             </td>
                                         @endif
                                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                                @if ($data->tokopedia->sku === null && $data->shopee->sku === null)
-                                                @elseif ($data->tokopedia->sku !== null && $data->shopee->sku === null)
+                                                @if ($data->tokopedia->sku !== null && $data->shopee->sku === null && $data->shopee->status == 1)
                                                     <a href="{{ route('online.product.form' , base64_encode($key)) }}" class="btn btn-icon btn-sm btn-light-dark btn-hover-rise">
                                                         <img alt="Logo"
                                                             src="{{ asset('assets/images/logo/shopee.png') }}"
                                                             class="h-20px" />
                                                     </a>
-                                                @elseif ($data->tokopedia->sku === null && $data->shopee->sku !== null)
+                                                @elseif ($data->tokopedia->sku === null && $data->shopee->sku !== null && $data->tokopedia->status == 1)
                                                     <a href="{{ route('online.product.form' , base64_encode($key)) }}" class="btn btn-icon btn-sm btn-light-dark btn-hover-rise"
                                                     onclick="updateDetail('')">
                                                         <img alt="Logo"
                                                             src="{{ asset('assets/images/logo/tokopedia.png') }}"
                                                             class="h-20px" />
                                                     </a>
-                                                @else
                                                 @endif
                                                 </td>
                                             </tr>

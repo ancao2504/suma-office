@@ -1735,4 +1735,16 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function DetailProductMarketplaceByPartNumber($part_number, $companyid)
+    {
+        $request = 'online/products/marketplace/detail';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

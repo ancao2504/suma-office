@@ -471,7 +471,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     });
                 });
 
-                Route::controller(ApiProductController::class)->group(function () {
+                Route::controller(ProductController::class)->group(function () {
                     Route::get('/online/product/marketplace/daftar', 'daftarProduct')->name('daftar');
                     Route::get('/online/product/marketplace/form/{part_number}', 'formProduct')->name('form');
                 });

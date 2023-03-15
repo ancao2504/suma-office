@@ -12,10 +12,6 @@ class ProductController extends Controller
 {
     public function daftarPartNumber(Request $request)
     {
-
-        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
-            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
-        }
         $view = view('layouts.online.shopee.product.product', [
             'title_menu'    => 'Products'
         ]);

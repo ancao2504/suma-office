@@ -11,9 +11,6 @@ class ProductController extends Controller
 {
     public function daftarProduct(Request $request)
     {
-        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
-            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
-        }
         $view = view('layouts.online.product.product', [
             'title_menu'    => 'Products'
         ]);
@@ -26,7 +23,6 @@ class ProductController extends Controller
                 $request->get('page')??1,
                 in_array($request->get('per_page'), [10, 25, 50]) ? $request->get('per_page') : 10
             );
-
             $statusApi = json_decode($responseApi)->status;
             if ($statusApi == 1) {
                 return response()->json([
@@ -51,13 +47,22 @@ class ProductController extends Controller
     }
 
     public function formProduct(Request $request, $part_number){
-        if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
-            return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
+        
+        $part_number = base64_decode($part_number);
+        // hubungkan dengan server 
+        $responseApi = ApiService::DetailProductMarketplaceByPartNumber(
+            strtoupper(trim($part_number)),
+            strtoupper(trim($request->session()->get('app_user_company_id')))
+        );
+
+        if (json_decode($responseApi)->status == 0) {
+            return redirect()->back()->withInput()->with('failed', json_decode($responseApi)->message);
         }
 
         $view = view('layouts.online.product.form', [
             'title_menu'    => 'Products',
-            'data_all'     => ''
+            'data_all'     => json_decode($responseApi)->data->data,
+            'kategori'     => json_decode($responseApi)->data->kategori
         ]);
 
         return $view;
