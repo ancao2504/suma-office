@@ -17,11 +17,13 @@ use App\Visit\PlanningVisitController;
 use App\Orders\TrackingOrderController;
 use App\Dashboard\DashboardSalesmanController;
 use App\Orders\Cart\Index\CartIndexController;
+use App\Online\Tokopedia\EkspedisiController;
 use App\Setting\Diskon\DiskonDealerController;
 use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
+use App\Online\ProductController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
 use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
 use App\Online\Shopee\ProductController as ProductShopee;
@@ -471,8 +473,9 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     });
                 });
 
-                Route::controller(ProductShopee::class)->group(function () {
+                Route::controller(ProductController::class)->group(function () {
                     Route::get('/online/product/marketplace/daftar', 'daftarProduct')->name('daftar');
+                    Route::get('/online/product/marketplace/form/{part_number}', 'formProduct')->name('form');
                 });
             });
 
