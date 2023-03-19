@@ -189,4 +189,130 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('#btnCetakLabel').on('click', function (e) {
+        e.preventDefault();
+        var nomor_invoice = $(this).data("nomor_invoice");
+        var _token = $('input[name="_token"]').val();
+
+        loading.block();
+        $.ajax({
+            url: url.proses_cetak_label,
+            method: "POST",
+            data: { nomor_invoice: nomor_invoice, _token: _token },
+
+            success: function (response) {
+                loading.release();
+
+                if (response.status == true) {
+                    var newWindow = window.open('url', '_blank');
+                    newWindow.document.open();
+                    newWindow.document.write(response.data);
+                    newWindow.document.close();
+                } else {
+                    Swal.fire({
+                        html: response.message,
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-warning'
+                        }
+                    });
+                }
+            },
+            error: function () {
+                loading.release();
+                Swal.fire({
+                    text: 'Server Not Responding',
+                    icon: 'error',
+                    buttonsStyling: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonText: 'Ok, got it!',
+                    customClass: {
+                        confirmButton: 'btn btn-danger'
+                    }
+                });
+            }
+        });
+    });
+
+    $('#btnRequestPickup').on('click', function (e) {
+        e.preventDefault();
+        var nomor_invoice = $(this).data("nomor_invoice");
+        var _token = $('input[name="_token"]').val();
+
+        Swal.fire({
+            html: `Apakah anda yakin akan memproses request pickup nomor invoice
+                    <strong>`+ nomor_invoice + `</strong> ?`,
+            icon: "info",
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No',
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: 'btn btn-primary'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                loading.block();
+                $.ajax({
+                    url: url.proses_request_pickup_tokopedia,
+                    method: "post",
+                    data: {
+                        nomor_invoice: nomor_invoice, _token: _token
+                    },
+                    success: function(response) {
+                        loading.release();
+
+                        if (response.status == true) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'success',
+                                buttonsStyling: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                confirmButtonText: 'Ok, got it!',
+                                customClass: {
+                                    confirmButton: 'btn btn-success'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'warning',
+                                buttonsStyling: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                confirmButtonText: 'Ok, got it!',
+                                customClass: {
+                                    confirmButton: 'btn btn-warning'
+                                }
+                            });
+                        }
+                    },
+                    error: function() {
+                        loading.release();
+                        Swal.fire({
+                            text: 'Server tidak merespon, coba lagi',
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-danger"
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
 });

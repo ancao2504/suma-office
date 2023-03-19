@@ -292,7 +292,7 @@ class ApiServiceTokopedia {
 
     public static function OrderPickup($nomor_invoice, $companyid)
     {
-        $request = 'online/orders/tokopedia/pickup';
+        $request = 'online/shipping/tokopedia/pickup';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_invoice' => $nomor_invoice,
@@ -304,10 +304,25 @@ class ApiServiceTokopedia {
 
     public static function OrderCetakLabel($nomor_invoice, $companyid)
     {
-        $request = 'online/orders/tokopedia/cetak-label';
+        $request = 'online/shipping/tokopedia/cetak-label';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function HistorySaldo($page, $per_page, $start_date, $end_date, $companyid)
+    {
+        $request = 'online/historysaldo/tokopedia/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 100,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
             'companyid'     => trim($companyid)
         ];
         $response = ApiRequest::requestPost($request, $header, $body);

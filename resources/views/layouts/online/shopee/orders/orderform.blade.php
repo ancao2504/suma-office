@@ -87,6 +87,45 @@
                     @endif
                 </div>
             </div>
+            <div class="row mt-4 mb-4">
+                <div class="d-flex">
+                    @if($data->faktur->status == 1)
+                    @php
+                        $total_faktur = 0;
+                    @endphp
+
+                    @foreach($data->faktur->list as $data_total)
+                    @php
+                        $total_faktur = (double)$total_faktur + (double)$data_total->total->total
+                    @endphp
+                    @endforeach
+                    @endif
+
+                    @if(strtoupper(trim($data->shopee->status)) != 'UNPAID')
+                        @if(strtoupper(trim($data->shopee->status)) != 'READY_TO_SHIP')
+                            @if($data->faktur->status == 1)
+                                @if((double)$data->shopee->item_price != (double)$total_faktur)
+                                <button id="btnCetakLabel" name="cetak_label" type="button" class="btn btn-sm btn-primary me-2"
+                                    data-nomor_invoice="{{ trim($data->shopee->nomor_invoice) }}">
+                                    <i class="fa fa-file-text text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Cetak Label
+                                </button>
+                                @endif
+                            @endif
+                        @endif
+                    @endif
+
+                    @if(strtoupper(trim($data->shopee->status)) == 'READY_TO_SHIP')
+                        @if($data->faktur->status == 1)
+                            @if((double)$data->shopee->item_price != (double)$total_faktur)
+                            <button id="btnAturPengiriman" name="request_pickup" type="button" class="btn btn-sm btn-danger"
+                                data-nomor_invoice="{{ trim($data->shopee->nomor_invoice) }}">
+                                <i class="fa fa-truck text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Atur Pengiriman
+                            </button>
+                            @endif
+                        @endif
+                    @endif
+                </div>
+            </div>
             <div class="row">
                 <div class="table-responsive">
                     <table class="table table-row-dashed table-row-gray-300 align-middle">
@@ -142,218 +181,220 @@
 </div>
 <div class="row g-0">
     @if($data->faktur->status == 0)
-    <div class="d-block">
-        <button id="btnSimulasiFaktur" name="simulasi_faktur" type="button" class="btn btn-primary mt-6">Simulasi Faktur</button>
-    </div>
+        @if(strtoupper(trim($data->shopee->status)) == 'READY_TO_SHIP')
+            <div class="d-block">
+                <button id="btnSimulasiFaktur" name="simulasi_faktur" type="button" class="btn btn-primary mt-6">Simulasi Faktur</button>
+            </div>
+        @endif
     @else
-    @forelse($data->faktur->list as $data_internal)
-    <div class="card card-flush mt-6">
-        <div class="card-header align-items-center border-0 mt-4">
-            <h3 class="card-title align-items-start flex-column">
-                <span class="fw-bolder mb-2 text-dark">Data Faktur</span>
-                <span class="text-muted fw-bold fs-7">Data faktur internal</span>
-            </h3>
-            <div class="card-toolbar">
-                <img src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-50px" />
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 pt-6 pb-6">
-                    <span class="fs-7 fw-bolder text-gray-500 d-block">No Faktur:</span>
-                    <span class="fs-7 fw-bolder text-dark d-block mt-1">{{ $data_internal->nomor_faktur }}</span>
-                    <span class="fs-7 fw-bolder text-danger d-block">{{ date('d F Y', strtotime($data_internal->tanggal)) }}</span>
-
-                    <div class="row mt-6">
-                        <div class="col-lg-4">
-                            <span class="fs-7 fw-bolder text-gray-500">Jenis Beli:</span>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
-                                <span class="pe-2">{{ $data_internal->jenis_beli->keterangan }}</span>
-                                <span class="fs-7 text-danger d-flex align-items-center">
-                                <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->jenis_beli->kode }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <span class="fs-7 fw-bolder text-gray-500">Salesman:</span>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
-                                <span class="pe-2">{{ $data_internal->salesman->nama }}</span>
-                                <span class="fs-7 text-danger d-flex align-items-center">
-                                <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->salesman->kode }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <span class="fs-7 fw-bolder text-gray-500">Dealer:</span>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
-                                <span class="pe-2">{{ $data_internal->dealer->nama }}</span>
-                                <span class="fs-7 text-danger d-flex align-items-center">
-                                <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->dealer->kode }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <span class="fs-7 fw-bolder text-gray-500">Ekspedisi:</span>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
-                                <span class="pe-2">{{ $data_internal->ekspedisi->nama }}</span>
-                                <span class="fs-7 text-danger d-flex align-items-center">
-                                <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->ekspedisi->kode }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 pt-6 pb-6 ps-6">
-                    <span class="fs-7 fw-bolder text-gray-500 d-block">Keterangan:</span>
-                    <span class="fs-7 fw-bolder text-gray-800 d-block mt-1">{{ $data_internal->keterangan }}</span>
-
-
-                    <span class="fs-7 fw-bolder text-gray-500 d-block mt-6">Umur Faktur:</span>
-                    <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
-                        <span class="pe-2">{{ $data_internal->jatuh_tempo->tanggal }}</span>
-                        <span class="fs-7 text-danger d-flex align-items-center">
-                        <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->jatuh_tempo->umur_faktur }} Hari</span>
-                    </div>
-
-                    <span class="fs-7 fw-bolder text-gray-500 d-block mt-6">Status:</span>
-                    @if($data_internal->kode_tpc == '14')
-                    <span class="fs-8 fw-boldest badge badge-primary mt-2">TPC {{ $data_internal->kode_tpc }}</span>
-                    @else
-                    <span class="fs-8 fw-boldest badge badge-danger mt-2">TPC {{ $data_internal->kode_tpc }}</span>
-                    @endif
-                    @if($data_internal->status->rh == 'H')
-                    <span class="fs-8 fw-boldest badge badge-danger mt-2">HOTLINE</span>
-                    @else
-                    <span class="fs-8 fw-boldest badge badge-success mt-2">REGULER</span>
-                    @endif
-                    @if($data_internal->status->bo == 'B')
-                    <span class="fs-8 fw-boldest badge badge-danger mt-2">BACKORDER</span>
-                    @else
-                    <span class="fs-8 fw-boldest badge badge-success mt-2">TIDAK BO</span>
-                    @endif
+        @forelse($data->faktur->list as $data_internal)
+        <div class="card card-flush mt-6">
+            <div class="card-header align-items-center border-0 mt-4">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="fw-bolder mb-2 text-dark">Data Faktur</span>
+                    <span class="text-muted fw-bold fs-7">Data faktur internal</span>
+                </h3>
+                <div class="card-toolbar">
+                    <img src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-50px" />
                 </div>
             </div>
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table table-row-dashed table-row-gray-300 align-middle">
-                        <thead class="border">
-                            <tr class="fs-8 fw-bolder text-muted">
-                                <th class="w-50px ps-3 pe-3 text-center">No</th>
-                                <th class="w-300px ps-3 pe-3 text-center">Part Number</th>
-                                <th class="w-100px ps-3 pe-3 text-center">Jml Order</th>
-                                <th class="w-100px ps-3 pe-3 text-center">Jml Jual</th>
-                                <th class="w-100px ps-3 pe-3 text-center">Harga</th>
-                                <th class="w-100px ps-3 pe-3 text-center">Disc (%)</th>
-                                <th class="w-100px ps-3 pe-3 text-center">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody class="border">
-                            @forelse($data_internal->detail as $data_internal_detail)
-                            <tr>
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    <span class="fs-7 fw-bold text-gray-800">{{ $loop->iteration }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <div class="d-flex">
-                                        <div class="symbol symbol-45px me-5">
-                                            <img src="{{ $data_internal_detail->pictures }}" alt="{{ $data_internal_detail->part_number }}">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 pt-6 pb-6">
+                        <span class="fs-7 fw-bolder text-gray-500 d-block">No Faktur:</span>
+                        <span class="fs-7 fw-bolder text-dark d-block mt-1">{{ $data_internal->nomor_faktur }}</span>
+                        <span class="fs-7 fw-bolder text-danger d-block">{{ date('d F Y', strtotime($data_internal->tanggal)) }}</span>
+
+                        <div class="row mt-6">
+                            <div class="col-lg-4">
+                                <span class="fs-7 fw-bolder text-gray-500">Jenis Beli:</span>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
+                                    <span class="pe-2">{{ $data_internal->jenis_beli->keterangan }}</span>
+                                    <span class="fs-7 text-danger d-flex align-items-center">
+                                    <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->jenis_beli->kode }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <span class="fs-7 fw-bolder text-gray-500">Salesman:</span>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
+                                    <span class="pe-2">{{ $data_internal->salesman->nama }}</span>
+                                    <span class="fs-7 text-danger d-flex align-items-center">
+                                    <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->salesman->kode }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <span class="fs-7 fw-bolder text-gray-500">Dealer:</span>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
+                                    <span class="pe-2">{{ $data_internal->dealer->nama }}</span>
+                                    <span class="fs-7 text-danger d-flex align-items-center">
+                                    <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->dealer->kode }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <span class="fs-7 fw-bolder text-gray-500">Ekspedisi:</span>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
+                                    <span class="pe-2">{{ $data_internal->ekspedisi->nama }}</span>
+                                    <span class="fs-7 text-danger d-flex align-items-center">
+                                    <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->ekspedisi->kode }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 pt-6 pb-6 ps-6">
+                        <span class="fs-7 fw-bolder text-gray-500 d-block">Keterangan:</span>
+                        <span class="fs-7 fw-bolder text-gray-800 d-block mt-1">{{ $data_internal->keterangan }}</span>
+
+
+                        <span class="fs-7 fw-bolder text-gray-500 d-block mt-6">Umur Faktur:</span>
+                        <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">
+                            <span class="pe-2">{{ $data_internal->jatuh_tempo->tanggal }}</span>
+                            <span class="fs-7 text-danger d-flex align-items-center">
+                            <span class="bullet bullet-dot bg-danger me-2"></span>{{ $data_internal->jatuh_tempo->umur_faktur }} Hari</span>
+                        </div>
+
+                        <span class="fs-7 fw-bolder text-gray-500 d-block mt-6">Status:</span>
+                        @if($data_internal->kode_tpc == '14')
+                        <span class="fs-8 fw-boldest badge badge-primary mt-2">TPC {{ $data_internal->kode_tpc }}</span>
+                        @else
+                        <span class="fs-8 fw-boldest badge badge-danger mt-2">TPC {{ $data_internal->kode_tpc }}</span>
+                        @endif
+                        @if($data_internal->status->rh == 'H')
+                        <span class="fs-8 fw-boldest badge badge-danger mt-2">HOTLINE</span>
+                        @else
+                        <span class="fs-8 fw-boldest badge badge-success mt-2">REGULER</span>
+                        @endif
+                        @if($data_internal->status->bo == 'B')
+                        <span class="fs-8 fw-boldest badge badge-danger mt-2">BACKORDER</span>
+                        @else
+                        <span class="fs-8 fw-boldest badge badge-success mt-2">TIDAK BO</span>
+                        @endif
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-row-dashed table-row-gray-300 align-middle">
+                            <thead class="border">
+                                <tr class="fs-8 fw-bolder text-muted">
+                                    <th class="w-50px ps-3 pe-3 text-center">No</th>
+                                    <th class="w-300px ps-3 pe-3 text-center">Part Number</th>
+                                    <th class="w-100px ps-3 pe-3 text-center">Jml Order</th>
+                                    <th class="w-100px ps-3 pe-3 text-center">Jml Jual</th>
+                                    <th class="w-100px ps-3 pe-3 text-center">Harga</th>
+                                    <th class="w-100px ps-3 pe-3 text-center">Disc (%)</th>
+                                    <th class="w-100px ps-3 pe-3 text-center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border">
+                                @forelse($data_internal->detail as $data_internal_detail)
+                                <tr>
+                                    <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
+                                        <span class="fs-7 fw-bold text-gray-800">{{ $loop->iteration }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
+                                        <div class="d-flex">
+                                            <div class="symbol symbol-45px me-5">
+                                                <img src="{{ $data_internal_detail->pictures }}" alt="{{ $data_internal_detail->part_number }}">
+                                            </div>
+                                            <div class="d-flex justify-content-start flex-column">
+                                                <span class="fs-7 fw-bolder text-dark">{{ $data_internal_detail->nama_part }}</span>
+                                                <span class="fs-8 fw-bolder text-gray-600 d-block">{{ $data_internal_detail->part_number }}</span>
+                                            </div>
                                         </div>
-                                        <div class="d-flex justify-content-start flex-column">
-                                            <span class="fs-7 fw-bolder text-dark">{{ $data_internal_detail->nama_part }}</span>
-                                            <span class="fs-8 fw-bolder text-gray-600 d-block">{{ $data_internal_detail->part_number }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->jml_order) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->jml_jual) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->harga) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->disc_detail, 2) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->total_detail) }}</span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="7">
-                                    <div class="fs-6 fw-boldest text-muted p-20 text-center">- TIDAK ADA DATA YANG DITAMPILKAN -</div>
-                                </td>
-                            </tr>
-                            @endforelse
-                            <tr>
-                                <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-muted">Sub Total</span>
-                                </td>
-                                <td colspan="2" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->sub_total) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-muted">Discount (%)</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->disc_header, 2) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->disc_header_rp) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-muted">Discount (Rp)</span>
-                                </td>
-                                <td colspan="2" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->disc_rp1) }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-muted">Total</span>
-                                </td>
-                                <td colspan="2" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->total) }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->jml_order) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->jml_jual) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->harga) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->disc_detail, 2) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal_detail->total_detail) }}</span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="fs-6 fw-boldest text-muted p-20 text-center">- TIDAK ADA DATA YANG DITAMPILKAN -</div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                                <tr>
+                                    <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-muted">Sub Total</span>
+                                    </td>
+                                    <td colspan="2" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->sub_total) }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-muted">Discount (%)</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->disc_header, 2) }}</span>
+                                    </td>
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->disc_header_rp) }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-muted">Discount (Rp)</span>
+                                    </td>
+                                    <td colspan="2" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->disc_rp1) }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-muted">Total</span>
+                                    </td>
+                                    <td colspan="2" class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
+                                        <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data_internal->total->total) }}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @empty
-    <div class="card card-flush mt-6">
-        <div class="card-header align-items-center border-0 mt-4">
-            <h3 class="card-title align-items-start flex-column">
-                <span class="fw-bolder mb-2 text-dark">Data Faktur</span>
-                <span class="text-muted fw-bold fs-7">Data faktur internal</span>
-            </h3>
-            <div class="card-toolbar">
-                <img src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-50px" />
+        @empty
+        <div class="card card-flush mt-6">
+            <div class="card-header align-items-center border-0 mt-4">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="fw-bolder mb-2 text-dark">Data Faktur</span>
+                    <span class="text-muted fw-bold fs-7">Data faktur internal</span>
+                </h3>
+                <div class="card-toolbar">
+                    <img src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-50px" />
+                </div>
+            </div>
+            <div class="card-body">
+                <h4 class="text-muted">- TIDAK ADA DATA YANG DITAMPILKAN -</h4>
             </div>
         </div>
-        <div class="card-body">
-            <h4 class="text-muted">- TIDAK ADA DATA YANG DITAMPILKAN -</h4>
-        </div>
-    </div>
-    @endforelse
+        @endforelse
     @endif
 </div>
 
@@ -545,11 +586,122 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-2" id="modalRequestPickupShopee">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modalRequestPickupShopeeContent">
+            <form action="#">
+                <div class="modal-header">
+                    <h5 id="modalTitle" name="modalTitle" class="modal-title">Request Pickup Shopee</h5>
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="svg-icon svg-icon-muted svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M6 19.7C5.7 19.7 5.5 19.6 5.3 19.4C4.9 19 4.9 18.4 5.3 18L18 5.3C18.4 4.9 19 4.9 19.4 5.3C19.8 5.7 19.8 6.29999 19.4 6.69999L6.7 19.4C6.5 19.6 6.3 19.7 6 19.7Z" fill="currentColor"/>
+                                <path d="M18.8 19.7C18.5 19.7 18.3 19.6 18.1 19.4L5.40001 6.69999C5.00001 6.29999 5.00001 5.7 5.40001 5.3C5.80001 4.9 6.40001 4.9 6.80001 5.3L19.5 18C19.9 18.4 19.9 19 19.5 19.4C19.3 19.6 19 19.7 18.8 19.7Z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="fv-row">
+                        <label for="inputNomorInvoice" class="form-label">Nomor Invoice</label>
+                        <input id="inputNomorInvoice" type="text" class="form-control" placeholder="" readonly/>
+                    </div>
+                    <div class="fv-row mt-8">
+                        <div class="w-lg-100" data-kt-buttons="true">
+                            <label class="d-flex flex-stack mb-5 cursor-pointer">
+                                <span class="d-flex align-items-center me-2">
+                                    <span class="symbol symbol-50px me-6">
+                                        <span class="symbol-label bg-light-danger">
+                                            <span class="svg-icon svg-icon-1 svg-icon-danger">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path opacity="0.3" d="M18.041 22.041C18.5932 22.041 19.041 21.5932 19.041 21.041C19.041 20.4887 18.5932 20.041 18.041 20.041C17.4887 20.041 17.041 20.4887 17.041 21.041C17.041 21.5932 17.4887 22.041 18.041 22.041Z" fill="currentColor"/>
+                                                    <path opacity="0.3" d="M6.04095 22.041C6.59324 22.041 7.04095 21.5932 7.04095 21.041C7.04095 20.4887 6.59324 20.041 6.04095 20.041C5.48867 20.041 5.04095 20.4887 5.04095 21.041C5.04095 21.5932 5.48867 22.041 6.04095 22.041Z" fill="currentColor"/>
+                                                    <path opacity="0.3" d="M7.04095 16.041L19.1409 15.1409C19.7409 15.1409 20.141 14.7409 20.341 14.1409L21.7409 8.34094C21.9409 7.64094 21.4409 7.04095 20.7409 7.04095H5.44095L7.04095 16.041Z" fill="currentColor"/>
+                                                    <path d="M19.041 20.041H5.04096C4.74096 20.041 4.34095 19.841 4.14095 19.541C3.94095 19.241 3.94095 18.841 4.14095 18.541L6.04096 14.841L4.14095 4.64095L2.54096 3.84096C2.04096 3.64096 1.84095 3.04097 2.14095 2.54097C2.34095 2.04097 2.94096 1.84095 3.44096 2.14095L5.44096 3.14095C5.74096 3.24095 5.94096 3.54096 5.94096 3.84096L7.94096 14.841C7.94096 15.041 7.94095 15.241 7.84095 15.441L6.54096 18.041H19.041C19.641 18.041 20.041 18.441 20.041 19.041C20.041 19.641 19.641 20.041 19.041 20.041Z" fill="currentColor"/>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <span class="d-flex flex-column">
+                                        <span class="fw-bolder fs-6">Drop Off</span>
+                                        <span class="fs-7 text-muted">Penjual mengantar paket ke pihak logistic</span>
+                                    </span>
+                                </span>
+                                <span class="form-check form-check-custom form-check-solid">
+                                    <input id="inputJenisMetodePengiriman" class="form-check-input" type="radio" name="category" value="0" disabled>
+                                </span>
+                            </label>
+                            <label class="d-flex flex-stack mb-5 cursor-pointer">
+                                <span class="d-flex align-items-center me-2">
+                                    <span class="symbol symbol-50px me-6">
+                                        <span class="symbol-label bg-light-primary">
+                                            <span class="svg-icon svg-icon-1 svg-icon-primary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M20 8H16C15.4 8 15 8.4 15 9V16H10V17C10 17.6 10.4 18 11 18H16C16 16.9 16.9 16 18 16C19.1 16 20 16.9 20 18H21C21.6 18 22 17.6 22 17V13L20 8Z" fill="currentColor"/>
+                                                    <path opacity="0.3" d="M20 18C20 19.1 19.1 20 18 20C16.9 20 16 19.1 16 18C16 16.9 16.9 16 18 16C19.1 16 20 16.9 20 18ZM15 4C15 3.4 14.6 3 14 3H3C2.4 3 2 3.4 2 4V13C2 13.6 2.4 14 3 14H15V4ZM6 16C4.9 16 4 16.9 4 18C4 19.1 4.9 20 6 20C7.1 20 8 19.1 8 18C8 16.9 7.1 16 6 16Z" fill="currentColor"/>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <span class="d-flex flex-column">
+                                        <span class="fw-bolder fs-6">Pickup</span>
+                                        <span class="fs-7 text-muted">Pihak logistic mengambil paket ke penjual</span>
+                                    </span>
+                                </span>
+                                <span class="form-check form-check-custom form-check-solid">
+                                    <input id="inputJenisMetodePengiriman" class="form-check-input" type="radio" name="category" value="1" checked>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="fv-row mt-8">
+                        <label for="selectTanggalJamPickup" class="form-label">Tanggal & Jam Pickup</label>
+                        <select id="selectTanggalJamPickup" class="form-select" aria-label="Select example">
+                            <option value="">Pilih tanggal & jam pickup</option>
+                        </select>
+                    </div>
+                    <div class="fv-row mt-8">
+                        <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-6">
+                            <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
+                                    <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                                    <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <div class="d-flex flex-stack flex-grow-1">
+                                <div class="fw-bold">
+                                    <h4 class="text-gray-900 fw-bolder">Alamat Toko:</h4>
+                                    <div id="inputIdAlamatSeller" class="fs-6 text-gray-700"></div>
+                                    <div id="inputAlamatSeller" class="fs-6 text-gray-700"></div>
+                                    <div id="inputKotaSeller" class="fs-6 text-gray-700"></div>
+                                    <div id="inputProvinsiSeller" class="fs-6 text-gray-700"></div>
+                                    <div id="inputKodePosSeller" class="fs-6 text-gray-700"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-end">
+                        <button id="btnSimpanRequestPickupShopee" name="btnSimpanRequestPickupShopee" type="button" class="btn btn-primary text-end">Simpan</button>
+                        <button id="btnFilterClose" name="btnClose" type="button" class="btn btn-light text-end" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
     const url = {
         'clossing_marketing': "{{ route('setting.default.clossing-marketing') }}",
         'proses_order': "{{ route('online.orders.shopee.form.proses') }}",
+        'proses_cetak_label': "{{ route('online.serahterima.form.cetak-label-shopee') }}",
+        'proses_request_pickup_shopee': "{{ route('online.serahterima.form.shopee-request-pickup') }}",
+        'data_request_pickup_shopee': "{{ route('online.serahterima.form.data-shopee-request-pickup') }}"
     }
     const data = {
         'nomor_invoice': "{{ $data->shopee->nomor_invoice }}",

@@ -36,6 +36,8 @@ use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
 use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
 use App\Online\Tokopedia\OrderController as OrderTokopediaController;
+use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
+use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
 use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
@@ -480,7 +482,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::name('form.')->group(function () {
                             Route::post('/online/orders/tokopedia/single/form/proses', 'prosesOrder')->name('proses');
                             Route::post('/online/orders/tokopedia/single/form/pickup', 'prosesPickup')->name('pickup');
-                            Route::post('/online/orders/tokopedia/single/form/cetaklabel', 'prosesCetakLabel')->name('cetak-label');
                             Route::get('/online/orders/tokopedia/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
                         });
                         Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
@@ -518,11 +519,31 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
 
+            Route::name('historysaldo.')->group(function () {
+                Route::name('tokopedia.')->group(function () {
+                    Route::controller(HistorySaldoTokopedia::class)->group(function () {
+                        Route::get('/online/historysaldo/tokopedia/daftar', 'daftarHistorySaldo')->name('daftar');
+                    });
+                });
+
+                Route::name('shopee.')->group(function () {
+                    Route::controller(HistorySaldoShopee::class)->group(function () {
+
+                    });
+                });
+            });
+
             Route::name('serahterima.')->group(function () {
                 Route::controller(SerahTerimaController::class)->group(function () {
                     Route::get('/online/serahterima/daftar', 'daftarSerahTerima')->name('daftar');
 
                     Route::name('form.')->group(function () {
+                        Route::post('/online/serahterima/form/shopee/datapickup', 'dataRequestPickupShopee')->name('data-shopee-request-pickup');
+                        Route::post('/online/serahterima/form/shopee/requestpickup', 'requestPickupShopee')->name('shopee-request-pickup');
+                        Route::post('/online/serahterima/form/shopee/cetaklabel', 'prosesCetakLabelShopee')->name('cetak-label-shopee');
+                        Route::post('/online/serahterima/form/tokopedia/requestpickup', 'requestPickupTokopedia')->name('tokopedia-request-pickup');
+                        Route::post('/online/serahterima/form/tokopedia/cetaklabel', 'prosesCetakLabelTokopedia')->name('cetak-label-tokopedia');
+
                         Route::post('/online/serahterima/form/proses/requestpickup', 'requestPickupPerNomorFaktur')->name('request-pickup');
                         Route::post('/online/serahterima/form/proses/updatestatus', 'updateStatusPerNomorFaktur')->name('update-status');
                         Route::get('/online/serahterima/form/{nomor_dokumen}', 'formSerahTerima')->where('nomor_dokumen', '(.*)')->name('form');

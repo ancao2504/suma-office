@@ -46,6 +46,7 @@ function getMinDateFaktur() {
 
 $(document).ready(function () {
     getMinDateFaktur();
+
     $('#btnSimulasiFaktur').on('click', function (e) {
         e.preventDefault();
         $('#modalSimulasiOrder').modal('show');
@@ -57,6 +58,8 @@ $(document).ready(function () {
         var tanggal = moment($('#inputTanggalProses').val()).format('YYYY-MM-DD');
         var close_mkr = moment(new Date()).format('YYYY-MM-DD');
         var _token = $('input[name="_token"]').val();
+
+        $('#btnProsesOrder').prop('disabled', true);
 
         loading.block();
         $.ajax({
@@ -104,8 +107,6 @@ $(document).ready(function () {
                             }
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                $('#btnProsesOrder').prop('disabled', true);
-
                                 loading.block();
                                 $.ajax({
                                     url: url.proses_order,
@@ -132,8 +133,6 @@ $(document).ready(function () {
                                                 }
                                             });
                                         } else {
-                                            $('#btnProsesOrder').prop('disabled', false);
-
                                             Swal.fire({
                                                 html: response.message,
                                                 icon: 'warning',
@@ -152,7 +151,6 @@ $(document).ready(function () {
                                         }
                                     },
                                     error: function () {
-                                        $('#btnProsesOrder').prop('disabled', false);
                                         loading.release();
                                         Swal.fire({
                                             text: 'Server Not Responding',
@@ -186,5 +184,152 @@ $(document).ready(function () {
                 window.location.href = window.location.origin + window.location.pathname;
             }
         });
+
+        $('#btnProsesOrder').prop('disabled', false);
+    });
+
+    $('#btnAturPengiriman').on('click', function (e) {
+        e.preventDefault();
+
+        var nomor_invoice =  $(this).data("nomor_invoice");
+        var _token = $('input[name="_token"]').val();
+
+        loading.block();
+        $.ajax({
+            url: url.data_request_pickup_shopee,
+            method: "post",
+            data: {
+                nomor_invoice: nomor_invoice, _token: _token
+            },
+            success: function(response) {
+                loading.release();
+
+                if (response.status == true) {
+                    $('#inputNomorInvoice').val(nomor_invoice);
+                    $('#selectTanggalJamPickup').find('option').remove().end().append('<option value="">Pilih tanggal & jam pickup</option>').val();
+                    $('#inputKeteranganPickup').val();
+
+                    var datetimePickup = response.data.pickup.address_list[0].time_slot_list;
+                    var infoSeller = response.data.pickup.address_list[0];
+
+                    $.each(datetimePickup, function(key, value) {
+                        moment.locale('id');
+                        var tanggal = moment.unix(value.date).format("dddd, DD MMMM YYYY");
+                        var jam = value.time_text;
+                        var newoption = new Option(tanggal.toString()+ ' = '+jam, value.pickup_time_id);
+
+                        $("#selectTanggalJamPickup").append(newoption);
+                    });
+
+                    $('#inputIdAlamatSeller').text(infoSeller.address_id);
+                    $('#inputAlamatSeller').text(infoSeller.address);
+                    $('#inputKotaSeller').text(infoSeller.district+', '+infoSeller.city);
+                    $('#inputProvinsiSeller').text(infoSeller.state);
+                    $('#inputKodePosSeller').text(infoSeller.zipcode);
+
+                    $('#modalRequestPickupShopee').modal('show');
+                } else {
+                    Swal.fire({
+                        text: response.message,
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-warning'
+                        }
+                    });
+                }
+            },
+            error: function() {
+                loading.release();
+                Swal.fire({
+                    text: 'Server tidak merespon, coba lagi',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            }
+        });
+    });
+
+    $('#btnSimpanRequestPickupShopee').on('click', function (e) {
+        e.preventDefault();
+        var nomor_invoice = $('#inputNomorInvoice').val();
+        var pickup_time_id = $('#selectTanggalJamPickup').find(":selected").val();
+        var address_id = $('#inputIdAlamatSeller').text();
+        var _token = $('input[name="_token"]').val();
+
+        if(address_id == '' || nomor_invoice == '' || pickup_time_id == '') {
+            Swal.fire({
+                text: 'Isi data secara lengkap',
+                icon: "warning",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-warning"
+                }
+            });
+        } else {
+            loading.block();
+            $.ajax({
+                url: url.proses_request_pickup_shopee,
+                method: "post",
+                data: {
+                    nomor_invoice: nomor_invoice,
+                    address_id: address_id, pickup_time_id: pickup_time_id,
+                    _token: _token
+                },
+                success: function(response) {
+                    loading.release();
+
+                    if (response.status == true) {
+                        Swal.fire({
+                            text: response.message,
+                            icon: 'success',
+                            buttonsStyling: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'Ok, got it!',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            text: response.message,
+                            icon: 'warning',
+                            buttonsStyling: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'Ok, got it!',
+                            customClass: {
+                                confirmButton: 'btn btn-warning'
+                            }
+                        });
+                    }
+                },
+                error: function() {
+                    loading.release();
+                    Swal.fire({
+                        text: 'Server tidak merespon, coba lagi',
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-danger"
+                        }
+                    });
+                }
+            });
+        }
     });
 });

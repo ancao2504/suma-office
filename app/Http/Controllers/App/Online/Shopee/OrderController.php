@@ -140,10 +140,4 @@ class OrderController extends Controller
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
-
-    public function prosesCetakLabel(Request $request) {
-        $responseApi = ApiServiceShopee::OrderCetakLabel($request->get('nomor_invoice'),
-                            strtoupper(trim($request->session()->get('app_user_company_id'))));
-        return json_decode($responseApi, true);
-    }
 }

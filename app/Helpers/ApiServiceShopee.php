@@ -129,9 +129,35 @@ class ApiServiceShopee
         return $response;
     }
 
+    public static function ShippingDataMetodePengiriman($nomor_invoice)
+    {
+        $request = 'online/shipping/shopee/metode-pengiriman';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice'   => trim($nomor_invoice)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function ShippingProsesPickup($nomor_invoice, $address_id, $pickup_time_id, $companyid)
+    {
+        $request = 'online/shipping/shopee/pickup';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice'     => trim($nomor_invoice),
+            'address_id'        => trim($address_id),
+            'pickup_time_id'    => trim($pickup_time_id),
+            'companyid'         => trim($companyid),
+
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OrderCetakLabel($nomor_invoice, $companyid)
     {
-        $request = 'online/orders/shopee/cetak-label';
+        $request = 'online/shipping/shopee/cetak-label';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_invoice' => $nomor_invoice,

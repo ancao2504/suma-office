@@ -16,7 +16,7 @@ class OrderController extends Controller
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == 'MD_REQ_API') {
             return redirect()->back()->withInput()->with('failed', 'Anda tidak memiliki akses untuk membuka halaman ini');
         }
-        $start_date = Carbon::now()->format('Y-m-d');
+        $start_date = Carbon::now()->addDay(-2)->format('Y-m-d');
         $end_date = Carbon::now()->format('Y-m-d');
 
         if(!empty($request->get('start_date'))) {
@@ -132,12 +132,6 @@ class OrderController extends Controller
 
     public function prosesPickup(Request $request) {
         $responseApi = ApiServiceTokopedia::OrderPickup($request->get('nomor_invoice'),
-                            strtoupper(trim($request->session()->get('app_user_company_id'))));
-        return json_decode($responseApi, true);
-    }
-
-    public function prosesCetakLabel(Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderCetakLabel($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

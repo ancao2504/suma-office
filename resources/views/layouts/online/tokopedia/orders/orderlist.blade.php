@@ -133,42 +133,51 @@
                 <div class="separator border-2 my-4"></div>
 
                 @if((double)$total_faktur == (double)$data->amount->product)
-                @if((int)$data->order_status->kode > 220)
-                <button id="btnCetakLabel" class="btn btn-sm btn-info" data-nomor_invoice="{{ trim($data->nomor_invoice) }}">
-                    <i class="fa fa-file-text text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Cetak Label
-                </button>
-                @endif
+                    @if((int)$data->order_status->kode > 220)
+                    <button id="btnCetakLabel" class="btn btn-sm btn-primary" data-nomor_invoice="{{ trim($data->nomor_invoice) }}">
+                        <i class="fa fa-file-text text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Cetak Label
+                    </button>
+                    @endif
                 @endif
 
                 @if(trim($data_faktur->nomor_surat_jalan) != '' || trim($data_faktur->nomor_serah_terima) == '')
                 <div class="row mt-4">
                     @if(trim($data_faktur->nomor_surat_jalan) != '')
                     <div class="d-flex flex-stack w-250px mt-1">
-                        <div class="fs-7 fw-bolder text-gray-500">Surat Jalan:</div>
+                        <div class="fs-8 fw-bolder text-gray-500">Surat Jalan:</div>
                         <div class="fs-7 fw-bolder text-gray-800 text-end">{{ trim($data_faktur->nomor_surat_jalan) }}</div>
                     </div>
                     @endif
+
                     @if(trim($data_faktur->nomor_serah_terima) != '')
                     <div class="d-flex flex-stack w-250px mt-1">
-                        <div class="fs-7 fw-bolder text-gray-500">Serah Terima:</div>
+                        <div class="fs-8 fw-bolder text-gray-500">Serah Terima:</div>
                         <div class="fs-7 fw-bolder text-gray-800 text-end">{{ trim($data_faktur->nomor_serah_terima) }}</div>
                     </div>
                     @endif
                 </div>
                 @endif
 
-                @if((double)$total_faktur != (double)$data->amount->product)
-                <span class="fs-7 fw-boldest text-danger animation-blink mt-6 d-block">TOTAL PRODUK DAN TOTAL FAKTUR TIDAK SAMA</span>
-                @else
-                    @if(!empty($data_faktur->nomor_serah_terima) && trim($data_faktur->nomor_serah_terima) != '')
-                        @if((int)$data->order_status->kode == 400)
-                        <div class="d-flex mt-4">
-                            <button id="btnRequestPickup" class="btn btn-sm btn-danger" data-nomor_invoice="{{ trim($data->nomor_invoice) }}">
-                                <i class="fa fa-truck text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Request Pickup
-                            </button>
+                @if((int)$data->order_status->kode == 400)
+                    @if((double)$total_faktur == (double)$data->amount->product)
+                        @if(trim($data_faktur->nomor_serah_terima) != '')
+                        <div class="separator border-2 my-4"></div>
+                        <div class="row">
+                            <div class="d-flex">
+                                <button id="btnRequestPickup" class="btn btn-sm btn-danger"
+                                    data-nomor_invoice="{{ trim($data->nomor_invoice) }}"
+                                    data-nomor_surat_jalan="{{ trim($data_faktur->nomor_surat_jalan) }}"
+                                    data-nomor_serah_terima="{{ trim($data_faktur->nomor_serah_terima) }}">
+                                    <i class="fa fa-truck text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Request Pickup
+                                </button>
+                            </div>
                         </div>
                         @endif
                     @endif
+                @endif
+
+                @if((double)$total_faktur != (double)$data->amount->product)
+                <span class="fs-7 fw-boldest text-danger animation-blink mt-6 d-block">TOTAL PRODUK DAN TOTAL FAKTUR TIDAK SAMA</span>
                 @endif
             </div>
             @empty

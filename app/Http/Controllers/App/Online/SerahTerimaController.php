@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\app\Online;
 
 use App\Helpers\ApiService;
+use App\Helpers\ApiServiceShopee;
+use App\Helpers\ApiServiceTokopedia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -110,17 +112,40 @@ class SerahTerimaController extends Controller
         }
     }
 
-    public function requestPickupPerNomorFaktur(Request $request) {
-        $responseApi = ApiService::OnlineSerahTerimaRequestPickupPerNomorFaktur(strtoupper(trim($request->get('nomor_faktur'))),
-                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+    public function dataRequestPickupShopee(Request $request) {
+        $responseApi = ApiServiceShopee::ShippingDataMetodePengiriman(strtoupper(trim($request->get('nomor_invoice'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function requestPickupShopee(Request $request) {
+        $responseApi = ApiServiceShopee::ShippingProsesPickup(strtoupper(trim($request->get('nomor_invoice'))),
+                        $request->get('address_id'), $request->get('pickup_time_id'),
+                        strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function requestPickupTokopedia(Request $request) {
+        $responseApi = ApiServiceTokopedia::OrderPickup(strtoupper(trim($request->get('nomor_invoice'))),
+                        strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 
     public function updateStatusPerNomorFaktur(Request $request) {
-        $responseApi = ApiService::OnlineSerahTerimaUpdateStatusPerNomorFaktur(strtoupper(trim($request->get('nomor_faktur'))),
+        $responseApi = ApiService::OnlineSerahTerimaUpdateStatusPerNoFaktur(strtoupper(trim($request->get('nomor_faktur'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 
+    public function prosesCetakLabelShopee(Request $request) {
+        $responseApi = ApiServiceShopee::OrderCetakLabel($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
 
+        return json_decode($responseApi, true);
+    }
+
+    public function prosesCetakLabelTokopedia(Request $request) {
+        $responseApi = ApiServiceTokopedia::OrderCetakLabel($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
 }

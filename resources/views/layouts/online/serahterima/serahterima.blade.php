@@ -42,65 +42,54 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-row-dashed table-row-gray-300 align-middle">
-                    <thead class="border">
-                        <tr class="fs-8 fw-bolder text-muted">
-                            <th class="w-50px ps-3 pe-3 text-center">No</th>
-                            <th class="w-200px ps-3 pe-3 text-center">No Dokumen</th>
-                            <th class="w-50px ps-3 pe-3 text-center">RIT</th>
-                            <th class="w-100px ps-3 pe-3 text-center">Mulai</th>
-                            <th class="w-100px ps-3 pe-3 text-center">Selesai</th>
-                            <th class="min-w-100px ps-3 pe-3 text-center">Keterangan</th>
-                            <th class="w-150px ps-3 pe-3 text-center">Status</th>
-                            <th class="w-100px ps-3 pe-3 text-center">Action</th>
+                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                    <thead>
+                        <tr class="fw-bolder text-muted">
+                            <th class="w-25px">No</th>
+                            <th class="min-w-200px">No Dokumen</th>
+                            <th class="min-w-150px">Ekspedisi</th>
+                            <th class="min-w-150px text-center">Mulai</th>
+                            <th class="min-w-150px text-center">Selesai</th>
+                            <th class="min-w-100px text-end">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="border">
+                    <tbody>
                         @forelse($data_serah_terima as $data)
                         <tr>
-                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                <span class="fs-7 fw-bold text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
+                            <td>
+                                <span class="fs-7 fw-boldest text-gray-800">{{ ((($data_page->current_page * $data_page->per_page) - $data_page->per_page) + $loop->iteration) }}</span>
                             </td>
-                            <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                <span class="fs-7 fw-bolder text-gray-800 d-block">{{ strtoupper(trim($data->nomor_dokumen)) }}</span>
-                                <span class="fs-7 fw-bolder text-gray-600 d-block mt-1">{{ $data->tanggal }}</span>
-                                <span class="fs-7 fw-bolder text-gray-400 d-block mt-4">Ekspedisi:</span>
-                                <div class="fs-7 fw-bolder text-gray-800 d-flex align-items-center flex-wrap">
-                                    <span class="pe-2">{{ trim($data->nama_ekspedisi) }}</span>
-                                    <span class="fs-7 text-danger d-flex align-items-center">
-                                    <span class="bullet bullet-dot bg-danger me-2"></span>{{ strtoupper(trim($data->kode_ekspedisi)) }}</span>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex justify-content-start flex-column">
+                                        <span class="fs-7 fw-boldest text-gray-800">{{ strtoupper(trim($data->nomor_dokumen)) }}</span>
+                                        <span class="fs-7 fw-bolder text-gray-600 d-block">{{ date('d F Y', strtotime($data->tanggal)) }}</span>
+                                    </div>
                                 </div>
                             </td>
-                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->rit) }}</span>
+                            <td>
+                                <span class="fs-7 fw-boldest text-danger d-block">{{ trim($data->nama_ekspedisi) }}</span>
+                                <span class="fs-7 fw-bolder text-muted d-block">{{ trim($data->kode_ekspedisi) }}</span>
                             </td>
-                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                <span class="fs-7 fw-bolder text-primary d-block">{{ date('d-m-Y', strtotime($data->tanggal_mulai)) }}</span>
-                                <span class="fs-7 fw-bolder text-primary">{{ trim($data->jam_mulai) }}</span>
+                            <td class="text-center">
+                                <span class="fs-7 fw-boldest text-gray-800 d-block">{{ date('d F Y', strtotime($data->tanggal_mulai)) }}</span>
+                                <span class="fs-7 fw-bolder text-gray-600 d-block">{{ trim($data->jam_mulai) }}</span>
                             </td>
-                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                <span class="fs-7 fw-bolder text-danger d-block">{{ date('d-m-Y', strtotime($data->tanggal_selesai)) }}</span>
-                                <span class="fs-7 fw-bolder text-danger">{{ trim($data->jam_selesai) }}</span>
+                            <td class="text-center">
+                                <span class="fs-7 fw-boldest text-gray-800 d-block">{{ date('d F Y', strtotime($data->tanggal_selesai)) }}</span>
+                                <span class="fs-7 fw-bolder text-gray-600 d-block">{{ trim($data->jam_selesai) }}</span>
                             </td>
-                            <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                <span class="fs-7 fw-bolder text-gray-800 d-block">{{ trim($data->keterangan) }}</span>
-                            </td>
-                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                @if((int)$data->status_mp == 0)
-                                <span class="fs-8 fw-boldest text-danger">TERDAPAT DATA YANG BELUM DI VALIDASI</span>
-                                @else
-                                <span class="fs-8 fw-boldest text-success">DATA SUDAH DI VALIDASI</span>
-                                @endif
-                            </td>
-                            <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                <a href="{{ route('online.serahterima.form.form', strtoupper(trim($data->nomor_dokumen))) }}" class="btn btn-icon btn-sm btn-primary" type="button">
-                                    <i class="fa fa-check text-white"></i>
-                                </a>
+                            <td>
+                                <div class="d-flex justify-content-end flex-shrink-0">
+                                    <a href="{{ route('online.serahterima.form.form', strtoupper(trim($data->nomor_dokumen))) }}" class="btn btn-icon btn-sm btn-primary" type="button">
+                                        <i class="fa fa-check text-white"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="pt-12 pb-12">
+                            <td colspan="6" class="pt-12 pb-12">
                                 <div class="row text-center pe-10">
                                     <span class="svg-icon svg-icon-muted">
                                         <svg class="h-100px w-100px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

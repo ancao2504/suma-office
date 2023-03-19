@@ -143,95 +143,6 @@ $(document).ready(function () {
         loading.block();
     });
 
-    $('body').on('click', '#btnRequestPickup', function (e) {
-        e.preventDefault();
-        var nomor_invoice = $(this).data("nomor_invoice");
-        var _token = $('input[name="_token"]').val();
-
-        Swal.fire({
-            html: `Apakah anda yakin akan memproses pickup nomor invoice
-                    <strong>`+ nomor_invoice + `</strong> ?`,
-            icon: "info",
-            buttonsStyling: false,
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            cancelButtonText: 'No',
-            customClass: {
-                confirmButton: "btn btn-danger",
-                cancelButton: 'btn btn-primary'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                loading.block();
-                $.ajax({
-                    url: url.proses_pickup,
-                    method: "POST",
-                    data: { nomor_invoice: nomor_invoice, _token: _token },
-
-                    success: function (response) {
-                        loading.release();
-
-                        if (response.status == true) {
-                            Swal.fire({
-                                html: response.message,
-                                icon: 'success',
-                                buttonsStyling: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                confirmButtonText: 'Ok, got it!',
-                                customClass: {
-                                    confirmButton: 'btn btn-success'
-                                }
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    var fields = $('#selectFields').val();
-                                    var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
-                                    var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-                                    var status = $('#selectStatus').val();
-                                    reloadDaftarOrders(0, 10, fields, start_date, end_date, status);
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                html: response.message,
-                                icon: 'warning',
-                                buttonsStyling: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                confirmButtonText: 'Ok, got it!',
-                                customClass: {
-                                    confirmButton: 'btn btn-warning'
-                                }
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    var fields = $('#selectFields').val();
-                                    var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
-                                    var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-                                    var status = $('#selectStatus').val();
-                                    reloadDaftarOrders(0, 10, fields, start_date, end_date, status);
-                                }
-                            });
-                        }
-                    },
-                    error: function () {
-                        loading.release();
-                        Swal.fire({
-                            text: 'Server Not Responding',
-                            icon: 'error',
-                            buttonsStyling: false,
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            confirmButtonText: 'Ok, got it!',
-                            customClass: {
-                                confirmButton: 'btn btn-danger'
-                            }
-                        });
-                    }
-                })
-            }
-        });
-    });
-
     $('body').on('click', '#btnCetakLabel', function (e) {
         e.preventDefault();
         var nomor_invoice = $(this).data("nomor_invoice");
@@ -247,45 +158,23 @@ $(document).ready(function () {
                 loading.release();
 
                 if(response.status == true) {
-                    console.log(response.data.url+response.data.parameter);
-
                     $.ajax({
-                        url: response.data.url,
-                        method: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: JSON.stringify(response.data.parameter),
-
-                        success: function (response) {
-                            if(response.error != '') {
-                                Swal.fire({
-                                    html: response.message,
-                                    icon: 'warning',
-                                    buttonsStyling: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                    confirmButtonText: 'Ok, got it!',
-                                    customClass: {
-                                        confirmButton: 'btn btn-warning'
-                                    }
-                                });
-                            }
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        error: function() {
-                            Swal.fire({
-                                html: 'Server shopee tidak merespon, coba lagi',
-                                icon: 'error',
-                                buttonsStyling: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                confirmButtonText: 'Ok, got it!',
-                                customClass: {
-                                    confirmButton: 'btn btn-danger'
-                                }
-                            });
-                        }
+                        contentType : 'application/json;application/pdf;charset=utf-8',
+                        type: "POST",
+                        url: response.data.url,
+                        dataType: "blob",
+                        data: JSON.stringify(response.data.parameter),
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                    }).done(function (response) {
+                        console.log(response);
+                    }).fail(function(xhr, ajaxOps, error) {
+                        console.log('Failed: ' + error + xhr + ajaxOps);
                     });
-
                 } else {
                     Swal.fire({
                         html: response.message,
@@ -315,5 +204,150 @@ $(document).ready(function () {
                 });
             }
         });
+    });
+
+    $('body').on('click', '#btnAturPengiriman', function (e) {
+        e.preventDefault();
+
+        var nomor_invoice =  $(this).data("nomor_invoice");
+        var _token = $('input[name="_token"]').val();
+
+        loading.block();
+        $.ajax({
+            url: url.data_request_pickup_shopee,
+            method: "post",
+            data: {
+                nomor_invoice: nomor_invoice, _token: _token
+            },
+            success: function(response) {
+                loading.release();
+
+                if (response.status == true) {
+                    $('#inputNomorInvoice').val(nomor_invoice);
+                    $('#selectTanggalJamPickup').find('option').remove().end().append('<option value="">Pilih tanggal & jam pickup</option>').val();
+                    $('#inputKeteranganPickup').val();
+
+                    var datetimePickup = response.data.pickup.address_list[0].time_slot_list;
+                    var infoSeller = response.data.pickup.address_list[0];
+
+                    $.each(datetimePickup, function(key, value) {
+                        moment.locale('id');
+                        var tanggal = moment.unix(value.date).format("dddd, DD MMMM YYYY");
+                        var jam = value.time_text;
+                        var newoption = new Option(tanggal.toString()+ ' = '+jam, value.pickup_time_id);
+
+                        $("#selectTanggalJamPickup").append(newoption);
+                    });
+
+                    $('#inputIdAlamatSeller').text(infoSeller.address_id);
+                    $('#inputAlamatSeller').text(infoSeller.address);
+                    $('#inputKotaSeller').text(infoSeller.district+', '+infoSeller.city);
+                    $('#inputProvinsiSeller').text(infoSeller.state);
+                    $('#inputKodePosSeller').text(infoSeller.zipcode);
+
+                    $('#modalRequestPickupShopee').modal('show');
+                } else {
+                    Swal.fire({
+                        text: response.message,
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-warning'
+                        }
+                    });
+                }
+            },
+            error: function() {
+                loading.release();
+                Swal.fire({
+                    text: 'Server tidak merespon, coba lagi',
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    }
+                });
+            }
+        });
+    });
+
+    $('#btnSimpanRequestPickupShopee').on('click', function (e) {
+        e.preventDefault();
+        var nomor_invoice = $('#inputNomorInvoice').val();
+        var pickup_time_id = $('#selectTanggalJamPickup').find(":selected").val();
+        var address_id = $('#inputIdAlamatSeller').text();
+        var _token = $('input[name="_token"]').val();
+
+        if(address_id == '' || nomor_invoice == '' || pickup_time_id == '') {
+            Swal.fire({
+                text: 'Isi data secara lengkap',
+                icon: "warning",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn btn-warning"
+                }
+            });
+        } else {
+            loading.block();
+            $.ajax({
+                url: url.proses_request_pickup_shopee,
+                method: "post",
+                data: {
+                    nomor_invoice: nomor_invoice,
+                    address_id: address_id, pickup_time_id: pickup_time_id,
+                    _token: _token
+                },
+                success: function(response) {
+                    loading.release();
+
+                    if (response.status == true) {
+                        Swal.fire({
+                            text: response.message,
+                            icon: 'success',
+                            buttonsStyling: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'Ok, got it!',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            text: response.message,
+                            icon: 'warning',
+                            buttonsStyling: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'Ok, got it!',
+                            customClass: {
+                                confirmButton: 'btn btn-warning'
+                            }
+                        });
+                    }
+                },
+                error: function() {
+                    loading.release();
+                    Swal.fire({
+                        text: 'Server tidak merespon, coba lagi',
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-danger"
+                        }
+                    });
+                }
+            });
+        }
     });
 });

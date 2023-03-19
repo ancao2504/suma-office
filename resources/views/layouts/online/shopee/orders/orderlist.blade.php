@@ -94,7 +94,7 @@
 
                 @if((double)$total_faktur == (double)$data->actual_products)
                 @if(strtoupper(trim($data->order_status)) != 'READY_TO_SHIP' || strtoupper(trim($data->order_status)) != 'UNPAID')
-                <button id="btnCetakLabel" class="btn btn-sm btn-info" data-nomor_invoice="{{ trim($data->order_sn) }}">
+                <button id="btnCetakLabel" class="btn btn-sm btn-primary" data-nomor_invoice="{{ trim($data->order_sn) }}">
                     <i class="fa fa-file-text text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Cetak Label
                 </button>
                 @endif
@@ -117,18 +117,24 @@
                 </div>
                 @endif
 
-                @if((double)$total_faktur != (double)$data->actual_products)
-                <span class="fs-7 fw-boldest text-danger animation-blink mt-6 d-block">TOTAL PRODUK DAN TOTAL FAKTUR TIDAK SAMA</span>
-                @else
-                    @if(!empty($data_faktur->nomor_serah_terima) && trim($data_faktur->nomor_serah_terima) != '')
-                        @if(strtoupper(trim($data->order_status)) == 'READY_TO_SHIP')
-                        <div class="d-flex mt-4">
-                            <button id="btnRequestPickup" class="btn btn-sm btn-danger" data-nomor_invoice="{{ trim($data->order_sn) }}">
-                                <i class="fa fa-truck text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Request Pickup
-                            </button>
+                @if(strtoupper(trim($data->order_status)) == 'READY_TO_SHIP')
+                    @if($data_faktur->nomor_faktur != '')
+                        @if((double)$total_faktur == (double)$data->actual_products)
+                        <div class="separator border-2 my-4"></div>
+                        <div class="row">
+                            <div class="d-flex">
+                                <button id="btnAturPengiriman" class="btn btn-sm btn-danger"
+                                    data-nomor_invoice="{{ trim($data->order_sn) }}">
+                                    <i class="fa fa-truck text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Atur Pengiriman
+                                </button>
+                            </div>
                         </div>
                         @endif
                     @endif
+                @endif
+
+                @if((double)$total_faktur != (double)$data->actual_products)
+                <span class="fs-7 fw-boldest text-danger animation-blink mt-6 d-block">TOTAL PRODUK DAN TOTAL FAKTUR TIDAK SAMA</span>
                 @endif
             </div>
             @empty

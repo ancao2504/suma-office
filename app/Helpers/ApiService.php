@@ -1712,7 +1712,7 @@ class ApiService
         return $response;
     }
 
-    public static function OnlineSerahTerimaUpdateStatusPerNomorFaktur($nomor_faktur, $companyid)
+    public static function OnlineSerahTerimaUpdateStatusPerNoFaktur($nomor_faktur, $companyid)
     {
         $request = 'online/serahterima/update/status';
         $header = ['Authorization' => session()->get('Authorization')];

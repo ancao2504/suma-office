@@ -94,8 +94,8 @@
 <script>
     const url = {
         'daftar_order': "{{ route('online.orders.tokopedia.daftar') }}",
-        'proses_pickup': "{{ route('online.orders.tokopedia.form.pickup') }}",
-        'proses_cetak_label': "{{ route('online.orders.tokopedia.form.cetak-label') }}",
+        'proses_cetak_label': "{{ route('online.serahterima.form.cetak-label-tokopedia') }}",
+        'proses_request_pickup_tokopedia': "{{ route('online.serahterima.form.tokopedia-request-pickup') }}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/online/tokopedia/orders/daftar.js') }}?v={{ time() }}"></script>
