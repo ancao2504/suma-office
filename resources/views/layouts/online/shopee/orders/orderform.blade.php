@@ -104,7 +104,7 @@
                     @if(strtoupper(trim($data->shopee->status)) != 'UNPAID')
                         @if(strtoupper(trim($data->shopee->status)) != 'READY_TO_SHIP')
                             @if($data->faktur->status == 1)
-                                @if((double)$data->shopee->item_price != (double)$total_faktur)
+                                @if((double)$data->shopee->item_price == (double)$total_faktur)
                                 <button id="btnCetakLabel" name="cetak_label" type="button" class="btn btn-sm btn-primary me-2"
                                     data-nomor_invoice="{{ trim($data->shopee->nomor_invoice) }}">
                                     <i class="fa fa-file-text text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Cetak Label
@@ -115,8 +115,8 @@
                     @endif
 
                     @if(strtoupper(trim($data->shopee->status)) == 'READY_TO_SHIP')
-                        @if($data->faktur->status == 1)
-                            @if((double)$data->shopee->item_price != (double)$total_faktur)
+                        @if((int)$data->faktur->status == 1)
+                            @if((double)$data->shopee->item_price == (double)$total_faktur)
                             <button id="btnAturPengiriman" name="request_pickup" type="button" class="btn btn-sm btn-danger"
                                 data-nomor_invoice="{{ trim($data->shopee->nomor_invoice) }}">
                                 <i class="fa fa-truck text-white" data-toggle="tooltip" data-placement="top" title="Select"></i> Atur Pengiriman
