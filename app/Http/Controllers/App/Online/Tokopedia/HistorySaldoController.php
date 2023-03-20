@@ -66,7 +66,6 @@ class HistorySaldoController extends Controller
                 return $view;
             }
         } else {
-            dd('okok');
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
     }
