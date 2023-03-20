@@ -1747,4 +1747,57 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function PemindahanMarketplaceDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
+    {
+        $request = 'online/pemindahan/marketplace/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($search),
+            'start_date'    => trim($start_date),
+            'end_date'      => trim($end_date),
+            'companyid'     => trim($companyid),
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function PemindahanMarketplaceDetail($nomor_dokumen ,$companyid)
+    {
+        $request = 'online/pemindahan/marketplace/detail';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen'     => trim($nomor_dokumen),
+            'companyid'         => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+    
+    public static function UpdateStockMarketplace($nomor_dokumen, $kode_part, $companyid){
+        $request = 'online/pemindahan/marketplace/update/stock';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'kode_part'     => trim($kode_part),
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function PemindahanUpdateStatusMarketplacePerPartNumber($nomor_dokumen, $part_number, $companyid)
+    {
+        $request = 'online/pemindahan/marketplace/update/statuspartnumber';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_dokumen' => trim($nomor_dokumen),
+            'part_number'   => trim($part_number),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }
