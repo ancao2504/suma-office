@@ -455,6 +455,6 @@
 @push('scripts')
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script language="JavaScript"
-        src=" {{ asset('assets/js/suma/online/pemindahan/PemindahanDetail.js') }} ?v= {{ time() }} ">
+        src=" {{ asset('assets/js/suma/online/pemindahan/PemindahanDetail.js') }}?v={{ time() }}">
     </script>
 @endpush
