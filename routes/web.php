@@ -1,10 +1,10 @@
 <?php
 
 use App\Auth\AuthController;
-use App\Auth\AuthMarketplaceController;
 use App\Profile\UserController;
 use App\Option\OptionController;
 use App\Orders\FakturController;
+use App\Online\ProductController;
 use App\Profile\DealerController;
 use App\Profile\AccountController;
 use App\Orders\Cart\CartController;
@@ -14,19 +14,16 @@ use App\Validasi\ValidasiController;
 use App\Parts\uplooadImageController;
 use Illuminate\Support\Facades\Route;
 use App\Visit\PlanningVisitController;
+use App\Auth\AuthMarketplaceController;
 use App\Orders\TrackingOrderController;
+use App\Online\Tokopedia\EkspedisiController;
 use App\Dashboard\DashboardSalesmanController;
 use App\Orders\Cart\Index\CartIndexController;
-use App\Online\Tokopedia\EkspedisiController;
 use App\Setting\Diskon\DiskonDealerController;
 use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
-use App\Online\ProductController;
-use App\Online\Shopee\PemindahanController as PemindahanShopee;
-use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
-use App\Online\Shopee\ProductController as ProductShopee;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
@@ -41,9 +38,13 @@ use App\Online\Tokopedia\OrderController as OrderTokopediaController;
 use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
 use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
 use App\Online\Shopee\OrderController as OrderShopeeController;
+use App\Online\PemindahanController as PemindahanMarketplace;
+use App\Online\Shopee\ProductController as ProductShopee;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use App\Online\Shopee\PemindahanController as PemindahanShopee;
+use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 
 /*
@@ -387,6 +388,16 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             });
 
             Route::name('pemindahan.')->group(function () {
+                Route::controller(PemindahanMarketplace::class)->group(function () {
+                    Route::get('/online/pemindahan/marketplace', 'daftarPemindahan')->name('daftar');
+                    Route::get('/online/pemindahan/marketplace/detail/{param}', 'detailPemindahan')->name('daftar-detail');
+
+                    Route::name('update.')->group(function () {
+                        Route::post('/online/pemindahan/marketplace/update/stock', 'updateStock')->name('stock');
+                        Route::post('/online/pemindahan/marketplace/update/stock/part/internal', 'updateStatusPerPartNumber')->name('sts-perpart');
+                    });
+                });
+
                 Route::name('tokopedia.')->group(function () {
                     Route::controller(PemindahanTokopediaController::class)->group(function () {
                         Route::get('/online/pemindahan/tokopedia/daftar', 'daftarPemindahan')->name('daftar');
