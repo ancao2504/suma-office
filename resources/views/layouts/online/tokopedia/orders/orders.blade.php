@@ -60,29 +60,29 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row g-0 mt-6">
-    <div class="card card-flush">
-        <div class="ms-8">
-            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
-                <li class="nav-item mt-2">
-                    <div id="navSemuaProses" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status != '220' && $data_filter->status != '400') active @endif"
-                        style="cursor: pointer;">Semua Invoice</div>
-                </li>
-                <li class="nav-item mt-2">
-                    <div id="navBelumProses" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status == '220') active @endif"
-                        style="cursor: pointer;">Belum Diproses</div>
-                </li>
-                <li class="nav-item mt-2">
-                    <div id="navRequestPickup" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status == '400') active @endif"
-                        style="cursor: pointer;">Request Pickup</div>
-                </li>
-            </ul>
+        <div class="row g-0 mt-4">
+            <div class="ms-10">
+                <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
+                    <li class="nav-item mt-2">
+                        <div id="navSemuaProses" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status != '220' && $data_filter->status != '400') active @endif"
+                            style="cursor: pointer;">Semua Invoice</div>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <div id="navBelumProses" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status == '220') active @endif"
+                            style="cursor: pointer;">Belum Diproses</div>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <div id="navRequestPickup" class="nav-link text-active-primary ms-0 me-10 py-5 @if($data_filter->status == '400') active @endif"
+                            style="cursor: pointer;">Request Pickup</div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
+
+
 
 <div id="postOrder">
     <!--Start List Order-->

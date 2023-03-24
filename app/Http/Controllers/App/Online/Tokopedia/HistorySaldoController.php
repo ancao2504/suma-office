@@ -48,6 +48,7 @@ class HistorySaldoController extends Controller
             $data_filter->push((object) [
                 'start_date'    => $start_date,
                 'end_date'      => $end_date,
+                'list_view'     => (empty($request->get('list_view')) || trim($request->get('list_view')) == '') ? 'DETAIL' : strtoupper(trim($request->get('list_view')))
             ]);
 
             $view = view('layouts.online.tokopedia.historysaldo.historysaldo', [

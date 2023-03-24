@@ -1,10 +1,10 @@
-function reloadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_date = '') {
+function reloadDaftarHistorySaldo(list_view = '', page = 1, per_page = 100, start_date = '', end_date = '') {
     loading.block();
-    window.location.href = window.location.origin + window.location.pathname + '?page=' + page + '&per_page=' + per_page +
-        '&start_date=' + start_date + '&end_date=' + end_date;
+    window.location.href = window.location.origin + window.location.pathname + '?list_view='+ list_view +
+        '&page=' + page + '&per_page=' + per_page + '&start_date=' + start_date + '&end_date=' + end_date;
 }
 
-function loadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_date = '') {
+function loadDaftarHistorySaldo(list_view = '', page = 1, per_page = 100, start_date = '', end_date = '') {
     loading.block();
     $.ajax({
         url: url.daftar_history_saldo,
@@ -14,7 +14,6 @@ function loadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_d
 
         success: function (response) {
             loading.release();
-            console.log(page);
             if (response.status == true) {
                 if(response.data == '') {
                     return;
@@ -48,7 +47,7 @@ function loadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_d
                 }
             });
         }
-    })
+    });
 }
 
 
@@ -79,9 +78,10 @@ $(document).ready(function () {
             if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
                 var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
                 var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
+                var list_view = data.list_view;
 
                 pages++;
-                loadDaftarHistorySaldo(pages, 100, start_date, end_date);
+                loadDaftarHistorySaldo(list_view, pages, 100, start_date, end_date);
             }
         }
     });
@@ -104,6 +104,24 @@ $(document).ready(function () {
         e.preventDefault();
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-        reloadDaftarHistorySaldo(1, 100, start_date, end_date);
+        var list_view = data.list_view;
+
+        reloadDaftarHistorySaldo(list_view, 1, 100, start_date, end_date);
+    });
+
+    $('#navListDetail').on('click', function (e) {
+        e.preventDefault();
+        var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
+        var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
+
+        reloadDaftarHistorySaldo('DETAIL', 1, 100, start_date, end_date);
+    });
+
+    $('#navListGroupTotal').on('click', function (e) {
+        e.preventDefault();
+        var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
+        var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
+
+        reloadDaftarHistorySaldo('GROUP_TOTAL', 1, 100, start_date, end_date);
     });
 });

@@ -65,7 +65,7 @@
         <div class="col-lg-4 col-md-6 col-sm-6 pt-6 pb-6 ps-10">
             <span class="fs-7 fw-bolder text-gray-500 d-block">No Invoice:</span>
             <span class="fs-7 fw-bolder text-dark d-block mt-1">{{ $data->nomor_invoice }}</span>
-            <span class="fs-7 fw-bolder text-gray-800 d-block">{{ date('d F Y', strtotime($data->tanggal)) }}</span>
+            <span class="fs-7 fw-bolder text-gray-800 d-block">{{ $data->tanggal }}</span>
 
             <span class="fs-7 fw-bolder text-gray-500 d-block mt-6">Logistics:</span>
             <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap mt-1">

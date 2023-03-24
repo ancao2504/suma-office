@@ -3,7 +3,7 @@
 @section('subtitle','History Saldo')
 @section('container')
 <div class="row g-0">
-    <div class="card card-flush">
+    <div class="card card-flush mb-6">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">History Saldo</span>
@@ -31,129 +31,33 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row g-0">
-    <div class="card card-flush">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tableHistorySaldo" class="table table-row-dashed table-row-gray-300 align-middle">
-                    <thead class="border">
-                        <tr class="fs-8 fw-bolder text-muted">
-                            <th class="w-100px ps-3 pe-3 text-center">Tanggal</th>
-                            <th class="w-200px ps-3 pe-3 text-center">Description</th>
-                            <th class="min-w-100px ps-3 pe-3 text-center">Keterangan</th>
-                            <th class="w-100px ps-3 pe-3 text-center">Amount</th>
-                            <th class="w-100px ps-3 pe-3 text-center">Saldo</th>
-                            <th class="w-100px ps-3 pe-3 text-center">Faktur</th>
-                            <th class="w-100px ps-3 pe-3 text-center">No Faktur</th>
-                        </tr>
-                    </thead>
-                    <tbody class="border">
-                        <!--Start List History Saldo-->
-                        @foreach($data_saldo as $data)
-                            @php
-                                $total_faktur = 0;
-                            @endphp
-
-                            @foreach ($data->faktur as $data_faktur)
-                            @php
-                                $total_faktur = (double)$total_faktur + (double)$data_faktur->total
-                            @endphp
-                            @endforeach
-
-                            <tr id="postOrder">
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800 d-block">{{ date('d/m/Y', strtotime($data->create_time)) }}</span>
-                                    <span class="fs-8 fw-bolder text-gray-600">{{ date('h:i:s', strtotime($data->create_time)) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800 d-block">{{ trim($data->type_description) }}</span>
-                                    @if((int)$data->type == 1001)
-                                    <div class="fs-8 fw-boldest text-success d-flex align-items-center flex-wrap">
-                                        <span class="pe-2">{{ trim($data->class) }}</span>
-                                        <span class="fs-7 text-success d-flex align-items-center">
-                                            <span class="bullet bullet-dot bg-success me-2"></span>{{ trim($data->type) }}
-                                        </span>
-                                    </div>
-                                    @elseif((int)$data->type == 7001)
-                                    <div class="fs-8 fw-boldest text-info d-flex align-items-center flex-wrap">
-                                        <span class="pe-2">{{ trim($data->class) }}</span>
-                                        <span class="fs-7 text-info d-flex align-items-center">
-                                            <span class="bullet bullet-dot bg-info me-2"></span>{{ trim($data->type) }}
-                                        </span>
-                                    </div>
-                                    @else
-                                    <div class="fs-8 fw-boldest text-danger d-flex align-items-center flex-wrap">
-                                        <span class="pe-2">{{ trim($data->class) }}</span>
-                                        <span class="fs-7 text-danger d-flex align-items-center">
-                                            <span class="bullet bullet-dot bg-danger me-2"></span>{{ trim($data->type) }}
-                                        </span>
-                                    </div>
-                                    @endif
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800 d-block">{{ trim($data->note) }}</span>
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    @if((int)$data->type == 1001)
-                                    <span class="fs-7 fw-boldest text-success d-block">{{ number_format($data->amount) }}</span>
-                                    @elseif((int)$data->type == 7001)
-                                    <span class="fs-7 fw-boldest text-info d-block">{{ number_format($data->amount) }}</span>
-                                    @else
-                                    <span class="fs-7 fw-boldest text-danger d-block">{{ number_format($data->amount) }}</span>
-                                    @endif
-                                </td>
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-dark d-block">{{ number_format($data->saldo) }}</span>
-                                </td>
-                                @if((int)$data->type == 1001)
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    @if((double)$total_faktur != (double)$data->amount)
-                                    <span class="fs-7 fw-boldest text-danger d-block">{{ number_format($total_faktur) }}</span>
-                                    @else
-                                    <span class="fs-7 fw-bolder text-dark d-block">{{ number_format($total_faktur) }}</span>
-                                    @endif
-                                </td>
-                                @elseif((int)$data->type == 7001)
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #d9214e ;"></td>
-                                @else
-                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #009ef7;"></td>
-                                @endif
-
-                                @if((int)$data->type == 1001)
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
-                                    @if((double)$total_faktur != (double)$data->amount)
-                                        @foreach($data->faktur as $data_faktur)
-                                        <span class="fs-7 fw-boldest text-danger d-block">{{ strtoupper(trim($data_faktur->nomor_faktur)) }}</span>
-                                        @endforeach
-                                    @else
-                                        @foreach($data->faktur as $data_faktur)
-                                        <span class="fs-7 fw-bolder text-gray-800 d-block">{{ strtoupper(trim($data_faktur->nomor_faktur)) }}</span>
-                                        @endforeach
-                                    @endif
-                                </td>
-                                @elseif((int)$data->type == 7001)
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;background-color: #d9214e ;"></td>
-                                @else
-                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;background-color: #009ef7;"></td>
-                                @endif
-                            </tr>
-                        @endforeach
-                        <!--End List History Saldo-->
-                    </tbody>
-                </table>
-            </div>
+        <div class="ms-10">
+            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
+                <li class="nav-item mt-2">
+                    <div id="navListDetail" class="nav-link text-active-primary ms-0 me-10 py-5 @if(strtoupper(trim($data_filter->list_view)) == 'DETAIL') active @endif" style="cursor: pointer;">Versi Detail</div>
+                </li>
+                <li class="nav-item mt-2">
+                    <div id="navListGroupTotal" class="nav-link text-active-primary ms-0 me-10 py-5 @if(strtoupper(trim($data_filter->list_view)) == 'GROUP_TOTAL') active @endif" style="cursor: pointer;">Versi Group</div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
 
+@if(strtoupper(trim($data_filter->list_view)) == 'DETAIL')
+@include('layouts.online.tokopedia.historysaldo.historysaldolistdetail')
+@else
+@include('layouts.online.tokopedia.historysaldo.historysaldolistgrouptotal')
+@endif
 
 @push('scripts')
 <script>
     const url = {
         'daftar_history_saldo': "{{ route('online.historysaldo.tokopedia.daftar') }}",
+    }
+    const data = {
+        'list_view': "{{ strtoupper(trim($data_filter->list_view)) }}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/online/tokopedia/historysaldo/daftar.js') }}?v={{ time() }}"></script>
