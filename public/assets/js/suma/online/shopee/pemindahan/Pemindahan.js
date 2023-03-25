@@ -139,4 +139,8 @@ $(document).ready(function() {
             }
         }.bind(this));
     });
+
+    
+    // hapus parameter pada url setelah menerapkan filter sebelumnya
+    window.history.pushState("", "", window.location.href.split('?')[0]);
 });

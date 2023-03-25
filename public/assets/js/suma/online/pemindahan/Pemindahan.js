@@ -33,7 +33,6 @@ function getDaftar(page = $('.card-body').find('.pagination').data('current_page
         success: function(response) {
             $('.card-body #tabel').remove();
             $('.card-body').prepend(response.data.view);
-            
         },
         error: function(xhr, status, error) {
         }
@@ -138,4 +137,7 @@ $(document).ready(function() {
             }
         }.bind(this));
     });
+
+    // hapus parameter pada url setelah menerapkan filter sebelumnya
+    window.history.pushState("", "", window.location.href.split('?')[0]);
 });
