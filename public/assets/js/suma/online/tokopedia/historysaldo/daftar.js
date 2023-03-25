@@ -50,18 +50,18 @@ function loadDaftarHistorySaldo(list_view = '', page = 1, per_page = 100, start_
     });
 }
 
-
 $(document).ready(function () {
     $("#inputStartDate").flatpickr({
         clickOpens: true,
-        dateFormat: 'Y-m-d'
+        dateFormat: 'Y-m-d',
+        defaultDate: moment(data.start_date).format('YYYY-MM-DD')
     });
     $("#inputEndDate").flatpickr({
         clickOpens: true,
         dateFormat: 'Y-m-d',
         minDate: moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD'),
         maxDate: moment(new Date($("#inputStartDate").val()).fp_incr(6)).format('YYYY-MM-DD'),
-        defaultDate: moment(new Date($("#inputStartDate").val()).fp_incr(6)).format('YYYY-MM-DD')
+        defaultDate: moment(data.end_date).format('YYYY-MM-DD')
     });
 
     // ===============================================================

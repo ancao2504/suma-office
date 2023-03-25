@@ -167,6 +167,33 @@ class ApiServiceShopee
         return $response;
     }
 
+    public static function HistorySaldoDaftar($page, $per_page, $start_date, $end_date, $companyid)
+    {
+        $request = 'online/historysaldo/shopee/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 50,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function HistorySaldoDetail($order_sn, $companyid)
+    {
+        $request = 'online/historysaldo/shopee/detail';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'order_sn'      => $order_sn,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     // PEMINDAHAN
     public static function PemindahanDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
     {

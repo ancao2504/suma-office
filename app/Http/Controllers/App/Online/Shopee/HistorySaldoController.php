@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Tokopedia;
+namespace App\Http\Controllers\app\Online\Shopee;
 
-use App\Helpers\ApiServiceTokopedia;
+use App\Helpers\ApiServiceShopee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
@@ -36,7 +36,7 @@ class HistorySaldoController extends Controller
             }
         }
 
-        $responseApi = ApiServiceTokopedia::HistorySaldo($request->get('page'), $per_page,
+        $responseApi = ApiServiceShopee::HistorySaldoDaftar($request->get('page'), $per_page,
                         $start_date, $end_date, strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -50,7 +50,7 @@ class HistorySaldoController extends Controller
                 'end_date'      => $end_date,
             ]);
 
-            $view = view('layouts.online.tokopedia.historysaldo.historysaldo', [
+            $view = view('layouts.online.shopee.historysaldo.historysaldo', [
                 'title_menu'    => 'History Saldo Tokopedia',
                 'data_filter'   => $data_filter->first(),
                 'data_saldo'    => $dataApi
@@ -68,5 +68,11 @@ class HistorySaldoController extends Controller
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
+    }
+
+    public function detailHistorySaldo(Request $request) {
+        $responseApi = ApiServiceShopee::HistorySaldoDetail(strtoupper(trim($request->get('nomor_invoice'))),
+                strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
     }
 }

@@ -542,7 +542,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
                 Route::name('shopee.')->group(function () {
                     Route::controller(HistorySaldoShopee::class)->group(function () {
-
+                        Route::get('/online/historysaldo/shopee/daftar', 'daftarHistorySaldo')->name('daftar');
+                        Route::get('/online/historysaldo/shopee/detail', 'detailHistorySaldo')->name('detail');
                     });
                 });
             });

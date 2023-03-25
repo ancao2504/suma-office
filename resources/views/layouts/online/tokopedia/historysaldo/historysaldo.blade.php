@@ -31,25 +31,171 @@
                 </div>
             </div>
         </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tableHistorySaldo" class="table table-row-dashed table-row-gray-300 align-middle">
+                    <thead class="border">
+                        <tr class="fs-8 fw-bolder text-muted bg-light">
+                            <th class="w-100px ps-3 pe-3 text-center">Tanggal</th>
+                            <th class="w-200px ps-3 pe-3 text-center">No Invoice</th>
+                            <th class="w-200px ps-3 pe-3 text-center">Description</th>
+                            <th class="min-w-100px ps-3 pe-3 text-center">Keterangan</th>
+                            <th class="w-100px ps-3 pe-3 text-center">Amount</th>
+                            <th class="w-100px ps-3 pe-3 text-center">Saldo</th>
+                            <th class="w-100px ps-3 pe-3 text-center">Nilai Faktur</th>
+                            <th class="w-100px ps-3 pe-3 text-center">No Faktur</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border">
+                        <!--Start List History Saldo-->
+                        @foreach($data_saldo as $data)
+                            @php
+                                $total_faktur = 0;
+                            @endphp
 
-        <div class="ms-10">
-            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder">
-                <li class="nav-item mt-2">
-                    <div id="navListDetail" class="nav-link text-active-primary ms-0 me-10 py-5 @if(strtoupper(trim($data_filter->list_view)) == 'DETAIL') active @endif" style="cursor: pointer;">Versi Detail</div>
-                </li>
-                <li class="nav-item mt-2">
-                    <div id="navListGroupTotal" class="nav-link text-active-primary ms-0 me-10 py-5 @if(strtoupper(trim($data_filter->list_view)) == 'GROUP_TOTAL') active @endif" style="cursor: pointer;">Versi Group</div>
-                </li>
-            </ul>
+                            @foreach ($data->faktur as $data_faktur)
+                            @php
+                                $total_faktur = (double)$total_faktur + (double)$data_faktur->total
+                            @endphp
+                            @endforeach
+
+                            <tr id="postOrder">
+                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D;
+                                    @elseif((int)$data->type == 7001) background-color: #7239ea;
+                                    @endif">
+                                    <span class="fs-7 fw-bolder d-block @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif">{{ date('d/m/Y', strtotime($data->create_time)) }}</span>
+                                    <span class="fs-8 fw-bolder @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif">{{ date('h:i:s', strtotime($data->create_time)) }}</span>
+                                </td>
+                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D;
+                                    @elseif((int)$data->type == 7001) background-color: #7239ea;
+                                    @else
+                                        @if((double)$data->amount > 0)
+                                            background-color: #4F9D4D;
+                                        @else
+                                            background-color: #f1416c;
+                                        @endif
+                                    @endif">
+                                    @if((int)$data->type == 1001)
+                                        <span class="fs-7 fw-bolder text-white d-block">{{ Str::substr($data->note,-27) }}</span>
+
+                                        @if((double)$total_faktur != (double)$data->amount)
+                                        <span class="badge badge-white fs-8 fw-boldest mt-4 animation-blink">TOTAL FAKTUR DAN INVOICE TIDAK SAMA</span>
+                                        @endif
+                                    @endif
+                                </td>
+                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D;
+                                    @elseif((int)$data->type == 7001) background-color: #7239ea;
+                                    @endif">
+                                    <span class="fs-7 fw-bolder @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif d-block">{{ trim($data->type_description) }}</span>
+                                    <div class="fs-8 fw-boldest
+                                        @if((int)$data->type == 1001 || (int)$data->type == 7001)
+                                            text-white
+                                        @else
+                                            @if((double)$data->amount > 0)
+                                                text-success
+                                            @else
+                                                text-danger
+                                            @endif
+                                        @endif d-flex align-items-center flex-wrap">
+                                        <span class="pe-2">{{ trim($data->class) }}</span>
+                                        <span class="fs-7
+                                            @if((int)$data->type == 1001 || (int)$data->type == 7001)
+                                                text-white
+                                            @else
+                                                @if((double)$data->amount > 0)
+                                                    text-success
+                                                @else
+                                                    text-danger
+                                                @endif
+                                            @endif d-flex align-items-center">
+                                            <span class="bullet bullet-dot
+                                                @if((int)$data->type == 1001 || (int)$data->type == 7001)
+                                                    bg-white
+                                                @else
+                                                    @if((double)$data->amount > 0)
+                                                        bg-success
+                                                    @else
+                                                        bg-danger
+                                                    @endif
+                                                @endif me-2">
+                                            </span>{{ trim($data->type) }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D;
+                                    @elseif((int)$data->type == 7001) background-color: #7239ea;
+                                    @endif">
+                                    <span class="fs-7 fw-bolder @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif d-block">{{ trim($data->note) }}</span>
+                                </td>
+                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D;
+                                    @elseif((int)$data->type == 7001) background-color: #7239ea;
+                                    @endif">
+                                    <span class="fs-7 fw-boldest
+                                        @if((int)$data->type == 1001 || (int)$data->type == 7001)
+                                            text-white
+                                        @else
+                                            @if((double)$data->amount > 0)
+                                                text-success
+                                            @else
+                                                text-danger
+                                            @endif
+                                        @endif d-block">{{ number_format($data->amount) }}
+                                    </span>
+                                </td>
+                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D;
+                                    @elseif((int)$data->type == 7001) background-color: #7239ea;
+                                    @endif">
+                                    <span class="fs-7 fw-bolder @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-dark @endif d-block">{{ number_format($data->saldo) }}</span>
+                                </td>
+
+                                @if((int)$data->type == 1001)
+                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;
+                                    @if((int)$data->type == 1001) background-color: #4F9D4D; @endif">
+                                    <span class="fs-7 fw-bolder text-white d-block">{{ number_format($total_faktur) }}</span>
+                                </td>
+                                @elseif((int)$data->type == 7001)
+                                <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #7239ea;"></td>
+                                @else
+                                    @if((double)$data->amount > 0)
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #4F9D4D;"></td>
+                                    @else
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #f1416c;"></td>
+                                    @endif
+                                @endif
+
+                                @if((int)$data->type == 1001)
+                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;@if((int)$data->type == 1001) background-color: #4F9D4D; @endif">
+                                    @foreach($data->faktur as $data_faktur)
+                                    <span class="fs-7 fw-bolder text-white d-block">{{ strtoupper(trim($data_faktur->nomor_faktur)) }}</span>
+                                    @endforeach
+                                </td>
+                                @elseif((int)$data->type == 7001)
+                                <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;background-color: #7239ea;"></td>
+                                @else
+                                    @if((double)$data->amount > 0)
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #4F9D4D;"></td>
+                                    @else
+                                    <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;background-color: #f1416c;"></td>
+                                    @endif
+                                @endif
+                            </tr>
+                        @endforeach
+                        <!--End List History Saldo-->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-@if(strtoupper(trim($data_filter->list_view)) == 'DETAIL')
-@include('layouts.online.tokopedia.historysaldo.historysaldolistdetail')
-@else
-@include('layouts.online.tokopedia.historysaldo.historysaldolistgrouptotal')
-@endif
+
+
 
 @push('scripts')
 <script>
@@ -57,7 +203,8 @@
         'daftar_history_saldo': "{{ route('online.historysaldo.tokopedia.daftar') }}",
     }
     const data = {
-        'list_view': "{{ strtoupper(trim($data_filter->list_view)) }}",
+        'start_date': "{{ $data_filter->start_date }}",
+        'end_date': "{{ $data_filter->end_date }}",
     }
 </script>
 <script src="{{ asset('assets/js/suma/online/tokopedia/historysaldo/daftar.js') }}?v={{ time() }}"></script>
