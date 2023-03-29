@@ -122,10 +122,19 @@
                 <span class="fs-8 fw-bolder text-gray-500 d-block">No Faktur:</span>
                 <span class="fs-7 fw-boldest text-danger d-block mt-1">{{ empty($data_faktur->nomor_faktur) ? '(Not Found)' : $data_faktur->nomor_faktur }}</span>
                 <span class="fs-7 fw-bolder text-gray-800 d-block">{{ empty($data_faktur->tanggal) ? '-' : date('d F Y', strtotime($data_faktur->tanggal)) }}</span>
-                <div class="mt-4">
-                    <span class="fs-8 fw-boldest badge badge-light-danger">{{ empty($data_faktur->kode_lokasi) ? '-' : strtoupper($data_faktur->kode_lokasi) }}</span>
-                    <span class="fs-8 fw-boldest badge badge-light-primary">{{ empty($data_faktur->kode_sales) ? '-' : strtoupper($data_faktur->kode_sales) }}</span>
-                    <span class="fs-8 fw-boldest badge badge-light-info">{{ empty($data_faktur->kode_dealer) ? '-' : strtoupper($data_faktur->kode_dealer) }}</span>
+                <div class="mt-3">
+                    <span class="fs-8 fw-boldest badge badge-light-success mt-1">
+                        <i class="fa fa-cubes me-2 text-success" aria-hidden="true"></i>{{ empty($data_faktur->kode_lokasi) ? '-' : strtoupper($data_faktur->kode_lokasi) }}
+                    </span>
+                    <span class="fs-8 fw-boldest badge badge-light-primary mt-1">
+                        <i class="fa fa-user me-2 text-primary" aria-hidden="true"></i>{{ empty($data_faktur->kode_sales) ? '-' : strtoupper($data_faktur->kode_sales) }}
+                    </span>
+                    <span class="fs-8 fw-boldest badge badge-light-info mt-1">
+                        <i class="fa fa-university me-2 text-info" aria-hidden="true"></i>{{ empty($data_faktur->kode_dealer) ? '-' : strtoupper($data_faktur->kode_dealer) }}
+                    </span>
+                    <span class="fs-8 fw-boldest badge badge-light-danger mt-1">
+                        <i class="fa fa-truck me-2 text-danger" aria-hidden="true"></i>{{ empty($data_faktur->kode_ekspedisi) ? '-' : strtoupper($data_faktur->kode_ekspedisi) }}
+                    </span>
                 </div>
                 <span class="fs-8 fw-bolder text-gray-500 d-block mt-4">Total Faktur:</span>
                 <span class="fs-7 fw-boldest text-danger">Rp. {{ empty($data_faktur->total) ? '-' : number_format($data_faktur->total) }}</span>
