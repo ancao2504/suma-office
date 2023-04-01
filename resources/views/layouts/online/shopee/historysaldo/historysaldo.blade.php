@@ -62,7 +62,7 @@
                                         text-white
                                     @else
                                         text-gray-600
-                                    @endif">{{ date('h:i:s', $data->create_time) }}</span>
+                                    @endif">{{ date('H:i:s', $data->create_time) }}</span>
                             </td>
                             <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;
                                 @if($data->transaction_type == 'WITHDRAWAL_COMPLETED' || $data->transaction_type == 'WITHDRAWAL_CREATED') background-color: #7239ea;@endif">
@@ -205,16 +205,20 @@
                                         <td id="textHargaProduk" class="ps-3 pe-3 fs-7 fw-bolder" style="text-align:right;vertical-align:center;"></td>
                                     </tr>
                                     <tr>
-                                        <td class="ps-3 pe-3 fs-7 fw-bolder" style="text-align:left;vertical-align:center;">Biaya Administrasi</td>
-                                        <td id="textBiayaAdministrasi" class="ps-3 pe-3 fs-7 fw-bolder text-danger" style="text-align:right;vertical-align:center;"></td>
+                                        <td class="ps-3 pe-3 fs-7 fw-bold" style="text-align:left;vertical-align:center;">Biaya Administrasi</td>
+                                        <td id="textBiayaAdministrasi" class="ps-3 pe-3 fs-7 fw-bolder text-muted" style="text-align:right;vertical-align:center;"></td>
                                     </tr>
                                     <tr>
-                                        <td class="ps-3 pe-3 fs-7 fw-bolder" style="text-align:left;vertical-align:center;">Biaya Layanan</td>
-                                        <td id="textBiayaLayanan" class="ps-3 pe-3 fs-7 fw-bolder text-danger" style="text-align:right;vertical-align:center;"></td>
+                                        <td class="ps-3 pe-3 fs-7 fw-bold" style="text-align:left;vertical-align:center;">Biaya Layanan</td>
+                                        <td id="textBiayaLayanan" class="ps-3 pe-3 fs-7 fw-bolder text-muted" style="text-align:right;vertical-align:center;"></td>
                                     </tr>
                                     <tr>
-                                        <td class="ps-3 pe-3 fs-7 fw-bolder" style="text-align:left;vertical-align:center;">Premi</td>
-                                        <td id="textBiayaPremi" class="ps-3 pe-3 fs-7 fw-bolder text-danger" style="text-align:right;vertical-align:center;"></td>
+                                        <td class="ps-3 pe-3 fs-7 fw-bold" style="text-align:left;vertical-align:center;">Premi</td>
+                                        <td id="textBiayaPremi" class="ps-3 pe-3 fs-7 fw-bolder text-muted" style="text-align:right;vertical-align:center;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-3 pe-3 fs-7 fw-bolder" style="text-align:left;vertical-align:center;">Total Biaya Admin</td>
+                                        <td id="textTotalBiayaAdmin" class="ps-3 pe-3 fs-7 fw-bolder text-danger" style="text-align:right;vertical-align:center;"></td>
                                     </tr>
                                     <tr>
                                         <td class="ps-3 pe-3 fs-7 fw-bolder" style="text-align:left;vertical-align:center;">Total Penghasilan</td>

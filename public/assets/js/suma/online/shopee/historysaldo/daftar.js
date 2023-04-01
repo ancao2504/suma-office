@@ -143,6 +143,7 @@ $(document).ready(function () {
                     $('#textBiayaAdministrasi').text(formatNumber('-'+response.data.commission_fee));
                     $('#textBiayaLayanan').text(formatNumber('-'+response.data.service_fee));
                     $('#textBiayaPremi').text(formatNumber('-'+response.data.delivery_seller_protection_fee_premium_amount));
+                    $('#textTotalBiayaAdmin').text(formatNumber('-'+response.data.admin_amount));
                     $('#textTotalPenghasilan').text(formatNumber(response.data.escrow_amount));
 
                     var total_faktur = 0;

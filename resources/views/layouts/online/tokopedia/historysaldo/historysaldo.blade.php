@@ -65,7 +65,7 @@
                                     @elseif((int)$data->type == 7001) background-color: #7239ea;
                                     @endif">
                                     <span class="fs-7 fw-bolder d-block @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif">{{ date('d/m/Y', strtotime($data->create_time)) }}</span>
-                                    <span class="fs-8 fw-bolder @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif">{{ date('h:i:s', strtotime($data->create_time)) }}</span>
+                                    <span class="fs-8 fw-bolder @if((int)$data->type == 1001 || (int)$data->type == 7001) text-white @else text-gray-800 @endif">{{ date('H:i:s', strtotime($data->create_time)) }}</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;
                                     @if((int)$data->type == 1001) background-color: #4F9D4D;
