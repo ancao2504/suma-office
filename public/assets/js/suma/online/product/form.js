@@ -244,7 +244,7 @@ $(document).ready(function () {
             var height = $this.height();
             var outerHeight = $this.outerHeight();
             var scrollHeight = $this[0].scrollHeight;
-            if (scrollTop - 500 + height >= scrollHeight - outerHeight && prosesRespown == false) {
+            if (scrollTop - 400 + height >= scrollHeight - outerHeight && prosesRespown == false) {
                 brendList();
             }
         });
