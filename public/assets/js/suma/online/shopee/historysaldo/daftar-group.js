@@ -1,15 +1,17 @@
-function reloadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_date = '') {
+var pages = 1;
+
+function reloadDaftarHistorySaldo(page = 1, per_page = 20, start_date = '', end_date = '') {
     loading.block();
     window.location.href = window.location.origin + window.location.pathname + '?page=' + page + '&per_page=' + per_page +
             '&start_date=' + start_date + '&end_date=' + end_date;
 }
 
-function loadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_date = '') {
+function loadMoreDaftarHistorySaldo(page = 0, per_page = 20, start_date = '', end_date = '') {
     loading.block();
     $.ajax({
-        url: url.daftar_history_saldo,
+        url: url.daftar_history_saldo_group,
         method: "get",
-        data: { page: page, per_page: per_page, start_date: start_date,
+        data: { page: page + 1, per_page: per_page, start_date: start_date,
                 end_date: end_date },
 
         success: function (response) {
@@ -18,6 +20,7 @@ function loadDaftarHistorySaldo(page = 1, per_page = 100, start_date = '', end_d
                 if(response.data == '') {
                     return;
                 }
+                pages = parseFloat(pages) + 1;
                 $('#tableHistorySaldo > tbody:last-child').append(response.data);
             } else {
                 Swal.fire({
@@ -83,8 +86,6 @@ $(document).ready(function () {
     // ===============================================================
     // Scroll
     // ===============================================================
-    var pages = 1;
-
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
     }
@@ -95,8 +96,7 @@ $(document).ready(function () {
                 var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
                 var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
 
-                pages++;
-                loadDaftarHistorySaldo(pages, 100, start_date, end_date);
+                loadMoreDaftarHistorySaldo(pages, 20, start_date, end_date);
             }
         }
     });
@@ -120,7 +120,7 @@ $(document).ready(function () {
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
 
-        reloadDaftarHistorySaldo(1, 100, start_date, end_date);
+        reloadDaftarHistorySaldo(1, 20, start_date, end_date);
     });
 
     $('body').on('click', '#btnDetail', function (e) {
@@ -130,7 +130,7 @@ $(document).ready(function () {
 
         loading.block();
         $.ajax({
-            url: url.detail_history_saldo,
+            url: url.detail_history_saldo_group,
             method: "get",
             data: {
                 nomor_invoice: nomor_invoice

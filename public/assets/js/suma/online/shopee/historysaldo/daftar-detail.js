@@ -1,18 +1,17 @@
 var pages = 1;
 
-function reloadDaftarHistorySaldo(list_view = '', page = 1, per_page = 50, start_date = '', end_date = '') {
+function reloadDaftarHistorySaldo(page = 1, start_date = '', end_date = '') {
     loading.block();
-    window.location.href = window.location.origin + window.location.pathname + '?list_view='+ list_view +
-        '&page=' + page + '&per_page=' + per_page + '&start_date=' + start_date + '&end_date=' + end_date;
+    window.location.href = window.location.origin + window.location.pathname + '?page=' + page +
+            '&start_date=' + start_date + '&end_date=' + end_date;
 }
 
-function loadMoreDaftarHistorySaldo(page = 0, per_page = 50, start_date = '', end_date = '') {
+function loadMoreDaftarHistorySaldo(page = 0, start_date = '', end_date = '') {
     loading.block();
     $.ajax({
-        url: url.daftar_history_saldo,
+        url: url.daftar_history_saldo_detail,
         method: "get",
-        data: { page: page + 1, per_page: per_page, start_date: start_date,
-                end_date: end_date },
+        data: { page: page + 1, start_date: start_date, end_date: end_date },
 
         success: function (response) {
             loading.release();
@@ -20,8 +19,8 @@ function loadMoreDaftarHistorySaldo(page = 0, per_page = 50, start_date = '', en
                 if(response.data == '') {
                     return;
                 }
-                pages++;
-                $('#tableHistorySaldo > tbody:last-child').append(response.data);
+                pages = parseFloat(pages) + 1;
+                $('#postData').append(response.data);
             } else {
                 Swal.fire({
                     text: response.message,
@@ -80,7 +79,7 @@ $(document).ready(function () {
                 var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
                 var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
 
-                loadMoreDaftarHistorySaldo(pages, 50, start_date, end_date);
+                loadMoreDaftarHistorySaldo(pages, start_date, end_date);
             }
         }
     });
@@ -103,24 +102,8 @@ $(document).ready(function () {
         e.preventDefault();
         var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
         var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-        var list_view = data.list_view;
 
-        reloadDaftarHistorySaldo(list_view, 1, 50, start_date, end_date);
+        reloadDaftarHistorySaldo(1, start_date, end_date);
     });
 
-    $('#navListDetail').on('click', function (e) {
-        e.preventDefault();
-        var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
-        var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-
-        reloadDaftarHistorySaldo('DETAIL', 1, 50, start_date, end_date);
-    });
-
-    $('#navListGroupTotal').on('click', function (e) {
-        e.preventDefault();
-        var start_date = moment(new Date($("#inputStartDate").val())).format('YYYY-MM-DD');
-        var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
-
-        reloadDaftarHistorySaldo('GROUP_TOTAL', 1, 50, start_date, end_date);
-    });
 });

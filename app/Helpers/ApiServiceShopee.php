@@ -167,9 +167,9 @@ class ApiServiceShopee
         return $response;
     }
 
-    public static function HistorySaldoDaftar($page, $per_page, $start_date, $end_date, $companyid)
+    public static function HistorySaldoDaftarGroup($page, $per_page, $start_date, $end_date, $companyid)
     {
-        $request = 'online/historysaldo/shopee/daftar';
+        $request = 'online/historysaldo/shopee/daftar/group';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
@@ -182,12 +182,26 @@ class ApiServiceShopee
         return $response;
     }
 
-    public static function HistorySaldoDetail($order_sn, $companyid)
+    public static function HistorySaldoDaftarGroupDetail($order_sn, $companyid)
     {
-        $request = 'online/historysaldo/shopee/detail';
+        $request = 'online/historysaldo/shopee/daftar/group/detail';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'order_sn'      => $order_sn,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function HistorySaldoDaftarDetail($page, $start_date, $end_date, $companyid)
+    {
+        $request = 'online/historysaldo/shopee/daftar/detail';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'          => $page ?? 1,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
             'companyid'     => trim($companyid)
         ];
         $response = ApiRequest::requestPost($request, $header, $body);

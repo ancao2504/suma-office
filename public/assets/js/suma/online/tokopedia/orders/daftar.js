@@ -1,15 +1,17 @@
+var pages = 1;
+
 function reloadDaftarOrders(page = 1, per_page = 10, start_date = '', end_date = '', status = '') {
     loading.block();
     window.location.href = window.location.origin + window.location.pathname + '?page=' + page + '&per_page=' + per_page +
         '&start_date=' + start_date + '&end_date=' + end_date + '&status=' + status;
 }
 
-function loadDaftarOrders(page = 1, per_page = 10, start_date = '', end_date = '', status = '') {
+function loadMoreDaftarOrders(page = 0, per_page = 10, start_date = '', end_date = '', status = '') {
     loading.block();
     $.ajax({
         url: url.daftar_order,
         method: "get",
-        data: { page: page, per_page: per_page, start_date: start_date,
+        data: { page: page + 1, per_page: per_page, start_date: start_date,
                 end_date: end_date, status: status },
 
         success: function (response) {
@@ -19,6 +21,7 @@ function loadDaftarOrders(page = 1, per_page = 10, start_date = '', end_date = '
                 if(response.data == '') {
                     return;
                 }
+                pages = parseFloat(pages) + 1;
                 $('#postOrder').append(response.data);
             } else {
                 Swal.fire({
@@ -67,8 +70,6 @@ $(document).ready(function () {
     // ===============================================================
     // Scroll
     // ===============================================================
-    var pages = 1;
-
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
     }
@@ -80,8 +81,7 @@ $(document).ready(function () {
                 var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
                 var status = $('#selectStatus').find(":selected").val();
 
-                pages++;
-                loadDaftarOrders(pages, 10, start_date, end_date, status);
+                loadMoreDaftarOrders(pages, 10, start_date, end_date, status);
             }
         }
     });

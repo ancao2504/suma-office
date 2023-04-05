@@ -1,3 +1,5 @@
+var pages = 0;
+
 function reloadDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time', start_date = '', end_date = '', status = '') {
     loading.block();
     window.location.href = window.location.origin + window.location.pathname + '?fields=' + fields +
@@ -6,22 +8,22 @@ function reloadDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time', 
 
 }
 
-function loadDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time', start_date = '', end_date = '', status = '') {
+function loadMoreDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time', start_date = '', end_date = '', status = '') {
     loading.block();
     $.ajax({
         url: url.daftar_order,
         method: "get",
-        data: { cursor: cursor, page_size: page_size, fields: fields,
+        data: { cursor: cursor + 1, page_size: page_size, fields: fields,
                 start_date: start_date, end_date: end_date,
                 status: status },
 
         success: function (response) {
             loading.release();
-
             if (response.status == true) {
                 if(response.data == '') {
                     return;
                 }
+                pages = parseFloat(pages) + 1;
                 $('#postOrder').append(response.data);
             } else {
                 Swal.fire({
@@ -70,8 +72,6 @@ $(document).ready(function () {
     // ===============================================================
     // Scroll
     // ===============================================================
-    var pages = 0;
-
     window.onbeforeunload = function () {
         window.scrollTo(0, 0);
     }
@@ -84,8 +84,7 @@ $(document).ready(function () {
                 var end_date = moment(new Date($("#inputEndDate").val())).format('YYYY-MM-DD');
                 var status = $('#selectStatus').val();
 
-                pages++;
-                loadDaftarOrders(pages, 10, fields, start_date, end_date, status);
+                loadMoreDaftarOrders(pages, 10, fields, start_date, end_date, status);
             }
         }
     });
