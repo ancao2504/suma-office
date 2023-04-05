@@ -92,7 +92,7 @@ class ProductController extends Controller
             strtoupper(trim($request->part_number)),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
-        // dd(json_decode($responseApi));
+        
         if (json_decode($responseApi)->status == 0) {
             return redirect()->back()->withInput()->with('failed', json_decode($responseApi)->message);
         }

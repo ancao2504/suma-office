@@ -238,7 +238,7 @@
                     <div class="fv-row mb-7">
                         <label class="form-label"><span class="required"></span>Merek :</label>
                         <div class="col-12">
-                            <input type="text" name="merekShopee" id="merekShopee" class="form-control" placeholder="Pilih Merek" style="cursor: pointer;" value="@if ($data_all->marketplace == 'shopee'){{ $data_all->category_name }}@endif" @if ($data_all->marketplace == 'shopee') disabled @else readonly @endif required>
+                            <input type="text" name="merekShopee" id="merekShopee" class="form-control" placeholder="Pilih Merek" style="cursor: pointer;" value="@if ($data_all->marketplace == 'shopee'){{ $data_all->brand_name }}@endif" @if ($data_all->marketplace == 'shopee') disabled @else readonly @endif required>
                         </div>
                     </div>
                     <div class="fv-row mb-7">
