@@ -5,8 +5,6 @@ namespace App\Http\Controllers\app\Online;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\ApiService;
-use App\Helpers\ApiServiceShopee;
-use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -109,7 +107,7 @@ class ProductController extends Controller
         return $view;
     }
 
-    public function updateProduct(Request $request)
+    public function addProduct(Request $request)
     {
         $request->validate([
             'image'         => 'required',
@@ -125,6 +123,20 @@ class ProductController extends Controller
             'kategori'      => 'required',
             'status'        => 'required',
             'logistic'      => 'required',
+        ],[
+            'image.required'        => 'Gambar tidak boleh kosong',
+            'nama.required'         => 'Nama tidak boleh kosong',
+            'deskripsi.required'    => 'Deskripsi tidak boleh kosong',
+            'harga.required'        => 'Harga tidak boleh kosong',
+            'stok.required'         => 'Stok tidak boleh kosong',
+            'min_order.required'    => 'Min Order tidak boleh kosong',
+            'berat.required'        => 'Berat tidak boleh kosong',
+            'ukuran.required'       => 'Ukuran tidak boleh kosong',
+            'sku.required'          => 'SKU tidak boleh kosong',
+            'kondisi.required'      => 'Kondisi tidak boleh kosong',
+            'kategori.required'     => 'Kategori tidak boleh kosong',
+            'status.required'       => 'Status tidak boleh kosong',
+            'logistic.required'     => 'Logistic tidak boleh kosong',
         ]);
 
         if($request->marketplace_update == 'tokopedia'){

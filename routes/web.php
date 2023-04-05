@@ -489,7 +489,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::controller(ProductController::class)->group(function () {
                     Route::get('/online/product/marketplace/daftar', 'daftarProduct')->name('daftar');
                     Route::get('/online/product/marketplace/form/{part_number}', 'formProduct')->name('form');
-                    Route::post('/online/product/marketplace/form/add', 'updateProduct')->name('update');
+                    Route::post('/online/product/marketplace/form/add', 'addProduct')->name('update');
                 });
             });
 

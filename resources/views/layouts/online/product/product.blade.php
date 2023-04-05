@@ -211,7 +211,6 @@
                             <div
                                 class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
                                 <div class="dataTables_paginate paging_simple_numbers" id="view_daftar_paginat">
-                                    {{-- @dd($data_all->links) --}}
                                     @if ($data_all->total > 0)
                                         <ul class="pagination" data-current_page="{{ $data_all->current_page }}">
                                             @foreach ($data_all->links as $data)
