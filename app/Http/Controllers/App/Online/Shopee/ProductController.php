@@ -81,4 +81,27 @@ class ProductController extends Controller
         );
         return json_decode($responseApi, true);
     }
+    
+    public function brandList(Request $request){
+        $request->validate([
+            'category_id' => 'required'
+        ], [
+            'category_id.required' => 'Category ID tidak boleh kosong'
+        ]);
+
+        $responseApi = ApiServiceShopee::brandList($request->category_id, $request->offset);
+        if (json_decode($responseApi)->status == 0) {
+            return Response()->json([
+                'status'    => 0,
+                'message'   => json_decode($responseApi)->message,
+                'data'      => ''
+            ]);
+        }
+
+        return Response()->json([
+            'status'    => 1,
+            'message'   => json_decode($responseApi)->message,
+            'data'      => json_decode($responseApi)->data
+        ]);
+    }
 }

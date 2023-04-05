@@ -1800,4 +1800,31 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+
+    public static function addProductMarketplace($companyid, $image, $nama, $merek, $deskripsi, $harga, $stok, $min_order, $berat, $ukuran, $sku, $kondisi, $kategori, $status, $etalase, $logistic)
+    {
+        $request = 'online/products/marketplace/add';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => trim($companyid),
+            'image'         => $image,
+            'nama'          => $nama,
+            'merek'         => $merek,
+            'deskripsi'     => $deskripsi,
+            'harga'         => $harga,
+            'stok'          => $stok,
+            'min_order'     => $min_order,
+            'berat'         => $berat,
+            'ukuran'        => $ukuran,
+            'sku'           => $sku,
+            'kondisi'       => $kondisi,
+            'kategori'      => $kategori,
+            'status'        => $status,
+            'etalase'       => $etalase,
+            'logistic'      => $logistic,
+        ];
+        
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

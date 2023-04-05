@@ -10,8 +10,8 @@
                     <span class="text-muted fw-bold fs-7">Form Product marketplace</span>
                 </h3>
                 <div class="card-toolbar">
-                    <img src="{{ asset('assets/images/logo/shopee_lg.png') }}" class="h-80px" />
-                    <img src="{{ asset('assets/images/logo/tokopedia_lg.png') }}" class="h-70px" />
+                    {{-- <img src="{{ asset('assets/images/logo/shopee_lg.png') }}" class="h-80px" />
+                    <img src="{{ asset('assets/images/logo/tokopedia_lg.png') }}" class="h-70px" /> --}}
                 </div>
             </div>
             <div class="card-body">
@@ -19,7 +19,7 @@
                     <div class="fw-bold fs-7 text-gray-600 mb-1">Part Number:</div>
                     <div class="input-group">
                         <input id="inputCariPartNumber" name="cari_part_number" type="text" class="form-control"
-                            style="text-transform:uppercase" placeholder="Cari Data Part Number" autocomplete="off">
+                            style="text-transform:uppercase" placeholder="Cari Data Part Number" autocomplete="off" value="{{ $filter->part_number }}">
                         <button id="btnCariPartNumber" type="button" class="btn btn-primary">Cari</button>
                     </div>
                 </div>
@@ -147,14 +147,21 @@
                                         @endif
                                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                                 @if ($data->tokopedia->sku !== null && $data->shopee->sku === null && $data->shopee->status == 1)
-                                                    <a href="{{ route('online.product.form' , base64_encode($key)) }}" class="btn btn-icon btn-sm btn-light-dark btn-hover-rise">
+                                                    <a href="{{ route('online.product.form' , base64_encode(json_encode(
+                                                        [
+                                                            'part_number' => $data->part_number,
+                                                            'filter' => $filter,
+                                                        ]))) }}" class="btn btn-icon btn-sm btn-light-dark btn-hover-rise">
                                                         <img alt="Logo"
                                                             src="{{ asset('assets/images/logo/shopee.png') }}"
                                                             class="h-20px" />
                                                     </a>
                                                 @elseif ($data->tokopedia->sku === null && $data->shopee->sku !== null && $data->tokopedia->status == 1)
-                                                    <a href="{{ route('online.product.form' , base64_encode($key)) }}" class="btn btn-icon btn-sm btn-light-dark btn-hover-rise"
-                                                    onclick="updateDetail('')">
+                                                    <a href="{{ route('online.product.form' , base64_encode(json_encode(
+                                                        [
+                                                            'part_number' => $data->part_number,
+                                                            'filter' => $filter,
+                                                        ]))) }}" class="btn btn-icon btn-sm btn-light-dark btn-hover-rise">
                                                         <img alt="Logo"
                                                             src="{{ asset('assets/images/logo/tokopedia.png') }}"
                                                             class="h-20px" />
@@ -207,7 +214,7 @@
                                     @if ($data_all->total > 0)
                                         <ul class="pagination" data-current_page="{{ $data_all->current_page }}">
                                             @foreach ($data_all->links as $data)
-                                                @if (strpos($data->label, 'Next') !== false)
+                                                @if (strpos($data->label, 'next') !== false)
                                                     <li
                                                         class="page-item next @if ($data->url == null) disabled @endif">
                                                         <a role="button"
@@ -216,7 +223,7 @@
                                                             <i class="next"></i>
                                                         </a>
                                                     </li>
-                                                @elseif (strpos($data->label, 'Previous') !== false)
+                                                @elseif (strpos($data->label, 'previous') !== false)
                                                     <li
                                                         class="page-item previous @if ($data->url == null) disabled @endif">
                                                         <a role="button"
@@ -253,12 +260,5 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        const url = {
-            'daftar_product_id': "{{ route('online.product.shopee.daftar') }}",
-            'cek_product_id': "{{ route('online.product.shopee.cek') }}",
-            'update_product_id': "{{ route('online.product.shopee.update') }}",
-        };
-    </script>
-    <script src="{{ asset('assets/js/suma/online/product/form.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('assets/js/suma/online/product/product.js') }}?v={{ time() }}"></script>
 @endpush
