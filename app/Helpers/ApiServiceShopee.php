@@ -368,4 +368,15 @@ class ApiServiceShopee
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+    public static function brandList($category_id, $offset)
+    {
+        $request = 'online/products/shopee/brand';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'category_id'   => trim($category_id),
+            'offset'        => trim($offset),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 }

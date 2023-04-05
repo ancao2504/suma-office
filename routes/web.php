@@ -481,12 +481,15 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::get('/online/product/shopee/daftar', 'daftarPartNumber')->name('daftar');
                         Route::post('/online/product/shopee/cek', 'cekProductId')->name('cek');
                         Route::post('/online/product/shopee/update', 'updateProductId')->name('update');
+
+                        Route::post('/online/product/shopee/brand', 'brandList')->name('brandlist');
                     });
                 });
 
                 Route::controller(ProductController::class)->group(function () {
                     Route::get('/online/product/marketplace/daftar', 'daftarProduct')->name('daftar');
                     Route::get('/online/product/marketplace/form/{part_number}', 'formProduct')->name('form');
+                    Route::post('/online/product/marketplace/form/add', 'updateProduct')->name('update');
                 });
             });
 
