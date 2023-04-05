@@ -743,7 +743,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion {{ (Request::is('online/historysaldo/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('online/historysaldo/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/historysaldo/shopee/daftar') }}">
+                            <a class="menu-link {{ (Request::is('online/historysaldo/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/historysaldo/shopee/daftar/group') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
