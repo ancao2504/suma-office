@@ -211,10 +211,11 @@
                             <div
                                 class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
                                 <div class="dataTables_paginate paging_simple_numbers" id="view_daftar_paginat">
+                                    {{-- @dd($data_all->links) --}}
                                     @if ($data_all->total > 0)
                                         <ul class="pagination" data-current_page="{{ $data_all->current_page }}">
                                             @foreach ($data_all->links as $data)
-                                                @if (strpos($data->label, 'Next') !== false)
+                                                @if (strpos($data->label, 'next') !== false)
                                                     <li
                                                         class="page-item next @if ($data->url == null) disabled @endif">
                                                         <a role="button"
@@ -223,7 +224,7 @@
                                                             <i class="next"></i>
                                                         </a>
                                                     </li>
-                                                @elseif (strpos($data->label, 'Previous') !== false)
+                                                @elseif (strpos($data->label, 'previous') !== false)
                                                     <li
                                                         class="page-item previous @if ($data->url == null) disabled @endif">
                                                         <a role="button"
