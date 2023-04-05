@@ -129,12 +129,12 @@ class ProductController extends Controller
 
         if($request->marketplace_update == 'tokopedia'){
             // ! cek apakah domain user yang mengakses adalah suma-honda.id jika bukan maka akan keluar pesan
-            // ! karena image pada tokopedia harus dengan url yang diakses secara public
+            // ! karena image yang bisa di upload pada tokopedia harus dengan url image yang diakses secara public
             foreach(json_decode($request->image) as $key => $value){
-                if($request->instance()->getHost() != 'suma-honda.id'){
+                if($request->instance()->getHost() != 'www.suma-honda.id' || $request->instance()->getHost() != 'suma-honda.id'){
                     return Response()->json([
                         'status'    => 0,
-                        'message'   => "Maaf untuk <b>Tokopedia</b> harus dengan Website PMO online yaitu : <a href='https://suma-honda.id' target='_blank'>suma-honda.id</a>",
+                        'message'   => "Maaf untuk <b>Tokopedia</b> harus dengan Website PMO online yaitu : <a href='https://www.suma-honda.id' target='_blank'>suma-honda.id</a>",
                         'data'      => ''
                     ]);
                 }
