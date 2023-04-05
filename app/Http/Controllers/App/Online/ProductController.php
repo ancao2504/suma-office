@@ -126,6 +126,36 @@ class ProductController extends Controller
             'status'        => 'required',
             'logistic'      => 'required',
         ]);
+
+        if($request->marketplace_update == 'tokopedia'){
+            // ! cek apakah domain user yang mengakses adalah suma-honda.id jika bukan maka akan keluar pesan
+            // ! karena image pada tokopedia harus dengan url yang diakses secara public
+            foreach(json_decode($request->image) as $key => $value){
+                if($request->instance()->getHost() != 'suma-honda.id'){
+                    return Response()->json([
+                        'status'    => 0,
+                        'message'   => "Maaf untuk <b>Tokopedia</b> harus dengan Website PMO online yaitu : <a href='https://suma-honda.id' target='_blank'>suma-honda.id</a>",
+                        'data'      => ''
+                    ]);
+                }
+            }
+
+            // TODO : upload gambar ke tokopedia$image_upload_id = [];
+            $image_tokped = [];
+            $image_tamp_lokal = [];
+            foreach(json_decode($request->image) as $key => $value){
+                $file = file_get_contents($value);
+                $file_name = 'file_tamp_upload_marketpale/'.$request->get('sku').'_'.$key.'.png';
+                file_put_contents($file_name, $file);
+                $image_tokped[$key] = asset($file_name);
+                $image_tamp_lokal[$key] = '../public/'.$file_name;
+            }
+
+            $request->merge([
+                'image' => json_encode($image_tokped)
+            ]);
+        }
+
         $responseApi = ApiService::addProductMarketplace(
             strtoupper(trim($request->session()->get('app_user_company_id'))),
             json_decode($request->image),
@@ -144,7 +174,16 @@ class ProductController extends Controller
             $request->etalase,
             collect($request->logistic)->where('logistic_id', '!=', '0')
         );
-        return $responseApi;
+
+        if($request->marketplace_update == 'tokopedia'){
+            // ! Hapus foto jika sudah di kirim ke tokopedia atau gagal
+            foreach($image_tamp_lokal as $key => $value){
+                if(file_exists($value)){
+                    unlink($value);
+                }
+            }
+        }
+
         if (json_decode($responseApi)->status == 0) {
             return Response()->json([
                 'status'    => 0,

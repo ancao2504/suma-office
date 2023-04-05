@@ -60,7 +60,8 @@ function submitData() {
                                 "enabled"       : true,
                                 "logistic_id"   : (($('#checkbox4').is(':checked'))?$('#checkbox4').data('id'):0)
                             }
-                        ]
+                        ],
+            marketplace_update  : $('#marketplace_add').data('ket'),
         },
         dataType: 'json',
         beforeSend: function () {
