@@ -264,4 +264,22 @@ $(document).ready(function () {
             $(this).val(parseInt($(this).val().replace(/[^0-9]/g, '')).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
     });
+
+    // ! validasi berat paket dan logistik
+    $('#berat_paket').on('keyup',function (e) {
+        if (mp == 'tokopedia'){
+            data_logistic.map(function (item) {
+                if (parseFloat($('#berat_paket').val()) > parseFloat(item.data_max)) {
+                    if(item.target.find('div.text-danger').length == 0){
+                        item.target.append('<div class="text-danger d-inline-block">Berat paket melebihi batas maksimal</div>');
+                        item.target.prev().find('input').prop('checked', false);
+                        item.target.prev().find('input').prop('disabled', true);
+                    }
+                } else {
+                    item.target.find('div.text-danger').remove();
+                    item.target.prev().find('input').prop('disabled', false);
+                }
+            });
+        }
+    });
 });

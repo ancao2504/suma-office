@@ -251,16 +251,22 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" role="switch" id="checkbox{{ $key }}" data-id="{{ $data->logistics_channel_id }}" @if (in_array($data->logistics_channel_id, $data_all->logistic)) checked @endif @if ($data_all->marketplace == 'shopee') disabled @endif>
                                         </div>
-                                        <b>{{ $data->logistics_channel_name }} @if (empty($data->detail)) (maks {{ (float)$data->weight_limit->item_max_weight * 1000}}g) @endif</b>
+                                        <div id="logisticTitle{{$key}}">
+                                            <b>
+                                                {{ $data->logistics_channel_name }}
+                                                @if (empty($data->detail)) (maks {{(float)$data->weight_limit->item_max_weight * 1000}}g) @endif
+                                            </b>
+                                        </div>
                                     </button>
+                                    {{-- <div id="max-logistic" data-cb="checkbox{{ $key }}">@if (!empty($data->detail)) {{collect($data->detail)->max('weight_limit.item_max_weight') * 1000 }} @else {{ $data->weight_limit->item_max_weight * 1000}} @endif</div> --}}
                                 </h2>
                                 @if (!empty($data->detail))
-                                <div id="collapse{{ $key }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $key }}" >
+                                <div id="collapse{{ $key }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $key }}">
                                     <div class="accordion-body">
                                         <div class="row">
                                             @foreach ($data->detail as $index => $item)
                                                 <div class="col-12 @if ($index != count($data->detail)-1) border-bottom @endif @if ($index > 0 ) mt-3 @endif">
-                                                    {{ $item->logistics_channel_name }} (maks {{ (float)$item->weight_limit->item_max_weight * 1000}}g)
+                                                    {{ $item->logistics_channel_name }} (maks {{(float)$item->weight_limit->item_max_weight * 1000}}g)
                                                 </div>
                                             @endforeach
                                         </div>
@@ -439,5 +445,15 @@
 
 @endsection
 @push('scripts')
+    <script>
+        let mp = '{{ $data_all->marketplace }}';
+        let data_logistic = [];
+        @foreach ($logistic->shopee as $key => $data)
+            data_logistic.push({
+                target   : $('#logisticTitle{{ $key }}'),
+                data_max : @if (!empty($data->detail)) {{collect($data->detail)->max('weight_limit.item_max_weight') * 1000 }} @else {{ $data->weight_limit->item_max_weight * 1000}} @endif
+            });
+        @endforeach
+    </script>
     <script src="{{ asset('assets/js/suma/online/product/form.js') }}?v={{ time() }}"></script>
 @endpush
