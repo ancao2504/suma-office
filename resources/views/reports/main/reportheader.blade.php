@@ -14,7 +14,7 @@
 		<meta property="og:url" content="{{ env('APP_URL') }}" />
 		<meta property="og:site_name" content="Suma | Honda" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="{{ asset('assets/images/logo/suma_login.png') }}" />
+		<link rel="shortcut icon" href="{{ asset('assets/images/logo/ic_suma.png') }}" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 		<!--end::Fonts-->
@@ -39,7 +39,7 @@
                                 <div class="card-body">
                                     <div class="d-flex flex-row">
                                         <div class="d-flex flex-column">
-                                            <img alt="Logo" src="{{ config('constants.app.app_images_url').'/logo/ic_suma.png' }}" class="h-60px" />
+                                            <img alt="Logo" src="{{ asset('assets/images/logo/bg_logo_suma.png') }}" class="h-60px" />
                                         </div>
 
                                         <div class="d-flex flex-column px-5">

@@ -14,7 +14,7 @@
 		<meta property="og:url" content="{{ env('APP_URL') }}" />
 		<meta property="og:site_name" content="Suma | Honda" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="{{ config('constants.app.app_images_url').'/logo/ic_suma.png' }}" />
+		<link rel="shortcut icon" href="{{ asset('assets/images/logo/ic_suma.png') }}" />
 
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
