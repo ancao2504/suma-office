@@ -44,10 +44,7 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    @if(strtoupper(trim($data_device->device)) == 'DESKTOP')
-    <div class="card card-flush mt-4">
+        @if(strtoupper(trim($data_device->device)) == 'DESKTOP')
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-row-dashed table-row-gray-300 align-middle">
@@ -172,8 +169,10 @@
                 </table>
             </div>
         </div>
+        @endif
     </div>
-    @else
+
+    @if(strtoupper(trim($data_device->device)) != 'DESKTOP')
     @forelse($data_faktur as $data)
     <div class="card card-flush mt-6">
         <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">

@@ -39,7 +39,7 @@
                                 <div class="card-body">
                                     <div class="d-flex flex-row">
                                         <div class="d-flex flex-column">
-                                            <img alt="Logo" src="{{ asset('assets/images/logo/suma_login.png') }}" class="h-60px" />
+                                            <img alt="Logo" src="{{ config('constants.app.app_images_url').'/logo/ic_suma.png' }}" class="h-60px" />
                                         </div>
 
                                         <div class="d-flex flex-column px-5">
