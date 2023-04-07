@@ -307,7 +307,8 @@
                                     <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                                         <div class="d-flex">
                                             <div class="symbol symbol-45px me-5">
-                                                <img src="{{ $data_internal_detail->pictures }}" alt="{{ $data_internal_detail->part_number }}">
+                                                <img src="{{ $data_internal_detail->pictures }}" alt="{{ $data_internal_detail->part_number }}"
+                                                    onerror="this.onerror=null; this.src='{{ URL::asset('assets/images/background/part_image_not_found.png') }}'">
                                             </div>
                                             <div class="d-flex justify-content-start flex-column">
                                                 <span class="fs-7 fw-bolder text-dark">{{ $data_internal_detail->nama_part }}</span>
