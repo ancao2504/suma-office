@@ -314,6 +314,7 @@
                         <span class="menu-title {{ (Request::is('parts/backorder*')) ? 'active' : '' }}">Back Order</span>
                     </a>
                 </div>
+                @endif
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}" href="{{ route('parts.stockharian.form') }}">
                         <span class="menu-icon">
@@ -327,7 +328,6 @@
                         <span class="menu-title {{ (Request::is('parts/stockharian*')) ? 'active' : '' }}">Stock Harian</span>
                     </a>
                 </div>
-                @endif
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('parts/uploadimage/part*')) ? 'active' : '' }}" href="{{ route('parts.uploadimage.form-input') }}">
                         <span class="menu-icon">
