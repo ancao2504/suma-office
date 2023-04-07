@@ -14,7 +14,7 @@
 		<meta property="og:url" content="{{ env('APP_URL') }}" />
 		<meta property="og:site_name" content="Suma | Honda" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="{{ asset('assets/images/logo/ic_suma.png') }}" />
+		<link rel="shortcut icon" href="{{ config('constants.app.app_images_url').'/logo/ic_suma.png' }}" />
 
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
@@ -26,6 +26,11 @@
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
 		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+
+        <!-- PWA  -->
+        <meta name="theme-color" content="#f1416c"/>
+        <link rel="apple-touch-icon" href="{{ asset('assets/images/logo/ic_suma.png') }}">
+        <link rel="manifest" href="{{ asset('/manifest.json') }}">
 	</head>
 
 	<!--begin::Body-->
@@ -95,7 +100,7 @@
                                     <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3" />Shopee Suma Honda
                                 </a>
                                 <a href="https://www.bukalapak.com/u/sumahonda" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                    <img alt="Logo" src="{{ asset('assets/images/logo/bukalapak.png') }}" class="h-20px me-3" />Bukalapak Suma Honda
+                                    <img alt="Logo" src="{{ config('constants.app.app_images_url').'/logo/bukalapak.png' }}" class="h-20px me-3" />Bukalapak Suma Honda
                                 </a>
 							</div>
 						</form>
@@ -115,7 +120,13 @@
 		<script src="{{ URL::asset('assets/js/scripts.bundle.js') }}"></script>
 
         @extends('components.swalfailed')
-
+        <script>
+            if (!navigator.serviceWorker.controller) {
+                navigator.serviceWorker.register("{{ asset('/sw.js') }}").then(function (reg) {
+                    console.log("Service worker has been registered for scope: " + reg.scope);
+                });
+            }
+        </script>
         <script type="text/javascript">
             var btnLogin = document.querySelector("#kt_sign_in_submit");
             var targetLogin = document.querySelector("#kt_body");

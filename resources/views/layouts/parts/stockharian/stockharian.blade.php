@@ -3,7 +3,7 @@
 @section('subtitle','Stock Harian')
 @section('container')
     <div class="row g-0">
-        <form id="formStockHarian" action="{{ route('parts.stockharian.proses') }}" method="get" autocomplete="off">
+        <form id="formStockHarian" action="{{ route('parts.stockharian.print-report') }}" method="get" autocomplete="off">
             <div class="card card-flush">
                 <div class="card-header align-items-center border-0 mt-4">
                     <h3 class="card-title align-items-start flex-column">
@@ -118,8 +118,29 @@
                         <div class="mb-10 d-flex flex-wrap gap-5">
                             <div class="fv-row w-100 flex-md-root fv-plugins-icon-container">
                                 <label class="form-label">Kode Lokasi</label>
-                                <input id="inputKodeLokasi" name="kode_lokasi" class="form-control form-control-solid" readonly
-                                    @if(isset($kode_lokasi)) value="{{ $kode_lokasi }}" @else value="{{ old('kode_lokasi') }}"@endif>
+                                <select id="selectKodeLokasi" name="kode_lokasi" class="form-select" data-control="select2" data-hide-search="true">
+                                    @if(strtoupper(trim(Session::get('app_user_role_id'))) == 'MD_H3_MGMT')
+                                    <option value="">ALL - SEMUA</option>
+                                    <option value="ALLONLINE">ALLMP - SEMUA MARKETPLACE</option>
+                                    @foreach ($lokasi as $list)
+                                    <option value="{{ $list->kode_lokasi }}"
+                                        @if(old('kode_lokasi') != "")
+                                            @if($list->kode_lokasi == old('kode_lokasi'))
+                                                {{"selected"}}
+                                            @endif
+                                        @else
+                                            @if(@isset($kode_lokasi))
+                                                @if($kode_lokasi == $list->kode_lokasi)
+                                                    {{"selected"}}
+                                                @endif
+                                            @endif
+                                        @endif>{{ $list->kode_lokasi }} - {{ $list->keterangan }}
+                                    </option>
+                                    @endforeach
+                                    @else
+                                    <option value="{{ $kode_lokasi }}">{{ $kode_lokasi }}</option>
+                                    @endif
+                                </select>
                             </div>
                             <div class="fv-row w-100 flex-md-root">
                                 <label class="form-label">Kode Rak</label>
@@ -148,10 +169,10 @@
                             </div>
                         </div>
                     </div>
-                    <button name="action" value="cetak" class="btn btn-primary" type="submit" formtarget="_blank">
+                    <button id="btnCetak" name="action" value="cetak" class="btn btn-primary" type="submit" formtarget="_blank">
                         <i class="bi bi-printer-fill fs-4 me-2"></i>Cetak
                     </button>
-                    <button id="excel" name="action" value="excel" class="btn btn-success" type="submit">
+                    <button id="btnExcel" name="action" value="excel" class="btn btn-success" type="button">
                         <i class="bi bi-file-earmark-excel-fill fs-4 me-2"></i>Excel
                     </button>
                 </div>
@@ -160,26 +181,12 @@
     </div>
 
     @push('scripts')
-        <script type="text/javascript">
-            // $(document).on('click', '#excel', function(e) {
-            //     e.preventDefault();
-
-            //     $.ajax({
-            //         type: "get",
-            //         url: "{{ route('parts.stockharian.proses') }}",
-            //         success: function (d){
-            //             var a = document.createElement("a");
-            //             a.download = "filename.xls";
-            //             a.href = "data:application/vnd.ms-excel,"+encodeURI(d);
-            //             document.body.appendChild(a);
-            //             a.click();
-            //         }
-            //     });
-            // });
-            // $(document).ready(function() {
-
-            // });
-        </script>
+    <script>
+        const url = {
+            'export_excel': "{{ route('parts.stockharian.export-excel') }}",
+        }
+    </script>
+    <script src="{{ asset('assets/js/suma/parts/stockharian.js') }}?v={{ time() }}"></script>
     @endpush
 @endsection
 

@@ -1,6 +1,6 @@
 <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
-        <a href="#">
+        <a href="{{ route('home.index') }}">
             <img alt="Logo" src="{{ asset('assets/images/logo/logo_suma_bg_dark.svg') }}" class="h-100px logo" />
         </a>
         <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize">
@@ -498,20 +498,16 @@
                                 <span class="menu-title">Antar Marketplace</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/pemindahan/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('online/pemindahan/tokopedia/*')) ? 'active' : '' }}" href="{{ url('/online/pemindahan/tokopedia/daftar') }}">
+                            <a class="menu-link {{ (Request::is('online/pemindahan/tokopedia*')) ? 'active' : '' }}" href="{{ url('/online/pemindahan/tokopedia/daftar') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">Tokopedia</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/pemindahan/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
-                            <a class="menu-link {{ (Request::is('online/pemindahan/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/pemindahan/shopee') }}">
+                            <a class="menu-link {{ (Request::is('online/pemindahan/shopee*')) ? 'active' : '' }}" href="{{ url('/online/pemindahan/shopee') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -544,8 +540,6 @@
                                 <span class="menu-title">Tokopedia</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/updateharga/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/updateharga/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/updateharga/shopee/daftar') }}">
                                 <span class="menu-bullet">
@@ -559,14 +553,12 @@
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/product/*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: assets/media/icons/duotune/communication/com014.svg-->
                             <span class="svg-icon svg-icon-muted svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path opacity="0.3" d="M3 6C2.4 6 2 5.6 2 5V3C2 2.4 2.4 2 3 2H5C5.6 2 6 2.4 6 3C6 3.6 5.6 4 5 4H4V5C4 5.6 3.6 6 3 6ZM22 5V3C22 2.4 21.6 2 21 2H19C18.4 2 18 2.4 18 3C18 3.6 18.4 4 19 4H20V5C20 5.6 20.4 6 21 6C21.6 6 22 5.6 22 5ZM6 21C6 20.4 5.6 20 5 20H4V19C4 18.4 3.6 18 3 18C2.4 18 2 18.4 2 19V21C2 21.6 2.4 22 3 22H5C5.6 22 6 21.6 6 21ZM22 21V19C22 18.4 21.6 18 21 18C20.4 18 20 18.4 20 19V20H19C18.4 20 18 20.4 18 21C18 21.6 18.4 22 19 22H21C21.6 22 22 21.6 22 21Z" fill="currentColor"/>
                                     <path d="M3 16C2.4 16 2 15.6 2 15V9C2 8.4 2.4 8 3 8C3.6 8 4 8.4 4 9V15C4 15.6 3.6 16 3 16ZM13 15V9C13 8.4 12.6 8 12 8C11.4 8 11 8.4 11 9V15C11 15.6 11.4 16 12 16C12.6 16 13 15.6 13 15ZM17 15V9C17 8.4 16.6 8 16 8C15.4 8 15 8.4 15 9V15C15 15.6 15.4 16 16 16C16.6 16 17 15.6 17 15ZM9 15V9C9 8.4 8.6 8 8 8H7C6.4 8 6 8.4 6 9V15C6 15.6 6.4 16 7 16H8C8.6 16 9 15.6 9 15ZM22 15V9C22 8.4 21.6 8 21 8H20C19.4 8 19 8.4 19 9V15C19 15.6 19.4 16 20 16H21C21.6 16 22 15.6 22 15Z" fill="currentColor"/>
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->
                         </span>
                         <span class="menu-title {{ (Request::is('online/product/*')) ? 'active' : '' }}">Products</span>
                         <span class="menu-arrow"></span>
@@ -580,8 +572,6 @@
                                 <span class="menu-title">Marketplace</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/product/tokopedia/*')) ? 'active' : '' }}" href="{{ url('/online/product/tokopedia/index') }}">
                                 <span class="menu-bullet">
@@ -590,8 +580,6 @@
                                 <span class="menu-title">Tokopedia</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/product/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/product/shopee/daftar') }}">
                                 <span class="menu-bullet">
@@ -703,8 +691,6 @@
                                 <span class="menu-title">Tokopedia</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/ekspedisi/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/ekspedisi/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/ekspedisi/shopee/daftar') }}">
                                 <span class="menu-bullet">
@@ -740,8 +726,6 @@
                                 <span class="menu-title">Tokopedia</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/historysaldo/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/historysaldo/shopee/*')) ? 'active' : '' }}" href="{{ url('/online/historysaldo/shopee/daftar/group') }}">
                                 <span class="menu-bullet">
@@ -752,7 +736,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('online/serahterima/*')) ? 'active' : '' }}" href="{{ url('/online/serahterima/daftar') }}">
                         <span class="menu-icon">

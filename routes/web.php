@@ -154,7 +154,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             Route::name('stockharian.')->group(function () {
                 Route::controller(StockHarianController::class)->group(function () {
                     Route::get('/parts/stockharian/form', 'index')->name('form');
-                    Route::get('/parts/stockharian/proses', 'proses')->name('proses');
+                    Route::get('/parts/stockharian/printreport', 'prosesPrintReport')->name('print-report');
+                    Route::get('/parts/stockharian/exportexcel', 'prosesExportExcel')->name('export-excel');
                 });
             });
         });

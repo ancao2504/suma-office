@@ -16,9 +16,10 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ExcelStockHarianController implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize
+class ExcelStockHarianController implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithStrictNullComparison
 {
     use Exportable;
 
@@ -40,12 +41,22 @@ class ExcelStockHarianController implements FromCollection, WithHeadings, WithCo
     }
 
     public function collection() {
-        $responseApi = ApiService::StockHarianProses(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
-                                                strtoupper(trim($this->kode_class)), strtoupper(trim($this->kode_produk)),
-                                                strtoupper(trim($this->kode_produk_level)), strtoupper(trim($this->kode_sub)),
-                                                strtoupper(trim($this->frg)), strtoupper(trim($this->kode_lokasi)),
-                                                strtoupper(trim($this->kode_rak)), strtoupper(trim($this->option_stock_sedia)),
-                                                strtoupper(trim($this->nilai_stock_sedia)));
+        if(strtoupper(trim($this->kode_lokasi)) == 'ALLONLINE') {
+            $responseApi = ApiService::StockHarianProsesMarketplace(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
+                                strtoupper(trim($this->kode_class)), strtoupper(trim($this->kode_produk)),
+                                strtoupper(trim($this->kode_produk_level)), strtoupper(trim($this->kode_sub)),
+                                strtoupper(trim($this->frg)), strtoupper(trim($this->kode_lokasi)),
+                                strtoupper(trim($this->kode_rak)), strtoupper(trim($this->option_stock_sedia)),
+                                strtoupper(trim($this->nilai_stock_sedia)));
+        } else {
+            $responseApi = ApiService::StockHarianProsesPerlokasi(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
+                                strtoupper(trim($this->kode_class)), strtoupper(trim($this->kode_produk)),
+                                strtoupper(trim($this->kode_produk_level)), strtoupper(trim($this->kode_sub)),
+                                strtoupper(trim($this->frg)), strtoupper(trim($this->kode_lokasi)),
+                                strtoupper(trim($this->kode_rak)), strtoupper(trim($this->option_stock_sedia)),
+                                strtoupper(trim($this->nilai_stock_sedia)));
+        }
+
 
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -60,16 +71,60 @@ class ExcelStockHarianController implements FromCollection, WithHeadings, WithCo
     }
 
     public function headings() :array {
-        return ["part_number", "nama_part", "frg", "het", "stok"];
+        if(strtoupper(trim($this->kode_lokasi)) == 'ALLONLINE') {
+            return [
+                "part_number",
+                "nama_part",
+                "frg", "het",
+                "stok_ob", "nilai_stok_ob",
+                "stok_ok", "nilai_stok_ok",
+                "stok_ol", "nilai_stok_ol",
+                "stok_op", "nilai_stok_op",
+                "stok_os", "nilai_stok_os",
+                "stok_ot", "nilai_stok_ot",
+            ];
+        } else {
+            return [
+                "part_number",
+                "nama_part",
+                "frg",
+                "het",
+                "lokasi",
+                "stok"
+            ];
+        }
+
     }
 
     public function columnFormats(): array {
-        return [
-            'A' => NumberFormat::FORMAT_TEXT,
-            'B' => NumberFormat::FORMAT_TEXT,
-            'C' => NumberFormat::FORMAT_TEXT,
-            'D' => NumberFormat::FORMAT_NUMBER,
-            'E' => NumberFormat::FORMAT_GENERAL,
-        ];
+        if(strtoupper(trim($this->kode_lokasi)) == 'ALLONLINE') {
+            return [
+                'A' => NumberFormat::FORMAT_TEXT,
+                'B' => NumberFormat::FORMAT_TEXT,
+                'C' => NumberFormat::FORMAT_TEXT,
+                'D' => NumberFormat::FORMAT_GENERAL,
+                'E' => NumberFormat::FORMAT_GENERAL,
+                'F' => NumberFormat::FORMAT_GENERAL,
+                'G' => NumberFormat::FORMAT_GENERAL,
+                'H' => NumberFormat::FORMAT_GENERAL,
+                'I' => NumberFormat::FORMAT_GENERAL,
+                'J' => NumberFormat::FORMAT_GENERAL,
+                'K' => NumberFormat::FORMAT_GENERAL,
+                'L' => NumberFormat::FORMAT_GENERAL,
+                'M' => NumberFormat::FORMAT_GENERAL,
+                'N' => NumberFormat::FORMAT_GENERAL,
+                'O' => NumberFormat::FORMAT_GENERAL,
+                'P' => NumberFormat::FORMAT_GENERAL,
+            ];
+        } else {
+            return [
+                'A' => NumberFormat::FORMAT_TEXT,
+                'B' => NumberFormat::FORMAT_TEXT,
+                'C' => NumberFormat::FORMAT_TEXT,
+                'D' => NumberFormat::FORMAT_GENERAL,
+                'E' => NumberFormat::FORMAT_TEXT,
+                'F' => NumberFormat::FORMAT_GENERAL,
+            ];
+        }
     }
 }

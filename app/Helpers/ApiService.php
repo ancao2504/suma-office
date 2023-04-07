@@ -1032,20 +1032,32 @@ class ApiService
         return $response;
     }
 
-    public static function StockHarianProses(
-        $companyid,
-        $role_id,
-        $kode_class,
-        $kode_produk,
-        $kode_produk_level,
-        $kode_sub,
-        $frg,
-        $kode_lokasi,
-        $kode_rak,
-        $option_stock_sedia,
-        $nilai_stock_sedia
-    ) {
-        $request = 'parts/stockharian/proses';
+    public static function StockHarianProsesPerlokasi($companyid, $role_id, $kode_class, $kode_produk,
+                    $kode_produk_level, $kode_sub, $frg, $kode_lokasi, $kode_rak,
+                    $option_stock_sedia, $nilai_stock_sedia) {
+        $request = 'parts/stockharian/proses/perlokasi';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'             => $companyid,
+            'role_id'               => $role_id,
+            'kode_class'            => $kode_class,
+            'kode_produk'           => $kode_produk,
+            'kode_produk_level'     => $kode_produk_level,
+            'kode_sub'              => $kode_sub,
+            'frg'                   => $frg,
+            'kode_lokasi'           => $kode_lokasi,
+            'kode_rak'              => $kode_rak,
+            'option_stock_sedia'    => $option_stock_sedia,
+            'nilai_stock_sedia'     => $nilai_stock_sedia,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function StockHarianProsesMarketplace($companyid, $role_id, $kode_class, $kode_produk,
+                    $kode_produk_level, $kode_sub, $frg, $kode_lokasi, $kode_rak,
+                    $option_stock_sedia, $nilai_stock_sedia) {
+        $request = 'parts/stockharian/proses/marketplace';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'             => $companyid,
@@ -1775,7 +1787,7 @@ class ApiService
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
-    
+
     public static function UpdateStockMarketplace($nomor_dokumen, $kode_part, $companyid){
         $request = 'online/pemindahan/marketplace/update/stock';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -1823,7 +1835,7 @@ class ApiService
             'etalase'       => $etalase,
             'logistic'      => $logistic,
         ];
-        
+
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }

@@ -1,14 +1,14 @@
 {
     "name": "Suma-PMO",
-    "short_name": "LPT",
+    "short_name": "PMO",
     "start_url": "/index.php",
-    "background_color": "#F1416C",
+    "background_color": "#f1416c",
     "description": "Suma Parts Mobile Ordering",
     "display": "fullscreen",
-    "theme_color": "#F1416C",
+    "theme_color": "#f1416c",
     "icons": [
         {
-            "src": "assets/images/logo/ic_suma.png",
+            "src": "/assets/images/logo/ic_suma.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
