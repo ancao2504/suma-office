@@ -54,7 +54,7 @@ class PembayaranController extends Controller
             $data = json_decode($responseApi)->data;
             return response()->json(
             base64_encode(json_encode(['status' => 1, 'message' => $messageApi, 'data' =>  $data]))
-        );
+            );
         } else {
             return response()->json(['status' => 0, 'message' => $messageApi]);
         }
@@ -74,7 +74,8 @@ class PembayaranController extends Controller
             foreach ($request->image as $key => $value) {
                 $nama_file =  'Bukti_Penagihan_'.strtoupper(trim($request->session()->get('app_user_id'))).'_'.strtoupper(trim($request->session()->get('app_user_company_id'))).'_'. date('YmdHis'). '.' . $value->getClientOriginalExtension();
                 $names_files[$key] = $nama_file;
-                $directory = 'C:/xampp/htdocs/suma-pmo/public/assets/images/penagihan_pembayaran/';
+                // $directory = '../images/penagihan_pembayaran/';
+                $directory = "images/upload/penagihan_pembayaran/";
                 try {
                     $image_resize = Image::make(file_get_contents($value->getRealPath()));
                     $image_resize->resize(900, null , function ($constraint) {
