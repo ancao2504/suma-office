@@ -17,8 +17,11 @@
                 <th colspan="2" class="ps-2 pe-2" style="text-align: center;vertical-align: center;">Paket</th>
                 <th colspan="2" class="ps-2 pe-2" style="text-align: center;vertical-align: center;">Shopee</th>
                 <th colspan="2" class="ps-2 pe-2" style="text-align: center;vertical-align: center;">Tiktok</th>
+                <th colspan="2" class="ps-2 pe-2" style="text-align: center;vertical-align: center;">Total</th>
             </tr>
             <tr class="fw-bolder fs-8 text-gray-800 border-bottom border-gray-200">
+                <th class="ps-2 pe-2" style="text-align: center; vertical-align: center;">Stock</th>
+                <th class="ps-2 pe-2" style="text-align: center; vertical-align: center;">Nilai</th>
                 <th class="ps-2 pe-2" style="text-align: center; vertical-align: center;">Stock</th>
                 <th class="ps-2 pe-2" style="text-align: center; vertical-align: center;">Nilai</th>
                 <th class="ps-2 pe-2" style="text-align: center; vertical-align: center;">Stock</th>
@@ -53,6 +56,8 @@
                 <td class="ps-2 pe-2" style="text-align: right; vertical-align: top;">{{ number_format($data->nilai_stock_os) }}</td>
                 <td class="ps-2 pe-2" style="text-align: right; vertical-align: top;">{{ number_format($data->stock_ot) }}</td>
                 <td class="ps-2 pe-2" style="text-align: right; vertical-align: top;">{{ number_format($data->nilai_stock_ot) }}</td>
+                <td class="ps-2 pe-2" style="text-align: right; vertical-align: top;">{{ number_format($data->stock_total) }}</td>
+                <td class="ps-2 pe-2" style="text-align: right; vertical-align: top;">{{ number_format($data->nilai_stock_total) }}</td>
             </tr>
             @endforeach
         </tbody>

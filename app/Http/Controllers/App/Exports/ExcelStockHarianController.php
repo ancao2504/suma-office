@@ -82,6 +82,7 @@ class ExcelStockHarianController implements FromCollection, WithHeadings, WithCo
                 "stok_op", "nilai_stok_op",
                 "stok_os", "nilai_stok_os",
                 "stok_ot", "nilai_stok_ot",
+                "stok_total", "nilai_stok_total",
             ];
         } else {
             return [
