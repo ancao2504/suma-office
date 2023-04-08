@@ -119,7 +119,9 @@
                             <div class="fv-row w-100 flex-md-root fv-plugins-icon-container">
                                 <label class="form-label">Kode Lokasi</label>
                                 <select id="selectKodeLokasi" name="kode_lokasi" class="form-select" data-control="select2" data-hide-search="true">
-                                    @if(strtoupper(trim(Session::get('app_user_role_id'))) == 'MD_H3_MGMT')
+                                    @if(strtoupper(trim(Session::get('app_user_role_id'))) == 'MD_H3_MGMT' ||
+                                        strtoupper(trim(Session::get('app_user_role_id'))) == 'MD_OL_SPV' ||
+                                        strtoupper(trim(Session::get('app_user_role_id'))) == 'MD_OL_ADMIN')
                                     <option value="">ALL - SEMUA</option>
                                     <option value="ALLONLINE">ALLMP - SEMUA MARKETPLACE</option>
                                     @foreach ($lokasi as $list)
