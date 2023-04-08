@@ -116,6 +116,8 @@ class ExcelStockHarianController implements FromCollection, WithHeadings, WithCo
                 'N' => NumberFormat::FORMAT_GENERAL,
                 'O' => NumberFormat::FORMAT_GENERAL,
                 'P' => NumberFormat::FORMAT_GENERAL,
+                'Q' => NumberFormat::FORMAT_GENERAL,
+                'R' => NumberFormat::FORMAT_GENERAL,
             ];
         } else {
             return [
