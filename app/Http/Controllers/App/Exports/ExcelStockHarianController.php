@@ -19,6 +19,9 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
+
+ini_set('memory_limit', '10240M');
+ini_set('max_execution_time', 0);
 class ExcelStockHarianController implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithStrictNullComparison
 {
     use Exportable;
