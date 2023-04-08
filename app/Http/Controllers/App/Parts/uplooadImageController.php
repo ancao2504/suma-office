@@ -61,8 +61,8 @@ class uplooadImageController extends Controller
                 'file.' . $key => 'required|image|mimes:jpeg,png,jpg|max:2048',
             ]);
             $nama_file =  trim(pathinfo($value->getClientOriginalName(), PATHINFO_FILENAME)) . '.png';
-            $tujuan_upload = 'C:\xampp\htdocs\suma-pmo\public\assets\images\parts';
-            $value->move($tujuan_upload, $nama_file);
+            // $tujuan_upload = config('app.app_images_url')."/parts/";
+            $value->move('images/parts', $nama_file);
         }
 
         return redirect()->back()->with('success', 'Data Berhasil Diupload');
