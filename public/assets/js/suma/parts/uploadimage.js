@@ -180,6 +180,9 @@ $(document).ready(function(){
                     $('input[name="file[]"]').prop('files', fileList.files);
 
                     if ($('input[name="file[]"]').prop('files').length == fileList.files.length) {
+                        $('#drop_zone').append(`
+                            <input type="hidden" name="search" value="${$('#inputCariPartNumber').val()}">
+                        `);
                         $('#drop_zone').submit();
                     }
                 }

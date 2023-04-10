@@ -45,7 +45,7 @@
                 </div>
                 <div class="input-group w-50">
                     <input id="inputCariPartNumber" name="cari_part_number" type="text" class="form-control"
-                        style="text-transform:uppercase" placeholder="Cari Part Number" autocomplete="off">
+                        style="text-transform:uppercase" placeholder="Cari Part Number" value="{{ $search }}" autocomplete="off">
                     <button type="button" class="btn btn-primary" id="cariImagePart">Cari</button>
                 </div>
             </div>
@@ -85,5 +85,8 @@
 @endsection
 
 @push('scripts')
+<script>
+    let search = "{{ $search }}";
+</script>   
 <script language="JavaScript" src="{{ asset('assets/js/suma/parts/uploadimage.js') }}?v={{ time() }}"></script>
 @endpush

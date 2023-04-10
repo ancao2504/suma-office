@@ -20,6 +20,7 @@ class uplooadImageController extends Controller
 
         $view = view('layouts.parts.uploadimage.uploadimage',[
             'title_menu'    => 'Upload Gambar part',
+            'search'       => $request->get('search')??'',
         ]);
         $dataApi = json_decode($responApi)->data;
         if (json_decode($responApi)->status == 1) {
@@ -59,13 +60,20 @@ class uplooadImageController extends Controller
         foreach ($request->file as $key => $value) {
             $this->validate($request, [
                 'file.' . $key => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ],[
+                'file.' . $key . '.required' => 'Gambar tidak boleh kosong',
+                'file.' . $key . '.image' => 'File yang diupload harus berupa gambar',
+                'file.' . $key . '.mimes' => 'File yang diupload harus berupa gambar dengan format jpeg, png, jpg',
+                'file.' . $key . '.max' => 'Ukuran file yang diupload maksimal 2 MB'
             ]);
             $nama_file =  trim(pathinfo($value->getClientOriginalName(), PATHINFO_FILENAME)) . '.png';
             // $tujuan_upload = config('app.app_images_url')."/parts/";
             $value->move('images/parts', $nama_file);
         }
-
-        return redirect()->back()->with('success', 'Data Berhasil Diupload');
+        // return redirect()->back()->with('success', 'Data Berhasil Diupload');
+        // redirect dan membawa $request->search
+        return redirect()->route('uploadimage.index', ['search' => $request->search])->with('success', 'Data Berhasil Diupload');
+        
     }
 
 }
