@@ -27,6 +27,7 @@
     </div>
 </div>
 
+<div id="postData">
 <!--Start List History Saldo-->
 @foreach($data_saldo as $data)
 @php
@@ -205,8 +206,8 @@
 </div>
 @endif
 @endforeach
-<div id="postData"></div>
 <!--End List History Saldo-->
+</div>
 
 @push('scripts')
 <script>

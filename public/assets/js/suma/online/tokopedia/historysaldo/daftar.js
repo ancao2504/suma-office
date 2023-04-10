@@ -18,7 +18,7 @@ function loadMoreDaftarHistorySaldo(page = 0, per_page = 50, start_date = '', en
         success: function (response) {
             loading.release();
             if (response.status == true) {
-                if(response.data == '') {
+                if(response.data.trim() == '') {
                     return;
                 }
                 pages = parseFloat(pages) + 1;

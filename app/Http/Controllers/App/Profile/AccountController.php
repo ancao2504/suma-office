@@ -60,7 +60,7 @@ class AccountController extends Controller
 
         if($statusApi == 1) {
             session()->flash('success', $messageApi);
-            return redirect()->route('profile.account-profile');
+            return redirect()->route('profile.account.index');
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
@@ -89,7 +89,7 @@ class AccountController extends Controller
 
         if($statusApi == 1) {
             session()->flash('success', $messageApi);
-            return redirect()->route('profile.account-change-password-profile');
+            return redirect()->route('profile.account.change-password');
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }

@@ -82,8 +82,6 @@
     </div>
 </div>
 
-
-
 <div id="postOrder">
     <!--Start List Order-->
     @include('layouts.online.tokopedia.orders.orderlist')
