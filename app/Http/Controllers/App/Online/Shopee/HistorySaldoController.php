@@ -105,7 +105,7 @@ class HistorySaldoController extends Controller
 
         if($statusApi == 1) {
             $dataApi = json_decode($responseApi)->data;
-            // dd($dataApi);
+
             $data_filter = new Collection();
             $data_filter->push((object) [
                 'start_date'    => $start_date,

@@ -6,10 +6,10 @@
     <form enctype="multipart/form-data" id="usersForm" name="usersForm" autofill="off" autocomplete="off" method="POST" action="{{ route('profile.account.change-password') }}">
         @csrf
         <div class="card card-flush">
-            <div class="card-header">
+            <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Change Password</span>
-                    <span class="text-muted fw-bold fs-7">Change password login PMO Suma Honda</span>
+                    <span class="text-muted fw-bold fs-7">Ubah password login PMO Suma Honda</span>
                 </h3>
             </div>
             <div class="card-body">

@@ -1734,6 +1734,19 @@ class ApiService
         return $response;
     }
 
+    public static function OnlineApproveOrderDaftar($page, $per_page, $companyid)
+    {
+        $request = 'online/order/approve/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'page'          => $page ?? 1,
+            'per_page'      => $per_page ?? 10,
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function SearchProductMarketplaceByPartNumber($part_number, $companyid, $page, $per_page)
     {
         $request = 'online/products/marketplace/daftar';
@@ -1836,6 +1849,44 @@ class ApiService
             'logistic'      => $logistic,
         ];
 
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function ApproveOrderMarketplaceDetail($nomor_faktur, $companyid)
+    {
+        $request = 'online/order/approve/form/internal';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_faktur'   => trim($nomor_faktur),
+            'companyid'     => trim($companyid),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function ApproveOrderMarketplaceProses($nomor_invoice, $companyid, $user_id)
+    {
+        $request = 'online/order/approve/proses/marketplace';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice'     => trim($nomor_invoice),
+            'companyid'         => trim($companyid),
+            'user_id'           => trim($user_id),
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function ApproveOrderInternalProses($nomor_faktur, $companyid, $user_id)
+    {
+        $request = 'online/order/approve/proses/internal';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_faktur'      => trim($nomor_faktur),
+            'companyid'         => trim($companyid),
+            'user_id'           => trim($user_id),
+        ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }

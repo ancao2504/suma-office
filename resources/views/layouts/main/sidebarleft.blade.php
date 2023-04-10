@@ -118,7 +118,7 @@
                         <span class="menu-title {{ (Request::is('dashboard/*')) ? 'active' : '' }}">Dashboards</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('dashboard/management/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('dashboard/management/*')) ? 'show' : '' }}" >
                         <div data-kt-menu-trigger="click" class="menu-item {{ (Request::is('dashboard/management/*')) ? 'here' : '' }} menu-accordion {{ (Request::is('dashboard/management/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
@@ -129,7 +129,7 @@
                             </span>
                             <div class="menu-sub menu-sub-accordion">
                                 <div class="menu-item">
-                                    <a id="menuDashboardManagementSales" class="menu-link {{ (Request::is('dashboard/management/sales')) ? 'active' : '' }}" href="{{ route('dashboard.management.sales') }}">
+                                    <a class="menu-link {{ (Request::is('dashboard/management/sales')) ? 'active' : '' }}" href="{{ route('dashboard.management.sales') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
@@ -232,8 +232,8 @@
                 </div>
                 @endif
                 @if (Session::get('app_user_role_id') != "D_H3")
-                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
-                    session()->get('app_user_role_id') == 'MD_H3_SM')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
+                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">PROFILE</span>
@@ -299,8 +299,8 @@
                         <span class="menu-title {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}">Part Number</span>
                     </a>
                 </div>
-                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
-                    session()->get('app_user_role_id') == 'MD_H3_SM')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
+                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('parts/backorder*')) ? 'active' : '' }}" href="{{ route('parts.backorder.daftar') }}">
                         <span class="menu-icon">
@@ -343,15 +343,15 @@
                         <span class="menu-title {{ (Request::is('parts/uploadimage/part*')) ? 'active' : '' }}">Upload Gambar Part</span>
                     </a>
                 </div>
-                @if(session()->get('app_user_role_id') != 'MD_REQ_API')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) != 'MD_REQ_API')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ORDERS</span>
                     </div>
                 </div>
                 @endif
-                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
-                    session()->get('app_user_role_id') == 'MD_H3_SM')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
+                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/cart*')) ? 'active' : '' }}" href="{{ route('orders.cart.index') }}">
                         <span class="menu-icon">
@@ -383,7 +383,7 @@
                 </div>
                 @endif
 
-                @if(session()->get('app_user_role_id') != 'MD_REQ_API')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) != 'MD_REQ_API')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/faktur/*')) ? 'active' : '' }}" href="{{ url('/orders/faktur/daftar') }}">
                         <span class="menu-icon">
@@ -412,8 +412,8 @@
                 </div>
                 @endif
 
-                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
-                    session()->get('app_user_role_id') == 'MD_H3_SM')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
+                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}" href="{{ url('/orders/pembayaranfaktur/belumterbayar') }}">
                         <span class="menu-icon">
@@ -445,7 +445,7 @@
                         <span class="menu-title {{ (Request::is('orders/warehouse/penerimaan*')) ? 'active' : '' }}">Penerimaan</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/warehouse/penerimaan/suratjalan*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/warehouse/penerimaan/suratjalan*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('orders/warehouse/penerimaan/suratjalan*')) ? 'active' : '' }}" href="{{ url('/orders/warehouse/penerimaan/suratjalan/create') }}">
                                 <span class="menu-bullet">
@@ -455,7 +455,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/warehouse/penerimaan/pembayaran/dealer*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('orders/warehouse/penerimaan/pembayaran/dealer*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('orders/warehouse/penerimaan/pembayaran/dealer*')) ? 'active' : '' }}" href="{{ url('/orders/warehouse/penerimaan/pembayaran/dealer/input') }}">
                                 <span class="menu-bullet">
@@ -467,8 +467,8 @@
                     </div>
                 </div>
                 @endif
-                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_OL_SPV' ||
-                    session()->get('app_user_role_id') == 'MD_OL_ADMIN' || session()->get('app_user_role_id') == 'MD_REQ_API')
+                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_OL_SPV' ||
+                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_OL_ADMIN' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_REQ_API')
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ONLINE</span>
@@ -489,7 +489,7 @@
                         <span class="menu-title {{ (Request::is('online/pemindahan/*')) ? 'active' : '' }}">Pemindahan</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/pemindahan/marketplace*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/pemindahan/marketplace*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/pemindahan/marketplace*')) ? 'active' : '' }}" href="{{ url('/online/pemindahan/marketplace') }}">
                                 <span class="menu-bullet">
@@ -531,7 +531,7 @@
                         <span class="menu-title {{ (Request::is('online/updateharga/*')) ? 'active' : '' }}">Update Harga</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/updateharga/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/updateharga/tokopedia/*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/updateharga/tokopedia/*')) ? 'active' : '' }}" href="{{ url('/online/updateharga/tokopedia/daftar') }}">
                                 <span class="menu-bullet">
@@ -563,7 +563,7 @@
                         <span class="menu-title {{ (Request::is('online/product/*')) ? 'active' : '' }}">Products</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/marketplace/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/product/marketplace/*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/product/marketplace/*')) ? 'active' : '' }}" href="{{ url('/online/product/marketplace/daftar') }}">
                                 <span class="menu-bullet">
@@ -608,7 +608,7 @@
                         <span class="menu-title {{ (Request::is('online/orders/*')) ? 'active' : '' }}">Orders</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/orders/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/orders/*')) ? 'show' : '' }}" >
                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/orders/tokopedia/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
@@ -636,8 +636,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/orders/shopee/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/orders/shopee/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
@@ -665,6 +663,16 @@
                                 </div>
                             </div>
                         </div>
+                        @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_OL_SPV')
+                        <div class="menu-item">
+                            <a class="menu-link {{ (Request::is('online/orders/approve/*')) ? 'active' : '' }}" href="{{ url('/online/orders/approve/daftar') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Approve</span>
+                            </a>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/ekspedisi/*')) ? 'here hover show' : '' }}">
@@ -682,7 +690,7 @@
                         <span class="menu-title {{ (Request::is('online/ekspedisi/*')) ? 'active' : '' }}">Ekspedisi</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/ekspedisi/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/ekspedisi/tokopedia/*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/ekspedisi/tokopedia/*')) ? 'active' : '' }}" href="{{ url('/online/ekspedisi/tokopedia/daftar') }}">
                                 <span class="menu-bullet">
@@ -701,7 +709,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/historysaldo/*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -717,7 +724,7 @@
                         <span class="menu-title {{ (Request::is('online/historysaldo/*')) ? 'active' : '' }}">History Saldo</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/historysaldo/tokopedia/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('online/historysaldo/tokopedia/*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/historysaldo/tokopedia/*')) ? 'active' : '' }}" href="{{ url('/online/historysaldo/tokopedia/daftar') }}">
                                 <span class="menu-bullet">
@@ -771,7 +778,7 @@
                         <span class="menu-title {{ (Request::is('setting*')) ? 'active' : '' }}">Pengaturan</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}" >
                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting/diskon/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
@@ -808,7 +815,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/netto/*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/netto/*')) ? 'show' : '' }}" >
                         <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('setting/netto/*')) ? 'show' : '' }}">
                             <span class="menu-link">
                                 <span class="menu-bullet">
@@ -837,7 +844,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/cetakulang*')) ? 'show' : '' }}" kt-hidden-height="277" style="">
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('setting/cetakulang*')) ? 'show' : '' }}" >
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('setting/cetakulang*')) ? 'active' : '' }}" href="{{ url('/setting/cetakulang') }}">
                                 <span class="menu-bullet">

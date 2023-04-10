@@ -45,6 +45,7 @@ use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
 use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
+use App\Online\ApproveOrderController as ApproveOrderController;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 
 /*
@@ -495,6 +496,22 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             });
 
             Route::name('orders.')->group(function () {
+                Route::name('approveorder.')->group(function () {
+                    Route::controller(ApproveOrderController::class)->group(function () {
+                        Route::get('/online/orders/approve/daftar', 'daftarApproveOrder')->name('daftar');
+                        Route::name('form.')->group(function () {
+                            Route::get('/online/orders/approve/form/tokopedia/{nomor_invoice}', 'formApproveTokopedia')->where('nomor_invoice', '(.*)')->name('tokopedia');
+                            Route::get('/online/orders/approve/form/shopee/{nomor_invoice}', 'formApproveShopee')->where('nomor_invoice', '(.*)')->name('shopee');
+                            Route::get('/online/orders/approve/form/internal/{nomor_faktur}', 'formApproveInternal')->where('nomor_faktur', '(.*)')->name('internal');
+
+                            Route::name('proses.')->group(function () {
+                                Route::post('/online/orders/approve/form/proses/marketplace', 'prosesApproveMarketplace')->name('marketplace');
+                                Route::post('/online/orders/approve/form/proses/internal', 'prosesApproveInternal')->name('internal');
+                            });
+                        });
+                    });
+                });
+
                 Route::name('tokopedia.')->group(function () {
                     Route::controller(OrderTokopediaController::class)->group(function () {
                         Route::name('form.')->group(function () {

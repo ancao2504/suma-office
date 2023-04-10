@@ -15,6 +15,7 @@ return [
     ],
     'tokopedia' => [
         'kode_lokasi'   => 'OL',
+        'kode_dealer'   => 'TP4A',
         'url' => [
             'base_url'  => 'https://fs.tokopedia.net',
             'account'   => 'https://accounts.tokopedia.com'
@@ -25,6 +26,7 @@ return [
     ],
     'shopee' => [
         'kode_lokasi'   => 'OS',
+        'kode_dealer'   => 'TP4C',
         'url' => [
             'host'      => 'https://partner.shopeemobile.com'
         ],

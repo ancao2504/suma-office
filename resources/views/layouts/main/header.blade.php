@@ -119,10 +119,10 @@
                                         <a href="{{ route('online.auth.shopee.auth') }}" class="menu-link px-5">Shopee</a>
                                     </div>
                                     <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-5">Lazada</a>
+                                        <span class="menu-link px-5">Lazada</span>
                                     </div>
                                     <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-5">Tiktok</a>
+                                        <span class="menu-link px-5">Tiktok</span>
                                     </div>
                                 </div>
                             </div>
