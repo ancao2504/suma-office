@@ -1,4 +1,5 @@
 var pages = 1;
+console.log('Page success : ' + pages);
 
 function reloadDaftarHistorySaldo(list_view = '', page = 1, per_page = 50, start_date = '', end_date = '') {
     loading.block();
@@ -20,9 +21,12 @@ function loadMoreDaftarHistorySaldo(page = 0, per_page = 50, start_date = '', en
                 if(response.data == '') {
                     return;
                 }
-                pages++;
+                pages = parseFloat(pages) + 1;
                 $('#tableHistorySaldo > tbody:last-child').append(response.data);
+
+                console.log('Page success : ' + pages);
             } else {
+                console.log('Page warning : ' + pages);
                 Swal.fire({
                     text: response.message,
                     icon: "warning",
@@ -37,6 +41,7 @@ function loadMoreDaftarHistorySaldo(page = 0, per_page = 50, start_date = '', en
             }
         },
         error: function () {
+            console.log('Page error : ' + pages);
             loading.release();
             Swal.fire({
                 text: 'Server not responding',

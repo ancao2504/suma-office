@@ -20,7 +20,7 @@ function loadMoreDaftarOrders(cursor = 0, page_size = 10, fields = 'create_time'
         success: function (response) {
             loading.release();
             if (response.status == true) {
-                if(response.data == '') {
+                if(response.data.trim() == '') {
                     return;
                 }
                 pages = parseFloat(pages) + 1;

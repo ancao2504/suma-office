@@ -18,7 +18,7 @@ function loadMoreDaftarOrders(page = 0, per_page = 10, start_date = '', end_date
             loading.release();
 
             if (response.status == true) {
-                if(response.data == '') {
+                if(response.data.trim() == '') {
                     return;
                 }
                 pages = parseFloat(pages) + 1;

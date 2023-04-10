@@ -1,4 +1,5 @@
 var pages = 1;
+console.log('Page success : ' + pages);
 
 function reloadDaftarHistorySaldo(page = 1, start_date = '', end_date = '') {
     loading.block();
@@ -16,12 +17,15 @@ function loadMoreDaftarHistorySaldo(page = 0, start_date = '', end_date = '') {
         success: function (response) {
             loading.release();
             if (response.status == true) {
-                if(response.data == '') {
+                if(response.data.trim() == '') {
                     return;
                 }
                 pages = parseFloat(pages) + 1;
                 $('#postData').append(response.data);
+
+                console.log('Page success : ' + pages);
             } else {
+                console.log('Page warning : ' + pages);
                 Swal.fire({
                     text: response.message,
                     icon: "warning",
@@ -36,6 +40,7 @@ function loadMoreDaftarHistorySaldo(page = 0, start_date = '', end_date = '') {
             }
         },
         error: function () {
+            console.log('Page error : ' + pages);
             loading.release();
             Swal.fire({
                 text: 'Server not responding',
