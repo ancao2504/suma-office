@@ -100,7 +100,7 @@
                                     <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3" />Shopee Suma Honda
                                 </a>
                                 <a href="https://www.bukalapak.com/u/sumahonda" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                    <img alt="Logo" src="{{ config('constants.app.app_images_url').'/logo/bukalapak.png' }}" class="h-20px me-3" />Bukalapak Suma Honda
+                                    <img alt="Logo" src="{{ asset('assets/images/logo/bukalapak.png') }}" class="h-20px me-3" />Bukalapak Suma Honda
                                 </a>
 							</div>
 						</form>

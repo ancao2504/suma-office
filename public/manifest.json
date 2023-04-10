@@ -8,7 +8,7 @@
     "theme_color": "#f1416c",
     "icons": [
         {
-            "src": "/assets/images/logo/ic_suma.png",
+            "src": "https://suma-honda.id/assets/images/logo/ic_suma.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
