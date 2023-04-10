@@ -20,7 +20,7 @@
 
     if($old??false){
         echo '<script>let old = []; old = '.json_encode($old).';</script>';
-    }else {
+    } else {
         echo '<script>let old = [];</script>';
     }
 @endphp

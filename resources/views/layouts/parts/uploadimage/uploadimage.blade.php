@@ -45,7 +45,7 @@
                 </div>
                 <div class="input-group w-50">
                     <input id="inputCariPartNumber" name="cari_part_number" type="text" class="form-control"
-                        style="text-transform:uppercase" placeholder="Cari Part Number" autocomplete="off">
+                        style="text-transform:uppercase" placeholder="Cari Part Number" value="{{ $search }}" autocomplete="off">
                     <button type="button" class="btn btn-primary" id="cariImagePart">Cari</button>
                 </div>
             </div>
@@ -53,10 +53,13 @@
                 <!--start::container-->
                 @if ($dataApi->status == 1)
                     @foreach ($dataApi->data->data as $item)
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-lg-3 py-3" onclick="pilihGambar('{{ asset('assets/images/parts/'.trim($item->kd_part).'.png') }}')" style="cursor: pointer;">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-lg-3 py-3" onclick="pilihGambar('{{ config('constants.app.app_images_url').'/parts/'.trim($item->kd_part).'.png' }}')" style="cursor: pointer;">
                             <div class="card border border-dark rounded">
                                 <div class="d-flex justify-content-center">
-                                    <div class="bg-image rounded" style="background-image: url('{{ file_exists(public_path('assets/images/parts/'.trim($item->kd_part).'.png')) ? asset('assets/images/parts/'.trim($item->kd_part).'.png') : asset('assets/images/default.png') }}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                                    @php
+                                        $headers = get_headers(config('constants.app.app_images_url').'/parts/'.trim($item->kd_part).'.png');
+                                    @endphp
+                                    <div class="bg-image rounded" style="background-image: url('{{ strpos($headers[0], '200')? (config('constants.app.app_images_url').'/parts/'.trim($item->kd_part).'.png') : (config('constants.app.app_images_url').'/default.png') }}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
                                         <div class="bg-dark" style="width: 100%; height: 50px; position: absolute; bottom: 0; opacity: 0.8;">
                                             <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
                                                 <span class="text-white">{{ trim($item->kd_part) }}<span>
@@ -82,5 +85,8 @@
 @endsection
 
 @push('scripts')
+<script>
+    let search = "{{ $search }}";
+</script>   
 <script language="JavaScript" src="{{ asset('assets/js/suma/parts/uploadimage.js') }}?v={{ time() }}"></script>
 @endpush
