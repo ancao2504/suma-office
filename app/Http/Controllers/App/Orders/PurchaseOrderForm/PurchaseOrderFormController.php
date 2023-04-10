@@ -33,6 +33,7 @@ class PurchaseOrderFormController extends Controller
         }
 
         $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -56,6 +57,7 @@ class PurchaseOrderFormController extends Controller
         if (strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
             $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
+                                dd($responseApi);
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
