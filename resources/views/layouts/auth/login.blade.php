@@ -94,13 +94,13 @@
 								<div class="text-center text-muted text-uppercase fw-bolder mb-5">or</div>
 
                                 <a href="https://www.tokopedia.com/sumahonda" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                    <img alt="Logo" src="{{ asset('assets/images/logo/tokopedia.png') }}" class="h-20px me-3" />Tokopedia Suma Honda
+                                    <img alt="Logo" src="{{ asset('assets/images/logo/tokopedia.png') }}" class="h-20px me-3" />Tokopedia
                                 </a>
                                 <a href="https://shopee.co.id/sumahonda" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                    <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3" />Shopee Suma Honda
+                                    <img alt="Logo" src="{{ asset('assets/images/logo/shopee.png') }}" class="h-20px me-3" />Shopee
                                 </a>
                                 <a href="https://www.bukalapak.com/u/sumahonda" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                    <img alt="Logo" src="{{ asset('assets/images/logo/bukalapak.png') }}" class="h-20px me-3" />Bukalapak Suma Honda
+                                    <img alt="Logo" src="{{ asset('assets/images/logo/bukalapak.png') }}" class="h-20px me-3" />Bukalapak
                                 </a>
 							</div>
 						</form>
