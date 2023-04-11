@@ -25,12 +25,12 @@
                 <div class="table-responsive">
                     <table class="table table-row-dashed table-row-gray-300 align-middle">
                         <thead class="border">
-                            <tr class="fw-bolder text-muted">
-                                <th class="w-75px ps-3 pe-3 text-center">Divisi</th>
-                                <th class="w-75px ps-3 pe-3 text-center">Tanggal</th>
+                            <tr class="fs-8 fw-bolder text-muted">
+                                <th class="w-50px ps-3 pe-3 text-center">Divisi</th>
+                                <th class="w-50px ps-3 pe-3 text-center">Tanggal</th>
                                 <th class="w-100px ps-3 pe-3 text-center">No Faktur</th>
-                                <th class="w-100px ps-3 pe-3 text-center">Cabang</th>
-                                <th class="w-150px ps-3 pe-3 text-center">Jenis</th>
+                                <th class="w-50px ps-3 pe-3 text-center">Cabang</th>
+                                <th class="w-100px ps-3 pe-3 text-center">Jenis</th>
                                 <th class="w-50px ps-3 pe-3 text-center">Jumlah</th>
                                 <th class="min-w-150px ps-3 pe-3 text-center">Alasan</th>
                                 <th class="min-w-100px ps-3 pe-3 text-center">Usertime</th>
@@ -38,7 +38,7 @@
                         </thead>
                         <tbody class="border">
                             @forelse($data_cetak_ulang->data as $data)
-                            <tr class="fs-6 fw-bold text-gray-700">
+                            <tr>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     @if(strtoupper(trim($data->divisi)) == 'HONDA')
                                     <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase">Honda</span>
@@ -48,12 +48,12 @@
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:center;vertical-align:top;">
                                     <div class="row">
-                                        <span class="fs-7 fw-bolder text-gray-800">{{ date('d/m/Y', strtotime($data->tanggal)) }}</span>
+                                        <span class="fs-8 fw-bolder text-gray-800">{{ date('d/m/Y', strtotime($data->tanggal)) }}</span>
                                     </div>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                                     <div class="row">
-                                        <span class="fs-7 fw-bolder text-gray-800">{{ trim($data->no_faktur) }}</span>
+                                        <span class="fs-8 fw-bolder text-gray-800">{{ trim($data->no_faktur) }}</span>
                                     </div>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
@@ -63,19 +63,19 @@
                                     @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
                                     <span class="text-primary fs-8 fw-boldest text-uppercase">{{ trim($data->jenis) }}</span>
                                     @elseif(strtoupper(trim($data->jenis)) == 'PEMINDAHAN KELUAR')
-                                    <span class="text-danger fs-8 fw-boldest text-uppercase">{{ trim($data->jenis) }}</span>
+                                    <span class="text-danger fs-8 fw-boldest text-uppercase">PEMINDAHAN CABANG</span>
                                     @elseif(strtoupper(trim($data->jenis)) == 'PURCHASE ORDER HOTLINE')
-                                    <span class="text-success fs-8 fw-boldest text-uppercase">{{ trim($data->jenis) }}</span>
+                                    <span class="text-success fs-8 fw-boldest text-uppercase">PO HOTLINE</span>
                                     @endif
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:right;vertical-align:top;">
-                                    <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->jml_edit) }}</span>
+                                    <span class="fs-8 fw-bolder text-gray-800">{{ number_format($data->jml_edit) }}</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <p class="fs-7 fw-bolder text-gray-800">{{ $data->alasan }}</p>
+                                    <p class="fs-8 fw-bolder text-gray-800">{{ $data->alasan }}</p>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <p class="fs-7 fw-bolder text-gray-800">{{ $data->usertime }}</p>
+                                    <p class="fs-8 fw-bolder text-gray-800">{{ $data->usertime }}</p>
                                 </td>
                             </tr>
                             @empty
@@ -134,33 +134,72 @@
     @if(strtoupper(trim($device)) == 'MOBILE')
     @forelse($data_cetak_ulang->data as $data)
     <div class="card card-flush mt-4">
-        <div class="card-body">
-            <div class="row">
-                <div class="align-items-center">
-                    <span class="fs-6 fw-boldest text-gray-800">{{ trim($data->no_faktur) }}</span>
-                    @if(strtoupper(trim($data->divisi)) == 'HONDA')
-                    <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase ms-2">Honda</span>
-                    @else
-                    <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase ms-2">FDR</span>
-                    @endif
+        <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
+            @if(strtoupper(trim($data->divisi)) == 'HONDA')
+            <div class="ribbon-label fw-bold bg-danger">
+                <span class="fs-8 fw-boldest text-uppercase">HONDA</span>
+             </div>
+            @else
+            <div class="ribbon-label fw-bold bg-primary">
+                <span class="fs-8 fw-boldest text-uppercase ps-2 pe-2">FDR</span>
+             </div>
+            @endif
+
+            <div class="row mt-2">
+                <div class="col-6">
+                    <div class="row">
+                        <span class="fw-bold fs-7 text-gray-600">Nomor Dokumen:</span>
+                        <span class="fw-bolder fs-7 text-dark mt-1">{{ trim($data->no_faktur) }}</span>
+                    </div>
                 </div>
-                <span class="fs-7 fw-bolder text-gray-800 mt-2">{{ date('d/m/Y', strtotime($data->tanggal)) }}</span>
-                <div class="d-flex align-items-center mt-2">
-                    <span class="badge badge-light-info fs-8 fw-boldest text-uppercase">{{ trim($data->cabang) }}</span>
-                    @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
-                    <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase ms-2">{{ trim($data->jenis) }}</span>
-                    @elseif(strtoupper(trim($data->jenis)) == 'PEMINDAHAN KELUAR')
-                    <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase ms-2">{{ trim($data->jenis) }}</span>
-                    @elseif(strtoupper(trim($data->jenis)) == 'PURCHASE ORDER HOTLINE')
-                    <span class="badge badge-light-success fs-8 fw-boldest text-uppercase ms-2">{{ trim($data->jenis) }}</span>
-                    @endif
+                <div class="col-6">
+                    <div class="row">
+                        <span class="fw-bold fs-7 text-gray-600">Tanggal Proses:</span>
+                        <span class="fw-bolder fs-7 text-dark mt-1">{{ date('d F Y', strtotime($data->tanggal)) }}</span>
+                    </div>
                 </div>
-                <span class="fs-7 fw-bolder text-gray-600 mt-4">Jumlah Edit : </span>
-                <span class="fs-7 fw-bolder text-gray-800">{{ number_format($data->jml_edit) }}</span>
-                <span class="fs-7 fw-bolder text-gray-600 mt-4">Alasan : </span>
-                <p class="fs-7 fw-bolder text-gray-800">{{ $data->alasan }}</p>
-                <span class="fs-7 fw-bolder text-gray-600 mt-4">Usertime : </span>
-                <p class="fs-7 fw-bolder text-gray-800">{{ $data->usertime }}</p>
+            </div>
+            <div class="row mt-4">
+                <div class="col-6">
+                    <div class="row">
+                        <span class="fw-bold fs-7 text-gray-600">Cabang:</span>
+                        <div class="d-flex">
+                            <span class="badge badge-light-info fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->cabang) }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <span class="fw-bold fs-7 text-gray-600">Jenis Transaksi:</span>
+                        <div class="d-flex">
+                            @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
+                            <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
+                            @elseif(strtoupper(trim($data->jenis)) == 'PEMINDAHAN KELUAR')
+                            <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
+                            @elseif(strtoupper(trim($data->jenis)) == 'PURCHASE ORDER HOTLINE')
+                            <span class="badge badge-light-success fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-6">
+                    <div class="row">
+                        <span class="fw-bold fs-7 text-gray-600">Jumlah Edit:</span>
+                        <span class="fw-bolder fs-7 text-gray-800">{{ number_format($data->jml_edit) }}</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <span class="fw-bold fs-7 text-gray-600">Alasan Edit:</span>
+                        <span class="fw-bolder fs-7 text-gray-800">{{ $data->alasan }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <span class="fw-bold fs-7 text-gray-600">Usertime:</span>
+                <span class="fw-bolder fs-7 text-gray-800">{{ $data->usertime }}</span>
             </div>
         </div>
     </div>
