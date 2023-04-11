@@ -7,7 +7,7 @@
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Cetak Ulang Faktur</span>
-                    <span class="text-muted fw-boldest fs-7">Form cetak ulang faktur</span>
+                    <span class="text-muted fw-bolder fs-7">Form cetak ulang faktur</span>
                 </h3>
                 <div class="card-toolbar">
                     <button id="btnTambah" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalEntryCetakUlang">
@@ -146,41 +146,32 @@
             @endif
 
             <div class="row mt-2">
-                <div class="col-6">
-                    <div class="row">
-                        <span class="fw-bold fs-7 text-gray-600">Nomor Dokumen:</span>
-                        <span class="fw-bolder fs-7 text-dark mt-1">{{ trim($data->no_faktur) }}</span>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="row">
-                        <span class="fw-bold fs-7 text-gray-600">Tanggal Proses:</span>
-                        <span class="fw-bolder fs-7 text-dark mt-1">{{ date('d F Y', strtotime($data->tanggal)) }}</span>
-                    </div>
+                <span class="fw-bold fs-7 text-gray-600">Nomor Dokumen:</span>
+                <span class="fw-bolder fs-7 text-dark mt-1">{{ trim($data->no_faktur) }}</span>
+            </div>
+            <div class="row mt-4">
+                <span class="fw-bold fs-7 text-gray-600">Tanggal Proses:</span>
+                <span class="fw-bolder fs-7 text-dark mt-1">{{ date('d F Y', strtotime($data->tanggal)) }}</span>
+            </div>
+            <div class="row mt-4">
+                <span class="fw-bold fs-7 text-gray-600">Jenis Transaksi:</span>
+                <div class="d-flex">
+                    @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
+                    <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
+                    @elseif(strtoupper(trim($data->jenis)) == 'PEMINDAHAN KELUAR')
+                    <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
+                    @elseif(strtoupper(trim($data->jenis)) == 'PURCHASE ORDER HOTLINE')
+                    <span class="badge badge-light-success fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
+                    @endif
                 </div>
             </div>
             <div class="row mt-4">
-                <div class="col-6">
-                    <div class="row">
-                        <span class="fw-bold fs-7 text-gray-600">Cabang:</span>
-                        <div class="d-flex">
-                            <span class="badge badge-light-info fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->cabang) }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="row">
-                        <span class="fw-bold fs-7 text-gray-600">Jenis Transaksi:</span>
-                        <div class="d-flex">
-                            @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
-                            <span class="badge badge-light-primary fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
-                            @elseif(strtoupper(trim($data->jenis)) == 'PEMINDAHAN KELUAR')
-                            <span class="badge badge-light-danger fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
-                            @elseif(strtoupper(trim($data->jenis)) == 'PURCHASE ORDER HOTLINE')
-                            <span class="badge badge-light-success fs-8 fw-boldest text-uppercase mt-1">{{ trim($data->jenis) }}</span>
-                            @endif
-                        </div>
-                    </div>
+                <span class="fw-bold fs-7 text-gray-600">Cabang:</span>
+                <div class="fw-bolder fs-7 text-gray-800 d-flex align-items-center flex-wrap">
+                    <span class="pe-2">{{ $data->kode_cabang }}</span>
+                    <span class="fs-7 fw-bolder text-info d-flex align-items-center">
+                        <span class="bullet bullet-dot bg-info me-2"></span>{{ $data->nama_cabang }}
+                    </span>
                 </div>
             </div>
             <div class="row mt-4">
@@ -192,14 +183,14 @@
                 </div>
                 <div class="col-6">
                     <div class="row">
-                        <span class="fw-bold fs-7 text-gray-600">Alasan Edit:</span>
-                        <span class="fw-bolder fs-7 text-gray-800">{{ $data->alasan }}</span>
+                        <span class="fw-bold fs-7 text-gray-600">Usertime:</span>
+                        <span class="fw-bolder fs-7 text-gray-800">{{ $data->usertime }}</span>
                     </div>
                 </div>
             </div>
             <div class="row mt-4">
-                <span class="fw-bold fs-7 text-gray-600">Usertime:</span>
-                <span class="fw-bolder fs-7 text-gray-800">{{ $data->usertime }}</span>
+                <span class="fw-bold fs-7 text-gray-600">Alasan Edit:</span>
+                <span class="fw-bolder fs-7 text-gray-800">{{ $data->alasan }}</span>
             </div>
         </div>
     </div>
