@@ -1,11 +1,11 @@
 {
-    "name": "Suma-PMO",
-    "short_name": "PMO",
+    "name": "Suma Parts Mobile Ordering",
+    "short_name": "Suma-PMO",
     "start_url": "/index.php",
-    "background_color": "#f1416c",
-    "description": "Suma Parts Mobile Ordering",
+    "background_color": "#ffffff",
+    "description": "Suma Parts Mobile Ordering Application",
     "display": "fullscreen",
-    "theme_color": "#f1416c",
+    "theme_color": "#ffffff",
     "icons": [
         {
             "src": "https://suma-honda.id/assets/images/logo/ic_suma.png",
