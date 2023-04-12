@@ -131,4 +131,16 @@ $(document).ready(function () {
         $('#inputFilterDealer').val($(this).data('kode_dealer'));
         $('#modalOptionDealerSalesman').modal('hide');
     });
+
+    $('#modalFilter').on('click', '#btnFilterReset', function (e) {
+        $('#selectFilterMonth').val(new Date().getMonth() + 1);
+        $('#inputFilterYear').val(new Date().getFullYear());
+        $('#inputFilterSalesman').val('');
+        $('#inputFilterDealer').val('');
+        loadMasterData(1,10,$('#inputFilterYear').val(),$('#selectFilterMonth').val(),$('#inputFilterSalesman').val(),$('#inputFilterDealer').val());
+    });
+
+    $('#modalFilter').on('click', '#btnFilterProses', function (e) {
+        loadMasterData(1,10,$('#inputFilterYear').val(),$('#selectFilterMonth').val(),$('#inputFilterSalesman').val(),$('#inputFilterDealer').val())
+    });
 });

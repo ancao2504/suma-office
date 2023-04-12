@@ -34,9 +34,9 @@ class PurchaseOrderFormDetailController extends Controller
                     $jumlah_data = (double)$jumlah_data + 1;
 
                     if($data_detail->terlayani > 0) {
-                        $table_detail .= '<div class="card card-flush" id="viewDetailPofTerlayani" type="button" data-kode="'.strtoupper(trim($data_detail->part_number)).'">';
+                        $table_detail .= '<div class="card card-flush mt-5" id="viewDetailPofTerlayani" type="button" data-kode="'.strtoupper(trim($data_detail->part_number)).'">';
                     } else {
-                        $table_detail .= '<div class="card card-flush">';
+                        $table_detail .= '<div class="card card-flush mt-5">';
                     }
 
                     $table_detail .= '<div class="card-body">

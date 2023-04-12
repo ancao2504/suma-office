@@ -275,7 +275,7 @@
                 'pof_detail_edit_part' : "{{ route('orders.purchaseorderform.form.detail.edit') }}",
                 'pof_detail_hapus_part' : "{{ route('orders.purchaseorderform.form.detail.hapus') }}",
                 'pof_detail_simpan_part' : "{{ route('orders.purchaseorderform.form.detail.simpan') }}",
-            }
+            };
         </script>
         <script src="{{ asset('assets/js/custom/autonumeric.js') }}?v={{ time() }}"></script>
         <script src="{{ asset('assets/js/suma/orders/purchaseorderform/purchaseorderformformdetail.js') }}?v={{ time() }}"></script>
