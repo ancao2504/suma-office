@@ -8,6 +8,9 @@ $(document).ajaxStop(function () {
 });
 $(document).ready(function () {
 
+    $('body').attr('data-kt-aside-minimize', 'on');
+    $('#kt_aside_toggle').addClass('active');
+
     $('#modalEntryPartNumber').modal({
         backdrop: 'static', keyboard: false
     });
@@ -345,6 +348,6 @@ $(document).ready(function () {
         // show modal modalOptionPartNumber
         $('#modalOptionPartNumber').modal('show');
         loadDataPartNumber(1,10,'');
-        
+
     });
 });
