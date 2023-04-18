@@ -78,9 +78,9 @@
                                                     <th class="min-w-175px">Part Number</th>
                                                     <th class="min-w-70px text-end">Order</th>
                                                     <th class="min-w-70px text-end">Jual</th>
-                                                    <th class="min-w-100px text-end">Harga</th>
+                                                    <th class="min-w-70px text-end">Harga</th>
                                                     <th class="min-w-70px text-end">Disc</th>
-                                                    <th class="min-w-100px text-end">Total</th>
+                                                    <th class="min-w-70px text-end">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="fs-7 fw-bold text-dark">
