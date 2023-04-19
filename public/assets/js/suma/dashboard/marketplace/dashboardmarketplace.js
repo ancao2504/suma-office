@@ -173,3 +173,9 @@ $(function chartSalesByDate() {
 
     });
 });
+
+$(document).ready(function () {
+    $('#btnSearch').on('click', function (e) {
+        loading.block();
+    });
+});

@@ -45,7 +45,7 @@
                             </select>
                             <input type="text" id="inputYear" name="year" class="form-control" placeholder="Tahun" autocomplete="off"
                                 @if(isset($data_filter->year)) value="{{ $data_filter->year }}" @else value="{{ old('year') }}"@endif>
-                            <button id="btnFilterMasterData" class="btn btn-icon btn-primary" type="submit">
+                            <button id="btnSearch" class="btn btn-icon btn-primary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
