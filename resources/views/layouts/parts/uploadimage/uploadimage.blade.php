@@ -39,11 +39,11 @@
             </div>
             {{-- end btn sumit --}}
             {{-- keterangan List Part --}}
-            <div class="d-flex justify-content-between my-5">
-                <div class="title">
+            <div class="row">
+                <div class="title col-sm-12 col-md-6">
                     <h3 class="text-dark font-weight-bold">List Part</h3>
                 </div>
-                <div class="input-group w-50">
+                <div class="input-group w-lg-50 w-sm-50 my-10 col-sm-12 col-md-6">
                     <input id="inputCariPartNumber" name="cari_part_number" type="text" class="form-control"
                         style="text-transform:uppercase" placeholder="Cari Part Number" value="{{ $search }}" autocomplete="off">
                     <button type="button" class="btn btn-primary" id="cariImagePart">Cari</button>
