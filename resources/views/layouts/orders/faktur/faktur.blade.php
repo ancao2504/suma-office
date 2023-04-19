@@ -3,7 +3,7 @@
 @section('subtitle','Faktur')
 @section('container')
 <div class="row g-0">
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Faktur</span>
@@ -174,7 +174,7 @@
 
     @if(strtoupper(trim($data_device->device)) != 'DESKTOP')
     @forelse($data_faktur as $data)
-    <div class="card card-flush mt-6">
+    <div class="card card-flush shadow mt-6">
         <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
             @if (trim($data->kode_tpc) == '14')
             <div class="ribbon-label fw-bold bg-primary">
@@ -263,7 +263,7 @@
         </div>
     </div>
     @empty
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-body d-flex flex-column justify-content-center pe-0 h-300px">
             <div class="row text-center pe-10">
                 <span class="svg-icon svg-icon-muted">

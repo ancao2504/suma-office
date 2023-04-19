@@ -1,5 +1,5 @@
 @if(strtoupper(trim($data_device->device)) == 'DESKTOP')
-<div class="card card-flush mt-4">
+<div class="card card-flush shadow mt-4">
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-row-dashed table-row-gray-300 align-middle">
@@ -99,7 +99,7 @@
 </div>
 @else
 @forelse($data_pembayaran as $data)
-<div class="card card-flush mt-4">
+<div class="card card-flush shadow mt-4">
     <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
         @if($data->status == 'LUNAS')
         <div class="ribbon-label fw-bold bg-success">
@@ -176,7 +176,7 @@
     </div>
 </div>
 @empty
-<div class="card card-flush mt-4">
+<div class="card card-flush shadow mt-4">
     <div class="card-body d-flex flex-column justify-content-center pe-0 h-300px">
         <div class="row text-center pe-10">
             <span class="svg-icon svg-icon-muted">

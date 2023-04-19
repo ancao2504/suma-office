@@ -446,6 +446,32 @@ class ApiService
         return $response;
     }
 
+    public static function DashboardMarketplaceSalesByDate($year, $month, $companyid)
+    {
+        $request = 'dashboard/marketplace/salesbydate';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'year'              => $year,
+            'month'             => $month,
+            'companyid'         => $companyid
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function DashboardMarketplaceSalesByLocation($year, $month, $companyid)
+    {
+        $request = 'dashboard/marketplace/salesbylocation';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'year'              => $year,
+            'month'             => $month,
+            'companyid'         => $companyid
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function DealerDaftar($page, $per_page, $kode_dealer, $user_id, $role_id, $companyid)
     {
         $request = 'profile/dealer/daftar';

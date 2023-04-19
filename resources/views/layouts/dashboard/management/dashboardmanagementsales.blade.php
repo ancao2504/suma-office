@@ -2,7 +2,7 @@
 @section('title','Home')
 @section('subtitle','Dashboard')
 @section('container')
-<div class="card card-flush">
+<div class="card card-flush shadow">
     <div class="card-header align-items-center border-0 mt-4 mb-4">
         <h3 class="card-title align-items-start flex-column">
             <span class="fw-bolder mb-2 text-dark">Management Sales</span>
@@ -51,7 +51,7 @@
 
 <div class="row mt-2">
     <div class="col-md-6 mt-4">
-        <div class="card card-flush"
+        <div class="card card-flush shadow"
             style="background-color: #ffff;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 1200px;">
             <div class="card-header pt-5">
                 <div class="card-title d-flex flex-column">
@@ -106,7 +106,7 @@
     <div class="col-md-6 mt-4">
         <div class="row">
             <div class="col-md-4">
-                <div class="card card-flush p-4"
+                <div class="card card-flush shadow p-4"
                     style="background-color: #009EF7;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 200px;height: 153px;">
                     <span class="text-white fw-bolder fs-6 me-4 mb-2">Pusat</span>
                     <table>
@@ -131,7 +131,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card card-flush p-4"
+                <div class="card card-flush shadow p-4"
                     style="background-color: #F1416C;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 200px;height: 153px;">
                     <span class="text-white fw-bolder fs-6 me-4 mb-2">PC</span>
                     <table>
@@ -156,7 +156,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card card-flush p-4"
+                <div class="card card-flush shadow p-4"
                     style="background-color: #7239EA;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 200px;height: 153px;">
                     <span class="text-white fw-bolder fs-6 me-4 mb-2">Online</span>
                     <table>
@@ -184,7 +184,7 @@
     </div>
     @else
     <div class="col-md-6 mt-4">
-        <div class="card card-flush"
+        <div class="card card-flush shadow"
             style="background-color: #ffff;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 1200px;">
             <div class="card-header pt-5">
                 <div class="card-title d-flex flex-column">
@@ -243,7 +243,7 @@
 
 <div class="row">
     <div class="col-lg-6 mt-6">
-        <div class="card card-flush h-xl-100">
+        <div class="card card-flush shadow h-xl-100">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-gray-800">Sales All</span>
@@ -386,7 +386,7 @@
     </div>
     @if($data_filter->fields == 'QUANTITY')
     <div class="col-lg-6 mt-6">
-        <div class="card card-flush h-xl-100">
+        <div class="card card-flush shadow h-xl-100">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-gray-800">Comparison</span>
@@ -416,7 +416,7 @@
     </div>
     @else
     <div class="col-lg-6 mt-6">
-        <div class="card card-flush h-xl-100">
+        <div class="card card-flush shadow h-xl-100">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-gray-800">Gross Profit</span>
@@ -556,7 +556,7 @@
 
 <div class="row mt-6">
     <div class="col-lg-12">
-        <div class="card card-flush h-xl-100">
+        <div class="card card-flush shadow h-xl-100">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-gray-800">Sales By Date</span>
@@ -589,7 +589,7 @@
 
 <div class="row mt-6">
     <div class="col-12">
-        <div class="card card-flush">
+        <div class="card card-flush shadow">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-gray-800">Sales By Product</span>

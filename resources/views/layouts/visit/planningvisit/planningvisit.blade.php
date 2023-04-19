@@ -3,7 +3,7 @@
 @section('subtitle','Planning Visit')
 @section('container')
 <div class="row g-0">
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Planning Visit</span>
@@ -22,7 +22,7 @@
 </div>
 <div class="row">
     @if(strtoupper(trim($data_device->device)) == 'DESKTOP')
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-row-dashed table-row-gray-300 align-middle">
@@ -124,7 +124,7 @@
     </div>
     @else
     @forelse($data_planning_visit as $data)
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
             @if ($data->check_in != '' && $data->check_out != '')
             <div class="ribbon-label fw-bold bg-success">
@@ -200,7 +200,7 @@
         </div>
     </div>
     @empty
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-body d-flex flex-column justify-content-center pe-0 h-300px">
             <div class="row text-center pe-10">
                 <span class="svg-icon svg-icon-muted">

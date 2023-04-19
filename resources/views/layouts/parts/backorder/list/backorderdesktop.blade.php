@@ -1,6 +1,6 @@
 @forelse($data_bo as $data)
 <div class="col-6 col-sm-3 col-sm-2">
-    <div class="card ribbon ribbon-top ribbon-vertical h-380px mb-5">
+    <div class="card card-flush shadow ribbon ribbon-top ribbon-vertical h-380px mb-5">
         @if ($data->kode_tpc == '14')
         <div class="ribbon-label fw-bold bg-danger">
             <i class="bi bi-percent fs-2 text-white"></i>
@@ -55,7 +55,7 @@
 </div>
 @empty
 <div class="col-md-12">
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-body d-flex flex-column justify-content-center pe-0 h-300px">
             <div class="row text-center pe-10">
                 <span class="svg-icon svg-icon-muted">

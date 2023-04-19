@@ -87,6 +87,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/dashboard/dealer', 'App\Dashboard\DashboardDealerController@index')->name('dealer');
             });
 
+            Route::name('marketplace.')->group(function () {
+                Route::get('/dashboard/marketplace', 'App\Dashboard\DashboardMarketplaceController@dashboardMarketplace')->name('marketplace');
+            });
+
             Route::name('management.')->group(function () {
                 Route::get('/dashboard/management', 'App\Dashboard\Management\DashboardManagementController@index')->name('management');
                 Route::get('/dashboard/management/sales', 'App\Dashboard\Management\DashboardManagementSalesController@index')->name('sales');

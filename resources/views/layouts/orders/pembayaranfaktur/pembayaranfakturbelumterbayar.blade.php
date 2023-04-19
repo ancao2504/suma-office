@@ -2,7 +2,7 @@
 @section('containerpembayaranfaktur')
 <div class="row g-0">
     @if(request()->get('salesman') || request()->get('dealer'))
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Belum Terbayar</span>
@@ -29,7 +29,7 @@
         </div>
     </div>
     @else
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="p-4">
             <div class="alert alert-danger d-flex align-items-center p-5">
                 <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">

@@ -2,7 +2,7 @@
 @section('containerpembayaranfaktur')
 <div class="row g-0">
     @if (request()->get('month') ||request()->get('year') ||request()->get('salesman') || request()->get('dealer'))
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Terbayar</span>
@@ -45,14 +45,14 @@
         </div>
     </div>
     @else
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Filter Terbayar</span>
                 <span class="text-muted fw-bold fs-7">Daftar faktur yang sudah terbayar (data yang ditampilkan berdasarkan bulan dan tahun faktur)</span>
             </h3>
         </div>
-        <div class="card-boady">
+        <div class="card-body">
             <form id="formFilter" name="formFilter" autofill="off" autocomplete="off" method="get" action="{{ route('orders.pembayaranfaktur.daftar-terbayar') }}">
                 <div class="modal-body row">
                     <div class="fv-row">

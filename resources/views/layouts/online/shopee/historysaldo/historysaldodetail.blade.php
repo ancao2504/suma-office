@@ -1,8 +1,8 @@
 @extends('layouts.online.shopee.historysaldo.historysaldo')
 @section('containerhistorysaldo')
 <div class="row g-0">
-    <div class="card card-flush mb-6">
-        <div class="card-header align-items-center border-0 mt-4 mb-4">
+    <div class="card card-flush shadow">
+        <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Detail Saldo</span>
                 <span class="text-muted fw-bold fs-7">Daftar list saldo detail marketplace shopee</span>
@@ -41,7 +41,7 @@
 @endforeach
 
 @if(strtoupper(trim(trim($data->transaction_type))) == 'ESCROW_VERIFIED_ADD')
-<div class="card mb-5 mb-xl-8 mt-6">
+<div class="card card-flush shadow mb-5 mb-xl-8 mt-6">
     <div class="row pt-4 pb-4 ps-6 pe-6">
         <div class="col-lg-6 text-start">
             <span class="fs-8 fw-bold text-gray-600">Transaksi:
@@ -155,7 +155,7 @@
     </div>
 </div>
 @elseif(str_contains(strtoupper(trim(trim($data->transaction_type))), 'WITHDRAWAL'))
-<div class="card mb-5 mb-xl-8 mt-6" style="background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);">
+<div class="card card-flush shadow mb-5 mb-xl-8 mt-6" style="background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);">
     <div class="card-body">
         <div class="row align-items-center h-75">
             <div class="col-7">
@@ -179,7 +179,7 @@
     </div>
 </div>
 @else
-<div class="card mb-5 mb-xl-8 mt-6"
+<div class="card card-flush shadow mb-5 mb-xl-8 mt-6"
     @if((double)$data->amount > 0) style="background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);"
     @else style="background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);" @endif>
     <div class="card-body">

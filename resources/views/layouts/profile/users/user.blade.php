@@ -4,7 +4,7 @@
 @section('container')
 <div class="row g-0">
     <form id="formUsers" action="{{ route('profile.users.daftar') }}" method="get" autocomplete="off">
-        <div class="card card-flush">
+        <div class="card card-flush shadow">
             <div class="card-header align-items-center border-0 mt-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Users</span>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card card-flush">
+            <div class="card card-flush shadow">
                 <div class="card-body pt-0">
                     <a href="{{ route('profile.users.tambah') }}" role="button" class="btn btn-sm btn-primary">Tambah</a>
                     <div class="row mt-12">

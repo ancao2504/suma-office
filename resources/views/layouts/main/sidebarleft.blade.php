@@ -201,6 +201,14 @@
                                 <span class="menu-title">Dealer</span>
                             </a>
                         </div>
+                        <div class="menu-item">
+                            <a class="menu-link {{ (Request::is('dashboard/marketplace')) ? 'active' : '' }}" href="{{ route('dashboard.marketplace.marketplace') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Marketplace</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 @endif

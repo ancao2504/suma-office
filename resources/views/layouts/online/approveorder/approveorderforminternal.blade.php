@@ -4,7 +4,7 @@
 @section('container')
 <div class="row g-0">
     @forelse($data as $data_internal)
-    <div class="card card-flush mt-6">
+    <div class="card card-flush shadow mt-6">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Data Faktur</span>
@@ -197,7 +197,7 @@
         </div>
     </div>
     @empty
-    <div class="card card-flush mt-6">
+    <div class="card card-flush shadow mt-6">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Data Faktur</span>

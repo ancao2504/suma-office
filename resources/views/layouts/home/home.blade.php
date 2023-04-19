@@ -2,7 +2,7 @@
 @section('title','Home')
 @section('subtitle','Dashboard')
 @section('container')
-    <div class="card card-flush p-12">
+    <div class="card card-flush shadow p-12">
         <div class="row">
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                 <div class="me-7 mb-4">

@@ -1,6 +1,6 @@
 @forelse($data_part as $data)
 <div class="col-6 col-sm-3 col-sm-2">
-    <div id="btnPartNumberCart" class="card ribbon ribbon-top ribbon-vertical pt-5 h-380px mb-5" type="button" role="button" data-kode="{{ $data->part_number }}">
+    <div id="btnPartNumberCart" class="card card-flush shadow ribbon ribbon-top ribbon-vertical pt-5 h-380px mb-5" type="button" role="button" data-kode="{{ $data->part_number }}">
         @if($data->discount_plus > 0)
         <div class="ribbon-label fw-bold bg-primary">
             <div class="row">
@@ -51,7 +51,7 @@
 </div>
 @empty
 <div class="col-12">
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-body d-flex flex-column justify-content-center pe-0 h-300px">
             <div class="row text-center pe-10">
                 <span class="svg-icon svg-icon-muted">

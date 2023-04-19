@@ -3,7 +3,7 @@
 @section('subtitle','Dashboard')
 @section('container')
     <form id="formDashboardDealer" action="{{ route('dashboard.dealer.dealer') }}" method="get">
-        <div class="card card-flush">
+        <div class="card card-flush shadow">
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Dealer</span>
@@ -79,7 +79,7 @@
 
         <div class="row mt-4">
             <div class="col-md-4 mt-4">
-                <div class="card card-flush"
+                <div class="card card-flush shadow"
                     style="background-color: #f1416c;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 500px;">
                     <div class="card-header pt-5">
                         <div class="card-title d-flex flex-column">
@@ -101,7 +101,7 @@
             </div>
 
             <div class="col-md-4 mt-4">
-                <div class="card card-flush"
+                <div class="card card-flush shadow"
                     style="background-color: #50cd89;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 500px;">
                     <div class="card-header pt-5">
                         <div class="card-title d-flex flex-column">
@@ -123,7 +123,7 @@
             </div>
 
             <div class="col-md-4 mt-4">
-                <div class="card card-flush"
+                <div class="card card-flush shadow"
                     style="background-color: #009ef7;background-image:url('{{ asset('assets/media/svg/shapes/wave-bg-dark.svg') }}');background-size: 500px;">
                     <div class="card-header pt-5">
                         <div class="card-title d-flex flex-column">

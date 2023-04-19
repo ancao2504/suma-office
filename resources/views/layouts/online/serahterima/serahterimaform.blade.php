@@ -5,7 +5,7 @@
 <div class="row g-0">
     <form action="#">
         @csrf
-        <div class="card card-flush">
+        <div class="card card-flush shadow">
             <div class="card-header align-items-center border-0 mt-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Serah Terima Ekspedisi</span>

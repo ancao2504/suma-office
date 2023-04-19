@@ -2,7 +2,7 @@
 @section('title','Profile')
 @section('subtitle','Dealer')
 @section('container')
-    <div class="card mb-5 mb-xl-10">
+    <div class="card card-flush shadow mb-5 mb-xl-10">
         <div class="card-body pt-9 pb-0">
             <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
                 <div class="me-7 mb-4">

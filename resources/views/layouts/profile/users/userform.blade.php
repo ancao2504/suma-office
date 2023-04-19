@@ -5,7 +5,7 @@
 <div class="row g-0">
     <form enctype="multipart/form-data" id="usersForm" name="usersForm" autofill="off" autocomplete="off" method="POST" action="{{ route('profile.users.simpan') }}">
         @csrf
-        <div class="card card-flush">
+        <div class="card card-flush shadow">
             <div class="card-header ribbon ribbon-top ribbon-vertical pt-5">
                 @if (trim($status_form) == 'ADD')
                 <div class="ribbon-label fw-bold bg-primary">

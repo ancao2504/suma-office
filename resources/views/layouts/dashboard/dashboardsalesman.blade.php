@@ -2,7 +2,7 @@
 @section('title','Home')
 @section('subtitle','Dashboard')
 @section('container')
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Sales Performance</span>
@@ -286,7 +286,7 @@
 
     <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
         <div class="col-xl-4">
-            <div class="card card-flush h-xl-200">
+            <div class="card card-flush shadow h-xl-200">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-dark">Pencapaian</span>
@@ -321,7 +321,7 @@
         </div>
 
         <div class="col-xl-8">
-            <div class="card card-flush h-xl-200">
+            <div class="card card-flush shadow h-xl-200">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-dark">Performa Penjualan</span>
@@ -357,7 +357,7 @@
     </div>
 
     <div class="row g-5">
-        <div class="card card-flush h-xl-100">
+        <div class="card card-flush shadow h-xl-100">
             <div class="card-header pt-7">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-dark">Omzet & Target Sales</span>
@@ -460,7 +460,7 @@
 
         @if (strtoupper(trim($device)) == 'MOBILE')
         @foreach ($detail_omset as $data)
-        <div class="card card-flush h-xl-100">
+        <div class="card card-flush shadow h-xl-100">
             <div class="d-flex p-5">
                 <div class="symbol symbol-50px me-5">
                     @if (strtoupper(trim($data->keterangan_selisih)) == 'BERTAHAN')

@@ -1,5 +1,5 @@
 @foreach($data_order as $data)
-<div class="card mb-5 mb-xl-8 mt-6">
+<div class="card card-flush shadow mb-5 mb-xl-8 mt-6">
     <div class="row pt-4 pb-4 ps-6 pe-6">
         <div class="col-lg-6 text-start">
             <span class="fs-7 fw-bolder text-gray-600">Order ID:

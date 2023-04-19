@@ -19,7 +19,7 @@
 @endif
 @endif
 <div class="row g-0">
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Invoice</span>
@@ -188,7 +188,7 @@
         @endif
     @else
         @forelse($data->faktur->list as $data_internal)
-        <div class="card card-flush mt-6">
+        <div class="card card-flush shadow mt-6">
             <div class="card-header align-items-center border-0 mt-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Data Faktur</span>
@@ -381,7 +381,7 @@
             </div>
         </div>
         @empty
-        <div class="card card-flush mt-6">
+        <div class="card card-flush shadow mt-6">
             <div class="card-header align-items-center border-0 mt-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Data Faktur</span>

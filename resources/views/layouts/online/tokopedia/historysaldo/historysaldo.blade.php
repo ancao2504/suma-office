@@ -3,7 +3,7 @@
 @section('subtitle','History Saldo')
 @section('container')
 <div class="row g-0">
-    <div class="card card-flush mb-6">
+    <div class="card card-flush shadow mb-6">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">History Saldo</span>

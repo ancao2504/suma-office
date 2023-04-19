@@ -2,7 +2,7 @@
 @section('title','Home')
 @section('subtitle','Dashboard')
 @section('container')
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Management Stock</span>
@@ -34,7 +34,7 @@
 
     <div class="row mt-8">
         <div class="col-lg-6">
-            <div class="card card-flush h-xl-100">
+            <div class="card card-flush shadow h-xl-100">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Stock All</span>
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="card card-flush h-xl-100">
+            <div class="card card-flush shadow h-xl-100">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Pembelian</span>
@@ -84,7 +84,7 @@
     </div>
     <div class="row mt-6">
         <div class="col-lg-6">
-            <div class="card card-flush h-xl-100">
+            <div class="card card-flush shadow h-xl-100">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">FS</span>
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="card card-flush h-xl-100">
+            <div class="card card-flush shadow h-xl-100">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">CNO</span>
@@ -134,7 +134,7 @@
     </div>
     <div class="row mt-6">
         <div class="col-lg-12">
-            <div class="card card-flush">
+            <div class="card card-flush shadow">
                 <div class="card-header pt-7">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-gray-800">Sales By Product</span>

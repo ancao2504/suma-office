@@ -3,7 +3,7 @@
 @section('subtitle','Cetak Ulang')
 @section('container')
     <div class="row g-0">
-        <div class="card card-flush">
+        <div class="card card-flush shadow">
             <div class="card-header align-items-center border-0 mt-4 mb-4">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="fw-bolder mb-2 text-dark">Cetak Ulang Faktur</span>
@@ -57,7 +57,7 @@
                                     </div>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
-                                    <span class="badge badge-light-info fs-8 fw-boldest text-uppercase">{{ trim($data->cabang) }}</span>
+                                    <span class="badge badge-light-info fs-8 fw-boldest text-uppercase">{{ trim($data->kode_cabang) }}</span>
                                 </td>
                                 <td class="ps-3 pe-3" style="text-align:left;vertical-align:top;">
                                     @if(strtoupper(trim($data->jenis)) == 'FAKTUR')
@@ -133,7 +133,7 @@
 
     @if(strtoupper(trim($device)) == 'MOBILE')
     @forelse($data_cetak_ulang->data as $data)
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-body ribbon ribbon-top ribbon-vertical pt-5">
             @if(strtoupper(trim($data->divisi)) == 'HONDA')
             <div class="ribbon-label fw-bold bg-danger">

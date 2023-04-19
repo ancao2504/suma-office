@@ -3,7 +3,7 @@
 @section('subtitle','Dashboard')
 @section('container')
 <form id="formDashboardManagementSales">
-    <div class="card card-flush">
+    <div class="card card-flush shadow">
         <div class="card-header align-items-center border-0 mt-4 mb-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Dashboard Marketing</span>
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Grand Total</span>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="card card-flush mt-4">
+    <div class="card card-flush shadow mt-4">
         <div class="card-header align-items-center border-0 mt-4">
             <h3 class="card-title align-items-start flex-column">
                 <span class="fw-bolder mb-2 text-dark">Total Marketing</span>
