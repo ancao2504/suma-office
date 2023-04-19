@@ -637,7 +637,7 @@ class CartController extends Controller
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
 
-            return redirect()->route('orders.cart-check-out-result', ['kode' => $data])->with('success', 'Data Berhasil Diproses');
+            return redirect()->route('orders.cart.checkout.result', ['kode' => $data])->with('success', 'Data Berhasil Diproses');
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }

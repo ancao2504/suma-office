@@ -72,7 +72,7 @@ class uplooadImageController extends Controller
         }
         // return redirect()->back()->with('success', 'Data Berhasil Diupload');
         // redirect dan membawa $request->search
-        return redirect()->route('uploadimage.index', ['search' => $request->search])->with('success', 'Data Berhasil Diupload');
+        return redirect()->route('parts.uploadimage.form-input', ['search' => $request->search])->with('success', 'Data Berhasil Diupload');
         
     }
 
