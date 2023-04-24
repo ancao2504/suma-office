@@ -166,4 +166,14 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    const data_page = {
+        'start_record': '{{ $data_page->from }}'
+    }
+</script>
+<script src="{{ asset('assets/js/suma/online/approveorder/daftar.js') }}?v={{ time() }}"></script>
+@endpush
 @endsection
+
