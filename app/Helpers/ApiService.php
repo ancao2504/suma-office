@@ -362,6 +362,26 @@ class ApiService
         return $response;
     }
 
+    public static function DashboardManagementQuarter($year, $fields, $option_company, $companyid, $kabupaten,
+                                $supervisor, $salesman, $produk, $user_id)
+    {
+        $request = 'dashboard/management/quarter/index';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'year'          => $year,
+            'fields'        => $fields,
+            'option_company'=> $option_company,
+            'companyid'     => $companyid,
+            'kabupaten'     => $kabupaten,
+            'supervisor'    => $supervisor,
+            'salesman'      => $salesman,
+            'produk'        => $produk,
+            'user_id'       => $user_id,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function DashboardMarketingGroupPerProduk($year, $month, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
         $request = 'dashboard/marketing/pencapaian/perproduk';
@@ -536,11 +556,15 @@ class ApiService
         return $response;
     }
 
-    public static function OptionCompany()
+    public static function OptionCompany($search, $page, $per_page)
     {
         $request = 'options/company';
         $header = ['Authorization' => session()->get('Authorization')];
-        $body = [];
+        $body = [
+            'search'        => $search,
+            'page'          => $page,
+            'per_page'      => $per_page,
+        ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
@@ -601,6 +625,19 @@ class ApiService
             'search'    => $search,
             'page'      => $page,
             'per_page'  => $per_page,
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
+    public static function OptionKabupaten($search, $page, $per_page)
+    {
+        $request = 'options/kabupaten';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'search'    => $search,
+            'page'      => $page,
+            'per_page'  => $per_page
         ];
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;

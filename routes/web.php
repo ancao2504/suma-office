@@ -95,6 +95,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/dashboard/management', 'App\Dashboard\Management\DashboardManagementController@index')->name('management');
                 Route::get('/dashboard/management/sales', 'App\Dashboard\Management\DashboardManagementSalesController@index')->name('sales');
                 Route::get('/dashboard/management/stock', 'App\Dashboard\Management\DashboardManagementStockController@index')->name('stock');
+                Route::get('/dashboard/management/quarter', 'App\Dashboard\Management\DashboardManagementQuarterController@index')->name('quarter');
             });
 
             Route::name('marketing.')->group(function () {
@@ -278,8 +279,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
         Route::name('option.')->group(function () {
             Route::controller(OptionController::class)->group(function () {
+                Route::get('/option/company', 'optionCompany')->name('company');
                 Route::get('/option/dealer', 'optionDealer')->name('dealer');
                 Route::get('/option/dealersalesman', 'optionDealerSalesman')->name('dealer-salesman');
+                Route::get('/option/kabupaten', 'optionKabupaten')->name('kabupaten');
                 Route::get('/option/salesman', 'optionSalesman')->name('salesman');
                 Route::get('/option/supervisor', 'optionSupervisor')->name('supervisor');
                 Route::get('/option/partnumber', 'optionPartNumber')->name('part-number');
