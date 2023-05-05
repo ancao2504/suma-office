@@ -118,7 +118,7 @@
                                 @if(isset($companyid) && trim($companyid) == trim($list->companyid))
                                     {{"selected"}}
                                 @endif
-                            @endif>{{ trim($list->companyid) }} - {{ trim($list->nama_company) }}</option>
+                            @endif>{{ trim($list->companyid) }} - {{ trim($list->keterangan) }}</option>
                     @endforeach
                     </select>
                 </div>

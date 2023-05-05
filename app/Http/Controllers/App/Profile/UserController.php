@@ -84,12 +84,12 @@ class UserController extends Controller
         }
 
         $data_company = [];
-        $responseApi = ApiService::OptionCompany();
+        $responseApi = ApiService::OptionCompany('', 1, 100);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
-            $data_company = json_decode($responseApi)->data;
+            $data_company = json_decode($responseApi)->data->data;
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
@@ -116,12 +116,12 @@ class UserController extends Controller
         }
 
         $data_company = [];
-        $responseApi = ApiService::OptionCompany();
+        $responseApi = ApiService::OptionCompany('', 1, 100);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
-            $data_company = json_decode($responseApi)->data;
+            $data_company = json_decode($responseApi)->data->data;
         } else {
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
