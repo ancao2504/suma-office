@@ -362,10 +362,10 @@ class ApiService
         return $response;
     }
 
-    public static function DashboardManagementQuarter($year, $fields, $option_company, $companyid, $kabupaten,
+    public static function DashboardManagementKuartal($year, $fields, $option_company, $companyid, $kabupaten,
                                 $supervisor, $salesman, $produk, $user_id)
     {
-        $request = 'dashboard/management/quarter/index';
+        $request = 'dashboard/management/kuartal/index';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,

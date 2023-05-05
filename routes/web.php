@@ -95,7 +95,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/dashboard/management', 'App\Dashboard\Management\DashboardManagementController@index')->name('management');
                 Route::get('/dashboard/management/sales', 'App\Dashboard\Management\DashboardManagementSalesController@index')->name('sales');
                 Route::get('/dashboard/management/stock', 'App\Dashboard\Management\DashboardManagementStockController@index')->name('stock');
-                Route::get('/dashboard/management/quarter', 'App\Dashboard\Management\DashboardManagementQuarterController@index')->name('quarter');
+                Route::get('/dashboard/management/kuartal', 'App\Dashboard\Management\DashboardManagementKuartalController@index')->name('kuartal');
             });
 
             Route::name('marketing.')->group(function () {

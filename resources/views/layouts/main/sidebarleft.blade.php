@@ -155,11 +155,11 @@
                                     </a>
                                 </div>
                                 <div class="menu-item">
-                                    <a class="menu-link {{ (Request::is('dashboard/management/quarter')) ? 'active' : '' }}" href="{{ route('dashboard.management.quarter') }}">
+                                    <a class="menu-link {{ (Request::is('dashboard/management/kuartal')) ? 'active' : '' }}" href="{{ route('dashboard.management.kuartal') }}">
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Quarter</span>
+                                        <span class="menu-title">Kuartal</span>
                                     </a>
                                 </div>
                             </div>

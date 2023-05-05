@@ -381,7 +381,7 @@
         'summary_quarter': {!!json_encode($data_summary_quarter)!!},
     }
 </script>
-<script src="{{ asset('assets/js/suma/dashboard/management/quarter/index.js') }}"></script>
-<script src="{{ asset('assets/js/suma/dashboard/management/quarter/amount.js') }}"></script>
+<script src="{{ asset('assets/js/suma/dashboard/management/kuartal/index.js') }}"></script>
+<script src="{{ asset('assets/js/suma/dashboard/management/kuartal/amount.js') }}"></script>
 @endpush
 @endsection

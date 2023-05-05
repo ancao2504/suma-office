@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\App\Dashboard\Management;
 
-use App\Helpers\ApiRequest;
 use App\Http\Controllers\Controller;
 use App\Helpers\ApiService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Stmt\Return_;
 
-class DashboardManagementQuarterController extends Controller
+class DashboardManagementKuartalController extends Controller
 {
     public function index(Request $request) {
         $year = (empty($request->get('year'))) ? date('Y') : $request->get('year');
@@ -29,7 +24,7 @@ class DashboardManagementQuarterController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Anda tidak dapat mengakses halaman ini');
         }
 
-        $responseApi = ApiService::DashboardManagementQuarter($year, strtoupper(trim($fields)), strtoupper(trim($option_company)),
+        $responseApi = ApiService::DashboardManagementKuartal($year, strtoupper(trim($fields)), strtoupper(trim($option_company)),
                             strtoupper(trim($companyid)), strtoupper(trim($request->get('kabupaten'))),
                             strtoupper(trim($request->get('supervisor'))), strtoupper(trim($request->get('salesman'))),
                             strtoupper(trim($request->get('produk'))), strtoupper(trim($request->session()->get('app_user_id'))));
@@ -113,8 +108,8 @@ class DashboardManagementQuarterController extends Controller
                 ];
             }
 
-            return view('layouts.dashboard.management.dashboardmanagementquarter', [
-                'title_menu'            => 'Dashboard Management Quarter',
+            return view('layouts.dashboard.management.dashboardmanagementKuartal', [
+                'title_menu'            => 'Dashboard Management Kuartal',
                 'data_default'          => $data_default->first(),
                 'data_filter'           => $data_filter->first(),
                 'data'                  => $dataApi,
