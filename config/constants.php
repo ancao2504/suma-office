@@ -2,9 +2,9 @@
 
 return [
     'app' => [
-        'app_base_url'  => 'https://suma-honda.id',
+        'app_base_url'  => 'https://suma-honda.id/suma-pmo/public',
         'app_api_url'   => 'http://43.252.9.117/suma-pmo-api/public/api',
-        'app_images_url' => 'https://suma-honda.id/images/parts',
+        'app_images_url' => 'https://suma-honda.id/images',
     ],
     'api_key' => [
         'api_username'  => 'suma-honda-sby',
