@@ -369,6 +369,7 @@
         'option_company': '{{ trim($data_filter->option_company) }}',
         'companyid': '{{ trim($data_filter->companyid) }}',
         'fields': '{{ trim($data_filter->fields) }}',
+        'kabupaten': '{{ trim($data_filter->kabupaten) }}',
         'supervisor': '{{ trim($data_filter->supervisor) }}',
         'salesman': '{{ trim($data_filter->salesman) }}',
         'produk': '{{ trim($data_filter->produk) }}',
