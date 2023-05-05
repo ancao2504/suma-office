@@ -108,7 +108,7 @@ class DashboardManagementKuartalController extends Controller
                 ];
             }
 
-            return view('layouts.dashboard.management.dashboardmanagementKuartal', [
+            return view('layouts.dashboard.management.dashboardmanagementkuartal', [
                 'title_menu'            => 'Dashboard Management Kuartal',
                 'data_default'          => $data_default->first(),
                 'data_filter'           => $data_filter->first(),
