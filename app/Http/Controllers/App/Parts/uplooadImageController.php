@@ -63,10 +63,10 @@ class uplooadImageController extends Controller
             ],[
                 'file.' . $key . '.required' => 'Gambar tidak boleh kosong',
                 'file.' . $key . '.image' => 'File yang diupload harus berupa gambar',
-                'file.' . $key . '.mimes' => 'File yang diupload harus berupa gambar dengan format jpeg, png, jpg',
+                'file.' . $key . '.mimes' => 'File yang diupload harus berupa gambar dengan format jpg',
                 'file.' . $key . '.max' => 'Ukuran file yang diupload maksimal 2 MB'
             ]);
-            $nama_file =  trim(pathinfo($value->getClientOriginalName(), PATHINFO_FILENAME)) . '.png';
+            $nama_file =  trim(pathinfo($value->getClientOriginalName(), PATHINFO_FILENAME)) . '.jpg';
             // $tujuan_upload = config('app.app_images_url')."/parts/";
             $value->move('images/parts', $nama_file);
         }
