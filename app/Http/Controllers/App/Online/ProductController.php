@@ -32,7 +32,7 @@ class ProductController extends Controller
         // ! Cek apakah ada part_number yang diinputkan
         //  * jika ada maka diasumsikan dari ajax requset dari ajax
         if (!empty($request->get('part_number')) && $request->get('part_number') != '') {
-            
+
             $responseApi = ApiService::SearchProductMarketplaceByPartNumber(
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
@@ -85,12 +85,12 @@ class ProductController extends Controller
             'part_number'   => $param_data->part_number,
         ]);
 
-        // hubungkan dengan server 
+        // hubungkan dengan server
         $responseApi = ApiService::DetailProductMarketplaceByPartNumber(
             strtoupper(trim($request->part_number)),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
-        
+
         if (json_decode($responseApi)->status == 0) {
             return redirect()->back()->withInput()->with('failed', json_decode($responseApi)->message);
         }
@@ -143,7 +143,7 @@ class ProductController extends Controller
             // ! cek apakah domain user yang mengakses adalah suma-honda.id jika bukan maka akan keluar pesan
             // ! karena image yang bisa di upload pada tokopedia harus dengan url image yang diakses secara public
             foreach(json_decode($request->image) as $key => $value){
-                if($request->instance()->getHost() != 'www.suma-honda.id' || $request->instance()->getHost() != 'suma-honda.id'){
+                if(!str_contains($request->instance()->getHost(), 'suma-honda.id')){
                     return Response()->json([
                         'status'    => 0,
                         'message'   => "Maaf untuk <b>Tokopedia</b> harus dengan Website PMO online yaitu : <a href='https://www.suma-honda.id' target='_blank'>suma-honda.id</a>",
