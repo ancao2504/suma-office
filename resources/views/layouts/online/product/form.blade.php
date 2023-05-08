@@ -24,7 +24,9 @@
             </div>
             <div class="mt-3">
                 <label class="form-label"><span class="required"></span>Nama Produk :</label>
-                <input type="text" name="nama_produk" id="nama_produk" class="form-control mb-3 mb-lg-0" placeholder="Mohon masukan" value="{{ $data_all->name }}" required>
+                <input type="text" name="nama_produk" id="nama_produk" class="form-control mb-3 mb-lg-0" placeholder="Mohon masukan" value="{{ $data_all->name }}"maxlength="70" 
+                pattern="^.{0,70}$"
+                required>
             </div>
             <div class="mt-3">
                 <label class="form-label"><span class="required"></span>Deskripsi :</label>
@@ -50,7 +52,7 @@
                 </div>
                 <div class="col-12 col-md-6 mt-3 mt-md-0">
                     <label class="form-label"><span class="required"></span>Stok :</label>
-                    <input type="text" name="stock_produk" id="stock_produk" class="form-control" placeholder="Mohon masukan" value="" min="0" required oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    <input type="text" name="stock_produk" id="stock_produk" class="form-control" placeholder="Mohon masukan" value="" min="1" required oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
                 <div class="col-12 col-md-6 mt-3">
                     <label class="form-label"><span class="required"></span>Minimal Order :</label>

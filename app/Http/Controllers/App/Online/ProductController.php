@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\app\Online;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Helpers\ApiService;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -109,12 +110,12 @@ class ProductController extends Controller
 
     public function addProduct(Request $request)
     {
-        $request->validate([
+        $validate = Validator::make($request->all(), [
             'image'         => 'required',
-            'nama'          => 'required',
+            'nama'          => 'required|max:70',
             'deskripsi'     => 'required',
             'harga'         => 'required',
-            'stok'          => 'required',
+            'stok'          => 'required|numeric|min:1',
             'min_order'     => 'required',
             'berat'         => 'required',
             'ukuran'        => 'required',
@@ -126,9 +127,12 @@ class ProductController extends Controller
         ],[
             'image.required'        => 'Gambar tidak boleh kosong',
             'nama.required'         => 'Nama tidak boleh kosong',
+            'nama.max'              => 'Nama tidak boleh lebih dari 70 karakter',
             'deskripsi.required'    => 'Deskripsi tidak boleh kosong',
             'harga.required'        => 'Harga tidak boleh kosong',
             'stok.required'         => 'Stok tidak boleh kosong',
+            'stok.numeric'          => 'Stok harus berupa angka',
+            'stok.min'              => 'Stok tidak boleh kurang dari 1',
             'min_order.required'    => 'Min Order tidak boleh kosong',
             'berat.required'        => 'Berat tidak boleh kosong',
             'ukuran.required'       => 'Ukuran tidak boleh kosong',
@@ -138,6 +142,14 @@ class ProductController extends Controller
             'status.required'       => 'Status tidak boleh kosong',
             'logistic.required'     => 'Logistic tidak boleh kosong',
         ]);
+
+        if ($validate->fails()) {
+            return Response()->json([
+                'status'    => 0,
+                'message'   => $validate->errors()->first(),
+                'data'      => ''
+            ]);
+        }
 
         if($request->marketplace_update == 'tokopedia'){
             // ! cek apakah domain user yang mengakses adalah suma-honda.id jika bukan maka akan keluar pesan
@@ -163,10 +175,10 @@ class ProductController extends Controller
                 $image_tamp_lokal[$key] = $file_name;
             }
 
-            $request->merge([
-                'image' => json_encode($image_tokped)
-            ]);
-        }
+            $request->merge([                   
+                'image' => json_encode($image_tokped)                  
+            ]);                                                                                                                                                       
+        }                                                  
 
         $responseApi = ApiService::addProductMarketplace(
             strtoupper(trim($request->session()->get('app_user_company_id'))),
@@ -191,7 +203,7 @@ class ProductController extends Controller
             // ! Hapus foto jika sudah di kirim ke tokopedia atau gagal
             foreach($image_tamp_lokal as $key => $value){
                 if(file_exists($value)){
-                    unlink($value);
+                    unlink($value);                                                                                                                                                                                                                                                                                                          
                 }
             }
         }
