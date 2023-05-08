@@ -157,7 +157,7 @@ class ProductController extends Controller
             $image_tamp_lokal = [];
             foreach(json_decode($request->image) as $key => $value){
                 $file = file_get_contents($value);
-                $file_name = config('app.app_images_url').'images/temp/'.$request->get('sku').'_'.$key.'.png';
+                $file_name = config('app.app_images_url').'images/temp/'.$request->get('sku').'_'.$key.'.jpg';
                 file_put_contents($file_name, $file);
                 $image_tokped[$key] = url($file_name);
                 $image_tamp_lokal[$key] = $file_name;
