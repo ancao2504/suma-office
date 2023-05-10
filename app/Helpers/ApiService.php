@@ -34,7 +34,7 @@ class ApiService
 
     public static function AccountProfile($user_id, $companyid)
     {
-        $request = 'account/profile';
+        $request = 'backend/account/profile';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -46,7 +46,7 @@ class ApiService
 
     public static function AccountProfileSimpan($user_id, $name, $email, $telepon, $photo, $companyid)
     {
-        $request = 'account/profile/simpan';
+        $request = 'backend/account/profile/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -62,7 +62,7 @@ class ApiService
 
     public static function AccountChangePassword($user_id, $email, $old_password, $new_password, $companyid)
     {
-        $request = 'account/profile/changepassword';
+        $request = 'backend/account/profile/changepassword';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -77,7 +77,7 @@ class ApiService
 
     public static function BackOrderDaftar($page, $per_page, $kode_sales, $kode_dealer, $part_number, $user_id, $role_id, $companyid)
     {
-        $request = 'parts/backorder/daftar';
+        $request = 'backend/parts/backorder/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
@@ -98,7 +98,7 @@ class ApiService
     // ============================================================================
     public static function CartHeader($user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/header';
+        $request = 'backend/orders/cart/header';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -111,7 +111,7 @@ class ApiService
 
     public static function CartEstimasi($user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/estimasi';
+        $request = 'backend/orders/cart/estimasi';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -124,7 +124,7 @@ class ApiService
 
     public static function CartCheckOutCekAturanHarga($user_id, $companyid)
     {
-        $request = 'orders/cart/checkout/cekaturanharga';
+        $request = 'backend/orders/cart/checkout/cekaturanharga';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -136,7 +136,7 @@ class ApiService
 
     public static function CartCheckOutProses($password, $password_confirm, $user_id, $companyid)
     {
-        $request = 'orders/cart/checkout/proses';
+        $request = 'backend/orders/cart/checkout/proses';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'password'      => $password,
@@ -150,7 +150,7 @@ class ApiService
 
     public static function CartCheckOutResult($role_id, $kode, $companyid)
     {
-        $request = 'orders/cart/checkout/result';
+        $request = 'backend/orders/cart/checkout/result';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'role_id'       => $role_id,
@@ -163,7 +163,7 @@ class ApiService
 
     public static function CartDetail($user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/detail';
+        $request = 'backend/orders/cart/detail';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -176,7 +176,7 @@ class ApiService
 
     public static function CartDeletePart($part_number, $user_id, $companyid)
     {
-        $request = 'orders/cart/deletepart';
+        $request = 'backend/orders/cart/deletepart';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
@@ -189,7 +189,7 @@ class ApiService
 
     public static function CartEditPart($part_number, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/editpart';
+        $request = 'backend/orders/cart/editpart';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
@@ -203,7 +203,7 @@ class ApiService
 
     public static function CartHapusTemporary($user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/deleteall';
+        $request = 'backend/orders/cart/deleteall';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -216,7 +216,7 @@ class ApiService
 
     public static function CartImportExcel($nama_file, $part_excel, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/importexcel';
+        $request = 'backend/orders/cart/importexcel';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nama_file'     => $nama_file,
@@ -231,7 +231,7 @@ class ApiService
 
     public static function CartProsesExcel($file_excel, $perbandingan, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/prosesexcel';
+        $request = 'backend/orders/cart/prosesexcel';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'file_excel'    => $file_excel,
@@ -246,7 +246,7 @@ class ApiService
 
     public static function CartReset($user_id, $companyid)
     {
-        $request = 'orders/cart/reset';
+        $request = 'backend/orders/cart/reset';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -258,7 +258,7 @@ class ApiService
 
     public static function CartSimpanDraft($kode_sales, $kode_dealer, $back_order, $keterangan, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/simpandraft';
+        $request = 'backend/orders/cart/simpandraft';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
@@ -275,7 +275,7 @@ class ApiService
 
     public static function CartSimpanPart($part_number, $tpc, $jml_order, $harga, $discount, $discount_plus, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/cart/simpanpart';
+        $request = 'backend/orders/cart/simpanpart';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
@@ -294,7 +294,7 @@ class ApiService
 
     public static function DashboardDealerPenjualanBulanan($year, $month, $kode_dealer, $user_id, $role_id, $companyid)
     {
-        $request = 'dashboard/dealer/penjualanbulanan';
+        $request = 'backend/dashboard/dealer/penjualanbulanan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -310,7 +310,7 @@ class ApiService
 
     public static function DashboardManagementSalesByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
-        $request = 'dashboard/management/sales/byproduct';
+        $request = 'backend/dashboard/management/sales/byproduct';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -328,7 +328,7 @@ class ApiService
 
     public static function DashboardManagementSalesByDate($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
-        $request = 'dashboard/management/sales/bydate';
+        $request = 'backend/dashboard/management/sales/bydate';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -346,7 +346,7 @@ class ApiService
 
     public static function DashboardManagementStockByProduct($year, $month, $fields, $level, $produk, $user_id, $role_id, $companyid)
     {
-        $request = 'dashboard/management/stock/stockbyproduct';
+        $request = 'backend/dashboard/management/stock/stockbyproduct';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -365,7 +365,7 @@ class ApiService
     public static function DashboardManagementKuartal($year, $fields, $option_company, $companyid, $kabupaten,
                                 $supervisor, $salesman, $produk, $user_id)
     {
-        $request = 'dashboard/management/kuartal/index';
+        $request = 'backend/dashboard/management/kuartal/index';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -384,7 +384,7 @@ class ApiService
 
     public static function DashboardMarketingGroupPerProduk($year, $month, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
-        $request = 'dashboard/marketing/pencapaian/perproduk';
+        $request = 'backend/dashboard/marketing/pencapaian/perproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -402,7 +402,7 @@ class ApiService
 
     public static function DashboardMarketingGroupPerLevel($year, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
-        $request = 'dashboard/marketing/pencapaian/perlevel';
+        $request = 'backend/dashboard/marketing/pencapaian/perlevel';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -417,7 +417,7 @@ class ApiService
 
     public static function DashboardMarketingGrowth($year, $level_produk, $kode_produk, $jenis_mkr, $kode_mkr, $role_id, $companyid)
     {
-        $request = 'dashboard/marketing/pencapaian/growth';
+        $request = 'backend/dashboard/marketing/pencapaian/growth';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'          => $year,
@@ -434,7 +434,7 @@ class ApiService
 
     public static function DashboardSalesmanPenjualanBulanan($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid)
     {
-        $request = 'dashboard/salesman/penjualanbulanan';
+        $request = 'backend/dashboard/salesman/penjualanbulanan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'              => $year,
@@ -451,7 +451,7 @@ class ApiService
 
     public static function DashboardSalesmanPenjualanHarian($year, $month, $jenis_mkr, $kode_mkr, $user_id, $role_id, $companyid)
     {
-        $request = 'dashboard/salesman/penjualanharian';
+        $request = 'backend/dashboard/salesman/penjualanharian';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'              => $year,
@@ -468,7 +468,7 @@ class ApiService
 
     public static function DashboardMarketplaceSalesByDate($year, $month, $companyid)
     {
-        $request = 'dashboard/marketplace/salesbydate';
+        $request = 'backend/dashboard/marketplace/salesbydate';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'              => $year,
@@ -481,7 +481,7 @@ class ApiService
 
     public static function DashboardMarketplaceSalesByLocation($year, $month, $companyid)
     {
-        $request = 'dashboard/marketplace/salesbylocation';
+        $request = 'backend/dashboard/marketplace/salesbylocation';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'              => $year,
@@ -494,7 +494,7 @@ class ApiService
 
     public static function DealerDaftar($page, $per_page, $kode_dealer, $user_id, $role_id, $companyid)
     {
-        $request = 'profile/dealer/daftar';
+        $request = 'backend/profile/dealer/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
@@ -510,7 +510,7 @@ class ApiService
 
     public static function DealerForm($kode_dealer, $user_id, $role_id, $companyid)
     {
-        $request = 'profile/dealer/form';
+        $request = 'backend/profile/dealer/form';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_dealer' => $kode_dealer,
@@ -524,7 +524,7 @@ class ApiService
 
     public static function FakturDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/faktur';
+        $request = 'backend/orders/faktur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
@@ -544,7 +544,7 @@ class ApiService
 
     public static function FakturForm($nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/faktur/form';
+        $request = 'backend/orders/faktur/form';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur' => $nomor_faktur,
@@ -558,7 +558,7 @@ class ApiService
 
     public static function OptionCompany($search, $page, $per_page)
     {
-        $request = 'options/company';
+        $request = 'backend/options/company';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
@@ -571,7 +571,7 @@ class ApiService
 
     public static function OptionClassProduk()
     {
-        $request = 'options/classproduk';
+        $request = 'backend/options/classproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
@@ -580,7 +580,7 @@ class ApiService
 
     public static function OptionDealer($search, $page, $per_page, $companyid)
     {
-        $request = 'options/dealer';
+        $request = 'backend/options/dealer';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
@@ -594,7 +594,7 @@ class ApiService
 
     public static function OptionDealerSalesman($kode_sales, $search, $page, $per_page, $companyid)
     {
-        $request = 'options/dealersalesman';
+        $request = 'backend/options/dealersalesman';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
@@ -609,7 +609,7 @@ class ApiService
 
     public static function OptionEkspedisiOnline()
     {
-        $request = 'options/ekspedisionline';
+        $request = 'backend/options/ekspedisionline';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
@@ -618,7 +618,7 @@ class ApiService
 
     public static function OptionGroupProduk($level, $search, $page, $per_page)
     {
-        $request = 'options/groupproduk';
+        $request = 'backend/options/groupproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'level'     => $level,
@@ -632,7 +632,7 @@ class ApiService
 
     public static function OptionKabupaten($search, $page, $per_page)
     {
-        $request = 'options/kabupaten';
+        $request = 'backend/options/kabupaten';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'    => $search,
@@ -645,7 +645,7 @@ class ApiService
 
     public static function OptionPartNumber($search, $page, $per_page, $companyid)
     {
-        $request = 'options/partnumber';
+        $request = 'backend/options/partnumber';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'    => $search,
@@ -659,7 +659,7 @@ class ApiService
 
     public static function OptionProdukLevel()
     {
-        $request = 'options/levelproduk';
+        $request = 'backend/options/levelproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
@@ -668,7 +668,7 @@ class ApiService
 
     public static function OptionSalesman($search, $page, $per_page, $companyid)
     {
-        $request = 'options/salesman';
+        $request = 'backend/options/salesman';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
@@ -682,7 +682,7 @@ class ApiService
 
     public static function OptionSupervisor($search, $page, $per_page, $companyid)
     {
-        $request = 'options/supervisor';
+        $request = 'backend/options/supervisor';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
@@ -696,7 +696,7 @@ class ApiService
 
     public static function OptionSubProduk()
     {
-        $request = 'options/subproduk';
+        $request = 'backend/options/subproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
@@ -705,7 +705,7 @@ class ApiService
 
     public static function OptionTipeMotor($search, $page, $per_page)
     {
-        $request = 'options/typemotor';
+        $request = 'backend/options/typemotor';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search'        => $search,
@@ -718,7 +718,7 @@ class ApiService
 
     public static function OptionRoleUser()
     {
-        $request = 'options/roleuser';
+        $request = 'backend/options/roleuser';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($request, $header, $body);
@@ -727,7 +727,7 @@ class ApiService
 
     public static function OptionUpdateHarga($kode_lokasi, $page, $per_page, $search, $companyid)
     {
-        $request = 'options/updateharga';
+        $request = 'backend/options/updateharga';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_lokasi' => $kode_lokasi,
@@ -742,7 +742,7 @@ class ApiService
 
     public static function PartNumberDaftar($page, $per_page, $type_motor, $level_produk, $kode_produk, $part_number, $user_id, $role_id, $companyid)
     {
-        $request = 'parts/partnumber/daftar';
+        $request = 'backend/parts/partnumber/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
@@ -761,7 +761,7 @@ class ApiService
 
     public static function PartNumberFormCart($part_number, $user_id, $role_id, $companyid)
     {
-        $request = 'parts/partnumber/form/cart';
+        $request = 'backend/parts/partnumber/form/cart';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number' => $part_number,
@@ -775,7 +775,7 @@ class ApiService
 
     public static function PartNumberTambahCart($part_number, $jumlah_order, $user_id, $role_id, $companyid)
     {
-        $request = 'parts/partnumber/form/cart/proses';
+        $request = 'backend/parts/partnumber/form/cart/proses';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
@@ -791,7 +791,7 @@ class ApiService
     public static function PembayaranFakturDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer,
         $status_pembayaran, $nomor_faktur, $user_id, $role_id, $companyid) {
 
-        $request = 'orders/pembayaranfaktur';
+        $request = 'backend/orders/pembayaranfaktur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'              => $page,
@@ -812,7 +812,7 @@ class ApiService
 
     public static function PembayaranFakturDetailPerFaktur($nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/pembayaranfaktur/detailperfaktur';
+        $request = 'backend/orders/pembayaranfaktur/detailperfaktur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur'      => $nomor_faktur,
@@ -826,7 +826,7 @@ class ApiService
 
     public static function PembayaranFakturDetailPerBpk($nomor_bpk, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/pembayaranfaktur/detailperbpk';
+        $request = 'backend/orders/pembayaranfaktur/detailperbpk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_bpk'         => $nomor_bpk,
@@ -840,7 +840,7 @@ class ApiService
 
     public static function PurchaseOrderFormDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $role_id, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform';
+        $request = 'backend/orders/purchaseorderform';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
@@ -859,7 +859,7 @@ class ApiService
 
     public static function PurchaseOrderFormBatalApprove($nomor_pof, $companyid)
     {
-        $request = 'orders/purchaseorderform/batalapprove';
+        $request = 'backend/orders/purchaseorderform/batalapprove';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -872,7 +872,7 @@ class ApiService
 
     public static function PurchaseOrderFormEditDiscount($nomor_pof, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/discount';
+        $request = 'backend/orders/purchaseorderform/discount';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -886,7 +886,7 @@ class ApiService
 
     public static function PurchaseOrderFormUpdateTpc($nomor_pof, $kode_tpc, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/tpc/update';
+        $request = 'backend/orders/purchaseorderform/tpc/update';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -901,7 +901,7 @@ class ApiService
 
     public static function PurchaseOrderFormUpdateDiscount($nomor_pof, $discount, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/discount/update';
+        $request = 'backend/orders/purchaseorderform/discount/update';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -916,7 +916,7 @@ class ApiService
 
     public static function PurchaseOrderFormDetail($nomor_pof, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/detail';
+        $request = 'backend/orders/purchaseorderform/detail';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -931,7 +931,7 @@ class ApiService
 
     public static function PurchaseOrderFormDetailDaftar($nomor_pof, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/detail/daftar';
+        $request = 'backend/orders/purchaseorderform/detail/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -945,7 +945,7 @@ class ApiService
 
     public static function PurchaseOrderFormDetailEditPart($nomor_pof, $part_number, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/detail/partnumber';
+        $request = 'backend/orders/purchaseorderform/detail/partnumber';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -960,7 +960,7 @@ class ApiService
 
     public static function PurchaseOrderFormDetailSimpanPart($nomor_pof, $part_number, $jml_order, $harga, $discount, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/detail/partnumber/simpan';
+        $request = 'backend/orders/purchaseorderform/detail/partnumber/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -978,7 +978,7 @@ class ApiService
 
     public static function PurchaseOrderFormDetailHapusPart($nomor_pof, $part_number, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/detail/partnumber/hapus';
+        $request = 'backend/orders/purchaseorderform/detail/partnumber/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -993,7 +993,7 @@ class ApiService
 
     public static function PurchaseOrderFormFaktur($nomor_pof, $part_number, $companyid)
     {
-        $request = 'orders/purchaseorderform/faktur';
+        $request = 'backend/orders/purchaseorderform/faktur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -1006,7 +1006,7 @@ class ApiService
 
     public static function PurchaseOrderFormSimpan($nomor_pof, $kode_sales, $kode_dealer, $kode_tpc, $umur_pof, $bo, $approve, $keterangan, $user_id, $companyid)
     {
-        $request = 'orders/purchaseorderform/simpan';
+        $request = 'backend/orders/purchaseorderform/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_pof'     => $nomor_pof,
@@ -1027,7 +1027,7 @@ class ApiService
 
     public static function PlanningVisitDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $user_id, $role_id, $companyid)
     {
-        $request = 'visit/planningvisit/daftar';
+        $request = 'backend/visit/planningvisit/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
@@ -1046,7 +1046,7 @@ class ApiService
 
     public static function PlanningVisitSimpan($tanggal, $kode_sales, $kode_dealer, $keterangan, $user_id, $role_id, $companyid)
     {
-        $request = 'visit/planningvisit/simpan';
+        $request = 'backend/visit/planningvisit/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'tanggal'       => $tanggal,
@@ -1063,7 +1063,7 @@ class ApiService
 
     public static function PlanningVisitHapus($kode_visit, $companyid)
     {
-        $request = 'visit/planningvisit/hapus';
+        $request = 'backend/visit/planningvisit/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_visit'    => $kode_visit,
@@ -1075,7 +1075,7 @@ class ApiService
 
     public static function SettingClossingMarketing($companyid)
     {
-        $request = 'setting/default/clossingmkr';
+        $request = 'backend/setting/default/clossingmkr';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => $companyid
@@ -1086,7 +1086,7 @@ class ApiService
 
     public static function StockHarianOption($companyid)
     {
-        $request = 'parts/stockharian/option';
+        $request = 'backend/parts/stockharian/option';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => $companyid
@@ -1098,7 +1098,7 @@ class ApiService
     public static function StockHarianProsesPerlokasi($companyid, $role_id, $kode_class, $kode_produk,
                     $kode_produk_level, $kode_sub, $frg, $kode_lokasi, $kode_rak,
                     $option_stock_sedia, $nilai_stock_sedia) {
-        $request = 'parts/stockharian/proses/perlokasi';
+        $request = 'backend/parts/stockharian/proses/perlokasi';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'             => $companyid,
@@ -1120,7 +1120,7 @@ class ApiService
     public static function StockHarianProsesMarketplace($companyid, $role_id, $kode_class, $kode_produk,
                     $kode_produk_level, $kode_sub, $frg, $kode_lokasi, $kode_rak,
                     $option_stock_sedia, $nilai_stock_sedia) {
-        $request = 'parts/stockharian/proses/marketplace';
+        $request = 'backend/parts/stockharian/proses/marketplace';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'             => $companyid,
@@ -1141,7 +1141,7 @@ class ApiService
 
     public static function TrackingOrderDaftar($page, $per_page, $year, $month, $kode_sales, $kode_dealer, $nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/trackingorder';
+        $request = 'backend/orders/trackingorder';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
@@ -1161,7 +1161,7 @@ class ApiService
 
     public static function TrackingOrderForm($nomor_faktur, $user_id, $role_id, $companyid)
     {
-        $request = 'orders/trackingorder/form';
+        $request = 'backend/orders/trackingorder/form';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur' => $nomor_faktur,
@@ -1175,7 +1175,7 @@ class ApiService
 
     public static function UserDaftar($page, $per_page, $role, $user_id, $role_id)
     {
-        $request = 'profile/users/daftar';
+        $request = 'backend/profile/users/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page,
@@ -1190,7 +1190,7 @@ class ApiService
 
     public static function UserForm($user_id)
     {
-        $request = 'profile/users/form';
+        $request = 'backend/profile/users/form';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'   => $user_id
@@ -1201,7 +1201,7 @@ class ApiService
 
     public static function UserSimpan($user_id, $role_id, $name, $jabatan, $telepon, $photo, $email, $password, $status_user, $companyid)
     {
-        $request = 'profile/users/simpan';
+        $request = 'backend/profile/users/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'   => $user_id,
@@ -1221,7 +1221,7 @@ class ApiService
 
     public static function ValidasiSalesman($kode_sales, $companyid)
     {
-        $request = 'validasi/salesman';
+        $request = 'backend/validasi/salesman';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
@@ -1233,7 +1233,7 @@ class ApiService
 
     public static function ValidasiDealer($kode_dealer, $companyid)
     {
-        $request = 'validasi/dealer';
+        $request = 'backend/validasi/dealer';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_dealer'   => $kode_dealer,
@@ -1245,7 +1245,7 @@ class ApiService
 
     public static function ValidasiDealerSalesman($kode_sales, $kode_dealer, $companyid)
     {
-        $request = 'validasi/dealersalesman';
+        $request = 'backend/validasi/dealersalesman';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_sales'    => $kode_sales,
@@ -1258,7 +1258,7 @@ class ApiService
 
     public static function ValidasiPartNumber($part_number, $companyid)
     {
-        $request = 'validasi/partnumber';
+        $request = 'backend/validasi/partnumber';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => $part_number,
@@ -1270,7 +1270,7 @@ class ApiService
 
     public static function ValidasiUserIdTidakTerdaftar($user_id, $companyid)
     {
-        $request = 'validasi/userid/tidakterdaftar';
+        $request = 'backend/validasi/userid/tidakterdaftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'user_id'       => $user_id,
@@ -1282,7 +1282,7 @@ class ApiService
 
     public static function ValidasiEmailTidakTerdaftar($email, $companyid)
     {
-        $request = 'validasi/email/tidakterdaftar';
+        $request = 'backend/validasi/email/tidakterdaftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'email'         => $email,
@@ -1294,7 +1294,7 @@ class ApiService
 
     public static function DiskonProdukDaftar($companyid, $page, $per_page, $role_id, $search)
     {
-        $request = 'setting/diskonproduk';
+        $request = 'backend/setting/diskonproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => trim($companyid),
@@ -1310,7 +1310,7 @@ class ApiService
 
     public static function ValidasiProduk($kd_produk)
     {
-        $request = 'validasi/produk';
+        $request = 'backend/validasi/produk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kode_produk'            => $kd_produk,
@@ -1320,7 +1320,7 @@ class ApiService
     }
     public static function ValidasiDiskonProduk($produk, $cabang)
     {
-        $request = 'setting/diskonproduk/cekproduk';
+        $request = 'backend/setting/diskonproduk/cekproduk';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'cabang'        => $cabang,
@@ -1339,7 +1339,7 @@ class ApiService
 
         if ($validasiProduk == 1) {
 
-            $request = 'setting/diskonproduk/simpan';
+            $request = 'backend/setting/diskonproduk/simpan';
             $header = ['Authorization' => session()->get('Authorization')];
             $body = [
                 'cabang'            => trim($cabang),
@@ -1361,7 +1361,7 @@ class ApiService
 
     public static function DiskonProdukHapus($cabang, $produk)
     {
-        $request = 'setting/diskonproduk/hapus';
+        $request = 'backend/setting/diskonproduk/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'cabang'        => trim($cabang),
@@ -1373,7 +1373,7 @@ class ApiService
 
     public static function DiskonProdukDealerDaftar($companyid, $page, $per_page, $role_id, $search)
     {
-        $request = 'setting/diskonproduk/dealer';
+        $request = 'backend/setting/diskonproduk/dealer';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => trim($companyid),
@@ -1398,7 +1398,7 @@ class ApiService
             $validasiDealer = json_decode($validasiDealer)->status;
 
             if ($validasiDealer == 1) {
-                $request = 'setting/diskonproduk/dealer/simpan';
+                $request = 'backend/setting/diskonproduk/dealer/simpan';
                 $header = ['Authorization' => session()->get('Authorization')];
                 $body = [
                     'produk'        => trim($produk),
@@ -1420,7 +1420,7 @@ class ApiService
 
     public static function DiskonProdukDealerHapus($produk, $dealer, $companyid)
     {
-        $request = 'setting/diskonproduk/dealer/hapus';
+        $request = 'backend/setting/diskonproduk/dealer/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'produk'            => trim($produk),
@@ -1433,7 +1433,7 @@ class ApiService
 
     public static function DiskonDealerDaftar($page, $per_page, $role_id, $companyid, $search)
     {
-        $request = 'setting/diskon/dealer';
+        $request = 'backend/setting/diskon/dealer';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => trim($page ?? 1),
@@ -1453,7 +1453,7 @@ class ApiService
         $validasiDealer = json_decode($validasiDealer)->status;
 
         if ($validasiDealer == 1) {
-            $request = 'setting/diskon/dealer/simpan';
+            $request = 'backend/setting/diskon/dealer/simpan';
             $header = ['Authorization' => session()->get('Authorization')];
             $body = [
                 'dealer'            => trim($dealer),
@@ -1472,7 +1472,7 @@ class ApiService
 
     public static function DiskonDealerHapus($dealer, $companyid)
     {
-        $request = 'setting/diskon/dealer/hapus';
+        $request = 'backend/setting/diskon/dealer/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'dealer'            => trim($dealer),
@@ -1484,7 +1484,7 @@ class ApiService
 
     public static function HargaNettoPartDaftar($page, $per_page, $companyid, $role_id, $search)
     {
-        $request = 'setting/harga/partnetto';
+        $request = 'backend/setting/harga/partnetto';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => trim($page ?? 1),
@@ -1505,7 +1505,7 @@ class ApiService
         $validasiPart = json_decode($validasiPart)->status;
 
         if ($validasiPart == 1) {
-            $request = 'setting/harga/partnetto/simpan';
+            $request = 'backend/setting/harga/partnetto/simpan';
             $header = ['Authorization' => session()->get('Authorization')];
             $body = [
                 'part_number'   => trim($part_number),
@@ -1524,7 +1524,7 @@ class ApiService
 
     public static function HargaNettoPartDealerDaftar($page, $per_page, $role_id, $companyid, $search)
     {
-        $request = 'setting/harga/partnetto/dealer';
+        $request = 'backend/setting/harga/partnetto/dealer';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => trim($page ?? 1),
@@ -1551,7 +1551,7 @@ class ApiService
             $validasiDealer = json_decode($validasiDealer)->status;
 
             if ($validasiDealer == 1)  {
-                $request = 'setting/harga/partnetto/dealer/simpan';
+                $request = 'backend/setting/harga/partnetto/dealer/simpan';
                 $header = ['Authorization' => session()->get('Authorization')];
                 $body = [
                     'part_number'   => trim($part_number),
@@ -1575,7 +1575,7 @@ class ApiService
 
     public static function HargaNettoPartDealerHapus($part_number, $dealer, $companyid)
     {
-        $request = 'setting/harga/partnetto/dealer/hapus';
+        $request = 'backend/setting/harga/partnetto/dealer/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'       => trim($part_number),
@@ -1588,7 +1588,7 @@ class ApiService
 
     public static function CekPenerimaanSuratJalan($nomor_serah_terima, $companyid)
     {
-        $request = 'orders/penerimaan/sj';
+        $request = 'backend/orders/penerimaan/sj';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_serah_terima'        => trim($nomor_serah_terima),
@@ -1602,7 +1602,7 @@ class ApiService
 
     public static function PenerimaanSuratJalanSimpan($nomor_sj, $tanggal, $jam, $companyid)
     {
-        $request = 'orders/penerimaan/sj/simpan';
+        $request = 'backend/orders/penerimaan/sj/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_sj'   => trim($nomor_sj),
@@ -1617,7 +1617,7 @@ class ApiService
 
     public static function PenerimaanSuratJalanHapus($nomor_sj, $companyid)
     {
-        $request = 'orders/penerimaan/sj/hapus';
+        $request = 'backend/orders/penerimaan/sj/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_sj'       => trim($nomor_sj),
@@ -1631,7 +1631,7 @@ class ApiService
 
     public static function PenerimaanSuratJalanReport($start_date, $end_date, $companyid, $no_serah_terima, $driver)
     {
-        $request = 'orders/penerimaan/sj/report';
+        $request = 'backend/orders/penerimaan/sj/report';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'start_date'           => date('Y-m-d', strtotime(trim($start_date))),
@@ -1649,7 +1649,7 @@ class ApiService
 
     public static function pembayaranDealerDaftar($kd_dealer, $companyid)
     {
-        $request = 'orders/penerimaan/pembayaran/daftar';
+        $request = 'backend/orders/penerimaan/pembayaran/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'dealer'        => trim($kd_dealer),
@@ -1663,7 +1663,7 @@ class ApiService
 
     public static function PembayaranDealerSimpan($kd_dealer,$jenis_transaksi, $total, $detail,$file_names, $user_id, $companyid)
     {
-        $request = 'orders/penerimaan/pembayaran/simpan';
+        $request = 'backend/orders/penerimaan/pembayaran/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'kd_dealer'         => trim($kd_dealer),
@@ -1681,7 +1681,7 @@ class ApiService
 
     public static function SettingCetakUlangDaftar($year, $month, $jenis, $page, $per_page, $role_id, $companyid)
     {
-        $request = 'setting/cetakulang/daftar';
+        $request = 'backend/setting/cetakulang/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'year'      => trim($year),
@@ -1699,7 +1699,7 @@ class ApiService
 
     public static function SettingCetakUlangCekDokumen($nomor_dokumen, $jenis_transaksi, $divisi, $role_id)
     {
-        $request = 'setting/cetakulang/cekdokumen';
+        $request = 'backend/setting/cetakulang/cekdokumen';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'no_dokumen'        => trim($nomor_dokumen),
@@ -1714,7 +1714,7 @@ class ApiService
 
     public static function SettingCetakUlangSimpan($nomor_dokumen, $jenis_transaksi, $divisi, $kode_cabang, $company_dokumen, $approve, $edit, $alasan, $role_id, $companyid, $user_id)
     {
-        $request = 'setting/cetakulang/simpan';
+        $request = 'backend/setting/cetakulang/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'no_dokumen'        => trim($nomor_dokumen),
@@ -1735,7 +1735,7 @@ class ApiService
     }
 
     public static function PartImageDaftar($search, $page){
-        $request = 'parts/partnumber/image/list';
+        $request = 'backend/parts/partnumber/image/list';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'search' => trim($search),
@@ -1747,7 +1747,7 @@ class ApiService
 
     public static function OnlineSerahTerimaDaftar($page, $per_page, $start_date, $end_date, $search, $companyid)
     {
-        $request = 'online/serahterima/daftar';
+        $request = 'backend/online/serahterima/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
@@ -1763,7 +1763,7 @@ class ApiService
 
     public static function OnlineSerahTerimaForm($nomor_dokumen, $companyid)
     {
-        $request = 'online/serahterima/form';
+        $request = 'backend/online/serahterima/form';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen' => $nomor_dokumen,
@@ -1775,7 +1775,7 @@ class ApiService
 
     public static function OnlineSerahTerimaRequestPickupPerNomorFaktur($nomor_faktur, $companyid)
     {
-        $request = 'online/serahterima/request/pickup';
+        $request = 'backend/online/serahterima/request/pickup';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur'  => $nomor_faktur,
@@ -1787,7 +1787,7 @@ class ApiService
 
     public static function OnlineSerahTerimaUpdateStatusPerNoFaktur($nomor_faktur, $companyid)
     {
-        $request = 'online/serahterima/update/status';
+        $request = 'backend/online/serahterima/update/status';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur'  => $nomor_faktur,
@@ -1799,7 +1799,7 @@ class ApiService
 
     public static function OnlineApproveOrderDaftar($page, $per_page, $companyid)
     {
-        $request = 'online/order/approve/daftar';
+        $request = 'backend/online/order/approve/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'page'          => $page ?? 1,
@@ -1812,7 +1812,7 @@ class ApiService
 
     public static function SearchProductMarketplaceByPartNumber($part_number, $companyid, $page, $per_page)
     {
-        $request = 'online/products/marketplace/daftar';
+        $request = 'backend/online/products/marketplace/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => trim($part_number),
@@ -1826,7 +1826,7 @@ class ApiService
 
     public static function DetailProductMarketplaceByPartNumber($part_number, $companyid)
     {
-        $request = 'online/products/marketplace/detail';
+        $request = 'backend/online/products/marketplace/detail';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'part_number'   => trim($part_number),
@@ -1838,7 +1838,7 @@ class ApiService
 
     public static function PemindahanMarketplaceDaftar($search,$start_date,$end_date,$companyid,$page,$per_page)
     {
-        $request = 'online/pemindahan/marketplace/daftar';
+        $request = 'backend/online/pemindahan/marketplace/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen' => trim($search),
@@ -1854,7 +1854,7 @@ class ApiService
 
     public static function PemindahanMarketplaceDetail($nomor_dokumen ,$companyid)
     {
-        $request = 'online/pemindahan/marketplace/detail';
+        $request = 'backend/online/pemindahan/marketplace/detail';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen'     => trim($nomor_dokumen),
@@ -1865,7 +1865,7 @@ class ApiService
     }
 
     public static function UpdateStockMarketplace($nomor_dokumen, $kode_part, $companyid){
-        $request = 'online/pemindahan/marketplace/update/stock';
+        $request = 'backend/online/pemindahan/marketplace/update/stock';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen' => trim($nomor_dokumen),
@@ -1878,7 +1878,7 @@ class ApiService
 
     public static function PemindahanUpdateStatusMarketplacePerPartNumber($nomor_dokumen, $part_number, $companyid)
     {
-        $request = 'online/pemindahan/marketplace/update/statuspartnumber';
+        $request = 'backend/online/pemindahan/marketplace/update/statuspartnumber';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_dokumen' => trim($nomor_dokumen),
@@ -1891,7 +1891,7 @@ class ApiService
 
     public static function addProductMarketplace($companyid, $image, $nama, $merek, $deskripsi, $harga, $stok, $min_order, $berat, $ukuran, $sku, $kondisi, $kategori, $status, $etalase, $logistic)
     {
-        $request = 'online/products/marketplace/add';
+        $request = 'backend/online/products/marketplace/add';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => trim($companyid),
@@ -1918,7 +1918,7 @@ class ApiService
 
     public static function ApproveOrderMarketplaceDetail($nomor_faktur, $companyid)
     {
-        $request = 'online/order/approve/form/internal';
+        $request = 'backend/online/order/approve/form/internal';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur'   => trim($nomor_faktur),
@@ -1930,7 +1930,7 @@ class ApiService
 
     public static function ApproveOrderMarketplaceProses($nomor_invoice, $companyid, $user_id)
     {
-        $request = 'online/order/approve/proses/marketplace';
+        $request = 'backend/online/order/approve/proses/marketplace';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_invoice'     => trim($nomor_invoice),
@@ -1943,7 +1943,7 @@ class ApiService
 
     public static function ApproveOrderInternalProses($nomor_faktur, $companyid, $user_id)
     {
-        $request = 'online/order/approve/proses/internal';
+        $request = 'backend/online/order/approve/proses/internal';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'nomor_faktur'      => trim($nomor_faktur),
