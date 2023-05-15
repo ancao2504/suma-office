@@ -22,6 +22,7 @@
                 </span>
                 @endforeach
             </div>
+            {{-- nama --}}
             <div class="mt-3">
                 <label class="form-label"><span class="required"></span>Nama Produk :</label>
                 <input type="text" name="nama_produk" id="nama_produk" class="form-control mb-3 mb-lg-0" placeholder="Mohon masukan" value="{{ $data_all->name }}"maxlength="70" 

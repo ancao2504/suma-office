@@ -12,6 +12,7 @@ class ProductController extends Controller
 {
     public function daftarProduct(Request $request)
     {
+        // param
         if(!empty($request->get('param'))){
             $filter = json_decode(base64_decode($request->get('param')));
             $request->merge([
