@@ -26,6 +26,8 @@
             <div class="d-flex align-items-center mt-4">
                 @if($data_filter->fields == 'QUANTITY')
                 <span class="badge badge-secondary fs-8 fw-boldest me-2">Quantity</span>
+                @elseif ($data_filter->fields == 'COST_PRICE')
+                <span class="badge badge-secondary fs-8 fw-boldest me-2">Cost Price</span>
                 @elseif ($data_filter->fields == 'SELLING_PRICE_EX_PPN')
                 <span class="badge badge-secondary fs-8 fw-boldest me-2">Selling Price (Exclude PPN)</span>
                 @elseif ($data_filter->fields == 'SELLING_PRICE_IN_PPN')
@@ -67,7 +69,7 @@
                     <span class="text-gray-800 pt-1 fw-bolder fs-6">Grand Total</span>
                 </div>
             </div>
-            <div class="card-body d-flex align-items-end pt-0 mt-4">
+            <div class="card-body pt-0 mt-4">
                 <div class="d-flex align-items-center fw-bolder fs-6 text-dark w-100 mt-auto mb-2">
                     <span class="me-4">Sales All</span>
                     @if(trim($selling['selling_total_status']) == 'NAIK')
@@ -97,6 +99,9 @@
                         </span>{{ str_replace('-','',number_format($selling['selling_total_prosentase'], 2)) }}%
                     </span>
                     @endif
+                </div>
+                <div class="row">
+                    <span class="fs-7 fw-bolder text-gray-600 mt-4">* Dibandingkan bulan sebelumnya</span>
                 </div>
             </div>
         </div>
@@ -204,7 +209,7 @@
                     <span class="text-gray-800 pt-1 fw-bolder fs-6">Grand Total</span>
                 </div>
             </div>
-            <div class="card-body d-flex align-items-end pt-0 mt-4">
+            <div class="card-body pt-0 mt-4">
                 <div class="d-flex align-items-center fw-bolder fs-6 text-dark w-100 mt-auto mb-2">
                     <span class="me-4">Margin</span>
                     @if(trim($margin['margin_total_status']) == 'NAIK')
@@ -235,6 +240,9 @@
                     </span>
                     @endif
                 </div>
+                <div class="row">
+                    <span class="fs-7 fw-bolder text-gray-600 mt-4">* Dibandingkan bulan sebelumnya</span>
+                </div>
             </div>
         </div>
     </div>
@@ -250,6 +258,8 @@
                     <div class="d-flex align-items-center mt-2">
                         @if($data_filter->fields == 'QUANTITY')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Quantity</span>
+                        @elseif ($data_filter->fields == 'COST_PRICE')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">Cost Price</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_EX_PPN')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Selling Price (Exclude PPN)</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_IN_PPN')
@@ -380,6 +390,7 @@
                             </div>
                         </div>
                     </div>
+                    <span class="mt-6 fs-7 fw-bolder text-gray-600">* Dibandingkan bulan sebelumnya</span>
                 </div>
             </div>
         </div>
@@ -393,6 +404,8 @@
                     <div class="d-flex align-items-center mt-2">
                         @if($data_filter->fields == 'QUANTITY')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Quantity</span>
+                        @elseif ($data_filter->fields == 'COST_PRICE')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">Cost Price</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_EX_PPN')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Selling Price (Exclude PPN)</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_IN_PPN')
@@ -423,6 +436,8 @@
                     <div class="d-flex align-items-center mt-2">
                         @if($data_filter->fields == 'QUANTITY')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Quantity</span>
+                        @elseif ($data_filter->fields == 'COST_PRICE')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">Cost Price</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_EX_PPN')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Selling Price (Exclude PPN)</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_IN_PPN')
@@ -547,6 +562,7 @@
                             </div>
                         </div>
                     </div>
+                    <span class="mt-6 fs-7 fw-bolder text-gray-600">* Dibandingkan bulan sebelumnya</span>
                 </div>
             </div>
         </div>
@@ -563,6 +579,8 @@
                     <div class="d-flex align-items-center mt-2">
                         @if($data_filter->fields == 'QUANTITY')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Quantity</span>
+                        @elseif ($data_filter->fields == 'COST_PRICE')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">Cost Price</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_EX_PPN')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Selling Price (Exclude PPN)</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_IN_PPN')
@@ -596,6 +614,8 @@
                     <div class="d-flex align-items-center mt-2">
                         @if($data_filter->fields == 'QUANTITY')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Quantity</span>
+                        @elseif ($data_filter->fields == 'COST_PRICE')
+                        <span class="badge badge-secondary fs-8 fw-boldest me-2">Cost Price</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_EX_PPN')
                         <span class="badge badge-secondary fs-8 fw-boldest me-2">Selling Price (Exclude PPN)</span>
                         @elseif ($data_filter->fields == 'SELLING_PRICE_IN_PPN')
@@ -662,6 +682,7 @@
                         <label class="form-label required">Data yang ditampilkan:</label>
                         <select id="selectFilterFields" name="fields" class="form-select" data-hide-search="true">
                             <option value="QUANTITY" @if($data_filter->fields == 'QUANTITY') {{"selected"}} @endif>Quantity</option>
+                            <option value="COST_PRICE" @if($data_filter->fields == 'COST_PRICE') {{"selected"}} @endif>Cost Price</option>
                             <option value="SELLING_PRICE_EX_PPN" @if($data_filter->fields == 'SELLING_PRICE_EX_PPN') {{"selected"}} @endif>Selling Price (Exclude PPN)</option>
                             <option value="SELLING_PRICE_IN_PPN" @if($data_filter->fields == 'SELLING_PRICE_IN_PPN') {{"selected"}} @endif>Selling Price (Include PPN)</option>
                         </select>
