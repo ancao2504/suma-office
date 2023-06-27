@@ -733,14 +733,14 @@
     <script>
         const url = {
             'clossing_marketing': "{{ route('setting.default.clossing-marketing') }}",
-        }
+        };
         const data_filter = {
             'year': '{{ trim($data_filter->year) }}',
             'month': '{{ trim($data_filter->month) }}',
             'fields': '{{ trim($data_filter->fields) }}',
             'level': '{{ trim($data_filter->level) }}',
             'produk': '{{ trim($data_filter->produk) }}',
-        }
+        };
     </script>
     @if($data_filter->fields == 'QUANTITY')
     <script>
@@ -749,7 +749,7 @@
             'sales_all': {!!json_encode($sales_all)!!},
             'by_date': {!!json_encode($by_date)!!},
             'by_product': {!!json_encode($by_product)!!},
-        }
+        };
     </script>
     <script src="{{ asset('assets/js/suma/dashboard/management/sales/quantity.js') }}?time={{ time() }}"></script>
     @else
@@ -759,7 +759,7 @@
             'sales_all': {!!json_encode($sales_all)!!},
             'by_date': {!!json_encode($by_date)!!},
             'by_product': {!!json_encode($by_product)!!},
-         }
+        };
     </script>
     <script src="{{ asset('assets/js/suma/dashboard/management/sales/amount.js') }}?time={{ time() }}"></script>
     @endif

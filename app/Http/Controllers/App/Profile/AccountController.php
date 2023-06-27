@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\App\Profile;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
     public function index(Request $request) {
-        $responseApi = ApiService::AccountProfile(strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::AccountProfile(strtoupper(trim($request->session()->get('app_user_id'))),
                     strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -52,7 +50,7 @@ class AccountController extends Controller
         }
 
 
-        $responseApi = ApiService::AccountProfileSimpan(strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::AccountProfileSimpan(strtoupper(trim($request->session()->get('app_user_id'))),
                     $request->get('name'), $request->get('email'), $request->get('telepon'), $photo,
                     strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -82,7 +80,7 @@ class AccountController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Kolom password dan password konfirmasi tidak boleh kosong dan harus sesuai');
         }
 
-        $responseApi = ApiService::AccountChangePassword(strtoupper(trim($request->session()->get('app_user_id'))), trim($request->session()->get('app_user_email')),
+        $responseApi = Service::AccountChangePassword(strtoupper(trim($request->session()->get('app_user_id'))), trim($request->session()->get('app_user_email')),
                     $request->get('old_password'), $request->get('password'), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

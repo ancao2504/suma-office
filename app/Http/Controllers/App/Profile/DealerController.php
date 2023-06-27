@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Profile;
 
-use App\Helpers\ApiService;
-use App\Http\Controllers\Controller;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class DealerController extends Controller
 {
@@ -17,7 +17,7 @@ class DealerController extends Controller
             $per_page = $request->get('per_page');
         }
 
-        $responseApi = ApiService::DealerDaftar($request->get('page'), $per_page, $request->get('kode_dealer'),
+        $responseApi = Service::DealerDaftar($request->get('page'), $per_page, $request->get('kode_dealer'),
                             strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -62,7 +62,7 @@ class DealerController extends Controller
     }
 
     public function formDealer($kode_dealer, Request $request) {
-        $responseApi = ApiService::DealerForm($kode_dealer, strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::DealerForm($kode_dealer, strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;

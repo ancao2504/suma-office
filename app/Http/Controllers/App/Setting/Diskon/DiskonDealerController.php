@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting\Diskon;
+namespace App\Http\Controllers\App\Setting\Diskon;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,13 +18,14 @@ class DiskonDealerController extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $param = json_decode(base64_decode($request->get('param')));
-        $responseApi = ApiService::DiskonDealerDaftar(
+        $responseApi = Service::DiskonDealerDaftar(
             $param->page??1,
             $param->per_page??10,
             $role_id,
             $companyid,
             $param->search??''
         );
+        
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -55,7 +56,7 @@ class DiskonDealerController extends Controller
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::DiskonDealerSimpan(
+        $responseApi = Service::DiskonDealerSimpan(
             trim($request->get('dealer')),
             trim($request->get('disc_default')),
             trim($request->get('disc_plus')),
@@ -82,7 +83,7 @@ class DiskonDealerController extends Controller
     public function destroy(Request $request)
     {
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
-        $responseApi = ApiService::DiskonDealerHapus(
+        $responseApi = Service::DiskonDealerHapus(
             trim($request->get('dealer')),
             trim($companyid)
         );

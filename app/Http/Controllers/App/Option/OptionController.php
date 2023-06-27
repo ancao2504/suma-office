@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\App\Option;
 
-use App\Helpers\ApiService;
 use Illuminate\Support\Str;
-
 use Jenssegers\Agent\Agent;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -16,7 +13,7 @@ class OptionController extends Controller
 {
     public function optionCompany(Request $request)
     {
-        $responseApi = ApiService::OptionCompany($request->get('search'), $request->get('page'),
+        $responseApi = Service::OptionCompany($request->get('search'), $request->get('page'),
                             $request->get('per_page'));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -160,7 +157,7 @@ class OptionController extends Controller
 
     public function optionDealer(Request $request)
     {
-        $responseApi = ApiService::optionDealer($request->get('search'), $request->get('page'), $request->get('per_page'),
+        $responseApi = Service::optionDealer($request->get('search'), $request->get('page'), $request->get('per_page'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -303,7 +300,7 @@ class OptionController extends Controller
 
     public function optionDealerSalesman(Request $request)
     {
-        $responseApi = ApiService::optionDealerSalesman($request->get('salesman'), $request->get('search'),
+        $responseApi = Service::optionDealerSalesman($request->get('salesman'), $request->get('search'),
                             $request->get('page'), $request->get('per_page'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -448,7 +445,7 @@ class OptionController extends Controller
 
     public function optionKabupaten(Request $request)
     {
-        $responseApi = ApiService::OptionKabupaten($request->get('search'), $request->get('page'),
+        $responseApi = Service::OptionKabupaten($request->get('search'), $request->get('page'),
                             $request->get('per_page'));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -594,7 +591,7 @@ class OptionController extends Controller
     {
 
         $Agent = new Agent();
-        $responseApi = ApiService::optionPartNumber($request->get('search'),
+        $responseApi = Service::optionPartNumber($request->get('search'),
                             $request->get('page'), $request->get('per_page'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
@@ -770,7 +767,7 @@ class OptionController extends Controller
 
     public function optionSalesman(Request $request)
     {
-        $responseApi = ApiService::optionSalesman($request->get('search'), $request->get('page'), $request->get('per_page'),
+        $responseApi = Service::optionSalesman($request->get('search'), $request->get('page'), $request->get('per_page'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -914,7 +911,7 @@ class OptionController extends Controller
 
     public function optionSupervisor(Request $request)
     {
-        $responseApi = ApiService::optionSupervisor($request->get('search'), $request->get('page'),
+        $responseApi = Service::optionSupervisor($request->get('search'), $request->get('page'),
                             $request->get('per_page'), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -1058,7 +1055,7 @@ class OptionController extends Controller
 
     public function optionTipeMotor(Request $request)
     {
-        $responseApi = ApiService::OptionTipeMotor($request->get('search'), $request->get('page'), $request->get('per_page'),
+        $responseApi = Service::OptionTipeMotor($request->get('search'), $request->get('page'), $request->get('per_page'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -1201,7 +1198,7 @@ class OptionController extends Controller
 
     public function optionGroupProduk(Request $request)
     {
-        $responseApi = ApiService::OptionGroupProduk($request->get('level'), $request->get('search'),
+        $responseApi = Service::OptionGroupProduk($request->get('level'), $request->get('search'),
                             $request->get('page'), $request->get('per_page'));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -1345,7 +1342,7 @@ class OptionController extends Controller
 
     public function optionUpdateHarga(Request $request)
     {
-        $responseApi = ApiService::OptionUpdateHarga($request->get('lokasi'), $request->get('page'),
+        $responseApi = Service::OptionUpdateHarga($request->get('lokasi'), $request->get('page'),
                             $request->get('per_page'), $request->get('search'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -1487,4 +1484,349 @@ class OptionController extends Controller
             return response()->json(['status' => 0, 'message' => $messageApi]);
         }
     }
+
+    // ! suma sby
+    public static function salesman(Request $request){
+        $responseApi = Service::dataSalesman($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            if($request->option == 'first'){
+                $respon = $data;
+            } else if($request->option == 'select'){
+                $respon = '';
+                foreach ($data as $key => $value) {
+                    $respon .= '<option value="'.$value->kd_sales.'" data-ket="'.$value->nm_sales.'">'.$value->kd_sales.($value->nm_sales ? '('.$value->nm_sales.')' : '').'</option>';
+                }
+            } else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Salse',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Kode Sales',
+                        'value' => $request->kd_sales,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-100px', 'text' => 'kode Sales'],
+                            (object)['class' => 'w-100px', 'text' => 'nm_sales'],
+                            (object)['class' => 'w-auto', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_sales'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto', 'key' => 'nm_sales'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih'],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+    public static function dealer(Request $request){
+        $responseApi = Service::dataDealer($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            
+            if($request->option == 'first'){
+                $respon = $data;
+            } else if($request->option == 'select'){
+                $respon = '';
+                foreach ($data as $key => $value) {
+                    $respon .= '<option value="'.$value->kd_dealer.'" data-ket="'.$value->nm_dealer.'">'.$value->kd_dealer.($value->nm_dealer ? '('.$value->nm_dealer.')' : '').'</option>';
+                }
+            } else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Dealer',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Kode Dealer',
+                        'value' => $request->kd_dealer,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-50px', 'text' => 'kode Dealer'],
+                            (object)['class' => 'w-200px', 'text' => 'nama Dealer'],
+                            (object)['class' => 'w-200px', 'text' => 'alamat'],
+                            (object)['class' => 'w-50px', 'text' => 'kota'],
+                            (object)['class' => 'w-auto', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_dealer'],
+                            (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_dealer'],
+                            (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'alamat1'],
+                            (object)[ 'option' => 'text','class' => 'w-50px', 'key' => 'kotasj'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                    'data' => [(object)['key' => 'a','value' => 'kd_dealer']]
+                                ],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
+    public static function faktur(Request $request){
+        $request->merge(['divisi' => (in_array($request->companyid, collect(session('app_user_company')->fdr->lokasi)->pluck('companyid')->toArray()))?'fdr':'honda']);
+        
+        $responseApi = Service::dataFaktur($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $respon = json_decode($responseApi)->data;
+
+            return Response()->json(['status' => 1, 'message' => $messageApi, 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
+    public static function konsumen(Request $request){
+        // $request->merge(['divisi' => ($request->companyid == $lokasi->fdr->companyid)?$lokasi->fdr->divisi:$lokasi->honda->divisi]);
+        $request->merge(['divisi' => (in_array($request->companyid, collect(session('app_user_company')->fdr->lokasi)->pluck('companyid')->toArray()))?'fdr':'honda']);
+
+        $responseApi = Service::dataKonsumen($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            
+            if($request->option == 'first'){
+                $respon = $data;
+            }else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Konsumen',
+                        'size' => 'modal-xl modal-fullscreen-lg-down',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Dapat mencari : NIK, Nama, Alamat, Telepon, Email, No Pol',
+                        'value' => $request->search,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-50px', 'text' => 'NIK'],
+                            (object)['class' => 'w-200px', 'text' => 'NAMA'],
+                            (object)['class' => 'w-200px', 'text' => 'TEMPAT TGL LAHIR'],
+                            (object)['class' => 'w-200px', 'text' => 'ALAMAT'],
+                            (object)['class' => 'w-200px', 'text' => 'TELEPON'],
+                            (object)['class' => 'w-200px', 'text' => 'EMAIL'],
+                            (object)['class' => 'w-200px', 'text' => 'NO POL'],
+                            (object)['class' => 'w-200px', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)['option' => 'text', 'class' => 'w-25px', 'key' => 'nik'],
+                            (object)['option' => 'text', 'class' => 'w-200px', 'key' => 'nama'],
+                            (object)['option' => 'text', 'class' => 'w-200px', 'key' => ['tempat_lahir', 'tgl_lahir']],
+                            (object)['option' => 'text', 'class' => 'w-200px', 'key' => 'alamat'],
+                            (object)['option' => 'text', 'class' => 'w-200px', 'key' => 'telepon'],
+                            (object)['option' => 'text', 'class' => 'w-200px', 'key' => 'email'],
+                            (object)['option' => 'text', 'class' => 'w-200px', 'key' => 'nopol'],
+                            (object)['option' => 'button', 'class' => 'w-auto', 'button' => [
+                                (object)[ 'class' => 'btn-sm btn-icon btn-primary me-2 text-white pilih', 'text' => 'Pilih',
+                                    'data' => [
+                                        (object)[
+                                                'key' => 'a',
+                                                'value' => ['nik', 'nama', 'tempat_lahir', 'tgl_lahir', 'alamat', 'telepon', 'email', 'nopol']
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                            ]
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
+    public static function part(Request $request){
+        $responseApi = Service::dataPart($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            
+            if($request->option == 'first'){
+                $respon = $data;
+            }else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Part',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Kode Part',
+                        'value' => $request->kd_part,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-50px', 'text' => 'kode Part'],
+                            (object)['class' => 'w-200px', 'text' => 'nama Part'],
+                            (object)['class' => 'w-25', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
+                            (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                    'data' => [(object)['key' => 'a','value' => 'kd_part']]
+                                ],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
+    public static function produk(Request $request){
+        $responseApi = Service::dataProduk($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            
+            if($request->option == 'first'){
+                $respon = $data;
+            }else if($request->option == 'select'){
+                $respon = '';
+                foreach ($data as $key => $value) {
+                    $respon .= '<option value="'.$value->kd_produk.'" data-ket="'.$value->nm_produk.'">'.$value->kd_produk.($value->nm_produk ? '('.$value->nm_produk.')' : '').'</option>';
+                }
+            }else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Produk',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Kode Produk',
+                        'value' => $request->kd_produk,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-50px', 'text' => 'kode Produk'],
+                            (object)['class' => 'w-200px', 'text' => 'nama Produk'],
+                            (object)['class' => 'w-auto', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_produk'],
+                            (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_produk'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                    'data' => [(object)['key' => 'a','value' => 'kd_produk']]
+                                ],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
+    public static function merekmotor(Request $request){
+        $responseApi = Service::dataMerekmotor($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            if($request->option == 'first'){
+                $respon = $data;
+            } else if($request->option == 'select'){
+                $respon = '';
+                foreach ($data as $key => $value) {
+                    $respon .= '<option value="'.$value->MerkMotor.'">'.$value->MerkMotor.'</option>';
+                }
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+
+    public static function typemotor(Request $request){
+        $responseApi = Service::dataTypemotor($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        return $responseApi;
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            if($request->option == 'first'){
+                $respon = $data;
+            } else if($request->option == 'get'){
+                $respon = $data;
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+    // ! 
 }

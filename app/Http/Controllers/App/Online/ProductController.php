@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\app\Online;
+namespace app\Http\Controllers\App\Online;
 
-use App\Helpers\ApiService;
 use Illuminate\Support\Str;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -35,13 +35,12 @@ class ProductController extends Controller
         //  * jika ada maka diasumsikan dari ajax requset dari ajax
         if (!empty($request->get('part_number')) && $request->get('part_number') != '') {
 
-            $responseApi = ApiService::SearchProductMarketplaceByPartNumber(
+            $responseApi = Service::SearchProductMarketplaceByPartNumber(
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 $request->get('page')??1,
                 in_array($request->get('per_page'), [10, 25, 50]) ? $request->get('per_page') : 10
             );
-
             $statusApi = json_decode($responseApi)->status;
             if ($statusApi == 1) {
                 if($request->ajax()){
@@ -88,7 +87,7 @@ class ProductController extends Controller
         ]);
 
         // hubungkan dengan server
-        $responseApi = ApiService::DetailProductMarketplaceByPartNumber(
+        $responseApi = Service::DetailProductMarketplaceByPartNumber(
             strtoupper(trim($request->part_number)),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -181,7 +180,7 @@ class ProductController extends Controller
             ]);                                                                                                                                                       
         }                                                  
 
-        $responseApi = ApiService::addProductMarketplace(
+        $responseApi = Service::addProductMarketplace(
             strtoupper(trim($request->session()->get('app_user_company_id'))),
             json_decode($request->image),
             $request->nama,

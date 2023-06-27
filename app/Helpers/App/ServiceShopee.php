@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Helpers\App;
 
-use App\Helpers\ApiRequest;
+use App\Helpers\App\ApiRequest;
 
-class ApiServiceShopee
+
+class ServiceShopee
 {
     public static function Authorization()
     {

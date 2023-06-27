@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Tokopedia;
+namespace app\Http\Controllers\App\Online\Tokopedia;
 
-use App\Helpers\ApiServiceTokopedia;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent as Agent;
+use App\Http\Controllers\Controller;
+use App\Helpers\App\ServiceTokopedia;
 
 class OrderController extends Controller
 {
@@ -36,7 +35,7 @@ class OrderController extends Controller
             }
         }
 
-        $responseApi = ApiServiceTokopedia::OrderDaftar($request->get('page'), $per_page,
+        $responseApi = ServiceTokopedia::OrderDaftar($request->get('page'), $per_page,
                         $start_date, $end_date, $request->get('status'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -83,7 +82,7 @@ class OrderController extends Controller
         ]);
 
         if(!empty($request->get('nomor_invoice'))) {
-            $responseApi = ApiServiceTokopedia::OrderSingle($request->get('nomor_invoice'),
+            $responseApi = ServiceTokopedia::OrderSingle($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi = json_decode($responseApi)->message;
@@ -103,7 +102,7 @@ class OrderController extends Controller
     }
 
     public function formOrder($nomor_invoice, Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderForm($nomor_invoice,
+        $responseApi = ServiceTokopedia::OrderForm($nomor_invoice,
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -123,7 +122,7 @@ class OrderController extends Controller
     }
 
     public function prosesOrder(Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderProses($request->get('nomor_invoice'),
+        $responseApi = ServiceTokopedia::OrderProses($request->get('nomor_invoice'),
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
@@ -131,7 +130,13 @@ class OrderController extends Controller
     }
 
     public function prosesPickup(Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderPickup($request->get('nomor_invoice'),
+        $responseApi = ServiceTokopedia::OrderPickup($request->get('nomor_invoice'),
+                            strtoupper(trim($request->session()->get('app_user_company_id'))));
+        return json_decode($responseApi, true);
+    }
+
+    public function updateKurir(Request $request) {
+        $responseApi = ServiceTokopedia::OrderUpdateKurir($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

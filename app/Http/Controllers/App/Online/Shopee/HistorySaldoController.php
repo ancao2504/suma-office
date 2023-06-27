@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Shopee;
+namespace app\Http\Controllers\App\Online\Shopee;
 
-use App\Helpers\ApiServiceShopee;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent as Agent;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Helpers\App\ServiceShopee;
+use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class HistorySaldoController extends Controller
 {
@@ -40,7 +39,7 @@ class HistorySaldoController extends Controller
             }
         }
 
-        $responseApi = ApiServiceShopee::HistorySaldoDaftarGroup($request->get('page'), $per_page,
+        $responseApi = ServiceShopee::HistorySaldoDaftarGroup($request->get('page'), $per_page,
                         $start_date, $end_date, strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -76,7 +75,7 @@ class HistorySaldoController extends Controller
     }
 
     public function detailHistorySaldoGroup(Request $request) {
-        $responseApi = ApiServiceShopee::HistorySaldoDaftarGroupDetail(strtoupper(trim($request->get('nomor_invoice'))),
+        $responseApi = ServiceShopee::HistorySaldoDaftarGroupDetail(strtoupper(trim($request->get('nomor_invoice'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
@@ -98,7 +97,7 @@ class HistorySaldoController extends Controller
             $end_date = $request->get('end_date');
         }
 
-        $responseApi = ApiServiceShopee::HistorySaldoDaftarDetail($request->get('page'), $start_date, $end_date,
+        $responseApi = ServiceShopee::HistorySaldoDaftarDetail($request->get('page'), $start_date, $end_date,
                                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

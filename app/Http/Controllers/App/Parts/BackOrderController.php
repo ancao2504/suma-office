@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Parts;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class BackOrderController extends Controller
@@ -33,7 +33,7 @@ class BackOrderController extends Controller
         $kode_dealer = '';
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
-            $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
+            $responseApi = Service::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
@@ -60,7 +60,7 @@ class BackOrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::BackOrderDaftar($request->get('page'), $per_page,
+        $responseApi = Service::BackOrderDaftar($request->get('page'), $per_page,
                             $kode_sales, $kode_dealer, $request->get('part_number'),
                             $user_id, $role_id, $companyid);
         $statusApi = json_decode($responseApi)->status;

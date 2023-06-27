@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\app\Parts;
+namespace app\Http\Controllers\App\Parts;
 
-use App\Helpers\ApiService;
 use Illuminate\Support\Str;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +16,7 @@ class uplooadImageController extends Controller
      */
     public function index(Request $request)
     {
-        $responApi = ApiService::PartImageDaftar($request->get('search')??'', $request->get('page')??1);
+        $responApi = Service::PartImageDaftar($request->get('search')??'', $request->get('page')??1);
 
         $view = view('layouts.parts.uploadimage.uploadimage',[
             'title_menu'    => 'Upload Gambar part',
@@ -59,7 +59,7 @@ class uplooadImageController extends Controller
     {
         foreach ($request->file as $key => $value) {
             $this->validate($request, [
-                'file.' . $key => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'file.' . $key => 'required|image|mimes:jpeg,jpg|max:2048',
             ],[
                 'file.' . $key . '.required' => 'Gambar tidak boleh kosong',
                 'file.' . $key . '.image' => 'File yang diupload harus berupa gambar',

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\app\Online;
+namespace app\Http\Controllers\App\Online;
 
-use App\Helpers\ApiService;
-use App\Helpers\ApiServiceShopee;
-use App\Helpers\ApiServiceTokopedia;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use App\Helpers\App\ServiceShopee;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
+use App\Helpers\App\ServiceTokopedia;
 
 class SerahTerimaController extends Controller
 {
@@ -45,7 +44,7 @@ class SerahTerimaController extends Controller
             $device = 'Mobile';
         }
 
-        $responseApi = ApiService::OnlineSerahTerimaDaftar($request->get('page'), $per_page,
+        $responseApi = Service::OnlineSerahTerimaDaftar($request->get('page'), $per_page,
                         $start_date, $end_date, $request->get('search'), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -96,7 +95,7 @@ class SerahTerimaController extends Controller
     }
 
     public function formSerahTerima($nomor_dokumen, Request $request) {
-        $responseApi = ApiService::OnlineSerahTerimaForm($nomor_dokumen, strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi = Service::OnlineSerahTerimaForm($nomor_dokumen, strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -113,38 +112,38 @@ class SerahTerimaController extends Controller
     }
 
     public function dataRequestPickupShopee(Request $request) {
-        $responseApi = ApiServiceShopee::ShippingDataMetodePengiriman(strtoupper(trim($request->get('nomor_invoice'))));
+        $responseApi = ServiceShopee::ShippingDataMetodePengiriman(strtoupper(trim($request->get('nomor_invoice'))));
         return json_decode($responseApi, true);
     }
 
     public function requestPickupShopee(Request $request) {
-        $responseApi = ApiServiceShopee::ShippingProsesPickup(strtoupper(trim($request->get('nomor_invoice'))),
+        $responseApi = ServiceShopee::ShippingProsesPickup(strtoupper(trim($request->get('nomor_invoice'))),
                         $request->get('address_id'), $request->get('pickup_time_id'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 
     public function requestPickupTokopedia(Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderPickup(strtoupper(trim($request->get('nomor_invoice'))),
+        $responseApi = ServiceTokopedia::OrderPickup(strtoupper(trim($request->get('nomor_invoice'))),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 
     public function updateStatusPerNomorFaktur(Request $request) {
-        $responseApi = ApiService::OnlineSerahTerimaUpdateStatusPerNoFaktur(strtoupper(trim($request->get('nomor_faktur'))),
+        $responseApi = Service::OnlineSerahTerimaUpdateStatusPerNoFaktur(strtoupper(trim($request->get('nomor_faktur'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }
 
     public function prosesCetakLabelShopee(Request $request) {
-        $responseApi = ApiServiceShopee::OrderCetakLabel($request->get('nomor_invoice'),
+        $responseApi = ServiceShopee::OrderCetakLabel($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }
 
     public function prosesCetakLabelTokopedia(Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderCetakLabel($request->get('nomor_invoice'),
+        $responseApi = ServiceTokopedia::OrderCetakLabel($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

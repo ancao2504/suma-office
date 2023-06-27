@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\App\Visit;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class PlanningVisitController extends Controller
@@ -45,7 +44,7 @@ class PlanningVisitController extends Controller
             $kode_sales = $request->get('salesman');
         }
 
-        $responseApi = ApiService::PlanningVisitDaftar($request->get('page'), $per_page,
+        $responseApi = Service::PlanningVisitDaftar($request->get('page'), $per_page,
                             $year, $month, $kode_sales, $request->get('dealer'),
                             strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -100,7 +99,7 @@ class PlanningVisitController extends Controller
     }
 
     public function simpanPlanningVisit(Request $request) {
-        $responseApi = ApiService::PlanningVisitSimpan($request->get('tanggal'),
+        $responseApi = Service::PlanningVisitSimpan($request->get('tanggal'),
                             strtoupper(trim($request->get('salesman'))),
                             strtoupper(trim($request->get('dealer'))),
                             trim($request->get('keterangan')),
@@ -118,7 +117,7 @@ class PlanningVisitController extends Controller
     }
 
     public function hapusPlanningVisit(Request $request) {
-        $responseApi = ApiService::PlanningVisitHapus($request->get('kode_visit'),
+        $responseApi = Service::PlanningVisitHapus($request->get('kode_visit'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

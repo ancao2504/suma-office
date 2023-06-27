@@ -19,7 +19,7 @@ function uploadFile(files) {
     if(fileList.files.length + files.length <= 20){
         for (let i = 0; i < files.length; i++) {
             // Filter file hanya jpg, jpeg, png
-            if (files[i].type.match('image/jpeg') || files[i].type.match('image/png') || files[i].type.match('image/jpg')) {
+            if (files[i].type.match('image/jpeg') || files[i].type.match('image/jpg')) {
                 // byte to kb dibulatkan 2 angka dibelakang koma
                 if(Math.round(files[i].size / 1024) <= 2048){
                     $('.dropzone').addClass('dz-started');
@@ -83,7 +83,6 @@ function pilihGambar(url){
 }
 
 function listGambar(){
-    console.log(page);
     $.ajax({
         url: window.location.href,
         type: "GET",
@@ -93,7 +92,6 @@ function listGambar(){
         },
         dataType: "json",
         success: function(data){
-            console.log(data);
             if (data != null && data.status == 1) {
                 $('#list-gambar').append(data.data);
                 $('#spin-page').remove();
@@ -113,7 +111,6 @@ function listGambar(){
         },
         error: function(data){
             scroll = false;
-            console.log(data);
         }
     });
 }

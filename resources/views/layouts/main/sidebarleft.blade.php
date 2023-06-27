@@ -258,8 +258,7 @@
                 </div>
                 @endif
                 @if (Session::get('app_user_role_id') != "D_H3")
-                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
-                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
+                @if (in_array(strtoupper(trim(Session::get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">PROFILE</span>
@@ -325,8 +324,7 @@
                         <span class="menu-title {{ (Request::is('parts/partnumber*')) ? 'active' : '' }}">Part Number</span>
                     </a>
                 </div>
-                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
-                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
+                @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('parts/backorder*')) ? 'active' : '' }}" href="{{ route('parts.backorder.daftar') }}">
                         <span class="menu-icon">
@@ -376,8 +374,7 @@
                     </div>
                 </div>
                 @endif
-                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
-                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
+                @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/cart*')) ? 'active' : '' }}" href="{{ route('orders.cart.index') }}">
                         <span class="menu-icon">
@@ -437,9 +434,7 @@
                     </a>
                 </div>
                 @endif
-
-                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_KORSM' ||
-                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_SM')
+                @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('orders/pembayaranfaktur*')) ? 'active' : '' }}" href="{{ url('/orders/pembayaranfaktur/belumterbayar') }}">
                         <span class="menu-icon">
@@ -493,8 +488,33 @@
                     </div>
                 </div>
                 @endif
-                @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_OL_SPV' ||
-                    strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_OL_ADMIN' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_REQ_API')
+                
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">RETUR</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <a class="menu-link {{ (Request::is('retur/konsumen*')) ? 'active' : '' }}" href="{{ url('/retur/konsumen') }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: assets/media/icons/duotune/communication/com014.svg-->
+                            <span class="svg-icon svg-icon-muted svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M16.0173 9H15.3945C14.2833 9 13.263 9.61425 12.7431 10.5963L12.154 11.7091C12.0645 11.8781 12.1072 12.0868 12.2559 12.2071L12.6402 12.5183C13.2631 13.0225 13.7556 13.6691 14.0764 14.4035L14.2321 14.7601C14.2957 14.9058 14.4396 15 14.5987 15H18.6747C19.7297 15 20.4057 13.8774 19.912 12.945L18.6686 10.5963C18.1487 9.61425 17.1285 9 16.0173 9Z" fill="currentColor"/>
+                                    <rect opacity="0.3" x="14" y="4" width="4" height="4" rx="2" fill="currentColor"/>
+                                    <path d="M4.65486 14.8559C5.40389 13.1224 7.11161 12 9 12C10.8884 12 12.5961 13.1224 13.3451 14.8559L14.793 18.2067C15.3636 19.5271 14.3955 21 12.9571 21H5.04292C3.60453 21 2.63644 19.5271 3.20698 18.2067L4.65486 14.8559Z" fill="currentColor"/>
+                                    <rect opacity="0.3" x="6" y="5" width="6" height="6" rx="3" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title {{ (Request::is('retur/konsumen*')) ? 'active' : '' }}">Konsumen</span>
+                    </a>
+                </div>
+                @endif
+
+                @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_OL_ADMIN', 'MD_REQ_API']))
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ONLINE</span>
@@ -689,7 +709,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if(strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_H3_MGMT' || strtoupper(trim(session()->get('app_user_role_id'))) == 'MD_OL_SPV')
+                        @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_OL_SPV']))
                         <div class="menu-item">
                             <a class="menu-link {{ (Request::is('online/orders/approve/*')) ? 'active' : '' }}" href="{{ url('/online/orders/approve/daftar') }}">
                                 <span class="menu-bullet">
@@ -785,7 +805,7 @@
                         <span class="menu-title {{ (Request::is('online/serahterima/*')) ? 'active' : '' }}">Serah Terima</span>
                     </a>
                 </div>
-                @if (Session::get('app_user_role_id') == "MD_H3_MGMT" || Session::get('app_user_role_id') == "MD_H3_FIN")
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_FIN']))
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">SETTING</span>
@@ -882,7 +902,7 @@
                     </div>
                 </div>
                 @endif
-                @if (Session::get('app_user_role_id') == "MD_H3_KORSM" ||  Session::get('app_user_role_id') == "MD_H3_MGMT")
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_KORSM', 'MD_H3_MGMT']))
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">VISIT</span>
@@ -903,6 +923,95 @@
                         </span>
                         <span class="menu-title {{ (Request::is('visit/planningvisit*')) ? 'active' : '' }}">Planning Visit</span>
                     </a>
+                </div>
+                @endif
+                
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KAPC']))
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Data</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <a class="menu-link {{ (Request::is('konsumen*')) ? 'active' : '' }}" href="{{ url('/konsumen') }}">
+                        <span class="menu-icon">
+                            <span class="svg-icon svg-icon-muted svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M8.7 4.19995L4 6.30005V18.8999L8.7 16.8V19L3.1 21.5C2.6 21.7 2 21.4 2 20.8V6C2 5.4 2.3 4.89995 2.9 4.69995L8.7 2.09998V4.19995Z" fill="currentColor"/>
+                                    <path d="M15.3 19.8L20 17.6999V5.09992L15.3 7.19989V4.99994L20.9 2.49994C21.4 2.29994 22 2.59989 22 3.19989V17.9999C22 18.5999 21.7 19.1 21.1 19.3L15.3 21.8998V19.8Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M15.3 7.19995L20 5.09998V17.7L15.3 19.8V7.19995Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M8.70001 4.19995V2L15.4 5V7.19995L8.70001 4.19995ZM8.70001 16.8V19L15.4 22V19.8L8.70001 16.8Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M8.7 16.8L4 18.8999V6.30005L8.7 4.19995V16.8Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="menu-title {{ (Request::is('konsumen*')) ? 'active' : '' }}">Konsumen</span>
+                    </a>
+                </div>
+                @endif
+
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">REPORT</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <a class="menu-link {{ (Request::is('report/faktur*')) ? 'active' : '' }}" href="{{ url('/report/faktur') }}">
+                        <span class="menu-icon">
+                            <span class="svg-icon svg-icon-muted svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M8.7 4.19995L4 6.30005V18.8999L8.7 16.8V19L3.1 21.5C2.6 21.7 2 21.4 2 20.8V6C2 5.4 2.3 4.89995 2.9 4.69995L8.7 2.09998V4.19995Z" fill="currentColor"/>
+                                    <path d="M15.3 19.8L20 17.6999V5.09992L15.3 7.19989V4.99994L20.9 2.49994C21.4 2.29994 22 2.59989 22 3.19989V17.9999C22 18.5999 21.7 19.1 21.1 19.3L15.3 21.8998V19.8Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M15.3 7.19995L20 5.09998V17.7L15.3 19.8V7.19995Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M8.70001 4.19995V2L15.4 5V7.19995L8.70001 4.19995ZM8.70001 16.8V19L15.4 22V19.8L8.70001 16.8Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M8.7 16.8L4 18.8999V6.30005L8.7 4.19995V16.8Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="menu-title {{ (Request::is('report/faktur*')) ? 'active' : '' }}">Faktur</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a class="menu-link {{ (Request::is('report/konsumen*')) ? 'active' : '' }}" href="{{ url('/report/konsumen') }}">
+                        <span class="menu-icon">
+                            <span class="svg-icon svg-icon-muted svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M8.7 4.19995L4 6.30005V18.8999L8.7 16.8V19L3.1 21.5C2.6 21.7 2 21.4 2 20.8V6C2 5.4 2.3 4.89995 2.9 4.69995L8.7 2.09998V4.19995Z" fill="currentColor"/>
+                                    <path d="M15.3 19.8L20 17.6999V5.09992L15.3 7.19989V4.99994L20.9 2.49994C21.4 2.29994 22 2.59989 22 3.19989V17.9999C22 18.5999 21.7 19.1 21.1 19.3L15.3 21.8998V19.8Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M15.3 7.19995L20 5.09998V17.7L15.3 19.8V7.19995Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M8.70001 4.19995V2L15.4 5V7.19995L8.70001 4.19995ZM8.70001 16.8V19L15.4 22V19.8L8.70001 16.8Z" fill="currentColor"/>
+                                    <path opacity="0.3" d="M8.7 16.8L4 18.8999V6.30005L8.7 4.19995V16.8Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="menu-title {{ (Request::is('report/konsumen*')) ? 'active' : '' }}">Konsumen</span>
+                    </a>
+                </div>
+                
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('report/retur/konsumen*')) ? 'here hover show' : '' }}">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path opacity="0.3" d="M22.1 11.5V12.6C22.1 13.2 21.7 13.6 21.2 13.7L19.9 13.9C19.7 14.7 19.4 15.5 18.9 16.2L19.7 17.2999C20 17.6999 20 18.3999 19.6 18.7999L18.8 19.6C18.4 20 17.8 20 17.3 19.7L16.2 18.9C15.5 19.3 14.7 19.7 13.9 19.9L13.7 21.2C13.6 21.7 13.1 22.1 12.6 22.1H11.5C10.9 22.1 10.5 21.7 10.4 21.2L10.2 19.9C9.4 19.7 8.6 19.4 7.9 18.9L6.8 19.7C6.4 20 5.7 20 5.3 19.6L4.5 18.7999C4.1 18.3999 4.1 17.7999 4.4 17.2999L5.2 16.2C4.8 15.5 4.4 14.7 4.2 13.9L2.9 13.7C2.4 13.6 2 13.1 2 12.6V11.5C2 10.9 2.4 10.5 2.9 10.4L4.2 10.2C4.4 9.39995 4.7 8.60002 5.2 7.90002L4.4 6.79993C4.1 6.39993 4.1 5.69993 4.5 5.29993L5.3 4.5C5.7 4.1 6.3 4.10002 6.8 4.40002L7.9 5.19995C8.6 4.79995 9.4 4.39995 10.2 4.19995L10.4 2.90002C10.5 2.40002 11 2 11.5 2H12.6C13.2 2 13.6 2.40002 13.7 2.90002L13.9 4.19995C14.7 4.39995 15.5 4.69995 16.2 5.19995L17.3 4.40002C17.7 4.10002 18.4 4.1 18.8 4.5L19.6 5.29993C20 5.69993 20 6.29993 19.7 6.79993L18.9 7.90002C19.3 8.60002 19.7 9.39995 19.9 10.2L21.2 10.4C21.7 10.5 22.1 11 22.1 11.5ZM12.1 8.59998C10.2 8.59998 8.6 10.2 8.6 12.1C8.6 14 10.2 15.6 12.1 15.6C14 15.6 15.6 14 15.6 12.1C15.6 10.2 14 8.59998 12.1 8.59998Z" fill="currentColor"></path>
+                                    <path d="M17.1 12.1C17.1 14.9 14.9 17.1 12.1 17.1C9.30001 17.1 7.10001 14.9 7.10001 12.1C7.10001 9.29998 9.30001 7.09998 12.1 7.09998C14.9 7.09998 17.1 9.29998 17.1 12.1ZM12.1 10.1C11 10.1 10.1 11 10.1 12.1C10.1 13.2 11 14.1 12.1 14.1C13.2 14.1 14.1 13.2 14.1 12.1C14.1 11 13.2 10.1 12.1 10.1Z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="menu-title {{ (Request::is('report/retur/konsumen*')) ? 'active' : '' }}">Retur</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion {{ (Request::is('report/retur/konsumen*')) ? 'show' : '' }}" >
+                        <div class="menu-item">
+                            <a class="menu-link {{ (Request::is('report/retur/konsumen*')) ? 'active' : '' }}" href="{{ url('/report/retur/konsumen') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Konsumen</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 @endif
                 <div class="menu-item">

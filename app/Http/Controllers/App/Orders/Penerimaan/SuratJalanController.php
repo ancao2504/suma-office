@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\App\Orders\Penerimaan;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
@@ -43,7 +43,7 @@ class SuratJalanController extends Controller
     public function CekPenerimaanSJ(Request $request)
     {
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
-        $responseApi = ApiService::CekPenerimaanSuratJalan(
+        $responseApi = Service::CekPenerimaanSuratJalan(
             $request->get('no_st'),
             $companyid,
         );
@@ -116,7 +116,7 @@ class SuratJalanController extends Controller
 
         $no_sj_err = [];
         foreach ($no_sj as $key => $value) {
-            $responseApi = ApiService::PenerimaanSuratJalanSimpan(
+            $responseApi = Service::PenerimaanSuratJalanSimpan(
                 trim($value->no_sj),
                 trim($request->get('tgl_terima')),
                 trim($request->get('jam_terima')),
@@ -159,7 +159,7 @@ class SuratJalanController extends Controller
     {
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::PenerimaanSuratJalanHapus(
+        $responseApi = Service::PenerimaanSuratJalanHapus(
             trim($request->get('no_sj')),
             trim($companyid),
         );
@@ -205,7 +205,7 @@ class SuratJalanController extends Controller
 
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::PenerimaanSuratJalanReport(
+        $responseApi = Service::PenerimaanSuratJalanReport(
             trim($request->get('start_date')),
             trim($request->get('end_date')),
             $companyid,

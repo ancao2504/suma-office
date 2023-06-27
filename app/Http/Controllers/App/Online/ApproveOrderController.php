@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\app\Online;
+namespace app\Http\Controllers\App\Online;
 
-use App\Helpers\ApiService;
-use App\Helpers\ApiServiceShopee;
-use App\Helpers\ApiServiceTokopedia;
-use Illuminate\Support\Str;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use App\Http\Controllers\Controller;
+use App\Helpers\App\ServiceShopee;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
+use App\Helpers\App\ServiceTokopedia;
 
 class ApproveOrderController extends Controller
 {
@@ -30,7 +28,7 @@ class ApproveOrderController extends Controller
             $device = 'Mobile';
         }
 
-        $responseApi = ApiService::OnlineApproveOrderDaftar($request->get('page'), $per_page,
+        $responseApi = Service::OnlineApproveOrderDaftar($request->get('page'), $per_page,
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -79,7 +77,7 @@ class ApproveOrderController extends Controller
     }
 
     public function formApproveTokopedia($nomor_invoice, Request $request) {
-        $responseApi = ApiServiceTokopedia::OrderForm($nomor_invoice,
+        $responseApi = ServiceTokopedia::OrderForm($nomor_invoice,
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -99,7 +97,7 @@ class ApproveOrderController extends Controller
     }
 
     public function formApproveShopee($nomor_invoice, Request $request) {
-        $responseApi = ApiServiceShopee::OrderForm($nomor_invoice,
+        $responseApi = ServiceShopee::OrderForm($nomor_invoice,
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -119,7 +117,7 @@ class ApproveOrderController extends Controller
     }
 
     public function formApproveInternal($nomor_faktur, Request $request) {
-        $responseApi = ApiService::ApproveOrderMarketplaceDetail($nomor_faktur,
+        $responseApi = Service::ApproveOrderMarketplaceDetail($nomor_faktur,
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -138,14 +136,14 @@ class ApproveOrderController extends Controller
     }
 
     public function prosesApproveMarketplace(Request $request) {
-        $responseApi = ApiService::ApproveOrderMarketplaceProses($request->get('nomor_invoice'),
+        $responseApi = Service::ApproveOrderMarketplaceProses($request->get('nomor_invoice'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         return json_decode($responseApi, true);
     }
 
     public function prosesApproveInternal(Request $request) {
-        $responseApi = ApiService::ApproveOrderInternalProses($request->get('nomor_faktur'),
+        $responseApi = Service::ApproveOrderInternalProses($request->get('nomor_faktur'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         return json_decode($responseApi, true);

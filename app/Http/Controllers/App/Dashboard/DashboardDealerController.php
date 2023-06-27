@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\App\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DashboardDealerController extends Controller
 {
@@ -27,7 +26,7 @@ class DashboardDealerController extends Controller
             $kode_dealer = $request->get('kode_dealer');
         }
 
-        $responseApi = ApiService::DashboardDealerPenjualanBulanan($year, $month, $kode_dealer,
+        $responseApi = Service::DashboardDealerPenjualanBulanan($year, $month, $kode_dealer,
                             strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));

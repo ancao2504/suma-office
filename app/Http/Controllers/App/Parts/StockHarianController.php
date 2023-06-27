@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\App\Parts;
 
-use App\Helpers\ApiService;
-use App\Http\Controllers\App\Exports\ExcelStockHarianController;
-use App\Http\Controllers\Controller;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\App\Exports\ExcelStockHarianController;
 
 class StockHarianController extends Controller
 {
@@ -21,7 +19,7 @@ class StockHarianController extends Controller
         $subProduk = [];
         $lokasi = [];
 
-        $responseApi = ApiService::StockHarianOption(trim($request->session()->get('app_user_company_id')));
+        $responseApi = Service::StockHarianOption(trim($request->session()->get('app_user_company_id')));
         $messageApi = json_decode($responseApi)->message;
         $statusApi = json_decode($responseApi)->status;
 
@@ -65,7 +63,7 @@ class StockHarianController extends Controller
         }
 
         if (strtoupper(trim($request->get('kode_lokasi'))) == 'ALLONLINE') {
-            $responseApi = ApiService::StockHarianProsesMarketplace(strtoupper(trim($request->session()->get('app_user_company_id'))),
+            $responseApi = Service::StockHarianProsesMarketplace(strtoupper(trim($request->session()->get('app_user_company_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->get('kode_class'))), strtoupper(trim($request->get('kode_produk'))),
                             strtoupper(trim($request->get('kode_produk_level'))), strtoupper(trim($request->get('kode_sub'))),
@@ -73,7 +71,7 @@ class StockHarianController extends Controller
                             strtoupper(trim($request->get('kode_rak'))), strtoupper(trim($request->get('option_stock_sedia'))),
                             strtoupper(trim($request->get('nilai_stock_sedia'))));
         } else {
-            $responseApi = ApiService::StockHarianProsesPerlokasi(strtoupper(trim($request->session()->get('app_user_company_id'))),
+            $responseApi = Service::StockHarianProsesPerlokasi(strtoupper(trim($request->session()->get('app_user_company_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->get('kode_class'))), strtoupper(trim($request->get('kode_produk'))),
                             strtoupper(trim($request->get('kode_produk_level'))), strtoupper(trim($request->get('kode_sub'))),

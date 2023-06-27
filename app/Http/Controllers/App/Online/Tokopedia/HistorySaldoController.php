@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Tokopedia;
+namespace app\Http\Controllers\App\Online\Tokopedia;
 
-use App\Helpers\ApiServiceTokopedia;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent as Agent;
+use App\Http\Controllers\Controller;
+use App\Helpers\App\ServiceTokopedia;
 
 class HistorySaldoController extends Controller
 {
@@ -36,7 +35,7 @@ class HistorySaldoController extends Controller
             }
         }
 
-        $responseApi = ApiServiceTokopedia::HistorySaldo($request->get('page'), $per_page,
+        $responseApi = ServiceTokopedia::HistorySaldo($request->get('page'), $per_page,
                         $start_date, $end_date, strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

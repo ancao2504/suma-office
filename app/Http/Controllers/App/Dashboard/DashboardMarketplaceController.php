@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\App\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Jenssegers\Agent\Agent as Agent;
+use App\Http\Controllers\Controller;
 
 class DashboardMarketplaceController extends Controller
 {
@@ -28,7 +26,7 @@ class DashboardMarketplaceController extends Controller
             'month'     => $month,
         ]);
 
-        $responseApi = ApiService::DashboardMarketplaceSalesByDate($year, $month,
+        $responseApi = Service::DashboardMarketplaceSalesByDate($year, $month,
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -36,7 +34,7 @@ class DashboardMarketplaceController extends Controller
         if($statusApi == 1) {
             $data_sales_by_date = json_decode($responseApi)->data;
 
-            $responseApi = ApiService::DashboardMarketplaceSalesByLocation($year, $month,
+            $responseApi = Service::DashboardMarketplaceSalesByLocation($year, $month,
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;

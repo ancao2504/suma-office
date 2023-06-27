@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\App\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class DashboardSalesmanController extends Controller
@@ -21,7 +20,7 @@ class DashboardSalesmanController extends Controller
             $month = $request->get('month');
         }
 
-        $responseApi = ApiService::DashboardSalesmanPenjualanBulanan($year, $month, $request->get('jenis_mkr'),
+        $responseApi = Service::DashboardSalesmanPenjualanBulanan($year, $month, $request->get('jenis_mkr'),
                 $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_id'))),
                 strtoupper(trim($request->session()->get('app_user_role_id'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -31,7 +30,7 @@ class DashboardSalesmanController extends Controller
         if($statusApi == 1) {
             $dataSalesMonth = json_decode($responseApi)->data;
 
-            $responseApi = ApiService::DashboardSalesmanPenjualanHarian($year, $month, $request->get('jenis_mkr'),
+            $responseApi = Service::DashboardSalesmanPenjualanHarian($year, $month, $request->get('jenis_mkr'),
                             $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
 

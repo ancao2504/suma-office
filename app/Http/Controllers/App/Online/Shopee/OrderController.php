@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Shopee;
+namespace app\Http\Controllers\App\Online\Shopee;
 
-use App\Helpers\ApiServiceShopee;
-use App\Helpers\ApiServiceTokopedia;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent as Agent;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Helpers\App\ServiceShopee;
+use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
@@ -39,7 +37,7 @@ class OrderController extends Controller
             }
         }
 
-        $responseApi = ApiServiceShopee::OrderDaftar($fields, $start_date, $end_date, $page_size,
+        $responseApi = ServiceShopee::OrderDaftar($fields, $start_date, $end_date, $page_size,
                         $request->get('cursor'), $request->get('status'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -88,7 +86,7 @@ class OrderController extends Controller
         ]);
 
         if(!empty($request->get('nomor_invoice'))) {
-            $responseApi = ApiServiceShopee::OrderSingle($request->get('nomor_invoice'),
+            $responseApi = ServiceShopee::OrderSingle($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
             $messageApi = json_decode($responseApi)->message;
             $statusApi = json_decode($responseApi)->status;
@@ -108,7 +106,7 @@ class OrderController extends Controller
     }
 
     public function formOrder($nomor_invoice, Request $request) {
-        $responseApi = ApiServiceShopee::OrderForm($nomor_invoice,
+        $responseApi = ServiceShopee::OrderForm($nomor_invoice,
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -128,7 +126,7 @@ class OrderController extends Controller
     }
 
     public function prosesOrder(Request $request) {
-        $responseApi = ApiServiceShopee::OrderProses($request->get('nomor_invoice'),
+        $responseApi = ServiceShopee::OrderProses($request->get('nomor_invoice'),
                 $request->get('tanggal'),
                 strtoupper(trim($request->session()->get('app_user_company_id'))),
                 strtoupper(trim($request->session()->get('app_user_id'))));
@@ -136,7 +134,7 @@ class OrderController extends Controller
     }
 
     public function prosesPickup(Request $request) {
-        $responseApi = ApiServiceShopee::OrderPickup($request->get('nomor_invoice'),
+        $responseApi = ServiceShopee::OrderPickup($request->get('nomor_invoice'),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

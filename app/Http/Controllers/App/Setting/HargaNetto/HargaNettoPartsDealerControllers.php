@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting\HargaNetto;
+namespace app\Http\Controllers\App\Setting\HargaNetto;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +18,7 @@ class HargaNettoPartsDealerControllers extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $param = json_decode(base64_decode($request->get('param')));
-        $responseApi = ApiService::HargaNettoPartDealerDaftar(
+        $responseApi = Service::HargaNettoPartDealerDaftar(
             $param->page??1,
             $param->per_page??10,
             $role_id,
@@ -54,7 +54,7 @@ class HargaNettoPartsDealerControllers extends Controller
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::HargaNettoPartDealerSimpan(
+        $responseApi = Service::HargaNettoPartDealerSimpan(
             trim($request->get('part_number')),
             trim($request->get('dealer')),
             trim(str_replace('.', '', $request->get('harga'))),
@@ -81,7 +81,7 @@ class HargaNettoPartsDealerControllers extends Controller
     public function destroy(Request $request)
     {
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
-        $responseApi = ApiService::HargaNettoPartDealerHapus(
+        $responseApi = Service::HargaNettoPartDealerHapus(
             trim($request->get('part_number')),
             trim($request->get('dealer')),
             $companyid

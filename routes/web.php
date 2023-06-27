@@ -2,15 +2,18 @@
 
 use App\Auth\AuthController;
 use App\Profile\UserController;
+use App\data_json\GetController;
 use App\Option\OptionController;
 use App\Orders\FakturController;
 use App\Online\ProductController;
 use App\Profile\DealerController;
+use App\Auth\AuthShopeeController;
 use App\Profile\AccountController;
 use App\Orders\Cart\CartController;
 use App\Parts\PartNumberController;
 use App\Parts\StockHarianController;
 use App\Validasi\ValidasiController;
+use App\Online\SerahTerimaController;
 use App\Parts\uplooadImageController;
 use Illuminate\Support\Facades\Route;
 use App\Visit\PlanningVisitController;
@@ -22,29 +25,32 @@ use App\Setting\Diskon\DiskonProdukController;
 use App\Orders\Penerimaan\PembayaranController;
 use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
+use App\Reports\FakturController as ReportFaktur;
+use App\Retur\KonsumenController as ReturKonsumen;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
-use App\Auth\AuthShopeeController;
-use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
-use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
-use App\Online\SerahTerimaController;
-use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
-use App\Online\Tokopedia\ProductController as ProductTokopediaController;
-use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
-use App\Online\Tokopedia\OrderController as OrderTokopediaController;
-use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
-use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
-use App\Online\Shopee\OrderController as OrderShopeeController;
-use App\Online\PemindahanController as PemindahanMarketplace;
+use App\konsumen\KonsumenController;
+use App\Reports\KonsumenController as ReportKonsumenController;
 use App\Online\Shopee\ProductController as ProductShopee;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
+use App\Online\PemindahanController as PemindahanMarketplace;
+use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
-use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
 use App\Online\ApproveOrderController as ApproveOrderController;
+use App\Reports\Retur\KonsumenController as ReportReturKonsumen;
+use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
+use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
+use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use App\Online\Tokopedia\OrderController as OrderTokopediaController;
+use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
+use App\Online\Tokopedia\ProductController as ProductTokopediaController;
+use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
+use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -287,6 +293,15 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/option/tipemotor', 'optionTipeMotor')->name('tipe-motor');
                 Route::get('/option/groupproduk', 'OptionGroupProduk')->name('group-produk');
                 Route::get('/option/updateharga', 'OptionUpdateHarga')->name('update-harga');
+                
+                // ! dari aplikasi suma sby
+                Route::get('/dealer', 'dealer')->name('option-dealer');
+                Route::get('/faktur', 'faktur')->name('option-faktur');
+                Route::get('/part', 'part')->name('option-part');
+                Route::get('/produk', 'produk')->name('option-produk');
+                // terakhir hari sabtu konsumen option
+                Route::get('option/konsumen', 'konsumen')->name('option-konsumen');
+                // ! end dari aplikasi suma sby
             });
         });
         Route::name('setting.')->group(function () {
@@ -331,12 +346,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                             Route::post('/setting/diskon/prosentase/dealer/default/hapus', 'destroy')->name('hapus');
                         });
                     });
-
-                    // Route::name('part.')->group(function () {
-                    //     Route::get('/setting/diskon/default/dealer', 'App\Setting\Diskon\DiskonDealerController@index')->name('daftar');
-                    //     Route::post('/setting/diskon/default/dealer/simpan', 'App\Setting\Diskon\DiskonDealerController@store')->name('simpan');
-                    //     Route::post('/setting/diskon/default/dealer/hapus', 'App\Setting\Diskon\DiskonDealerController@destroy')->name('hapus');
-                    // });
                 });
             });
             // setting.netto.dealer.part
@@ -522,6 +531,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::name('form.')->group(function () {
                             Route::post('/online/orders/tokopedia/single/form/proses', 'prosesOrder')->name('proses');
                             Route::post('/online/orders/tokopedia/single/form/pickup', 'prosesPickup')->name('pickup');
+                            Route::post('/online/orders/tokopedia/single/form/update-kurir', 'updateKurir')->name('update-kurir');
                             Route::get('/online/orders/tokopedia/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
                         });
                         Route::get('/online/orders/tokopedia/daftar', 'daftarOrder')->name('daftar');
@@ -595,6 +605,69 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
         });
+
+        // !
+        Route::name('retur.')->group(function () {
+            Route::name('konsumen.')->group(function () {
+                Route::controller(ReturKonsumen::class)->group(function () {
+                    Route::get('/retur/konsumen',  'index')->name('index');
+                    Route::get('/retur/konsumen/form',  'form')->name('form');
+                    Route::post('/retur/konsumen/form',  'store')->name('store');
+                    Route::get('/retur/konsumen/edit',  'edit')->name('edit');
+                    Route::post('/retur/konsumen/edit',  'storeDtl')->name('storeDtl');
+                    Route::post('/retur/konsumen/delete',  'destroy')->name('delete');
+                });
+            });
+        });
+
+        Route::name('report.')->group(function () {
+            Route::controller(Controller::class)->group(function () {
+                Route::name('faktur.')->group(function () {
+                    Route::controller(ReportFaktur::class)->group(function () {
+                        Route::get('report/faktur', 'index')->name('index');
+                        Route::post('report/faktur', 'data')->name('data');
+                        Route::post('report/faktur/export',  'export')->name('export');
+                    });
+                });
+                Route::name('retur.')->group(function () {
+                    Route::name('konsumen.')->group(function () {
+                        Route::controller(ReportReturKonsumen::class)->group(function () {
+                            Route::get('report/retur/konsumen', 'index')->name('index');
+                            Route::post('report/retur/konsumen', 'data')->name('data');
+                            Route::post('report/retur/konsumen/export',  'export')->name('export');
+                        });
+                    });
+                });
+                Route::name('konsumen.')->group(function () {
+                    Route::controller(ReportKonsumenController::class)->group(function () {
+                        Route::get('report/konsumen/', 'index')->name('index');
+                        Route::post('report/konsumen/daftar', 'daftarKonsumen')->name('daftar');
+                        Route::post('report/konsumen/histori', 'dataHistoriKonsumen')->name('histori');
+                        Route::post('report/konsumen/export',  'export')->name('export');
+                        Route::post('report/konsumen/export',  'Historyexport')->name('export');
+                    });
+                });
+            });
+        });
+        Route::name('konsumen.')->group(function () {
+            // konsumen
+            Route::controller(KonsumenController::class)->group(function () {
+                Route::get('konsumen/', 'index')->name('index');
+                Route::get('konsumen/create', 'create')->name('create');
+                Route::get('konsumen/edit/{id}', 'konsumenEdit')->name('edit');
+                Route::post('konsumen/store', 'konsumenStore')->name('store');
+                Route::post('konsumen/delete', 'konsumenDelete')->name('delete');
+            });
+
+            // // export
+            // Route::name('export.')->group(function () {
+            //     Route::controller(ExportController::class)->group(function () {
+            //         Route::get('reportkonsumen/konsumen/export',  'konsumenExport')->name('daftar');
+            //         Route::get('reportkonsumen/histori/export',  'historyKonsumenExport')->name('histori');
+            //     });
+            // });
+        });
+        // ! end 
     });
 
     Route::get('/reportheader', function () {

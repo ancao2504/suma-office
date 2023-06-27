@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\app\Orders\Penerimaan;
+namespace app\Http\Controllers\App\Orders\Penerimaan;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 use Intervention\Image\Facades\Image;
@@ -42,7 +41,7 @@ class PembayaranController extends Controller
     public function daftarPembayaranDealer(Request $request)
     {
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
-        $responseApi = ApiService::pembayaranDealerDaftar(
+        $responseApi = Service::pembayaranDealerDaftar(
             trim($request->get('kd_dealer')),
             trim($companyid)
         );
@@ -92,7 +91,7 @@ class PembayaranController extends Controller
             }
         } 
         // kirim data ke api
-        $responseApi = ApiService::PembayaranDealerSimpan(
+        $responseApi = Service::PembayaranDealerSimpan(
             trim($request->get('kd_dealer')),
             trim($request->get('jenis_transaksi')),
             $request->get('total'),

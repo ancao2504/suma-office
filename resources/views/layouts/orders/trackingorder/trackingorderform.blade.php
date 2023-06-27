@@ -187,6 +187,19 @@
                                         @endif
                                     </div>
                                 </div>
+                                @if ($data->detail_pengiriman->nomor_surat_jalan != '')
+                                <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-250px px-7 py-3 mb-5">
+                                    <div class="pe-3">
+                                        <div class="fw-bolder text-dark mt-1">Lokasi Pacing :</div>
+                                        <div class="d-flex align-items-center mt-1 fs-6">
+                                            <div class="fw-bold text-gray-600 fs-7">{{ trim($data->detail_pengiriman->lokasi_packing) }}</div>
+                                        </div>
+                                        <div class="d-flex align-items-center mt-1 fs-6">
+                                            <div class="fw-bold text-gray-600 fs-7">{{ trim($data->detail_pengiriman->usertime_packing) }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-line w-40px"></div>

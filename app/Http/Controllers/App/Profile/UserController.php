@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\App\Profile;
 
-use Carbon\Carbon;
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     public function daftarUser(Request $request) {
         $data_role = [];
 
-        $responseApi = ApiService::OptionRoleUser();
+        $responseApi = Service::OptionRoleUser();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -33,7 +31,7 @@ class UserController extends Controller
             $per_page = $request->get('per_page');
         }
 
-        $responseApi = ApiService::UserDaftar($request->get('page'), $per_page,
+        $responseApi = Service::UserDaftar($request->get('page'), $per_page,
                             $request->get('role_id'), $request->get('user_id'),
                             strtoupper(trim($request->session()->get('app_user_role_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -73,7 +71,7 @@ class UserController extends Controller
 
     public function tambahUser(Request $request) {
         $data_role = [];
-        $responseApi = ApiService::OptionRoleUser();
+        $responseApi = Service::OptionRoleUser();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -84,7 +82,7 @@ class UserController extends Controller
         }
 
         $data_company = [];
-        $responseApi = ApiService::OptionCompany('', 1, 100);
+        $responseApi = Service::OptionCompany('', 1, 100);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -105,7 +103,7 @@ class UserController extends Controller
 
     public function formUser($user_id, Request $request) {
         $data_role = [];
-        $responseApi = ApiService::OptionRoleUser();
+        $responseApi = Service::OptionRoleUser();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -116,7 +114,7 @@ class UserController extends Controller
         }
 
         $data_company = [];
-        $responseApi = ApiService::OptionCompany('', 1, 100);
+        $responseApi = Service::OptionCompany('', 1, 100);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -126,7 +124,7 @@ class UserController extends Controller
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
-        $responseApi = ApiService::UserForm(strtoupper(trim($user_id)));
+        $responseApi = Service::UserForm(strtoupper(trim($user_id)));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -180,7 +178,7 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->with('failed', 'Kolom password dan password konfirmasi tidak boleh kosong dan harus sesuai');
             }
 
-            $responseApi = ApiService::ValidasiUserIdTidakTerdaftar(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
+            $responseApi = Service::ValidasiUserIdTidakTerdaftar(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -188,7 +186,7 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->with('failed', $messageApi);
             }
 
-            $responseApi = ApiService::ValidasiEmailTidakTerdaftar(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
+            $responseApi = Service::ValidasiEmailTidakTerdaftar(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -196,7 +194,7 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->with('failed', $messageApi);
             }
         } else {
-            $responseApi = ApiService::UserForm(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
+            $responseApi = Service::UserForm(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('companyid'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -209,7 +207,7 @@ class UserController extends Controller
             }
 
             if(trim($email_sebelumnya) != trim($request->get('email'))) {
-                $responseApi = ApiService::ValidasiEmailTidakTerdaftar(strtoupper(trim($request->get('email'))), strtoupper(trim($request->get('companyid'))));
+                $responseApi = Service::ValidasiEmailTidakTerdaftar(strtoupper(trim($request->get('email'))), strtoupper(trim($request->get('companyid'))));
                 $statusApi = json_decode($responseApi)->status;
                 $messageApi =  json_decode($responseApi)->message;
 
@@ -236,7 +234,7 @@ class UserController extends Controller
             $photo = $photo_sebelumnya;
         }
 
-        $responseApi = ApiService::UserSimpan(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('user_role'))),
+        $responseApi = Service::UserSimpan(strtoupper(trim($request->get('user_id'))), strtoupper(trim($request->get('user_role'))),
                             trim($request->get('name')), trim($request->get('jabatan')), trim($request->get('telepon')),
                             trim($photo), trim($request->get('email')), trim($request->get('password')), trim($request->get('status_user')),
                             strtoupper(trim($request->get('companyid'))));

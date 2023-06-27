@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\App\Validasi;
 
-use App\Helpers\ApiService;
-use App\Http\Controllers\Controller;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
 
 class ValidasiController extends Controller
 {
     public function validasiSalesman(Request $request)
     {
-        $responseApi = ApiService::validasiSalesman(
+        $responseApi = Service::validasiSalesman(
             strtoupper($request->get('kode_sales')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -23,7 +19,7 @@ class ValidasiController extends Controller
 
     public function validasiDealer(Request $request)
     {
-        $responseApi = ApiService::validasiDealer(
+        $responseApi = Service::validasiDealer(
             strtoupper($request->get('kode_dealer')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -32,7 +28,7 @@ class ValidasiController extends Controller
 
     public function validasiDealerSalesman(Request $request)
     {
-        $responseApi = ApiService::validasiDealerSalesman(
+        $responseApi = Service::validasiDealerSalesman(
             strtoupper($request->get('kode_sales')),
             strtoupper($request->get('kode_dealer')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -42,7 +38,7 @@ class ValidasiController extends Controller
 
     public function validasiPartNumber(Request $request)
     {
-        $responseApi = ApiService::validasiPartNumber(
+        $responseApi = Service::validasiPartNumber(
             strtoupper($request->get('part_number')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -51,7 +47,7 @@ class ValidasiController extends Controller
 
     public function validasiProduk(Request $request)
     {
-        $responseApi = ApiService::ValidasiProduk(strtoupper(trim($request->kd_produk)));
+        $responseApi = Service::ValidasiProduk(strtoupper(trim($request->kd_produk)));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 

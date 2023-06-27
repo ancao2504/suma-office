@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\App\Orders\PurchaseOrderForm;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class PurchaseOrderFormDetailController extends Controller
 {
     public function purchaseOrderFormDetailDaftar(Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormDetailDaftar(trim($request->get('nomor_pof')),
+        $responseApi = Service::PurchaseOrderFormDetailDaftar(trim($request->get('nomor_pof')),
                 strtoupper(trim($request->session()->get('app_user_id'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -27,7 +26,7 @@ class PurchaseOrderFormDetailController extends Controller
             $Agent = new Agent();
 
             if($Agent->isMobile()) {
-                $image_url_part = config('constants.app.app_images_url');
+                $image_url_part = config('constants.app.url.images');
                 $image_not_found_url_part = "'" . asset('assets/images/background/part_image_not_found.png') . "'";
 
                 foreach($data->data_pof_detail as $data_detail) {
@@ -213,7 +212,7 @@ class PurchaseOrderFormDetailController extends Controller
                 foreach($data->data_pof_detail as $data_detail) {
                     $jumlah_data = (double)$jumlah_data + 1;
 
-                    $image_url_part = config('constants.app.app_images_url');
+                    $image_url_part = config('constants.app.url.images');
                     $image_not_found_url_part = "'" . asset('assets/images/background/part_image_not_found.png') . "'";
 
                     $table_detail .= '<tr>';
@@ -453,14 +452,14 @@ class PurchaseOrderFormDetailController extends Controller
     }
 
     public function purchaseOrderFormDetailEditPart(Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormDetailEditPart($request->get('nomor_pof'), $request->get('part_number'),
+        $responseApi = Service::PurchaseOrderFormDetailEditPart($request->get('nomor_pof'), $request->get('part_number'),
             strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }
 
     public function PurchaseOrderFormDetailSimpanPart(Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormDetailSimpanPart($request->get('nomor_pof'), $request->get('part_number'),
+        $responseApi = Service::PurchaseOrderFormDetailSimpanPart($request->get('nomor_pof'), $request->get('part_number'),
             (double)str_replace(',', '', $request->get('jml_order')), (double)str_replace(',','', $request->get('harga')),
             (double)str_replace(',', '', $request->get('discount')), strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -469,7 +468,7 @@ class PurchaseOrderFormDetailController extends Controller
     }
 
     public function purchaseOrderFormDetailHapusPart(Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormDetailHapusPart($request->get('nomor_pof'), $request->get('part_number'),
+        $responseApi = Service::PurchaseOrderFormDetailHapusPart($request->get('nomor_pof'), $request->get('part_number'),
             strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);

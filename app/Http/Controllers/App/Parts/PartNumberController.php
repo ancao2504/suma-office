@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Parts;
 
-use App\Helpers\ApiService;
-use App\Http\Controllers\Controller;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class PartNumberController extends Controller
@@ -28,7 +28,7 @@ class PartNumberController extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::PartNumberDaftar($request->get('page'), $per_page, $request->get('type_motor'),
+        $responseApi = Service::PartNumberDaftar($request->get('page'), $per_page, $request->get('type_motor'),
                             $request->get('group_level'), $request->get('group_produk'),
                             $request->get('part_number'), $user_id, $role_id, $companyid);
         $statusApi = json_decode($responseApi)->status;
@@ -83,7 +83,7 @@ class PartNumberController extends Controller
 
     public function tambahCartPartNumber(Request $request)
     {
-        $responseApi = ApiService::PartNumberFormCart(
+        $responseApi = Service::PartNumberFormCart(
             strtoupper(trim($request->get('part_number'))),
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -182,7 +182,7 @@ class PartNumberController extends Controller
 
     public function prosesCartPartNumber(Request $request)
     {
-        $responseApi = ApiService::PartNumberTambahCart(strtoupper(trim($request->get('part_number'))),
+        $responseApi = Service::PartNumberTambahCart(strtoupper(trim($request->get('part_number'))),
             $request->get('jumlah_order'), strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_role_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id'))));

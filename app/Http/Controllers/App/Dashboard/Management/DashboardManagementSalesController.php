@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers\App\Dashboard\Management;
 
-use App\Helpers\ApiRequest;
-use App\Http\Controllers\App\Dashboard\DashboardSalesmanController;
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Stmt\Return_;
+use App\Http\Controllers\Controller;
 
 class DashboardManagementSalesController extends Controller
 {
@@ -35,7 +28,7 @@ class DashboardManagementSalesController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Anda tidak dapat mengakses halaman ini');
         }
 
-        $responseApi = ApiService::DashboardManagementSalesByProduct($year, $month, $fields, $request->get('level'), $request->get('produk'),
+        $responseApi = Service::DashboardManagementSalesByProduct($year, $month, $fields, $request->get('level'), $request->get('produk'),
                             strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -49,7 +42,7 @@ class DashboardManagementSalesController extends Controller
             $data_comparison = $dataSalesByProduct->comparison;
             $data_best_sales = $dataSalesByProduct->best_sales;
 
-            $responseApi = ApiService::DashboardManagementSalesByDate($year, $month, $fields, $request->get('level'), $request->get('produk'),
+            $responseApi = Service::DashboardManagementSalesByDate($year, $month, $fields, $request->get('level'), $request->get('produk'),
                                 strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;

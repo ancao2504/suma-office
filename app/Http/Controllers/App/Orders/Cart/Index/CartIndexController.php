@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\App\Orders\Cart\Index;
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
+
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CartIndexController extends Controller
 {
     public function index(Request $request)
     {
-        $responseApi = ApiService::CartHeader(strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::CartHeader(strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
@@ -18,7 +19,7 @@ class CartIndexController extends Controller
 
     public function estimasiCart(Request $request)
     {
-        $responseApi = ApiService::CartEstimasi(strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::CartEstimasi(strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $messageApi = json_decode($responseApi)->message;

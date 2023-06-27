@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Shopee;
+namespace app\Http\Controllers\App\Online\Shopee;
 
 use Carbon\Carbon;
-use App\Helpers\ApiService;
 use Illuminate\Support\Str;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use App\Helpers\ApiServiceShopee;
+use App\Helpers\App\ServiceShopee;
 use App\Http\Controllers\Controller;
 
 class PemindahanController extends Controller
@@ -24,7 +24,7 @@ class PemindahanController extends Controller
             ]);
         }
 
-        $responseApi_SCM = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi_SCM = Service::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi_SCM = json_decode($responseApi_SCM)->status;
         $messageApi_SCM =  json_decode($responseApi_SCM)->message;
 
@@ -45,7 +45,7 @@ class PemindahanController extends Controller
         $end_date =  empty($request->get('end_date'))? Carbon::now()->format('Y-m-d') : $request->get('end_date');
         $per_page = in_array($request->get('per_page'), [10,25,50,100]) ? $request->get('per_page') : 10;
 
-        $responseApi = ApiServiceShopee::PemindahanDaftar(
+        $responseApi = ServiceShopee::PemindahanDaftar(
             $request->get('search'),
             $start_date,
             $end_date,
@@ -104,7 +104,7 @@ class PemindahanController extends Controller
 
     public function detailPemindahan($param, Request $request){
         $param_data = json_decode(base64_decode($param));
-        $responseApi = ApiServiceShopee::PemindahanDetail(
+        $responseApi = ServiceShopee::PemindahanDetail(
             trim($param_data->nomor_dokumen),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -145,7 +145,7 @@ class PemindahanController extends Controller
     }
     
     public function updateStockperDokumen(Request $request){
-        $responseApi = ApiServiceShopee::UpdateStockPerDokumen(
+        $responseApi = ServiceShopee::UpdateStockPerDokumen(
             $request->no_dok,
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -177,7 +177,7 @@ class PemindahanController extends Controller
     }
 
     public function updateStockperPart(Request $request){
-        $responseApi = ApiServiceShopee::UpdateStockPerPart(
+        $responseApi = ServiceShopee::UpdateStockPerPart(
             $request->nomor_dokumen,
             $request->kode_part,
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -209,7 +209,7 @@ class PemindahanController extends Controller
     }
 
     public function updateStatusPerPartNumber(Request $request) {
-        $responseApi = ApiServiceShopee::PemindahanUpdateStatusPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ServiceShopee::PemindahanUpdateStatusPerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                         trim($request->get('kode_part')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         $statusApi = json_decode($responseApi)->status;

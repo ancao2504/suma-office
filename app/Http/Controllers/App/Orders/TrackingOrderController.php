@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Orders;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class TrackingOrderController extends Controller
@@ -31,7 +31,7 @@ class TrackingOrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi = Service::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -53,7 +53,7 @@ class TrackingOrderController extends Controller
         }
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
-            $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
+            $responseApi = Service::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -79,7 +79,7 @@ class TrackingOrderController extends Controller
             }
         }
 
-        $responseApi = ApiService::TrackingOrderDaftar($request->get('page'), $per_page,
+        $responseApi = Service::TrackingOrderDaftar($request->get('page'), $per_page,
                             $year, $month, $kode_sales, $kode_dealer, $request->get('nomor_faktur'),
                             strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -137,7 +137,7 @@ class TrackingOrderController extends Controller
     }
 
     public function formTrackingOrder($nomor_faktur, Request $request) {
-        $responseApi = ApiService::TrackingOrderForm(strtoupper(trim($nomor_faktur)), strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::TrackingOrderForm(strtoupper(trim($nomor_faktur)), strtoupper(trim($request->session()->get('app_user_id'))),
                                         strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;

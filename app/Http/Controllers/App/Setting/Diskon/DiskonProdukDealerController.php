@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\setting\Diskon;
+namespace App\Http\Controllers\App\setting\Diskon;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +18,7 @@ class DiskonProdukDealerController extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $param = json_decode(base64_decode($request->get('param')));
-        $responseApi = ApiService::DiskonProdukDealerDaftar(
+        $responseApi = Service::DiskonProdukDealerDaftar(
             $companyid,
             $param->page??1,
             $param->per_page??10,
@@ -54,7 +54,7 @@ class DiskonProdukDealerController extends Controller
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::DiskonProdukDealerSimpan(
+        $responseApi = Service::DiskonProdukDealerSimpan(
             trim($request->get('produk')),
             trim($request->get('dealer')),
             trim($request->get('keterangan')),
@@ -79,7 +79,7 @@ class DiskonProdukDealerController extends Controller
      */
     public function destroy(Request $request)
     {
-        $responseApi = ApiService::DiskonProdukDealerHapus(
+        $responseApi = Service::DiskonProdukDealerHapus(
             trim($request->get('produk')),
             trim($request->get('dealer')),
             trim($request->get('cabang'))

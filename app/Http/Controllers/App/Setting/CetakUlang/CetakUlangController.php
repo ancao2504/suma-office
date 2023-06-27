@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting\CetakUlang;
+namespace app\Http\Controllers\App\Setting\CetakUlang;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
-use Illuminate\Support\Facades\Date;
 
 class CetakUlangController extends Controller
 {
@@ -22,7 +21,7 @@ class CetakUlangController extends Controller
             $month = $request->get('month');
         }
 
-        $responseApi = ApiService::SettingCetakUlangDaftar($year, $month, 'Faktur', $request->get('page'), $request->get('per_page'),
+        $responseApi = Service::SettingCetakUlangDaftar($year, $month, 'Faktur', $request->get('page'), $request->get('per_page'),
                         strtoupper(trim($request->session()->get('app_user_role_id'))),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -67,7 +66,7 @@ class CetakUlangController extends Controller
     }
 
     public function cekNomorDokumen(Request $request) {
-        $responseApi = ApiService::SettingCetakUlangCekDokumen($request->get('nomor_dokumen'),
+        $responseApi = Service::SettingCetakUlangCekDokumen($request->get('nomor_dokumen'),
                         strtoupper(trim($request->get('jenis_transaksi'))),
                         strtoupper(trim($request->get('divisi'))),
                         strtoupper(trim($request->session()->get('app_user_role_id'))));
@@ -75,7 +74,7 @@ class CetakUlangController extends Controller
     }
 
     public function simpanCetakUlang(Request $request) {
-        $responseApi = ApiService::SettingCetakUlangSimpan(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = Service::SettingCetakUlangSimpan(strtoupper(trim($request->get('nomor_dokumen'))),
                         strtoupper(trim($request->get('transaksi'))), strtoupper(trim($request->get('divisi'))),
                         strtoupper(trim($request->get('kode_cabang'))), strtoupper(trim($request->get('company_cabang'))),
                         $request->get('status_approve'), $request->get('status_edit'),

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\App\Online\Tokopedia;
 
-use App\Helpers\ApiService;
-use App\Helpers\ApiServiceTokopedia;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
+use App\Helpers\App\ServiceTokopedia;
 
 class UpdateHargaController extends Controller
 {
@@ -33,7 +33,7 @@ class UpdateHargaController extends Controller
             $device = 'Mobile';
         }
 
-        $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi = Service::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -54,7 +54,7 @@ class UpdateHargaController extends Controller
             return redirect()->back()->withInput()->with('failed', $messageApi);
         }
 
-        $responseApi = ApiServiceTokopedia::UpdateHargaDaftar($request->get('page'), $per_page, $year, $month,
+        $responseApi = ServiceTokopedia::UpdateHargaDaftar($request->get('page'), $per_page, $year, $month,
                         $request->get('search'), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -77,7 +77,7 @@ class UpdateHargaController extends Controller
             $data_filter->push((object) [
                 'year'          => $year,
                 'month'         => $month,
-                'kode_lokasi'   => config('constants.tokopedia.kode_lokasi')
+                'kode_lokasi'   => config('constants.app.tokopedia.kode_lokasi')
             ]);
 
             $data_device = new Collection();
@@ -105,14 +105,14 @@ class UpdateHargaController extends Controller
     }
 
     public function buatDokumen(Request $request) {
-        $responseApi = ApiServiceTokopedia::UpdateHargaBuatDokumen($request->get('kode'), date('Y-m-d'),
+        $responseApi = ServiceTokopedia::UpdateHargaBuatDokumen($request->get('kode'), date('Y-m-d'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))),
                         strtoupper(trim($request->session()->get('app_user_id'))));
         return json_decode($responseApi, true);
     }
 
     public function formUpdateHarga($nomor_dokumen, Request $request) {
-        $responseApi = ApiServiceTokopedia::UpdateHargaForm($nomor_dokumen,
+        $responseApi = ServiceTokopedia::UpdateHargaForm($nomor_dokumen,
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -130,7 +130,7 @@ class UpdateHargaController extends Controller
     }
 
     public function formUpdateHargaDetail(Request $request) {
-        $responseApi = ApiServiceTokopedia::UpdateHargaForm($request->get('nomor_dokumen'),
+        $responseApi = ServiceTokopedia::UpdateHargaForm($request->get('nomor_dokumen'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
 
@@ -278,21 +278,21 @@ class UpdateHargaController extends Controller
     }
 
     public function updateHargaPerPartNumber(Request $request) {
-        $responseApi = ApiServiceTokopedia::UpdateHargaUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ServiceTokopedia::UpdateHargaUpdatePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }
 
     public function updateHargaStatusPerPartNumber(Request $request) {
-        $responseApi = ApiServiceTokopedia::UpdateHargaUpdateStatusPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ServiceTokopedia::UpdateHargaUpdateStatusPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                 trim($request->get('part_number')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         return json_decode($responseApi, true);
     }
 
     public function updateHargaPerNomorDokumen(Request $request) {
-        $responseApi = ApiServiceTokopedia::UpdateHargaUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = ServiceTokopedia::UpdateHargaUpdatePerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
         return json_decode($responseApi, true);
     }

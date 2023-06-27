@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\App\Dashboard\Management;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class DashboardManagementKuartalController extends Controller
 {
@@ -24,7 +23,7 @@ class DashboardManagementKuartalController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Anda tidak dapat mengakses halaman ini');
         }
 
-        $responseApi = ApiService::DashboardManagementKuartal($year, strtoupper(trim($fields)), strtoupper(trim($option_company)),
+        $responseApi = Service::DashboardManagementKuartal($year, strtoupper(trim($fields)), strtoupper(trim($option_company)),
                             strtoupper(trim($companyid)), strtoupper(trim($request->get('kabupaten'))),
                             strtoupper(trim($request->get('supervisor'))), strtoupper(trim($request->get('salesman'))),
                             strtoupper(trim($request->get('produk'))), strtoupper(trim($request->session()->get('app_user_id'))));

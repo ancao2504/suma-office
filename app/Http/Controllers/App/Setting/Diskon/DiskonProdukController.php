@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting\Diskon;
+namespace App\Http\Controllers\App\Setting\Diskon;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +18,7 @@ class DiskonProdukController extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $param = json_decode(base64_decode($request->get('param')));
-        $responseApi = ApiService::DiskonProdukDaftar(
+        $responseApi = Service::DiskonProdukDaftar(
             $companyid,
             $param->page??1,
             $param->per_page??10,
@@ -45,7 +45,7 @@ class DiskonProdukController extends Controller
 
     public function cekDiskonProduk(Request $request)
     {
-        $responseApi = ApiService::ValidasiDiskonProduk(trim($request->kd_produk), trim($request->cabang));
+        $responseApi = Service::ValidasiDiskonProduk(trim($request->kd_produk), trim($request->cabang));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -86,7 +86,7 @@ class DiskonProdukController extends Controller
             return redirect()->back()->withInput()->with('failed', 'Cabang tidak valid');
         }
 
-        $responseApi = ApiService::DiskonProdukSimpan(
+        $responseApi = Service::DiskonProdukSimpan(
             trim($cabang),
             trim($request->get('produk')),
             trim($request->get('disc_normal')),
@@ -115,7 +115,7 @@ class DiskonProdukController extends Controller
     public function destroy(Request $request)
     {
 
-        $responseApi = ApiService::DiskonProdukHapus(
+        $responseApi = Service::DiskonProdukHapus(
             trim($request->get('cabang')),
             trim($request->get('produk'))
         );

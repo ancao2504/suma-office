@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\app\Setting\HargaNetto;
+namespace app\Http\Controllers\App\Setting\HargaNetto;
 
-use App\Helpers\ApiService;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,7 +18,7 @@ class HargaNettoPartsControllers extends Controller
         $role_id = strtoupper(trim($request->session()->get('app_user_role_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
         $param = json_decode(base64_decode($request->get('param')));
-        $responseApi = ApiService::HargaNettoPartDaftar(
+        $responseApi = Service::HargaNettoPartDaftar(
             $param->page??1,
             $param->per_page??10,
             $companyid,
@@ -56,7 +56,7 @@ class HargaNettoPartsControllers extends Controller
         $user_id = strtoupper(trim($request->session()->get('app_user_id')));
         $companyid = strtoupper(trim($request->session()->get('app_user_company_id')));
 
-        $responseApi = ApiService::HargaNettoPartSimpan(
+        $responseApi = Service::HargaNettoPartSimpan(
             trim($request->get('part_number')),
             trim($request->get('status')),
             trim(str_replace('.', '', $request->get('harga'))),

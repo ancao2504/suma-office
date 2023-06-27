@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\App\Auth;
+namespace app\Http\Controllers\App\Auth;
 
-use App\Helpers\ApiService;
-use App\Helpers\ApiServiceTokopedia;
-
-use App\Http\Controllers\Controller;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Agent as Agent;
+use Illuminate\Support\Facades\Cookie;
 
 
 class AuthController extends Controller {
@@ -22,7 +20,7 @@ class AuthController extends Controller {
         $agent = new Agent();
         $user_agent = $agent->browser();
 
-        $responseApi = ApiService::OauthToken();
+        $responseApi = Service::OauthToken($request);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -30,12 +28,12 @@ class AuthController extends Controller {
             $request->session()->flush();
 
             $dataApi = json_decode($responseApi)->data;
-            $dataToken = $dataApi->pmo_token;
+            $dataToken = $dataApi->office_token;
 
-            $token = 'Bearer '.$dataApi->pmo_token;
+            $token = 'Bearer '.$dataApi->office_token;
             session()->put('Authorization', $token);
 
-            $responseApi = ApiService::AuthLogin($request->get('email'), $request->get('password'), $request->get('remember_me'),
+            $responseApi = Service::AuthLogin($request->get('email'), $request->get('password'), $request->get('remember_me'),
                                 $user_agent, request()->ip(), $dataToken);
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;

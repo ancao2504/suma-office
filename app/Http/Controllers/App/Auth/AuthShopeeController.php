@@ -1,20 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\App\Auth;
+namespace app\Http\Controllers\App\Auth;
 
-use App\Helpers\ApiServiceShopee;
-
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
-use Jenssegers\Agent\Agent as Agent;
+use App\Helpers\App\ServiceShopee;
+use App\Http\Controllers\Controller;
 
 
 class AuthShopeeController extends Controller {
 
     public function index() {
-        $responseApi = ApiServiceShopee::Authorization();
+        $responseApi = ServiceShopee::Authorization();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -35,12 +31,12 @@ class AuthShopeeController extends Controller {
     }
 
     public function generateLink() {
-        $responseApi = ApiServiceShopee::AuthorizationGenerateLink();
+        $responseApi = ServiceShopee::AuthorizationGenerateLink();
         return json_decode($responseApi, true);
     }
 
     public function simpanAccessCode(Request $request) {
-        $responseApi = ApiServiceShopee::AuthorizationSimpan($request->get('access_code'),
+        $responseApi = ServiceShopee::AuthorizationSimpan($request->get('access_code'),
             strtoupper(trim($request->session()->get('app_user_company_id'))),
             strtoupper(trim($request->session()->get('app_user_id'))));
         return json_decode($responseApi, true);

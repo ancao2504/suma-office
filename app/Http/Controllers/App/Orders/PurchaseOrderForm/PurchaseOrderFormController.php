@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\App\Orders\PurchaseOrderForm;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class PurchaseOrderFormController extends Controller
@@ -32,7 +31,7 @@ class PurchaseOrderFormController extends Controller
             }
         }
 
-        $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi = Service::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
         
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -55,7 +54,7 @@ class PurchaseOrderFormController extends Controller
         }
 
         if (strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
-            $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
+            $responseApi = Service::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
                                 
             $statusApi = json_decode($responseApi)->status;
@@ -83,7 +82,7 @@ class PurchaseOrderFormController extends Controller
             }
         }
 
-        $responseApi = ApiService::PurchaseOrderFormDaftar($request->get('page'), $per_page, $year, $month, $kode_sales, $kode_dealer,
+        $responseApi = Service::PurchaseOrderFormDaftar($request->get('page'), $per_page, $year, $month, $kode_sales, $kode_dealer,
             strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_role_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -137,7 +136,7 @@ class PurchaseOrderFormController extends Controller
     }
 
     public function purchaseOrderForm($nomor_pof, Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormDetail($nomor_pof,
+        $responseApi = Service::PurchaseOrderFormDetail($nomor_pof,
                 strtoupper(trim($request->session()->get('app_user_id'))),
                 strtoupper(trim($request->session()->get('app_user_role_id'))),
                 strtoupper(trim($request->session()->get('app_user_company_id'))));
@@ -176,7 +175,7 @@ class PurchaseOrderFormController extends Controller
     }
 
     public function purchaseOrderFormUpdateTpc(Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormUpdateTpc($request->get('nomor_pof'), $request->get('tpc'),
+        $responseApi = Service::PurchaseOrderFormUpdateTpc($request->get('nomor_pof'), $request->get('tpc'),
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
@@ -184,7 +183,7 @@ class PurchaseOrderFormController extends Controller
     }
 
     public function purchaseOrderFormEditDiscount(Request $request) {
-        $responseApi = ApiService::purchaseOrderFormEditDiscount($request->get('nomor_pof'),
+        $responseApi = Service::purchaseOrderFormEditDiscount($request->get('nomor_pof'),
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
@@ -192,7 +191,7 @@ class PurchaseOrderFormController extends Controller
     }
 
     public function purchaseOrderFormUpdateDiscount(Request $request) {
-        $responseApi = ApiService::purchaseOrderFormUpdateDiscount($request->get('nomor_pof'),
+        $responseApi = Service::purchaseOrderFormUpdateDiscount($request->get('nomor_pof'),
             (double)$request->get('discount'), strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id'))));
 
@@ -201,7 +200,7 @@ class PurchaseOrderFormController extends Controller
 
     public function viewDetailPofTerlayani(Request $request)
     {
-        $responseApi = ApiService::PurchaseOrderFormFaktur(
+        $responseApi = Service::PurchaseOrderFormFaktur(
             strtoupper($request->get('nomor_pof')),
             strtoupper($request->get('part_number')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -288,7 +287,7 @@ class PurchaseOrderFormController extends Controller
     }
 
     public function purchaseOrderFormSimpan(Request $request) {
-        $responseApi = ApiService::PurchaseOrderFormSimpan(
+        $responseApi = Service::PurchaseOrderFormSimpan(
             strtoupper($request->get('nomor_pof')),
             strtoupper($request->get('salesman')),
             strtoupper($request->get('dealer')),
@@ -312,7 +311,7 @@ class PurchaseOrderFormController extends Controller
 
     public function purchaseOrderFormBatalApprove(Request $request)
     {
-        $responseApi = ApiService::purchaseOrderFormBatalApprove(
+        $responseApi = Service::purchaseOrderFormBatalApprove(
             strtoupper($request->get('nomor_pof')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );

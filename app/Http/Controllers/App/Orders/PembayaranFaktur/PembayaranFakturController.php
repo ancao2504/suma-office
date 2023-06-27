@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\App\Orders\PembayaranFaktur;
 
-use Carbon\Carbon;
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
 
 class PembayaranFakturController extends Controller
@@ -36,7 +34,7 @@ class PembayaranFakturController extends Controller
         }
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
-            $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
+            $responseApi = Service::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -63,7 +61,7 @@ class PembayaranFakturController extends Controller
         }
 
         if(!empty($request->get('salesman')) || !empty($request->get('dealer'))) {
-            $responseApi = ApiService::PembayaranFakturDaftar($request->get('page'), $per_page, date('Y'), date('m'),
+            $responseApi = Service::PembayaranFakturDaftar($request->get('page'), $per_page, date('Y'), date('m'),
                                 trim($kode_sales), trim($kode_dealer), 'BELUM_LUNAS', $request->get('nomor_faktur'),
                                 strtoupper(trim($request->session()->get('app_user_id'))),
                                 strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -144,7 +142,7 @@ class PembayaranFakturController extends Controller
             }
         }
 
-        $responseApi = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi = Service::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -166,7 +164,7 @@ class PembayaranFakturController extends Controller
         }
 
         if(strtoupper(trim($request->session()->get('app_user_role_id'))) == "D_H3") {
-            $responseApi = ApiService::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
+            $responseApi = Service::ValidasiDealer(strtoupper(trim($request->session()->get('app_user_id'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
@@ -194,7 +192,7 @@ class PembayaranFakturController extends Controller
         }
 
         if(!empty($request->get('month')) || !empty($request->get('year'))) {
-            $responseApi = ApiService::PembayaranFakturDaftar($request->get('page'), $per_page, $year, $month,
+            $responseApi = Service::PembayaranFakturDaftar($request->get('page'), $per_page, $year, $month,
                             trim($kode_sales), trim($kode_dealer), 'LUNAS', $request->get('nomor_faktur'),
                             strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -258,7 +256,7 @@ class PembayaranFakturController extends Controller
     }
 
     public function pembayaranFakturDetailPerFaktur(Request $request) {
-        $responseApi = ApiService::PembayaranFakturDetailPerFaktur(strtoupper(trim($request->get('nomor_faktur'))), strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::PembayaranFakturDetailPerFaktur(strtoupper(trim($request->get('nomor_faktur'))), strtoupper(trim($request->session()->get('app_user_id'))),
                         strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
 
@@ -381,7 +379,7 @@ class PembayaranFakturController extends Controller
     }
 
     public function pembayaranFakturDetailPerBpk(Request $request) {
-        $responseApi = ApiService::PembayaranFakturDetailPerBpk(strtoupper(trim($request->get('nomor_bpk'))), strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::PembayaranFakturDetailPerBpk(strtoupper(trim($request->get('nomor_bpk'))), strtoupper(trim($request->session()->get('app_user_id'))),
                         strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
 

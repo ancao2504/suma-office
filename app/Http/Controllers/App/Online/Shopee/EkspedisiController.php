@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\App\Online\Shopee;
+namespace app\Http\Controllers\App\Online\Shopee;
 
-use App\Helpers\ApiService;
-use App\Helpers\ApiServiceShopee;
-use App\Helpers\ApiServiceTokopedia;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
+use App\Helpers\App\ServiceShopee;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent as Agent;
 
 class EkspedisiController extends Controller
 {
     public function daftarEkspedisi() {
-        $responseApi = ApiService::OptionEkspedisiOnline();
+        $responseApi = Service::OptionEkspedisiOnline();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
             $dataOptionEkspedisi = json_decode($responseApi)->data;
 
-            $responseApi = ApiServiceShopee::EkspedisiDaftar();
+            $responseApi = ServiceShopee::EkspedisiDaftar();
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -43,7 +38,7 @@ class EkspedisiController extends Controller
     }
 
     public function simpanEkspedisi(Request $request) {
-        $responseApi = ApiServiceShopee::EkspedisiSimpan($request->get('id'), $request->get('shopee_id'),
+        $responseApi = ServiceShopee::EkspedisiSimpan($request->get('id'), $request->get('shopee_id'),
                         $request->get('kode'), $request->get('nama'),
                         strtoupper(trim($request->session()->get('app_user_id'))));
 

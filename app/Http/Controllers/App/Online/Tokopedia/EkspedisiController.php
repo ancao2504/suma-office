@@ -1,27 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Tokopedia;
+namespace app\Http\Controllers\App\Online\Tokopedia;
 
-use App\Helpers\ApiService;
-use App\Helpers\ApiServiceTokopedia;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Jenssegers\Agent\Agent as Agent;
+use App\Helpers\App\ServiceTokopedia;
 
 class EkspedisiController extends Controller
 {
     public function daftarEkspedisi() {
-        $responseApi = ApiService::OptionEkspedisiOnline();
+        $responseApi = Service::OptionEkspedisiOnline();
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if($statusApi == 1) {
             $dataOptionEkspedisi = json_decode($responseApi)->data;
 
-            $responseApi = ApiServiceTokopedia::EkspedisiDaftar();
+            $responseApi = ServiceTokopedia::EkspedisiDaftar();
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
 
@@ -42,7 +38,7 @@ class EkspedisiController extends Controller
     }
 
     public function simpanEkspedisi(Request $request) {
-        $responseApi = ApiServiceTokopedia::EkspedisiSimpan($request->get('id'), $request->get('tokopedia_id'),
+        $responseApi = ServiceTokopedia::EkspedisiSimpan($request->get('id'), $request->get('tokopedia_id'),
                             $request->get('kode'), $request->get('nama'),
                             strtoupper(trim($request->session()->get('app_user_id'))));
 

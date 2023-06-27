@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Helpers\App;
 
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Http;
-use App\Helpers\ApiRequestTokopedia;
+use App\Helpers\App\ApiRequest;
 
-class ApiServiceTokopedia {
+
+class ServiceTokopedia {
     public static function EkspedisiDaftar()
     {
         $request = 'backend/online/ekspedisi/tokopedia/daftar';
@@ -302,6 +301,18 @@ class ApiServiceTokopedia {
         return $response;
     }
 
+    public static function OrderUpdateKurir($nomor_invoice, $companyid)
+    {
+        $request = 'backend/online/orders/tokopedia/update-kurir';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_invoice' => $nomor_invoice,
+            'companyid'     => trim($companyid)
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+    
     public static function OrderCetakLabel($nomor_invoice, $companyid)
     {
         $request = 'backend/online/shipping/tokopedia/cetak-label';

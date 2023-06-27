@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\App\Dashboard\Marketing;
 
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class DashboardMarketingController extends Controller
 {
@@ -17,7 +16,7 @@ class DashboardMarketingController extends Controller
             $year = $request->get('year');
         }
 
-        $responseApi = ApiService::DashboardMarketingGroupPerLevel($year, $request->get('jenis_mkr'), $request->get('kode_mkr'),
+        $responseApi = Service::DashboardMarketingGroupPerLevel($year, $request->get('jenis_mkr'), $request->get('kode_mkr'),
                             strtoupper(trim($request->session()->get('app_user_role_id'))), strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -53,7 +52,7 @@ class DashboardMarketingController extends Controller
             $year = $request->get('year');
         }
 
-        $responseApi = ApiService::DashboardMarketingGrowth($year, $request->get('level_produk'), $request->get('kode_produk'),
+        $responseApi = Service::DashboardMarketingGrowth($year, $request->get('level_produk'), $request->get('kode_produk'),
                             $request->get('jenis_mkr'), $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -94,7 +93,7 @@ class DashboardMarketingController extends Controller
             $month = $request->get('month');
         }
 
-        $responseApi = ApiService::DashboardMarketingGroupPerProduk($year, $month, $request->get('level_produk'), $request->get('kode_produk'),
+        $responseApi = Service::DashboardMarketingGroupPerProduk($year, $month, $request->get('level_produk'), $request->get('kode_produk'),
                             $request->get('jenis_mkr'), $request->get('kode_mkr'), strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;

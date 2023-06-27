@@ -315,4 +315,65 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('#btnUpdateKurir').on('click', function (e) {
+        e.preventDefault();
+        var nomor_invoice = $(this).data("nomor_invoice");
+        var _token = $('input[name="_token"]').val();
+
+        loading.block();
+        $.ajax({
+            url: url.proses_update_kurir,
+            method: "POST",
+            data: { nomor_invoice: nomor_invoice, _token: _token },
+
+            success: function (response) {
+                loading.release();
+
+                if (response.status == true) {
+                    Swal.fire({
+                        html: response.message,
+                        icon: 'success',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = window.location.origin + window.location.pathname;
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        html: response.message,
+                        icon: 'warning',
+                        buttonsStyling: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Ok, got it!',
+                        customClass: {
+                            confirmButton: 'btn btn-warning'
+                        }
+                    });
+                }
+            },
+            error: function () {
+                loading.release();
+                Swal.fire({
+                    text: 'Server Not Responding',
+                    icon: 'error',
+                    buttonsStyling: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonText: 'Ok, got it!',
+                    customClass: {
+                        confirmButton: 'btn btn-danger'
+                    }
+                });
+            }
+        });
+    });
 });

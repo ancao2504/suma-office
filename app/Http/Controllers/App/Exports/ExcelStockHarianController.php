@@ -1,23 +1,15 @@
 <?php
 namespace App\Http\Controllers\App\Exports;
 
-use App\Helpers\ApiService;
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Collection;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use App\Helpers\App\Service;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 
 ini_set('memory_limit', '10240M');
@@ -25,6 +17,17 @@ ini_set('max_execution_time', 0);
 class ExcelStockHarianController implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithStrictNullComparison
 {
     use Exportable;
+    private $companyId;
+    private $role_id;
+    private $kode_class;
+    private $kode_produk;
+    private $kode_produk_level;
+    private $kode_sub;
+    private $frg;
+    private $kode_lokasi;
+    private $kode_rak;
+    private $option_stock_sedia;
+    private $nilai_stock_sedia;
 
     public function __construct(String $companyId, String $role_id, String $kode_class, String $kode_produk, String $kode_produk_level,
                             String $kode_sub, String $frg, String $kode_lokasi, String $kode_rak, String $option_stock_sedia,
@@ -45,14 +48,14 @@ class ExcelStockHarianController implements FromCollection, WithHeadings, WithCo
 
     public function collection() {
         if(strtoupper(trim($this->kode_lokasi)) == 'ALLONLINE') {
-            $responseApi = ApiService::StockHarianProsesMarketplace(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
+            $responseApi = Service::StockHarianProsesMarketplace(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
                                 strtoupper(trim($this->kode_class)), strtoupper(trim($this->kode_produk)),
                                 strtoupper(trim($this->kode_produk_level)), strtoupper(trim($this->kode_sub)),
                                 strtoupper(trim($this->frg)), strtoupper(trim($this->kode_lokasi)),
                                 strtoupper(trim($this->kode_rak)), strtoupper(trim($this->option_stock_sedia)),
                                 strtoupper(trim($this->nilai_stock_sedia)));
         } else {
-            $responseApi = ApiService::StockHarianProsesPerlokasi(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
+            $responseApi = Service::StockHarianProsesPerlokasi(strtoupper(trim($this->companyId)), strtoupper(trim($this->role_id)),
                                 strtoupper(trim($this->kode_class)), strtoupper(trim($this->kode_produk)),
                                 strtoupper(trim($this->kode_produk_level)), strtoupper(trim($this->kode_sub)),
                                 strtoupper(trim($this->frg)), strtoupper(trim($this->kode_lokasi)),

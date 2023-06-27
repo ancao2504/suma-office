@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\app\Online\Shopee;
+namespace app\Http\Controllers\App\Online\Shopee;
 
-use App\Helpers\ApiService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Helpers\ApiServiceShopee;
+use App\Helpers\App\ServiceShopee;
 use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
@@ -18,11 +17,10 @@ class ProductController extends Controller
 
         if (!empty($request->get('part_number')) && $request->get('part_number') != '' && $request->ajax()) {
             
-            $responseApi = ApiServiceShopee::SearchProductByPartNumber(
+            $responseApi = ServiceShopee::SearchProductByPartNumber(
                 strtoupper(trim($request->get('part_number'))),
                 strtoupper(trim($request->session()->get('app_user_company_id')))
             );
-            
             $statusApi = json_decode($responseApi)->status;
             if ($statusApi == 1) {
                 return response()->json([
@@ -48,7 +46,7 @@ class ProductController extends Controller
 
     public function cekProductId(Request $request)
     {
-        $responseApi = ApiServiceShopee::CekProductId(
+        $responseApi = ServiceShopee::CekProductId(
             strtoupper(trim($request->get('product_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -74,7 +72,7 @@ class ProductController extends Controller
 
     public function updateProductId(Request $request)
     {
-        $responseApi = ApiServiceShopee::UpdateShopeeidInPart(
+        $responseApi = ServiceShopee::UpdateShopeeidInPart(
             strtoupper(trim($request->get('part_number'))),
             strtoupper(trim($request->get('product_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -89,7 +87,7 @@ class ProductController extends Controller
             'category_id.required' => 'Category ID tidak boleh kosong'
         ]);
 
-        $responseApi = ApiServiceShopee::brandList($request->category_id, $request->offset);
+        $responseApi = ServiceShopee::brandList($request->category_id, $request->offset);
         if (json_decode($responseApi)->status == 0) {
             return Response()->json([
                 'status'    => 0,

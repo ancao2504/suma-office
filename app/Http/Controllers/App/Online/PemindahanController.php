@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\app\Online;
+namespace app\Http\Controllers\App\Online;
 
-use App\Helpers\ApiService;
 use Illuminate\Support\Str;
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -24,7 +24,7 @@ class PemindahanController extends Controller
             ]);
         }
 
-        $responseApi_SCM = ApiService::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
+        $responseApi_SCM = Service::SettingClossingMarketing(strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi_SCM = json_decode($responseApi_SCM)->status;
         $messageApi_SCM =  json_decode($responseApi_SCM)->message;
 
@@ -44,7 +44,7 @@ class PemindahanController extends Controller
         $end_date =  empty($request->get('end_date'))? Carbon::now()->format('Y-m-d') : $request->get('end_date');
         $per_page = in_array($request->get('per_page'), [10,25,50,100]) ? $request->get('per_page') : 10;
 
-        $responseApi = ApiService::PemindahanMarketplaceDaftar(
+        $responseApi = Service::PemindahanMarketplaceDaftar(
             $request->get('search'),
             $start_date,
             $end_date,
@@ -105,7 +105,7 @@ class PemindahanController extends Controller
     public function detailPemindahan($param, Request $request){
         $param_data = json_decode(base64_decode($param));
 
-        $responseApi = ApiService::PemindahanMarketplaceDetail(
+        $responseApi = Service::PemindahanMarketplaceDetail(
             trim($param_data->nomor_dokumen),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -146,7 +146,7 @@ class PemindahanController extends Controller
     }
 
     public function updateStock(Request $request){
-        $responseApi = ApiService::UpdateStockMarketplace(
+        $responseApi = Service::UpdateStockMarketplace(
             $request->nomor_dokumen,
             $request->kode_part,
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -179,7 +179,7 @@ class PemindahanController extends Controller
     }
 
     public function updateStatusPerPartNumber(Request $request) {
-        $responseApi = ApiService::PemindahanUpdateStatusMarketplacePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
+        $responseApi = Service::PemindahanUpdateStatusMarketplacePerPartNumber(strtoupper(trim($request->get('nomor_dokumen'))),
                         trim($request->get('kode_part')), strtoupper(trim($request->session()->get('app_user_company_id'))));
 
         $statusApi = json_decode($responseApi)->status;

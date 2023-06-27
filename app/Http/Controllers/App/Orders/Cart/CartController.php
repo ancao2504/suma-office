@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers\App\Orders\Cart;
 
-use App\Http\Controllers\App\Imports\ExcelCartController;
-use App\Http\Controllers\App\Imports\ExcelDealerCartController;
-use App\Http\Controllers\Controller;
-use App\Helpers\ApiService;
-
+use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
 use Jenssegers\Agent\Agent as Agent;
-use Mockery\Undefined;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\App\Imports\ExcelCartController;
 
 class CartController extends Controller
 {
     public function index(Request $request)
     {
-        $responseApi = ApiService::CartHeader(strtoupper(trim($request->session()->get('app_user_id'))),
+        $responseApi = Service::CartHeader(strtoupper(trim($request->session()->get('app_user_id'))),
                             strtoupper(trim($request->session()->get('app_user_role_id'))),
                             strtoupper(trim($request->session()->get('app_user_company_id'))));
         $statusApi = json_decode($responseApi)->status;
@@ -52,7 +48,7 @@ class CartController extends Controller
 
     public function daftarCartDetail(Request $request)
     {
-        $responseApi = ApiService::CartDetail(
+        $responseApi = Service::CartDetail(
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_role_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -74,7 +70,7 @@ class CartController extends Controller
                 foreach ($data->detail as $data) {
                     $jumlah_data_detail = (float)$jumlah_data_detail + 1;
 
-                    $image_url_part = config('constants.app.app_images_url');
+                    $image_url_part = config('constants.app.url.images');
                     $image_not_found_url_part = "'" . asset('assets/images/background/part_image_not_found.png') . "'";
 
                     $data_kode_tpc = '';
@@ -249,7 +245,7 @@ class CartController extends Controller
                 foreach ($data->detail as $data) {
                     $jumlah_data_detail = (float)$jumlah_data_detail + 1;
 
-                    $image_url_part = config('constants.app.app_images_url');
+                    $image_url_part = config('constants.app.url.images');
                     $image_not_found_url_part = "'" . asset('assets/images/background/part_image_not_found.png') . "'";
 
                     $data_kode_tpc = '';
@@ -405,7 +401,7 @@ class CartController extends Controller
 
     public function cartResetData(Request $request)
     {
-        $responseApi = ApiService::CartReset(
+        $responseApi = Service::CartReset(
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -427,7 +423,7 @@ class CartController extends Controller
             $kode_dealer = $request->get('dealer');
         }
 
-        $responseApi = ApiService::CartSimpanDraft(
+        $responseApi = Service::CartSimpanDraft(
             $kode_sales,
             $kode_dealer,
             $request->get('back_order'),
@@ -448,7 +444,7 @@ class CartController extends Controller
 
     public function cartEditDetail(Request $request)
     {
-        $responseApi = ApiService::CartEditPart(
+        $responseApi = Service::CartEditPart(
             $request->get('part_number'),
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_role_id'))),
@@ -460,7 +456,7 @@ class CartController extends Controller
 
     public function cartSimpanPart(Request $request)
     {
-        $responseApi = ApiService::CartSimpanPart(
+        $responseApi = Service::CartSimpanPart(
             $request->get('part_number'),
             $request->get('tpc'),
             str_replace(',', '', $request->get('jml_order')),
@@ -476,7 +472,7 @@ class CartController extends Controller
 
     public function cartHapusPart(Request $request)
     {
-        $responseApi = ApiService::CartDeletePart(
+        $responseApi = Service::CartDeletePart(
             $request->get('part_number'),
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -551,7 +547,7 @@ class CartController extends Controller
                     }
                 }
 
-                $responseApi = ApiService::cartImportExcel(
+                $responseApi = Service::cartImportExcel(
                     $fileName,
                     $data_excel,
                     strtoupper(trim($request->session()->get('app_user_id'))),
@@ -562,7 +558,7 @@ class CartController extends Controller
                 $messageApi =  json_decode($responseApi)->message;
 
                 if ($statusApi == 1) {
-                    $responseApi = ApiService::CartProsesExcel(
+                    $responseApi = Service::CartProsesExcel(
                         $fileName,
                         strtoupper($request->get('jenis_part_number')),
                         strtoupper(trim($request->session()->get('app_user_id'))),
@@ -616,7 +612,7 @@ class CartController extends Controller
 
     public function cartCheckOutCekAturanHarga(Request $request)
     {
-        $responseApi = ApiService::cartCheckOutCekAturanHarga(
+        $responseApi = Service::cartCheckOutCekAturanHarga(
             strtoupper(trim($request->session()->get('app_user_id'))),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
@@ -625,7 +621,7 @@ class CartController extends Controller
 
     public function cartCheckOut(Request $request)
     {
-        $responseApi = ApiService::CartCheckOutProses(
+        $responseApi = Service::CartCheckOutProses(
             $request->get('password'),
             $request->get('password_confirm'),
             strtoupper(trim($request->session()->get('app_user_id'))),
@@ -645,7 +641,7 @@ class CartController extends Controller
 
     public function cartCheckOutResult(Request $request)
     {
-        $responseApi = ApiService::CartCheckOutResult(
+        $responseApi = Service::CartCheckOutResult(
             strtoupper(trim($request->session()->get('app_user_role_id'))),
             json_encode($request->get('kode')),
             strtoupper(trim($request->session()->get('app_user_company_id')))
@@ -656,7 +652,7 @@ class CartController extends Controller
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
 
-            ApiService::CartHapusTemporary(
+            Service::CartHapusTemporary(
                 strtoupper(trim($request->session()->get('app_user_id'))),
                 strtoupper(trim($request->session()->get('app_user_role_id'))),
                 strtoupper(trim($request->session()->get('app_user_company_id')))
