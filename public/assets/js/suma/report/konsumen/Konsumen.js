@@ -6,6 +6,58 @@ function typemotor(){
     });
 }
 
+function request_data(page){
+    loading.block();
+    $.ajax({
+        url: base_url + '/report/konsumen/daftar',
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            divisi: $('#filter_report #divisi').val(),
+            companyid: $('#filter_report #company').val(),
+            kd_lokasi: $('#filter_report #lokasi').val(),
+
+            tgl_transaksi: ($('#filter_report #tgl_tran').val()!='')?[$('#filter_report #tgl_tran').val()]:(($('#filter_report #tgl_tran0').val() != '')?[$('#filter_report #tgl_tran0').val(), $('#filter_report #tgl_tran1').val()]:null),
+
+            tgl_lahir: ($('#filter_report #tgl_lahir').val()!='')?[$('#filter_report #tgl_lahir').val()]:(($('#filter_report #tgl_lahir1').val() != '')?[$('#filter_report #tgl_lahir1').val(), $('#filter_report #tgl_lahir2').val(), $('#filter_report #tgl_lahir3').val(), $('#filter_report #tgl_lahir4').val()]:null),
+
+            jenis_part: $('#filter_report #jenis_part').val(),
+            kd_part: $('#filter_report #kd_part').val(),
+
+            merek_motor: $('#filter_report #merek_motor').val(),
+            tipe_motor: $('#filter_report #tipe_motor').val(),
+            jenis_motor: $('#filter_report #jenis_motor').val(),
+            page: page,
+            per_page: $('#table_list').find('#per_page').val(),
+        },
+        dataType: 'json',
+        success: function(response) {
+            $('#kt_post #table_list').html(response.data);
+            $('#filter_report').modal('hide');
+            if($('#filter_report #lokasi').val() == ''){
+                $('#filter_report #lokasi').val(response.old.request.kd_lokasi).trigger('change');
+            }
+            loading.release();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            loading.release();
+            Swal.fire({
+                text: 'Maaf terjadi kesalahan, silahkan coba lagi!',
+                icon: "error",
+                confirmButtonText: "OK !",
+                customClass: {
+                    confirmButton: "btn btn-danger"
+                },
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        }
+    });
+}
+
 $('document').ready(function() {
     $('body').attr('data-kt-aside-minimize', 'on');
     $('#kt_aside_toggle').addClass('active');
@@ -144,11 +196,27 @@ $('document').ready(function() {
                 return false;
             }
         }
-        loading.block();
-        // kirim data ke server
+
+        request_data();
+    });
+
+    $('#table_list').on('change', '#per_page',function() {
+        request_data();
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    });
+    $('#table_list').on('click', '.pagination .page-item a.page-link',function() {
+        request_data($(this).attr('href').split('page=')[1]);
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    });
+
+    $('#kt_post').on('click', '#btn_export',function () {
+        console.log('export');
         $.ajax({
-            url: base_url + '/report/konsumen/daftar',
-            type: 'POST',
+            url: base_url + '/report/konsumen/daftar/export',
+            method: 'POST',
+            xhrFields: {
+                responseType: 'blob'
+            },
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 divisi: $('#filter_report #divisi').val(),
@@ -164,26 +232,24 @@ $('document').ready(function() {
 
                 merek_motor: $('#filter_report #merek_motor').val(),
                 tipe_motor: $('#filter_report #tipe_motor').val(),
-                jenis_motor: $('#filter_report #jenis_motor').val(),
-                page: 1,
-                per_page: 10
+                jenis_motor: $('#filter_report #jenis_motor').val()
             },
-            dataType: 'json',
-            beforeSend: function() {
+            beforeSend: function () {
                 loading.block();
-            },
-            success: function(response) {
-                $('#kt_post #table_list').html(response.data);
-                
-                $('#filter_report').modal('hide');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                Swal.fire({
-                    text: 'Maaf terjadi kesalahan, silahkan coba lagi!',
-                    icon: "error",
-                    confirmButtonText: "OK !",
+            }
+        }).done(function (response) {
+            if (response.status == '0') {
+                toastr.error(response.message, "Error");
+                return false;
+            }
+            if (response.status == '2') {
+                swal.fire({
+                    title: 'Perhatian!',
+                    text: response.message,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
                     customClass: {
-                        confirmButton: "btn btn-danger"
+                        confirmButton: 'btn btn-secondary'
                     },
                     allowOutsideClick: false
                 }).then((result) => {
@@ -191,15 +257,38 @@ $('document').ready(function() {
                         location.reload();
                     }
                 });
+                return false;
             }
+            
+            var blob = new Blob([response], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'Konsumen (' + ($('#filter_report #divisi').val() != ''? ' divisi = ' + $('#filter_report #divisi').val() + ' ,' : '') + ($('#filter_report #company').val() != ''? ' company = ' + $('#filter_report #company').val()+ ' ,' : '') + ($('#filter_report #lokasi').val() != ''? ' lokasi = ' + $('#filter_report #lokasi').val()+ ' ,' : '') + (
+                ($('#filter_report #tgl_tran').val() != '')? ' tgl transaksi = ' + $('#filter_report #tgl_tran').val()+ ' ,' : (($('#filter_report #tgl_tran0').val() != '') ? ' tgl transaksi = ' + $('#filter_report #tgl_tran0').val() + ' s/d ' + $('#filter_report #tgl_tran1').val()+ ' ,' : '')
+            ) + (
+                ($('#filter_report #tgl_lahir').val() != '')? ' ,tgl lahir = ' + $('#filter_report #tgl_lahir').val()+ ' ,' : (($('#filter_report #tgl_lahir1').val() != '') ? ' tgl lahir = ' + $('#filter_report #tgl_lahir1').val() + '-'+ $('#filter_report #tgl_lahir2').val() + ' s/d ' + $('#filter_report #tgl_lahir3').val() + '-' + $('#filter_report #tgl_lahir4').val()+ ' ,' : '')
+            ) + ($('#filter_report #jenis_part').val() != ''? ' jenis part = ' + $('#filter_report #jenis_part').val()+ ' ,' : '') + ($('#filter_report #kd_part').val() != ''? ' kode part = ' + $('#filter_report #kd_part').val()+ ' ,' : '') + ($('#filter_report #merek_motor').val() != ''? ' merek motor = ' + $('#filter_report #merek_motor').val()+ ' ,' : '') + ($('#filter_report #tipe_motor').val() != ''? ' tipe motor = ' + $('#filter_report #tipe_motor').val()+ ' ,' : '') + ($('#filter_report #jenis_motor').val() != ''? ' jenis motor = ' + $('#filter_report #jenis_motor').val()+ ' ,' : '') + ').xlsx';
+            link.click();
+            link.remove();
+        }).fail(function (jqXHR, textStatus, error) {
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Silahkan coba kembali, jika pesan ini masih muncul silahkan Filter data lebih spesifik.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'btn btn-secondary'
+                },
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        }).always(function () {
+            loading.release();
         });
-        
-        loading.release();
     });
-
-    // data = {
-    //     tgl_lahir : tgl_lahir??[tgl_lahir1, tgl_lahir2, tgl_lahir3, tgl_lahir4],
-
-    // }
-
 });

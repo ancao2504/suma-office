@@ -2090,7 +2090,7 @@ class Service
             'divisi'        => $request->get('divisi'),
             'companyid'     => $request->get('companyid'),
             'kd_lokasi'     => $request->get('kd_lokasi'),
-            'tgl_transaksi' => $request->get('tgl_tran'),
+            'tgl_transaksi' => $request->get('tgl_transaksi'),
             'tgl_lahir'     => $request->get('tgl_lahir'),
             'jenis_part'    => $request->get('jenis_part'),
             'kd_part'       => $request->get('kd_part'),
@@ -2319,6 +2319,25 @@ class Service
         return $response;
     }
 
+    public static function exportDaftarKonsumen($request){
+        $url = 'backend/report/konsumen/daftar/export';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'divisi'        => $request->get('divisi'),
+            'companyid'     => $request->get('companyid'),
+            'kd_lokasi'     => $request->get('kd_lokasi'),
+            'tgl_transaksi' => $request->get('tgl_transaksi'),
+            'tgl_lahir'     => $request->get('tgl_lahir'),
+            'jenis_part'    => $request->get('jenis_part'),
+            'kd_part'       => $request->get('kd_part'),
+            'merek_motor'   => $request->get('merek_motor'),
+            'tipe_motor'    => $request->get('tipe_motor'),
+            'jenis_motor'   => $request->get('jenis_motor')
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
     public static function LokasiAll($request)
     {
         $url = 'backend/konsumen/lokasi';

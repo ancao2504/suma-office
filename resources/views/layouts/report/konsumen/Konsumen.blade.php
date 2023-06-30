@@ -24,7 +24,7 @@
 	}
 
 	.btn_filter:hover {
-		color: #8dffca;
+		color: #01be3a;
 		cursor: pointer;
 	}
 </style>
@@ -61,20 +61,20 @@
 								<thead class="border">
 									<tr  class="fs-8 fw-bolder text-muted text-center">
 										<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Tgl Transaksi</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Jenis Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Tipe Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Merek Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span class="text-part">Jenis Part</span></th>
-										<th rowspan="2" class="w-100px ps-3 pe-3"><span class="required"></span><span class="text-kd_part">kode Part</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Tgl Transaksi</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Jenis Motor</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Tipe Motor</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Merek Motor</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="text-part">Jenis Part</span></th>
+										<th rowspan="2" class="w-100px ps-3 pe-3"><span class="text-kd_part">kode Part</span></th>
 										<th rowspan="2" class="w-100px ps-3 pe-3">Ket part</th>
 										<th rowspan="2" class="w-100px ps-3 pe-3">Nama Konsumen</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Tgl lahir</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Tgl lahir</span></th>
 										<th rowspan="2" class="w-100px ps-3 pe-3">Alamat</th>
 										<th rowspan="2" class="w-100px ps-3 pe-3">Telepon</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Divisi</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Company</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="required"></span><span>Lokasi</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Divisi</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Company</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Lokasi</span></th>
 									</tr>
 								</thead>
 								<tbody class="border">
@@ -86,19 +86,19 @@
 											$no = $data->from;
 										@endphp
 											@foreach ($data->data as $key => $value)
-											<tr class="text-center">
+											<tr class="fw-bolder fs-8 border">
 												<td class="text-center">{{ $no++ }}</td>
 												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_faktur)) }}</td>
-												<td class="text-center">{{ ($value->jenis??'-') }}</td>
-												<td class="text-center">{{ ($value->type??'-') }}</td>
-												<td class="text-center">{{ ($value->merk??'-') }}</td>
-												<td class="text-center">{{ ($value->ring??'-') }}</td>
-												<td class="text-center">{{ ($value->kd_part??'-') }}</td>
-												<td class="text-center">{{ ($value->ket??'-') }}</td>
-												<td class="text-center">{{ ($value->nama??'-') }}</td>
-												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_lahir)) }}</td>
-												<td class="text-center">{{ ($value->alamat??'-') }}</td>
-												<td class="text-center">{{ ($value->telepon??'-') }}</td>
+												<td class="text-start">{{ ($value->jenis??'-') }}</td>
+												<td class="text-start">{{ ($value->type??'-') }}</td>
+												<td class="text-start">{{ ($value->merk??'-') }}</td>
+												<td class="text-start">{{ ($value->ring??'-') }}</td>
+												<td class="text-start">{{ ($value->kd_part??'-') }}</td>
+												<td class="text-start">{{ ($value->ket??'-') }}</td>
+												<td class="text-start">{{ ($value->nama??'-') }}</td>
+												<td class="text-start">{{ ($value->tgl_lahir==null?'-':date('d/m/Y', strtotime($value->tgl_lahir))) }}</td>
+												<td class="text-start">{{ ($value->alamat??'-') }}</td>
+												<td class="text-start">{{ ($value->telepon??'-') }}</td>
 												<td class="text-center">{{ ($value->divisi??'-') }}</td>
 												<td class="text-center">{{ ($value->CompanyId??'-') }}</td>
 												<td class="text-center">{{ ($value->kd_lokasi??'-') }}</td>
@@ -113,7 +113,7 @@
 							</table>
 						</div>
 					</div>
-					<div class="card-footer" id="p-faktur">
+					<div class="card-footer">
 						@if (!empty($data))
 						<div class="d-flex justify-content-between">
 							<div class="form-group">
@@ -141,7 +141,7 @@
 								</ul>
 							</nav>
 						</div>
-						<span class="mt-3 badge badge-success jmldta">{{ $data->total }}</span>
+						<span class="mt-3 badge badge-success jmldta">Jumlah data : {{ number_format($data->total, 0, ',') }}</span>
 						@endif
 					</div>
 					<!--end::Card-->
@@ -190,14 +190,14 @@
 										<input class="form-control" placeholder="Pick date rage" id="tgl_tran1"/>
 									</div>
 									<label for="tgl_tran" class="form-label">Bulan Tahun</label>
-									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value=""/>
+									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value="{{ date('Y-m') }}"/>
 									<span class="text-end text-gray-600 fs-7"><i class="required"></i> Isi inputan diatas dengan salah satu dari <b>Range Tanggal</b> atau <b>Bulan Tahun</b></span>
 								</div>
 							</div>
 							<div class="col-lg-4 pb-15">
 								<label for="tgl_lahir" class="form-label">Filter Tanggal Lahir : </label>
 								<div class="w-100 h-100 border border-dark p-6 rounded">
-									<label for="tgl_lahir" class="form-label">Bulan Tanggal</label>
+									<label for="tgl_lahir" class="form-label">Range Bulan Tanggal</label>
 									<div class="input-group">
 										<select class="form-control" placeholder="Bulan" id="tgl_lahir1"/>
 											<option value="">Bulan</option>

@@ -642,9 +642,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::controller(ReportKonsumenController::class)->group(function () {
                         Route::get('report/konsumen/', 'index')->name('index');
                         Route::post('report/konsumen/daftar', 'daftarKonsumen')->name('daftar');
+                        Route::post('report/konsumen/daftar/export', 'exportDaftarKonsumen')->name('daftar.export');
                         Route::post('report/konsumen/histori', 'dataHistoriKonsumen')->name('histori');
-                        Route::post('report/konsumen/export',  'export')->name('export');
-                        Route::post('report/konsumen/export',  'Historyexport')->name('export');
                     });
                 });
             });

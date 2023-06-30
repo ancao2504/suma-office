@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use App\Exports\Retur\Konsumen;
+use App\Exports\Konsumen;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -123,12 +123,12 @@ class KonsumenController extends Controller
         }
     }
 
-    public function export(Request $request){
+    public function exportDaftarKonsumen(Request $request){
         try {
-            $responseApi = Service::ExprotReportReturKonsumen($request);
+            $responseApi = Service::exportDaftarKonsumen($request);
             if (json_decode($responseApi)->status == 1) {
                 $data = json_decode($responseApi)->data;
-                return Excel::download(new Konsumen($data), 'Retur_Konsumen.xlsx');
+                return Excel::download(new Konsumen($data), 'Konsumen.xlsx');
             } else {
                 return Response()->json([
                     'status'    => 0,

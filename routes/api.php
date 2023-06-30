@@ -561,7 +561,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                 Route::name('konsumen.')->group(function () {
                     Route::controller(Reportkonsumen::class)->group(function () {
                         Route::post('/backend/report/konsumen/daftar',  'daftarKonsumen')->name('daftar');
-                        Route::post('/backend/report/konsumen/export',  'export')->name('export');
+                        Route::post('/backend/report/konsumen/daftar/export',  'exportDaftarKonsumen')->name('daftar.export');
                     });
                 });
             });
