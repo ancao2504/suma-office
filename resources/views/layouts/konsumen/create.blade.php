@@ -216,7 +216,7 @@
                 honda : @json(session('app_user_company')->honda),
             @endif
             fdr : @json(session('app_user_company')->fdr)
-        }
+        };
         const tipemotor = @json($type_motor);
         const old = {
             merk: '{{ $data->merk??'' }}',

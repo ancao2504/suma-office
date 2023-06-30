@@ -31,16 +31,20 @@ class KonsumenController extends Controller
         // ! cek lokasi,cabang agar sesuai yang di izinkan
         if(!empty($request->companyid) && !in_array($request->companyid, $lokasi->lokasi_valid->companyid)){
             return redirect()->back()->with('failed', 'Maaaf, Anda tidak memiliki akses ke company '.$request->companyid);
-        } else {
-            $request->merge(['companyid' => collect($lokasi)->first()->lokasi[0]->companyid]);
         }
         if(!empty($request->kd_lokasi) && !in_array($request->kd_lokasi, $lokasi->lokasi_valid->kd_lokasi)){
             return redirect()->back()->with('failed', 'Maaaf, Anda tidak memiliki akses ke lokasi '.$request->kd_lokasi);
-        } else {
-            $request->merge(['kd_lokasi' => collect($lokasi)->first()->lokasi[0]->kd_lokasi[0]]);
         }
 
-        $request->merge(['divisi' => ($request->companyid == collect($lokasi)->first()->lokasi[0]->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
+        // ! jika tidak ada lokasi,cabang yang dipilih maka ambil lokasi pertama yang diizinkan
+        if(empty($request->companyid)){
+            $request->merge(['companyid' => collect(collect($lokasi)->first()->lokasi)->first()->companyid]);
+        }
+        if(empty($request->kd_lokasi)){
+            $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
+        }
+
+        $request->merge(['divisi' => ($request->companyid == collect(collect($lokasi)->first()->lokasi)->first()->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
         
         $responseApi = Service::KonsumenDaftar($request);
         $statusApi = json_decode($responseApi)->status;
@@ -152,22 +156,19 @@ class KonsumenController extends Controller
         // ! cek lokasi,cabang agar sesuai yang di izinkan
         if(!empty($request->companyid) && !in_array($request->companyid, $lokasi->lokasi_valid->companyid)){
             return redirect()->back()->with('failed', 'Maaaf, Anda tidak memiliki akses ke company '.$request->companyid);
-        } else {
-            
-            $request->merge(['companyid' => collect($lokasi)->first()->lokasi[0]->companyid]);
-        }
+        } 
         if(!empty($request->kd_lokasi) && !in_array($request->kd_lokasi, $lokasi->lokasi_valid->kd_lokasi)){
             return redirect()->back()->with('failed', 'Maaaf, Anda tidak memiliki akses ke lokasi '.$request->kd_lokasi);
         }
         // ! jika tidak ada lokasi,cabang yang dipilih maka ambil lokasi pertama yang diizinkan
         if(empty($request->companyid)){
-            $request->merge(['companyid' => collect($lokasi)->first()->lokasi[0]->companyid]);
+            $request->merge(['companyid' => collect(collect($lokasi)->first()->lokasi)->first()->companyid]);
         }
         if(empty($request->kd_lokasi)){
-            $request->merge(['kd_lokasi' => collect($lokasi)->first()->lokasi[0]->kd_lokasi[0]]);
+            $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
         }
 
-        $request->merge(['divisi' => ($request->companyid == collect($lokasi)->first()->lokasi[0]->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
+        $request->merge(['divisi' => ($request->companyid == collect(collect($lokasi)->first()->lokasi)->first()->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
 
         $request->merge(['id' => $id]);
         $request->merge(['option' => 'first']);

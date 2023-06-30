@@ -1828,5 +1828,24 @@ class OptionController extends Controller
             return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
         }
     }
+
+    public static function ukuranring(){
+        $responseApi = Service::dataUkuranRing();
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            $respon = '';
+            foreach ($data as $key => $value) {
+                $respon .= '<option value="'.$value->jenis.'">'.$value->jenis.'</option>';
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
     // ! 
 }

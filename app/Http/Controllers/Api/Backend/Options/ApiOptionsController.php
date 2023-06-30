@@ -642,6 +642,23 @@ class ApiOptionsController extends Controller
             );
         }
     }
+    public function dataUkuranRing(Request $request){
+        try{
+
+            $data = DB::table('dbsuma.dbo.part')->lock('with (nolock)')->select('jenis')->where('jenis', '!=', '')->orderBy('jenis', 'asc')->distinct()->get();
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
 
     public function dataDealer(Request $request){
         try {

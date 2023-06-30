@@ -35,6 +35,7 @@
 		<div id="kt_content_container" class="container-xxl">
 			<div class="row gy-5 g-xl-8">
 				<div class="card card-xl-stretch shadow" id="table_list">
+					<!--begin::Card-->
 					<div class="card-header align-items-center py-5 gap-2 gap-md-5">
 						<div class="card-title" id="btn_filter">
 							<div class="dropdown d-inline-block me-2">
@@ -77,27 +78,73 @@
 									</tr>
 								</thead>
 								<tbody class="border">
+									@if (!empty($data))
+										@if($data->total == 0)
+											<tr><td colspan="15" class="text-center text-danger">Tidak ada data</td></tr
+										@else
+										@php
+											$no = $data->from;
+										@endphp
+											@foreach ($data->data as $key => $value)
+											<tr class="text-center">
+												<td class="text-center">{{ $no++ }}</td>
+												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_faktur)) }}</td>
+												<td class="text-center">{{ ($value->jenis??'-') }}</td>
+												<td class="text-center">{{ ($value->type??'-') }}</td>
+												<td class="text-center">{{ ($value->merk??'-') }}</td>
+												<td class="text-center">{{ ($value->ring??'-') }}</td>
+												<td class="text-center">{{ ($value->kd_part??'-') }}</td>
+												<td class="text-center">{{ ($value->ket??'-') }}</td>
+												<td class="text-center">{{ ($value->nama??'-') }}</td>
+												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_lahir)) }}</td>
+												<td class="text-center">{{ ($value->alamat??'-') }}</td>
+												<td class="text-center">{{ ($value->telepon??'-') }}</td>
+												<td class="text-center">{{ ($value->divisi??'-') }}</td>
+												<td class="text-center">{{ ($value->CompanyId??'-') }}</td>
+												<td class="text-center">{{ ($value->kd_lokasi??'-') }}</td>
+											</tr>
+											@endforeach
+											
+										@endif
+									@else
+										<tr><td colspan="15" class="text-center text-secondary">Atur Filter terlebih dahulu</td></tr>
+									@endif
 								</tbody>
 							</table>
 						</div>
 					</div>
-					<div class="card-footer" id="p-faktur" hidden>
+					<div class="card-footer" id="p-faktur">
+						@if (!empty($data))
 						<div class="d-flex justify-content-between">
 							<div class="form-group">
 								<select class="form-select form-select-sm" name="per_page" id="per_page">
-									<option value="10" selected>10</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-									<option value="500">500</option>
+									<option value="10" @if ($data->per_page == 10) selected @endif>10</option>
+									<option value="50" @if ($data->per_page == 50) selected @endif>50</option>
+									<option value="100" @if ($data->per_page == 100) selected @endif>100</option>
+									<option value="500" @if ($data->per_page == 500) selected @endif>500</option>
 								</select>
 							</div>
 							<nav aria-label="...">
 								<ul class="pagination justify-content-center">
+									@php
+										$paginator = new Illuminate\Pagination\LengthAwarePaginator(
+											$data->data,
+											$data->total,
+											$data->per_page,
+											$data->current_page,
+											[
+												'path' => '#',
+											]
+										);
+									@endphp
+									{{ $paginator->links() }}
 								</ul>
 							</nav>
 						</div>
-						<span class="mt-3 badge badge-success jmldta"></span>
+						<span class="mt-3 badge badge-success jmldta">{{ $data->total }}</span>
+						@endif
 					</div>
+					<!--end::Card-->
 				</div>
 			</div>
 		</div>
@@ -143,7 +190,7 @@
 										<input class="form-control" placeholder="Pick date rage" id="tgl_tran1"/>
 									</div>
 									<label for="tgl_tran" class="form-label">Bulan Tahun</label>
-									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value="{{ date('Y-m') }}"/>
+									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value=""/>
 									<span class="text-end text-gray-600 fs-7"><i class="required"></i> Isi inputan diatas dengan salah satu dari <b>Range Tanggal</b> atau <b>Bulan Tahun</b></span>
 								</div>
 							</div>
@@ -154,9 +201,11 @@
 									<div class="input-group">
 										<select class="form-control" placeholder="Bulan" id="tgl_lahir1"/>
 											<option value="">Bulan</option>
+											@if (!empty($bulan))
 												@foreach ($bulan as $key => $item)
 													<option value="{{ $key }}">{{ $item }}</option>
 												@endforeach
+											@endif
 										</select>
 										<select class="form-control" placeholder="Tanggal" id="tgl_lahir2"/>
 											<option value="">Tanggal</option>
@@ -167,9 +216,11 @@
 										<span class="input-group-text">-</span>
 										<select class="form-control" placeholder="Bulan" id="tgl_lahir3"/>
 											<option value="">Bulan</option>
-											@foreach ($bulan as $key => $item)
-												<option value="{{ $key }}">{{ $item }}</option>
-											@endforeach
+											@if (!empty($bulan))
+												@foreach ($bulan as $key => $item)
+													<option value="{{ $key }}">{{ $item }}</option>
+												@endforeach
+											@endif
 										</select>
 										<select class="form-control" placeholder="Tanggal" id="tgl_lahir4"/>
 											<option value="">Tanggal</option>
@@ -181,25 +232,29 @@
 									<label for="tgl_lahir" class="form-label">Bulan</label>
 									<select class="form-select" placeholder="Pick date rage" id="tgl_lahir"/>
 										<option value="">Pilih Bulan</option>
+										@if (!empty($bulan))
 											@foreach ($bulan as $key => $item)
 												<option value="{{ $key }}">{{ $item }}</option>
 											@endforeach
+										@endif
 									</select>
 									<span class="text-end text-gray-600 fs-7"><i class="required"></i> Isi inputan diatas dengan salah satu dari <b>Bulan Tanggal</b> atau <b>Bulan</b></span>
 								</div>
 							</div>
 							<div class="col-lg-4 pb-15">
-								<label for="tgl_lahir" class="form-label">Filter Part : </label>
+								<label for="part" class="form-label">Filter Part : </label>
 								<div class="w-100 h-100 border border-dark p-6 rounded">
-									<label for="ukuran_ban" class="form-label text-part">Kode Part</label>
-									<input class="form-control" placeholder="" id="ukuran_ban"/>
-									<label for="ukuran_ring" class="form-label text-kd_part">Jenis Part</label>
-									<select name="ukuran_ring" id="ukuran_ring" class="form-select">
-										<option value=""></option>
-										{{-- @foreach($ring_ban as $a)
-											<option value="{{ trim($a->jenis) }}">{{ trim($a->jenis) }}</option>
-										@endforeach --}}
-									</select>
+									<div id="jenis_part_selector" hidden>
+										<label for="jenis_part" class="form-label">Ukuran ring Ban</label>
+										<select name="jenis_part" id="jenis_part" class="form-select" data-placeholder="Pilih ukuran ring Ban">
+											<option value="">Pilih ukuran ring Ban</option>
+											@if (!empty($ring_ban))
+												{!! $ring_ban !!}
+											@endif
+										</select>
+									</div>
+									<label for="kd_part" class="form-label text-kd_part">Kode Part</label>
+									<input class="form-control" name="kd_part" id="kd_part" placeholder="Contoh : 22535KWN901"/>
 								</div>
 							</div>
 							<div class="col-lg-4 pb-15">
@@ -208,7 +263,9 @@
 									<label for="merek_motor" class="form-label">Merek Motor</label>
 									<select name="merek_motor" id="merek_motor" class="form-select" data-placeholder="Pilih Merek Motor">
 										<option value="">Pilih Merek Motor</option>
-										{!! $merk_motor !!}
+										@if (!empty($merk_motor))
+											{!! $merk_motor !!}
+										@endif
 									</select>
 									<label for="tipe_motor" class="form-label">Tipe Motor</label>
 									<select name="tipe_motor" id="tipe_motor" class="form-select" data-placeholder="Pilih Type Motor">
@@ -238,8 +295,12 @@
 
 @push('scripts')
 	<script language="JavaScript">
-		const lokasi = @json($lokasi);
-        const tipemotor = @json($type_motor);
+		@if (!empty($lokasi))
+			const lokasi = @json($lokasi);
+		@endif
+		@if (!empty($type_motor))
+			const tipemotor = @json($type_motor);
+		@endif
 	</script>
     <script language="JavaScript" src="{{ asset('assets/js/suma/report/konsumen/Konsumen.js')}}?v={{ time() }}"></script>
 @endpush

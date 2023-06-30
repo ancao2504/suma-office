@@ -2082,6 +2082,28 @@ class Service
         return $response;
     }
 
+    public static function ReportKonsumenData($request){
+        $url = 'backend/report/konsumen/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'divisi'        => $request->get('divisi'),
+            'companyid'     => $request->get('companyid'),
+            'kd_lokasi'     => $request->get('kd_lokasi'),
+            'tgl_transaksi' => $request->get('tgl_tran'),
+            'tgl_lahir'     => $request->get('tgl_lahir'),
+            'jenis_part'    => $request->get('jenis_part'),
+            'kd_part'       => $request->get('kd_part'),
+            'merek_motor'   => $request->get('merek_motor'),
+            'tipe_motor'    => $request->get('tipe_motor'),
+            'jenis_motor'   => $request->get('jenis_motor'),
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
     public static function ExprotReportReturKonsumen($request){
         $url = 'backend/report/retur/konsumen/export';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -2112,6 +2134,13 @@ class Service
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
         ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function dataUkuranRing(){
+        $url = 'backend/ukuranring';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }

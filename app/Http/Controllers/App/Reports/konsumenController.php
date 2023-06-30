@@ -3,10 +3,10 @@
 namespace app\Http\Controllers\App\Reports;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Exports\Retur\Konsumen;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -31,7 +31,7 @@ class KonsumenController extends Controller
         }
 
         $request->merge(['option' => 'select']);
-        $responseApiSales = OptionController::salesman($request)->getData();
+        $responseApiringban = OptionController::ukuranring()->getData();
 
         $responseApi_merekmotor = OptionController::merekmotor($request)->getData();
         $statusApi_merekmotor = $responseApi_merekmotor->status;
@@ -39,7 +39,7 @@ class KonsumenController extends Controller
         $responseApi_typemotor = json_decode(OptionController::typemotor($request));
         $statusApi_typemotor = $responseApi_typemotor->status;
 
-        if ($responseApiSales->status == 1 && $statusApi_merekmotor == 1 && $statusApi_typemotor == 1) {
+        if ($responseApiringban->status == 1 && $statusApi_merekmotor == 1 && $statusApi_typemotor == 1) {
             return view(
                 'layouts.report.konsumen.konsumen',
                 [
@@ -61,27 +61,56 @@ class KonsumenController extends Controller
                     'lokasi'    =>  collect(session()->get('app_user_company'))->except('lokasi_valid')->all(),
                     'merk_motor'    =>  $responseApi_merekmotor->data,
                     'type_motor'    =>  $responseApi_typemotor->data,
+                    'ring_ban'      =>  $responseApiringban->data,
                 ]
             );
         } else {
-            return redirect()->back()->with('failed', $responseApiSales->message);
+            return redirect()->back()->with('failed', 'Maaf, terjadi kesalahan coba beberapa saat lagi');
         }
     }
 
-    public function data(Request $request)
+    public function daftarKonsumen(Request $request)
     {
         try {
-            $responseApi = Service::ReportReturKonsumenData($request);
-            if (json_decode($responseApi)->status == 1) {
+            $lokasi = session()->get('app_user_company');
+            // ! cek lokasi,cabang agar sesuai yang di izinkan
+            if(!empty($request->companyid) && !in_array($request->companyid, $lokasi->lokasi_valid->companyid)){
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => 'Maaaf, Anda tidak memiliki akses ke company '.$request->companyid,
+                    'data'      => ''
+                ], 200);
+            }
+            if(empty($request->companyid)) {
+                $request->merge(['companyid' => collect(collect($lokasi)->first()->lokasi)->first()->companyid]);
+            }
+            
+            if(empty($request->kd_lokasi) || !in_array($request->kd_lokasi, $lokasi->lokasi_valid->kd_lokasi)){
+                $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
+            }
+            
+            $request->merge(['divisi' => ($request->companyid == collect(collect($lokasi)->first()->lokasi)->first()->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
+
+            $responseApi = json_decode(Service::ReportKonsumenData($request));
+            if ($responseApi->status == 1) {
+                $view = view(
+                    'layouts.report.konsumen.konsumen',
+                    [
+                        'title_menu' => 'Report Konsumen',
+                        'data' => $responseApi->data->data,
+                    ]
+                );
+
                 return Response()->json([
                     'status'    => 1,
                     'message'   => 'success',
-                    'data'      => json_decode($responseApi)->data,
+                    'data'      => Str::between($view->with('data', $responseApi->data->data)->render(), '<!--begin::Card-->', '<!--end::Card-->'),
+                    'old'       => (object)['filter' => $responseApi->data->filter, 'request' => $request->except('_token')]
                 ], 200);
             } else {
                 return Response()->json([
                     'status'    => 0,
-                    'message'   => json_decode($responseApi)->message,
+                    'message'   => $responseApi->message,
                     'data'      => ''
                 ], 200);
             }
