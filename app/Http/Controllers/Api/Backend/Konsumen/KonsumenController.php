@@ -79,6 +79,8 @@ class KonsumenController extends Controller
                         'no_faktur' => $data = $data->where('konsumen.no_faktur', 'like', '%' . $request->search . '%'),
                         default     => $data = $data->where('konsumen.no_faktur', 'like', '%' . $request->search . '%'),
                     };
+                } else {
+                    $data = $data->whereYear('konsumen.tanggal', date('Y'));
                 }
                 
                 $data = $data->orderBy('konsumen.tanggal', 'desc')

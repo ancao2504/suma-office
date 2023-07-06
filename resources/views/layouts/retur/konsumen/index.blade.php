@@ -60,7 +60,7 @@
 						<td class="text-end">{{ number_format($a->total) }}</td>
 						<td class="text-end">{{ number_format($a->terbayar) }}</td>
 						<td class="text-center">
-							<a class="btn-sm btn-icon btn-warning d-inline-block mt-1 btnEdit" href="{{ Route('retur.konsumen.edit',['no_retur'=>trim($a->no_retur)]); }}"><span class="bi bi-pencil"></span></a>
+							<a class="btn-sm btn-icon btn-warning d-inline-block mt-1 btnEdit" href="{{ Route('retur.konsumen.edit',['no_retur'=>trim($a->no_retur)]) }}"><span class="bi bi-pencil"></span></a>
 							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_retur}}"><span class="bi bi-trash"></span></a>
 						</td>
 					</tr>

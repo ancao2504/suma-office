@@ -43,9 +43,8 @@ class KonsumenController extends Controller
         if(empty($request->kd_lokasi)){
             $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
         }
-
-        $request->merge(['divisi' => ($request->companyid == collect(collect($lokasi)->first()->lokasi)->first()->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
-        
+            
+        $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
         $responseApi = Service::KonsumenDaftar($request);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -167,8 +166,8 @@ class KonsumenController extends Controller
         if(empty($request->kd_lokasi)){
             $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
         }
-
-        $request->merge(['divisi' => ($request->companyid == collect(collect($lokasi)->first()->lokasi)->first()->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
+            
+        $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
 
         $request->merge(['id' => $id]);
         $request->merge(['option' => 'first']);

@@ -22,6 +22,7 @@ class KonsumenController extends Controller
      */
     public function index(Request $request)
     {
+        // dd(json_decode(service::LokasiAll($request)));
         if(empty(session()->get('app_user_company'))){
             $data = json_decode(service::LokasiAll($request));
             if($data->status == 0){
@@ -89,7 +90,7 @@ class KonsumenController extends Controller
                 $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
             }
             
-            $request->merge(['divisi' => ($request->companyid == collect(collect($lokasi)->first()->lokasi)->first()->companyid)?collect($lokasi)->first()->divisi:collect($lokasi)->last()->divisi]);
+            $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
 
             $responseApi = json_decode(Service::ReportKonsumenData($request));
             if ($responseApi->status == 1) {
@@ -110,7 +111,7 @@ class KonsumenController extends Controller
             } else {
                 return Response()->json([
                     'status'    => 0,
-                    'message'   => $responseApi->message,
+                    'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
                     'data'      => ''
                 ], 200);
             }

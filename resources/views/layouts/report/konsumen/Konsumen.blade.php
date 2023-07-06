@@ -2,6 +2,7 @@
 @section('title','Report')
 @section('subtitle','Konsumen')
 @push('styles')
+
 <style>
 	@media print {
 		body * {
@@ -40,14 +41,17 @@
 						<div class="card-title" id="btn_filter">
 							<div class="dropdown d-inline-block me-2">
 								<button class="btn btn-light-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-									<i class="bi bi-file-earmark-arrow-down"></i> Export
+									<i class="bi bi-file-earmark-arrow-down fs-4"></i> Export
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 									<li><a id="btn_export" class="dropdown-item" href="#">EXEL</a></li>
 								</ul>
 							</div>
 							<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_report">
-								Filter
+								<i class="bi bi-filter fs-1"></i> Filter
+							</button>
+							<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_urutkan">
+								<i class="bi bi-sort-down fs-1"></i> Urutkan Data
 							</button>
 						</div>
 						<div class="card-toolbar">
@@ -61,26 +65,26 @@
 								<thead class="border">
 									<tr  class="fs-8 fw-bolder text-muted text-center">
 										<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Tgl Transaksi</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Jenis Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Tipe Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Merek Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="text-part">Jenis Part</span></th>
-										<th rowspan="2" class="w-100px ps-3 pe-3"><span class="text-kd_part">kode Part</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_faktur">Tgl Transaksi</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="jenis_motor">Jenis Motor</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="tipe_motor">Tipe Motor</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="merek_motor">Merek Motor</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="text-part" id="jenis_part">Jenis Part</span></th>
+										<th rowspan="2" class="w-100px ps-3 pe-3"><span class="text-kd_part" id="kd_part">kode Part</span></th>
 										<th rowspan="2" class="w-100px ps-3 pe-3">Ket part</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">Nama Konsumen</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Tgl lahir</span></th>
+										<th rowspan="2" class="w-100px ps-3 pe-3" id="nama">Nama Konsumen</th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="tgl_lahir">Tgl lahir</span></th>
 										<th rowspan="2" class="w-100px ps-3 pe-3">Alamat</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">Telepon</th>
+										<th rowspan="2" class="w-100px ps-3 pe-3" id="telepon">Telepon</th>
 										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Divisi</span></th>
 										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Company</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Lokasi</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="divisi">Lokasi</span></th>
 									</tr>
 								</thead>
 								<tbody class="border">
 									@if (!empty($data))
 										@if($data->total == 0)
-											<tr><td colspan="15" class="text-center text-danger">Tidak ada data</td></tr
+											<tr><td colspan="15" class="text-center text-dark">Tidak ada data</td></tr
 										@else
 										@php
 											$no = $data->from;
@@ -107,7 +111,7 @@
 											
 										@endif
 									@else
-										<tr><td colspan="15" class="text-center text-secondary">Atur Filter terlebih dahulu</td></tr>
+										<tr><td colspan="15" class="text-center text-dark">Atur Filter terlebih dahulu</td></tr>
 									@endif
 								</tbody>
 							</table>
@@ -167,7 +171,9 @@
 									<label for="divisi" class="form-label required">Divisi</label>
 									<select name="divisi" id="divisi" class="form-select" data-placeholder="Pilih Divisi" required>
 										<option value="">Pilih Divisi</option>
-										<option value="honda">HONDA</option>
+										@if (!Str::contains(session('app_user_name'), 'EFO'))
+											<option value="honda">HONDA</option>
+										@endif
 										<option value="fdr">FDR</option>
 									</select>
 									<label for="divisi" class="form-label required">Cabang</label>
@@ -189,8 +195,10 @@
 										<span class="input-group-text">-</span>
 										<input class="form-control" placeholder="Pick date rage" id="tgl_tran1"/>
 									</div>
+
 									<label for="tgl_tran" class="form-label">Bulan Tahun</label>
 									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value="{{ date('Y-m') }}"/>
+
 									<span class="text-end text-gray-600 fs-7"><i class="required"></i> Isi inputan diatas dengan salah satu dari <b>Range Tanggal</b> atau <b>Bulan Tahun</b></span>
 								</div>
 							</div>
@@ -285,9 +293,56 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
 						<button type="submit" class="btn btn-primary" id="btn-smt">Simpan</button>
 					</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="filter_urutkan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="exampleModalLabel">Urutkan Data</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				
+				<div class="row">
+					<div class="col-lg-6 pb-15">
+						<label for="urutkan_collom" class="form-label">Urutkan Berdasarkan : </label>
+						<div class="w-100 h-100">
+							<select name="urutkan_collom" id="urutkan_collom" class="form-select" data-placeholder="Pilih Urutan">
+								<option value="">Pilih Collom</option>
+								<option value="tgl_faktur">Tanggal Transaksi</option>
+								<option value="kd_part" class="text-kd_part">Kode Part</option>
+								<option value="merk">Merek Motor</option>
+								<option value="type">Tipe Motor</option>
+								<option value="jenis">Jenis Motor</option>
+								<option value="nama">Nama</option>
+								<option value="tgl_lahir">Tanggal Lahir</option>
+								<option value="telepon">Telepon</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6 pb-15">
+						<label for="urutkan" class="form-label">Urutan : </label>
+						<div class="w-100 h-100">
+							<select name="urutkan" id="urutkan" class="form-select" data-placeholder="Pilih Urutan">
+								<option value="">Pilih Urutan</option>
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+				<button type="button" class="btn btn-primary" id="btn-smt">Simpan</button>
+			</div>
 			</div>
 		</div>
 	</div>

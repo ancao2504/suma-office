@@ -50,12 +50,12 @@
                 <div class="form-group row mb-2">
                     <label for="tgl_terima" class="col-sm-2 col-form-label">Tanggal Terima</label>
                     <div class="col-sm-4">
-                        <input class="form-control" id="tgl_terima" name="tgl_terima" placeholder="Masukkan No Dokumen" value="{{date('Y-m-d', strtotime(($data->tgl_terima == null)?date('Y-m-d'):$data->tgl_terima)); }}" required>
+                        <input class="form-control" id="tgl_terima" name="tgl_terima" placeholder="Masukkan No Dokumen" value="{{date('Y-m-d', strtotime(($data->tgl_terima == null)?date('Y-m-d'):$data->tgl_terima)) }}" required>
                     </div>
 
                     <label for="tgl_claim" class="col-sm-2 col-form-label">Tanggal Claim</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" id="tgl_claim" name="tgl_claim" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(($data->tanggal == null)?date('Y-m-d'):$data->tanggal)); }}" required>
+                        <input type="text" class="form-control" id="tgl_claim" name="tgl_claim" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(($data->tanggal == null)?date('Y-m-d'):$data->tanggal)) }}" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -111,19 +111,19 @@
 
                             <tr class="fw-bolder fs-8 border">
                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                <td>{{ $detail->tgl_faktur??'-' }}</td>
-                                <td>{{ $detail->no_faktur??'-' }}</td>
-                                <td>{{ $detail->kd_part??'-' }}</td>
-                                <td>{{ $detail->kd_lokasi??'-' }}</td>
-                                <td>{{ $detail->qty_faktur??'-' }}</td>
-                                <td>{{ $detail->jumlah??'-' }}</td>
+                                <td>{{ ($detail->tgl_faktur??'-') }}</td>
+                                <td>{{ ($detail->no_faktur??'-') }}</td>
+                                <td>{{ ($detail->kd_part??'-') }}</td>
+                                <td>{{ ($detail->kd_lokasi??'-') }}</td>
+                                <td>{{ ($detail->qty_faktur??'-') }}</td>
+                                <td>{{ ($detail->jumlah??'-') }}</td>
                                 {{-- <td>{{ $detail->harga??'-' }}</td> format number dengan , --}}
                                 <td>{{ number_format($detail->harga, 0, '.', ',')??'-' }}</td>
-                                <td>{{ $detail->disc??'-' }}</td>
+                                <td>{{ ($detail->disc??'-') }}</td>
                                 {{-- <td>{{ $detail->nilai??'-' }}</td> format number dengan ,--}}
                                 <td>{{ number_format($detail->nilai, 0, '.', ',')??'-' }}</td>
-                                <td>{{ $detail->status??'-' }}</td>
-                                <td>{{ $detail->ket??'-' }}</td>
+                                <td>{{ ($detail->status??'-') }}</td>
+                                <td>{{ ($detail->ket??'-') }}</td>
                                 <td class="text-center">
                                     <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="{{ base64_encode($dta_edt) }}" class="btn_dtl_edit btn-sm btn-icon btn-warning text-dark"><i class="fas fa-edit"></i></a>
                                     <a role="button" data-a="{{ base64_encode($dta_del) }}" class="btn_dtl_delete btn-sm btn-icon btn-danger text-white" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash"></i></a>
@@ -138,7 +138,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="{{ Route('retur.konsumen.index'); }}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{ Route('retur.konsumen.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>

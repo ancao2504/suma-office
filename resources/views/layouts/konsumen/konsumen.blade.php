@@ -190,25 +190,24 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
+					<div class="ms-2 d-inline-block">
+						<label class="form-label">Divisi</label>
+						<select class="form-select form-control" id="divisi" name="divisi">
+							<option value="">Pilih Divisi</option>
+							<option value="honda">HONDA</option>
+							<option value="fdr">FDR</option>
+						</select>
+					</div>
 					<div class="ms-2 d-inline-block mb-3">
-						<label class="form-label">Company</label>
+						<label class="form-label">Cabang</label>
 						<select class="form-select form-control" id="company" name="company">
-							@foreach (session('app_user_company') as $key => $value)
-								@if ($key != 'lokasi_valid')
-									@foreach ($value->lokasi as $item)
-										@if (app('request')->input('companyid') == $item->companyid)
-											<option value="{{ $item->companyid }}" selected>{{ $item->companyid }}</option>
-										@else
-											<option value="{{ $item->companyid }}">{{ $item->companyid }}</option>
-										@endif
-									@endforeach
-								@endif
-							@endforeach
+							<option value="">Pilih Cabang</option>
 						</select>
 					</div>
 					<div class="ms-2 d-inline-block">
 						<label class="form-label">Lokasi</label>
 						<select class="form-select form-control" id="lokasi" name="lokasi">
+							<option value="">Pilih Lokasi</option>
 						</select>
 					</div>
 				</div>
@@ -225,14 +224,19 @@
 	<script language="JavaScript">
 		const lokasi = {
 			@if (!empty($lokasi->honda))
+				honda : {
 				@foreach ($lokasi->honda->lokasi as $item)
 					@json($item->companyid):@json($item->kd_lokasi),
 				@endforeach
+				},
 			@endif
+			fdr : {
 			@foreach ($lokasi->fdr->lokasi as $item)
 				@json($item->companyid):@json($item->kd_lokasi),
 			@endforeach
+			}
 		}
+
 		let url = new URLSearchParams(window.location.search);
 	</script>
 	<script language="JavaScript" src="{{ asset('assets/js/suma/konsumen/konsumen.js') }}?v={{ time() }}"></script>

@@ -5,7 +5,7 @@ function typemotor(){
         $('#filter_report #tipe_motor').append(`<option value="${value.TypeMotor}">${value.TypeMotor}</option>`);
     });
 }
-
+let ada_data = false;
 function request_data(page){
     loading.block();
     $.ajax({
@@ -29,15 +29,43 @@ function request_data(page){
             jenis_motor: $('#filter_report #jenis_motor').val(),
             page: page,
             per_page: $('#table_list').find('#per_page').val(),
+
+            filter: {[$('#filter_urutkan #urutkan_collom').val()] : $('#filter_urutkan #urutkan').val()},
         },
         dataType: 'json',
         success: function(response) {
+            if(response.status == 0){
+                Swal.fire({
+                    text: response.message,
+                    icon: "error",
+                    confirmButtonText: "OK !",
+                    customClass: {
+                        confirmButton: "btn btn-danger"
+                    },
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                    }
+                });
+                loading.release();
+                return false;
+            }
+
             $('#kt_post #table_list').html(response.data);
             $('#filter_report').modal('hide');
             if($('#filter_report #lokasi').val() == ''){
                 $('#filter_report #lokasi').val(response.old.request.kd_lokasi).trigger('change');
             }
+            // response.old.filter looping
+            // #kt_post #table_list #{item}
+            response.old.filter.forEach(function(item) {
+                console.log(item);
+                // ubah warna text menjadi primary pada boostrap
+                $('#kt_post #table_list #'+item).addClass('text-primary');
+            });
+
             loading.release();
+            ada_data = true;
         },
         error: function(jqXHR, textStatus, errorThrown) {
             loading.release();
@@ -70,7 +98,7 @@ $('document').ready(function() {
         $('#filter_report #lokasi').html('<option value="">Pilih Lokasi</option>');
 
         if ($(this).val().toLowerCase() == 'honda') {
-            $('#filter_report .text-kd_part').text('Kode Part');
+            $('.text-kd_part').text('Kode Part');
             $('#filter_report #kd_part').attr('placeholder', 'Contoh : 22535KWN901');
             $('#filter_report #jenis_part_selector').attr('hidden', true);
 
@@ -79,7 +107,7 @@ $('document').ready(function() {
                 $('#filter_report #company').append(`<option value="${honda_lokasi[item].companyid}">${honda_lokasi[item].companyid}</option>`);
             });
         } else if ($(this).val().toLowerCase() == 'fdr') {
-            $('#filter_report .text-kd_part').text('Ukuran Ban');
+            $('.text-kd_part').text('Ukuran Ban');
             $('#filter_report #kd_part').attr('placeholder', 'Contoh : 80/90-17');
             $('#filter_report #jenis_part_selector').attr('hidden', false);
 
@@ -200,6 +228,13 @@ $('document').ready(function() {
         request_data();
     });
 
+    $('#filter_urutkan #btn-smt').on('click', function() {
+        if($('#filter_urutkan #urutkan_collom').val() != '' && $('#filter_urutkan #urutkan').val() != ''){
+            request_data();
+            $('#filter_urutkan').modal('hide');
+        }
+    });
+
     $('#table_list').on('change', '#per_page',function() {
         request_data();
         $('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -210,7 +245,22 @@ $('document').ready(function() {
     });
 
     $('#kt_post').on('click', '#btn_export',function () {
-        console.log('export');
+        if(ada_data == false){
+            Swal.fire({
+                text: 'Atur Filter terlebih dahulu!',
+                icon: "info",
+                confirmButtonText: "OK !",
+                customClass: {
+                    confirmButton: "btn btn-info"
+                },
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#filter_report').modal('show');
+                }
+            });
+            return false;
+        }
         $.ajax({
             url: base_url + '/report/konsumen/daftar/export',
             method: 'POST',
@@ -232,7 +282,9 @@ $('document').ready(function() {
 
                 merek_motor: $('#filter_report #merek_motor').val(),
                 tipe_motor: $('#filter_report #tipe_motor').val(),
-                jenis_motor: $('#filter_report #jenis_motor').val()
+                jenis_motor: $('#filter_report #jenis_motor').val(),
+
+                filter: {[$('#filter_urutkan #urutkan_collom').val()] : $('#filter_urutkan #urutkan').val()},
             },
             beforeSend: function () {
                 loading.block();

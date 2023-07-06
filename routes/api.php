@@ -153,6 +153,8 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/merekmotor', 'dataMerekmotor')->name('merekmotor');
                     Route::post('/backend/typemotor', 'dataTypemotor')->name('typemotor');
                     Route::post('/backend/ukuranring', 'dataUkuranRing')->name('ukuranring');
+                    Route::post('/backend/gudang/paking/online/meja', 'dataMejaPackingOnline')->name('meja');
+                    Route::post('/backend/gudang/wh', 'dataWH')->name('wh');
                     // ! end sby
                 });
             });
@@ -531,6 +533,15 @@ Route::group(['middleware' => 'authBasic'], function () {
                 });
             });
             // ! sby 
+
+            Route::name('gudang.')->group(function () {
+                Route::name('packing.')->group(function () {
+                    Route::controller(PackingController::class)->group(function () {
+                        Route::post('/backend/gudang/packing/online/simpan',  'store')->name('store');
+                    });
+                });
+            });
+
             Route::name('retur.')->group(function () {
                 Route::name('konsumen.')->group(function () {
                     Route::controller(ReturKonsumen::class)->group(function () {

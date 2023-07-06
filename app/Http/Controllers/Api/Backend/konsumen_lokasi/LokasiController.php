@@ -39,10 +39,10 @@ class LokasiController extends Controller
                     $company->put('fdr', (object)[
                         'divisi'    => 'fdr',
                         'lokasi'    => (array)[
-                            (object)[
+                            strtoupper(trim($compeny_default->kd_fdr)) => (object)[
                                 'companyid' => strtoupper(trim($compeny_default->kd_fdr)),
-                                'kd_lokasi' => $fdr_kd_lokasi,
-                            ]
+                                'kd_lokasi' => $fdr_kd_lokasi
+                                ]
                         ]
                     ]);
                     $company->put('lokasi_valid', (object)[
@@ -54,7 +54,7 @@ class LokasiController extends Controller
                     // ! Jika Bukan efo maka menyimpan data honda dan fdr
                 } else {
                     // ! jika bukan MD_H3_MGMT maka hanya bisa mengunakan lokasi default
-                    // if(strtoupper(trim($request->role_id)) != 'MD_H3_MGMT'){
+                    if(strtoupper(trim($request->role_id)) != 'MD_H3_MGMT'){
                         $company->put('honda', (object)[
                             'divisi'    => 'honda',
                             'lokasi'    => (array)[
@@ -78,27 +78,41 @@ class LokasiController extends Controller
                             'companyid' => [strtoupper(trim($compeny_default->kd_honda)),strtoupper(trim($compeny_default->kd_fdr))],
                             'kd_lokasi' => array_merge(DB::table(DB::raw('dbhonda.dbo.lokasi'))->where('CompanyId', strtoupper(trim($compeny_default->kd_honda)))->pluck('kd_lokasi')->toArray(), $fdr_kd_lokasi),
                         ]);
-                    // } 
-                    // else {
-                    //     $data = DB::table('kode_company')
-                    //     ->select('kd_honda', 'kd_fdr')
-                    //     ->get();
+                    } 
+                    else {
+                        $data = DB::table('kode_company')
+                        ->select('kd_honda', 'kd_fdr')
+                        ->get();
+                        $honda = [];
+                        $fdr = [];
+                        foreach($data as $key => $value) {
+                            $honda[strtoupper(trim($value->kd_honda))] = (object)[
+                                'companyid' => strtoupper(trim($value->kd_honda)),
+                                'kd_lokasi' => DB::table(DB::raw('dbhonda.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_honda)))->pluck('kd_lokasi')->toArray(),
+                            ];
 
-                    //     foreach($data as $key => $value) {
-                    //         $company->put('lokasi', [
-                    //             'honda' => DB::table(DB::raw('dbhonda.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_honda)))->pluck('kd_lokasi')->toArray(),
-                    //             'fdr'   => $fdr_kd_lokasi,
-                    //         ])
-                            // $company->put(strtoupper(trim($value->kd_honda)), (object)[
-                            //     'companyid' => strtoupper(trim($value->kd_honda)),
-                            //     'kd_lokasi' => DB::table(DB::raw('dbhonda.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_honda)))->pluck('kd_lokasi')->toArray(),
-                            // ]);
-                            // $company->put(strtoupper(trim($value->kd_fdr)), (object)[
-                            //     'companyid' => strtoupper(trim($value->kd_fdr)),
-                            //     'kd_lokasi' => DB::table(DB::raw('dbsuma.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_fdr)))->pluck('kd_lokasi')->toArray(),
-                            // ]);
-                        // }
-                    // }
+                            $fdr[strtoupper(trim($value->kd_fdr))] = (object)[
+                                'companyid' => strtoupper(trim($value->kd_fdr)),
+                                'kd_lokasi' => DB::table(DB::raw('dbsuma.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_fdr)))->pluck('kd_lokasi')->toArray(),
+                            ];
+                        }
+
+                        $company->put('honda', (object)[
+                            'divisi'    => 'honda',
+                            'lokasi'    => $honda
+                        ]);
+                        $company->put('fdr', (object)[
+                            'divisi'    => 'fdr',
+                            'lokasi'    => $fdr
+                        ]);
+
+                        $company->put('lokasi_valid', (object)[
+                            'divisi'    => ['honda','fdr'],
+                            'companyid' => array_merge(collect($honda)->pluck('companyid')->toArray(),collect($fdr)->pluck('companyid')->toArray()),
+                            'kd_lokasi' => array_merge(collect($honda)->pluck('kd_lokasi')->flatten()->all(), collect($fdr)->pluck('kd_lokasi')->flatten()->all()),
+                        ]);
+
+                    }
                 }
             
             return Response::responseSuccess('success', $company);

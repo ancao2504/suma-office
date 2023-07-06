@@ -1,40 +1,41 @@
 $(document).ready(function () {
     $('body').attr('data-kt-aside-minimize', 'on');
     $('#kt_aside_toggle').addClass('active');
-
-    $('#lokasi').append(`<option value="">Pilih Lokasi</option>`);
-    Object.values(lokasi)[0].forEach(item => {
-        if (item == url.get('kd_lokasi')) {
-            $('#lokasi').append(`<option value="${item}" selected>${item}</option>`);
-        } else {
-            $('#lokasi').append(`<option value="${item}">${item}</option>`);
-        }
-    });
-    $('#search').val(url.get('search'));
+    
 
     $('#btn_filter').on('click', function () {
-        window.location.href = base_url + '/konsumen?page=1&per_page=10&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#lokasi').val()??(url.get('kd_lokasi')??''))+'&search='+($('#search').val()??(url.get('search')??''))+'&by='+(url.get('by')??'');
+        window.location.href = base_url + '/konsumen?page=1&per_page=10'+'&divisi='+($('#divisi').val()??(url.get('divisi')??''))+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#lokasi').val()??(url.get('kd_lokasi')??''))+'&search='+($('#search').val()??(url.get('search')??''))+'&by='+(url.get('by')??'');
     });
-    
+
+    $('#divisi').on('change', function(){
+        $('#company').html('<option value="">Pilih Cabang</option>');
+        for (let key in lokasi[$(this).val()]) {
+            $('#company').append(`<option value="${key}">${key}</option>`);
+        }
+    });
+
     $('#company').on('change', function () {
-        $('#lokasi').empty();
-        $('#lokasi').append(`<option value="">Pilih Lokasi</option>`);
-        lokasi[$(this).val()].forEach(item => {
-            $('#lokasi').append(`<option value="${item}">${item}</option>`);
-        });
+        if($('#divisi').val() != ''){
+            $('#lokasi').html(`<option value="">Pilih Lokasi</option>`);
+            for (let key in lokasi[$('#divisi').val()][$(this).val()]) {
+                $('#lokasi').append(`<option value="${lokasi[$('#divisi').val()][$(this).val()][key]}">${lokasi[$('#divisi').val()][$(this).val()][key]}</option>`);
+            }
+        }
     });
 
     $('#per_page').on('change', function () {
-        window.location.href = base_url + '/konsumen?page=1&per_page='+$(this).val()+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#kd_lokasi').val()??url.get('kd_lokasi')??'')+'&search='+($('#search').val()??(url.get('search')??''))+'&by='+(url.get('by')??'');
+        window.location.href = base_url + '/konsumen?page=1&per_page='+$(this).val()+'&divisi='+($('#divisi').val()??(url.get('divisi')??''))+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#kd_lokasi').val()??url.get('kd_lokasi')??'')+'&search='+($('#search').val()??(url.get('search')??''))+'&by='+(url.get('by')??'');
     });
 
     $('.select_by').on('click', function () {
-        window.location.href = base_url + '/konsumen?page=1&per_page='+($('#per_page').val()??(url.get('per_page')??''))+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#kd_lokasi').val()??url.get('kd_lokasi')??'')+'&search='+($('#search').val()??(url.get('search')??''))+'&by='+($(this).data('a')??'');
+        if($('#search').val() != ''){
+            window.location.href = base_url + '/konsumen?page=1&per_page='+($('#per_page').val()??(url.get('per_page')??''))+'&divisi='+($('#divisi').val()??(url.get('divisi')??''))+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#kd_lokasi').val()??url.get('kd_lokasi')??'')+'&search='+($('#search').val()??(url.get('search')??''))+'&by='+($(this).data('a')??'');
+        }
     });
 
     $('#search').on('change', function () {
         if ($(this).val() == '' && url.get('search') != '') {
-            window.location.href = base_url + '/konsumen?page=1&per_page='+($('#per_page').val()??(url.get('per_page')??''))+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#kd_lokasi').val()??url.get('kd_lokasi')??'')+'&search='+($(this).val())+'&by='+(url.get('by')??'');
+            window.location.href = base_url + '/konsumen?page=1&per_page='+($('#per_page').val()??(url.get('per_page')??''))+'&divisi='+($('#divisi').val()??(url.get('divisi')??''))+'&companyid='+($('#company').val()??(url.get('companyid')??''))+'&kd_lokasi='+($('#kd_lokasi').val()??url.get('kd_lokasi')??'')+'&search='+($(this).val())+'&by='+(url.get('by')??'');
         }
     });
 
@@ -143,4 +144,11 @@ $(document).ready(function () {
             }
         });
     });
+
+    if(url){
+        $('#divisi').val((url.get('divisi')??'')).trigger('change');
+        $('#company').val((url.get('companyid')??'')).trigger('change');
+        $('#lokasi').val((url.get('kd_lokasi')??''));
+        $('#search').val((url.get('search')??''));
+    }
 });

@@ -2082,6 +2082,24 @@ class Service
         return $response;
     }
 
+    public static function ExprotReportReturKonsumen($request){
+        $url = 'backend/report/retur/konsumen/export';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'tgl_claim'     => $request->tgl_claim,
+            'tgl_terima'    => $request->tgl_terima,
+            'kd_sales'      => $request->kd_sales,
+            'kd_dealer'     => $request->kd_dealer,
+            'no_faktur'     => $request->no_faktur,
+            'kd_part'       => $request->kd_part,
+            'sts'           => $request->sts,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
     public static function ReportKonsumenData($request){
         $url = 'backend/report/konsumen/daftar';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -2099,24 +2117,28 @@ class Service
             'jenis_motor'   => $request->get('jenis_motor'),
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
+            'filter'        => $request->get('filter'),
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
 
-    public static function ExprotReportReturKonsumen($request){
-        $url = 'backend/report/retur/konsumen/export';
+    public static function exportDaftarKonsumen($request){
+        $url = 'backend/report/konsumen/daftar/export';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
-            'tgl_claim'     => $request->tgl_claim,
-            'tgl_terima'    => $request->tgl_terima,
-            'kd_sales'      => $request->kd_sales,
-            'kd_dealer'     => $request->kd_dealer,
-            'no_faktur'     => $request->no_faktur,
-            'kd_part'       => $request->kd_part,
-            'sts'           => $request->sts,
+            'divisi'        => $request->get('divisi'),
+            'companyid'     => $request->get('companyid'),
+            'kd_lokasi'     => $request->get('kd_lokasi'),
+            'tgl_transaksi' => $request->get('tgl_transaksi'),
+            'tgl_lahir'     => $request->get('tgl_lahir'),
+            'jenis_part'    => $request->get('jenis_part'),
+            'kd_part'       => $request->get('kd_part'),
+            'merek_motor'   => $request->get('merek_motor'),
+            'tipe_motor'    => $request->get('tipe_motor'),
+            'jenis_motor'   => $request->get('jenis_motor'),
+            'filter'        => $request->get('filter'),
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2189,7 +2211,7 @@ class Service
         $url = 'backend/faktur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'companyid'     => $request->companyid??strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'companyid'     => ($request->companyid??strtoupper(trim($request->session()->get('app_user_company_id')))),
             'user_id'       => trim($request->session()->get('app_user_id')),
             'divisi'        => $request->divisi,
             'option'        => $request->option,
@@ -2318,26 +2340,6 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
-
-    public static function exportDaftarKonsumen($request){
-        $url = 'backend/report/konsumen/daftar/export';
-        $header = ['Authorization' => session()->get('Authorization')];
-        $body = [
-            'user_id'       => trim($request->session()->get('app_user_id')),
-            'divisi'        => $request->get('divisi'),
-            'companyid'     => $request->get('companyid'),
-            'kd_lokasi'     => $request->get('kd_lokasi'),
-            'tgl_transaksi' => $request->get('tgl_transaksi'),
-            'tgl_lahir'     => $request->get('tgl_lahir'),
-            'jenis_part'    => $request->get('jenis_part'),
-            'kd_part'       => $request->get('kd_part'),
-            'merek_motor'   => $request->get('merek_motor'),
-            'tipe_motor'    => $request->get('tipe_motor'),
-            'jenis_motor'   => $request->get('jenis_motor')
-        ];
-        $response = ApiRequest::requestPost($url, $header, $body);
-        return $response;
-    }
     public static function LokasiAll($request)
     {
         $url = 'backend/konsumen/lokasi';
@@ -2347,6 +2349,42 @@ class Service
             'companyid'             => $request->session()->get('app_user_company_id'),
             'username'              => $request->session()->get('app_user_name'),
             'role_id'               => trim($request->session()->get('app_user_role_id')),
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function dataMejaPackingOnline(){
+        $url = 'backend/gudang/paking/online/meja';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function dataWH($request){
+        $url = 'backend/gudang/wh';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid' => $request->session()->get('app_user_company_id'),
+            'option'    => $request->option,
+            'no_wh'     => $request->no_wh,
+            'page'      => $request->page,
+            'per_page'  => $request->per_page
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function PackingSimpan($request)
+    {
+        $url = 'backend/gudang/packing/online/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'             => $request->session()->get('app_user_company_id'),
+            'no_dok'                => $request->no_dok,
+            'kd_pack'               => $request->kd_packer,
+            'kd_lokpack'            => $request->no_meja,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

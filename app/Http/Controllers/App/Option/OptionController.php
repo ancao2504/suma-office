@@ -1597,8 +1597,7 @@ class OptionController extends Controller
         }
     }
     public static function faktur(Request $request){
-        $request->merge(['divisi' => (in_array($request->companyid, collect(session('app_user_company')->fdr->lokasi)->pluck('companyid')->toArray()))?'fdr':'honda']);
-        
+        $request->merge(['divisi' => (in_array(($request->companyid??strtoupper(trim($request->session()->get('app_user_company_id')))), collect(session('app_user_company')->fdr->lokasi)->pluck('companyid')->toArray()))?'fdr':'honda']);
         $responseApi = Service::dataFaktur($request);
         $statusApi = json_decode($responseApi)?->status;
         $messageApi =  json_decode($responseApi)?->message;
@@ -1614,7 +1613,6 @@ class OptionController extends Controller
         }
     }
     public static function konsumen(Request $request){
-        // $request->merge(['divisi' => ($request->companyid == $lokasi->fdr->companyid)?$lokasi->fdr->divisi:$lokasi->honda->divisi]);
         $request->merge(['divisi' => (in_array($request->companyid, collect(session('app_user_company')->fdr->lokasi)->pluck('companyid')->toArray()))?'fdr':'honda']);
 
         $responseApi = Service::dataKonsumen($request);
@@ -1845,6 +1843,73 @@ class OptionController extends Controller
                 $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
             }
             return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+
+    public static function MejaPackingOnline(){
+        $responseApi = Service::dataMejaPackingOnline();
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            $respon = '';
+            foreach ($data as $key => $value) {
+                $respon .= '<option value="'.$value->kd_lokpack.'">'.$value->keterangan.'</option>';
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+
+    public static function WH(Request $request){
+        $responseApi = json_decode(Service::dataWH($request));
+        $statusApi = $responseApi?->status;
+        $messageApi =  $responseApi?->message;
+
+        if ($statusApi == 1) {
+            $data = $responseApi->data;
+            
+            if($request->option == 'first'){
+                $respon = $data;
+            }else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Nomor WH',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Nomor WH',
+                        'value' => $request->no_wh,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-auto', 'text' => 'Nomor WH'],
+                            (object)['class' => 'w-auto', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)[ 'option' => 'text', 'class' => 'w-auto fs-7', 'key' => 'no_dok'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                    'data' => [(object)['key' => 'kd','value' => ['no_dok','nm_dealer','ket','kd_ekspedisi']]]
+                                ],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
         }
     }
     // ! 

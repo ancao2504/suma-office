@@ -748,15 +748,18 @@ class ApiOptionsController extends Controller
                 ->where('faktur.CompanyId', $request->companyid)
                 ->leftjoinSub(function($query) use ($request, $database) {
                     $query->select('konsumen.id','konsumen.companyid','konsumen.no_faktur','konsumen.kd_lokasi')
-                    ->from(DB::raw($database . 'konsumen WITH (NOLOCK)'));
+                    ->from(DB::raw($database . 'konsumen WITH (NOLOCK)'))
+                    ->where('konsumen.CompanyId', $request->companyid);
                     // !agar saat edit mengecualikan faktur ini agar tidak terkena faktur sudah di gunakan
                     if (!empty($request->id_konsumen)) {
                         $query = $query->where('konsumen.id', '!=', $request->id_konsumen);
                     }
-
-                    $query = $query->where('konsumen.CompanyId', $request->companyid)
-                    ->where('konsumen.no_faktur', 'LIKE', '%'.$request->no_faktur . '%')
-                    ->where('konsumen.kd_lokasi', $request->kd_lokasi);
+                    if (!empty($request->no_faktur)) {
+                    $query = $query->where('konsumen.no_faktur', 'LIKE', '%'.$request->no_faktur . '%');
+                    }
+                    if (!empty($request->kd_lokasi)) {
+                    $query = $query->where('konsumen.kd_lokasi', $request->kd_lokasi);
+                    }
                 }, 'konsumen', function ($join) {
                 $join->on('faktur.no_faktur', '=', 'konsumen.no_faktur');
                 $join->on('faktur.CompanyId', '=', 'konsumen.companyid');
@@ -858,7 +861,6 @@ class ApiOptionsController extends Controller
             if(!empty($request->kd_part)){
                 $data = $data->where('part.kd_part', 'LIKE', '%'.$request->kd_part . '%');
             }
-
             // ! ------------------------------------
             // ! Jika data first atau get (paginate)
             // ! ------------------------------------
@@ -866,7 +868,6 @@ class ApiOptionsController extends Controller
                 $data = $data->first();
             }else if($request->option == 'page'){
                 $data = $data->paginate($request->per_page);
-                // $data = $data->toSql();
             }
 
             return Response::responseSuccess('success', $data);
@@ -980,6 +981,87 @@ class ApiOptionsController extends Controller
                 $data = collect($data->get())->groupBy('MerkMotor');
             }
             
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
+    public function dataMejaPackingOnline(Request $request){
+        try{
+            $data = DB::table('dbhonda.dbo.lokasi_pack')->select('kd_lokpack', 'keterangan')->get();
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
+    public function dataWH(Request $request){
+        try{
+            if (!in_array($request->per_page, [10, 50, 100, 500])) {
+                $request->merge(['per_page' => 10]);
+            }
+            
+            $data = DB::table('wh_time')
+            ->lock('with (nolock)')
+            ->select(
+                'wh_time.no_dok','dealer.nm_dealer', 'faktur.ket','faktur.kd_ekspedisi'
+            )
+            ->joinSub(function ($query) use ($request) {
+                $query->select('no_dok', 'no_faktur')
+                    ->from('wh_dtl')
+                    ->where('CompanyId', $request->companyid);
+            }, 'wh_dtl', function ($join) {
+                $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok');
+            })
+            ->joinSub(function ($query) use ($request) {
+                $query->select('kd_dealer', 'nm_dealer')
+                    ->from('dealer')
+                    ->where('kd_area', 'i8')
+                    ->where('CompanyId', $request->companyid);
+            }, 'dealer', function ($join) {
+                $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer');
+            })
+            ->leftJoinSub(function ($query) use ($request) {
+                $query->select('no_faktur', 'ket', 'kd_ekspedisi')
+                ->from('faktur')
+                ->where('CompanyId', $request->companyid);
+            }, 'faktur', function ($join) {
+                $join->on('wh_dtl.no_faktur', '=', 'faktur.no_faktur');
+            });
+
+            if (!empty($request->no_wh)) {
+                $data = $data->where('wh_time.no_dok', 'LIKE', '%' . $request->no_wh . '%');
+            }
+
+            $data = $data->where('wh_time.CompanyId', $request->companyid);
+
+            if ($request->option == 'first') {
+                $data = $data->first();
+            } else if ($request->option == 'page') {
+                $data = $data
+                ->whereNull('wh_time.kd_lokpack')
+                ->whereNull('wh_time.no_sj')
+                ->orderBy('wh_time.no_dok', 'asc')
+                ->groupBy('wh_time.no_dok', 'dealer.nm_dealer', 'faktur.ket', 'faktur.kd_ekspedisi')
+                ->paginate($request->per_page);
+            }
+
             return Response::responseSuccess('success', $data);
         } catch(\Exception $e){
             return Response::responseError(

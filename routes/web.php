@@ -11,6 +11,7 @@ use App\Auth\AuthShopeeController;
 use App\Profile\AccountController;
 use App\Orders\Cart\CartController;
 use App\Parts\PartNumberController;
+use App\konsumen\KonsumenController;
 use App\Parts\StockHarianController;
 use App\Validasi\ValidasiController;
 use App\Online\SerahTerimaController;
@@ -30,16 +31,16 @@ use App\Retur\KonsumenController as ReturKonsumen;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
-use App\konsumen\KonsumenController;
-use App\Reports\KonsumenController as ReportKonsumenController;
 use App\Online\Shopee\ProductController as ProductShopee;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
+use App\Http\Controllers\App\Gudang\Online\PackingController;
 use App\Online\PemindahanController as PemindahanMarketplace;
 use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
 use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
+use App\Reports\KonsumenController as ReportKonsumenController;
 use App\Online\ApproveOrderController as ApproveOrderController;
 use App\Reports\Retur\KonsumenController as ReportReturKonsumen;
 use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
@@ -299,8 +300,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/faktur', 'faktur')->name('option-faktur');
                 Route::get('/part', 'part')->name('option-part');
                 Route::get('/produk', 'produk')->name('option-produk');
-                // terakhir hari sabtu konsumen option
                 Route::get('option/konsumen', 'konsumen')->name('option-konsumen');
+                Route::get('/wh', 'WH')->name('wh');
                 // ! end dari aplikasi suma sby
             });
         });
@@ -607,6 +608,16 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         });
 
         // !
+        Route::name('gudang.')->group(function () {
+            Route::name('packing.')->group(function () {
+                Route::controller(PackingController::class)->group(function () {
+                    Route::get('/gudang/packing/online/form',  'form')->name('form');
+                    Route::post('/gudang/packing/online/form',  'store')->name('store');
+                });
+            });
+        });
+
+
         Route::name('retur.')->group(function () {
             Route::name('konsumen.')->group(function () {
                 Route::controller(ReturKonsumen::class)->group(function () {

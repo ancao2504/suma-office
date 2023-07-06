@@ -112,7 +112,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary btn-submit">Update</button>
-            <a href="{{ Route('edit.returkonsumen',['no_retur'=> encrypt($data->no_retur)]); }}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{ Route('edit.returkonsumen',['no_retur'=> encrypt($data->no_retur)]) }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>
