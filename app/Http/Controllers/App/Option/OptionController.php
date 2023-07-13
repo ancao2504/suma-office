@@ -1686,10 +1686,10 @@ class OptionController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            
-            if($request->option == 'first'){
+            // dd($data);
+            if($request->option[0] == 'first'){
                 $respon = $data;
-            }else if($request->option == 'page'){
+            }else if($request->option[0] == 'page'){
                 $respon = view('layouts.option.option', [
                     'data' => $data,
                     'modal' => (object)[
@@ -1704,11 +1704,13 @@ class OptionController extends Controller
                         'thead' => (object)[
                             (object)['class' => 'w-50px', 'text' => 'kode Part'],
                             (object)['class' => 'w-200px', 'text' => 'nama Part'],
+                            (object)['class' => 'w-20px', 'text' => 'Stock'],
                             (object)['class' => 'w-25', 'text' => 'Action'],
                         ],
                         'tbody' => (object)[
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+                            (object)[ 'option' => 'text', 'class' => 'w-20px text-end', 'key' => 'stock'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
                                 (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
                                     'data' => [(object)['key' => 'a','value' => 'kd_part']]
@@ -1910,6 +1912,25 @@ class OptionController extends Controller
             return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
         } else {
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
+
+    public static function cabang($request){
+        $responseApi = json_decode(Service::dataCabang($request));
+        $statusApi = $responseApi?->status;
+        $messageApi =  $responseApi?->message;
+        if ($statusApi == 1) {
+            $data = $responseApi->data;
+            $respon = '';
+            foreach ($data as $key => $value) {
+                $respon .= '<option value="'.$value->kd_cabang.'">'.$value->kd_cabang.' ('.$value->nm_cabang.')</option>';
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
         }
     }
     // ! 

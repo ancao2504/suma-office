@@ -155,6 +155,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/ukuranring', 'dataUkuranRing')->name('ukuranring');
                     Route::post('/backend/gudang/paking/online/meja', 'dataMejaPackingOnline')->name('meja');
                     Route::post('/backend/gudang/wh', 'dataWH')->name('wh');
+                    Route::post('/backend/cabang', 'dataCabang')->name('cabang');
                     // ! end sby
                 });
             });
@@ -547,7 +548,6 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::controller(ReturKonsumen::class)->group(function () {
                         Route::post('/backend/retur/konsumen/daftar',  'index')->name('index');
                         Route::post('/backend/retur/konsumen/simpan',  'store')->name('store');
-                        Route::post('/backend/retur/konsumen/edit',  'storeDtl')->name('storeDtl');
                         Route::post('/backend/retur/konsumen/delete',  'destroy')->name('delete');
                     });
                 });

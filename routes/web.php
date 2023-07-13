@@ -29,6 +29,7 @@ use App\Setting\CetakUlang\CetakUlangController;
 use App\Reports\FakturController as ReportFaktur;
 use App\Retur\KonsumenController as ReturKonsumen;
 use App\setting\Diskon\DiskonProdukDealerController;
+use App\Claim\SupplierController as ClaimSupplier;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\ProductController as ProductShopee;
@@ -624,9 +625,20 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::get('/retur/konsumen',  'index')->name('index');
                     Route::get('/retur/konsumen/form',  'form')->name('form');
                     Route::post('/retur/konsumen/form',  'store')->name('store');
-                    Route::get('/retur/konsumen/edit',  'edit')->name('edit');
-                    Route::post('/retur/konsumen/edit',  'storeDtl')->name('storeDtl');
                     Route::post('/retur/konsumen/delete',  'destroy')->name('delete');
+                });
+            });
+        });
+
+        Route::name('claim.')->group(function () {
+            Route::name('supplier.')->group(function () {
+                Route::controller(ClaimSupplier::class)->group(function () {
+                    Route::get('/claim/supplier',  'index')->name('index');
+                    Route::get('/claim/supplier/form',  'form')->name('form');
+                    Route::post('/claim/supplier/form',  'store')->name('store');
+                    Route::get('/claim/supplier/edit',  'edit')->name('edit');
+                    Route::post('/claim/supplier/edit',  'storeDtl')->name('storeDtl');
+                    Route::post('/claim/supplier/delete',  'destroy')->name('delete');
                 });
             });
         });

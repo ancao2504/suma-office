@@ -820,9 +820,18 @@ class ApiOptionsController extends Controller
             // ! End Validasi
             // ! -----------------------------------------
 
-            $data = DB::table('part')
-            ->lock('with (nolock)')
-            ->select('part.kd_part', 'part.ket as nm_part', 'part.het', 'part.hrg_pokok', 'part.kd_sub');
+            $data = DB::table(function ($query) use ($request) {
+                $query->select('part.kd_part', 'part.ket as nm_part', 'part.het', 'part.hrg_pokok', 'part.kd_sub','part.CompanyId','part.kanvas','part.in_transit','part.min_gudang','part.min_htl')
+                    ->from('part')
+                    ->where('part.CompanyId', $request->companyid)
+                    ->whereRaw("isnull(part.del_send, 0)=0")
+                    ->whereRaw("isnull(part.het, 0) > 0");
+                if (!empty($request->kd_part)) {
+                    $query = $query->where('part.kd_part', 'LIKE', '%'.$request->kd_part . '%');
+                }
+                return $query;
+            }, 'part')
+            ->select('part.kd_part', 'part.nm_part', 'part.het', 'part.hrg_pokok', 'part.kd_sub');
 
             // ! ------------------------------------
             // ! Jika di join dengan faktur
@@ -853,20 +862,44 @@ class ApiOptionsController extends Controller
                 //! select tambahan
                 $data = $data->selectRaw('faktur.no_faktur, faktur.jml_jual, faktur.harga, faktur.disc1, faktur.kd_sales');
             }
-            
-            $data = $data->where('part.CompanyId', $request->companyid)
-                        ->whereRaw("isnull(part.del_send, 0)=0")
-                        ->whereRaw("isnull(part.het, 0) > 0");
 
-            if(!empty($request->kd_part)){
-                $data = $data->where('part.kd_part', 'LIKE', '%'.$request->kd_part . '%');
-            }
             // ! ------------------------------------
             // ! Jika data first atau get (paginate)
             // ! ------------------------------------
-            if($request->option == 'first'){
+            if($request->option[1] == 'with_stock'){
+                $data = $data->select('part.kd_part','part.nm_part')
+                ->selectRaw('(ISNULL(tbStLokasiRak.Stock,0) - (ISNULL(stlokasi.min,0) + ISNULL(stlokasi.in_transit,0) + ISNULL(part.kanvas,0) + ISNULL(part.in_transit,0))) as stock')
+                ->JoinSub(function ($query) use ($request) {
+                    $query->select('*')
+                        ->from('company')
+                        ->where('company.CompanyId', $request->companyid);
+                }, 'company', function ($join) {
+                    $join->on('part.CompanyId', '=', 'company.CompanyId');
+                })
+                ->leftJoinSub(function($query) use ($request){
+                    $query->select('stlokasi.kd_part','stlokasi.kd_lokasi','stlokasi.CompanyId','stlokasi.min','stlokasi.in_transit')
+                    ->from('stlokasi')
+                    ->where('stlokasi.CompanyId', $request->companyid);
+                }, 'stlokasi', function($join){
+                    $join->on('part.kd_part', '=', 'stlokasi.kd_part')
+                    ->on('company.kd_lokasi', '=', 'stlokasi.kd_lokasi')
+                    ->on('part.CompanyId', '=', 'stlokasi.CompanyId');
+                })
+                ->leftJoinSUb(function ($query) use ($request){
+                    $query->select('tbStLokasiRak.Kd_part','tbStLokasiRak.Kd_Lokasi','tbStLokasiRak.Kd_Rak','tbStLokasiRak.CompanyId','tbStLokasiRak.Stock')
+                    ->from('tbStLokasiRak')
+                    ->where('tbStLokasiRak.CompanyId',$request->companyid);
+                }, 'tbStLokasiRak', function($join){
+                    $join->on('part.kd_part', '=', 'tbStLokasiRak.Kd_part')
+                    ->on('stlokasi.kd_lokasi', '=', 'tbStLokasiRak.Kd_Lokasi')
+                    ->on('company.kd_rak', '=', 'tbStLokasiRak.Kd_Rak')
+                    ->on('part.CompanyId', '=', 'tbStLokasiRak.CompanyId');
+                });
+            }
+            
+            if($request->option[0] == 'first'){
                 $data = $data->first();
-            }else if($request->option == 'page'){
+            }else if($request->option[0] == 'page'){
                 $data = $data->paginate($request->per_page);
             }
 
@@ -1061,6 +1094,27 @@ class ApiOptionsController extends Controller
                 ->groupBy('wh_time.no_dok', 'dealer.nm_dealer', 'faktur.ket', 'faktur.kd_ekspedisi')
                 ->paginate($request->per_page);
             }
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
+    public function dataCabang(Request $request){
+        try{
+            $data = DB::table('cabang')
+            ->select('kd_cabang','nm_cabang')
+            ->where('CompanyId', $request->companyid)
+            ->where('inisial',0)
+            ->get();
 
             return Response::responseSuccess('success', $data);
         } catch(\Exception $e){

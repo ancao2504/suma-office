@@ -55,20 +55,19 @@ class PackingController extends Controller
             }
 
 
-            // $responseApi = json_decode(Service::PackingSimpan($request));
-            // $messageApi =  $responseApi->message;
+            $responseApi = json_decode(Service::PackingSimpan($request));
+            $messageApi =  $responseApi->message;
 
-            // if($responseApi->status == 1){
+            if($responseApi->status == 1){
                 $request->session()->put('no_meja', $request->no_meja);
                 $request->session()->put('kd_packer', $request->kd_packer);
 
-                // return redirect()->back()->with('success', $messageApi);
-                return redirect()->back()->with('success', 'Data berhasil diSimpan!');
-            // }
+                return redirect()->back()->with('success', $messageApi);
+            }
             
-            // return redirect()->back()->with('failed', $messageApi);
+            return redirect()->back()->with('failed', $messageApi);
         } catch (\Throwable $exception) {
-            return redirect()->back()->with('failed', $exception->getMessage());
+            return redirect()->back()->with('failed', 'Maaf terjadi kesalahan pada Server, coba ulangi beberapa saat lagi!');
         }
     }
 

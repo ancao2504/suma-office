@@ -23,11 +23,12 @@ class Response
         ], 200);
     }
 
-    public static function responseWarning($message = null)
+    public static function responseWarning($message = null, $data = '')
     {
         return response()->json([
             'status'    => 0,
-            'message'   => $message
+            'message'   => $message,
+            'data'      => $data
         ], 200);
     }
 

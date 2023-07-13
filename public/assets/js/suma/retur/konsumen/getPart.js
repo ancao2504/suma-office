@@ -1,8 +1,17 @@
 function Part(requst){
     loading.block();
+    $('#part-list').find('tbody').html(`
+    <tr>
+        <td colspan="5" class="text-center text-primary">
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </td>
+    </tr>`);
     $.get(base_url+'/part',{
         option: requst.option,
-        no_faktur: $('#no_faktur').val(),
         kd_sales: $('#kd_sales').val(),
         kd_part: requst.kd_part,
         page : requst.page,
@@ -10,50 +19,19 @@ function Part(requst){
     }, function (response) {
         if(response.status == '1'){
             let dataJson = response.data;
-            if(requst.option == 'first'){
+            if(requst.option[0] == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
                     toastr.error('Part Number Tidak Ditemukan!', "info");
                     $('#kd_part').addClass('is-invalid');
                     $('#kd_part').removeClass('is-valid');
                 } else {
                     $('#kd_part').val(dataJson.kd_part);
-                    $('#ket_part').val(dataJson.nm_part);
-                    $('#qty_faktur').val(dataJson.jml_jual);
-                    if (dataJson.jml_jual == 0) {
-                        toastr.error('Jumlah Jual Bernilai 0!', "info");
-                    } else {
-                        if (dataJson.harga != '' && dataJson.harga != 0 && dataJson.harga != null && dataJson.harga != undefined) {
-                            var options = { style: 'decimal', useGrouping: true, minimumFractionDigits: 0, maximumFractionDigits: 2, minimumIntegerDigits: 1 };
-                            
-                            $('#harga').val(Number(dataJson.harga).toLocaleString('en-US', options));
-                            $('#disc').val((parseFloat(disc2)) ? parseFloat(disc2) : '');
-                            $('#qty_claim,' + '#harga,' + '#disc').on('keyup', function () {
-                                if (parseInt($('#disc').val()) > 100) {
-                                    $('#disc').val(100);
-                                } else if (parseInt($('#disc').val()) < 0) {
-                                    $('#disc').val(0);
-                                }
-        
-                                let ttl = (Number($('#qty_claim').val().replace(/[^\d.-]/g, '')) * Number($('#harga').val().replace(/[^\d.-]/g, '')));
-                                let disc01 = (ttl * (dataJson.disc1 / 100));
-                                let disc02 = ((disc01 == 0) ? ttl * (Number($('#disc').val().replace(/[^\d.-]/g, '')) / 100) : (ttl - disc01) * (Number($('#disc').val().replace(/[^\d.-]/g, '')) / 100));
-                                let total = ttl - disc01 - disc02;
-        
-                                $('#total').val(total.toLocaleString('en-US', options));
-                            });
-    
-                            let ttl = (Number($('#qty_claim').val().replace(/[^\d.-]/g, '')) * Number($('#harga').val().replace(/[^\d.-]/g, '')));
-                            let disc01 = (ttl * (dataJson.disc1 / 100));
-                            let disc02 = ((disc01 == 0) ? ttl * (Number($('#disc').val().replace(/[^\d.-]/g, '')) / 100) : (ttl - disc01) * (Number($('#disc').val().replace(/[^\d.-]/g, '')) / 100));
-                            let total = ttl - disc01 - disc02;
-        
-                            $('#total').val(total.toLocaleString('en-US', options));
-                        }
-                    }
+                    $('#nm_part').val(dataJson.nm_part);
+                    $('#stock').val(dataJson.stock);
                     $('#kd_part').removeClass('is-invalid');
                     $('#kd_part').addClass('is-valid');
                 }
-            } else if (requst.option == 'page') {
+            } else if (requst.option[0] == 'page') {
                 $('#part-list').html(response.data);
                 $('#part-list').modal('show');
             } else {
@@ -85,7 +63,7 @@ function Part(requst){
         $('#part-list .close').trigger('click')
         Swal.fire({
             title: 'Error ' + jqXHR.status,
-            text: textStatus,
+            text: 'Maaf, Terjadi Kesalahan, Silahkan coba lagi!',
             icon: 'error',
             confirmButtonText: 'OK',
             customClass: {
@@ -103,12 +81,16 @@ function Part(requst){
 
 $('#part-list').on('click','.pilih' ,function () {
     $('#kd_part').val($(this).data('a'));
-    Part({
-        option: 'first',
-        kd_part: $(this).data('a'),
-        page : 1,
-        per_page : 10
-    });
+    $('#nm_part').val($(this).closest('tr').find('td:eq(2)').text());
+    $('#stock').val($(this).closest('tr').find('td:eq(3)').text());
+
+    if($(this).closest('tr').find('td:eq(3)').text() <= 0){
+        $('#sts_stock').val('');
+        $('#sts_stock option[value="1"]').attr('hidden', true);
+    } else {
+        $('#sts_stock option[value="1"]').attr('hidden', false);
+    }
+
     $('#part-list .close').trigger('click')
 })
 
@@ -120,7 +102,7 @@ $('#kd_part').on('change', function () {
     }
 
     Part({
-        option: 'first',
+        option: ['first','with_stock'],
         kd_part: $(this).val(),
         page : 1,
         per_page : 10
@@ -129,7 +111,7 @@ $('#kd_part').on('change', function () {
 
 $('.list-part').on('click', function () {
     Part({
-        option: 'page',
+        option: ['page','with_stock'],
         page : 1,
         per_page : 10
     });
@@ -137,7 +119,7 @@ $('.list-part').on('click', function () {
 
 $('#part-list').on('click', '.pagination .page-item', function () {
     Part({
-        option: 'page',
+        option: ['page','with_stock'],
         page : $(this).find('a').attr('href').split('page=')[1],
         per_page : $('#part-list').find('#per_page').val()
     });
@@ -145,7 +127,7 @@ $('#part-list').on('click', '.pagination .page-item', function () {
 
 $('#part-list').on('change','#per_page', function () {
     Part({
-        option: 'page',
+        option: ['page','with_stock'],
         kd_part: $('#part-list').find('#cari').val(),
         page : 1,
         per_page : $(this).val()
@@ -154,7 +136,7 @@ $('#part-list').on('change','#per_page', function () {
 
 $('#part-list').on('click','#btn_cari', function () {
     Part({
-        option: 'page',
+        option: ['page','with_stock'],
         kd_part: $('#part-list').find('#cari').val(),
         page : 1,
         per_page : $('#part-list').find('#per_page').val()

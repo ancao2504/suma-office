@@ -25,7 +25,7 @@ class KonsumenController extends Controller
                 'per_page' => 10
             ]);
         }
-        $request->merge(['option' => 'page']);
+        $request->merge(['option' => ['page']]);
         $responseApi = Service::ReturKonsumenDaftar($request);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
@@ -54,21 +54,29 @@ class KonsumenController extends Controller
      */
     public function form(Request $request)
     {
-        $request->merge(['option' => 'select']);
-        $responseApi = OptionController::salesman($request)->getData();
-        $statusApi = $responseApi->status;
-        $messageApi =  $responseApi->message;
+        $request->merge(['option' => ['with_detail','tamp']]);
+        $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
+        $statusApiRetur = $responseApiRetur->status;
 
-        if ($statusApi == 1) {
-            return view(
-                'layouts.retur.konsumen.form',
-                [
-                    'sales' => $responseApi->data,
-                    'title_menu' => 'Retur Konsumen Edit',
-                ]
-            );
+        $request->merge(['option' => 'select']);
+        $responseApi_cabang = OptionController::cabang($request)->getData();
+        $statusApi_cabang = $responseApi_cabang->status;
+
+        $responseApi_sales = OptionController::salesman($request)->getData();
+        $statusApi_sales = $responseApi_sales->status;
+
+        if ($statusApi_sales == 1 && $statusApi_cabang == 1 && $statusApiRetur == 1) {
+            $data = [
+                'sales' => $responseApi_sales->data,
+                'cabang' => $responseApi_cabang->data,
+                'data' => $responseApiRetur->data,
+                'title_menu' => 'Retur Konsumen',
+                'title_page' => 'Tambah',
+            ];
+            
+            return view('layouts.retur.konsumen.form', $data);
         }else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
+            return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
         }
     }
 
@@ -80,159 +88,75 @@ class KonsumenController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [];
-        $messages = [];
+        try {
 
-        // ! ------------------------------------
-        // ! Jika menambahkan validasi
+            $rules = [];
+            $messages = [];
 
-        if(!empty($request->no_retur)){
-            $rules += [
-                'kd_dealer' => 'required',
-            ];
-            $messages += [
-                'kd_dealer.required' => 'kode Dealer Kososng',
-            ];
-        } else {
-            $rules += [
-                'kd_dealer' => 'required',
-                'kd_part' => 'required',
-                'qty_claim' => 'required|numeric|min:1',
-                'sts' => 'required',
-                'tgl_claim' => 'required',
-                'tgl_terima' => 'required',
-            ];
-            $messages += [
-                'kd_dealer.required' => 'kode Dealer Kososng',
-                'kd_part.required' => 'Part Number Kososng',
-                'qty_claim.required' => 'QTY Claim Kososng',
-                'qty_claim.min' => 'QTY Pada Claim Minimal 1',
-                'tgl_claim.required' => 'Tanggal Claim Kososng',
-                'tgl_terima.required' => 'Tanggal Terima Kososng',
-                'sts.required' => 'Status Kososng',
-            ];
-        }
+            // ! ------------------------------------
+            // ! Jika menambahkan validasi
+            if($request->no_retur == $request->user_id){
+                if(!empty($request->pc) && $request->pc == 1){
+                    $rules += ['kd_cabang' => 'required'];
+                    $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
+                } else {
+                    $rules += ['kd_dealer' => 'required'];
+                    $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
+                }
 
-        // ! megecek validasi dan menampilkan pesan error
-        // ! ------------------------------------
-        $validate = Validator::make($request->all(), $rules,$messages);
-        if ($validate->fails()) {
+                if(!empty($request->kd_part)){
+                    $rules += [
+                        'kd_part' => 'required',
+                        'qty_retur' => 'required|numeric|min:1',
+                        'sts_stock' => 'required',
+                        'sts_klaim' => 'required',
+                        'sts_min' => 'required',
+                    ];
+                    $messages += [
+                        'kd_part.required' => 'Part Number Kososng',
+                        'qty_retur.required' => 'QTY Claim Kososng',
+                        'qty_retur.min' => 'QTY Pada Claim Minimal 1',
+                        'sts_stock.required' => 'Status Stock Kososng',
+                        'sts_klaim.required' => 'Status Retur Kososng',
+                        'sts_min.required' => 'Status Min Kososng',
+                    ];
+                }
+            }
+            // ! megecek validasi dan menampilkan pesan error
+            // ! ------------------------------------
+            $validate = Validator::make($request->all(), $rules,$messages);
+            if ($validate->fails()) {
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => $validate->errors()->first(),
+                    'data'      => ''
+                ]);
+            }
+
+            $responseApi = Service::ReturKonsumenSimpan($request);
+            $statusApi = json_decode($responseApi)->status;
+            $messageApi =  json_decode($responseApi)->message;
+            $data = json_decode($responseApi)->data;
+
+            if ($statusApi == 1) {
+                return Response()->json([
+                    'status'    => 1,
+                    'message'   => 'Data berhasil disimpan',
+                    'data'      => $data
+                ], 200);
+            }else {
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => $messageApi,
+                    'data'      => $data
+                ], 200);
+            }
+        } catch (\Throwable $th) {
             return Response()->json([
                 'status'    => 0,
-                'message'   => $validate->errors()->first(),
-                'data'      => ''
-            ]);
-        }
-
-        $responseApi = Service::ReturKonsumenSimpan($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-
-        if ($statusApi == 1) {
-            return Response()->json([
-                'status'    => 1,
-                'message'   => 'Data berhasil disimpan',
-                'data'      => json_decode($responseApi)->data
-            ], 200);
-        }else {
-            return Response()->json([
-                'status'    => 0,
-                'message'   => $messageApi,
+                'message'   => 'Terjadi kesalahan pada server',
                 'data'      => ''
             ], 200);
-        }
-    }
-
-    public function storeDtl(Request $request)
-    {
-        $rules = [
-            'kd_part' => 'required',
-            'qty_claim' => 'required|numeric|min:1',
-            'sts' => 'required',
-        ];
-        $messages = [
-            'kd_part.required' => 'Kode Part Kososng',
-            'qty_claim.required' => 'QTY Claim Kososng',
-            'qty_claim.min' => 'QTY Claim Minimal 1',
-            'sts.required' => 'Status Kososng',
-        ];
-
-        // ! ------------------------------------
-        // ! Jika menambahkan validasi
-        // ! ------------------------------------
-
-        if(!empty($request->no_faktur)){
-            $rules += [
-                'no_faktur' => 'required|min:5',
-            ];
-            $messages += [
-                'no_faktur.required' => 'No Faktur Tidak Bisa Kosong',
-                'no_faktur.min' => 'No Faktur minimal 5 karakter',
-            ];
-        }
-
-        // ! ------------------------------------
-        // ! megecek validasi dan menampilkan pesan error
-        // ! ------------------------------------
-        $validate = Validator::make($request->all(), $rules,$messages);
-        if ($validate->fails()) {
-            return Response()->json([
-                'status'    => 1,
-                'message'   => $validate->errors()->first(),
-                'data'      => ''
-            ]);
-        }
-
-        $responseApi = Service::ReturKonsumenDtlSimpan($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
-
-        if ($statusApi == 1) {
-            return Response()->json([
-                'status'    => 1,
-                'message'   => 'Data berhasil disimpan',
-                'data'      => json_decode($responseApi)->data
-            ], 200);
-        }else {
-            return Response()->json([
-                'status'    => 0,
-                'message'   => $messageApi,
-                'data'      => ''
-            ], 200);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {
-        $request->merge(['option' => 'with_detail']);
-        $responseApiRetur = Service::ReturKonsumenDaftar($request);
-        $statusApiRetur = json_decode($responseApiRetur)->status;
-        $messageApiRetur =  json_decode($responseApiRetur)->message;
-
-        $request->merge(['option' => 'select']);
-        $responseApiSales = OptionController::salesman($request)->getData();
-        $statusApiSales = $responseApiSales->status;
-        $messageApiSales =  $responseApiSales->message;
-
-        if ($statusApiRetur == 1 && $statusApiSales == 1) {
-            return view(
-                'layouts.retur.konsumen.edit',
-                [
-                    'sales' => $responseApiSales->data,
-                    'data'  => json_decode($responseApiRetur)->data,
-                    'title_menu' => 'Retur Konsumen Edit',
-                ]
-            );
-        }else if($statusApiRetur == 0){
-            return redirect()->route('retur.konsumen.index')->with('failed', $messageApiRetur);
-        } else if($statusApiSales == 0){
-            return redirect()->route('retur.konsumen.index')->with('failed', $messageApiSales);
         }
     }
 
@@ -247,11 +171,10 @@ class KonsumenController extends Controller
 
         if(!empty($request->kd_part)){
             $rules += [
-                'kd_part' => 'required|min:5',
+                'kd_part' => 'required',
             ];
             $messages += [
-                'kd_part.required' => 'No Faktur Tidak Bisa Kosong',
-                'kd_part.min' => 'No Faktur minimal 5 karakter',
+                'kd_part.required' => 'Part Number Tidak boleh kososng',
             ];
         }
 
@@ -271,7 +194,7 @@ class KonsumenController extends Controller
         if ($statusApi == 1) {
             return Response()->json([
                 'status'    => 1,
-                'message'   => 'Data berhasil disimpan',
+                'message'   => 'Data berhasil dihapus',
                 'data'      => json_decode($responseApi)->data
             ], 200);
         }else {

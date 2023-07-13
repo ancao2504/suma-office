@@ -1964,7 +1964,7 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
-            'option'        => trim($request->option),
+            'option'        => $request->option,
             'no_retur'      => trim($request->no_retur),
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
@@ -1980,19 +1980,22 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
-            'no_retur'      => trim($request->no_retur),
-            'no_faktur'     => trim($request->no_faktur),
-            'kd_part'       => trim($request->kd_part),
-            'no_retur'      => trim($request->no_retur),
-            'kd_dealer'     => trim($request->kd_dealer),
+            'option'        => trim($request->option),
+            // ! data Header
+            'no_retur'      => $request->no_retur,
+            'tgl_retur'     => $request->tgl_retur,
             'kd_sales'      => trim($request->kd_sales),
-            'tgl_claim'     => $request->tgl_claim,
-            'tgl_terima'    => $request->tgl_terima,
-            'qty_claim'     => $request->qty_claim,
-            'harga'         => $request->harga,
-            'disc'          => $request->disc,
+            'pc'            => $request->pc,
+            'kd_dealer'     => trim($request->kd_dealer),
+            'kd_cabang'     => trim($request->kd_cabang),
+            // ! data detail
+            'no_produksi'   => trim($request->no_produksi),
+            'kd_part'       => trim($request->kd_part),
+            'qty_retur'     => $request->qty_retur,
             'ket'           => $request->ket,
-            'sts'           => $request->sts,
+            'sts_stock'     => $request->sts_stock,
+            'sts_klaim'     => $request->sts_klaim,
+            'sts_min'       => $request->sts_minimum,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2004,29 +2007,8 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
-            'no_retur'      => trim($request->no_retur),
-            'no_faktur'     => trim($request->no_faktur),
+            'no_retur'      => $request->no_retur,
             'kd_part'       => trim($request->kd_part),
-        ];
-        $response = ApiRequest::requestPost($url, $header, $body);
-        return $response;
-    }
-
-    public static function ReturKonsumenDtlSimpan($request)
-    {
-        $url = 'backend/retur/konsumen/edit';
-        $header = ['Authorization' => session()->get('Authorization')];
-        $body = [
-            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
-            'user_id'       => trim($request->session()->get('app_user_id')),
-            'no_retur'      => trim($request->no_retur),
-            'no_faktur'     => trim($request->no_faktur),
-            'kd_part'       => trim($request->kd_part),
-            'qty_claim'     => $request->qty_claim,
-            'disc'          => $request->disc,
-            'harga'         => $request->harga,
-            'ket'           => $request->ket,
-            'sts'           => $request->sts,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2381,10 +2363,21 @@ class Service
         $url = 'backend/gudang/packing/online/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'companyid'             => $request->session()->get('app_user_company_id'),
-            'no_dok'                => $request->no_dok,
-            'kd_pack'               => $request->kd_packer,
-            'kd_lokpack'            => $request->no_meja,
+            'companyid'          => $request->session()->get('app_user_company_id'),
+            'no_dok'             => $request->no_dok,
+            'kd_packer'          => $request->kd_packer,
+            'no_meja'            => $request->no_meja,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function dataCabang($request)
+    {
+        $url = 'backend/cabang';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'          => $request->session()->get('app_user_company_id'),
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
