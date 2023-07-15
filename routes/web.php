@@ -28,6 +28,7 @@ use App\Orders\Penerimaan\SuratJalanController;
 use App\Setting\CetakUlang\CetakUlangController;
 use App\Reports\FakturController as ReportFaktur;
 use App\Retur\KonsumenController as ReturKonsumen;
+use App\Retur\SupplierController as ReturSupplier;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Claim\SupplierController as ClaimSupplier;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
@@ -628,20 +629,28 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::post('/retur/konsumen/delete',  'destroy')->name('delete');
                 });
             });
-        });
-
-        Route::name('claim.')->group(function () {
             Route::name('supplier.')->group(function () {
-                Route::controller(ClaimSupplier::class)->group(function () {
-                    Route::get('/claim/supplier',  'index')->name('index');
-                    Route::get('/claim/supplier/form',  'form')->name('form');
-                    Route::post('/claim/supplier/form',  'store')->name('store');
-                    Route::get('/claim/supplier/edit',  'edit')->name('edit');
-                    Route::post('/claim/supplier/edit',  'storeDtl')->name('storeDtl');
-                    Route::post('/claim/supplier/delete',  'destroy')->name('delete');
+                Route::controller(ReturSupplier::class)->group(function () {
+                    Route::get('/retur/supplier',  'index')->name('index');
+                    Route::get('/retur/supplier/form',  'form')->name('form');
+                    Route::post('/retur/supplier/form',  'store')->name('store');
+                    Route::post('/retur/supplier/delete',  'destroy')->name('delete');
                 });
             });
         });
+
+        // Route::name('claim.')->group(function () {
+        //     Route::name('supplier.')->group(function () {
+        //         Route::controller(ClaimSupplier::class)->group(function () {
+        //             Route::get('/claim/supplier',  'index')->name('index');
+        //             Route::get('/claim/supplier/form',  'form')->name('form');
+        //             Route::post('/claim/supplier/form',  'store')->name('store');
+        //             Route::get('/claim/supplier/edit',  'edit')->name('edit');
+        //             Route::post('/claim/supplier/edit',  'storeDtl')->name('storeDtl');
+        //             Route::post('/claim/supplier/delete',  'destroy')->name('delete');
+        //         });
+        //     });
+        // });
 
         Route::name('report.')->group(function () {
             Route::controller(Controller::class)->group(function () {

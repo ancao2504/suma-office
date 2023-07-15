@@ -1972,6 +1972,21 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+    public static function ReturSupplierDaftar($request)
+    {
+        $url = 'backend/retur/supplier/daftar';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => $request->option,
+            'no_retur'      => trim($request->no_retur),
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
 
     public static function ReturKonsumenSimpan($request)
     {
@@ -2126,6 +2141,21 @@ class Service
         return $response;
     }
     
+    public static function dataSupplier($request){
+        $url = 'backend/supplier';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => $request->option,
+            'kd_supplier'   => $request->kd_supplier,
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
     public static function dataSalesman($request){
         $url = 'backend/salesman';
         $header = ['Authorization' => session()->get('Authorization')];

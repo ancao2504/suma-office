@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
 @section('title','Retur')
-@section('subtitle','Konsumen')
+@section('subtitle','Supplier')
 @push('styles')
 @endpush
 
@@ -13,13 +13,13 @@
 				<!--begin::Search-->
 				<div class="d-flex align-items-center position-relative my-1">
 					<span class="svg-icon svg-icon-1 position-absolute ms-4"><i class="bi bi-search"></i></span>
-					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search No Dokumen" id="cari" name="cari" value="{{ $old_request->no_retur }}" />
+					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search No Dokumen" id="cari" name="cari" value="{{ $old_request->no_retur }}"/>
 				</div>
 				<!--end::Search-->
 			</div>
 			<div class="card-toolbar flex-row-fluid justify-content-end gap-5">
 				<!--begin::Menu Tambah-->
-				<a href="{{ route('retur.konsumen.form') }}" class="btn btn-primary">
+				<a href="{{ route('retur.supplier.form') }}" class="btn btn-primary">
 					Tambah Retur
 				</a>
 				<!--end::Menu Tambah-->
@@ -29,20 +29,11 @@
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">
-						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-						<th rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
-						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
-						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
-						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
-						<th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
-					</tr>
-					<tr class="fs-8 fw-bolder text-muted text-center">
-						<th class="w-50px ps-3 pe-3">Dokumen</th>
-						<th class="w-50px ps-3 pe-3">Input</th>
-						<th class="w-50px ps-3 pe-3">Sales</th>
-						<th class="w-50px ps-3 pe-3">Dealer/Cabang</th>
-						<th class="w-50px ps-3 pe-3">Approve</th>
-						<th class="w-50px ps-3 pe-3">Selesai</th>
+						<th class="w-50px ps-3 pe-3">No</th>
+						<th class="w-100px ps-3 pe-3">No Retur</th>
+						<th class="w-100px ps-3 pe-3">Tanggal</th>
+						<th class="w-100px ps-3 pe-3">Kd Supplier</th>
+						<th class="w-auto ps-3 pe-3">Action</th>
 					</tr>
 				</thead>
 				<tbody class="border">
@@ -59,29 +50,11 @@
 					@foreach ($data->data as $a)
 					<tr class="fw-bolder fs-8 border">
 						<td class="text-center">{{  $no++ }}</td>
-						<td>{{ $a->no_dokumen }}</td>
-						<td>{{ date('Y/m/d', strtotime($a->tgl_dokumen)) }}</td>
-						<td>{{ date('Y/m/d', strtotime($a->tgl_entry)) }}</td>
-						<td class="text-center">{{ $a->kd_sales }}</td>
-						<td class="text-center">{{ $a->kd_dealer }}</td>
+						<td>{{ $a->no_retur }}</td>
+						<td>{{ date('Y/m/d', strtotime($a->tglretur)) }}</td>
+						<td class="text-center">{{ $a->kd_supp }}</td>
 						<td class="text-center">
-							@if ($a->status_approve==1)
-								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
-							@else
-								<i class="fs-1 bi bi-bookmark-x-fill text-danger"></i>
-							@endif
-						</td>
-						<td class="text-center">
-							@if ($a->status_end==1)
-								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
-							@else
-								<i class="fs-1 bi bi-bookmark-x-fill text-danger"></i>
-							@endif
-						</td>
-						<td class="text-center">
-							@if ($a->status_approve!=1)
-							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_dokumen}}"><span class="bi bi-trash"></span></a>
-							@endif
+							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_retur}}"><span class="bi bi-trash"></span></a>
 						</td>
 					</tr>
 					@endforeach

@@ -1486,6 +1486,59 @@ class OptionController extends Controller
     }
 
     // ! suma sby
+    public static function supplier(Request $request){
+        $responseApi = Service::dataSalesman($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            if($request->option == 'first'){
+                $respon = $data;
+            } else if($request->option == 'select'){
+                $respon = '';
+                foreach ($data as $key => $value) {
+                    $respon .= '<option value="'.$value->kd_sales.'" data-ket="'.$value->nm_sales.'">'.$value->kd_sales.($value->nm_sales ? '('.$value->nm_sales.')' : '').'</option>';
+                }
+            } else if($request->option == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Salse',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Kode Sales',
+                        'value' => $request->kd_sales,
+                    ],
+                    'table' => (object)[
+                        'thead' => (object)[
+                            (object)['class' => 'w-100px', 'text' => 'kode Sales'],
+                            (object)['class' => 'w-100px', 'text' => 'nm_sales'],
+                            (object)['class' => 'w-auto', 'text' => 'Action'],
+                        ],
+                        'tbody' => (object)[
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_sales'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto', 'key' => 'nm_sales'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih'],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+
     public static function salesman(Request $request){
         $responseApi = Service::dataSalesman($request);
         $statusApi = json_decode($responseApi)?->status;

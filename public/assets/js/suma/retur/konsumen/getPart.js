@@ -83,14 +83,6 @@ $('#part-list').on('click','.pilih' ,function () {
     $('#kd_part').val($(this).data('a'));
     $('#nm_part').val($(this).closest('tr').find('td:eq(2)').text());
     $('#stock').val($(this).closest('tr').find('td:eq(3)').text());
-
-    if($(this).closest('tr').find('td:eq(3)').text() <= 0){
-        $('#sts_stock').val('');
-        $('#sts_stock option[value="1"]').attr('hidden', true);
-    } else {
-        $('#sts_stock option[value="1"]').attr('hidden', false);
-    }
-
     $('#part-list .close').trigger('click')
 })
 

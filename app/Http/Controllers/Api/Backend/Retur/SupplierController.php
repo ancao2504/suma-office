@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
 
-class KonsumenController extends Controller
+class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,41 +45,17 @@ class KonsumenController extends Controller
                 $request->replace(['per_page' => 10]); 
             }
 
-            $request->merge(['tb' => ['klaim','klaim_dtl']]);
-            if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
-                $request->merge(['tb' => ['klaimTmp','klaim_dtlTmp']]);
-            }
-
-            $data = DB::table($request->tb[0])
-                ->leftJoinSub(function($query) use ($request){
-                    $query->select('kd_dealer', 'nm_dealer', 'alamat1', 'kota', 'CompanyId')
-                    ->from('dealer')
-                    ->where('CompanyId', $request->companyid);
-                }, 'dealer', function($join) use ($request){
-                    $join->on($request->tb[0].'.kd_dealer', '=', 'dealer.kd_dealer')
-                    ->on($request->tb[0].'.companyid', '=', 'dealer.CompanyId');
-                })
-                ->leftJoinSub(function($query) use ($request){
-                    $query->select('kd_sales', 'nm_sales', 'CompanyId')
-                    ->from('salesman')
-                    ->where('CompanyId', $request->companyid);
-                }, 'salesman', function($join) use ($request){
-                    $join->on($request->tb[0].'.kd_sales', '=', 'salesman.kd_sales')
-                    ->on($request->tb[0].'.companyid', '=', 'salesman.CompanyId');
-                })
-                ->lock('with (nolock)')
-                ->select($request->tb[0].'.no_dokumen', $request->tb[0].'.tgl_dokumen', $request->tb[0].'.tgl_entry', $request->tb[0].'.kd_sales', 'salesman.nm_sales', $request->tb[0].'.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota',$request->tb[0].'.status_approve',$request->tb[0].'.status_end',$request->tb[0].'.pc')
-                ->where($request->tb[0].'.companyid', $request->companyid);
+            $data = DB::table('retur')
+            ->lock('with (nolock)')->select('*')
+            ->where('CompanyId', $request->companyid);
 
             if(!empty($request->no_retur)){
-                $data = $data->where($request->tb[0].'.no_dokumen', 'LIKE', '%'.$request->no_retur.'%');
+                $data = $data->where('no_retur', 'LIKE', '%'.$request->no_retur.'%');
             }
 
             if($request->option[0] == 'page'){
                 $data = $data
-                ->orderBy($request->tb[0].'.status_approve' , 'asc')
-                ->orderBy($request->tb[0].'.tgl_dokumen', 'asc')
-                ->orderBy($request->tb[0].'.no_dokumen', 'asc')
+                ->orderBy('tglretur', 'desc')
                 ->paginate($request->per_page);
 
             } else if($request->option[0] == 'first'){
@@ -272,7 +248,7 @@ class KonsumenController extends Controller
                 ->addSelect('company.kd_rak','company.kd_lokasi')
                 ->addSelect('klaim_dtlTmp.sts_stock','klaim_dtlTmp.qty','klaim_dtlTmp.no_produksi','klaim_dtlTmp.sts_klaim', 'klaim_dtlTmp.sts_min', 'klaim_dtlTmp.keterangan');
 
-                // ! jika tombol Simpan
+                // ! jika tombol kirim
 
                 // ! ======================================================
                 // ! Validasi apakah ada produk yang di Klaim
@@ -328,7 +304,7 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 $data_error = [];
                 collect($validasi_stock)->filter(function($value, $key) use (&$data_error){
-                    if(($value->sts_stock == 1 || $value->sts_stock == 3) && $value->stock < $value->qty){
+                    if($value->sts_stock == 1 && $value->stock < $value->qty){
                         $data_error[] = [
                                 'kd_part'   => $value->kd_part,
                                 'qty'       => $value->qty,
@@ -385,7 +361,7 @@ class KonsumenController extends Controller
                         // ! cek apakah part sudah ada pada min_g
                         $exists = DB::table('min_g')
                         ->select('kd_part')
-                        ->where('kd_part', '=', $value->kd_part)
+                        ->where('kd_part', '=', $value->Kd_part)
                         ->where('min', '=', $value->qty)
                         ->where('ket', '=', $ket)
                         ->where('usermin', '=', $request->user_id)
@@ -396,51 +372,44 @@ class KonsumenController extends Controller
                             // ! jika tidak menemukan data yaang sama
                             DB::table('min_g')
                                 ->insert([
-                                    'kd_part' => $value->kd_part,
+                                    'kd_part' => $value->Kd_Part,
                                     'kd_lokasi' => $value->kd_lokasi,
                                     'min' => $value->qty,
                                     'ket' => $ket,
                                     'usermin' => $request->user_id,
                                     'pending' => 0,
                                     'tgl' => date('Y-m-d'),
-                                    'CompanyId' => $request->companyid,
-                                    'usertime' => ($request->user_id.date('m/d/Y'))
+                                    'companyid' => $request->companyid,
+                                    'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id)
                                 ]);
                         } else {
                             //! jika menemukan data yang sama maka ubah
                             DB::table('min_g')
-                                ->where('kd_part', '=', $value->kd_part)
+                                ->where('kd_part', '=', $value->Kd_part)
                                 ->where('min', '=', $value->qty)
                                 ->where('ket', '=', $ket)
                                 ->where('usermin', '=', $request->user_id)
                                 ->where('tgl', '=', date('Y-m-d'))
                                 ->update([
-                                    'kd_part' => $value->kd_part,
+                                    'kd_part' => $value->Kd_Part,
                                     'kd_lokasi' => $value->kd_lokasi,
                                     'min' => $value->qty,
                                     'ket' => $ket,
                                     'usermin' => $request->user_id,
                                     'tgl' => date('Y-m-d'),
-                                    'CompanyId' => $request->companyid,
+                                    'companyid' => $request->companyid,
                                     'pending' => $request->Pending,//??
-                                    'usertime' => ($request->user_id.date('m/d/Y'))
+                                    'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id)
                                 ]);
                         }
     
                         DB::table('stlokasi')
-                        ->joinSub(function($query) use ($request,$value){
-                            $query->select('CompanyId', 'Kd_Lokasi', 'Kd_part', DB::raw('sum(Min) as min'))
-                            ->from('min_g')
-                            ->where('CompanyId', $request->companyid)
-                            ->where('Kd_part', $value->kd_part)
-                            ->whereRaw('isnull(pending, 0) = 0')
-                            ->groupBy('CompanyId', 'Kd_Lokasi', 'Kd_part');
-                        }, 'a', function($join){
-                            $join->on('stlokasi.CompanyId', '=', 'a.CompanyId')
-                            ->on('stlokasi.kd_lokasi', '=', 'a.Kd_Lokasi')
-                            ->on('stlokasi.kd_part', '=', 'a.Kd_part');
-                        })
-                        ->update(['stlokasi.min' => DB::raw('isnull(a.min, 0)')]);
+                        ->join(DB::raw('(select companyid, kd_lokasi, kd_part, sum(min) as min from min_g with (nolock) where kd_part = ? and companyid = ? and isnull(pending, 0) = 0 group by companyid, kd_lokasi, kd_part) as a'), function ($join) {
+                            $join->on('stlokasi.companyid', '=', 'a.companyid')
+                                ->on('stlokasi.kd_lokasi', '=', 'a.kd_lokasi')
+                                ->on('stlokasi.kd_part', '=', 'a.kd_part');
+                        }, [$request->Kd_Part, $request->companyid])
+                        ->update(['min' => DB::raw('IFNULL(a.min, 0)')]);
                     }
 
                     //! simpan pada tabel klaim_dtl
@@ -464,15 +433,14 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 // ! INSERT RTOKO
                 // ! ======================================================
-                if($value->sts_klaim == '1'){
+                if($value->sts_stock == '2' && $request->$request->pc == '0'){
                     DB::table('rtoko')->insert([
                         'no_retur' => $request->no_retur,
                         'tanggal' => date('Y-m-d'),
                         'kd_dealer' => $request->kd_dealer,
                         'kd_sales' => $request->kd_sales,
-                        'sts_jurnal' => '0',
-                        'Companyid' => $request->companyid,
                         'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id),
+                        'Companyid' => $request->companyid
                     ]);
 
                     $data = collect($validasi_stock)->map(function($value, $key) use ($request){
@@ -482,8 +450,8 @@ class KonsumenController extends Controller
                             'kd_lokasi' => $value->kd_lokasi,
                             'Kd_Rak' => $value->kd_rak,
                             'jumlah' => $value->qty,
-                            'CompanyId' => $request->companyid,
-                            'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id)
+                            'CompanyId' => $value->companyid,
+                            'usertime' => $value->usertime
                         ];
                     })->toArray();
                     DB::table('rtoko_dtl')->insert($data);

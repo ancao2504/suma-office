@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\App\Option\OptionController;
 
-class KonsumenController extends Controller
+class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,25 +21,24 @@ class KonsumenController extends Controller
     public function index(Request $request)
     {
         if(!in_array($request->per_page, [10,50,100,500])){
-            $request->merge([
-                'per_page' => 10
-            ]);
+            $request->merge(['per_page' => 10]);
         }
+
         $request->merge(['option' => ['page']]);
-        $responseApi = Service::ReturKonsumenDaftar($request);
+        $responseApi = Service::ReturSupplierDaftar($request);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
         if ($statusApi == 1) {
             return view(
-                'layouts.retur.konsumen.index',
+                'layouts.retur.supplier.index',
                 [
                     'old_request' => (object)[
                         'no_retur' => $request->no_retur ?? '',
                         'per_page' => $request->per_page ?? 10,
                     ],
                     'data' => json_decode($responseApi)->data,
-                    'title_menu' => 'Retur Konsumen',
+                    'title_menu' => 'Retur Supplier',
                 ]
             );
         }else {
@@ -59,22 +58,18 @@ class KonsumenController extends Controller
         $statusApiRetur = $responseApiRetur->status;
 
         $request->merge(['option' => 'select']);
-        $responseApi_cabang = OptionController::cabang($request)->getData();
-        $statusApi_cabang = $responseApi_cabang->status;
+        $responseApi_supplier = OptionController::supplier($request)->getData();
+        $statusApi_supplier = $responseApi_supplier->status;
 
-        $responseApi_sales = OptionController::salesman($request)->getData();
-        $statusApi_sales = $responseApi_sales->status;
-
-        if ($statusApi_sales == 1 && $statusApi_cabang == 1 && $statusApiRetur == 1) {
+        if ($statusApi_supplier == 1 && $statusApiRetur == 1) {
             $data = [
-                'sales' => $responseApi_sales->data,
-                'cabang' => $responseApi_cabang->data,
+                'supplier' => $responseApi_supplier->data,
                 'data' => $responseApiRetur->data,
-                'title_menu' => 'Retur Konsumen',
+                'title_menu' => 'Retur Supplier',
                 'title_page' => 'Tambah',
             ];
             
-            return view('layouts.retur.konsumen.form', $data);
+            return view('layouts.retur.supplier.form', $data);
         }else {
             return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
         }
@@ -153,7 +148,7 @@ class KonsumenController extends Controller
             }
         } catch (\Throwable $th) {
             return Response()->json([
-                'status'    => 2,
+                'status'    => 0,
                 'message'   => 'Terjadi kesalahan pada server',
                 'data'      => ''
             ], 200);

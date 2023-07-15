@@ -12,15 +12,15 @@
             <h3>1. Informasi Dokumen</h3>
             <div class="mb-3 border rounded p-3">
                 <div class="form-group row mb-2">
-                    <label for="no_retur" class="col-sm-2 col-form-label">No Retur</label>
+                    <label for="no_retur" class="col-sm-2 col-form-label">No Dokumen</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="no_retur" name="no_retur" value="{{ session('app_user_id') }}" disabled>
                     </div>
                 </div>
                 <div class="form-group row mb-2">
-                    <label for="kd_sales" class="col-sm-2 col-form-label">Kd Sales</label>
+                    <label for="kd_supp" class="col-sm-2 col-form-label">Kode Supplier</label>
                     <div class="col-sm-4">
-                        <select name="kd_sales" id="kd_sales" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Sales">
+                        <select name="kd_supp" id="kd_supp" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Supplier">
                             <option></option>
                             {!! $sales !!}
                         </select>
@@ -28,49 +28,6 @@
                     <label for="tgl_claim" class="col-sm-2 col-form-label">Tanggal Retur</label>
                     <div class="col-sm-3">
                         <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}" required>
-                    </div>
-                </div>
-                <div class="form-group row mb-2">
-                    <label for="jenis_konsumen" class="col-sm-2 col-form-label">jenis Konsumen</label>
-                    <div class="col-sm-4">
-                        <select name="jenis_konsumen" id="jenis_konsumen" class="form-select form-control" data-placeholder="Pilih Jenis Konsumen">
-                            <option value="0" @if (($data->pc??0) != 1) selected @endif>Dealer</option>
-                            <option value="1" @if (($data->pc??0) == 1) selected @endif>Cabang</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="jenis_konsumen_dealer" @if (($data->pc??0) == 1) hidden @endif>
-                    <div class="form-group row mb-2">
-                        <label for="kd_dealer" class="col-sm-2 col-form-label required">Kd Dealer</label>
-                        <div class="col-sm-4">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Masukkan Kd Dealer" value="{{ ((($data->pc??0) != 1)?($data->kd_dealer??null):null) }}" required>
-                                <button class="btn btn-primary list-dealer" type="button">Pilih</button>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="nm_dealer" name="nm_dealer" placeholder="Masukkan Nama Dealer" value="{{ ((($data->pc??0) != 1)?($data->nm_dealer??null):null) }}" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label for="alamat1" class="col-sm-2 col-form-label">Alamat</label>
-                        <div class="col-sm-4">
-                            <textarea type="text" class="form-control" data-kt-autosize="true" id="alamat1" name="alamat1" disabled>{{ ((($data->pc??0) != 1)?($data->alamat1??null):null) }}</textarea>
-                        </div>
-                        <div class="col-sm-5 mt-3 mt-sm-0">
-                            <input type="text" class="form-control" id="kotasj" name="kotasj" placeholder="Masukkan Dealer" value="{{ ((($data->pc??0) != 1)?($data->kota??null):null) }}" disabled>
-                        </div>
-                    </div>
-                </div>
-                <div id="jenis_konsumen_cabang" @if (($data->pc??0) != 1) hidden @endif>
-                    <div class="form-group row mb-2">
-                        <label for="kd_cabang" class="col-sm-2 col-form-label required">kode Cabang</label>
-                        <div class="col-sm-9">
-                            <select name="kd_cabang" id="kd_cabang" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Cabang">
-                                <option></option>
-                                {!! $cabang !!}
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -83,23 +40,16 @@
                     <thead class="border">
                         <tr class="fs-8 fw-bolder text-muted text-center">
                             <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">part Number</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">Qty Retur</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
-                            <th rowspan="2" class="w-50px ps-3 pe-3">tgl Ganti</th>
-                            <th rowspan="2" class="w-50px ps-3 pe-3">Qty Ganti</th>
-                            <th colspan="3" class="w-50px ps-3 pe-3">status</th>
-                            <th rowspan="2" class="min-w-150px ps-3 pe-3">Keterangan</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3">No Retur</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal Retur</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3">Qty</th>
                             <th rowspan="2" class="min-w-150px ps-3 pe-3">Action</th>
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted text-center">
-                            <th class="w-50px ps-3 pe-3">Stock</th>
-                            <th class="w-50px ps-3 pe-3">Minimum</th>
-                            <th class="w-50px ps-3 pe-3">Klaim</th>
                         </tr>
                     </thead>
                     <tbody id="list-retur">
-                        @if (empty($data->detail) || count($data->detail) == 0)
+                        {{-- @if (empty($data->detail) || count($data->detail) == 0)
                             <tr class="fw-bolder fs-8 border text_not_data">
                                 <td colspan="13" class="text-center">Tidak ada data</td>
                             </tr>
@@ -161,7 +111,7 @@
                                 </td>
                             </tr>
                             @endforeach
-                        @endif
+                        @endif --}}
                     </tbody>
                 </table>
             </div>
@@ -205,9 +155,26 @@
                 <h3>2. Informasi Produk</h3>
                 <div class="col-xl-12 border rounded mb-3 p-2">
                     <div class="form-group row mb-2">
+                        <label for="no_ps" class="col-sm-2 col-form-label">No Packing Sheet</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="no_ps" name="no_ps" placeholder="Masukkan No Packing Sheet" value="" required>
+                        </div>
+                        <label for="no_dus" class="col-sm-2 col-form-label">Nomor DUS</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="no_dus" name="no_dus" placeholder="Masukkan No DUS" value="" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label for="kd_part" class="col-sm-2 col-form-label required">No Retur</label>
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="" required>
+                                <button class="btn btn-primary list-part" type="button">Pilih</button>
+                            </div>
+                        </div>
                         <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="no_produksi" name="no_produksi" placeholder="Masukkan No Produksi" value="" required>
+                            <input type="text" class="form-control" id="no_produksi" name="no_produksi" placeholder="Masukkan No Produk" value="" required>
                         </div>
                     </div>
                     <div class="form-group row mb-2">
@@ -218,11 +185,8 @@
                                 <button class="btn btn-primary list-part" type="button">Pilih</button>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <input type="text" class="form-control bg-secondary" id="nm_part" name="nm_part" placeholder="Nama Part" value="" readonly>
-                        </div>
-                        <div class="col-sm-1 mt-3 mt-sm-0">
-                            <input type="text" class="form-control bg-secondary" id="stock" name="stock" placeholder="stock" value="" readonly>
                         </div>
                     </div>
                     <div class="form-group row mb-2">
@@ -241,37 +205,9 @@
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="sts_stock" class="col-sm-2 col-form-label required">Status Stock</label>
+                        <label for="diterima_oleh" class="col-sm-2 col-form-label">Diterima Oleh</label>
                         <div class="col-sm-4">
-                            <select name="sts_stock" id="sts_stock" class="form-select form-control" required>
-                                <option value="">Pilih Status Stock</option>
-                                <option value="1">Ganti Barang</option>
-                                <option value="2">Stock 0</option>
-                                <option value="3">Retur</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row mb-2">
-                        <label for="sts_minimum" class="col-sm-2 col-form-label required">Status Minimum</label>
-                        <div class="col-sm-4">
-                            <select name="sts_minimum" id="sts_minimum" class="form-select form-control" required>
-                                <option value="">Pilih Status Minimum</option>
-                                {{-- <option value="1">Minimum</option>
-                                <option value="2">Tidak Minimum</option> --}}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row mb-2">
-                        <label for="sts_klaim" class="col-sm-2 col-form-label required">Status Retur</label>
-                        <div class="col-sm-4">
-                            <select name="sts_klaim" id="sts_klaim" class="form-select form-control" required>
-                                <option value="">Pilih Status Retur</option>
-                                {{-- <option value="1">klaim ke Supplier</option>
-                                <option value="2">Tidak</option> --}}
-                                {{-- <option value="3">Memo Koreksi</option> --}}
-                            </select>
+                            <input type="text" class="form-control" id="diterima_oleh" name="diterima_oleh" placeholder="Masukkan Diterima Oleh" value="" required>
                         </div>
                     </div>
                 </div>
