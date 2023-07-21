@@ -54,7 +54,7 @@ class SupplierController extends Controller
     public function form(Request $request)
     {
         $request->merge(['option' => ['with_detail','tamp']]);
-        $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
+        $responseApiRetur = json_decode(Service::ReturSupplierDaftar($request));
         $statusApiRetur = $responseApiRetur->status;
 
         $request->merge(['option' => 'select']);
@@ -85,50 +85,69 @@ class SupplierController extends Controller
     {
         try {
 
-            $rules = [];
-            $messages = [];
+            // $rules = [];
+            // $messages = [];
 
-            // ! ------------------------------------
-            // ! Jika menambahkan validasi
-            if($request->no_retur == $request->user_id){
-                if(!empty($request->pc) && $request->pc == 1){
-                    $rules += ['kd_cabang' => 'required'];
-                    $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
-                } else {
-                    $rules += ['kd_dealer' => 'required'];
-                    $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
-                }
+            // // ! ------------------------------------
+            // // ! Jika menambahkan validasi
+            // if($request->no_retur == $request->user_id){
+            //     if(!empty($request->pc) && $request->pc == 1){
+            //         $rules += ['kd_cabang' => 'required'];
+            //         $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
+            //     } else {
+            //         $rules += ['kd_dealer' => 'required'];
+            //         $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
+            //     }
 
-                if(!empty($request->kd_part)){
-                    $rules += [
-                        'kd_part' => 'required',
-                        'qty_retur' => 'required|numeric|min:1',
-                        'sts_stock' => 'required',
-                        'sts_klaim' => 'required',
-                        'sts_min' => 'required',
-                    ];
-                    $messages += [
-                        'kd_part.required' => 'Part Number Kososng',
-                        'qty_retur.required' => 'QTY Claim Kososng',
-                        'qty_retur.min' => 'QTY Pada Claim Minimal 1',
-                        'sts_stock.required' => 'Status Stock Kososng',
-                        'sts_klaim.required' => 'Status Retur Kososng',
-                        'sts_min.required' => 'Status Min Kososng',
-                    ];
-                }
+            //     if(!empty($request->kd_part)){
+            //         $rules += [
+            //             'kd_part' => 'required',
+            //             'qty_retur' => 'required|numeric|min:1',
+            //             'sts_stock' => 'required',
+            //             'sts_klaim' => 'required',
+            //             'sts_min' => 'required',
+            //         ];
+            //         $messages += [
+            //             'kd_part.required' => 'Part Number Kososng',
+            //             'qty_retur.required' => 'QTY Claim Kososng',
+            //             'qty_retur.min' => 'QTY Pada Claim Minimal 1',
+            //             'sts_stock.required' => 'Status Stock Kososng',
+            //             'sts_klaim.required' => 'Status Retur Kososng',
+            //             'sts_min.required' => 'Status Min Kososng',
+            //         ];
+            //     }
+            // }
+            // // ! megecek validasi dan menampilkan pesan error
+            // // ! ------------------------------------
+            // $validate = Validator::make($request->all(), $rules,$messages);
+            // if ($validate->fails()) {
+            //     return Response()->json([
+            //         'status'    => 0,
+            //         'message'   => $validate->errors()->first(),
+            //         'data'      => ''
+            //     ]);
+            // }
+
+            if(in_array($request->ket, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'O', 'P'])){
+                match ($request->ket) {
+                    'A' => $request->merge(['ket' => 'Karat/Korosi']),
+                    'B' => $request->merge(['ket' => 'Permukaan Cacat (Jamur, Gores, dll)']),
+                    'C' => $request->merge(['ket' => 'Bengkok/Berubah Bentuk']),
+                    'D' => $request->merge(['ket' => 'Patah/Pecah/Sobek']),
+                    'E' => $request->merge(['ket' => 'Sub Part Tidak lengkap']),
+                    'F' => $request->merge(['ket' => 'Arus Mati (Electric)']),
+                    'G' => $request->merge(['ket' => 'Bocor (Liquid)']),
+                    'H' => $request->merge(['ket' => 'Dimensi Tidak Sesuai Spek']),
+                    'K' => $request->merge(['ket' => 'Jumlah Part Kurang']),
+                    'L' => $request->merge(['ket' => 'Jumlah Part Lebih']),
+                    'M' => $request->merge(['ket' => 'Fisik Part Beda']),
+                    'N' => $request->merge(['ket' => 'Label Beda']),
+                    'O' => $request->merge(['ket' => 'Packaging rusak']),
+                    'P' => $request->merge(['ket' => 'Tidak Order']),
+                };
             }
-            // ! megecek validasi dan menampilkan pesan error
-            // ! ------------------------------------
-            $validate = Validator::make($request->all(), $rules,$messages);
-            if ($validate->fails()) {
-                return Response()->json([
-                    'status'    => 0,
-                    'message'   => $validate->errors()->first(),
-                    'data'      => ''
-                ]);
-            }
 
-            $responseApi = Service::ReturKonsumenSimpan($request);
+            $responseApi = Service::ReturSupplierSimpan($request);
             $statusApi = json_decode($responseApi)->status;
             $messageApi =  json_decode($responseApi)->message;
             $data = json_decode($responseApi)->data;
@@ -164,15 +183,6 @@ class SupplierController extends Controller
             'no_retur.required' => 'No Retur Tidak Boleh Kososng',
         ];
 
-        if(!empty($request->kd_part)){
-            $rules += [
-                'kd_part' => 'required',
-            ];
-            $messages += [
-                'kd_part.required' => 'Part Number Tidak boleh kososng',
-            ];
-        }
-
         $validate = Validator::make($request->all(), $rules,$messages);
         if ($validate->fails()) {
             return Response()->json([
@@ -182,7 +192,7 @@ class SupplierController extends Controller
             ]);
         }
 
-        $responseApi = Service::ReturKonsumenDelete($request);
+        $responseApi = Service::ReturSupplierDelete($request);
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 

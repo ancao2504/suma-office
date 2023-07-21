@@ -2015,6 +2015,29 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+    public static function ReturSupplierSimpan($request)
+    {
+        $url = 'backend/retur/supplier/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => trim($request->option),
+            // ! data Header
+            'no_retur'      => $request->no_retur,
+            'kd_supp'       => trim($request->kd_supp),
+            'tgl_retur'     => $request->tgl_retur,
+            // ! data detail
+            'no_klaim'      => trim($request->no_klaim),
+            'kd_part'       => trim($request->kd_part),
+            'no_ps'         => trim($request->no_ps),
+            'ket'           => $request->ket,
+            'diterima'      => $request->diterima,
+            'no_produksi'   => trim($request->no_produksi),
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
     public static function ReturKonsumenDelete($request)
     {
         $url = 'backend/retur/konsumen/delete';
@@ -2023,6 +2046,20 @@ class Service
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
             'no_retur'      => $request->no_retur,
+            'kd_part'       => trim($request->kd_part),
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function ReturSupplierDelete($request)
+    {
+        $url = 'backend/retur/supplier/delete';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_retur'      => $request->no_retur,
+            'no_klaim'      => $request->no_klaim,
             'kd_part'       => trim($request->kd_part),
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
@@ -2262,7 +2299,22 @@ class Service
             'option'        => $request->option,
             'kd_part'       => $request->kd_part,
             'kd_sales'      => $request->kd_sales,
+            'no_retur'      => $request->no_retur,
             'no_faktur'     => $request->no_faktur,
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function dataRetur($request){
+        $url = 'backend/retur';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => $request->option,
+            'no_retur'      => $request->no_retur,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
         ];

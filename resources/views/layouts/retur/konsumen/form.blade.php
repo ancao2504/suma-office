@@ -12,7 +12,7 @@
             <h3>1. Informasi Dokumen</h3>
             <div class="mb-3 border rounded p-3">
                 <div class="form-group row mb-2">
-                    <label for="no_retur" class="col-sm-2 col-form-label">No Retur</label>
+                    <label for="no_retur" class="col-sm-2 col-form-label">No Klaim</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="no_retur" name="no_retur" value="{{ session('app_user_id') }}" disabled>
                     </div>
@@ -232,7 +232,7 @@
                         </div>
                     </div>
                 </div>
-                <h3>3. Informasi Retur</h3>
+                <h3>3. Informasi Klaim</h3>
                 <div class="mb-3 border rounded p-2">
                     <div class="form-group row mb-2">
                         <label for="ket" class="col-sm-2 col-form-label">Keterangan</label>
@@ -258,13 +258,13 @@
                             <select name="sts_minimum" id="sts_minimum" class="form-select form-control" required>
                                 <option value="">Pilih Status Minimum</option>
                                 {{-- <option value="1">Minimum</option>
-                                <option value="2">Tidak Minimum</option> --}}
+                                <option value="0">Tidak Minimum</option> --}}
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row mb-2">
-                        <label for="sts_klaim" class="col-sm-2 col-form-label required">Status Retur</label>
+                        <label for="sts_klaim" class="col-sm-2 col-form-label required">Status Klaim</label>
                         <div class="col-sm-4">
                             <select name="sts_klaim" id="sts_klaim" class="form-select form-control" required>
                                 <option value="">Pilih Status Retur</option>

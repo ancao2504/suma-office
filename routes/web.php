@@ -298,9 +298,11 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/option/updateharga', 'OptionUpdateHarga')->name('update-harga');
                 
                 // ! dari aplikasi suma sby
+                Route::get('/retur', 'retur')->name('option-retur');
                 Route::get('/dealer', 'dealer')->name('option-dealer');
                 Route::get('/faktur', 'faktur')->name('option-faktur');
                 Route::get('/part', 'part')->name('option-part');
+                Route::get('/part/stock', 'partStock')->name('option-part-stock');
                 Route::get('/produk', 'produk')->name('option-produk');
                 Route::get('option/konsumen', 'konsumen')->name('option-konsumen');
                 Route::get('/wh', 'WH')->name('wh');

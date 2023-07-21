@@ -96,5 +96,5 @@
 <!-- JQuery CDN -->
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> --}}
 
-<script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/index.js') }}?v={{ time() }}"></script>
+<script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/index.js') }}?v={{ time() }}"></script>
 @endpush

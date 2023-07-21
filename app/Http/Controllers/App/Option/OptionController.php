@@ -1487,7 +1487,7 @@ class OptionController extends Controller
 
     // ! suma sby
     public static function supplier(Request $request){
-        $responseApi = Service::dataSalesman($request);
+        $responseApi = Service::dataSupplier($request);
         $statusApi = json_decode($responseApi)?->status;
         $messageApi =  json_decode($responseApi)?->message;
 
@@ -1498,37 +1498,8 @@ class OptionController extends Controller
             } else if($request->option == 'select'){
                 $respon = '';
                 foreach ($data as $key => $value) {
-                    $respon .= '<option value="'.$value->kd_sales.'" data-ket="'.$value->nm_sales.'">'.$value->kd_sales.($value->nm_sales ? '('.$value->nm_sales.')' : '').'</option>';
+                    $respon .= '<option value="'.$value->kd_supplier.'" data-ket="'.$value->nm_supplier.'">'.$value->kd_supplier.($value->nm_supplier ? ' ('.$value->nm_supplier.')' : '').'</option>';
                 }
-            } else if($request->option == 'page'){
-                $respon = view('layouts.option.option', [
-                    'data' => $data,
-                    'modal' => (object)[
-                        'title' => 'List Salse',
-                        'size' => 'modal-lg',
-                    ],
-                    'cari' => (object)[
-                        'title' => 'Kode Sales',
-                        'value' => $request->kd_sales,
-                    ],
-                    'table' => (object)[
-                        'thead' => (object)[
-                            (object)['class' => 'w-100px', 'text' => 'kode Sales'],
-                            (object)['class' => 'w-100px', 'text' => 'nm_sales'],
-                            (object)['class' => 'w-auto', 'text' => 'Action'],
-                        ],
-                        'tbody' => (object)[
-                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_sales'],
-                            (object)[ 'option' => 'text', 'class' => 'w-auto', 'key' => 'nm_sales'],
-                            (object)[ 'option' => 'button', 'class' => 'w-auto', 'button' => [
-                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih'],
-                            ]],
-                        ],
-                    ],
-                    'per_page' => (object)[
-                        'value' => $request->per_page,
-                    ]
-                ])->render();
             }
             return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
         } else {
@@ -1565,12 +1536,12 @@ class OptionController extends Controller
                         'value' => $request->kd_sales,
                     ],
                     'table' => (object)[
-                        'thead' => (object)[
+                        'thead' => [
                             (object)['class' => 'w-100px', 'text' => 'kode Sales'],
                             (object)['class' => 'w-100px', 'text' => 'nm_sales'],
                             (object)['class' => 'w-auto', 'text' => 'Action'],
                         ],
-                        'tbody' => (object)[
+                        'tbody' => [
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_sales'],
                             (object)[ 'option' => 'text', 'class' => 'w-auto', 'key' => 'nm_sales'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto', 'button' => [
@@ -1618,14 +1589,14 @@ class OptionController extends Controller
                         'value' => $request->kd_dealer,
                     ],
                     'table' => (object)[
-                        'thead' => (object)[
+                        'thead' => [
                             (object)['class' => 'w-50px', 'text' => 'kode Dealer'],
                             (object)['class' => 'w-200px', 'text' => 'nama Dealer'],
                             (object)['class' => 'w-200px', 'text' => 'alamat'],
                             (object)['class' => 'w-50px', 'text' => 'kota'],
                             (object)['class' => 'w-auto', 'text' => 'Action'],
                         ],
-                        'tbody' => (object)[
+                        'tbody' => [
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_dealer'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_dealer'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'alamat1'],
@@ -1689,7 +1660,7 @@ class OptionController extends Controller
                         'value' => $request->search,
                     ],
                     'table' => (object)[
-                        'thead' => (object)[
+                        'thead' => [
                             (object)['class' => 'w-50px', 'text' => 'NIK'],
                             (object)['class' => 'w-200px', 'text' => 'NAMA'],
                             (object)['class' => 'w-200px', 'text' => 'TEMPAT TGL LAHIR'],
@@ -1699,7 +1670,7 @@ class OptionController extends Controller
                             (object)['class' => 'w-200px', 'text' => 'NO POL'],
                             (object)['class' => 'w-200px', 'text' => 'Action'],
                         ],
-                        'tbody' => (object)[
+                        'tbody' => [
                             (object)['option' => 'text', 'class' => 'w-25px', 'key' => 'nik'],
                             (object)['option' => 'text', 'class' => 'w-200px', 'key' => 'nama'],
                             (object)['option' => 'text', 'class' => 'w-200px', 'key' => ['tempat_lahir', 'tgl_lahir']],
@@ -1732,6 +1703,54 @@ class OptionController extends Controller
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
         }
     }
+    public static function retur(Request $request){
+        $responseApi = Service::dataRetur($request);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            if($request->option[0] == 'first'){
+                $respon = $data;
+            }else if($request->option[0] == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Klaim',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'No Klaim',
+                        'value' => $request->no_retur,
+                    ],
+                    'table' => (object)[
+                        'thead' => [
+                            (object)['class' => 'w-50px', 'text' => 'Nomor Klaim'],
+                            (object)['class' => 'w-50px', 'text' => 'Tanggal Klaim'],
+                            (object)['class' => 'w-25', 'text' => 'Action'],
+                        ],
+                        'tbody' => [
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'no_retur'],
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'tanggal'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                    'data' => [(object)['key' => 'a','value' => ['no_retur','tanggal']]]
+                                ],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
     public static function part(Request $request){
         $responseApi = Service::dataPart($request);
         $statusApi = json_decode($responseApi)?->status;
@@ -1739,10 +1758,52 @@ class OptionController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            // dd($data);
             if($request->option[0] == 'first'){
                 $respon = $data;
             }else if($request->option[0] == 'page'){
+                $table = (object)[
+                    'thead' => [
+                        (object)['class' => 'w-50px', 'text' => 'kode Part'],
+                        (object)['class' => 'w-200px', 'text' => 'nama Part'],
+                        (object)['class' => 'w-25', 'text' => 'Action'],
+                    ],
+                    'tbody' => [
+                        (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
+                        (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+                        (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                            (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                'data' => [(object)['key' => 'a','value' => 'kd_part']]
+                            ],
+                        ]],
+                    ],
+                ];
+
+                if(!empty($request->option[1]) && $request->option[1] == 'with_stock'){
+                    $table = (object)[
+                        'thead' => [
+                            (object)['class' => 'w-50px', 'text' => 'kode Part'],
+                            (object)['class' => 'w-200px', 'text' => 'nama Part'],
+                            (object)['class' => 'w-20px', 'text' => 'Stock'],
+                            (object)['class' => 'w-25', 'text' => 'Action'],
+                        ],
+                        'tbody' => [
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
+                            (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+                            (object)[ 'option' => 'text', 'class' => 'w-20px text-end', 'key' => 'stock'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                    'data' => [(object)['key' => 'a','value' => ['kd_part','nm_part','stock']]]
+                                ],
+                            ]],
+                        ],
+                    ];
+                }
+                
+                if(!empty($request->no_retur)){
+                    $table->tbody[2]->button[0]->data[0]->value = ['kd_part','nm_part','jumlah','no_produksi'];
+                }
+
+
                 $respon = view('layouts.option.option', [
                     'data' => $data,
                     'modal' => (object)[
@@ -1753,24 +1814,7 @@ class OptionController extends Controller
                         'title' => 'Kode Part',
                         'value' => $request->kd_part,
                     ],
-                    'table' => (object)[
-                        'thead' => (object)[
-                            (object)['class' => 'w-50px', 'text' => 'kode Part'],
-                            (object)['class' => 'w-200px', 'text' => 'nama Part'],
-                            (object)['class' => 'w-20px', 'text' => 'Stock'],
-                            (object)['class' => 'w-25', 'text' => 'Action'],
-                        ],
-                        'tbody' => (object)[
-                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
-                            (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
-                            (object)[ 'option' => 'text', 'class' => 'w-20px text-end', 'key' => 'stock'],
-                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
-                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
-                                    'data' => [(object)['key' => 'a','value' => 'kd_part']]
-                                ],
-                            ]],
-                        ],
-                    ],
+                    'table' => $table,
                     'per_page' => (object)[
                         'value' => $request->per_page,
                     ]
@@ -1810,12 +1854,12 @@ class OptionController extends Controller
                         'value' => $request->kd_produk,
                     ],
                     'table' => (object)[
-                        'thead' => (object)[
+                        'thead' => [
                             (object)['class' => 'w-50px', 'text' => 'kode Produk'],
                             (object)['class' => 'w-200px', 'text' => 'nama Produk'],
                             (object)['class' => 'w-auto', 'text' => 'Action'],
                         ],
-                        'tbody' => (object)[
+                        'tbody' => [
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_produk'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_produk'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
@@ -1942,11 +1986,11 @@ class OptionController extends Controller
                         'value' => $request->no_wh,
                     ],
                     'table' => (object)[
-                        'thead' => (object)[
+                        'thead' => [
                             (object)['class' => 'w-auto', 'text' => 'Nomor WH'],
                             (object)['class' => 'w-auto', 'text' => 'Action'],
                         ],
-                        'tbody' => (object)[
+                        'tbody' => [
                             (object)[ 'option' => 'text', 'class' => 'w-auto fs-7', 'key' => 'no_dok'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
                                 (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',

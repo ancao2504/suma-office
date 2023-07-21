@@ -80,9 +80,10 @@ function Part(requst){
 
 
 $('#part-list').on('click','.pilih' ,function () {
-    $('#kd_part').val($(this).data('a'));
-    $('#nm_part').val($(this).closest('tr').find('td:eq(2)').text());
-    $('#stock').val($(this).closest('tr').find('td:eq(3)').text());
+    const data = JSON.parse(atob($(this).data('a')));
+    $('#kd_part').val(data.kd_part);
+    $('#nm_part').val(data.nm_part);
+    $('#stock').val(data.stock);
     $('#part-list .close').trigger('click')
 })
 

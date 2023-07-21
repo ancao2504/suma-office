@@ -147,6 +147,8 @@ Route::group(['middleware' => 'authBasic'], function () {
                     // ! sby
                     Route::post('/backend/option/konsumen', 'dataKonsumen')->name('konsumen');
                     Route::post('/backend/salesman', 'dataSalesman')->name('salesman');
+                    Route::post('/backend/retur', 'dataRetur')->name('retur');
+                    Route::post('/backend/supplier', 'dataSupplier')->name('supplier');
                     Route::post('/backend/dealer', 'dataDealer')->name('dealer');
                     Route::post('/backend/faktur', 'dataFaktur')->name('faktur');
                     Route::post('/backend/part', 'dataPart')->name('part');

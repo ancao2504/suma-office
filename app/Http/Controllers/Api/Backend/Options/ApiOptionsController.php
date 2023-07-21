@@ -583,6 +583,63 @@ class ApiOptionsController extends Controller
             );
         }
     }
+    public function dataSupplier(Request $request){
+        try{
+            // ! Validasi ---------------------------------------------
+            $rules = array(
+                'option' => 'in:first,select',
+            );
+            $messages = array(
+                'option.in' => 'Maaf, pilihan option tidak tersedia',
+            );
+
+            if($request->option == 'first'){
+                $rules['kd_supplier'] = 'required';
+                $messages['kd_supplier.required'] = 'Maaf, kode supplier tidak boleh kosong';
+            }
+
+            $validate = Validator::make($request->all(), $rules, $messages);
+
+            if ($validate->fails()) {
+                
+                return Response::responseWarning($validate->errors()->first());
+            }
+
+            if (!in_array($request->per_page, ['10', '50', '100'])) {
+                $request->merge(['per_page' => '10']);
+            }
+            // ! End Validasi -----------------------------------------
+
+            $data = DB::table('supplier')
+            ->select('kd_supp as kd_supplier', 'nama as nm_supplier')
+            ->where('CompanyId', $request->companyid);
+
+            if(!empty($request->kd_sipplier)) {
+                $data = $data->where('kd_supp', $request->kd_supplier);
+            }
+
+            if($request->option == 'first'){
+                $data = $data->first();
+            } else if($request->option == 'select'){
+                $data = $data->orderBy('kd_supp', 'asc')
+                ->get();
+            } else if($request->option == 'page'){
+                $data = $data->orderBy('kd_supp', 'asc')
+                ->paginate($request->per_page);
+            }
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
     public function dataSalesman(Request $request){
         try{
             // ! Validasi ---------------------------------------------
@@ -863,10 +920,34 @@ class ApiOptionsController extends Controller
                 $data = $data->selectRaw('faktur.no_faktur, faktur.jml_jual, faktur.harga, faktur.disc1, faktur.kd_sales');
             }
 
+            if(!empty($request->no_retur)){
+                $data = $data->JoinSub(function ($query) use ($request) {
+                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part', 'rtoko_dtl.jumlah','rtoko_dtl.CompanyId')
+                    ->from('rtoko_dtl')
+                    ->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%')
+                    ->where('rtoko_dtl.CompanyId', $request->companyid)
+                    ->whereRaw("isnull(rtoko_dtl.status, 0)=0");
+                }, 'rtoko_dtl', function ($join) {
+                    $join->on('part.kd_part', '=', 'rtoko_dtl.kd_part')
+                        ->on('part.CompanyId', '=', 'rtoko_dtl.CompanyId');
+                })->leftJoinSub(function($query) use ($request){
+                    $query->select('klaim_dtl.no_produksi', 'klaim_dtl.no_dokumen','klaim_dtl.CompanyId')
+                    ->from('klaim_dtl')
+                    ->where('klaim_dtl.CompanyId', $request->companyid)
+                    ->where('klaim_dtl.no_dokumen', 'LIKE', '%'.$request->no_retur . '%');
+                }, 'klaim_dtl', function($join){
+                    $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_retur')
+                    ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
+                });
+
+                //! ganti select default
+                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi');
+            }
+
             // ! ------------------------------------
             // ! Jika data first atau get (paginate)
             // ! ------------------------------------
-            if($request->option[1] == 'with_stock'){
+            if(!empty($request->option[1]) && $request->option[1] == 'with_stock'){
                 $data = $data->select('part.kd_part','part.nm_part')
                 ->selectRaw('(ISNULL(tbStLokasiRak.Stock,0) - (ISNULL(stlokasi.min,0) + ISNULL(stlokasi.in_transit,0) + ISNULL(part.kanvas,0) + ISNULL(part.in_transit,0))) as stock')
                 ->JoinSub(function ($query) use ($request) {
@@ -901,6 +982,81 @@ class ApiOptionsController extends Controller
                 $data = $data->first();
             }else if($request->option[0] == 'page'){
                 $data = $data->paginate($request->per_page);
+            }
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
+    public function dataRetur(Request $request){
+        try{
+            // ! ---------------------------------------------
+            // ! Validasi
+            $rules = [];
+            $messages = [];
+            if (!empty($request->no_retur)) {
+                $rules += [
+                    'no_retur' => 'min:5',
+                ];
+                $messages += [
+                    'no_retur.min' => 'No Klaim minimal 5 karakter',
+                ];
+            }
+
+            $validate = Validator::make($request->all(), $rules,$messages);
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
+
+            if(!in_array($request->per_page, ['10', '50', '100'])){
+                $request->merge(['per_page' => '10']);
+            }
+            // ! End Validasi
+            // ! -----------------------------------------
+
+            $data = DB::table(function ($query) use ($request) {
+                $query->select('*')
+                    ->from('rtoko')
+                    ->joinSub(function ($query) use ($request) {
+                        $query->select('rtoko_dtl.no_retur as no_dokumen','rtoko_dtl.status')
+                            ->from('rtoko_dtl')
+                            ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
+                            ->where('rtoko_dtl.CompanyId', $request->companyid);
+                            
+                            if (!empty($request->no_retur)) {
+                                $query = $query->where('rtoko_dtl.no_dokumen', 'LIKE', '%'.$request->no_retur . '%');
+                            }
+
+                            $query = $query->groupBy('rtoko_dtl.no_retur','rtoko_dtl.status','rtoko_dtl.CompanyId');
+                    }, 'rtoko_dtl', function ($join) {
+                        $join->on('rtoko.no_retur', '=', 'rtoko_dtl.no_dokumen');
+                    })
+                    ->where('rtoko.CompanyId', $request->companyid);
+                    if (!empty($request->no_retur)) {
+                        $query = $query->where('rtoko.no_retur', 'LIKE', '%'.$request->no_retur . '%');
+                    }
+                    return $query;
+            }, 'retur')
+            ->select('retur.no_retur','retur.tanggal');
+
+            // ! ------------------------------------
+            // ! Jika data first atau get (paginate)
+            // ! ------------------------------------
+            if($request->option[0] == 'first'){
+                $data = $data->orderBy('retur.tanggal', 'desc')->first();
+            }else if($request->option[0] == 'page'){
+                $data = $data->orderBy('retur.tanggal', 'desc')
+                ->orderBy('retur.no_retur', 'desc')
+                ->paginate($request->per_page);
             }
 
             return Response::responseSuccess('success', $data);

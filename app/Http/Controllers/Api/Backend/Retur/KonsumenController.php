@@ -205,20 +205,15 @@ class KonsumenController extends Controller
             if ($validate->fails()) {
                 return Response::responseWarning($validate->errors()->first());
             }
-
-            $request->merge(['tb' => ['klaim','klaim_dtl']]);
-            if($request->no_retur == $request->user_id){
-                $request->merge(['tb' => ['klaimTmp','klaim_dtlTmp']]);
-            }
             $simpan = DB::transaction(function () use ($request) {
                 // ! ======================================================
                 // ! Simpan Data Tamporeri
                 // ! ======================================================
                 if($request->no_retur == $request->user_id){
                     //! simpan pada tabel klaimTmp 
-                    DB::table($request->tb[0])
+                    DB::table('klaimTmp')
                     ->updateOrInsert([
-                        'no_dokumen'        => $request->no_retur,
+                        'no_dokumen'        => $request->user_id,
                         'companyid'         => $request->companyid,
                     ],  [
                         'tgl_dokumen'       => $request->tgl_retur,
@@ -231,26 +226,23 @@ class KonsumenController extends Controller
                     ]);
 
                     if(!empty($request->kd_part)){
-                        $data_where_detail = [
-                            'no_dokumen'    => $request->no_retur,
-                            'CompanyId'     => $request->companyid,
-                            'kd_key'        => $request->no_retur,
-                            'kd_part'       => $request->kd_part,
-                        ];
                         //! simpan pada tabel klaimtmp_dtl
-                        DB::table($request->tb[1])
-                        ->updateOrInsert($data_where_detail, [
+                        DB::table('klaim_dtlTmp')
+                        ->updateOrInsert([
+                            'no_dokumen'    => $request->user_id,
+                            'kd_key'        => $request->user_id,
+                            'companyid'     => $request->companyid,
+                            'kd_part'       => $request->kd_part,
+                        ], [
                             'qty'           => $request->qty_retur,
                             'no_produksi'   => ($request->no_produksi??null),
                             'sts_stock'     => ($request->sts_stock??0),
                             'sts_klaim'     => ($request->sts_klaim??0),
                             'sts_min'       => ($request->sts_min??0),
                             'keterangan'    => ($request->ket??null),
-                            'CompanyId'     => $request->companyid,
                             'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
                         ]);
                     }
-                    
                     return (object)[
                         'status'    => true,
                         'data'      => ''
@@ -328,7 +320,7 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 $data_error = [];
                 collect($validasi_stock)->filter(function($value, $key) use (&$data_error){
-                    if(($value->sts_stock == 1 || $value->sts_stock == 3) && $value->stock < $value->qty){
+                    if($value->sts_min == 1 && $value->stock < $value->qty){
                         $data_error[] = [
                                 'kd_part'   => $value->kd_part,
                                 'qty'       => $value->qty,
@@ -364,7 +356,7 @@ class KonsumenController extends Controller
                 $request->merge(['no_retur' => $number]);
 
                 //! simpan pada tabel klaim
-                DB::table($request->tb[0])
+                DB::table('klaim')
                 ->updateOrInsert([
                     'no_dokumen'        => $request->no_retur,
                     'companyid'         => $request->companyid,
@@ -379,7 +371,7 @@ class KonsumenController extends Controller
                     // ! ======================================================
                     // ! MINIMUM
                     // ! ======================================================
-                    if($value->sts_min == '1'){
+                    if($value->sts_min == 1){
                         $ket = 'Klaim ' . trim($request->kd_dealer);
     
                         // ! cek apakah part sudah ada pada min_g
@@ -444,7 +436,7 @@ class KonsumenController extends Controller
                     }
 
                     //! simpan pada tabel klaim_dtl
-                    DB::table($request->tb[1])
+                    DB::table('klaim_dtl')
                     ->updateOrInsert([
                         'no_dokumen'    => $request->no_retur,
                         'kd_part'       => $value->kd_part,
@@ -459,23 +451,14 @@ class KonsumenController extends Controller
                         'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
                     ]);
                 }
-
                 
                 // ! ======================================================
                 // ! INSERT RTOKO
                 // ! ======================================================
-                if($value->sts_klaim == '1'){
-                    DB::table('rtoko')->insert([
-                        'no_retur' => $request->no_retur,
-                        'tanggal' => date('Y-m-d'),
-                        'kd_dealer' => $request->kd_dealer,
-                        'kd_sales' => $request->kd_sales,
-                        'sts_jurnal' => '0',
-                        'Companyid' => $request->companyid,
-                        'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id),
-                    ]);
 
-                    $data = collect($validasi_stock)->map(function($value, $key) use ($request){
+                // ! filter cek adakah detail yang sts klaim == 1 atau klim ke supplier
+                $data = collect($validasi_stock)->map(function($value, $key) use ($request){
+                    if($value->sts_klaim == '1') {
                         return [
                             'no_retur' => $request->no_retur,
                             'kd_part' => $value->kd_part,
@@ -485,7 +468,21 @@ class KonsumenController extends Controller
                             'CompanyId' => $request->companyid,
                             'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id)
                         ];
-                    })->toArray();
+                    } else {
+                        return null;
+                    }
+                })->filter()->values()->toArray();
+                //! jika ada data yang di klaim maka tambahkan rtoko dan rtoko_dtl
+                if(count($data) != 0){
+                    DB::table('rtoko')->insert([
+                        'no_retur' => $request->no_retur,
+                        'tanggal' => date('Y-m-d'),
+                        'kd_dealer' => (($request->pc==1)?$request->kd_cabang:$request->kd_dealer),
+                        'kd_sales' => $request->kd_sales,
+                        'sts_jurnal' => '0',
+                        'Companyid' => $request->companyid,
+                        'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id),
+                    ]);
                     DB::table('rtoko_dtl')->insert($data);
                 }
 
@@ -494,13 +491,13 @@ class KonsumenController extends Controller
                 DB::table('klaim_dtlTmp')->where('kd_key', $request->user_id)->where('companyid', $request->companyid)->delete();
                 return (object)[
                     'status'    => true,
-                    'data'      => ''
+                    'data'      => $request->no_retur
                 ];
             });
 
             // ! jika true succes jika false terdapat validasi yang gagal
             if($simpan->status == true){
-                return Response::responseSuccess('success', '');
+                return Response::responseSuccess('success', $simpan->data);
             } else if ($simpan->status == false){
                 return Response::responseWarning($simpan->message, $simpan->data);
             }
