@@ -32,6 +32,7 @@ use Api\Backend\Setting\ApiSettingDiskonDealerController;
 use Api\Backend\Setting\ApiSettingDiskonProdukController;
 use Api\Backend\Retur\KonsumenController as ReturKonsumen;
 use Api\Backend\Retur\SupplierController as ReturSupplier;
+use Api\Backend\Retur\SupplierJawabController as ReturSupplierJawab;
 use Api\Backend\Dashboard\ApiDashboardMarketplaceController;
 use Api\Backend\Setting\ApiSettingPartNettoDealerController;
 use Api\Backend\Reports\KonsumenController as Reportkonsumen;
@@ -559,6 +560,11 @@ Route::group(['middleware' => 'authBasic'], function () {
                         Route::post('/backend/retur/supplier/daftar',  'index')->name('index');
                         Route::post('/backend/retur/supplier/simpan',  'store')->name('store');
                         Route::post('/backend/retur/supplier/delete',  'destroy')->name('delete');
+                    });
+                    Route::name('jawab.')->group(function () {
+                        Route::controller(ReturSupplierJawab::class)->group(function () {
+                            Route::post('/backend/retur/supplier/jawab/simpan',  'store')->name('store');
+                        });
                     });
                 });
             });

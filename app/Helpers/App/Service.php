@@ -2038,6 +2038,25 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+    public static function ReturSupplierjawabSimpan($request)
+    {
+        $url = 'backend/retur/supplier/jawab/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_retur'      => $request->no_retur,
+            'no_klaim'      => trim($request->no_klaim),
+            'kd_part'       => trim($request->kd_part),
+            'qty_jwb'       => $request->qty_jwb,
+            'alasan'        => $request->alasan,
+            'ca'            => $request->ca,
+            'keputusan'     => $request->keputusan,
+            'ket'           => $request->ket,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
     public static function ReturKonsumenDelete($request)
     {
         $url = 'backend/retur/konsumen/delete';

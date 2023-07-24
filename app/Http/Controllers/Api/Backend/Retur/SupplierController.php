@@ -62,7 +62,6 @@ class SupplierController extends Controller
             if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
                 $data = $data->where($request->tb[0].'.Kd_Key', $request->user_id);
             }
-                
 
             if($request->option[0] == 'page'){
                 $data = $data
@@ -72,24 +71,35 @@ class SupplierController extends Controller
             } else if($request->option[0] == 'first'){
                 $data = $data->first();
 
-            } else if($request->option[0] == 'with_detail'){
+            } else if($request->option[0] == 'with_detail' || $request->option[0] == 'with_jwb'){
                 $data = $data->first();
                 if(!empty($data)){
-                    $data_detail = DB::table($request->tb[1])
-                    ->lock('with (nolock)')
-                    ->select(
-                        $request->tb[1].'.no_klaim',
-                        $request->tb[1].'.tgl_claim',
-                        $request->tb[1].'.no_produksi',
-                        $request->tb[1].'.no_ps_klaim',
-                        $request->tb[1].'.kd_dealer',
-                        $request->tb[1].'.kd_part',
-                        'part.ket as nm_part',
-                        $request->tb[1].'.kd_lokasi',
-                        $request->tb[1].'.jmlretur',
-                        $request->tb[1].'.ket',
-                        $request->tb[1].'.diterima',
-                    )
+
+                    $data_detail = DB::table(function ($query) use ($request) {
+                        $query->select(
+                                'no_klaim',
+                                'tgl_claim',
+                                'no_produksi',
+                                'no_ps_klaim',
+                                'kd_dealer',
+                                'kd_part',
+                                'kd_lokasi',
+                                'jmlretur',
+                                'qty_jwb',
+                                'ket',
+                                'ket_jwb',
+                                'diterima',
+                                'CompanyId'
+                            )
+                        ->from($request->tb[1])
+                        ->where($request->tb[1].'.CompanyId', $request->companyid);
+                        if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
+                            $query->where($request->tb[1].'.kd_key', $request->user_id);
+                        }
+                        if(!empty($request->no_retur)){
+                            $query->where($request->tb[1].'.no_retur', $request->no_retur);
+                        }
+                    }, $request->tb[1])
                     ->leftJoinSub(function($query) use ($request){
                         $query->select('part.kd_part', 'part.ket','part.CompanyId')
                         ->from('part')
@@ -97,21 +107,27 @@ class SupplierController extends Controller
                     }, 'part', function($join) use ($request){
                         $join->on('part.kd_part', '=', $request->tb[1].'.kd_part')
                         ->on('part.CompanyId', '=', $request->tb[1].'.CompanyId');
-                    });
+                    })
+                    ->select(
+                        $request->tb[1].'.*',
+                        'part.ket as nm_part',
+                    )
+                    ->orderBy($request->tb[1].'.no_klaim', 'desc')
+                    ->get();
                     
-
-                    if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
-                        $data_detail = $data_detail->where($request->tb[1].'.kd_key', $request->user_id);
+                    if($request->option[0] == 'with_jwb'){
+                        foreach ($data_detail as $key => $value) {
+                            $data_detail[$key]->detail_jwb = DB::table('jwb_claim')
+                            ->select('*')
+                            ->where('jwb_claim.no_retur', $request->no_retur)
+                            ->where('jwb_claim.no_klaim', $value->no_klaim)
+                            ->where('jwb_claim.kd_part', $value->kd_part)
+                            ->where('jwb_claim.CompanyId', $request->companyid)
+                            ->orderBy('no_jwb', 'asc')
+                            ->get();
+                        }
                     }
-                    
-                    $data_detail = $data_detail->where($request->tb[1].'.companyid', $request->companyid);
 
-                    if(!empty($request->no_retur)){
-                        $data_detail = $data_detail->where($request->tb[1].'.no_retur', $request->no_retur);
-                    }
-
-                    $data_detail = $data_detail->get();
-                    
                     $data->detail = $data_detail;
                 }
             }
@@ -409,6 +425,12 @@ class SupplierController extends Controller
                         DB::table('retur_dtl')
                             ->where('no_retur', $request->no_retur)
                             ->delete();
+
+                        DB::table('jwb_claim')
+                            ->where('no_retur', $request->no_retur)
+                            ->delete();
+
+                        
                     }
                 );
 

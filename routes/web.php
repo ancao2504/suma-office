@@ -29,6 +29,7 @@ use App\Setting\CetakUlang\CetakUlangController;
 use App\Reports\FakturController as ReportFaktur;
 use App\Retur\KonsumenController as ReturKonsumen;
 use App\Retur\SupplierController as ReturSupplier;
+use App\Retur\SupplierJawabController as ReturSupplierJawab;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Claim\SupplierController as ClaimSupplier;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
@@ -637,6 +638,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::get('/retur/supplier/form',  'form')->name('form');
                     Route::post('/retur/supplier/form',  'store')->name('store');
                     Route::post('/retur/supplier/delete',  'destroy')->name('delete');
+                    
+                    Route::name('jawab.')->group(function () {
+                        Route::controller(ReturSupplierJawab::class)->group(function () {
+                            Route::get('/retur/supplier/jawab/form',  'form')->name('form');
+                            Route::post('/retur/supplier/jawab/form',  'store')->name('store');
+                        });
+                    });
                 });
             });
         });
