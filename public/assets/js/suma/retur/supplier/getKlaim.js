@@ -20,7 +20,7 @@ function Klaim(requst){
             let dataJson = response.data;
             if(requst.option[0] == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.error('Part Number Tidak Ditemukan!', "info");
+                    toastr.error('No Klaim Tidak Ditemukan atau sudah di tambahkan pada Retur!', "info");
                     $('#no_klaim').addClass('is-invalid');
                     $('#no_klaim').removeClass('is-valid');
                 } else {

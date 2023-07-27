@@ -19,25 +19,34 @@ class SupplierController extends Controller
     public function index(Request $request)
     {
         try {
-            // $rules = [];
-            // $messages = [];
-            // if(!empty($request->option)){
-            //     $rules += [
-            //         'no_retur' => 'required|min:5',
-            //     ];
-            //     $messages += [
-            //         'no_retur.required' => 'Nomor Retur tidak boleh kosong',
-            //         'no_retur.min' => 'Nomor Retur Minimal 5 Karakter',
-            //     ];
-            // }
+            $rules = [
+                'companyid' => 'required',
+                'user_id' => 'required',
+                'option' => 'required',
+            ];
+            $messages = [
+                'companyid.required' => 'Companyid Tidak Boleh Kososng',
+                'user_id.required' => 'User Id Tidak Boleh Kososng',
+                'option.required' => 'Option Tidak Boleh Kososng',
+            ];
 
-            // $validate = Validator::make($request->all(), $rules,$messages);
-            // if ($validate->fails()) {
-            //     return Response::responseWarning($validate->errors()->first());
-            // }
+            if(!empty($request->no_retur)){
+                $rules += [
+                    'no_retur' => 'required|min:5',
+                ];
+                $messages += [
+                    'no_retur.required' => 'Nomor Retur tidak boleh kosong',
+                    'no_retur.min' => 'Nomor Retur Minimal 5 Karakter',
+                ];
+            }
+
+            $validate = Validator::make($request->all(), $rules,$messages);
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
 
             
-            if(empty($request->no_retur) && (!empty($request->option[1]) && $request->option[1] == 'tamp')){
+            if(empty($request->no_retur) && in_array('tamp',$request->option)){
                 $request->merge(['no_retur' => $request->user_id]);
             }
 
@@ -47,34 +56,61 @@ class SupplierController extends Controller
 
             
             $request->merge(['tb' => ['retur','retur_dtl']]);
-            if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
+            if(in_array($request->option, ['tamp'])){
                 $request->merge(['tb' => ['returtmp','retur_dtltmp']]);
             }
 
-            $data = DB::table($request->tb[0])
-            ->lock('with (nolock)')->select('*')
-            ->where($request->tb[0].'.CompanyId', $request->companyid);
+            // $data = DB::table($request->tb[0])
+            // ->lock('with (nolock)')
+            // ->select('*')
+            // ->where($request->tb[0].'.CompanyId', $request->companyid);
 
-            if(!empty($request->no_retur)){
-                $data = $data->where($request->tb[0].'.no_retur', 'LIKE', '%'.$request->no_retur.'%');
-            }
+            // if(!empty($request->no_retur)){
+            //     $data = $data->where($request->tb[0].'.no_retur', 'LIKE', '%'.$request->no_retur.'%');
+            // }
 
-            if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
-                $data = $data->where($request->tb[0].'.Kd_Key', $request->user_id);
-            }
+            $data = DB::table(function($query) use ($request){
+                $query->select('*')
+                ->from($request->tb[0])
+                ->where($request->tb[0].'.CompanyId', $request->companyid);
+                if(!empty($request->no_retur)){
+                    $query = $query->where($request->tb[0].'.no_retur', 'LIKE', '%'.$request->no_retur.'%');
+                }
+            }, $request->tb[0]);
 
-            if($request->option[0] == 'page'){
+            if(in_array('page', $request->option)){
                 $data = $data
+                ->joinSub(function($query) use ($request){
+                    $query->select(
+                        'retur_dtl.no_retur',
+                        DB::raw('sum(retur_dtl.jmlretur) as jmlretur'),
+                        DB::raw('sum(retur_dtl.qty_jwb) as qty_jwb'),
+                        DB::raw('sum(retur_dtl.jmlretur) - sum(retur_dtl.qty_jwb) as belum_jawab'),
+                        'retur_dtl.CompanyId'
+                    )
+                    ->from($request->tb[1])
+                    ->where('retur_dtl.CompanyId',$request->companyid)
+                    ->groupBy('retur_dtl.no_retur', 'retur_dtl.CompanyId');
+                }, 'detail', function($join){
+                    $join->on('detail.no_retur', '=', 'retur.no_retur')
+                    ->on('detail.CompanyId', '=', 'retur.CompanyId');
+                })
+                ->select(
+                    $request->tb[0].'.*',
+                    'detail.jmlretur',
+                    'detail.qty_jwb'
+                )
+                ->orderBy('detail.belum_jawab')
                 ->orderBy('tglretur', 'desc')
+                ->orderBy('usertime', 'desc')
                 ->paginate($request->per_page);
 
-            } else if($request->option[0] == 'first'){
+            } else if(in_array('first', $request->option)){
                 $data = $data->first();
 
-            } else if($request->option[0] == 'with_detail' || $request->option[0] == 'with_jwb'){
+            } else if(in_array('with_detail',$request->option) || in_array('with_jwb',$request->option)){
                 $data = $data->first();
                 if(!empty($data)){
-
                     $data_detail = DB::table(function ($query) use ($request) {
                         $query->select(
                                 'no_klaim',
@@ -93,12 +129,9 @@ class SupplierController extends Controller
                             )
                         ->from($request->tb[1])
                         ->where($request->tb[1].'.CompanyId', $request->companyid);
-                        if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
-                            $query->where($request->tb[1].'.kd_key', $request->user_id);
-                        }
-                        if(!empty($request->no_retur)){
-                            $query->where($request->tb[1].'.no_retur', $request->no_retur);
-                        }
+                    if(!empty($request->no_retur) || in_array($request->option, ['tamp'])){
+                        $query->where($request->tb[1].'.no_retur', $request->no_retur);
+                    }
                     }, $request->tb[1])
                     ->leftJoinSub(function($query) use ($request){
                         $query->select('part.kd_part', 'part.ket','part.CompanyId')
@@ -115,7 +148,7 @@ class SupplierController extends Controller
                     ->orderBy($request->tb[1].'.no_klaim', 'desc')
                     ->get();
                     
-                    if($request->option[0] == 'with_jwb'){
+                    if(in_array('with_jwb', $request->option)){
                         foreach ($data_detail as $key => $value) {
                             $data_detail[$key]->detail_jwb = DB::table('jwb_claim')
                             ->select('*')
@@ -148,45 +181,42 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         try{
-            // $rules = [];
-            // $messages = [];
+            $rules = [
+                'companyid' => 'required',
+                'user_id' => 'required',
+            ];
+            $messages = [
+                'companyid.required' => 'Companyid Tidak Boleh Kososng',
+                'user_id.required' => 'User Id Tidak Boleh Kososng',
+            ];
 
-            // // ! ------------------------------------
-            // // ! Jika menambahkan validasi
-            // if($request->no_retur == $request->user_id){
-            //     if(!empty($request->pc) && $request->pc == 1){
-            //         $rules += ['kd_cabang' => 'required'];
-            //         $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
-            //     } else {
-            //         $rules += ['kd_dealer' => 'required'];
-            //         $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
-            //     }
+            // ! ------------------------------------
+            // ! Jika menambahkan validasi
+            if($request->no_retur == $request->user_id){
+                $rules += [
+                    'kd_supp' => 'required',
+                    'tgl_retur' => 'required',
+                ];
+                $messages += [
+                    'kd_supp.required' => 'Kode Supplier Tidak Boleh Kososng',
+                    'tgl_retur.required' => 'Tanggal Retur Tidak Boleh Kososng',
+                ];
+                if(!empty($request->kd_part)){
+                    $rules += [
+                        'no_klaim' => 'required',
+                    ];
+                    $messages += [
+                        'no_klaim.required' => 'No Klaim Tidak Boleh Kososng',
+                    ];
+                }
+            }
 
-            //     if(!empty($request->kd_part)){
-            //         $rules += [
-            //             'kd_part' => 'required',
-            //             'qty_retur' => 'required|numeric|min:1',
-            //             'sts_stock' => 'required',
-            //             'sts_klaim' => 'required',
-            //             'sts_min' => 'required',
-            //         ];
-            //         $messages += [
-            //             'kd_part.required' => 'Part Number Kososng',
-            //             'qty_retur.required' => 'QTY Claim Kososng',
-            //             'qty_retur.min' => 'QTY Pada Claim Minimal 1',
-            //             'sts_stock.required' => 'Status Stock Kososng',
-            //             'sts_klaim.required' => 'Status Retur Kososng',
-            //             'sts_min.required' => 'Status Min Kososng',
-            //         ];
-            //     }
-            // }
-
-            // // ! megecek validasi dan menampilkan pesan error
-            // // ! ------------------------------------
-            // $validate = Validator::make($request->all(), $rules,$messages);
-            // if ($validate->fails()) {
-            //     return Response::responseWarning($validate->errors()->first());
-            // }
+            // ! megecek validasi dan menampilkan pesan error
+            // ! ------------------------------------
+            $validate = Validator::make($request->all(), $rules,$messages);
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
 
             $simpan = DB::transaction(function () use ($request) {
                 // ! ======================================================
@@ -249,7 +279,6 @@ class SupplierController extends Controller
                         $query
                         ->select('retur_dtltmp.Kd_Key', 'retur_dtltmp.no_retur', DB::raw('isnull(sum(retur_dtltmp.jmlretur), 0) as total'))
                         ->from('retur_dtltmp')
-                        ->where('retur_dtltmp.Kd_Key', $request->user_id)
                         ->where('retur_dtltmp.no_retur', $request->user_id)
                         ->where('retur_dtltmp.CompanyId', $request->companyid)
                         ->groupBy('retur_dtltmp.Kd_Key', 'retur_dtltmp.no_retur');
@@ -259,7 +288,6 @@ class SupplierController extends Controller
                     //! simpan pada tabel returtmp 
                     DB::table('returtmp')
                     ->updateOrInsert([
-                        'returtmp.Kd_Key'            => $request->user_id,
                         'returtmp.no_retur'          => $request->user_id,
                         'returtmp.CompanyId'         => $request->companyid,
                     ],  [
@@ -281,17 +309,18 @@ class SupplierController extends Controller
                 // ! ======================================================
                 $a = DB::table('retur')
                 ->lock('with (nolock)')
-                ->select(DB::raw("isnull(max(substring(no_retur, 1, charindex('/', no_retur) - 1)), 0) as number"))
+                ->select(DB::raw("CONVERT(INT,isnull(max(substring(no_retur, 1, charindex('/', no_retur) - 1)), 0)) as number"))
                 ->whereYear('tglretur', date('Y'))
                 ->where('CompanyId', $request->companyid)
+                ->groupBy('no_retur')
+                ->orderBy('number', 'desc')
                 ->first();
 
-                $no_retur = ($a->number + 1)."/C/A/".date('Y');
+                $no_retur = ((int)$a->number + 1)."/C/A/".date('Y');
 
                 $data_header_tamp = DB::table('returtmp')
                 ->lock('with (nolock)')
                 ->select('*')
-                ->where('returtmp.Kd_Key', $request->user_id)
                 ->where('returtmp.no_retur', $request->user_id)
                 ->where('returtmp.CompanyId', $request->companyid)
                 ->first();
@@ -313,8 +342,7 @@ class SupplierController extends Controller
                 ->lock('with (nolock)')
                 ->select(
                     DB::raw("'".$no_retur."' as no_retur")
-                    , 'no_klaim', 'kd_dealer', 'no_faktur', 'kd_part', 'kd_lokasi', 'jmlretur', 'ket', 'diterima', 'no_produksi', 'tgl_pemakaian', 'tgl_claim', 'tgl_jwb', 'qty_jwb', 'ket_jwb', 'no_ps_klaim', 'jml_ganti', 'kd_min', 'qty_min', 'no_memo', 'qty_memo', 'add_proc', 'del_proc', 'CompanyId', 'usertime')
-                ->where('retur_dtltmp.Kd_Key', $request->user_id)
+                    , 'no_klaim', 'kd_dealer', 'no_faktur', 'kd_part', 'kd_lokasi', 'jmlretur', 'ket', 'diterima', 'no_produksi', 'tgl_pemakaian', 'tgl_claim', 'tgl_jwb', 'qty_jwb', 'ket_jwb', 'no_ps_klaim', 'jml_ganti', 'add_proc', 'del_proc', 'CompanyId', 'usertime')
                 ->where('retur_dtltmp.no_retur', $request->user_id)
                 ->where('retur_dtltmp.CompanyId', $request->companyid)
                 ->get();
@@ -326,8 +354,8 @@ class SupplierController extends Controller
                 ->insert($data_detail_tamp);
 
                 // ! hapus data tamporeri
-                DB::table('returtmp')->where('kd_key', $request->user_id)->where('companyid', $request->companyid)->delete();
-                DB::table('retur_dtltmp')->where('kd_key', $request->user_id)->where('companyid', $request->companyid)->delete();
+                DB::table('returtmp')->where('no_retur', $request->user_id)->where('companyid', $request->companyid)->delete();
+                DB::table('retur_dtltmp')->where('no_retur', $request->user_id)->where('companyid', $request->companyid)->delete();
 
                 return (object)[
                     'status'    => true,
@@ -351,8 +379,16 @@ class SupplierController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $rules = ['no_retur' => 'required'];
-            $messages = ['no_retur.required' => 'No Retur Tidak Boleh Kososng'];
+            $rules = [
+                'no_retur' => 'required',
+                'user_id' => 'required',
+                'companyid' => 'required',
+            ];
+            $messages = [
+                'no_retur.required' => 'No Retur Tidak Boleh Kososng',
+                'user_id.required' => 'User Id Tidak Boleh Kososng',
+                'companyid.required' => 'Companyid Tidak Boleh Kososng',
+            ];
 
             // ! ------------------------------------
             // ! megecek validasi dan menampilkan pesan error
@@ -403,36 +439,31 @@ class SupplierController extends Controller
 
                 return response::responseSuccess('success', '');
             } else if ($request->no_retur != $request->user_id){
-                DB::transaction(
-                    function () use ($request) {
-                        DB::table('retur')
-                            ->where('no_retur', $request->no_retur)
-                            ->delete();
+                DB::transaction(function () use ($request) {
+                    DB::table('retur')
+                    ->where('no_retur', $request->no_retur)
+                    ->where('CompanyId', $request->companyid)
+                    ->delete();
 
-                        DB::table('rtoko_dtl')
-                        ->JoinSub(function($query) use ($request){
-                            $query->select('*')
-                            ->from('retur_dtl')
-                            ->where('retur_dtl.no_retur', $request->no_retur);
-                        }, 'retur_dtl', function($join){
-                            $join->on('rtoko_dtl.no_retur', '=', 'retur_dtl.no_klaim')
-                            ->on('rtoko_dtl.kd_part', '=', 'retur_dtl.kd_part');
-                        })
-                        ->update([
-                            'rtoko_dtl.status' => 0
-                        ]);
+                    DB::table('rtoko_dtl')
+                    ->JoinSub(function($query) use ($request){
+                        $query->select('*')
+                        ->from('retur_dtl')
+                        ->where('retur_dtl.CompanyId', $request->companyid)
+                        ->where('retur_dtl.no_retur', $request->no_retur);
+                    }, 'retur_dtl', function($join){
+                        $join->on('rtoko_dtl.no_retur', '=', 'retur_dtl.no_klaim')
+                        ->on('rtoko_dtl.kd_part', '=', 'retur_dtl.kd_part');
+                    })
+                    ->update([
+                        'rtoko_dtl.status' => 0
+                    ]);
 
-                        DB::table('retur_dtl')
-                            ->where('no_retur', $request->no_retur)
-                            ->delete();
-
-                        DB::table('jwb_claim')
-                            ->where('no_retur', $request->no_retur)
-                            ->delete();
-
-                        
-                    }
-                );
+                    DB::table('retur_dtl')
+                    ->where('no_retur', $request->no_retur)
+                    ->where('CompanyId', $request->companyid)
+                    ->delete();
+                });
 
                 return response::responseSuccess('success', '');
             }

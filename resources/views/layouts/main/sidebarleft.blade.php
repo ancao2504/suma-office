@@ -489,7 +489,7 @@
                 </div>
                 @endif
                 
-                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT','MD_H3_SM']))
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">RETUR</span>
@@ -512,6 +512,8 @@
                         <span class="menu-title {{ (Request::is('retur/konsumen*')) ? 'active' : '' }}">Konsumen</span>
                     </a>
                 </div>
+                @endif
+                @if(in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
                 <div class="menu-item">
                     <a class="menu-link {{ (Request::is('retur/supplier*')) ? 'active' : '' }}" href="{{ url('/retur/supplier') }}">
                         <span class="menu-icon">
@@ -531,12 +533,13 @@
                 </div>
                 @endif
 
-                @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_OL_ADMIN', 'MD_REQ_API']))
+                
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">ONLINE</span>
                     </div>
                 </div>
+                @if(in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_OL_ADMIN', 'MD_REQ_API']))
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion {{ (Request::is('online/pemindahan/*')) ? 'here hover show' : '' }}">
                     <span class="menu-link">
                         <span class="menu-icon">

@@ -14,7 +14,7 @@
                 <div class="form-group row mb-2">
                     <label for="no_retur" class="col-sm-2 col-form-label">No Klaim</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="no_retur" name="no_retur" value="{{ session('app_user_id') }}" disabled>
+                        <input type="text" class="form-control" id="no_retur" name="no_retur" value="{{ $data->no_dokumen??session('app_user_id') }}" disabled>
                     </div>
                 </div>
                 <div class="form-group row mb-2">
@@ -143,7 +143,7 @@
                                 <td class="text-center">
                                     @if ($detail->sts_min == 1)
                                         <span class="badge badge-light-info">Minimum</span>
-                                    @elseif ($detail->sts_min == 2)
+                                    @elseif ($detail->sts_min == 0)
                                         <span class="badge badge-light-info">Tidak</span>
                                     @endif
                                 </td>

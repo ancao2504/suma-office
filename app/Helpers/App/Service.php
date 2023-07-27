@@ -1964,6 +1964,7 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
+            'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
             'option'        => $request->option,
             'no_retur'      => trim($request->no_retur),
             'page'          => $request->page ?? 1,
@@ -1995,6 +1996,8 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
+            'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
+            'tamp'          => $request->tamp,
             'option'        => trim($request->option),
             // ! data Header
             'no_retur'      => $request->no_retur,

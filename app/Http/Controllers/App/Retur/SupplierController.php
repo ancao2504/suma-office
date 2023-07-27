@@ -85,49 +85,6 @@ class SupplierController extends Controller
     {
         try {
 
-            // $rules = [];
-            // $messages = [];
-
-            // // ! ------------------------------------
-            // // ! Jika menambahkan validasi
-            // if($request->no_retur == $request->user_id){
-            //     if(!empty($request->pc) && $request->pc == 1){
-            //         $rules += ['kd_cabang' => 'required'];
-            //         $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
-            //     } else {
-            //         $rules += ['kd_dealer' => 'required'];
-            //         $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
-            //     }
-
-            //     if(!empty($request->kd_part)){
-            //         $rules += [
-            //             'kd_part' => 'required',
-            //             'qty_retur' => 'required|numeric|min:1',
-            //             'sts_stock' => 'required',
-            //             'sts_klaim' => 'required',
-            //             'sts_min' => 'required',
-            //         ];
-            //         $messages += [
-            //             'kd_part.required' => 'Part Number Kososng',
-            //             'qty_retur.required' => 'QTY Claim Kososng',
-            //             'qty_retur.min' => 'QTY Pada Claim Minimal 1',
-            //             'sts_stock.required' => 'Status Stock Kososng',
-            //             'sts_klaim.required' => 'Status Retur Kososng',
-            //             'sts_min.required' => 'Status Min Kososng',
-            //         ];
-            //     }
-            // }
-            // // ! megecek validasi dan menampilkan pesan error
-            // // ! ------------------------------------
-            // $validate = Validator::make($request->all(), $rules,$messages);
-            // if ($validate->fails()) {
-            //     return Response()->json([
-            //         'status'    => 0,
-            //         'message'   => $validate->errors()->first(),
-            //         'data'      => ''
-            //     ]);
-            // }
-
             if(in_array($request->ket, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'O', 'P'])){
                 match ($request->ket) {
                     'A' => $request->merge(['ket' => 'Karat/Korosi']),

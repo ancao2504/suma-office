@@ -19,25 +19,32 @@ class KonsumenController extends Controller
     public function index(Request $request)
     {
         try {
-            // $rules = [];
-            // $messages = [];
-            // if(!empty($request->option)){
-            //     $rules += [
-            //         'no_retur' => 'required|min:5',
-            //     ];
-            //     $messages += [
-            //         'no_retur.required' => 'Nomor Retur tidak boleh kosong',
-            //         'no_retur.min' => 'Nomor Retur Minimal 5 Karakter',
-            //     ];
-            // }
+            $rules = [
+                'option' => 'required',
+                'companyid' => 'required',
+            ];
+            $messages = [
+                'option.required' => 'Option tidak boleh kosong',
+                'companyid.required' => 'Companyid tidak boleh kosong',
+            ];
 
-            // $validate = Validator::make($request->all(), $rules,$messages);
-            // if ($validate->fails()) {
-            //     return Response::responseWarning($validate->errors()->first());
-            // }
+            if(!empty($request->no_retur)){
+                $rules += [
+                    'no_retur' => 'required|min:5',
+                ];
+                $messages += [
+                    'no_retur.required' => 'Nomor Retur tidak boleh kosong',
+                    'no_retur.min' => 'Nomor Retur Minimal 5 Karakter',
+                ];
+            }
+
+            $validate = Validator::make($request->all(), $rules,$messages);
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
 
             
-            if(empty($request->no_retur) && (!empty($request->option[1]) && $request->option[1] == 'tamp')){
+            if(empty($request->no_retur) && in_array('tamp', $request->option)){
                 $request->merge(['no_retur' => $request->user_id]);
             }
 
@@ -46,7 +53,7 @@ class KonsumenController extends Controller
             }
 
             $request->merge(['tb' => ['klaim','klaim_dtl']]);
-            if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
+            if(in_array('tamp', $request->option)){
                 $request->merge(['tb' => ['klaimTmp','klaim_dtlTmp']]);
             }
 
@@ -75,17 +82,20 @@ class KonsumenController extends Controller
                 $data = $data->where($request->tb[0].'.no_dokumen', 'LIKE', '%'.$request->no_retur.'%');
             }
 
-            if($request->option[0] == 'page'){
+            if(!in_array($request->role_id, ['MD_H3_MGMT'])){
+                $data = $data->where($request->tb[0].'.Kd_sales', $request->user_id);
+            }
+
+            if(in_array('page', $request->option)){
                 $data = $data
-                ->orderBy($request->tb[0].'.status_approve' , 'asc')
-                ->orderBy($request->tb[0].'.tgl_dokumen', 'asc')
-                ->orderBy($request->tb[0].'.no_dokumen', 'asc')
+                ->orderBy($request->tb[0].'.no_dokumen', 'desc')
+                ->orderBy($request->tb[0].'.tgl_dokumen', 'desc')
                 ->paginate($request->per_page);
 
-            } else if($request->option[0] == 'first'){
+            } else if(in_array('first', $request->option)){
                 $data = $data->first();
 
-            } else if($request->option[0] == 'with_detail'){
+            } else if(in_array('with_detail', $request->option)){
                 $data = $data->first();
                 if(!empty($data)){
                     $data_detail = DB::table($request->tb[1])
@@ -137,10 +147,6 @@ class KonsumenController extends Controller
                         ->on('company.kd_rak', '=', 'tbStLokasiRak.Kd_Rak')
                         ->on('part.CompanyId', '=', 'tbStLokasiRak.CompanyId');
                     });
-
-                    if(!empty($request->option[1]) && $request->option[1] == 'tamp'){
-                        $data_detail = $data_detail->where($request->tb[1].'.kd_key', $request->no_retur);
-                    }
                     
                     $data_detail = $data_detail->where($request->tb[1].'.companyid', $request->companyid)
                     ->where($request->tb[1].'.no_dokumen', $request->no_retur)
@@ -205,15 +211,23 @@ class KonsumenController extends Controller
             if ($validate->fails()) {
                 return Response::responseWarning($validate->errors()->first());
             }
+
             $simpan = DB::transaction(function () use ($request) {
+
+                if ($request->no_retur != $request->user_id) {
+                    $request->merge(['table' => ['klaim','klaim_dtl']]);
+                } else {
+                    $request->merge(['table' => ['klaimTmp','klaim_dtlTmp']]);
+                }
                 // ! ======================================================
                 // ! Simpan Data Tamporeri
                 // ! ======================================================
-                if($request->no_retur == $request->user_id){
+                if($request->tamp == 'true'){
+
                     //! simpan pada tabel klaimTmp 
-                    DB::table('klaimTmp')
+                    DB::table($request->table[0])
                     ->updateOrInsert([
-                        'no_dokumen'        => $request->user_id,
+                        'no_dokumen'        => $request->no_retur,
                         'companyid'         => $request->companyid,
                     ],  [
                         'tgl_dokumen'       => $request->tgl_retur,
@@ -227,10 +241,9 @@ class KonsumenController extends Controller
 
                     if(!empty($request->kd_part)){
                         //! simpan pada tabel klaimtmp_dtl
-                        DB::table('klaim_dtlTmp')
+                        DB::table($request->table[1])
                         ->updateOrInsert([
-                            'no_dokumen'    => $request->user_id,
-                            'kd_key'        => $request->user_id,
+                            'no_dokumen'    => $request->no_retur,
                             'companyid'     => $request->companyid,
                             'kd_part'       => $request->kd_part,
                         ], [
@@ -269,10 +282,10 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 // ! Validasi apakah ada produk yang di Klaim
                 // ! ======================================================
-                $data_detail = DB::table('klaim_dtlTmp')
+
+                $data_detail = DB::table($request->table[1])
                 ->select('*')
-                ->where('kd_key', $request->user_id)
-                ->where('no_dokumen', $request->user_id)
+                ->where('no_dokumen', $request->no_retur)
                 ->where('companyid', $request->companyid);
 
                 if(!$data_detail->exists()){
@@ -338,40 +351,31 @@ class KonsumenController extends Controller
                     ];
                 }
 
-                $romawi = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-                // ! lihat kode retur
-                $cek_jenis = DB::table('setting')->lock('with (nolock)')->select('*')->where('CompanyId', $request->companyid)->first();
-                //! lihat kode retur terakhir
-                $cek_number_terakhir = (DB::table('number')->lock('with (nolock)')->select('*')->where('CompanyId', $request->companyid)->where('jenis', $cek_jenis->retur)->orderBy('nomor', 'desc')->first()->nomor?? ($cek_jenis->retur.'00000/0/00'));
-                // ! membuat number retur
-                $number = $cek_jenis->retur . (string)sprintf("%05d", (int)substr($cek_number_terakhir, 2, 5) + 00001) . '/' . (string)$romawi[(int)date('m')] . '/' . substr(date('Y'), 2, 2);
+                if($request->no_retur == $request->user_id){
+                    $romawi = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+                    // ! lihat kode retur
+                    $cek_jenis = DB::table('setting')->lock('with (nolock)')->select('*')->where('CompanyId', $request->companyid)->first();
+                    //! lihat kode retur terakhir
+                    $cek_number_terakhir = (DB::table('number')->lock('with (nolock)')->select('*')->where('CompanyId', $request->companyid)->where('jenis', $cek_jenis->retur)->orderBy('nomor', 'desc')->first()->nomor?? ($cek_jenis->retur.'00000/0/00'));
+                    // ! membuat number retur
+                    $number = $cek_jenis->retur . (string)sprintf("%05d", (int)substr($cek_number_terakhir, 2, 5) + 00001) . '/' . (string)$romawi[(int)date('m')] . '/' . substr(date('Y'), 2, 2);
 
-                // ! tambah number
-                DB::table('number')->insert([
-                    'nomor'     => $number,
-                    'jenis'     => $cek_jenis->retur,
-                    'pakai'     => 1,
-                    'CompanyId' => $request->companyid
-                ]);
-                $request->merge(['no_retur' => $number]);
-
-                //! simpan pada tabel klaim
-                DB::table('klaim')
-                ->updateOrInsert([
-                    'no_dokumen'        => $request->no_retur,
-                    'companyid'         => $request->companyid,
-                ], (array)DB::table('klaimTmp')
-                ->select('tgl_dokumen', 'tgl_entry', 'kd_sales', 'pc', 'kd_dealer', 'status_approve', 'usertime')
-                ->where('no_dokumen', $request->user_id)
-                ->where('companyid', $request->companyid)
-                ->first());
-
+                    // ! tambah number
+                    DB::table('number')->insert([
+                        'nomor'     => $number,
+                        'jenis'     => $cek_jenis->retur,
+                        'pakai'     => 1,
+                        'CompanyId' => $request->companyid
+                    ]);
+                    $request->merge(['no_retur' => $number]);
+                    $request->merge(['hapus_tamp' => true]);
+                }
                 foreach($validasi_stock as $key => $value){
                     
                     // ! ======================================================
                     // ! MINIMUM
                     // ! ======================================================
-                    if($value->sts_min == 1){
+                    if($value->sts_min == 1 && $request->role_id == 'MD_H3_MGMT'){
                         $ket = 'Klaim ' . trim($request->kd_dealer);
     
                         // ! cek apakah part sudah ada pada min_g
@@ -458,7 +462,7 @@ class KonsumenController extends Controller
 
                 // ! filter cek adakah detail yang sts klaim == 1 atau klim ke supplier
                 $data = collect($validasi_stock)->map(function($value, $key) use ($request){
-                    if($value->sts_klaim == '1') {
+                    if($value->sts_klaim == '1' && $request->role_id == 'MD_H3_MGMT') {
                         return [
                             'no_retur' => $request->no_retur,
                             'kd_part' => $value->kd_part,
@@ -486,9 +490,38 @@ class KonsumenController extends Controller
                     DB::table('rtoko_dtl')->insert($data);
                 }
 
-                // ! hapus data tamporeri
-                DB::table('klaimTmp')->where('no_dokumen', $request->user_id)->where('companyid', $request->companyid)->delete();
-                DB::table('klaim_dtlTmp')->where('kd_key', $request->user_id)->where('companyid', $request->companyid)->delete();
+                $header = DB::table($request->table[0])
+                ->select(
+                    DB::raw("'".$request->tgl_retur."' as tgl_dokumen"),
+                    'tgl_entry', 
+                    DB::raw("'".$request->kd_sales."' as kd_sales"),
+                    DB::raw("'".($request->pc??0)."' as pc"),
+                    DB::raw("'".(($request->pc==1)?$request->kd_cabang:$request->kd_dealer)."' as kd_dealer"),
+                    DB::raw("case when '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_approve"),
+                    DB::raw("case when '".count($data)."' = 0 and '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_end"),
+                    'usertime'
+                );
+                if(in_array('klaim', $request->table)){
+                    $header = $header->where('no_dokumen', $request->no_retur);
+                } else {
+                    $header = $header->where('no_dokumen', $request->user_id);
+                }
+                $header =$header->where('companyid', $request->companyid)
+                ->first();
+
+                //! simpan pada tabel klaim
+                DB::table('klaim')
+                ->updateOrInsert([
+                    'no_dokumen'        => $request->no_retur,
+                    'companyid'         => $request->companyid,
+                ], (array)$header);
+
+                if($request->hapus_tamp??false){
+                    // ! hapus data tamporeri
+                    DB::table('klaimTmp')->where('no_dokumen', $request->user_id)->where('companyid', $request->companyid)->delete();
+                    DB::table('klaim_dtlTmp')->where('no_dokumen', $request->user_id)->where('companyid', $request->companyid)->delete();
+                }
+
                 return (object)[
                     'status'    => true,
                     'data'      => $request->no_retur
@@ -546,21 +579,17 @@ class KonsumenController extends Controller
 
                 return response::responseSuccess('success', '');
             } else if ($request->no_retur != $request->user_id){
-                DB::transaction(
-                    function () use ($request) {
-                        if($request->no_retur == $request->user_id){
-                            DB::table('number')
-                                ->where('nomor', $request->no_retur)
-                                ->delete();
-                        }
-                        DB::table($request->tb[0])
-                            ->where('no_dokumen', $request->no_retur)
-                            ->delete();
-                        DB::table($request->tb[1])
-                            ->where('no_dokumen', $request->no_retur)
-                            ->delete();
-                    }
-                );
+                DB::transaction(function () use ($request) {
+                    DB::table('number')
+                        ->where('nomor', $request->no_retur)
+                        ->delete();
+                    DB::table($request->tb[0])
+                        ->where('no_dokumen', $request->no_retur)
+                        ->delete();
+                    DB::table($request->tb[1])
+                        ->where('no_dokumen', $request->no_retur)
+                        ->delete();
+                });
 
                 return response::responseSuccess('success', '');
             }

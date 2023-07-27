@@ -122,7 +122,8 @@ $(document).ready(function () {
         const data = JSON.parse(atob($(this).data('a')));
         $('#list-jwb').html('');
 
-        $('#jwb_modal a.btn_simpan').attr('data-a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
+        // $('#jwb_modal a.btn_simpan').attr('data-a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
+        $('#jwb_modal a.btn_simpan').data('a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
 
         if (data.detail_jwb.length == 0) {
             $('#list-jwb').append(`

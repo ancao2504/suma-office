@@ -29,11 +29,16 @@
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">
-						<th class="w-50px ps-3 pe-3">No</th>
-						<th class="w-100px ps-3 pe-3">No Retur</th>
-						<th class="w-100px ps-3 pe-3">Tanggal</th>
-						<th class="w-100px ps-3 pe-3">Kd Supplier</th>
-						<th class="w-auto ps-3 pe-3">Action</th>
+						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+						<th rowspan="2" class="w-100px ps-3 pe-3">No Retur</th>
+						<th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
+						<th rowspan="2" class="w-100px ps-3 pe-3">Kd Supplier</th>
+						<th colspan="2" class="w-100px ps-3 pe-3">Qty</th>
+						<th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
+					</tr>
+					<tr class="fs-8 fw-bolder text-muted text-center">
+						<th class="w-100px ps-3 pe-3">Retur</th>
+						<th class="w-100px ps-3 pe-3">Jawab</th>
 					</tr>
 				</thead>
 				<tbody class="border">
@@ -53,9 +58,13 @@
 						<td>{{ $a->no_retur }}</td>
 						<td>{{ date('Y/m/d', strtotime($a->tglretur)) }}</td>
 						<td class="text-center">{{ $a->kd_supp }}</td>
+						<td class="text-end">{{ $a->jmlretur??0 }}</td>
+						<td class="text-end">{{ $a->qty_jwb??0 }}</td>
 						<td class="text-center">
 							<a href="{{ route('retur.supplier.jawab.form',['no_retur' => $a->no_retur,]) }}" class="btn-sm btn-icon btn-success text-white d-inline-block mt-1" role="button" data-id="{{ $a->no_retur}}"><span class="bi bi-envelope"></span></a>
+							@if (($a->qty_jwb??0) == 0)
 							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_retur}}"><span class="bi bi-trash"></span></a>
+							@endif
 						</td>
 					</tr>
 					@endforeach

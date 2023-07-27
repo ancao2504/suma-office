@@ -36,7 +36,9 @@ function simpan(tamp){
     $.post(base_url + "/retur/konsumen/form",
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
-            no_retur: ((tamp==true)?$('#no_retur').val():Math.floor(Math.random() * 1000000000) + 1),
+            tamp: tamp,
+
+            no_retur: $('#no_retur').val(),
             kd_sales: $('#kd_sales').val(),
             tgl_retur: $('#tgl_retur').val(),
             kd_dealer: $('#kd_dealer').val(),

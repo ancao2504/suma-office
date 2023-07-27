@@ -54,9 +54,28 @@ class KonsumenController extends Controller
      */
     public function form(Request $request)
     {
-        $request->merge(['option' => ['with_detail','tamp']]);
+        $option = [
+            'with_detail',
+        ];
+
+        if(!empty($request->id)){
+            $request->merge(['no_retur' => base64_decode($request->id)]);
+        } else {
+            array_push($option, 'tamp');
+        }
+
+        $request->merge(['option' => $option]);
         $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
         $statusApiRetur = $responseApiRetur->status;
+
+        if((!empty($request->id) && $statusApiRetur == 1 && !empty($responseApiRetur->data)) && ($responseApiRetur->data->status_approve == 1 || $responseApiRetur->data->status_end == 1)){
+            if($responseApiRetur->data->status_approve == 1){
+                $massege = 'Data Sudah di Approve, tidak bisa diubah';
+            } else if($responseApiRetur->data->status_end == 1){
+                $massege = 'Proses Retur Sudah Selesai, tidak bisa diubah';
+            }
+            return redirect()->route('retur.konsumen.index')->withInput()->with('failed', $massege);
+        }
 
         $request->merge(['option' => 'select']);
         $responseApi_cabang = OptionController::cabang($request)->getData();

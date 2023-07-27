@@ -941,7 +941,8 @@ class ApiOptionsController extends Controller
                 });
 
                 //! ganti select default
-                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi');
+                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi')
+                ->groupBy('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi');
             }
 
             // ! ------------------------------------
@@ -1033,7 +1034,7 @@ class ApiOptionsController extends Controller
                             ->where('rtoko_dtl.CompanyId', $request->companyid);
                             
                             if (!empty($request->no_retur)) {
-                                $query = $query->where('rtoko_dtl.no_dokumen', 'LIKE', '%'.$request->no_retur . '%');
+                                $query = $query->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%');
                             }
 
                             $query = $query->groupBy('rtoko_dtl.no_retur','rtoko_dtl.status','rtoko_dtl.CompanyId');
@@ -1054,8 +1055,10 @@ class ApiOptionsController extends Controller
             if($request->option[0] == 'first'){
                 $data = $data->orderBy('retur.tanggal', 'desc')->first();
             }else if($request->option[0] == 'page'){
-                $data = $data->orderBy('retur.tanggal', 'desc')
+                $data = $data
+                ->orderBy('retur.tanggal', 'desc')
                 ->orderBy('retur.no_retur', 'desc')
+                ->groupBy('retur.no_retur','retur.tanggal')
                 ->paginate($request->per_page);
             }
 

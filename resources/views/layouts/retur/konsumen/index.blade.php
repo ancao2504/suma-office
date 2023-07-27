@@ -34,7 +34,9 @@
 						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')
 						<th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
+						@endif
 					</tr>
 					<tr class="fs-8 fw-bolder text-muted text-center">
 						<th class="w-50px ps-3 pe-3">Dokumen</th>
@@ -67,22 +69,22 @@
 						<td class="text-center">
 							@if ($a->status_approve==1)
 								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
-							@else
-								<i class="fs-1 bi bi-bookmark-x-fill text-danger"></i>
 							@endif
 						</td>
 						<td class="text-center">
 							@if ($a->status_end==1)
 								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
-							@else
-								<i class="fs-1 bi bi-bookmark-x-fill text-danger"></i>
 							@endif
 						</td>
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')
 						<td class="text-center">
-							@if ($a->status_approve!=1)
+							@if ($a->status_approve!=1 && $a->status_end!=1 && session('app_user_role_id') == 'MD_H3_MGMT')
+							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
+							class="btn-sm btn-icon btn-warning d-inline-block mt-1"><span class="bi bi-pencil"></span></a>
 							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_dokumen}}"><span class="bi bi-trash"></span></a>
 							@endif
 						</td>
+						@endif
 					</tr>
 					@endforeach
 					@endif
@@ -120,8 +122,5 @@
 @endsection
 
 @push('scripts')
-<!-- JQuery CDN -->
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> --}}
-
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/index.js') }}?v={{ time() }}"></script>
 @endpush
