@@ -57,7 +57,7 @@ function simpan(request){
                     no_klaim: request.no_klaim,
                     no_retur: request.no_retur,
                     qty_jwb: $('#jml').val().replace(/\./g, ''),
-                    tgl_jwb: moment($('#tgl_claim').val()).format('YYYY-MM-DD'),
+                    tgl_jwb: moment($('#tgl_claim').val()).format('YYYY/MM/DD HH:mm:ss'),
                     usertime: '',
                 });
 
@@ -120,9 +120,11 @@ $(document).ready(function () {
 
     $('#list-klaim .btn_jwb').on('click', function () {
         const data = JSON.parse(atob($(this).data('a')));
+        $('#jwb_no_klaim').html(data.no_klaim);
+        $('#jwb_kd_part').html(data.kd_part);
+
         $('#list-jwb').html('');
 
-        // $('#jwb_modal a.btn_simpan').attr('data-a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
         $('#jwb_modal a.btn_simpan').data('a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
 
         if (data.detail_jwb.length == 0) {

@@ -59,7 +59,7 @@ function simpan(tamp){
                 if(tamp == false){
                     swal.fire({
                         title: 'Perhatian!',
-                        html: response.message + '<br>dengan No Klaim : <b>' + response.data + '</b>',
+                        html: response.message + '<br>dengan No Klaim : <b>' + response.data.no_retur + '</b>'+((response.data.approve==1)?', dan <b>Berhasil di Approve</b>':''),
                         icon: 'success',
                         confirmButtonText: 'OK',
                         customClass: {
@@ -68,7 +68,11 @@ function simpan(tamp){
                         allowOutsideClick: false
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            location.reload();
+                            if(response.data.approve==0){
+                                location.reload();
+                            } else if(response.data.approve==1){
+                                window.location.href = base_url + '/retur/konsumen';
+                            }
                         }
                     });
                     return false;

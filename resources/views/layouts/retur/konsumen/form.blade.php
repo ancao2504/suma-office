@@ -18,20 +18,20 @@
                     </div>
                 </div>
                 <div class="form-group row mb-2">
-                    <label for="kd_sales" class="col-sm-2 col-form-label">Kd Sales</label>
+                    <label for="kd_sales" class="col-sm-2 col-form-label required">Kd Sales</label>
                     <div class="col-sm-4">
                         <select name="kd_sales" id="kd_sales" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Sales">
                             <option></option>
                             {!! $sales !!}
                         </select>
                     </div>
-                    <label for="tgl_claim" class="col-sm-2 col-form-label">Tanggal Retur</label>
+                    <label for="tgl_claim" class="col-sm-2 col-form-label required">Tanggal Retur</label>
                     <div class="col-sm-3">
                         <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}" required>
                     </div>
                 </div>
                 <div class="form-group row mb-2">
-                    <label for="jenis_konsumen" class="col-sm-2 col-form-label">jenis Konsumen</label>
+                    <label for="jenis_konsumen" class="col-sm-2 col-form-label required">jenis Konsumen</label>
                     <div class="col-sm-4">
                         <select name="jenis_konsumen" id="jenis_konsumen" class="form-select form-control" data-placeholder="Pilih Jenis Konsumen">
                             <option value="0" @if (($data->pc??0) != 1) selected @endif>Dealer</option>
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="col-sm-5">
-                            <input type="text" class="form-control" id="nm_dealer" name="nm_dealer" placeholder="Masukkan Nama Dealer" value="{{ ((($data->pc??0) != 1)?($data->nm_dealer??null):null) }}" disabled>
+                            <input type="text" class="form-control" id="nm_dealer" name="nm_dealer" value="{{ ((($data->pc??0) != 1)?($data->nm_dealer??null):null) }}" disabled>
                         </div>
                     </div>
                     <div class="form-group row mb-2">
@@ -58,7 +58,7 @@
                             <textarea type="text" class="form-control" data-kt-autosize="true" id="alamat1" name="alamat1" disabled>{{ ((($data->pc??0) != 1)?($data->alamat1??null):null) }}</textarea>
                         </div>
                         <div class="col-sm-5 mt-3 mt-sm-0">
-                            <input type="text" class="form-control" id="kotasj" name="kotasj" placeholder="Masukkan Dealer" value="{{ ((($data->pc??0) != 1)?($data->kota??null):null) }}" disabled>
+                            <input type="text" class="form-control" id="kotasj" name="kotasj" value="{{ ((($data->pc??0) != 1)?($data->kota??null):null) }}" disabled>
                         </div>
                     </div>
                 </div>
@@ -167,7 +167,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a role="button" class="btn btn-success text-white btn_simpan">Simpan Pengajuan</a>
+            <a role="button" class="btn btn-success text-white btn_simpan">Simpan @if (session('app_user_role_id') == 'MD_H3_MGMT')dan Approve @elseif (session('app_user_role_id') != 'MD_H3_MGMT')Pengajuan @endif</a>
             <a href="{{ Route('retur.konsumen.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>

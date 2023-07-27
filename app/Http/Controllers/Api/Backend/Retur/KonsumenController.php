@@ -82,7 +82,7 @@ class KonsumenController extends Controller
                 $data = $data->where($request->tb[0].'.no_dokumen', 'LIKE', '%'.$request->no_retur.'%');
             }
 
-            if(!in_array($request->role_id, ['MD_H3_MGMT'])){
+            if(!in_array($request->role_id, ['MD_H3_MGMT']) && !in_array('tamp', $request->option)){
                 $data = $data->where($request->tb[0].'.Kd_sales', $request->user_id);
             }
 
@@ -333,7 +333,7 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 $data_error = [];
                 collect($validasi_stock)->filter(function($value, $key) use (&$data_error){
-                    if($value->sts_min == 1 && $value->stock < $value->qty){
+                    if($value->sts_min == 1 && $value->stock < $value->qty && $value->sts_stock == 1){
                         $data_error[] = [
                                 'kd_part'   => $value->kd_part,
                                 'qty'       => $value->qty,
@@ -418,7 +418,7 @@ class KonsumenController extends Controller
                                     'usermin' => $request->user_id,
                                     'tgl' => date('Y-m-d'),
                                     'CompanyId' => $request->companyid,
-                                    'pending' => $request->Pending,//??
+                                    'pending' => $request->Pending, //!
                                     'usertime' => ($request->user_id.date('m/d/Y'))
                                 ]);
                         }
@@ -524,7 +524,10 @@ class KonsumenController extends Controller
 
                 return (object)[
                     'status'    => true,
-                    'data'      => $request->no_retur
+                    'data'      => (object)[
+                        'no_retur' => $request->no_retur,
+                        'approve'  => $header->status_approve
+                    ]
                 ];
             });
 

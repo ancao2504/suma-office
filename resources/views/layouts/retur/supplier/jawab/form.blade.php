@@ -76,8 +76,8 @@
         <div class="modal-content">
             <div class="card-body">
                 <div class="w-100">
-                    <h5 class="d-block">RD00056/VII/23</h5>
-                    <span class="d-block">03962MUC000</span>
+                    <h5 class="d-block mb-0 pb-0" id="jwb_no_klaim">-</h5>
+                    <span class="d-block mt-0 pt-0" id="jwb_kd_part">-</span>
                 </div>
                 <div id="list_jwb" class="table-responsive border rounded-3 mb-10">
                     <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
