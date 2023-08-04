@@ -50,6 +50,7 @@ class SupplierJawabController extends Controller
                 ->where('no_retur', $request->no_retur)
                 ->where('no_klaim', $request->no_klaim)
                 ->where('kd_part', $request->kd_part)
+                ->where('CompanyId', $request->companyid)
                 ->select(
                     DB::raw('isnull(max(no_jwb), 0) as no_jwb'),
                     DB::raw('isnull(sum(qty_jwb), 0) as qty_jwb'), 
@@ -68,7 +69,7 @@ class SupplierJawabController extends Controller
                 ->where('no_retur', $request->no_klaim)
                 ->where('kd_part', $request->kd_part)
                 ->where('CompanyId', $request->companyid)
-                ->select('jumlah')
+                ->select('jumlah','no_klaim')
                 ->first();
 
                 if($request->qty_jwb > $retur->jumlah){
@@ -119,10 +120,11 @@ class SupplierJawabController extends Controller
                         ->where('rtoko.CompanyId', '=', $request->companyid);
                     }, 'rtoko')
                     ->leftJoinSub(function($query) use ($request){
-                        $query->select('*')
+                        $query->select('no_klaim','kd_part',DB::raw('sum(qty_jwb) as qty_jwb'), 'CompanyId')
                         ->from('jwb_claim')
                         ->where('no_klaim', '=', $request->no_klaim)
-                        ->where('CompanyId', '=', $request->companyid);
+                        ->where('CompanyId', '=', $request->companyid)
+                        ->groupBy('no_klaim', 'kd_part', 'CompanyId');
                     }, 'jwb_claim', function($join){
                         $join->on('rtoko.no_retur', '=', 'jwb_claim.no_klaim')
                         ->on('rtoko.kd_part', '=', 'jwb_claim.kd_part')
@@ -135,12 +137,22 @@ class SupplierJawabController extends Controller
                     //! cek jika kosong maka klaim status_end = 1
                     if(count($klaim) == 0){
                         DB::table('klaim')
-                        ->where('no_dokumen', $request->no_klaim)
+                        ->where('no_dokumen', $retur->no_klaim)
                         ->where('companyid', $request->companyid)
                         ->update([
                             'status_end' => 1,
                         ]);
                     }
+
+                    DB::insert('exec SP_jwb_claim_simpan ?, ?, ?, ?, ?, ?, ?', [
+                        $request->user_id,
+                        $request->no_retur,
+                        $request->no_klaim,
+                        $retur->no_klaim,
+                        $request->kd_part,
+                        $request->companyid,
+                        date('d-m-Y')
+                    ]);
                 }
 
                 $jwb = (object)[

@@ -25,9 +25,8 @@ class SupplierController extends Controller
         }
 
         $request->merge(['option' => ['page']]);
-        $responseApi = Service::ReturSupplierDaftar($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+        $responseApi = json_decode(Service::ReturSupplierDaftar($request));
+        $statusApi = $responseApi->status??0;
 
         if ($statusApi == 1) {
             return view(
@@ -37,12 +36,12 @@ class SupplierController extends Controller
                         'no_retur' => $request->no_retur ?? '',
                         'per_page' => $request->per_page ?? 10,
                     ],
-                    'data' => json_decode($responseApi)->data,
+                    'data' => $responseApi->data,
                     'title_menu' => 'Retur Supplier',
                 ]
             );
         }else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
+            return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
         }
     }
 
@@ -55,11 +54,11 @@ class SupplierController extends Controller
     {
         $request->merge(['option' => ['with_detail','tamp']]);
         $responseApiRetur = json_decode(Service::ReturSupplierDaftar($request));
-        $statusApiRetur = $responseApiRetur->status;
+        $statusApiRetur = $responseApiRetur->status??0;
 
         $request->merge(['option' => 'select']);
         $responseApi_supplier = OptionController::supplier($request)->getData();
-        $statusApi_supplier = $responseApi_supplier->status;
+        $statusApi_supplier = $responseApi_supplier->status??0;
 
         if ($statusApi_supplier == 1 && $statusApiRetur == 1) {
             $data = [
@@ -83,8 +82,8 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        try {
 
+        try {
             if(in_array($request->ket, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'O', 'P'])){
                 match ($request->ket) {
                     'A' => $request->merge(['ket' => 'Karat/Korosi']),
@@ -104,10 +103,10 @@ class SupplierController extends Controller
                 };
             }
 
-            $responseApi = Service::ReturSupplierSimpan($request);
-            $statusApi = json_decode($responseApi)->status;
-            $messageApi =  json_decode($responseApi)->message;
-            $data = json_decode($responseApi)->data;
+            $responseApi = json_decode(Service::ReturSupplierSimpan($request));
+            $statusApi = $responseApi->status;
+            $messageApi =  $responseApi->message;
+            $data = $responseApi->data;
 
             if ($statusApi == 1) {
                 return Response()->json([
@@ -125,7 +124,7 @@ class SupplierController extends Controller
         } catch (\Throwable $th) {
             return Response()->json([
                 'status'    => 0,
-                'message'   => 'Terjadi kesalahan pada server',
+                'message'   => 'Maaf terjadi kesalahan, silahkan coba lagi',
                 'data'      => ''
             ], 200);
         }
@@ -149,20 +148,19 @@ class SupplierController extends Controller
             ]);
         }
 
-        $responseApi = Service::ReturSupplierDelete($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+        $responseApi = json_decode(Service::ReturSupplierDelete($request));
+        $statusApi = $responseApi->status??0;
 
         if ($statusApi == 1) {
             return Response()->json([
                 'status'    => 1,
                 'message'   => 'Data berhasil dihapus',
-                'data'      => json_decode($responseApi)->data
+                'data'      => $responseApi->data
             ], 200);
         }else {
             return Response()->json([
                 'status'    => 0,
-                'message'   => $messageApi,
+                'message'   => 'Terjadi kesalahan, silahkan cek jika data masih ada maka belum terhapus',
                 'data'      => ''
             ], 200);
         }

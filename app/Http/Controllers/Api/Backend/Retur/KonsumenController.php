@@ -88,8 +88,8 @@ class KonsumenController extends Controller
 
             if(in_array('page', $request->option)){
                 $data = $data
-                ->orderBy($request->tb[0].'.no_dokumen', 'desc')
-                ->orderBy($request->tb[0].'.tgl_dokumen', 'desc')
+                ->orderBy($request->tb[0].'.status_approve', 'asc')
+                ->orderBy($request->tb[0].'.usertime', 'desc')
                 ->paginate($request->per_page);
 
             } else if(in_array('first', $request->option)){
@@ -275,7 +275,8 @@ class KonsumenController extends Controller
                 ->select('part.kd_part','part.het')
                 ->selectRaw('(ISNULL(tbStLokasiRak.Stock,0) - (ISNULL(stlokasi.min,0) + ISNULL(stlokasi.in_transit,0) + ISNULL(part.kanvas,0) + ISNULL(part.in_transit,0))) as stock')
                 ->addSelect('company.kd_rak','company.kd_lokasi')
-                ->addSelect('klaim_dtlTmp.sts_stock','klaim_dtlTmp.qty','klaim_dtlTmp.no_produksi','klaim_dtlTmp.sts_klaim', 'klaim_dtlTmp.sts_min', 'klaim_dtlTmp.keterangan');
+                ->addSelect('klaim_dtlTmp.sts_stock','klaim_dtlTmp.qty','klaim_dtlTmp.no_produksi','klaim_dtlTmp.sts_klaim', 'klaim_dtlTmp.sts_min', 'klaim_dtlTmp.keterangan')
+                ->addSelect('klaim_dtlTmp.no_dokumen', 'klaim_dtlTmp.companyid');
 
                 // ! jika tombol Simpan
 
@@ -331,175 +332,59 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 // ! Validasi Stock
                 // ! ======================================================
-                $data_error = [];
-                collect($validasi_stock)->filter(function($value, $key) use (&$data_error){
-                    if($value->sts_min == 1 && $value->stock < $value->qty && $value->sts_stock == 1){
-                        $data_error[] = [
-                                'kd_part'   => $value->kd_part,
-                                'qty'       => $value->qty,
-                                'stock'     => $value->stock,
-                                'keterangan'   => 'Stock tidak mencukupi'
-                        ];
-                    }
-                });
-
+                $data_error = collect($validasi_stock)
+                ->where('sts_min',1)
+                ->where('sts_stock',1)
+                // ->where('stock','<','qty')
+                ->filter(function($value, $key){
+                    return (float)$value->stock < (float)$value->qty;
+                })
+                ->map(function($value, $key){
+                    return [
+                        'kd_part'   => $value->kd_part,
+                        'qty'       => $value->qty,
+                        'stock'     => $value->stock,
+                        'keterangan'   => 'Stock tidak mencukupi'
+                    ];
+                })->toArray();
                 if(count($data_error) > 0){
                     return (object)[
                         'status'    => false,
                         'message'   => 'Validasi Stock Gagal',
-                        'data'      => $data_error
+                        'data'      => (array)$data_error
                     ];
                 }
 
                 if($request->no_retur == $request->user_id){
                     $romawi = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-                    // ! lihat kode retur
-                    $cek_jenis = DB::table('setting')->lock('with (nolock)')->select('*')->where('CompanyId', $request->companyid)->first();
-                    //! lihat kode retur terakhir
-                    $cek_number_terakhir = (DB::table('number')->lock('with (nolock)')->select('*')->where('CompanyId', $request->companyid)->where('jenis', $cek_jenis->retur)->orderBy('nomor', 'desc')->first()->nomor?? ($cek_jenis->retur.'00000/0/00'));
-                    // ! membuat number retur
-                    $number = $cek_jenis->retur . (string)sprintf("%05d", (int)substr($cek_number_terakhir, 2, 5) + 00001) . '/' . (string)$romawi[(int)date('m')] . '/' . substr(date('Y'), 2, 2);
 
-                    // ! tambah number
-                    DB::table('number')->insert([
-                        'nomor'     => $number,
-                        'jenis'     => $cek_jenis->retur,
-                        'pakai'     => 1,
-                        'CompanyId' => $request->companyid
-                    ]);
+                    //! lihat kode retur terakhir
+                    $cek_number_terakhir = DB::table('klaim')
+                    ->select('no_dokumen')
+                    ->where('companyid', $request->companyid)
+                    ->whereYear('tgl_dokumen', date('Y'))
+                    ->orderBy('usertime', 'desc')
+                    ->first()->no_dokumen??'KL00000/I/00';
+
+                    // ! membuat number retur
+                    $number = 'KL' . (string)sprintf("%05d", (int)substr($cek_number_terakhir, 2, 5) + 00001) . '/' . (string)$romawi[(int)date('m')] . '/' . substr(date('Y'), 2, 2);
+
                     $request->merge(['no_retur' => $number]);
                     $request->merge(['hapus_tamp' => true]);
                 }
-                foreach($validasi_stock as $key => $value){
-                    
-                    // ! ======================================================
-                    // ! MINIMUM
-                    // ! ======================================================
-                    if($value->sts_min == 1 && $request->role_id == 'MD_H3_MGMT'){
-                        $ket = 'Klaim ' . trim($request->kd_dealer);
-    
-                        // ! cek apakah part sudah ada pada min_g
-                        $exists = DB::table('min_g')
-                        ->select('kd_part')
-                        ->where('kd_part', '=', $value->kd_part)
-                        ->where('min', '=', $value->qty)
-                        ->where('ket', '=', $ket)
-                        ->where('usermin', '=', $request->user_id)
-                        ->where('tgl', '=', date('Y-m-d'))
-                        ->exists();
-    
-                        if (!$exists) {
-                            // ! jika tidak menemukan data yaang sama
-                            DB::table('min_g')
-                                ->insert([
-                                    'kd_part' => $value->kd_part,
-                                    'kd_lokasi' => $value->kd_lokasi,
-                                    'min' => $value->qty,
-                                    'ket' => $ket,
-                                    'usermin' => $request->user_id,
-                                    'pending' => 0,
-                                    'tgl' => date('Y-m-d'),
-                                    'CompanyId' => $request->companyid,
-                                    'usertime' => ($request->user_id.date('m/d/Y'))
-                                ]);
-                        } else {
-                            //! jika menemukan data yang sama maka ubah
-                            DB::table('min_g')
-                                ->where('kd_part', '=', $value->kd_part)
-                                ->where('min', '=', $value->qty)
-                                ->where('ket', '=', $ket)
-                                ->where('usermin', '=', $request->user_id)
-                                ->where('tgl', '=', date('Y-m-d'))
-                                ->update([
-                                    'kd_part' => $value->kd_part,
-                                    'kd_lokasi' => $value->kd_lokasi,
-                                    'min' => $value->qty,
-                                    'ket' => $ket,
-                                    'usermin' => $request->user_id,
-                                    'tgl' => date('Y-m-d'),
-                                    'CompanyId' => $request->companyid,
-                                    'pending' => $request->Pending, //!
-                                    'usertime' => ($request->user_id.date('m/d/Y'))
-                                ]);
-                        }
-    
-                        DB::table('stlokasi')
-                        ->joinSub(function($query) use ($request,$value){
-                            $query->select('CompanyId', 'Kd_Lokasi', 'Kd_part', DB::raw('sum(Min) as min'))
-                            ->from('min_g')
-                            ->where('CompanyId', $request->companyid)
-                            ->where('Kd_part', $value->kd_part)
-                            ->whereRaw('isnull(pending, 0) = 0')
-                            ->groupBy('CompanyId', 'Kd_Lokasi', 'Kd_part');
-                        }, 'a', function($join){
-                            $join->on('stlokasi.CompanyId', '=', 'a.CompanyId')
-                            ->on('stlokasi.kd_lokasi', '=', 'a.Kd_Lokasi')
-                            ->on('stlokasi.kd_part', '=', 'a.Kd_part');
-                        })
-                        ->update(['stlokasi.min' => DB::raw('isnull(a.min, 0)')]);
-                    }
-
-                    //! simpan pada tabel klaim_dtl
-                    DB::table('klaim_dtl')
-                    ->updateOrInsert([
-                        'no_dokumen'    => $request->no_retur,
-                        'kd_part'       => $value->kd_part,
-                        'CompanyId'     => $request->companyid,
-                    ], [
-                        'qty'           => $value->qty,
-                        'no_produksi'   => ($value->no_produksi??null),
-                        'sts_stock'     => ($value->sts_stock??null),
-                        'sts_klaim'     => ($value->sts_klaim??null),
-                        'sts_min'       => ($value->sts_min??null),
-                        'keterangan'    => ($value->keterangan??null),
-                        'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
-                    ]);
-                }
                 
-                // ! ======================================================
-                // ! INSERT RTOKO
-                // ! ======================================================
-
-                // ! filter cek adakah detail yang sts klaim == 1 atau klim ke supplier
-                $data = collect($validasi_stock)->map(function($value, $key) use ($request){
-                    if($value->sts_klaim == '1' && $request->role_id == 'MD_H3_MGMT') {
-                        return [
-                            'no_retur' => $request->no_retur,
-                            'kd_part' => $value->kd_part,
-                            'kd_lokasi' => $value->kd_lokasi,
-                            'Kd_Rak' => $value->kd_rak,
-                            'jumlah' => $value->qty,
-                            'CompanyId' => $request->companyid,
-                            'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id)
-                        ];
-                    } else {
-                        return null;
-                    }
-                })->filter()->values()->toArray();
-                //! jika ada data yang di klaim maka tambahkan rtoko dan rtoko_dtl
-                if(count($data) != 0){
-                    DB::table('rtoko')->insert([
-                        'no_retur' => $request->no_retur,
-                        'tanggal' => date('Y-m-d'),
-                        'kd_dealer' => (($request->pc==1)?$request->kd_cabang:$request->kd_dealer),
-                        'kd_sales' => $request->kd_sales,
-                        'sts_jurnal' => '0',
-                        'Companyid' => $request->companyid,
-                        'usertime' => (date('Y-m-d H:i:s').'='.$request->user_id),
-                    ]);
-                    DB::table('rtoko_dtl')->insert($data);
-                }
-
                 $header = DB::table($request->table[0])
                 ->select(
+                    DB::raw("'".$request->no_retur."' as no_dokumen"),
                     DB::raw("'".$request->tgl_retur."' as tgl_dokumen"),
                     'tgl_entry', 
                     DB::raw("'".$request->kd_sales."' as kd_sales"),
                     DB::raw("'".($request->pc??0)."' as pc"),
                     DB::raw("'".(($request->pc==1)?$request->kd_cabang:$request->kd_dealer)."' as kd_dealer"),
                     DB::raw("case when '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_approve"),
-                    DB::raw("case when '".count($data)."' = 0 and '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_end"),
-                    'usertime'
+                    DB::raw("case when ((".collect($validasi_stock)->where('sts_klaim','1')->count()." = 0 and ".$request->pc." = 0) or (".$request->pc." = 1)) and '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_end"),
+                    'usertime',
+                    DB::raw("'".$request->companyid."' as companyid")
                 );
                 if(in_array('klaim', $request->table)){
                     $header = $header->where('no_dokumen', $request->no_retur);
@@ -509,12 +394,60 @@ class KonsumenController extends Controller
                 $header =$header->where('companyid', $request->companyid)
                 ->first();
 
-                //! simpan pada tabel klaim
-                DB::table('klaim')
-                ->updateOrInsert([
-                    'no_dokumen'        => $request->no_retur,
-                    'companyid'         => $request->companyid,
-                ], (array)$header);
+                if(
+                    DB::table('klaim')
+                    ->where('no_dokumen', $request->no_retur)
+                    ->where('companyid', $request->companyid)
+                    ->doesntExist()
+                ){
+                    // ! simpan pada tabel klaim_dtl
+                    DB::table('klaim_dtl')
+                    ->insert(collect($validasi_stock)->map(function($value, $key) use ($request){
+                        return [
+                            'no_dokumen'    => $request->no_retur,
+                            'kd_part'       => $value->kd_part,
+                            'CompanyId'     => $request->companyid,
+                            'qty'           => $value->qty,
+                            'no_produksi'   => ($value->no_produksi??null),
+                            'sts_stock'     => ($value->sts_stock??null),
+                            'sts_klaim'     => ($value->sts_klaim??null),
+                            'sts_min'       => ($value->sts_min??null),
+                            'keterangan'    => ($value->keterangan??null),
+                            'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
+                        ];
+                    })->toArray());
+
+                    // ! simpan pada tabel klaim
+                    DB::table('klaim')
+                    ->insert((array)$header);
+                } else {
+                    // ! Jika sudah ada data pada tabel klaim maka update dimana jika yang menginput adalah MD_H3_MGMT maka status_approve = 1
+                    DB::table('klaim')
+                    ->where('no_dokumen', $request->no_retur)
+                    ->where('companyid', $request->companyid)
+                    ->update((array)$header);
+                }
+                
+                // ! terdapat minimum, input ke rtoko
+                DB::insert("exec [SP_RToko_Simpan1] ?, ?, ?, ?, ?, ?, ?, ?", [
+                    (string)$request->user_id,
+                    (string)$request->no_retur,
+                    (string)date('d-m-Y'),
+                    (string)$request->kd_sales,
+                    (string)$request->kd_dealer,
+                    $request->pc,
+                    0,
+                    (string)$request->companyid,
+                ]);
+
+                if($request->pc == 0){
+                    $cari = DB::table('rtoko_dtl')
+                    ->where('companyid', $request->companyid)
+                    ->where('no_klaim', $request->no_retur)
+                    ->first();
+
+                    $request->merge(['no_retur' => $cari->no_retur??$request->no_retur]);
+                }
 
                 if($request->hapus_tamp??false){
                     // ! hapus data tamporeri
@@ -526,7 +459,7 @@ class KonsumenController extends Controller
                     'status'    => true,
                     'data'      => (object)[
                         'no_retur' => $request->no_retur,
-                        'approve'  => $header->status_approve
+                        'approve'  => $header->status_approve,
                     ]
                 ];
             });
@@ -581,21 +514,7 @@ class KonsumenController extends Controller
                 });
 
                 return response::responseSuccess('success', '');
-            } else if ($request->no_retur != $request->user_id){
-                DB::transaction(function () use ($request) {
-                    DB::table('number')
-                        ->where('nomor', $request->no_retur)
-                        ->delete();
-                    DB::table($request->tb[0])
-                        ->where('no_dokumen', $request->no_retur)
-                        ->delete();
-                    DB::table($request->tb[1])
-                        ->where('no_dokumen', $request->no_retur)
-                        ->delete();
-                });
-
-                return response::responseSuccess('success', '');
-            }
+            } 
         }catch (\Exception $exception) {
             return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
                         $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));

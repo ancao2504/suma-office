@@ -24,7 +24,7 @@ class SupplierJawabController extends Controller
     {
         $request->merge(['option' => ['with_jwb']]);
         $responseApiRetur = json_decode(Service::ReturSupplierDaftar($request));
-        $statusApiRetur = $responseApiRetur->status;
+        $statusApiRetur = $responseApiRetur->status??0;
 
         if ($statusApiRetur == 1) {
             $data = [
@@ -95,10 +95,10 @@ class SupplierJawabController extends Controller
                 ]);
             }
 
-            $responseApi = Service::ReturSupplierjawabSimpan($request);
-            $statusApi = json_decode($responseApi)->status;
-            $messageApi =  json_decode($responseApi)->message;
-            $data = json_decode($responseApi)->data;
+            $responseApi = json_decode(Service::ReturSupplierjawabSimpan($request));
+            $statusApi = $responseApi->status;
+            $messageApi =  $responseApi->message;
+            $data = $responseApi->data;
 
             if ($statusApi == 1) {
                 return Response()->json([
@@ -116,46 +116,45 @@ class SupplierJawabController extends Controller
         } catch (\Throwable $th) {
             return Response()->json([
                 'status'    => 0,
-                'message'   => 'Terjadi kesalahan pada server',
+                'message'   => 'Maaf terjadi kesalahan, silahkan coba lagi',
                 'data'      => ''
             ], 200);
         }
     }
 
-    public function destroy(Request $request)
-    {
-        $rules = [
-            'no_retur' => 'required',
-        ];
-        $messages = [
-            'no_retur.required' => 'No Retur Tidak Boleh Kososng',
-        ];
+    // public function destroy(Request $request)
+    // {
+    //     $rules = [
+    //         'no_retur' => 'required',
+    //     ];
+    //     $messages = [
+    //         'no_retur.required' => 'No Retur Tidak Boleh Kososng',
+    //     ];
 
-        $validate = Validator::make($request->all(), $rules,$messages);
-        if ($validate->fails()) {
-            return Response()->json([
-                'status'    => 1,
-                'message'   => $validate->errors()->first(),
-                'data'      => ''
-            ]);
-        }
+    //     $validate = Validator::make($request->all(), $rules,$messages);
+    //     if ($validate->fails()) {
+    //         return Response()->json([
+    //             'status'    => 1,
+    //             'message'   => $validate->errors()->first(),
+    //             'data'      => ''
+    //         ]);
+    //     }
 
-        $responseApi = Service::ReturSupplierDelete($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+    //     $responseApi = json_decode(Service::ReturSupplierDelete($request));
+    //     $statusApi = $responseApi->status??0;
 
-        if ($statusApi == 1) {
-            return Response()->json([
-                'status'    => 1,
-                'message'   => 'Data berhasil dihapus',
-                'data'      => json_decode($responseApi)->data
-            ], 200);
-        }else {
-            return Response()->json([
-                'status'    => 0,
-                'message'   => $messageApi,
-                'data'      => ''
-            ], 200);
-        }
-    }
+    //     if ($statusApi == 1) {
+    //         return Response()->json([
+    //             'status'    => 1,
+    //             'message'   => 'Data berhasil dihapus',
+    //             'data'      => $responseApi->data
+    //         ], 200);
+    //     }else {
+    //         return Response()->json([
+    //             'status'    => 0,
+    //             'message'   => 'Terjadi kesalahan, silahkan cek jika data masih ada maka belum terhapus',
+    //             'data'      => ''
+    //         ], 200);
+    //     }
+    // }
 }

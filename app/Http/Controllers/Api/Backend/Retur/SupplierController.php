@@ -56,18 +56,9 @@ class SupplierController extends Controller
 
             
             $request->merge(['tb' => ['retur','retur_dtl']]);
-            if(in_array($request->option, ['tamp'])){
+            if(in_array('tamp', $request->option)){
                 $request->merge(['tb' => ['returtmp','retur_dtltmp']]);
             }
-
-            // $data = DB::table($request->tb[0])
-            // ->lock('with (nolock)')
-            // ->select('*')
-            // ->where($request->tb[0].'.CompanyId', $request->companyid);
-
-            // if(!empty($request->no_retur)){
-            //     $data = $data->where($request->tb[0].'.no_retur', 'LIKE', '%'.$request->no_retur.'%');
-            // }
 
             $data = DB::table(function($query) use ($request){
                 $query->select('*')
@@ -134,7 +125,7 @@ class SupplierController extends Controller
                     }
                     }, $request->tb[1])
                     ->leftJoinSub(function($query) use ($request){
-                        $query->select('part.kd_part', 'part.ket','part.CompanyId')
+                        $query->select('part.kd_part', 'part.ket','part.CompanyId','hrg_pokok')
                         ->from('part')
                         ->where('part.CompanyId', $request->companyid);
                     }, 'part', function($join) use ($request){
@@ -144,6 +135,7 @@ class SupplierController extends Controller
                     ->select(
                         $request->tb[1].'.*',
                         'part.ket as nm_part',
+                        'part.hrg_pokok'
                     )
                     ->orderBy($request->tb[1].'.no_klaim', 'desc')
                     ->get();
@@ -288,6 +280,7 @@ class SupplierController extends Controller
                     //! simpan pada tabel returtmp 
                     DB::table('returtmp')
                     ->updateOrInsert([
+                        'returtmp.Kd_Key'            => $request->user_id,
                         'returtmp.no_retur'          => $request->user_id,
                         'returtmp.CompanyId'         => $request->companyid,
                     ],  [
@@ -307,59 +300,22 @@ class SupplierController extends Controller
                 // ! ======================================================
                 // ! Simpan Data
                 // ! ======================================================
-                $a = DB::table('retur')
-                ->lock('with (nolock)')
-                ->select(DB::raw("CONVERT(INT,isnull(max(substring(no_retur, 1, charindex('/', no_retur) - 1)), 0)) as number"))
-                ->whereYear('tglretur', date('Y'))
-                ->where('CompanyId', $request->companyid)
-                ->groupBy('no_retur')
-                ->orderBy('number', 'desc')
-                ->first();
-
-                $no_retur = ((int)$a->number + 1)."/C/A/".date('Y');
-
-                $data_header_tamp = DB::table('returtmp')
-                ->lock('with (nolock)')
-                ->select('*')
-                ->where('returtmp.no_retur', $request->user_id)
-                ->where('returtmp.CompanyId', $request->companyid)
-                ->first();
-
-                
-                //! simpan pada tabel retur
-                DB::table('retur')
-                ->insert([
-                    'no_retur'          => $no_retur,
-                    'tglretur'          => $data_header_tamp->tglretur,
-                    'Kd_supp'           => $data_header_tamp->kd_supp,
-                    'sts_jurnal'        => ($data_header_tamp->sts_jurnal??0),
-                    'total'             => $data_header_tamp->total,
-                    'CompanyId'         => $data_header_tamp->CompanyId,
-                    'usertime'          => (string)(date('Y-m-d H:i:s').'='.$request->user_id)
+                DB::insert("exec SP_Retur_Simpan1 ?, ?, ?", [
+                    date('d-m-Y', strtotime($request->tgl_retur)),
+                    $request->companyid,
+                    $request->user_id
                 ]);
 
-                $data_detail_tamp = DB::table('retur_dtltmp')
-                ->lock('with (nolock)')
-                ->select(
-                    DB::raw("'".$no_retur."' as no_retur")
-                    , 'no_klaim', 'kd_dealer', 'no_faktur', 'kd_part', 'kd_lokasi', 'jmlretur', 'ket', 'diterima', 'no_produksi', 'tgl_pemakaian', 'tgl_claim', 'tgl_jwb', 'qty_jwb', 'ket_jwb', 'no_ps_klaim', 'jml_ganti', 'add_proc', 'del_proc', 'CompanyId', 'usertime')
-                ->where('retur_dtltmp.no_retur', $request->user_id)
-                ->where('retur_dtltmp.CompanyId', $request->companyid)
-                ->get();
+                $cek = DB::table('retur')
+                ->where('CompanyId', $request->companyid)
+                ->where('tglretur', $request->tgl_retur)
+                ->where('Kd_supp', $request->kd_supp)
+                ->orderBy('no_retur', 'desc');
 
-                $data_detail_tamp = json_decode(json_encode($data_detail_tamp), true);
-
-                //! simpan pada tabel retur_dtl
-                DB::table('retur_dtl')
-                ->insert($data_detail_tamp);
-
-                // ! hapus data tamporeri
-                DB::table('returtmp')->where('no_retur', $request->user_id)->where('companyid', $request->companyid)->delete();
-                DB::table('retur_dtltmp')->where('no_retur', $request->user_id)->where('companyid', $request->companyid)->delete();
 
                 return (object)[
                     'status'    => true,
-                    'data'      => $no_retur
+                    'data'      => $cek->first()->no_retur??''
                 ];
             });
 

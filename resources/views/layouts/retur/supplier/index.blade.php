@@ -62,9 +62,6 @@
 						<td class="text-end">{{ $a->qty_jwb??0 }}</td>
 						<td class="text-center">
 							<a href="{{ route('retur.supplier.jawab.form',['no_retur' => $a->no_retur,]) }}" class="btn-sm btn-icon btn-success text-white d-inline-block mt-1" role="button" data-id="{{ $a->no_retur}}"><span class="bi bi-envelope"></span></a>
-							@if (($a->qty_jwb??0) == 0)
-							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_retur}}"><span class="bi bi-trash"></span></a>
-							@endif
 						</td>
 					</tr>
 					@endforeach

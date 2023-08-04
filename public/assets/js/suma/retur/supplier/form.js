@@ -141,50 +141,7 @@ function simpan(tamp){
                     detail_clear();
                 }
                 if (response.status == '0') {
-                    // if (Array.isArray(response.data) && response.data.length > 0) {
-                    //     $('#warning_modal .modal-title').text(response.message);
-                    //         let view = `
-                    //         <div id="list_detail" class="table-responsive border rounded-3">
-                    //         <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
-                    //             <thead class="border">
-                    //                 <tr class="fs-8 fw-bolder text-muted text-center">
-                    //                     <th rowspan="2" class="w-auto ps-3 pe-3">No</th>
-                    //                     <th rowspan="2" class="w-auto ps-3 pe-3">part Number</th>
-                    //                     <th colspan="2" class="w-auto ps-3 pe-3">Qty</th>
-                    //                     <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
-                    //                     <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
-                    //                 </tr>
-                    //                 <tr class="fs-8 fw-bolder text-muted text-center">
-                    //                     <th class="w-auto ps-3 pe-3">Retur</th>
-                    //                     <th class="w-auto ps-3 pe-3">Stock</th>
-                    //                 </tr>
-                    //             </thead>
-                    //             <tbody id="list-retur">`
-                    //     response.data.forEach(function (data, index) {
-                    //             view += `
-                    //                 <tr class="fw-bolder fs-8 border">
-                    //                     <td class="text-center">${index + 1}</td>
-                    //                     <td>${data.kd_part}</td>
-                    //                     <td class="text-end">${data.qty}</td>
-                    //                     <td class="text-end">${data.stock}</td>
-                    //                     <td class="text-center"><span class="badge badge-light-danger">${data.keterangan}</span></td>
-                    //                     <td class="text-center">
-                    //                         <a role="button" data-key="${data.kd_part}" class="btn_warning_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
-                    //                     </td>
-                    //                 </tr>
-                    //             `;
-                    //     });
-
-                    //     view +=`</tbody>
-                    //         </table>
-                    //     </div>`;
-
-                    //     $('#warning_modal .modal-body').html(view);
-                    //     $('#detail_modal').modal('hide');
-                    //     $('#warning_modal').modal('show');
-                    // } else {
-                        toastr.error(response.message, "Error");
-                    // }
+                    toastr.error(response.message, "Error");
                 }
                 if (response.status == '2') {
                     swal.fire({

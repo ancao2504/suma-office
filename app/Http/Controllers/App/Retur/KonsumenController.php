@@ -26,9 +26,8 @@ class KonsumenController extends Controller
             ]);
         }
         $request->merge(['option' => ['page']]);
-        $responseApi = Service::ReturKonsumenDaftar($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+        $responseApi = json_decode(Service::ReturKonsumenDaftar($request));
+        $statusApi = $responseApi->status??0;
 
         if ($statusApi == 1) {
             return view(
@@ -38,12 +37,12 @@ class KonsumenController extends Controller
                         'no_retur' => $request->no_retur ?? '',
                         'per_page' => $request->per_page ?? 10,
                     ],
-                    'data' => json_decode($responseApi)->data,
+                    'data' => $responseApi->data,
                     'title_menu' => 'Retur Konsumen',
                 ]
             );
         }else {
-            return redirect()->back()->withInput()->with('failed', $messageApi);
+            return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
         }
     }
 
@@ -66,7 +65,7 @@ class KonsumenController extends Controller
 
         $request->merge(['option' => $option]);
         $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
-        $statusApiRetur = $responseApiRetur->status;
+        $statusApiRetur = $responseApiRetur->status??0;
 
         if((!empty($request->id) && $statusApiRetur == 1 && !empty($responseApiRetur->data)) && ($responseApiRetur->data->status_approve == 1 || $responseApiRetur->data->status_end == 1)){
             if($responseApiRetur->data->status_approve == 1){
@@ -79,10 +78,10 @@ class KonsumenController extends Controller
 
         $request->merge(['option' => 'select']);
         $responseApi_cabang = OptionController::cabang($request)->getData();
-        $statusApi_cabang = $responseApi_cabang->status;
+        $statusApi_cabang = $responseApi_cabang->status??0;
 
         $responseApi_sales = OptionController::salesman($request)->getData();
-        $statusApi_sales = $responseApi_sales->status;
+        $statusApi_sales = $responseApi_sales->status??0;
 
         if ($statusApi_sales == 1 && $statusApi_cabang == 1 && $statusApiRetur == 1) {
             $data = [
@@ -141,6 +140,7 @@ class KonsumenController extends Controller
                     ];
                 }
             }
+
             // ! megecek validasi dan menampilkan pesan error
             // ! ------------------------------------
             $validate = Validator::make($request->all(), $rules,$messages);
@@ -151,11 +151,10 @@ class KonsumenController extends Controller
                     'data'      => ''
                 ]);
             }
-            
-            $responseApi = Service::ReturKonsumenSimpan($request);
-            $statusApi = json_decode($responseApi)->status;
-            $messageApi =  json_decode($responseApi)->message;
-            $data = json_decode($responseApi)->data;
+            $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
+            $statusApi = $responseApi->status;
+            $messageApi =  $responseApi->message;
+            $data = $responseApi->data;
 
             if ($statusApi == 1) {
                 return Response()->json([
@@ -173,7 +172,7 @@ class KonsumenController extends Controller
         } catch (\Throwable $th) {
             return Response()->json([
                 'status'    => 2,
-                'message'   => 'Terjadi kesalahan pada server',
+                'message'   => 'Maaf terjadi kesalahan, silahkan coba lagi',
                 'data'      => ''
             ], 200);
         }
@@ -206,20 +205,19 @@ class KonsumenController extends Controller
             ]);
         }
 
-        $responseApi = Service::ReturKonsumenDelete($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+        $responseApi = json_decode(Service::ReturKonsumenDelete($request));
+        $statusApi = $responseApi->status;
 
         if ($statusApi == 1) {
             return Response()->json([
                 'status'    => 1,
                 'message'   => 'Data berhasil dihapus',
-                'data'      => json_decode($responseApi)->data
+                'data'      => $responseApi->data
             ], 200);
         }else {
             return Response()->json([
                 'status'    => 0,
-                'message'   => $messageApi,
+                'message'   => 'Terjadi kesalahan, silahkan cek jika data masih ada maka belum terhapus',
                 'data'      => ''
             ], 200);
         }

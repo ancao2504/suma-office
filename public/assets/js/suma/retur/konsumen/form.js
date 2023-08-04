@@ -59,7 +59,7 @@ function simpan(tamp){
                 if(tamp == false){
                     swal.fire({
                         title: 'Perhatian!',
-                        html: response.message + '<br>dengan No Klaim : <b>' + response.data.no_retur + '</b>'+((response.data.approve==1)?', dan <b>Berhasil di Approve</b>':''),
+                        html: response.message + '<br>dengan No '+((response.data.approve==1)?'Retur':'Klaim')+' : <b>' + response.data.no_retur + '</b>'+((response.data.approve==1)?', dan <b>Berhasil di Approve</b>':''),
                         icon: 'success',
                         confirmButtonText: 'OK',
                         customClass: {
@@ -164,7 +164,7 @@ function simpan(tamp){
                 detail_clear();
             }
             if (response.status == '0') {
-                if (Array.isArray(response.data) && response.data.length > 0) {
+                if ((Array.isArray(response.data) || typeof response.data === 'object') && (response.data.length > 0 || Object.keys(response.data).length > 0)) {
                     $('#warning_modal .modal-title').text(response.message);
                         let view = `
                         <div id="list_detail" class="table-responsive border rounded-3">
@@ -183,7 +183,7 @@ function simpan(tamp){
                                 </tr>
                             </thead>
                             <tbody id="list-retur">`
-                    response.data.forEach(function (data, index) {
+                        $.each(response.data, function (index, data) {
                             view += `
                                 <tr class="fw-bolder fs-8 border">
                                     <td class="text-center">${index + 1}</td>

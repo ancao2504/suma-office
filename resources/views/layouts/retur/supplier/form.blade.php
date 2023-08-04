@@ -44,10 +44,10 @@
                             <th rowspan="2" class="w-100px ps-3 pe-3">No Klaim</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal Klaim</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Part Number</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">Nama Part</th>
+                            <th rowspan="2" class="w-auto ps-3 pe-3">Nama Part</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Qty</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">keterangan</th>
-                            <th rowspan="2" class="min-w-150px ps-3 pe-3">Action</th>
+                            <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted text-center">
                         </tr>

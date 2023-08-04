@@ -10,7 +10,7 @@
 <div class="row gy-5 g-xl-8">
     <div class="card card-xl-stretch shadow">
         <div class="card-body">
-            <h3><span class="text-muted">No Retur : </span>{{ request('no_retur')??'-'}}</h3>
+            <h3><span class="text-muted">No Dokumen : </span>{{ request('no_retur')??'-'}}</h3>
             <div id="list_detail" class="table-responsive border rounded-3">
                 <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
                     <thead class="border">
@@ -41,6 +41,7 @@
                                     'no_retur' => $data->no_retur,
                                     'no_klaim' => $detail->no_klaim,
                                     'kd_part' => $detail->kd_part,
+                                    'harga' => (float)$detail->hrg_pokok,
                                     'detail_jwb' => $detail->detail_jwb
                                 ]
                             @endphp
@@ -141,7 +142,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a role="button" class="btn btn-success text-white btn_simpan" data-a="">Simpan Jawaban</a>
+                <button type="button" class="btn btn-success text-white btn_simpan" data-a="">Simpan Jawaban</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

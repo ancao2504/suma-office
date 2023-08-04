@@ -257,8 +257,6 @@
                         <div class="col-sm-4">
                             <select name="sts_minimum" id="sts_minimum" class="form-select form-control" required>
                                 <option value="">Pilih Status Minimum</option>
-                                {{-- <option value="1">Minimum</option>
-                                <option value="0">Tidak Minimum</option> --}}
                             </select>
                         </div>
                     </div>
@@ -268,9 +266,6 @@
                         <div class="col-sm-4">
                             <select name="sts_klaim" id="sts_klaim" class="form-select form-control" required>
                                 <option value="">Pilih Status Retur</option>
-                                {{-- <option value="1">klaim ke Supplier</option>
-                                <option value="2">Tidak</option> --}}
-                                {{-- <option value="3">Memo Koreksi</option> --}}
                             </select>
                         </div>
                     </div>
@@ -294,16 +289,18 @@
 <div class="modal fade" tabindex="-1" id="part-list">
 </div>
 <!--end::Modal Part data-->
-
 @endsection
 
 @push('scripts')
 <!-- script tambanhan -->
 <script>
-    
     const old = {
         kd_cabang: @json(((($data->pc??0) == 1)?$data->kd_dealer:'')),
-        kd_sales: @json(($data->kd_sales??'')),
+        @if ($data->kd_sales??false)
+            kd_sales:@json(($data->kd_sales??''))
+        @elseif (session('app_user_role_id')=='MD_H3_SM')
+            kd_sales:@json(session('app_user_id'))
+        @endif
     };
     
 </script>

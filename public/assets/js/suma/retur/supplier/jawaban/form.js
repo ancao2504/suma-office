@@ -15,6 +15,7 @@ function formatRibuan(input) {
 }
 
 function simpan(request){
+
     loading.block();
     $.post(base_url + "/retur/supplier/jawab/form",
         {
@@ -125,8 +126,10 @@ $(document).ready(function () {
 
         $('#list-jwb').html('');
 
-        $('#jwb_modal a.btn_simpan').data('a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
+        $('#jwb_modal .btn_simpan').data('a', btoa(JSON.stringify({ no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
 
+        $('#jwb_modal #ca').val(data.harga).trigger('keyup');
+        
         if (data.detail_jwb.length == 0) {
             $('#list-jwb').append(`
                 <tr class="fw-bolder fs-8 border text_not_data">
@@ -151,7 +154,11 @@ $(document).ready(function () {
         });
     });
 
-    $('.btn_simpan').on('click', function () {
+    $('.btn_simpan:not([disabled])').on('click', function () {
+        $(this).attr('disabled', true);
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
         simpan(JSON.parse(atob($(this).data('a'))));
+        $(this).attr('disabled', false);
+        $(this).html('Simpan Jawaban');
     });
 });

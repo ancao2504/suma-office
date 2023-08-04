@@ -26,10 +26,10 @@ function Part(requst){
                         $('#kd_part').addClass('is-invalid');
                         $('#kd_part').removeClass('is-valid');
                     } else {
-                        $('#kd_part').val(data.kd_part);
-                        $('#nm_part').val(data.nm_part);
-                        $('#qty_klaim').val(data.jumlah);
-                        $('#no_produksi').val(data.no_produksi);
+                        $('#kd_part').val(dataJson.kd_part);
+                        $('#nm_part').val(dataJson.nm_part);
+                        $('#qty_klaim').val(dataJson.jumlah);
+                        $('#no_produksi').val(dataJson.no_produksi);
                         $('#kd_part').removeClass('is-invalid');
                         $('#kd_part').addClass('is-valid');
                     }

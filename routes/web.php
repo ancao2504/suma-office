@@ -31,7 +31,6 @@ use App\Retur\KonsumenController as ReturKonsumen;
 use App\Retur\SupplierController as ReturSupplier;
 use App\Retur\SupplierJawabController as ReturSupplierJawab;
 use App\setting\Diskon\DiskonProdukDealerController;
-use App\Claim\SupplierController as ClaimSupplier;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
 use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\ProductController as ProductShopee;
@@ -648,19 +647,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
         });
-
-        // Route::name('claim.')->group(function () {
-        //     Route::name('supplier.')->group(function () {
-        //         Route::controller(ClaimSupplier::class)->group(function () {
-        //             Route::get('/claim/supplier',  'index')->name('index');
-        //             Route::get('/claim/supplier/form',  'form')->name('form');
-        //             Route::post('/claim/supplier/form',  'store')->name('store');
-        //             Route::get('/claim/supplier/edit',  'edit')->name('edit');
-        //             Route::post('/claim/supplier/edit',  'storeDtl')->name('storeDtl');
-        //             Route::post('/claim/supplier/delete',  'destroy')->name('delete');
-        //         });
-        //     });
-        // });
 
         Route::name('report.')->group(function () {
             Route::controller(Controller::class)->group(function () {
