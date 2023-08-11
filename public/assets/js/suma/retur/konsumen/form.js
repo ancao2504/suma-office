@@ -196,7 +196,7 @@ function simpan(tamp){
                                     </td>
                                 </tr>
                             `;
-                    });
+                        });
 
                     view +=`</tbody>
                         </table>

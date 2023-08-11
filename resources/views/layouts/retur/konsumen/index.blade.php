@@ -43,7 +43,8 @@
 						<th class="w-50px ps-3 pe-3">Dokumen</th>
 						<th class="w-50px ps-3 pe-3">Input</th>
 						<th class="w-50px ps-3 pe-3">Sales</th>
-						<th class="w-50px ps-3 pe-3">Dealer/Cabang</th>
+						<th class="w-150px ps-3 pe-3"><span class="badge badge-light-primary">Dealer</span>/
+							<span class="badge badge-light-success">Cabang</span></th>
 						<th class="w-50px ps-3 pe-3">Approve</th>
 						<th class="w-50px ps-3 pe-3">Selesai</th>
 					</tr>
@@ -69,7 +70,13 @@
 						<td>{{ date('Y/m/d', strtotime($a->tgl_dokumen)) }}</td>
 						<td>{{ date('Y/m/d', strtotime($a->tgl_entry)) }}</td>
 						<td class="text-center">{{ $a->kd_sales }}</td>
-						<td class="text-center">{{ $a->kd_dealer }}</td>
+						<td class="text-center">
+							@if ($a->pc == 0)
+								<span class="badge badge-light-primary">{{ $a->kd_dealer }}</span>
+							@else
+								<span class="badge badge-light-success">{{ $a->kd_dealer }}</span>
+							@endif
+						</td>
 						<td class="text-center">
 							@if ($a->status_approve==1)
 								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>

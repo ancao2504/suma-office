@@ -82,7 +82,11 @@
                     <div class="form-group row mb-2">
                         <label for="kd_cabang" class="col-sm-2 col-form-label required">kode Cabang</label>
                         <div class="col-sm-9">
-                            <select name="kd_cabang" id="kd_cabang" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Cabang">
+                            <select name="kd_cabang" id="kd_cabang" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Cabang"
+                            @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                                disabled
+                            @endif
+                            >
                                 <option></option>
                                 {!! $cabang !!}
                             </select>
