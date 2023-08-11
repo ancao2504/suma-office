@@ -74,8 +74,16 @@ class KonsumenController extends Controller
                     $join->on($request->tb[0].'.kd_sales', '=', 'salesman.kd_sales')
                     ->on($request->tb[0].'.companyid', '=', 'salesman.CompanyId');
                 })
+                ->leftJoinSub(function($query) use ($request){
+                    $query->select('no_retur','no_klaim', 'CompanyId')
+                    ->from('rtoko_dtl')
+                    ->where('CompanyId', $request->companyid);
+                }, 'rtoko', function($join) use ($request){
+                    $join->on($request->tb[0].'.no_dokumen', '=', 'rtoko.no_klaim')
+                    ->on($request->tb[0].'.companyid', '=', 'rtoko.CompanyId');
+                })
                 ->lock('with (nolock)')
-                ->select($request->tb[0].'.no_dokumen', $request->tb[0].'.tgl_dokumen', $request->tb[0].'.tgl_entry', $request->tb[0].'.kd_sales', 'salesman.nm_sales', $request->tb[0].'.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota',$request->tb[0].'.status_approve',$request->tb[0].'.status_end',$request->tb[0].'.pc')
+                ->select($request->tb[0].'.no_dokumen','rtoko.no_retur', $request->tb[0].'.tgl_dokumen', $request->tb[0].'.tgl_entry', $request->tb[0].'.kd_sales', 'salesman.nm_sales', $request->tb[0].'.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota',$request->tb[0].'.status_approve',$request->tb[0].'.status_end',$request->tb[0].'.pc')
                 ->where($request->tb[0].'.companyid', $request->companyid);
 
             if(!empty($request->no_retur)){
@@ -88,8 +96,13 @@ class KonsumenController extends Controller
 
             if(in_array('page', $request->option)){
                 $data = $data
+                ->groupBy($request->tb[0].'.no_dokumen','rtoko.no_retur', $request->tb[0].'.tgl_dokumen', $request->tb[0].'.tgl_entry', $request->tb[0].'.kd_sales', 'salesman.nm_sales', $request->tb[0].'.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota',$request->tb[0].'.status_approve',$request->tb[0].'.status_end',$request->tb[0].'.pc',$request->tb[0].'.usertime')
+                ->where($request->tb[0].'.companyid', $request->companyid)
                 ->orderBy($request->tb[0].'.status_approve', 'asc')
-                ->orderBy($request->tb[0].'.usertime', 'desc')
+                ->orderBy($request->tb[0].'.status_end', 'asc')
+                ->orderBy($request->tb[0].'.no_dokumen', 'desc')
+                ->orderBy($request->tb[0].'.usertime', 'asc')
+                ->orderBy($request->tb[0].'.tgl_dokumen', 'desc')
                 ->paginate($request->per_page);
 
             } else if(in_array('first', $request->option)){
@@ -278,8 +291,6 @@ class KonsumenController extends Controller
                 ->addSelect('klaim_dtlTmp.sts_stock','klaim_dtlTmp.qty','klaim_dtlTmp.no_produksi','klaim_dtlTmp.sts_klaim', 'klaim_dtlTmp.sts_min', 'klaim_dtlTmp.keterangan')
                 ->addSelect('klaim_dtlTmp.no_dokumen', 'klaim_dtlTmp.companyid');
 
-                // ! jika tombol Simpan
-
                 // ! ======================================================
                 // ! Validasi apakah ada produk yang di Klaim
                 // ! ======================================================
@@ -428,25 +439,24 @@ class KonsumenController extends Controller
                     ->update((array)$header);
                 }
                 
-                // ! terdapat minimum, input ke rtoko
-                DB::insert("exec [SP_RToko_Simpan1] ?, ?, ?, ?, ?, ?, ?, ?", [
-                    (string)$request->user_id,
-                    (string)$request->no_retur,
-                    (string)date('d-m-Y'),
-                    (string)$request->kd_sales,
-                    (string)$request->kd_dealer,
-                    $request->pc,
-                    0,
-                    (string)$request->companyid,
-                ]);
+                if($request->role_id == 'MD_H3_MGMT'){
+                    // ! terdapat minimum, input ke rtoko
+                    $simpan = DB::select("
+                    SET NOCOUNT ON;
+                    exec [SP_RToko_Simpan1] ?, ?, ?, ?, ?, ?, ?, ?", [
+                        (string)$request->user_id,
+                        (string)$request->no_retur,
+                        (string)date('d-m-Y'),
+                        (string)$request->kd_sales,
+                        (string)$request->kd_dealer,
+                        $request->pc,
+                        0,
+                        (string)$request->companyid
+                    ]);
 
-                if($request->pc == 0){
-                    $cari = DB::table('rtoko_dtl')
-                    ->where('companyid', $request->companyid)
-                    ->where('no_klaim', $request->no_retur)
-                    ->first();
-
-                    $request->merge(['no_retur' => $cari->no_retur??$request->no_retur]);
+                    if($request->pc == 0){
+                        $request->merge(['no_retur' => $simpan[0]->no_retur]);
+                    }
                 }
 
                 if($request->hapus_tamp??false){
@@ -514,7 +524,17 @@ class KonsumenController extends Controller
                 });
 
                 return response::responseSuccess('success', '');
-            } 
+            }
+
+            DB::transaction(function () use ($request) {
+                DB::table($request->tb[0])
+                    ->where('no_dokumen', $request->no_retur)
+                    ->delete();
+                DB::table($request->tb[1])
+                    ->where('no_dokumen', $request->no_retur)
+                    ->delete();
+            });
+            return response::responseSuccess('success', '');
         }catch (\Exception $exception) {
             return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
                         $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));

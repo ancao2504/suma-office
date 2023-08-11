@@ -141,7 +141,7 @@ function simpan(tamp){
                     detail_clear();
                 }
                 if (response.status == '0') {
-                    toastr.error(response.message, "Error");
+                    toastr.warning(response.message, "Peringatan");
                 }
                 if (response.status == '2') {
                     swal.fire({
@@ -178,13 +178,13 @@ function simpan(tamp){
         loading.release();
     } else {
         if ($('#kd_supp').val() == '') {
-            toastr.error('Kode Supplier Tidak Boleh Kosong', "Error");
+            toastr.warning('Kode Supplier Tidak Boleh Kosong', "Peringatan");
             $('#kd_supp').focus();
         } else if ($('#no_klaim').val() == '') {
-            toastr.error('No Klaim Tidak Boleh Kosong', "Error");
+            toastr.warning('No Klaim Tidak Boleh Kosong', "Peringatan");
             $('#no_klaim').focus();
         } else if ($('#kd_part').val() == '') {
-            toastr.error('Kode Part Tidak Boleh Kosong', "Error");
+            toastr.warning('Kode Part Tidak Boleh Kosong', "Peringatan");
             $('#kd_part').focus();
         }
     }
@@ -296,7 +296,7 @@ $(document).ready(function () {
                             }
                         }
                         if (response.status == '0') {
-                            toastr.error(response.message, "Error");
+                            toastr.warning(response.message, "Peringatan");
                         }
                         if (response.status == '2') {
                             swal.fire({

@@ -564,6 +564,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::name('jawab.')->group(function () {
                         Route::controller(ReturSupplierJawab::class)->group(function () {
                             Route::post('/backend/retur/supplier/jawab/simpan',  'store')->name('store');
+                            Route::post('/backend/retur/supplier/jawab/delete',  'destroy')->name('delete');
                         });
                     });
                 });

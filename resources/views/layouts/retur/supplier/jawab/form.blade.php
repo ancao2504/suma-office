@@ -5,12 +5,11 @@
 @endpush
 
 @section('container')
-{{-- @dd($data) --}}
 <!--begin::Row-->
 <div class="row gy-5 g-xl-8">
     <div class="card card-xl-stretch shadow">
         <div class="card-body">
-            <h3><span class="text-muted">No Dokumen : </span>{{ request('no_retur')??'-'}}</h3>
+            <h3><span class="text-muted"></span>{{ request('no_retur')??'-'}}</h3>
             <div id="list_detail" class="table-responsive border rounded-3">
                 <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
                     <thead class="border">
@@ -38,6 +37,7 @@
                             @foreach ($data->detail as $detail)
                             @php
                                 $jwb_detail = (object)[
+                                    'tamp'=>1,
                                     'no_retur' => $data->no_retur,
                                     'no_klaim' => $detail->no_klaim,
                                     'kd_part' => $detail->kd_part,
@@ -52,7 +52,7 @@
                                 <td>{{ ($detail->kd_part??'-') }}</td>
                                 <td>{{ ($detail->nm_part??'-') }}</td>
                                 <td class="text-end">{{ number_format($detail->jmlretur, 0, '.', ',')??'-' }}</td>
-                                <td class="text-end">{{ (!empty($detail->qty_jwb))?number_format($detail->qty_jwb, 0, '.', ','):'-' }}</td>
+                                <td class="text-end">{{ (!empty($detail->qty_jwb))?number_format($detail->qty_jwb, 0, '.', ','):0 }}</td>
                                 <td>{{ ($detail->ket_jwb) }}</td>
                                 <td class="text-center">
                                     <a role="button" data-bs-toggle="modal" href="#jwb_modal" data-a="{{ base64_encode(json_encode($jwb_detail)) }}" class="btn_jwb btn-sm btn-icon btn-success my-1"><span class="bi bi-envelope text-white"></span></a>
@@ -65,6 +65,7 @@
             </div>
         </div>
         <div class="modal-footer">
+            <button type="button" class="btn btn-success text-white btn_simpan" data-a="{{ base64_encode(json_encode((object)['no_retur' => $data->no_retur,'tamp'=>0])) }}">Simpan Semua Jawaban</button>
             <a href="{{ Route('retur.supplier.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
@@ -77,20 +78,20 @@
         <div class="modal-content">
             <div class="card-body">
                 <div class="w-100">
-                    <h5 class="d-block mb-0 pb-0" id="jwb_no_klaim">-</h5>
-                    <span class="d-block mt-0 pt-0" id="jwb_kd_part">-</span>
+                    <span class="d-block mb-0 pb-0 fs-4 fw-bold" id="jwb_no_klaim">-</span>
+                    <span class="d-block mt-0 pt-0 fs-5" id="jwb_kd_part">-</span>
                 </div>
                 <div id="list_jwb" class="table-responsive border rounded-3 mb-10">
                     <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted text-center">
-                                <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3">Qty</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Alasan</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">CA</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Keputusan</th>
                                 <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+                                <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
                             </tr>
                             <tr class="fs-8 fw-bolder text-muted text-center">
                             </tr>
@@ -142,7 +143,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success text-white btn_simpan" data-a="">Simpan Jawaban</button>
+                <button type="button" class="btn btn-success text-white btn_simpan_tmp" data-a="">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

@@ -30,7 +30,8 @@
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">
 						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-						<th rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
+						<th 
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
@@ -50,8 +51,8 @@
 				<tbody class="border">
 					@if (count($data->data) == 0 )
 					<tr>
-						<td colspan="9" class="text-center">
-							<span class="text-active-danger">Tidak ada data</span>
+						<td colspan="10" class="text-center">
+							<span class="fw-bold">Tidak ada data</span>
 						</td>
 					</tr>
 					@else
@@ -62,6 +63,9 @@
 					<tr class="fw-bolder fs-8 border">
 						<td class="text-center">{{  $no++ }}</td>
 						<td>{{ $a->no_dokumen }}</td>
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')
+							<td>{{ $a->no_retur }}</td>
+						@endif
 						<td>{{ date('Y/m/d', strtotime($a->tgl_dokumen)) }}</td>
 						<td>{{ date('Y/m/d', strtotime($a->tgl_entry)) }}</td>
 						<td class="text-center">{{ $a->kd_sales }}</td>
@@ -76,15 +80,18 @@
 								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
 							@endif
 						</td>
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')
 						<td class="text-center">
 							@if ($a->status_approve!=1 && $a->status_end!=1 && session('app_user_role_id') == 'MD_H3_MGMT')
 							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
 							class="btn-sm btn-icon btn-warning d-inline-block mt-1"><span class="bi bi-pencil"></span></a>
 							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_dokumen}}"><span class="bi bi-trash"></span></a>
 							@endif
+							
+							@if ($a->status_approve==1 || session('app_user_role_id') != 'MD_H3_MGMT')
+							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
+							class="btn-sm btn-icon btn-primary d-inline-block mt-1 text-white"><span class="bi bi-eye"></span></a>
+							@endif
 						</td>
-						@endif
 					</tr>
 					@endforeach
 					@endif

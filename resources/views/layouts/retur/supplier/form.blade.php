@@ -35,7 +35,6 @@
             <div class="mb-3">
                 <a role="button" id="add_detail" class="btn btn-primary" data-bs-toggle="modal" href="#detail_modal">Tambah Detail</a>
             </div>
-            {{-- @dd($data->detail) --}}
             <div id="list_detail" class="table-responsive border rounded-3">
                 <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
                     <thead class="border">
@@ -47,7 +46,7 @@
                             <th rowspan="2" class="w-auto ps-3 pe-3">Nama Part</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Qty</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">keterangan</th>
-                            <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
+                            <th rowspan="2" class="min-w-150px ps-3 pe-3">Action</th>
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted text-center">
                         </tr>

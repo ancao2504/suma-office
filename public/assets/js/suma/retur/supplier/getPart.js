@@ -41,7 +41,7 @@ function Part(requst){
                 }
             }
             if (response.status == '0') {
-                toastr.error(response.message, "Error");
+                toastr.warning(response.message, "Peringatan");
             }
             if (response.status == '2') {
                 swal.fire({

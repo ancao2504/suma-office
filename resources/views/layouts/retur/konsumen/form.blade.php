@@ -20,20 +20,32 @@
                 <div class="form-group row mb-2">
                     <label for="kd_sales" class="col-sm-2 col-form-label required">Kd Sales</label>
                     <div class="col-sm-4">
-                        <select name="kd_sales" id="kd_sales" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Sales">
+                        <select name="kd_sales" id="kd_sales" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Sales"
+                        @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                            disabled
+                        @endif
+                        >
                             <option></option>
                             {!! $sales !!}
                         </select>
                     </div>
                     <label for="tgl_claim" class="col-sm-2 col-form-label required">Tanggal Retur</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}" required>
+                        <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}"
+                        @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                            disabled
+                        @endif
+                        >
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="jenis_konsumen" class="col-sm-2 col-form-label required">jenis Konsumen</label>
                     <div class="col-sm-4">
-                        <select name="jenis_konsumen" id="jenis_konsumen" class="form-select form-control" data-placeholder="Pilih Jenis Konsumen">
+                        <select name="jenis_konsumen" id="jenis_konsumen" class="form-select form-control" data-placeholder="Pilih Jenis Konsumen"
+                        @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                            disabled
+                        @endif
+                        >
                             <option value="0" @if (($data->pc??0) != 1) selected @endif>Dealer</option>
                             <option value="1" @if (($data->pc??0) == 1) selected @endif>Cabang</option>
                         </select>
@@ -44,7 +56,11 @@
                         <label for="kd_dealer" class="col-sm-2 col-form-label required">Kd Dealer</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Masukkan Kd Dealer" value="{{ ((($data->pc??0) != 1)?($data->kd_dealer??null):null) }}" required>
+                                <input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Masukkan Kd Dealer" value="{{ ((($data->pc??0) != 1)?($data->kd_dealer??null):null) }}"
+                                @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                                    disabled
+                                @endif
+                                >
                                 <button class="btn btn-primary list-dealer" type="button">Pilih</button>
                             </div>
                         </div>
@@ -74,9 +90,11 @@
                     </div>
                 </div>
             </div>
+            @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
             <div class="mb-3">
                 <a role="button" id="add_detail" class="btn btn-primary" data-bs-toggle="modal" href="#detail_modal">Tambah Detail</a>
             </div>
+            @endif
 
             <div id="list_detail" class="table-responsive border rounded-3">
                 <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
@@ -90,7 +108,9 @@
                             <th rowspan="2" class="w-50px ps-3 pe-3">Qty Ganti</th>
                             <th colspan="3" class="w-50px ps-3 pe-3">status</th>
                             <th rowspan="2" class="min-w-150px ps-3 pe-3">Keterangan</th>
+                            @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
                             <th rowspan="2" class="min-w-150px ps-3 pe-3">Action</th>
+                            @endif
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted text-center">
                             <th class="w-50px ps-3 pe-3">Stock</th>
@@ -101,7 +121,7 @@
                     <tbody id="list-retur">
                         @if (empty($data->detail) || count($data->detail) == 0)
                             <tr class="fw-bolder fs-8 border text_not_data">
-                                <td colspan="13" class="text-center">Tidak ada data</td>
+                                <td colspan="11" class="text-center">Tidak ada data</td>
                             </tr>
                         @else
                             @foreach ($data->detail as $detail)
@@ -155,10 +175,12 @@
                                     @endif
                                 </td>
                                 <td>{{ ($detail->keterangan??'-') }}</td>
+                                @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
                                 <td class="text-center">
                                     <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="{{ base64_encode($dta_edt) }}" class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
                                     <a role="button" data-a="{{ base64_encode($dta_del) }}" class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         @endif
@@ -167,13 +189,16 @@
             </div>
         </div>
         <div class="modal-footer">
+            @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
             <a role="button" class="btn btn-success text-white btn_simpan">Simpan @if (session('app_user_role_id') == 'MD_H3_MGMT')dan Approve @elseif (session('app_user_role_id') != 'MD_H3_MGMT')Pengajuan @endif</a>
+            @endif
             <a href="{{ Route('retur.konsumen.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>
 <!--end::Row-->
 
+@if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
 <!-- Modal warning -->
 <div class="modal fade" id="warning_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-3" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-fullscreen-md-down">
@@ -289,6 +314,8 @@
 <div class="modal fade" tabindex="-1" id="part-list">
 </div>
 <!--end::Modal Part data-->
+@endif
+
 @endsection
 
 @push('scripts')
@@ -302,9 +329,11 @@
             kd_sales:@json(session('app_user_id'))
         @endif
     };
-    
 </script>
+
+@if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getDealer.js') }}?v={{ time() }}"></script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getpart.js') }}?v={{ time() }}"></script>
+@endif
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/form.js') }}?v={{ time() }}"></script>
 @endpush

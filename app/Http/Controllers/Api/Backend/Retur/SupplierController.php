@@ -132,10 +132,21 @@ class SupplierController extends Controller
                         $join->on('part.kd_part', '=', $request->tb[1].'.kd_part')
                         ->on('part.CompanyId', '=', $request->tb[1].'.CompanyId');
                     })
+                    ->leftJoinSub(function($query) use ($request){
+                        $query->select('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim', 'rtoko_dtl.status_end','rtoko_dtl.CompanyId')
+                        ->from('rtoko_dtl')
+                        ->where('rtoko_dtl.CompanyId', $request->companyid)
+                        ->groupBy('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim', 'rtoko_dtl.status_end','rtoko_dtl.CompanyId');
+                    }, 'rtoko_dtl', function($join) use ($request){
+                        $join->on('rtoko_dtl.no_retur', '=', $request->tb[1].'.no_klaim')
+                        ->on('rtoko_dtl.kd_part', '=', $request->tb[1].'.kd_part')
+                        ->on('rtoko_dtl.CompanyId', '=', $request->tb[1].'.CompanyId');
+                    })
                     ->select(
                         $request->tb[1].'.*',
                         'part.ket as nm_part',
-                        'part.hrg_pokok'
+                        'part.hrg_pokok',
+                        'rtoko_dtl.status_end'
                     )
                     ->orderBy($request->tb[1].'.no_klaim', 'desc')
                     ->get();
@@ -143,13 +154,24 @@ class SupplierController extends Controller
                     if(in_array('with_jwb', $request->option)){
                         foreach ($data_detail as $key => $value) {
                             $data_detail[$key]->detail_jwb = DB::table('jwb_claim')
-                            ->select('*')
+                            ->select(
+                                '*',
+                                DB::raw("'".$data_detail[$key]->status_end."' as status_end")
+                                )
                             ->where('jwb_claim.no_retur', $request->no_retur)
                             ->where('jwb_claim.no_klaim', $value->no_klaim)
                             ->where('jwb_claim.kd_part', $value->kd_part)
                             ->where('jwb_claim.CompanyId', $request->companyid)
                             ->orderBy('no_jwb', 'asc')
                             ->get();
+
+                            $detail_jwb = collect($data_detail[$key]->detail_jwb);
+
+                            $data_detail[$key]->qty_jwb = $detail_jwb->sum('qty_jwb');
+
+                            $data_detail[$key]->ket_jwb = 
+                                $detail_jwb->where('keputusan','TERIMA')->sum('qty_jwb').' TERIMA ' .
+                                $detail_jwb->where('keputusan','TOLAK')->sum('qty_jwb').' TOLAK ';
                         }
                     }
 
@@ -330,102 +352,5 @@ class SupplierController extends Controller
             return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
                         $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));
         }
-    }
-
-    public function destroy(Request $request)
-    {
-        try {
-            $rules = [
-                'no_retur' => 'required',
-                'user_id' => 'required',
-                'companyid' => 'required',
-            ];
-            $messages = [
-                'no_retur.required' => 'No Retur Tidak Boleh Kososng',
-                'user_id.required' => 'User Id Tidak Boleh Kososng',
-                'companyid.required' => 'Companyid Tidak Boleh Kososng',
-            ];
-
-            // ! ------------------------------------
-            // ! megecek validasi dan menampilkan pesan error
-            // ! ------------------------------------
-            $validate = Validator::make($request->all(), $rules,$messages);
-            if ($validate->fails()) {
-                return Response::responseWarning($validate->errors()->first());
-            }
-
-            if(!empty($request->kd_part) && !empty($request->no_klaim) && $request->no_retur == $request->user_id){
-                DB::transaction(function () use ($request) {
-                    DB::table('retur_dtltmp')
-                    ->where('retur_dtltmp.Kd_Key', $request->user_id)
-                    ->where('retur_dtltmp.no_retur', $request->user_id)
-                    ->where('retur_dtltmp.CompanyId', $request->companyid)
-                    ->where('retur_dtltmp.no_klaim', $request->no_klaim)
-                    ->where('kd_part', $request->kd_part)
-                    ->delete();
-
-                    DB::table('rtoko_dtl')
-                    ->where('rtoko_dtl.no_retur', $request->no_klaim)
-                    ->where('rtoko_dtl.kd_part', $request->kd_part)
-                    ->where('rtoko_dtl.CompanyId', $request->companyid)
-                    ->update([
-                        'status' => 0
-                    ]);
-
-                    // ! update total sesuai dengan data detail yang ada 
-                    $b = DB::table(function ($query) use ($request) {
-                        $query
-                        ->select('retur_dtltmp.Kd_Key', 'retur_dtltmp.no_retur', DB::raw('isnull(sum(retur_dtltmp.jmlretur), 0) as total'))
-                        ->from('retur_dtltmp')
-                        ->where('retur_dtltmp.Kd_Key', $request->user_id)
-                        ->where('retur_dtltmp.no_retur', $request->user_id)
-                        ->where('retur_dtltmp.CompanyId', $request->companyid)
-                        ->groupBy('retur_dtltmp.Kd_Key', 'retur_dtltmp.no_retur');
-                    },'b')
-                    ->first();
-
-                    DB::table('returtmp')
-                    ->where('kd_key', $request->user_id)
-                    ->where('no_retur', $request->user_id)
-                    ->where('companyid', $request->companyid)
-                    ->update([
-                        'total'             => $b->total??0,
-                    ]);
-                });
-
-                return response::responseSuccess('success', '');
-            } else if ($request->no_retur != $request->user_id){
-                DB::transaction(function () use ($request) {
-                    DB::table('retur')
-                    ->where('no_retur', $request->no_retur)
-                    ->where('CompanyId', $request->companyid)
-                    ->delete();
-
-                    DB::table('rtoko_dtl')
-                    ->JoinSub(function($query) use ($request){
-                        $query->select('*')
-                        ->from('retur_dtl')
-                        ->where('retur_dtl.CompanyId', $request->companyid)
-                        ->where('retur_dtl.no_retur', $request->no_retur);
-                    }, 'retur_dtl', function($join){
-                        $join->on('rtoko_dtl.no_retur', '=', 'retur_dtl.no_klaim')
-                        ->on('rtoko_dtl.kd_part', '=', 'retur_dtl.kd_part');
-                    })
-                    ->update([
-                        'rtoko_dtl.status' => 0
-                    ]);
-
-                    DB::table('retur_dtl')
-                    ->where('no_retur', $request->no_retur)
-                    ->where('CompanyId', $request->companyid)
-                    ->delete();
-                });
-
-                return response::responseSuccess('success', '');
-            }
-        }catch (\Exception $exception) {
-            return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
-                        $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));
-        };
     }
 }

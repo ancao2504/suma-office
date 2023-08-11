@@ -2048,12 +2048,13 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
+            'tamp'          => (boolean)$request->tamp,
             'no_retur'      => $request->no_retur,
             'no_klaim'      => trim($request->no_klaim),
             'kd_part'       => trim($request->kd_part),
-            'qty_jwb'       => $request->qty_jwb,
+            'qty_jwb'       => (float)$request->qty_jwb,
             'alasan'        => $request->alasan,
-            'ca'            => $request->ca,
+            'ca'            => (float)$request->ca,
             'keputusan'     => $request->keputusan,
             'ket'           => $request->ket,
         ];
@@ -2073,16 +2074,17 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
-    public static function ReturSupplierDelete($request)
+    public static function ReturSupplierJwbDelete($request)
     {
-        $url = 'backend/retur/supplier/delete';
+        $url = 'backend/retur/supplier/jawab/delete';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
-            'no_retur'      => $request->no_retur,
-            'no_klaim'      => $request->no_klaim,
-            'kd_part'       => trim($request->kd_part),
+            'no_retur' => $request->no_retur,
+            'no_klaim' => $request->no_klaim,
+            'kd_part' => $request->kd_part,
+            'no_jwb'      => $request->no_jwb,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
