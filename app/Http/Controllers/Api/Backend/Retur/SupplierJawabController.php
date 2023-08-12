@@ -82,7 +82,7 @@ class SupplierJawabController extends Controller
                         || 
                         (!empty($request->no_jwb) && ((float)(collect($jwb)->sum('qty_jwb')??0) - (float)$request->qty_jwb) > (float)$retur->jmlretur)
                     ){
-                        return (object) array('status' => 1, 'message' => 'Jawaban melebihi jumlah klaim');
+                        return (object) array('status' => 0, 'message' => 'Jawaban melebihi jumlah klaim');
                     }
                     // ! data yangakan di simpan atau update
                     $data = [
@@ -142,30 +142,26 @@ class SupplierJawabController extends Controller
                         'ket'       => $cek->terima . ' TERIMA '.$cek->tolak.' TOLAK ',
                         'detail'    => $data
                     ];
-                    return (object) array('status' => 0, 'message' => 'success', 'data' => $data);
+                    return (object) array('status' => 1, 'message' => 'success', 'data' => $data);
                 }
                 // ! Jika inggin simpan Semua Jawaban dan menerapkan memo dna minimum
                 // ! =========================================
-                // dd(DB::select('
-                // SET NOCOUNT ON; 
-                // exec SP_jwb_claim_simpan ?, ?, ?, ?', [
-                //     $request->user_id,
-                //     $request->no_retur,
-                //     $request->companyid,
-                //     date('d-m-Y')
-                // ]));
-
-                DB::insert('exec SP_jwb_claim_simpan ?, ?, ?, ?', [
+                $simpan = DB::select('
+                SET NOCOUNT ON;
+                exec SP_jwb_claim_simpan ?, ?, ?, ?', [
                     $request->user_id,
                     $request->no_retur,
                     $request->companyid,
                     date('d-m-Y')
                 ]);
-
-                return (object) array('status' => 0, 'message' => 'success', 'data' => '');
+                return (object)[
+                    'status'    => (int)$simpan[0]->status,
+                    'message'   => $simpan[0]->message,
+                    'data'      => $simpan[0]->data
+                ];
             });
 
-            if($simpan->status == 0){
+            if($simpan->status == 1){
                 return Response::responseSuccess($simpan->message,$simpan->data);
             }else{
                 return Response::responseWarning($simpan->message);

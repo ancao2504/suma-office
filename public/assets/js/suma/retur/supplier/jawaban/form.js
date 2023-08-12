@@ -16,6 +16,7 @@ function formatRibuan(input) {
 
 function simpan(request){
     loading.block();
+
     let param = {
         _token: $('meta[name="csrf-token"]').attr('content'),
         tamp:request.tamp,

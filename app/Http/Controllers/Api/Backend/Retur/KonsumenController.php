@@ -30,11 +30,11 @@ class KonsumenController extends Controller
 
             if(!empty($request->no_retur)){
                 $rules += [
-                    'no_retur' => 'required|min:5',
+                    'no_retur' => 'required|min:2',
                 ];
                 $messages += [
                     'no_retur.required' => 'Nomor Retur tidak boleh kosong',
-                    'no_retur.min' => 'Nomor Retur Minimal 5 Karakter',
+                    'no_retur.min' => 'Nomor Retur Minimal 2 Karakter',
                 ];
             }
 
@@ -87,7 +87,12 @@ class KonsumenController extends Controller
                 ->where($request->tb[0].'.companyid', $request->companyid);
 
             if(!empty($request->no_retur)){
-                $data = $data->where($request->tb[0].'.no_dokumen', 'LIKE', '%'.$request->no_retur.'%');
+                $data = $data->where(function($query) use ($request){
+                    $query->where($request->tb[0].'.no_dokumen', 'LIKE', '%'.$request->no_retur.'%')
+                    ->orWhere('rtoko.no_retur', 'LIKE', '%'.$request->no_retur.'%')
+                    ->orWhere('salesman.kd_sales', 'LIKE', '%'.$request->no_retur.'%')
+                    ->orWhere('dealer.kd_dealer', 'LIKE', '%'.$request->no_retur.'%');
+                });
             }
 
             if(!in_array($request->role_id, ['MD_H3_MGMT']) && !in_array('tamp', $request->option)){
@@ -520,6 +525,7 @@ class KonsumenController extends Controller
                     DB::table($request->tb[1])
                         ->where('no_dokumen', $request->no_retur)
                         ->where('kd_part', $request->kd_part)
+                        ->where('companyid', $request->companyid)
                         ->delete();
                 });
 
@@ -529,9 +535,11 @@ class KonsumenController extends Controller
             DB::transaction(function () use ($request) {
                 DB::table($request->tb[0])
                     ->where('no_dokumen', $request->no_retur)
+                    ->where('companyid', $request->companyid)
                     ->delete();
                 DB::table($request->tb[1])
                     ->where('no_dokumen', $request->no_retur)
+                    ->where('companyid', $request->companyid)
                     ->delete();
             });
             return response::responseSuccess('success', '');

@@ -87,7 +87,6 @@ class SupplierJawabController extends Controller
                     'data'      => ''
                 ]);
             }
-            // return Service::ReturSupplierjawabSimpan($request);
             $responseApi = json_decode(Service::ReturSupplierjawabSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;

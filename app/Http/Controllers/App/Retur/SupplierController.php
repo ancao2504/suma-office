@@ -105,7 +105,7 @@ class SupplierController extends Controller
                     'P' => $request->merge(['ket' => 'Tidak Order']),
                 };
             }
-
+            // return Service::ReturSupplierSimpan($request);
             $responseApi = json_decode(Service::ReturSupplierSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;
@@ -136,16 +136,18 @@ class SupplierController extends Controller
     public function destroy(Request $request)
     {
         $rules = [
-            'no_retur' => 'required',
+            'no_klaim' => 'required',
+            'kd_part' => 'required',
         ];
         $messages = [
-            'no_retur.required' => 'No Retur Tidak Boleh Kososng',
+            'no_klaim.required' => 'Maaf terjadi kesalahan, silahkan coba lagi',
+            'kd_part.required' => 'Maaf terjadi kesalahan, silahkan coba lagi',
         ];
 
         $validate = Validator::make($request->all(), $rules,$messages);
         if ($validate->fails()) {
             return Response()->json([
-                'status'    => 1,
+                'status'    => 2,
                 'message'   => $validate->errors()->first(),
                 'data'      => ''
             ]);

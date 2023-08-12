@@ -18,10 +18,10 @@
                             <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal Klaim</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">No Klaim</th>
                             <th rowspan="2" class="w-150px ps-3 pe-3">Part Number</th>
-                            <th rowspan="2" class="w-250px ps-3 pe-3">Nama Part</th>
+                            <th rowspan="2" class="w-300px ps-3 pe-3">Nama Part</th>
                             <th colspan="2" class="w-100px ps-3 pe-3">Qty</th>
-                            <th rowspan="2" class="w-250px ps-3 pe-3">Ket Jawab</th>
-                            <th rowspan="2" class="min-w-150px ps-3 pe-3">Action</th>
+                            <th rowspan="2" class="w-150px ps-3 pe-3">Ket Jawab</th>
+                            <th rowspan="2" class="min-w-100px ps-3 pe-3">Action</th>
                         </tr>
                         <tr class="fs-8 fw-bolder text-muted text-center">
                             <th class="ps-3 pe-3">Klaim</th>
@@ -47,7 +47,7 @@
                             @endphp
                             <tr class="fw-bolder fs-8 border" data-key="{{ ($detail->no_klaim.$detail->kd_part) }}">
                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                <td >{{ date('Y/m/d', strtotime($detail->tgl_claim))??'-' }}</td>
+                                <td >{{ $detail->tgl_claim?date('Y/m/d', strtotime($detail->tgl_claim)):'-' }}</td>
                                 <td >{{ $detail->no_klaim }}</td>
                                 <td>{{ ($detail->kd_part??'-') }}</td>
                                 <td>{{ ($detail->nm_part??'-') }}</td>
@@ -64,6 +64,8 @@
                 </table>
             </div>
         </div>
+        <span class="text-muted fs-8"><span class="required"></span>Data <b>qty Jawab</b> sudah memenuhi klaim maka data tersebut akan <b>diproses</b> jika <b>simpan semua jawaban</b></span>
+        <span class="text-muted fs-8"><span class="required"></span>Simpan Semua Jawaban <b>hanya memproses</b> data yang <b>sebelumnya belum diproses</b></span>
         <div class="modal-footer">
             <button type="button" class="btn btn-success text-white btn_simpan" data-a="{{ base64_encode(json_encode((object)['no_retur' => $data->no_retur,'tamp'=>0])) }}">Simpan Semua Jawaban</button>
             <a href="{{ Route('retur.supplier.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>

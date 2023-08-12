@@ -2074,6 +2074,20 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+    public static function ReturSupplierDelete($request)
+    {
+        $url = 'backend/retur/supplier/delete';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_klaim' => $request->no_klaim,
+            'kd_part' => $request->kd_part,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
     public static function ReturSupplierJwbDelete($request)
     {
         $url = 'backend/retur/supplier/jawab/delete';

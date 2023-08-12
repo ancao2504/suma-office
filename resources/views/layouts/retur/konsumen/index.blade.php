@@ -13,7 +13,7 @@
 				<!--begin::Search-->
 				<div class="d-flex align-items-center position-relative my-1">
 					<span class="svg-icon svg-icon-1 position-absolute ms-4"><i class="bi bi-search"></i></span>
-					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search No Dokumen" id="cari" name="cari" value="{{ $old_request->no_retur }}" />
+					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="{{ $old_request->no_retur }}" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, Sales, Dealer/cabang"/>
 				</div>
 				<!--end::Search-->
 			</div>
