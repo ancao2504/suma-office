@@ -57,8 +57,6 @@ function Part(requst){
                 }
             });
         }
-    }).always(function () {
-        loading.release();
     }).fail(function (jqXHR, textStatus, error) {
         $('#part-list .close').trigger('click')
         Swal.fire({
@@ -76,6 +74,7 @@ function Part(requst){
             }
         });
     });
+    loading.release();
 }
 
 

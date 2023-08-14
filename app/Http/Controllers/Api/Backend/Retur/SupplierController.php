@@ -82,7 +82,6 @@ class SupplierController extends Controller
                         'retur_dtl.no_retur',
                         DB::raw('isnull(sum(retur_dtl.jmlretur),0) as jmlretur'),
                         DB::raw('isnull(sum(retur_dtl.qty_jwb),0) as qty_jwb'),
-                        DB::raw('isnull(sum(retur_dtl.jmlretur),0) - isnull(sum(retur_dtl.qty_jwb),0) as belum_jawab'),
                         'retur_dtl.CompanyId'
                     )
                     ->from($request->tb[1])
@@ -95,13 +94,12 @@ class SupplierController extends Controller
                 ->select(
                     $request->tb[0].'.*',
                     'detail.jmlretur',
-                    'detail.qty_jwb',
-                    'detail.belum_jawab'
+                    'detail.qty_jwb'
                 );
 
                 $data = $data
-                ->orderBy('detail.belum_jawab', 'desc')
                 ->orderBy('tglretur', 'desc')
+                ->orderBy('no_retur', 'desc')
                 ->paginate($request->per_page);
             } else if(in_array('first', $request->option)){
                 $data = $data->first();
@@ -140,10 +138,10 @@ class SupplierController extends Controller
                         ->on('part.CompanyId', '=', $request->tb[1].'.CompanyId');
                     })
                     ->leftJoinSub(function($query) use ($request){
-                        $query->select('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim', 'rtoko_dtl.status_end','rtoko_dtl.CompanyId')
+                        $query->select('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim', 'rtoko_dtl.ket','rtoko_dtl.status_end','rtoko_dtl.CompanyId')
                         ->from('rtoko_dtl')
                         ->where('rtoko_dtl.CompanyId', $request->companyid)
-                        ->groupBy('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim', 'rtoko_dtl.status_end','rtoko_dtl.CompanyId');
+                        ->groupBy('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim','rtoko_dtl.ket', 'rtoko_dtl.status_end','rtoko_dtl.CompanyId');
                     }, 'rtoko_dtl', function($join) use ($request){
                         $join->on('rtoko_dtl.no_retur', '=', $request->tb[1].'.no_klaim')
                         ->on('rtoko_dtl.kd_part', '=', $request->tb[1].'.kd_part')
@@ -153,6 +151,7 @@ class SupplierController extends Controller
                         $request->tb[1].'.*',
                         'part.ket as nm_part',
                         'part.hrg_pokok',
+                        'rtoko_dtl.ket as ket_klaim',
                         'rtoko_dtl.status_end'
                     )
                     ->orderBy($request->tb[1].'.no_klaim', 'desc')
@@ -378,11 +377,19 @@ class SupplierController extends Controller
 
             DB::transaction(function () use ($request) {
                 DB::table('retur_dtltmp')
-                    ->where('no_retur', $request->user_id)
-                    ->where('no_klaim', $request->no_klaim)
-                    ->where('kd_part', $request->kd_part)
-                    ->where('CompanyId', $request->companyid)
-                    ->delete();
+                ->where('no_retur', $request->user_id)
+                ->where('no_klaim', $request->no_klaim)
+                ->where('kd_part', $request->kd_part)
+                ->where('CompanyId', $request->companyid)
+                ->delete();
+
+                DB::table('rtoko_dtl')
+                ->where('no_retur', $request->no_klaim)
+                ->where('kd_part', $request->kd_part)
+                ->where('CompanyId', $request->companyid)
+                ->update([
+                    'status' => 0
+                ]);
             });
             return response::responseSuccess('success', '');
         }catch (\Exception $exception) {

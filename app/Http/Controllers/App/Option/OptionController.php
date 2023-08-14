@@ -1800,9 +1800,8 @@ class OptionController extends Controller
                 }
                 
                 if(!empty($request->no_retur)){
-                    $table->tbody[2]->button[0]->data[0]->value = ['kd_part','nm_part','jumlah','no_produksi'];
+                    $table->tbody[2]->button[0]->data[0]->value = ['kd_part','nm_part','jumlah','no_produksi','ket'];
                 }
-
 
                 $respon = view('layouts.option.option', [
                     'data' => $data,

@@ -388,6 +388,29 @@ $(document).ready(function () {
         validasi_sts_stock();
     });
     $("#add_detail").on('click', function (e) {
+        switch (true) {
+            case ($('#kd_sales').val() == ''):
+                toastr.warning('Kode Sales Harus diisi', "Peringatan");
+                $('#kd_sales').focus();
+                return false;
+                break;
+            case ($('#tgl_retur').val() == ''):
+                toastr.warning('Tanggal Retur Harus diisi', "Peringatan");
+                $('#tgl_retur').focus();
+                return false;
+                break;
+            case ($('#jenis_konsumen').val() == '0' && $('#kd_dealer').val() == ''):
+                toastr.warning('Kode Dealer Harus diisi', "Peringatan");
+                $('#kd_dealer').focus();
+                return false;
+                break;
+            case ($('#jenis_konsumen').val() == '1' && $('#kd_cabang').val() == ''):
+                toastr.warning('Kode Cabang Harus diisi', "Peringatan");
+                $('#kd_cabang').focus();
+                return false;
+                break;
+        }
+        $('#detail_modal').modal('show');
         detail_clear();
     });
 

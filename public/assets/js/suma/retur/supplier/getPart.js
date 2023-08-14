@@ -22,7 +22,7 @@ function Part(requst){
                 let dataJson = response.data;
                 if(requst.option[0] == 'first'){
                     if (jQuery.isEmptyObject(dataJson)) {
-                        toastr.error('Part Number Tidak Ditemukan!', "info");
+                        toastr.warning('Part Number Tidak Ditemukan!', "info");
                         $('#kd_part').addClass('is-invalid');
                         $('#kd_part').removeClass('is-valid');
                     } else {
@@ -30,6 +30,7 @@ function Part(requst){
                         $('#nm_part').val(dataJson.nm_part);
                         $('#qty_klaim').val(dataJson.jumlah);
                         $('#no_produksi').val(dataJson.no_produksi);
+                        $('#ket_klaim').val(dataJson.ket);
                         $('#kd_part').removeClass('is-invalid');
                         $('#kd_part').addClass('is-valid');
                     }
@@ -78,7 +79,7 @@ function Part(requst){
         });
         loading.release();
     } else {
-        toastr.error('No Klaim Tidak Boleh Kosong!', "Error");
+        toastr.warning('No Klaim Tidak Boleh Kosong!', "Error");
     }
 }
 
@@ -89,6 +90,7 @@ $('#part-list').on('click','.pilih' ,function () {
     $('#nm_part').val(data.nm_part);
     $('#qty_klaim').val(data.jumlah);
     $('#no_produksi').val(data.no_produksi);
+    $('#ket_klaim').val(data.ket);
     $('#part-list .close').trigger('click')
 })
 

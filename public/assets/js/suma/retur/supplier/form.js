@@ -6,6 +6,7 @@ function detail_clear(){
     $('#no_klaim').removeClass('is-invalid');
     $('#tgl_claim').val('');
     $('#kd_part').val('');
+    $('#ket_klaim').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');
     $('#nm_part').val('');
@@ -22,8 +23,10 @@ function simpan(tamp){
     if($('#kd_supp').val() != ''){
         loading.block();
         let ket = '';
-        if ($('#kode_claim_kualitas').val() == 'I' || $('#kode_claim_non_kualitas').val() == 'Q'){
-            ket = $('#ket').val();
+        if ($('#kode_claim_kualitas').val().split('|')[0] == 'I'){
+            ket = $('#kode_claim_kualitas').val()+$('#ket').val();
+        } else if ($('#kode_claim_non_kualitas').val().split('|')[0] == 'Q'){
+            ket = $('#kode_claim_non_kualitas').val()+$('#ket').val();
         } else if ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == ''){
             ket = $('#kode_claim_kualitas').val();
         } else if ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != ''){
@@ -49,7 +52,6 @@ function simpan(tamp){
                 diterima: $('#diterima').val(),
             },
             function (response) {
-                console.log(response);
                 if (response.status == '1') {
                     if(tamp == false){
                         swal.fire({
@@ -63,7 +65,7 @@ function simpan(tamp){
                             allowOutsideClick: false
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                location.reload();
+                                window.location.href = base_url + '/retur/supplier';
                             }
                         });
                         return false;
@@ -79,14 +81,16 @@ function simpan(tamp){
                         kd_part : $('#kd_part').val(),
                         nm_part : $('#nm_part').val(),
                         ket : (
-                            ($('#kode_claim_kualitas').val() == 'I' || $('#kode_claim_non_kualitas').val() == 'Q')? $('#ket').val() :
+                            ($('#kode_claim_kualitas').val().split('|')[0] == 'I')? $('#kode_claim_kualitas').val()+$('#ket').val() :
+                            ($('#kode_claim_non_kualitas').val().split('|')[0] == 'Q')? $('#kode_claim_non_kualitas').val()+$('#ket').val() :
 
-                            ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas option:selected').text().replace(/\([A-Z]\)/g, "") :
+                            ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas').val() :
 
-                            ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas option:selected').text().replace(/\([A-Z]\)/g, "") : ''
+                            ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas').val() : ''
                         ),
                         jumlah : $('#qty_klaim').val(),
                         diterima : $('#diterima').val(),
+                        ket_klaim : $('#ket_klaim').val(),
                     });
                     let dta_del = JSON.stringify({
                         no_klaim: $('#no_klaim').val(),
@@ -105,13 +109,13 @@ function simpan(tamp){
                                 <td>${$('#kd_part').val()}</td>
                                 <td>${$('#nm_part').val()}</td>
                                 <td class="text-end">${$('#qty_klaim').val()}</td>
-                                <td>${
-                                    ($('#kode_claim_kualitas').val() == 'I' || $('#kode_claim_non_kualitas').val() == 'Q')? $('#ket').val() :
-
-                                    ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas option:selected').text().replace(/\([A-Z]\)/g, "") :
-
-                                    ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas option:selected').text().replace(/\([A-Z]\)/g, "") : '-'
-                                }</td>
+                                <td>${(
+                                    ($('#kode_claim_kualitas').val().split('|')[0] == 'I' || $('#kode_claim_non_kualitas').val().split('|')[0] == 'Q')? $('#ket').val() :
+        
+                                    ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas').val().split('|')[1] :
+        
+                                    ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas').val().split('|')[1] : ''
+                                )}</td>
                                 <td class="text-center">
                                     <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a='${btoa(dta_edt)}' class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
                                     <a role="button" data-a='${btoa(dta_del)}' class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
@@ -125,13 +129,13 @@ function simpan(tamp){
                         $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').find('td:eq(4)').text($('#kd_part').val());
                         $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').find('td:eq(5)').text($('#nm_part').val());
                         $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').find('td:eq(5)').text($('#qty_klaim').val());
-                        $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').find('td:eq(6)').text(
-                            ($('#kode_claim_kualitas').val() == 'I' || $('#kode_claim_non_kualitas').val() == 'Q')? $('#ket').val() :
+                        $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').find('td:eq(6)').text((
+                            ($('#kode_claim_kualitas').val().split('|')[0] == 'I' || $('#kode_claim_non_kualitas').val().split('|')[0] == 'Q')? $('#ket').val() :
 
-                            ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas option:selected').text().replace(/\([A-Z]\)/g, "") :
+                            ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas').val().split('|')[1] :
 
-                            ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas option:selected').text().replace(/\([A-Z]\)/g, "") : '-'
-                        );
+                            ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas').val().split('|')[1] : ''
+                        ));
                         $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').find('td:eq(7)').html(`
                             <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a='${btoa(dta_edt)}' class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
                             <a role="button" data-a='${btoa(dta_del)}' class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
@@ -201,8 +205,17 @@ function edit_detail(val){
     $('#nm_part').val(val.nm_part);
     $('#qty_klaim').val(val.jumlah);
     $('#no_produksi').val(val.no_produksi);
-    $('#kode_claim_kualitas option[value="I').prop('selected', true).trigger('change');
-    $('#ket').val(val.ket);
+    $('#ket_klaim').val(val.ket_klaim);
+
+    if(val.ket.split('|')[0] == 'I' || val.ket.split('|')[0] == 'Q'){
+        $('#kode_claim_kualitas option[value="'+val.ket.split('|')[0]+'|"]').prop('selected', true).trigger('change');
+        $('#kode_claim_non_kualitas option[value="'+val.ket.split('|')[0]+'|"]').prop('selected', true).trigger('change');
+        $('#ket').val(val.ket.split('|')[1]);
+    } else {
+        $('#kode_claim_kualitas option[value="'+val.ket+'"]').prop('selected', true).trigger('change');
+        $('#kode_claim_non_kualitas option[value="'+val.ket+'"]').prop('selected', true).trigger('change');
+        $('#ket').val('');
+    }
     $('#diterima').val(val.diterima);
 }
 
@@ -212,7 +225,6 @@ $(document).ready(function () {
 
     $("#list_detail").on('click','.btn_dtl_edit', function () {
         let val = JSON.parse(atob($(this).data('a')));
-        console.log(val);
         edit_detail(val);
     });
 
@@ -338,6 +350,19 @@ $(document).ready(function () {
     });
     
     $("#add_detail").on('click', function (e) {
+        switch (true) {
+            case ($('#tgl_retur').val() == ''):
+                toastr.warning('Tanggal Retur Harus diisi', "Peringatan");
+                $('#tgl_retur').focus();
+                return false;
+                break;
+            case ($('#kd_supp').val() == ''):
+                toastr.warning('Kode Supplier Harus diisi', "Peringatan");
+                $('#kd_supp').focus();
+                return false;
+                break;
+        }
+        $('#detail_modal').modal('show');
         detail_clear();
     });
 
@@ -359,7 +384,7 @@ $(document).ready(function () {
     });
 
     $('#detail_modal').on('change','#kode_claim_kualitas, #kode_claim_non_kualitas', function () {
-        if($(this).val() == 'I' || $(this).val() == 'Q'){
+        if($(this).val().split('|')[0] == 'I' || $(this).val().split('|')[0] == 'Q'){
             $('#detail_modal  #ket').attr('hidden', false);
         }else{
             $('#detail_modal  #ket').attr('hidden', true);

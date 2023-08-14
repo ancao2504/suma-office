@@ -20,7 +20,7 @@ function Klaim(requst){
             let dataJson = response.data;
             if(requst.option[0] == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.error('No Klaim Tidak Ditemukan atau sudah di tambahkan pada Retur!', "info");
+                    toastr.warning('No Klaim Tidak Ditemukan atau sudah di tambahkan pada Retur!', "info");
                     $('#no_klaim').addClass('is-invalid');
                     $('#no_klaim').removeClass('is-valid');
                 } else {
@@ -80,6 +80,7 @@ function clear_part(){
     $('#nm_part').val('');
     $('#qty_klaim').val('');
     $('#no_produksi').val('');
+    $('#ket_klaim').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');
 }

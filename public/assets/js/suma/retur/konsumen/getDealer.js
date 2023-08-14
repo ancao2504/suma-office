@@ -11,7 +11,7 @@ function Dealer(requst) {
             let dataJson = response.data;
             if(requst.option == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.error('Kd Dealer Tidak Ditemukan!', "info");
+                    toastr.warning('Kd Dealer Tidak Ditemukan!', "info");
                     $('#kd_dealer').addClass('is-invalid');
                     $('#kd_dealer').removeClass('is-valid');
                 } else {

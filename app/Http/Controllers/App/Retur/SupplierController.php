@@ -85,24 +85,24 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-
+        $request->merge(['option' => explode('|', $request->ket)[0]]);
         try {
             if(in_array($request->ket, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'O', 'P'])){
                 match ($request->ket) {
-                    'A' => $request->merge(['ket' => 'Karat/Korosi']),
-                    'B' => $request->merge(['ket' => 'Permukaan Cacat (Jamur, Gores, dll)']),
-                    'C' => $request->merge(['ket' => 'Bengkok/Berubah Bentuk']),
-                    'D' => $request->merge(['ket' => 'Patah/Pecah/Sobek']),
-                    'E' => $request->merge(['ket' => 'Sub Part Tidak lengkap']),
-                    'F' => $request->merge(['ket' => 'Arus Mati (Electric)']),
-                    'G' => $request->merge(['ket' => 'Bocor (Liquid)']),
-                    'H' => $request->merge(['ket' => 'Dimensi Tidak Sesuai Spek']),
-                    'K' => $request->merge(['ket' => 'Jumlah Part Kurang']),
-                    'L' => $request->merge(['ket' => 'Jumlah Part Lebih']),
-                    'M' => $request->merge(['ket' => 'Fisik Part Beda']),
-                    'N' => $request->merge(['ket' => 'Label Beda']),
-                    'O' => $request->merge(['ket' => 'Packaging rusak']),
-                    'P' => $request->merge(['ket' => 'Tidak Order']),
+                    'A' => $request->merge(['ket' => 'A|Karat/Korosi']),
+                    'B' => $request->merge(['ket' => 'B|Permukaan Cacat (Jamur, Gores, dll)']),
+                    'C' => $request->merge(['ket' => 'C|Bengkok/Berubah Bentuk']),
+                    'D' => $request->merge(['ket' => 'D|Patah/Pecah/Sobek']),
+                    'E' => $request->merge(['ket' => 'E|Sub Part Tidak lengkap']),
+                    'F' => $request->merge(['ket' => 'F|Arus Mati (Electric)']),
+                    'G' => $request->merge(['ket' => 'G|Bocor (Liquid)']),
+                    'H' => $request->merge(['ket' => 'H|Dimensi Tidak Sesuai Spek']),
+                    'K' => $request->merge(['ket' => 'K|Jumlah Part Kurang']),
+                    'L' => $request->merge(['ket' => 'L|Jumlah Part Lebih']),
+                    'M' => $request->merge(['ket' => 'M|Fisik Part Beda']),
+                    'N' => $request->merge(['ket' => 'N|Label Beda']),
+                    'O' => $request->merge(['ket' => 'O|Packaging rusak']),
+                    'P' => $request->merge(['ket' => 'P|Tidak Order']),
                 };
             }
             // return Service::ReturSupplierSimpan($request);

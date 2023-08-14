@@ -922,7 +922,7 @@ class ApiOptionsController extends Controller
 
             if(!empty($request->no_retur)){
                 $data = $data->JoinSub(function ($query) use ($request) {
-                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part', 'rtoko_dtl.jumlah','rtoko_dtl.CompanyId')
+                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part', 'rtoko_dtl.jumlah','rtoko_dtl.ket' ,'rtoko_dtl.CompanyId')
                     ->from('rtoko_dtl')
                     ->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%')
                     ->where('rtoko_dtl.CompanyId', $request->companyid)
@@ -941,8 +941,8 @@ class ApiOptionsController extends Controller
                 });
 
                 //! ganti select default
-                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi')
-                ->groupBy('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi');
+                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi','rtoko_dtl.ket')
+                ->groupBy('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi','rtoko_dtl.ket');
             }
 
             // ! ------------------------------------

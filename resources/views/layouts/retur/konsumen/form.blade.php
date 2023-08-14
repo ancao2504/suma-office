@@ -96,7 +96,7 @@
             </div>
             @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
             <div class="mb-3">
-                <a role="button" id="add_detail" class="btn btn-primary" data-bs-toggle="modal" href="#detail_modal">Tambah Detail</a>
+                <a role="button" id="add_detail" class="btn btn-primary" >Tambah Detail</a>
             </div>
             @endif
 

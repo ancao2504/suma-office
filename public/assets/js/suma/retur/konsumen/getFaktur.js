@@ -9,7 +9,7 @@ function Faktur(requst) {
             let dataJson = response.data;
             if(requst.option == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.error('No Faktur Tidak Ditemukan!', "info");
+                    toastr.warning('No Faktur Tidak Ditemukan!', "info");
                     $('#no_faktur').addClass('is-invalid');
                     $('#no_faktur').removeClass('is-valid');
                 } else {

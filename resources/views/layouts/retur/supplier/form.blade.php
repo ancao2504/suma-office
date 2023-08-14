@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <a role="button" id="add_detail" class="btn btn-primary" data-bs-toggle="modal" href="#detail_modal">Tambah Detail</a>
+                <a role="button" id="add_detail" class="btn btn-primary">Tambah Detail</a>
             </div>
             <div id="list_detail" class="table-responsive border rounded-3">
                 <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
@@ -66,6 +66,7 @@
                                     'kd_part' => $detail->kd_part,
                                     'nm_part' => $detail->nm_part,
                                     'ket' => $detail->ket,
+                                    'ket_klaim' => $detail->ket_klaim,
                                     'jumlah' => $detail->jmlretur,
                                     'diterima' => $detail->diterima,
                                     'no_ps' => $detail->no_ps_klaim,
@@ -83,7 +84,7 @@
                                 <td>{{ ($detail->kd_part??'-') }}</td>
                                 <td>{{ ($detail->nm_part??'-') }}</td>
                                 <td class="text-end">{{ number_format($detail->jmlretur, 0, '.', ',')??'-' }}</td>
-                                <td>{{ ($detail->ket??'-') }}</td>
+                                <td>{{ (explode('|',$detail->ket)[1]??'-') }}</td>
                                 <td class="text-center">
                                     <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="{{ base64_encode($dta_edt) }}" class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
                                     <a role="button" data-a="{{ base64_encode($dta_del) }}" class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
@@ -184,6 +185,12 @@
                 <h3>3. Informasi Retur</h3>
                 <div class="mb-3 border rounded p-2">
                     <div class="form-group row mb-2">
+                        <label for="diterima" class="col-sm-2 col-form-label">Keterangan Pada Klaim</label>
+                        <div class="col-sm-4">
+                            <textarea type="text" class="form-control" data-kt-autosize="true" id="ket_klaim" name="ket_klaim" rows="3" disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
                         <label for="kode_claim" class="col-sm-2 col-form-label">Kode Claim</label>
                         <div class="col-sm-10">
                             <div class="row">
@@ -191,28 +198,28 @@
                                     <label for="kode_claim_kualitas" class="col col-form-label">Claim Kualitas</label>
                                     <select name="kode_claim_kualitas" id="kode_claim_kualitas" class="form-select form-control" data-placeholder="Pilih kode Claim">
                                         <option value="">Pilih Kode Claim</option>
-                                        <option value="A">(A) Karat/Korosi</option>
-                                        <option value="B">(B) Permukaan Cacat (Jamur, Gores, dll)</option>
-                                        <option value="C">(C) Bengkok/Berubah Bentuk</option>
-                                        <option value="D">(D) Patah/Pecah/Sobek</option>
-                                        <option value="E">(E) Sub Part Tidak lengkap</option>
-                                        <option value="F">(F) Arus Mati (Electric)</option>
-                                        <option value="G">(G) Bocor (Liquid)</option>
-                                        <option value="H">(H) Dimensi Tidak Sesuai Spek</option>
-                                        <option value="I">Lainya</option>
+                                        <option value="A|Karat/Korosi">(A) Karat/Korosi</option>
+                                        <option value="B|Permukaan Cacat (Jamur, Gores, dll)">(B) Permukaan Cacat (Jamur, Gores, dll)</option>
+                                        <option value="C|Bengkok/Berubah Bentuk">(C) Bengkok/Berubah Bentuk</option>
+                                        <option value="D|Patah/Pecah/Sobek">(D) Patah/Pecah/Sobek</option>
+                                        <option value="E|Sub Part Tidak lengkap">(E) Sub Part Tidak lengkap</option>
+                                        <option value="F|Arus Mati (Electric)">(F) Arus Mati (Electric)</option>
+                                        <option value="G|Bocor (Liquid)">(G) Bocor (Liquid)</option>
+                                        <option value="H|Dimensi Tidak Sesuai Spek">(H) Dimensi Tidak Sesuai Spek</option>
+                                        <option value="I|">Lainya</option>
                                     </select>
                                 </div>
                                 <div class="col-6">
                                     <label for="kode_claim_non_kualitas" class="col col-form-label">Claim Non Kualitas</label>
                                         <select name="kode_claim_non_kualitas" id="kode_claim_non_kualitas" class="form-select form-control" data-placeholder="Pilih kode Claim">
                                             <option value="">Pilih Kode Claim</option>
-                                            <option value="K">(K) Jumlah Part Kurang</option>
-                                            <option value="L">(L) Jumlah Part Lebih</option>
-                                            <option value="M">(M) Fisik Part Beda</option>
-                                            <option value="N">(N) Label Beda</option>
-                                            <option value="O">(O) Packaging rusak</option>
-                                            <option value="P">(P) Tidak Order</option>
-                                            <option value="Q">lainya</option>
+                                            <option value="K|Jumlah Part Kurang">(K) Jumlah Part Kurang</option>
+                                            <option value="L|Jumlah Part Lebih">(L) Jumlah Part Lebih</option>
+                                            <option value="M|Fisik Part Beda">(M) Fisik Part Beda</option>
+                                            <option value="N|Label Beda">(N) Label Beda</option>
+                                            <option value="O|Packaging rusak">(O) Packaging rusak</option>
+                                            <option value="P|Tidak Order">(P) Tidak Order</option>
+                                            <option value="Q|">lainya</option>
                                         </select>
                                 </div>
                                 <div class="col-12 mt-3">
@@ -227,7 +234,7 @@
                     <div class="form-group row mb-2">
                         <label for="diterima" class="col-sm-2 col-form-label">Diterima Oleh</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="diterima" name="diterima" placeholder="Masukkan Diterima Oleh" value="" required>
+                            <input type="text" class="form-control" id="diterima" name="diterima" placeholder="Diterima Oleh" value="" required>
                         </div>
                     </div>
                 </div>
