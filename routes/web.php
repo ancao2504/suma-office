@@ -2,7 +2,6 @@
 
 use App\Auth\AuthController;
 use App\Profile\UserController;
-use App\data_json\GetController;
 use App\Option\OptionController;
 use App\Orders\FakturController;
 use App\Online\ProductController;
@@ -686,14 +685,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::post('konsumen/store', 'konsumenStore')->name('store');
                 Route::post('konsumen/delete', 'konsumenDelete')->name('delete');
             });
-
-            // // export
-            // Route::name('export.')->group(function () {
-            //     Route::controller(ExportController::class)->group(function () {
-            //         Route::get('reportkonsumen/konsumen/export',  'konsumenExport')->name('daftar');
-            //         Route::get('reportkonsumen/histori/export',  'historyKonsumenExport')->name('histori');
-            //     });
-            // });
         });
         // ! end 
     });
