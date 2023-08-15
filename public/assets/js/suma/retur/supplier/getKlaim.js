@@ -55,6 +55,8 @@ function Klaim(requst){
                 }
             });
         }
+    }).always(function () {
+        loading.release();
     }).fail(function (jqXHR, textStatus, error) {
         $('#klaim-list .close').trigger('click')
         Swal.fire({
@@ -72,7 +74,6 @@ function Klaim(requst){
             }
         });
     });
-    loading.release();
 }
 
 function clear_part(){

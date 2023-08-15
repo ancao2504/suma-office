@@ -5,10 +5,8 @@
 @endpush
 
 @section('container')
-{{-- @dd($errors->all()) --}}
 <div class="row gy-5 g-xl-8">
     <div class="card card-xl-stretch shadow">
-        {{-- matikan default submit --}}
         <form action="{{ Route('gudang.packing.store') }}" method="POST" enctype="multipart/form-data">
             <div class="card-body">
                 @csrf
