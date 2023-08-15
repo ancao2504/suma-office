@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btn_submit">Simpan</button>
+                <button type="button" class="btn btn-success w-100" id="btn_submit">Simpan</button>
             </div>
         </form>
     </div>
