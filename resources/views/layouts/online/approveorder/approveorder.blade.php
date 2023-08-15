@@ -30,7 +30,7 @@
                             <td class="ps-3 pe-3" style="text-align:left;vertical-align:center;">
                                 <div class="d-flex align-items-center">
                                     <div class="symbol symbol-50px me-4">
-                                        @if(strtoupper(trim($data->kode_dealer)) == config('constants.tokopedia.kode_dealer'))
+                                        @if(strtoupper(trim($data->kode_dealer)) == config('constants.app.tokopedia.kode_dealer'))
                                         <span class="symbol-label bg-light-success">
                                             <span class="svg-icon svg-icon-2x svg-icon-success">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -39,7 +39,7 @@
                                                 </svg>
                                             </span>
                                         </span>
-                                        @elseif(strtoupper(trim($data->kode_dealer)) == config('constants.shopee.kode_dealer'))
+                                        @elseif(strtoupper(trim($data->kode_dealer)) == config('constants.app.shopee.kode_dealer'))
                                         <span class="symbol-label bg-light-warning">
                                             <span class="svg-icon svg-icon-2x svg-icon-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -75,9 +75,9 @@
                                 <span class="fs-7 fw-bolder text-gray-800 mb-1">{{ trim($data->nomor_invoice) }}</span>
                             </td>
                             <td class="ps-3 pe-3" style="text-align:center;vertical-align:center;">
-                                @if(strtoupper(trim($data->kode_dealer)) == config('constants.tokopedia.kode_dealer'))
+                                @if(strtoupper(trim($data->kode_dealer)) == config('constants.app.tokopedia.kode_dealer'))
                                 <span class="fs-8 fw-boldest badge badge-light-success">{{ $data->kode_ekspedisi }}</span>
-                                @elseif(strtoupper(trim($data->kode_dealer)) == config('constants.shopee.kode_dealer'))
+                                @elseif(strtoupper(trim($data->kode_dealer)) == config('constants.app.shopee.kode_dealer'))
                                 <span class="fs-8 fw-boldest badge badge-light-warning">{{ $data->kode_ekspedisi }}</span>
                                 @else
                                 <span class="fs-8 fw-boldest badge badge-light-danger">{{ $data->kode_ekspedisi }}</span>
@@ -87,11 +87,11 @@
                                 <span class="fs-7 fw-bolder text-gray-800 mb-1">{{ number_format($data->total) }}</span>
                             </td>
                             <td class="ps-3 pe-3" style="text-align:right;vertical-align:center;">
-                                @if(strtoupper(trim($data->kode_dealer)) == config('constants.tokopedia.kode_dealer'))
+                                @if(strtoupper(trim($data->kode_dealer)) == config('constants.app.tokopedia.kode_dealer'))
                                 <a href="{{ route('online.orders.approveorder.form.tokopedia', trim($data->nomor_invoice)) }}" role="button" class="btn btn-sm btn-icon btn-success">
                                     <i class="fa fa-check text-white"></i>
                                 </a>
-                                @elseif(strtoupper(trim($data->kode_dealer)) == config('constants.shopee.kode_dealer'))
+                                @elseif(strtoupper(trim($data->kode_dealer)) == config('constants.app.shopee.kode_dealer'))
                                 <a href="{{ route('online.orders.approveorder.form.shopee', trim($data->nomor_invoice)) }}" role="button" class="btn btn-sm btn-icon btn-warning">
                                     <i class="fa fa-check text-white"></i>
                                 </a>

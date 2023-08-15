@@ -794,7 +794,7 @@ class ApiOrderController extends Controller
                                         isnull(dealer.kd_dealer, '') as kode_dealer,
                                         isnull(dealer.nm_dealer, '') as nama_dealer
                                 from	dealer with (nolock)
-                                where	dealer.kd_dealer='".config('constants.tokopedia.kode_dealer')."' and
+                                where	dealer.kd_dealer='".config('constants.app.tokopedia.kode_dealer')."' and
                                         dealer.companyid='".$request->get('companyid')."'
                             )	dealer on marketplace.marketplace=dealer.marketplace
                             left join
@@ -1423,7 +1423,7 @@ class ApiOrderController extends Controller
                         select	top 1 dealer.companyid, dealer.kd_dealer, dealer.nm_dealer
                         from	dealer with (nolock)
                         where	dealer.companyid='".strtoupper(trim($request->get('companyid')))."' and
-                                dealer.kd_dealer='".strtoupper(trim(config('constants.tokopedia.kode_dealer')))."'
+                                dealer.kd_dealer='".strtoupper(trim(config('constants.app.tokopedia.kode_dealer')))."'
                     )	dealer on company.companyid=dealer.companyid
                     left join
                     (
@@ -1484,7 +1484,7 @@ class ApiOrderController extends Controller
                 }
                 if(strtoupper(trim($kode_dealer)) == '') {
                     return Response::responseWarning('Data kode dealer
-                        <strong>'.strtoupper(trim(config('constants.tokopedia.kode_dealer'))).'</strong> '.
+                        <strong>'.strtoupper(trim(config('constants.app.tokopedia.kode_dealer'))).'</strong> '.
                         'tidak terdaftar di database internal');
                 }
                 if(strtoupper(trim($kode_ekspedisi)) == '') {
