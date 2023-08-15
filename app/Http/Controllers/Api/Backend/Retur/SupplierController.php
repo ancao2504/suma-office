@@ -70,8 +70,6 @@ class SupplierController extends Controller
                         $query->where($request->tb[0].'.no_retur', 'LIKE', '%'.$request->no_retur.'%')
                         ->orWhere($request->tb[0].'.kd_supp', 'LIKE', '%'.$request->no_retur.'%');
                     });
-                } else {
-                    $query = $query->whereYear($request->tb[0].'.tglretur', '>=', date('Y')-3);
                 }
             }, $request->tb[0]);
 
