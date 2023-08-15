@@ -331,6 +331,16 @@ $(document).ready(function () {
             cekfaktur();
         }
     });
+    $('#company').on('change', function () {
+        $('#lokasi').html('');
+        for (const [key, item] of Object.entries(company[$('input[name="divisi"]:checked').val()].lokasi)) {
+            if(item.companyid == $('#company').val()){
+                item.kd_lokasi.forEach(item => {
+                    $('#lokasi').append(`<option value="${item}">${item}</option>`);
+                });
+            }
+        };
+    });
 
     $("#inputTanggalLahir").flatpickr({
         dateFormat: "d-m-Y",
