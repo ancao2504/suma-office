@@ -71,7 +71,7 @@ class UpdateHargaController extends Controller
             $data_filter->push((object) [
                 'year'          => $year,
                 'month'         => $month,
-                'kode_lokasi'   => config('constants.shopee.kode_lokasi')
+                'kode_lokasi'   => config('constants.app.shopee.kode_lokasi')
             ]);
 
             $data_device = new Collection();

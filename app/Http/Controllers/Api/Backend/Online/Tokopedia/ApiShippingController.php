@@ -75,7 +75,7 @@ class ApiShippingController extends Controller
             $order_id = $dataTokopedia->order_id;
             $data_req_pickup = [
                 'order_id'  => (int)$order_id,
-                'shop_id'   => (int)config('constants.tokopedia.shop_id')
+                'shop_id'   => (int)config('constants.api.tokopedia.shop_id')
             ];
 
             $responseTokopedia = ServiceTokopedia::OrderRequestPickup(trim($token_tokopedia), $data_req_pickup);

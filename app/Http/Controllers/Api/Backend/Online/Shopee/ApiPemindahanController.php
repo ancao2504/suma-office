@@ -45,8 +45,8 @@ class ApiPemindahanController extends Controller
                     ->where('pdh.companyid', trim($request->get('companyid')))
                     ->whereBetween('pdh.tanggal', [ $request->get('start_date'), $request->get('end_date') ])
                     ->where(function($query) {
-                        $query->where('pdh.kd_lokasi1', config('constants.shopee.kode_lokasi'))
-                        ->orWhere('pdh.kd_lokasi2', config('constants.shopee.kode_lokasi'));
+                        $query->where('pdh.kd_lokasi1', config('constants.api.shopee.kode_lokasi'))
+                        ->orWhere('pdh.kd_lokasi2', config('constants.api.shopee.kode_lokasi'));
                     });
 
             if(!empty($request->get('nomor_dokumen')) && trim($request->get('nomor_dokumen')) != '') {
@@ -83,8 +83,8 @@ class ApiPemindahanController extends Controller
                             isnull(part.ket, '') as nama_part,
                             isnull(pdh_dtl.pindah, 0) as pindah,
                             isnull(
-                                iif(pdh.kd_lokasi1='".config('constants.shopee.kode_lokasi')."' and pdh_dtl.sts_mp_awal=1, 1,
-                                iif(pdh.kd_lokasi2='".config('constants.shopee.kode_lokasi')."' and pdh_dtl.sts_mp_tujuan=1, 1, 0)
+                                iif(pdh.kd_lokasi1='".config('constants.api.shopee.kode_lokasi')."' and pdh_dtl.sts_mp_awal=1, 1,
+                                iif(pdh.kd_lokasi2='".config('constants.api.shopee.kode_lokasi')."' and pdh_dtl.sts_mp_tujuan=1, 1, 0)
                             ), 0) as status_mp_detail,
                             isnull(part.shopee_id, '') as product_id,
                             isnull(stlokasi.jumlah, 0) - isnull(stlokasi.in_transit, 0) as stock_suma,
@@ -105,14 +105,14 @@ class ApiPemindahanController extends Controller
                         from	pdh with (nolock)
                         where	pdh.no_dokumen=? and
                                 pdh.companyid=? and
-                                (pdh.kd_lokasi1 = '".config('constants.shopee.kode_lokasi')."' or pdh.kd_lokasi2 = '".config('constants.shopee.kode_lokasi')."')
+                                (pdh.kd_lokasi1 = '".config('constants.api.shopee.kode_lokasi')."' or pdh.kd_lokasi2 = '".config('constants.api.shopee.kode_lokasi')."')
                     )	pdh
                             left join pdh_dtl with (nolock) on pdh.no_dokumen=pdh_dtl.no_dokumen and
                                     pdh.companyid=pdh_dtl.companyid
                             left join part with (nolock) on pdh_dtl.kd_part=part.kd_part and
                                     pdh.companyid=part.companyid
                             left join stlokasi with (nolock) on pdh_dtl.kd_part=stlokasi.kd_part and
-                                    pdh.companyid=stlokasi.companyid and stlokasi.kd_lokasi='".config('constants.shopee.kode_lokasi')."'
+                                    pdh.companyid=stlokasi.companyid and stlokasi.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."'
                     where	isnull(pdh_dtl.pindah, 0) > 0
                     order by pdh_dtl.kd_part asc";
             $sql = DB::select($sql, [ $request->get('nomor_dokumen'), $request->get('companyid')]);
@@ -305,7 +305,7 @@ class ApiPemindahanController extends Controller
                                     isnull(pdh.sts_mp, 0) as status_marketplace,
                                     CASE WHEN isnull(pdh.tgl_in, 0) = 0 THEN 0 ELSE 1 END as validasi
                                     ")
-                        ->whereRaw("(pdh.kd_lokasi1='".config('constants.shopee.kode_lokasi')."' or pdh.kd_lokasi2='".config('constants.shopee.kode_lokasi')."')")
+                        ->whereRaw("(pdh.kd_lokasi1='".config('constants.api.shopee.kode_lokasi')."' or pdh.kd_lokasi2='".config('constants.api.shopee.kode_lokasi')."')")
                         ->where('pdh.no_dokumen', trim($request->get('nomor_dokumen')))
                         ->where('pdh.companyid', $request->get('companyid'))->first();
 
@@ -331,13 +331,13 @@ class ApiPemindahanController extends Controller
                     ->join('stlokasi', function($join) use ($request) {
                         $join->on('pdh_dtl.kd_part', '=', 'stlokasi.kd_part')
                             ->where('stlokasi.companyid', '=', trim($request->get('companyid')))
-                            ->where('stlokasi.kd_lokasi','=',config('constants.shopee.kode_lokasi'));
+                            ->where('stlokasi.kd_lokasi','=',config('constants.api.shopee.kode_lokasi'));
                     })
                     ->where('pdh_dtl.companyid', trim($request->get('companyid')))
                     ->where('pdh_dtl.no_dokumen', trim($request->get('nomor_dokumen')))
                     ->where('pdh_dtl.pindah', '>' , 0);
 
-                    if ($sql_header->lokasi_awal == config('constants.shopee.kode_lokasi')) {
+                    if ($sql_header->lokasi_awal == config('constants.api.shopee.kode_lokasi')) {
                         $sql_detail = $sql_detail->where(function($query) {
                             $query->where('pdh_dtl.sts_mp_awal', '<>', 1)
                             ->orWhereNull('pdh_dtl.sts_mp_awal');
@@ -449,7 +449,7 @@ class ApiPemindahanController extends Controller
             DB::transaction(function () use ($list_produkid_sukses_update, $sql_header, $request) {
                 DB::insert('exec SP_PdhLok_UpdateStsMP_ShopeeAll ?,?,?,?', [
                     trim(strtoupper($sql_header->nomor_dokumen)),
-                    config('constants.shopee.kode_lokasi'),
+                    config('constants.api.shopee.kode_lokasi'),
                     trim(strtoupper($request->get('companyid'))),
                     $list_produkid_sukses_update
                 ]);
@@ -497,7 +497,7 @@ class ApiPemindahanController extends Controller
                                     isnull(pdh.kd_lokasi1, '') as kode_lokasi_awal,
                                     isnull(pdh.kd_lokasi2, '') as kode_lokasi_tujuan,
                                     isnull(pdh.sts_mp, '') as status_mp_header,
-                                    iif(pdh.kd_lokasi1 = '".config('constants.shopee.kode_lokasi')."',isnull(pdh_dtl.sts_mp_awal, 0), isnull(pdh_dtl.sts_mp_tujuan, 0)) as status_mp_detail,
+                                    iif(pdh.kd_lokasi1 = '".config('constants.api.shopee.kode_lokasi')."',isnull(pdh_dtl.sts_mp_awal, 0), isnull(pdh_dtl.sts_mp_tujuan, 0)) as status_mp_detail,
                                     isnull(pdh_dtl.pindah, 0) as jumlah_pindah")
                     ->joinSub(function($query) use ($request) {
                         $query->select("*")
@@ -574,7 +574,7 @@ class ApiPemindahanController extends Controller
             DB::transaction(function () use ($request, $data) {
                 DB::insert('exec sp_PdhLok_UpdateStsMP ?,?,?,?', [
                     trim(strtoupper($data->nomor_dokumen)),
-                    config('constants.shopee.kode_lokasi'),
+                    config('constants.api.shopee.kode_lokasi'),
                     trim(strtoupper($data->kd_part)),
                     trim(strtoupper($request->get('companyid')))
                 ]);
@@ -620,7 +620,7 @@ class ApiPemindahanController extends Controller
 
             DB::transaction(function () use ($request) {
                 DB::insert('exec sp_PdhLok_UpdateStsMP ?,?,?,?', [
-                    trim(strtoupper($request->get('nomor_dokumen'))), config('constants.shopee.kode_lokasi'),
+                    trim(strtoupper($request->get('nomor_dokumen'))), config('constants.api.shopee.kode_lokasi'),
                     trim(strtoupper($request->get('part_number'))), trim(strtoupper($request->get('companyid')))
                 ]);
             });

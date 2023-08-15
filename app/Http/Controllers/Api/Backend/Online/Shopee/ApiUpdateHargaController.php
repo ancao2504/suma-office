@@ -325,7 +325,7 @@ class ApiUpdateHargaController extends Controller
                             left join part with (nolock) on hargadtl_shopee.kd_part=part.kd_part and
                                                             part.companyid=hargadtl_shopee.companyid
                             left join part with (nolock) on hargadtl_shopee.kd_part=part.kd_part and
-                                        part.kd_lokasi='".config('constants.shopee.kode_lokasi')."' and
+                                        part.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."' and
                                         stlokasi.companyid=hargadtl_shopee.companyid";
 
             $result = DB::select($sql, [ $request->get('nomor_dokumen'), $request->get('part_number'), $request->get('companyid') ]);
@@ -494,7 +494,7 @@ class ApiUpdateHargaController extends Controller
                             left join part with (nolock) on hargadtl_shopee.kd_part=part.kd_part and
                                                             part.companyid=hargadtl_shopee.companyid
                             left join stlokasi with (nolock) on hargadtl_shopee.kd_part=stlokasi.kd_part and
-                                        stlokasi.kd_lokasi='".config('constants.shopee.kode_lokasi')."' and
+                                        stlokasi.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."' and
                                         stlokasi.companyid=hargadtl_shopee.companyid";
 
             $result = DB::select($sql, [ $request->get('nomor_dokumen'), $request->get('companyid') ]);
@@ -584,7 +584,7 @@ class ApiUpdateHargaController extends Controller
             DB::transaction(function () use ($request, $success_list, $error_list) {
                 if(count($success_list) > 0) {
                     DB::insert('exec SP_UpdateHarga_ShopeeUpdateSts_All ?,?,?,?', [
-                        trim(strtoupper($request->get('nomor_dokumen'))), trim(strtoupper(config('constants.shopee.kode_lokasi'))),
+                        trim(strtoupper($request->get('nomor_dokumen'))), trim(strtoupper(config('constants.api.shopee.kode_lokasi'))),
                         trim(strtoupper($request->get('companyid'))), collect($success_list)->pluck('product_id')->implode(',')
                     ]);
                 }

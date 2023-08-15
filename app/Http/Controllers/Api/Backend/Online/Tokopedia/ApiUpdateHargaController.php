@@ -196,7 +196,7 @@ class ApiUpdateHargaController extends Controller
                                         harga_tokopedia.companyid=part.companyid
                             left join stlokasi with (nolock) on hargadtl_tokopedia.kd_part=stlokasi.kd_part and
                                         harga_tokopedia.companyid=stlokasi.companyid and
-                                        stlokasi.kd_lokasi='".config('constants.tokopedia.kode_lokasi')."'
+                                        stlokasi.kd_lokasi='".config('constants.api.tokopedia.kode_lokasi')."'
                     order by hargadtl_tokopedia.kd_part asc";
 
             $result = DB::select($sql, [ $request->get('nomor_dokumen'), $request->get('companyid') ]);
@@ -599,7 +599,7 @@ class ApiUpdateHargaController extends Controller
             // ==========================================================================
             DB::transaction(function () use ($request, $product_id_update_database, $jumlah_data_error_update_harga, $query_data_error_update_harga) {
                 DB::insert('exec SP_UpdateHarga_TokopediaUpdateSts_All ?,?,?,?', [
-                    trim(strtoupper($request->get('nomor_dokumen'))), trim(strtoupper(config('constants.tokopedia.kode_lokasi'))),
+                    trim(strtoupper($request->get('nomor_dokumen'))), trim(strtoupper(config('constants.api.tokopedia.kode_lokasi'))),
                     trim(strtoupper($request->get('companyid'))), trim(strtoupper($product_id_update_database))
                 ]);
 

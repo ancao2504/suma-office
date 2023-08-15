@@ -43,7 +43,7 @@ class ApiProductController extends Controller
                             ->on('part.companyid', '=', 'stlokasi.companyid');
                     })
                     ->where('stlokasi.kd_part', 'like', $request->get('part_number').'%')
-                    ->where('stlokasi.kd_lokasi', config('constants.shopee.kode_lokasi'))
+                    ->where('stlokasi.kd_lokasi', config('constants.api.shopee.kode_lokasi'))
                     ->where('stlokasi.companyid', $request->get('companyid'))
                     ->orderByRaw("stlokasi.kd_part asc");
 
