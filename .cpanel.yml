@@ -9,3 +9,5 @@ deployment:
     - /bin/cp -R public/vendor/* $DEPLOYPATH
     - export DEPLOYPATH=/home/sumahond/public_html/storage
     - /bin/cp -R public/storage/* $DEPLOYPATH
+    - export DEPLOYPATH=/home/sumahond/public_html/index.php
+    - /bin/cp -R public/index.php $DEPLOYPATH
