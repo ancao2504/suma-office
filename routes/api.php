@@ -451,6 +451,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                             Route::post('/backend/online/orders/tokopedia/single', 'singleOrder');
                             Route::post('/backend/online/orders/tokopedia/form', 'formOrder');
                             Route::post('/backend/online/orders/tokopedia/proses', 'prosesFaktur');
+                            Route::post('/backend/online/orders/tokopedia/update-kurir', 'updateKurir');
                         });
                     });
 
@@ -537,7 +538,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     });
                 });
             });
-            // ! sby 
+            // ! sby
 
             Route::name('gudang.')->group(function () {
                 Route::name('packing.')->group(function () {
@@ -593,7 +594,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     });
                 });
             });
-            
+
             Route::name('konsumen.')->group(function () {
                 Route::controller(LokasiController::class)->group(function () {
                     Route::post('/backend/konsumen/lokasi/',  'index')->name('lokasi');
