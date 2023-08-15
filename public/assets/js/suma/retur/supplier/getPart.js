@@ -135,6 +135,9 @@ $('#part-list').on('change','#per_page', function () {
     });
 });
 
+$('#part-list').on('change','#cari', function () {
+    $('#part-list').find('#btn_cari').trigger('click');
+});
 $('#part-list').on('click','#btn_cari', function () {
     Part({
         option: ['page'],

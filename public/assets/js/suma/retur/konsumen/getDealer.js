@@ -94,6 +94,9 @@ $(document).ready(function () {
         });
     });
 
+    $('#dealer-list').on('change','#cari', function () {
+        $('#dealer-list').find('#btn_cari').trigger('click');
+    });
     $('#dealer-list').on('click','#btn_cari', function () {
         Dealer({
             option: 'page',
