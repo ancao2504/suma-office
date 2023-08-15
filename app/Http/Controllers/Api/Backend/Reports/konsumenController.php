@@ -171,7 +171,7 @@ class KonsumenController extends Controller
             }
             if(!empty($request->tgl_lahir)){
                 if (count(Arr::wrap($request->tgl_lahir)) == 1) {
-                    $data = $data->whereMonth('konsumen.tgl_lahir', date('m', strtotime(Arr::wrap($request->tgl_lahir)[0])));
+                    $data = $data->whereMonth('konsumen.tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
                 } else {
                     $data = $data->whereRaw('MONTH(konsumen.tgl_lahir) BETWEEN ? AND ?', [date('m', strtotime($request->tgl_lahir[0])), date('m', strtotime($request->tgl_lahir[1]))])
                     ->whereRaw('DAY(konsumen.tgl_lahir) BETWEEN ? AND ?', [date('d', strtotime($request->tgl_lahir[0])), date('d', strtotime($request->tgl_lahir[1]))]);
