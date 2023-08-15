@@ -71,7 +71,7 @@ class UpdateHargaController extends Controller
             $data_filter->push((object) [
                 'year'          => $year,
                 'month'         => $month,
-                'kode_lokasi'   => config('constants.app.shopee.kode_lokasi')
+                'kode_lokasi'   => config('constants.shopee.kode_lokasi')
             ]);
 
             $data_device = new Collection();
@@ -115,7 +115,7 @@ class UpdateHargaController extends Controller
             }
         }
     }
-    
+
     public function buatDokumen(Request $request) {
         $responseApi = ServiceShopee::BuatDokumenUpdateHarga($request->get('kode'), date('Y-m-d'),
                         strtoupper(trim($request->session()->get('app_user_company_id'))),
@@ -124,7 +124,7 @@ class UpdateHargaController extends Controller
     }
 
     public function formUpdateHarga($param, Request $request) {
-        
+
         $data_param = base64_decode($param);
         $data_param = json_decode($data_param, true);
 
@@ -185,9 +185,9 @@ class UpdateHargaController extends Controller
                 'message' => $messageApi
             ]);
         }
-        
+
         $data_all = json_decode($responseApi)->data;
-        
+
         $view_respon = view('layouts.online.shopee.pemindahan.modal_respon_update', [
             'data_all'      => $data_all
         ]);
@@ -204,7 +204,7 @@ class UpdateHargaController extends Controller
     public function updateHargaPerNomorDokumen(Request $request) {
         $responseApi = ServiceShopee::UpdateHargaPerNomorDokumen(strtoupper(trim($request->get('nomor_dokumen'))),
                                 strtoupper(trim($request->session()->get('app_user_company_id'))));
-        
+
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -214,9 +214,9 @@ class UpdateHargaController extends Controller
                 'message' => $messageApi
             ]);
         }
-        
+
         $data_all = json_decode($responseApi)->data;
-        
+
         $view_respon = view('layouts.online.shopee.pemindahan.modal_respon_update', [
             'data_all'      => $data_all
         ]);

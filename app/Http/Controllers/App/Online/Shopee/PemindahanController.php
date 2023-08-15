@@ -28,10 +28,10 @@ class PemindahanController extends Controller
         $statusApi_SCM = json_decode($responseApi_SCM)->status;
         $messageApi_SCM =  json_decode($responseApi_SCM)->message;
 
-        
+
         if($statusApi_SCM == 0 && !$request->ajax()){
             return redirect()->back()->withInput()->with('failed', $messageApi_SCM);
-        } 
+        }
         if($statusApi_SCM == 0 && $request->ajax()){
             return response()->json([
                 'status'    => $statusApi_SCM,
@@ -58,7 +58,7 @@ class PemindahanController extends Controller
 
         if($statusApi == 0 && !$request->ajax()){
             return redirect()->back()->withInput()->with('failed', $messageApi);
-        } 
+        }
         if($statusApi == 0 && $request->ajax()){
             return response()->json([
                 'status'    => $statusApi,
@@ -80,7 +80,7 @@ class PemindahanController extends Controller
                 'per_page'      => $per_page
             ]
         ]);
-        
+
         if(!$request->ajax()){
             return  $view;
         }
@@ -108,8 +108,8 @@ class PemindahanController extends Controller
             trim($param_data->nomor_dokumen),
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
-        
-        $statusApi = json_decode($responseApi)->status; 
+
+        $statusApi = json_decode($responseApi)->status;
         $messageApi = json_decode($responseApi)->message;
 
         if($statusApi == 0 && !$request->ajax()){
@@ -143,13 +143,13 @@ class PemindahanController extends Controller
             ]);
         }
     }
-    
+
     public function updateStockperDokumen(Request $request){
         $responseApi = ServiceShopee::UpdateStockPerDokumen(
             $request->no_dok,
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
-        
+
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 
@@ -192,9 +192,9 @@ class PemindahanController extends Controller
                 'message' => $messageApi
             ]);
         }
-        
+
         $data_all = json_decode($responseApi)->data;
-        
+
         $view_respon = view('layouts.online.shopee.pemindahan.modal_respon_update', [
             'data_all'      => $data_all
         ]);

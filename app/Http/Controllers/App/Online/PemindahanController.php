@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 
 class PemindahanController extends Controller
 {
-    
     public function daftarPemindahan(Request $request){
         // menagkap param dan mengabungkan ke varibel request
         if(!empty($request->get('param'))){
@@ -30,7 +29,7 @@ class PemindahanController extends Controller
 
         if($statusApi_SCM == 0 && !$request->ajax()){
             return redirect()->back()->withInput()->with('failed', $messageApi_SCM);
-        } 
+        }
         if($statusApi_SCM == 0 && $request->ajax()){
             return response()->json([
                 'status'    => $statusApi_SCM,
@@ -58,7 +57,7 @@ class PemindahanController extends Controller
 
         if($statusApi == 0 && !$request->ajax()){
             return redirect()->back()->withInput()->with('failed', $messageApi);
-        } 
+        }
         if($statusApi == 0 && $request->ajax()){
             return response()->json([
                 'status'    => $statusApi,
@@ -80,7 +79,7 @@ class PemindahanController extends Controller
                 'per_page'      => $per_page
             ]
         ]);
-        
+
         if(!$request->ajax()){
             return  $view;
         }
@@ -110,7 +109,7 @@ class PemindahanController extends Controller
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
         // dd($responseApi);
-        $statusApi = json_decode($responseApi)->status; 
+        $statusApi = json_decode($responseApi)->status;
         $messageApi = json_decode($responseApi)->message;
 
         if($statusApi == 0 && !$request->ajax()){
@@ -151,7 +150,7 @@ class PemindahanController extends Controller
             $request->kode_part,
             strtoupper(trim($request->session()->get('app_user_company_id')))
         );
-        
+
         $statusApi = json_decode($responseApi)->status;
         $messageApi =  json_decode($responseApi)->message;
 

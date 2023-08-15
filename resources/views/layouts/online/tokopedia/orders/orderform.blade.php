@@ -638,11 +638,11 @@
         'proses_cetak_label': "{{ route('online.serahterima.form.cetak-label-tokopedia') }}",
         'proses_request_pickup_tokopedia': "{{ route('online.serahterima.form.tokopedia-request-pickup') }}",
         'proses_update_kurir': "{{ route('online.orders.tokopedia.form.update-kurir') }}",
-    };
+    }
     const data = {
         'nomor_invoice': "{{ $data->tokopedia->nomor_invoice }}",
         'tanggal': "{{ $tanggal }}",
-    };
+    }
 </script>
 <script src="{{ asset('assets/js/suma/online/tokopedia/orders/form.js') }}?v={{ time() }}"></script>
 @endpush

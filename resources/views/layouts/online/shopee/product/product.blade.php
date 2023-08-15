@@ -155,6 +155,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" tabindex="-2" id="modalEditProduct">
         <div class="modal-dialog">
             <div class="modal-content" id="modalEditProductContent">

@@ -62,11 +62,11 @@ class ApiApproveOrderController extends Controller
 
             $token_tokopedia = '';
 
-            $sql = DB::table('user_api_pmo')->lock('with (nolock)')
-                    ->selectRaw("isnull(user_api_pmo.tokopedia_token, '') as tokopedia_token,
-                                isnull(user_api_pmo.user_id, '') as user_id")
-                    ->where('user_api_pmo.pmo_token', $auth_token)
-                    ->orderByRaw("isnull(user_api_pmo.id, 0) desc")
+            $sql = DB::table('user_api_office')->lock('with (nolock)')
+                    ->selectRaw("isnull(user_api_office.tokopedia_token, '') as tokopedia_token,
+                                isnull(user_api_office.user_id, '') as user_id")
+                    ->where('user_api_office.office_token', $auth_token)
+                    ->orderByRaw("isnull(user_api_office.id, 0) desc")
                     ->first();
 
             if(empty($sql->tokopedia_token) || trim($sql->tokopedia_token) == '') {
@@ -218,7 +218,7 @@ class ApiApproveOrderController extends Controller
                     $jumlah_faktur = (double)$jumlah_faktur + 1;
 
                     $data_faktur_detail_temp->push((object) [
-                        'pictures'      => trim(config('constants.api.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
+                        'pictures'      => trim(config('constants.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
                         'nomor_faktur'  => strtoupper(trim($data->nomor_faktur)),
                         'part_number'   => strtoupper(trim($data->part_number)),
                         'nama_part'     => strtoupper(trim($data->nama_part)),
@@ -379,11 +379,11 @@ class ApiApproveOrderController extends Controller
 
             $token_shopee = '';
 
-            $sql = DB::table('user_api_pmo')->lock('with (nolock)')
-                    ->selectRaw("isnull(user_api_pmo.shopee_token, '') as shopee_token,
-                                isnull(user_api_pmo.user_id, '') as user_id")
-                    ->where('user_api_pmo.pmo_token', $auth_token)
-                    ->orderByRaw("isnull(user_api_pmo.id, 0) desc")
+            $sql = DB::table('user_api_office')->lock('with (nolock)')
+                    ->selectRaw("isnull(user_api_office.shopee_token, '') as shopee_token,
+                                isnull(user_api_office.user_id, '') as user_id")
+                    ->where('user_api_office.office_token', $auth_token)
+                    ->orderByRaw("isnull(user_api_office.id, 0) desc")
                     ->first();
 
             if(empty($sql->shopee_token) || trim($sql->shopee_token) == '') {
@@ -557,7 +557,7 @@ class ApiApproveOrderController extends Controller
                 $jumlah_faktur = (double)$jumlah_faktur + 1;
 
                 $data_faktur_detail_temp->push((object) [
-                    'pictures'      => trim(config('constants.api.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
+                    'pictures'      => trim(config('constants.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
                     'nomor_faktur'  => strtoupper(trim($data->nomor_faktur)),
                     'part_number'   => strtoupper(trim($data->part_number)),
                     'nama_part'     => strtoupper(trim($data->nama_part)),
@@ -762,7 +762,7 @@ class ApiApproveOrderController extends Controller
                 $jumlah_faktur = (double)$jumlah_faktur + 1;
 
                 $data_faktur_detail_temp->push((object) [
-                    'pictures'      => trim(config('constants.api.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
+                    'pictures'      => trim(config('constants.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
                     'nomor_faktur'  => strtoupper(trim($data->nomor_faktur)),
                     'part_number'   => strtoupper(trim($data->part_number)),
                     'nama_part'     => strtoupper(trim($data->nama_part)),
@@ -887,13 +887,32 @@ class ApiApproveOrderController extends Controller
                 return Response::responseWarning("Pilih nomor invoice terlebih dahulu");
             }
 
+            $sql = DB::table('faktur')->lock('with (nolock)')
+                    ->selectRaw("isnull(faktur.no_faktur, '') as nomor_faktur,
+                            isnull(faktur.kd_ekspedisi, '') as kode_ekspedisi")
+                    ->where('faktur.ket', $request->get('nomor_invoice'))
+                    ->where('faktur.companyid', $request->get('companyid'))
+                    ->first();
+
+            if(empty($sql->nomor_faktur) || trim($sql->nomor_faktur) == '') {
+                return Response::responseWarning('Nomor faktur tidak terdaftar');
+            }
+
+            if(strtoupper(trim($sql->kode_ekspedisi)) == '') {
+                return Response::responseWarning('Kode ekspedisi masih kosong');
+            }
+
+            if(strtoupper(trim($sql->kode_ekspedisi)) == 'TKPDEXP') {
+                return Response::responseWarning('Kode ekspedisi masih kurir rekomendasi dan belum divalidasi');
+            }
+
             DB::transaction(function () use ($request) {
                 DB::update('update  faktur
                             set     approve_ol=1, approve_user=?
                             where   faktur.ket=? and
                                     faktur.companyid=?',
                                     [
-                                        date('d-m-Y').'='.date('H:i:s').'=WPMO='.strtoupper(trim($request->get('user_id'))),
+                                        date('d-m-Y').'='.date('H:i:s').'=SUMAOFFICE='.strtoupper(trim($request->get('user_id'))),
                                         $request->get('nomor_invoice'),
                                         $request->get('companyid')
                                     ]);
@@ -918,13 +937,32 @@ class ApiApproveOrderController extends Controller
                 return Response::responseWarning("Pilih nomor faktur terlebih dahulu");
             }
 
+            $sql = DB::table('faktur')->lock('with (nolock)')
+                    ->selectRaw("isnull(faktur.no_faktur, '') as nomor_faktur,
+                            isnull(faktur.kd_ekspedisi, '') as kode_ekspedisi")
+                    ->where('faktur.no_faktur', $request->get('nomor_faktur'))
+                    ->where('faktur.companyid', $request->get('companyid'))
+                    ->first();
+
+            if(empty($sql->nomor_faktur) || trim($sql->nomor_faktur) == '') {
+                return Response::responseWarning('Nomor faktur tidak terdaftar');
+            }
+
+            if(strtoupper(trim($sql->kode_ekspedisi)) == '') {
+                return Response::responseWarning('Kode ekspedisi masih kosong');
+            }
+
+            if(strtoupper(trim($sql->kode_ekspedisi)) == 'TKPDEXP') {
+                return Response::responseWarning('Kode ekspedisi masih kurir rekomendasi dan belum divalidasi');
+            }
+
             DB::transaction(function () use ($request) {
                 DB::update('update  faktur
                             set     approve_ol=1, approve_user=?
                             where   faktur.no_faktur=? and
                                     faktur.companyid=?',
                                     [
-                                        date('d-m-Y').'='.date('H:i:s').'=WPMO='.strtoupper(trim($request->get('user_id'))),
+                                        date('d-m-Y').'='.date('H:i:s').'=SUMAOFFICE='.strtoupper(trim($request->get('user_id'))),
                                         $request->get('nomor_faktur'),
                                         $request->get('companyid')
                                     ]);

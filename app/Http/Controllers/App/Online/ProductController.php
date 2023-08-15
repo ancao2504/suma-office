@@ -41,6 +41,7 @@ class ProductController extends Controller
                 $request->get('page')??1,
                 in_array($request->get('per_page'), [10, 25, 50]) ? $request->get('per_page') : 10
             );
+
             $statusApi = json_decode($responseApi)->status;
             if ($statusApi == 1) {
                 if($request->ajax()){
@@ -175,10 +176,10 @@ class ProductController extends Controller
                 $image_tamp_lokal[$key] = $file_name;
             }
 
-            $request->merge([                   
-                'image' => json_encode($image_tokped)                  
-            ]);                                                                                                                                                       
-        }                                                  
+            $request->merge([
+                'image' => json_encode($image_tokped)
+            ]);
+        }
 
         $responseApi = Service::addProductMarketplace(
             strtoupper(trim($request->session()->get('app_user_company_id'))),
@@ -203,7 +204,7 @@ class ProductController extends Controller
             // ! Hapus foto jika sudah di kirim ke tokopedia atau gagal
             foreach($image_tamp_lokal as $key => $value){
                 if(file_exists($value)){
-                    unlink($value);                                                                                                                                                                                                                                                                                                          
+                    unlink($value);
                 }
             }
         }

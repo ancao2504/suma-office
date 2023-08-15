@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiProductController extends Controller
 {
-
     public function daftarPartNumber(Request $request) {
         try {
             $validate = Validator::make($request->all(), [
@@ -44,13 +43,13 @@ class ApiProductController extends Controller
                             ->on('part.companyid', '=', 'stlokasi.companyid');
                     })
                     ->where('stlokasi.kd_part', 'like', $request->get('part_number').'%')
-                    ->where('stlokasi.kd_lokasi', config('constants.api.shopee.kode_lokasi'))
+                    ->where('stlokasi.kd_lokasi', config('constants.shopee.kode_lokasi'))
                     ->where('stlokasi.companyid', $request->get('companyid'))
                     ->orderByRaw("stlokasi.kd_part asc");
 
             $sql_data = $sql_data->paginate(20);
             $result = collect($sql_data)->toArray();
-            
+
             $daftar_product = (object)[
                 'current_page'      => $result['current_page'],
                 'data'              => [],
@@ -107,6 +106,7 @@ class ApiProductController extends Controller
                             ->where('product_id', '!=', 0)
                             ->pluck('product_id')
                             ->implode(',');
+
             $responseShopee = ServiceShopee::getItem(trim($token_shopee), trim($product_id));
 
             $statusResponseShopee = (empty(json_decode($responseShopee)->error)) ? 1 : 0;
@@ -148,7 +148,7 @@ class ApiProductController extends Controller
                     'description'   => trim($data->description),
                     'het'           => (double)$data->het,
                     'stock'         => (double)$data->stock,
-                    'images'        => config('constants.api.url.images').'/'.strtoupper(trim($data->part_number)).'.jpg',
+                    'images'        => config('constants.url.images').'/'.strtoupper(trim($data->part_number)).'.jpg',
                     'marketplace'   => $data_marketplace
                 ];
             }

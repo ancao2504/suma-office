@@ -576,7 +576,7 @@ class ApiOrderController extends Controller
                 $jumlah_faktur = (double)$jumlah_faktur + 1;
 
                 $data_faktur_detail_temp->push((object) [
-                    'pictures'      => trim(config('constants.api.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
+                    'pictures'      => trim(config('constants.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
                     'nomor_faktur'  => strtoupper(trim($data->nomor_faktur)),
                     'part_number'   => strtoupper(trim($data->part_number)),
                     'nama_part'     => strtoupper(trim($data->nama_part)),
@@ -713,7 +713,7 @@ class ApiOrderController extends Controller
                                     isnull(salesman.kd_sales, '') as kode_sales,
                                     isnull(salesman.nm_sales, '') as nama_sales
                             from	salesman with (nolock)
-                            where	salesman.kd_sales='".config('constants.api.shopee.kode_sales')."' and
+                            where	salesman.kd_sales='".config('constants.shopee.kode_sales')."' and
                                     salesman.companyid='".$request->get('companyid')."'
                         )	salesman on marketplace.marketplace=salesman.marketplace
                         left join
@@ -722,7 +722,7 @@ class ApiOrderController extends Controller
                                     isnull(dealer.kd_dealer, '') as kode_dealer,
                                     isnull(dealer.nm_dealer, '') as nama_dealer
                             from	dealer with (nolock)
-                            where	dealer.kd_dealer='".config('constants.api.shopee.kode_dealer')."' and
+                            where	dealer.kd_dealer='".config('constants.shopee.kode_dealer')."' and
                                     dealer.companyid='".$request->get('companyid')."'
                         )	dealer on marketplace.marketplace=dealer.marketplace
                         left join
@@ -731,7 +731,7 @@ class ApiOrderController extends Controller
                                     isnull(jns_beli.kd_beli, '') as kode_beli,
                                     isnull(jns_beli.nama, '') as nama_beli
                             from	jns_beli with (nolock)
-                            where	jns_beli.kd_beli='".config('constants.api.shopee.kode_beli')."' and
+                            where	jns_beli.kd_beli='".config('constants.shopee.kode_beli')."' and
                                     jns_beli.companyid='".$request->get('companyid')."'
                         )	jns_beli on marketplace.marketplace=jns_beli.marketplace
                         left join
@@ -740,7 +740,7 @@ class ApiOrderController extends Controller
                                     isnull(lokasi.kd_lokasi, '') as kode_lokasi,
                                     isnull(lokasi.ket, '') as nama_lokasi
                             from	lokasi with (nolock)
-                            where	lokasi.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."' and
+                            where	lokasi.kd_lokasi='".config('constants.shopee.kode_lokasi')."' and
                                     lokasi.companyid='".$request->get('companyid')."'
                         )	lokasi on marketplace.marketplace=lokasi.marketplace
                         left join
@@ -809,7 +809,7 @@ class ApiOrderController extends Controller
                                     part.shopee_id in (".$data_product_id_marketplace.")
                         )   part
                                 left join stlokasi with (nolock) on part.kd_part=stlokasi.kd_part and
-                                            stlokasi.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."' and
+                                            stlokasi.kd_lokasi='".config('constants.shopee.kode_lokasi')."' and
                                             part.companyid=stlokasi.companyid";
 
                 $result = DB::select($sql);
@@ -1147,9 +1147,9 @@ class ApiOrderController extends Controller
                                 part.companyid=?
                     )	part
                             left join stlokasi with (nolock) on part.kd_part=stlokasi.kd_part and
-                                    stlokasi.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."' and
+                                    stlokasi.kd_lokasi='".config('constants.shopee.kode_lokasi')."' and
                                     part.companyid=stlokasi.companyid
-                            left join lokasi with (nolock) on lokasi.kd_lokasi='".config('constants.api.shopee.kode_lokasi')."' and
+                            left join lokasi with (nolock) on lokasi.kd_lokasi='".config('constants.shopee.kode_lokasi')."' and
                                         part.companyid=lokasi.companyid";
 
             $result = DB::select($sql, [ $request->get('companyid') ]);
@@ -1196,11 +1196,11 @@ class ApiOrderController extends Controller
 
                         if((double)$jml_stock <= 0) {
                             return Response::responseWarning('ProductID pada part number <strong>'.trim($data_marketplace->sku).'</strong> '.
-                                'stock lokasi <strong>'.strtoupper(trim(config('constants.api.shopee.kode_lokasi'))).' : '.$jml_stock.'</strong>');
+                                'stock lokasi <strong>'.strtoupper(trim(config('constants.shopee.kode_lokasi'))).' : '.$jml_stock.'</strong>');
                         } else {
                             if((double)$jml_jual > (double)$jml_stock) {
                                 return Response::responseWarning('ProductID pada part number <strong>'.trim($data_marketplace->sku).'</strong> '.
-                                    'stock lokasi <strong>'.strtoupper(trim(config('constants.api.shopee.kode_lokasi'))).'</strong> '.
+                                    'stock lokasi <strong>'.strtoupper(trim(config('constants.shopee.kode_lokasi'))).'</strong> '.
                                     'tidak mencukupi untuk memenuhi transaksi ini.
                                     <br><strong>Permintaan : '.$jml_jual.'</strong>
                                     <br><strong>Stock : '.$jml_stock.'</strong>');
@@ -1358,21 +1358,21 @@ class ApiOrderController extends Controller
                         select	top 1 salesman.companyid, salesman.kd_sales, salesman.nm_sales
                         from	salesman with (nolock)
                         where	salesman.companyid='".strtoupper(trim($request->get('companyid')))."' and
-                                salesman.kd_sales='".strtoupper(trim(config('constants.api.shopee.kode_sales')))."'
+                                salesman.kd_sales='".strtoupper(trim(config('constants.shopee.kode_sales')))."'
                     )	salesman on company.companyid=salesman.companyid
                     left join
                     (
                         select	top 1 dealer.companyid, dealer.kd_dealer, dealer.nm_dealer
                         from	dealer with (nolock)
                         where	dealer.companyid='".strtoupper(trim($request->get('companyid')))."' and
-                                dealer.kd_dealer='".strtoupper(trim(config('constants.api.shopee.kode_dealer')))."'
+                                dealer.kd_dealer='".strtoupper(trim(config('constants.shopee.kode_dealer')))."'
                     )	dealer on company.companyid=dealer.companyid
                     left join
                     (
                         select	top 1 jns_beli.companyid, jns_beli.kd_beli, jns_beli.nama
                         from	jns_beli with (nolock)
                         where	jns_beli.companyid='".strtoupper(trim($request->get('companyid')))."' and
-                                jns_beli.kd_beli='".strtoupper(trim(config('constants.api.shopee.kode_beli')))."'
+                                jns_beli.kd_beli='".strtoupper(trim(config('constants.shopee.kode_beli')))."'
                     )	jns_beli on company.companyid=jns_beli.companyid
                     left join
                     (
@@ -1413,22 +1413,22 @@ class ApiOrderController extends Controller
 
                 if(strtoupper(trim($kode_beli)) == '') {
                     return Response::responseWarning('Data kode beli
-                        <strong>'.strtoupper(trim(config('constants.api.shopee.kode_beli'))).'</strong> '.
+                        <strong>'.strtoupper(trim(config('constants.shopee.kode_beli'))).'</strong> '.
                         'tidak terdaftar di database internal');
                 }
                 if(strtoupper(trim($kode_sales)) == '') {
                     return Response::responseWarning('Data kode sales
-                        <strong>'.strtoupper(trim(config('constants.api.shopee.kode_sales'))).'</strong> '.
+                        <strong>'.strtoupper(trim(config('constants.shopee.kode_sales'))).'</strong> '.
                         'tidak terdaftar di database internal');
                 }
                 if(strtoupper(trim($kode_dealer)) == '') {
                     return Response::responseWarning('Data kode dealer
-                        <strong>'.strtoupper(trim(config('constants.api.shopee.kode_dealer'))).'</strong> '.
+                        <strong>'.strtoupper(trim(config('constants.shopee.kode_dealer'))).'</strong> '.
                         'tidak terdaftar di database internal');
                 }
                 if(strtoupper(trim($kode_ekspedisi)) == '') {
                     return Response::responseWarning('Data kode ekspedisi
-                        <strong>'.strtoupper(trim(config('constants.api.shopee.kode_beli'))).'</strong> '.
+                        <strong>'.strtoupper(trim(config('constants.shopee.kode_beli'))).'</strong> '.
                         'tidak terdaftar di database internal');
                 }
             }
@@ -1540,7 +1540,7 @@ class ApiOrderController extends Controller
                         (double)$data->disc2, (double)$data->umur_faktur, trim($data->tgl_akhir_faktur), trim($data->kd_tpc),
                         trim(strtoupper($data->rh)), trim(strtoupper($data->bo)), (double)$data->discrp1, 'T', '', '', '', '', '', '',
                         trim(strtoupper($request->get('user_id'))).'=SUMAOFFICE', trim(strtoupper($data->companyid)),
-                        1, 1, '', 0, trim(strtoupper(config('constants.api.shopee.kode_lokasi'))),
+                        1, 1, '', 0, trim(strtoupper(config('constants.shopee.kode_lokasi'))),
                         trim(strtoupper($data->kd_ekspedisi))
                     ]);
 
