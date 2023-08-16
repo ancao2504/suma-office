@@ -1,15 +1,15 @@
 <?php
 
-namespace app\Http\Controllers\App\Reports\Retur;
+namespace app\Http\Controllers\App\Reports;
 
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use App\Exports\Retur\Konsumen;
+use App\Exports\Retur;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\App\Option\OptionController;
 
-class KonsumenController extends Controller
+class ReturController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,9 @@ class KonsumenController extends Controller
         $responseApiSales = OptionController::salesman($request)->getData();
         if ($responseApiSales->status == 1) {
             return view(
-                'layouts.report.retur.konsumen',
+                'layouts.report.retur',
                 [
-                    'title_menu' => 'Report Retur Konsumen',
+                    'title_menu' => 'Report Retur',
                     'sales' => $responseApiSales->data
                 ]
             );
@@ -36,7 +36,7 @@ class KonsumenController extends Controller
     public function data(Request $request)
     {
         try {
-            $responseApi = Service::ReportReturKonsumenData($request);
+            $responseApi = Service::ReportReturData($request);
             if (json_decode($responseApi)->status == 1) {
                 return Response()->json([
                     'status'    => 1,
@@ -61,10 +61,10 @@ class KonsumenController extends Controller
 
     public function export(Request $request){
         try {
-            $responseApi = Service::ExprotReportReturKonsumen($request);
+            $responseApi = Service::ExprotReportRetur($request);
             if (json_decode($responseApi)->status == 1) {
                 $data = json_decode($responseApi)->data;
-                return Excel::download(new Konsumen($data), 'Retur_Konsumen.xlsx');
+                return Excel::download(new Retur($data), 'Retur_Konsumen.xlsx');
             } else {
                 return Response()->json([
                     'status'    => 0,

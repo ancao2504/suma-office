@@ -2134,8 +2134,8 @@ class Service
         return $response;
     }
 
-    public static function ReportReturKonsumenData($request){
-        $url = 'backend/report/retur/konsumen';
+    public static function ReportReturData($request){
+        $url = 'backend/report/retur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'tgl_klaim'     => $request->tanggal,
@@ -2150,8 +2150,8 @@ class Service
         return $response;
     }
 
-    public static function ExprotReportReturKonsumen($request){
-        $url = 'backend/report/retur/konsumen/export';
+    public static function ExprotReportRetur($request){
+        $url = 'backend/report/retur/export';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),

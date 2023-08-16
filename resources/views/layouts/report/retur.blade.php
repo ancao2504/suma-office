@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
 @section('title','Report')
-@section('subtitle','Retur Konsumen')
+@section('subtitle','Retur')
 @push('styles')
 	<style>
 		@media print {
@@ -190,10 +190,8 @@
 @endsection
 
 @push('scripts')
-	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/getFaktur.js')}}?v={{ time() }}"></script>
-	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/getDealer.js')}}?v={{ time() }}"></script>
-	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/getPart.js')}}?v={{ time() }}"></script>
-	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/index.js')}}?v={{ time() }}"></script>
+	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/getDealer.js')}}?v={{ time() }}"></script>
+	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/index.js')}}?v={{ time() }}"></script>
 	<script>
 		const tableContainer = $(".table-responsive");
 		const scrollTable = $(".table");
@@ -227,18 +225,17 @@
 		}
 
 		function scrollRight() {
-		if (isScrolling) {
-			document.body.style.cursor = "e-resize";
-			tableContainer.scrollLeft(tableContainer.scrollLeft() + scrollSpeed);
-			requestAnimationFrame(scrollRight);
-		}
+			if (isScrolling) {
+				document.body.style.cursor = "e-resize";
+				tableContainer.scrollLeft(tableContainer.scrollLeft() + scrollSpeed);
+				requestAnimationFrame(scrollRight);
+			}
 		}
 
 		tableContainer.on("mouseleave", function() {
-		isScrolling = false;
-		document.body.style.cursor = "default";
+			isScrolling = false;
+			document.body.style.cursor = "default";
 		});
-
-		</script>
+	</script>
 		
 @endpush

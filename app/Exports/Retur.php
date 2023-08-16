@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Exports\Retur;
-
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class Konsumen implements FromCollection, WithHeadings, ShouldAutoSize
+class Retur implements FromCollection, WithHeadings, ShouldAutoSize
 {
     private $data;
     
@@ -25,7 +22,6 @@ class Konsumen implements FromCollection, WithHeadings, ShouldAutoSize
         ini_set('memory_limit', '4096M');
         ini_set('max_execution_time', '0');
         $data = $this->data;
-        
         return collect($data);
     }
 

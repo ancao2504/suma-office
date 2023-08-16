@@ -1,12 +1,12 @@
 <?php
 
-namespace app\Http\Controllers\Api\Backend\Reports\Retur;
+namespace app\Http\Controllers\Api\Backend\Reports;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
-class KonsumenController extends Controller
+class ReturController extends Controller
 {
     public function data(Request $request)
     {

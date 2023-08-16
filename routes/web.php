@@ -43,7 +43,7 @@ use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
 use App\Reports\KonsumenController as ReportKonsumenController;
 use App\Online\ApproveOrderController as ApproveOrderController;
-use App\Reports\Retur\KonsumenController as ReportReturKonsumen;
+use App\Reports\ReturController as ReportRetur;
 use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
 use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
 use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
@@ -658,12 +658,10 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     });
                 });
                 Route::name('retur.')->group(function () {
-                    Route::name('konsumen.')->group(function () {
-                        Route::controller(ReportReturKonsumen::class)->group(function () {
-                            Route::get('report/retur/konsumen', 'index')->name('index');
-                            Route::post('report/retur/konsumen', 'data')->name('data');
-                            Route::post('report/retur/konsumen/export',  'export')->name('export');
-                        });
+                    Route::controller(ReportRetur::class)->group(function () {
+                        Route::get('report/retur', 'index')->name('index');
+                        Route::post('report/retur', 'data')->name('data');
+                        Route::post('report/retur/export',  'export')->name('export');
                     });
                 });
                 Route::name('konsumen.')->group(function () {

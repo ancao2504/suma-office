@@ -46,7 +46,7 @@ use Api\Backend\Online\Tokopedia\ApiOrderController as OrderTokopedia;
 use Api\Backend\Konsumen_lokasi\LokasiController;
 use Api\Backend\Online\ApiPemindahanController as PemindahanMarketplace;
 use Api\Backend\Online\Shopee\ApiEkspedisiController as EkspedisiShopee;
-use Api\Backend\Reports\Retur\KonsumenController as ReportReturkonsumen;
+use Api\Backend\Reports\ReturController as ReportRetur;
 use Api\Backend\Online\Shopee\ApiPemindahanController as PemindahanShopee;
 use Api\Backend\Online\Tokopedia\ApiProductController as ProductTokopedia;
 use Api\Backend\Dashboard\Management\ApiDashboardManagementSalesController;
@@ -579,12 +579,10 @@ Route::group(['middleware' => 'authBasic'], function () {
                     });
                 });
                 Route::name('retur.')->group(function () {
-                    Route::name('konsumen.')->group(function () {
-                        Route::controller(ReportReturkonsumen::class)->group(function () {
-                            Route::post('/backend/report/retur/konsumen',  'index')->name('index');
-                            Route::post('/backend/report/retur/konsumen',  'data')->name('data');
-                            Route::post('/backend/report/retur/konsumen/export',  'export')->name('export');
-                        });
+                    Route::controller(ReportRetur::class)->group(function () {
+                        Route::post('/backend/report/retur',  'index')->name('index');
+                        Route::post('/backend/report/retur',  'data')->name('data');
+                        Route::post('/backend/report/retur/export',  'export')->name('export');
                     });
                 });
                 Route::name('konsumen.')->group(function () {
