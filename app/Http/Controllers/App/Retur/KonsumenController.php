@@ -67,15 +67,6 @@ class KonsumenController extends Controller
         $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
         $statusApiRetur = $responseApiRetur->status??0;
 
-        // if((!empty($request->id) && $statusApiRetur == 1 && !empty($responseApiRetur->data)) && ($responseApiRetur->data->status_approve == 1 || $responseApiRetur->data->status_end == 1)){
-        //     if($responseApiRetur->data->status_approve == 1){
-        //         $massege = 'Data Sudah di Approve, tidak bisa diubah';
-        //     } else if($responseApiRetur->data->status_end == 1){
-        //         $massege = 'Proses Retur Sudah Selesai, tidak bisa diubah';
-        //     }
-        //     return redirect()->route('retur.konsumen.index')->withInput()->with('failed', $massege);
-        // }
-
         $request->merge(['option' => 'select']);
         $responseApi_cabang = OptionController::cabang($request)->getData();
         $statusApi_cabang = $responseApi_cabang->status??0;

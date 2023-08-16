@@ -105,7 +105,7 @@ class SupplierController extends Controller
                     'P' => $request->merge(['ket' => 'P|Tidak Order']),
                 };
             }
-            // return Service::ReturSupplierSimpan($request);
+            
             $responseApi = json_decode(Service::ReturSupplierSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;
