@@ -139,6 +139,9 @@ $(document).ready(function () {
         });
     });
 
+    $('#klaim-list').on('change','#cari', function () {
+        $('#klaim-list').find('#btn_cari').trigger('click');
+    });
     $('#klaim-list').on('click','#btn_cari', function () {
         Klaim({
             option: ['page'],

@@ -91,7 +91,7 @@ class KonsumenController extends Controller
             }
             
             $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
-
+            
             $responseApi = json_decode(Service::ReportKonsumenData($request));
             if ($responseApi->status == 1) {
                 $view = view(

@@ -58,7 +58,7 @@
 							<span class="fs-8 d-block">Surabaya</span>
 						</div>
 						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">Retur Konsumen</span>
+							<span class="fs-5 d-block">Retur</span>
 							{{-- <span class="fs-7 d-block">-</span> --}}
 						</div>
 					</div>

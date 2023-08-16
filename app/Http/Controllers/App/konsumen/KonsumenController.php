@@ -45,9 +45,9 @@ class KonsumenController extends Controller
         }
             
         $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
-        $responseApi = Service::KonsumenDaftar($request);
-        $statusApi = json_decode($responseApi)->status;
-        $messageApi =  json_decode($responseApi)->message;
+        $responseApi = json_decode(Service::KonsumenDaftar($request));
+        $statusApi = $responseApi->status;
+        $messageApi =  $responseApi->message;
 
         if ($statusApi == 1) {
             return view(
@@ -59,7 +59,7 @@ class KonsumenController extends Controller
                 ],
             );
         }
-        return redirect()->back()->with('failed', $messageApi);
+        return redirect()->back()->with('failed', $messageApi??'Maaf, terjadi kesalahan coba beberapa saat lagi');
     }
 
     public function create(Request $request)
