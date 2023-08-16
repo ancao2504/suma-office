@@ -1708,10 +1708,6 @@ class ApiOrderController extends Controller
             $token = explode(" ", $authorization);
             $auth_token = trim($token[1]);
 
-            $authorization = $request->header('Authorization');
-            $token = explode(" ", $authorization);
-            $auth_token = trim($token[1]);
-
             $token_tokopedia = '';
 
             $sql = DB::table('user_api_office')->lock('with (nolock)')
@@ -1762,6 +1758,10 @@ class ApiOrderController extends Controller
 
                 $data_kurir_rekomendasi = $dataTokopedia->order_info->shipping_info->recommended_courier_info;
                 $kode_kurir_rekomendasi = '';
+
+                if(empty($data_kurir_rekomendasi)) {
+                    return Response::responseWarning('Kurir rekomendasi tidak dapat diproses, lakukan update data kurir secara manual');
+                }
 
                 foreach($data_kurir_rekomendasi as $data) {
                     if(strtoupper(trim($data->milestone)) == 'PICKUP_BY') {
