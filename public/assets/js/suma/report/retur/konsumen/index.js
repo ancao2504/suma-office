@@ -48,22 +48,22 @@ function report(page = 1) {
                     $.each(response.data.data, function (key, value) {
                         $('#table_list tbody').append(`
                             <tr class="fw-bolder fs-8 border">
-                                <td class="text-center">${ no++}</td>
-                                <td>${value.no_klaim??'-'}</td>
-                                <td>${value.kd_part??'-'}</td>
-                                <td>${value.tgl_klaim?moment(value.tgl_klaim).format('YYYY/MM/DD'):'-'}</td>
-                                <td>${value.tgl_approve?moment(value.tgl_approve).format('YYYY/MM/DD'):'-'}</td>
-                                <td>${value.tgl_retur?moment(value.tgl_retur).format('YYYY/MM/DD'):'-'}</td>
-                                <td>${value.tgl_jwb?moment(value.tgl_jwb).format('YYYY/MM/DD'):'-'}</td>
-                                <td>${value.kd_dealer??'-'}</td>
-                                <td>${value.kd_sales??'-'}</td>
-                                <td>${value.kd_supp??'-'}</td>
-                                <td>${value.sts_stock??'-'}</td>
-                                <td>${value.sts_min??'-'}</td>
-                                <td>${value.sts_klaim??'-'}</td>
-                                <td>${value.keterangan??'-'}</td>
-                                <td>${value.qty_retur??'-'}</td>
-                                <td>${value.qty_jwb??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${ no++}</td>
+                                <td class="ps-3 pe-3">${value.no_klaim??'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_part??'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_klaim?moment(value.tgl_klaim).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_approve?moment(value.tgl_approve).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_retur?moment(value.tgl_retur).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_jwb?moment(value.tgl_jwb).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_dealer??'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_sales??'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_supp??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${value.sts_stock??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${value.sts_min??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${value.sts_klaim??'-'}</td>
+                                <td class="ps-3 pe-3">${value.keterangan??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_klaim??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_jwb??'-'}</td>
                             </tr>
                         `);
                     });
@@ -143,11 +143,7 @@ $(document).ready(function () {
     });
 
     $('#export_exel').on('click', function () {
-        if ($('#tgl_claim').val() == '' && $('#tgl_terima').val() == '' && $('#kd_sales').val() == '' && $('#kd_dealer').val() == '' && $('#no_faktur').val() == '' && $('#kd_part').val() == '' && $('#sts').val() == '') {
-            toastr.warning('Anda belum mengatur filter apapun', "Warning");
-            return false;
-        }
-
+        loading.block();
         $.ajax({
             url: window.location.origin + window.location.pathname + '/export',
             method: 'POST',
@@ -156,16 +152,9 @@ $(document).ready(function () {
             },
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                tgl_claim: $('#tgl_claim').val() == '' ? '' : [date.tgl_claim.start.format('YYYY-MM-DD'), date.tgl_claim.end.format('YYYY-MM-DD')],
-                tgl_terima: $('#tgl_terima').val() == '' ? '' : [date.tgl_terima.start.format('YYYY-MM-DD'), date.tgl_terima.end.format('YYYY-MM-DD')],
+                tgl_klaim: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
                 kd_sales: $('#kd_sales').val(),
-                kd_dealer: $('#kd_dealer').val(),
-                no_faktur: $('#no_faktur').val(),
-                kd_part: $('#kd_part').val(),
-                sts: $('#sts').val(),
-            },
-            beforeSend: function () {
-                loading.block();
+                kd_dealer: $('#kd_dealer').val()
             }
         }).done(function (response) {
             if (response.status == '0') {
@@ -195,7 +184,7 @@ $(document).ready(function () {
             });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + date.tgl_claim.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_claim.end.format('DD-MM-YYYY') : '') + ($('#tgl_terima').val() != ''? ' Tanggal Terima =' + date.tgl_terima.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_terima.end.format('DD-MM-YYYY') : '') + ($('#kd_sales').val() != ''? ' Sales =' + $('#kd_sales').val() : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + ($('#no_faktur').val() != ''? ' No Faktur =' + $('#no_faktur').val() : '') + ($('#kd_part').val() != ''? ' Kode Part =' + $('#kd_part').val() : '') + ($('#sts').val() != ''? ' Status =' + $('#sts').val() : '') + '.xlsx';
+            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + date.tgl_klaim.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_klaim.end.format('DD-MM-YYYY') : '') + ($('#kd_sales').val() != ''? ' Sales =' + $('#kd_sales').val() : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + '.xlsx';
             link.click();
             link.remove();
         }).fail(function (jqXHR, textStatus, error) {

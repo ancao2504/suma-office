@@ -33,17 +33,21 @@ class Konsumen implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'No. Retur',
-            'Tanggal Retur',
-            'No. Faktur',
-            'Tanggal Faktur',
-            'Kode Sales',
-            'Kode Dealer',
-            'Kode Part',
-            'Qty Claim',
-            'Qty Dikirim',
-            'Keterangan',
-            'Status'
+            'no_klaim',
+            'kd_part',
+            'tgl_klaim',
+            'tgl_approve',
+            'tgl_retur',
+            'tgl_jwb',
+            'kd_dealer',
+            'kd_sales',
+            'kd_supp',
+            'sts_klaim',
+            'sts_stock',
+            'sts_min',
+            'keterangan',
+            'qty_klaim',
+            'qty_jwb'
         ];
     }
 }

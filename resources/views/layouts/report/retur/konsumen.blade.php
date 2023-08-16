@@ -58,7 +58,7 @@
 							<span class="fs-8 d-block">Surabaya</span>
 						</div>
 						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">Claim</span>
+							<span class="fs-5 d-block">Klaim</span>
 							{{-- <span class="fs-7 d-block">-</span> --}}
 						</div>
 					</div>
@@ -81,7 +81,7 @@
 
 										<th scope="col" class="ps-3 pe-3">Retur Sales</th>
 										<th scope="col" class="ps-3 pe-3">Aprove SPV</th>
-										<th scope="col" class="ps-3 pe-3">Klaim Supp</th>
+										<th scope="col" class="ps-3 pe-3">Klaim Supplier</th>
 										<th scope="col" class="ps-3 pe-3">Di Jawab</th>
 
 										<th scope="col" class="ps-3 pe-3">Dealer</th>
@@ -92,7 +92,7 @@
 										<th scope="col" class="ps-3 pe-3">Minimum</th>
 										<th scope="col" class="ps-3 pe-3">Klaim</th>
 										
-										<th scope="col" class="ps-3 pe-3">Retur</th>
+										<th scope="col" class="ps-3 pe-3">Klaim</th>
 										<th scope="col" class="ps-3 pe-3">Jawab</th>
 									</tr>
 								</thead>

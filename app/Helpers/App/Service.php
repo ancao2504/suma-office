@@ -2138,13 +2138,9 @@ class Service
         $url = 'backend/report/retur/konsumen';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'tgl_claim'     => $request->tgl_claim,
-            'tgl_terima'    => $request->tgl_terima,
+            'tgl_klaim'     => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
             'kd_dealer'     => $request->kd_dealer,
-            'no_faktur'     => $request->no_faktur,
-            'kd_part'       => $request->kd_part,
-            'sts'           => $request->sts,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
