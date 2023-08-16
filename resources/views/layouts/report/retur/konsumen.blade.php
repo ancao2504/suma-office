@@ -58,7 +58,7 @@
 							<span class="fs-8 d-block">Surabaya</span>
 						</div>
 						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">Retur</span>
+							<span class="fs-5 d-block">Claim</span>
 							{{-- <span class="fs-7 d-block">-</span> --}}
 						</div>
 					</div>
@@ -68,22 +68,37 @@
 							<table class="table table-row-dashed table-row-gray-300 align-middle">
 								<thead class="border">
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">No Retur</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">No Faktur</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">Part Number</th>
-										<th colspan="2" class="w-auto ps-3 pe-3">QTY</th>
-										<th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
-										<th rowspan="2" class="w-auto ps-3 pe-3">Status</th>
+										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No</th>
+										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
+										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Part Number</th>
+										<th scope="col" colspan="4" class="w-auto ps-3 pe-3">Tanggal</th>
+										<th scope="col" colspan="3" class="w-auto ps-3 pe-3">Kode</th>
+										<th scope="col" colspan="3" class="w-auto ps-3 pe-3">Status</th>
+										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">QTY</th>
 									</tr>
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th class="w-50px ps-3 pe-3">Claim</th>
-										<th class="w-50px ps-3 pe-3">Dikirim</th>
+
+										<th scope="col" class="ps-3 pe-3">Retur Sales</th>
+										<th scope="col" class="ps-3 pe-3">Aprove SPV</th>
+										<th scope="col" class="ps-3 pe-3">Klaim Supp</th>
+										<th scope="col" class="ps-3 pe-3">Di Jawab</th>
+
+										<th scope="col" class="ps-3 pe-3">Dealer</th>
+										<th scope="col" class="ps-3 pe-3">Sales</th>
+										<th scope="col" class="ps-3 pe-3">Supplier</th>
+
+										<th scope="col" class="ps-3 pe-3">Stock</th>
+										<th scope="col" class="ps-3 pe-3">Minimum</th>
+										<th scope="col" class="ps-3 pe-3">Klaim</th>
+										
+										<th scope="col" class="ps-3 pe-3">Retur</th>
+										<th scope="col" class="ps-3 pe-3">Jawab</th>
 									</tr>
 								</thead>
 								<tbody class="border">
-									<tr>
-                                        <td colspan="8" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
+									<tr class="fw-bolder fs-8 border">
+                                        <td colspan="16" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
                                     </tr>
 								</tbody>
 							</table>
@@ -132,12 +147,8 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-lg-6 mb-3">
-								<label for="tgl_claim" class="form-label">Tanggal Claim</label>
-								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_claim"/>
-							</div>
-							<div class="col-lg-6 mb-3">
-								<label for="tgl_terima" class="form-label">Tanggal Terima</label>
-								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_terima"/>
+								<label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
+								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
 							</div>
 						</div>
 						<div class="row">
@@ -148,46 +159,12 @@
 									{!! $sales !!}
 								</select>
 							</div>
-						</div>
-						<div class="form-group row mb-2">
-							<label for="kd_dealer" class="form-label">Kd Dealer</label>
-							<div class="col-lg-6">
+							<div class="form-group col-lg-6">
+								<label for="kd_dealer" class="form-label">Kode Dealer</label>
 								<div class="input-group mb-3">
-									<input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kd Dealer" value="" required>
+									<input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
 									<button class="btn btn-primary list-dealer" type="button">Pilih</button>
 								</div>
-							</div>
-							<div class="col-lg-6">
-								<input type="text" class="form-control bg-secondary" id="nm_dealer" name="nm_dealer" value="" readonly>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-6 mb-3">
-								<label for="no_faktur" class="form-label">No Faktur</label>
-								<input type="text" class="form-control" id="no_faktur" name="no_faktur" placeholder="No Faktur" value="">
-							</div>
-						</div>
-						<div class="form-group row mb-3">
-							<label for="kd_part" class="form-label">Part Number</label>
-							<div class="col-lg-6">
-								<div class="input-group mb-3">
-									<input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="" required>
-									<button class="btn btn-primary list-part" type="button">Pilih</button>
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<input type="text" class="form-control" id="ket_part" name="ket_part" value="" disabled>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-6 mb-3">
-								<label for="sts" class="form-label">Status</label>
-								<select id="sts" name="sts" class="form-select" aria-label="Default select example">
-									<option selected value="">Semua Status</option>
-									<option value="RETUR">Retur (Ganti Uang)</option>
-									<option value="GANTI BARANG">Ganti barang</option>
-									<option value="CLAIM ke Supplier">Claim ke Supplier</option>
-								</select>
 							</div>
 						</div>
 					</div>
@@ -217,4 +194,51 @@
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/getDealer.js')}}?v={{ time() }}"></script>
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/getPart.js')}}?v={{ time() }}"></script>
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/konsumen/index.js')}}?v={{ time() }}"></script>
+	<script>
+		const tableContainer = $(".table-responsive");
+		const scrollTable = $(".table");
+		const scrollSpeed = 10;
+		const offset = 50;
+
+		let isScrolling = false;
+
+		tableContainer.on("mousemove", function(event) {
+		const mouseX = event.clientX - tableContainer.offset().left;
+		const containerWidth = tableContainer.width();
+
+		if (mouseX < offset) {
+			isScrolling = true;
+			scrollLeft();
+		} else if (mouseX > containerWidth - offset) {
+			isScrolling = true;
+			scrollRight();
+		} else {
+			isScrolling = false;
+			document.body.style.cursor = "default";
+		}
+		});
+
+		function scrollLeft() {
+			if (isScrolling) {
+				document.body.style.cursor = "w-resize";
+				tableContainer.scrollLeft(tableContainer.scrollLeft() - scrollSpeed);
+				requestAnimationFrame(scrollLeft);
+			}
+		}
+
+		function scrollRight() {
+		if (isScrolling) {
+			document.body.style.cursor = "e-resize";
+			tableContainer.scrollLeft(tableContainer.scrollLeft() + scrollSpeed);
+			requestAnimationFrame(scrollRight);
+		}
+		}
+
+		tableContainer.on("mouseleave", function() {
+		isScrolling = false;
+		document.body.style.cursor = "default";
+		});
+
+		</script>
+		
 @endpush

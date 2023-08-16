@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\App\konsumen;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -65,21 +63,19 @@ class KonsumenController extends Controller
     public function create(Request $request)
     {
         $request->merge(['option' => 'select']);
-        $responseApi_merekmotor = OptionController::merekmotor($request)->getData();
-        $statusApi_merekmotor = $responseApi_merekmotor->status;
-        $messageApi_merekmotor =  $responseApi_merekmotor->message;
+        $responseApiMerekmotor = OptionController::merekmotor($request)->getData();
+        $statusApiMerekmotor = $responseApiMerekmotor->status;
 
-        $responseApi_typemotor = json_decode(OptionController::typemotor($request));
-        $statusApi_typemotor = $responseApi_typemotor->status;
-        $messageApi_typemotor =  $responseApi_typemotor->message;
+        $responseApiTypemotor = json_decode(OptionController::typemotor($request));
+        $statusApiTypemotor = $responseApiTypemotor->status;
 
-        if ($statusApi_merekmotor == 1 && $statusApi_typemotor == 1) {
+        if ($statusApiMerekmotor == 1 && $statusApiTypemotor == 1) {
             return view(
                 'layouts.konsumen.create',
                 [
                     'title_menu'        => 'Tambah Konsumen',
-                    'merk_motor_list'   => $responseApi_merekmotor->data,
-                    'type_motor'        => $responseApi_typemotor->data,
+                    'merk_motor_list'   => $responseApiMerekmotor->data,
+                    'type_motor'        => $responseApiTypemotor->data,
                 ],
             );
         }
@@ -113,8 +109,7 @@ class KonsumenController extends Controller
                 'status' => 2,
                 'message' => 'Maaaf, Cabang tidak ditemukan, mohon cek kembali',
             ]);
-        } 
-
+        }
         if(!empty($request->kd_lokasi) && !in_array($request->kd_lokasi, $lokasi->lokasi_valid->kd_lokasi)){
             return Response()->json([
                 'status' => 2,
@@ -144,18 +139,18 @@ class KonsumenController extends Controller
     public function konsumenEdit($id, Request $request){
         
         $request->merge(['option' => 'select']);
-        $responseApi_merekmotor = OptionController::merekmotor($request)->getData();
-        $statusApi_merekmotor = $responseApi_merekmotor->status;
+        $responseApiMerekmotor = OptionController::merekmotor($request)->getData();
+        $statusApiMerekmotor = $responseApiMerekmotor->status;
 
-        $responseApi_typemotor = json_decode(OptionController::typemotor($request));
-        $statusApi_typemotor = $responseApi_typemotor->status;
+        $responseApiTypemotor = json_decode(OptionController::typemotor($request));
+        $statusApiTypemotor = $responseApiTypemotor->status;
         
         $lokasi = session()->get('app_user_company');
 
         // ! cek lokasi,cabang agar sesuai yang di izinkan
         if(!empty($request->companyid) && !in_array($request->companyid, $lokasi->lokasi_valid->companyid)){
             return redirect()->back()->with('failed', 'Maaaf, Anda tidak memiliki akses ke company '.$request->companyid);
-        } 
+        }
         if(!empty($request->kd_lokasi) && !in_array($request->kd_lokasi, $lokasi->lokasi_valid->kd_lokasi)){
             return redirect()->back()->with('failed', 'Maaaf, Anda tidak memiliki akses ke lokasi '.$request->kd_lokasi);
         }
@@ -174,7 +169,7 @@ class KonsumenController extends Controller
         $responseApi = Service::KonsumenDaftar($request);
         $statusApi = json_decode($responseApi)->status;
 
-        if ($statusApi_merekmotor == 1 && $statusApi_typemotor == 1 && $statusApi == 1) {
+        if ($statusApiMerekmotor == 1 && $statusApiTypemotor == 1 && $statusApi == 1) {
             $data = json_decode($responseApi)->data;
             $data->divisi = $request->divisi;
 
@@ -186,8 +181,8 @@ class KonsumenController extends Controller
                 'layouts.konsumen.create',
                 [
                     'title_menu'        => 'Edit Konsumen',
-                    'merk_motor_list'   => $responseApi_merekmotor->data,
-                    'type_motor'        => $responseApi_typemotor->data,
+                    'merk_motor_list'   => $responseApiMerekmotor->data,
+                    'type_motor'        => $responseApiTypemotor->data,
                     'data'              => $data,
                 ],
             );

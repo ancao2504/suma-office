@@ -1,11 +1,7 @@
 let date = {
-    tgl_claim: {
-        start: moment().subtract(0, "days"),
-        end: moment()
-    },
-    tgl_terima: {
-        start: moment().subtract(0, "days"),
-        end: moment()
+    tgl_klaim: {
+        start: moment().startOf('month'),
+        end: moment().endOf('month')
     }
 }
 
@@ -16,7 +12,7 @@ function report(page = 1) {
         $('#table_list tbody').empty();
         $('#table_list tbody').html(`
             <tr>
-                <td colspan="8" class="text-center text-primary">
+                <td colspan="16" class="text-center text-primary">
                     <div class="text-center">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -28,13 +24,9 @@ function report(page = 1) {
         $.post(window.location.href,
             {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                tgl_claim: $('#tgl_claim').val()==''?'':[date.tgl_claim.start.format('YYYY-MM-DD'), date.tgl_claim.end.format('YYYY-MM-DD')],
-                tgl_terima: $('#tgl_terima').val()==''?'':[date.tgl_terima.start.format('YYYY-MM-DD'), date.tgl_terima.end.format('YYYY-MM-DD')],
+                tgl_klaim: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
                 kd_sales: $('#kd_sales').val(),
                 kd_dealer: $('#kd_dealer').val(),
-                no_faktur: $('#no_faktur').val(),
-                kd_part: $('#kd_part').val(),
-                sts: $('#sts').val(),
                 page: page,
                 per_page: $('#per_page').val(),
             }, function (response) {
@@ -46,39 +38,35 @@ function report(page = 1) {
                     if($.isEmptyObject(response.data.data) && response.data.data.length == 0){
                         $('#table_list tbody').html(`
                             <tr>
-                                <td colspan="8" class="text-center text-danger"> Tidak ada data </td>
+                                <td colspan="16" class="text-center text-danger"> Tidak ada data </td>
                             </tr>
                         `);
                         return false;
                     }
 
                     let no = response.data.from;
-                    let total_qty_claim = 0;
-                    let total_qty_dikirim = 0;
                     $.each(response.data.data, function (key, value) {
                         $('#table_list tbody').append(`
                             <tr class="fw-bolder fs-8 border">
                                 <td class="text-center">${ no++}</td>
-                                <td>${value.no_retur?value.no_retur:'-'}</td>
-                                <td>${value.no_faktur?value.no_faktur:'-'}</td>
-                                <td>${value.kd_part?value.kd_part:'-'}</td>
-                                <td class="text-end">${value.qty_claim?value.qty_claim:'-'}</td>
-                                <td class="text-end">${value.qty_dikirim?value.qty_dikirim:'-'}</td>
-                                <td>${value.ket?value.ket:'-'}</td>
-                                <td>${value.status?value.status:'-'}</td>
+                                <td>${value.no_klaim??'-'}</td>
+                                <td>${value.kd_part??'-'}</td>
+                                <td>${value.tgl_klaim?moment(value.tgl_klaim).format('YYYY/MM/DD'):'-'}</td>
+                                <td>${value.tgl_approve?moment(value.tgl_approve).format('YYYY/MM/DD'):'-'}</td>
+                                <td>${value.tgl_retur?moment(value.tgl_retur).format('YYYY/MM/DD'):'-'}</td>
+                                <td>${value.tgl_jwb?moment(value.tgl_jwb).format('YYYY/MM/DD'):'-'}</td>
+                                <td>${value.kd_dealer??'-'}</td>
+                                <td>${value.kd_sales??'-'}</td>
+                                <td>${value.kd_supp??'-'}</td>
+                                <td>${value.sts_stock??'-'}</td>
+                                <td>${value.sts_min??'-'}</td>
+                                <td>${value.sts_klaim??'-'}</td>
+                                <td>${value.keterangan??'-'}</td>
+                                <td>${value.qty_retur??'-'}</td>
+                                <td>${value.qty_jwb??'-'}</td>
                             </tr>
                         `);
-                        total_qty_claim += parseInt(value.qty_claim);
-                        total_qty_dikirim += parseInt(value.qty_dikirim);
                     });
-                    $('#table_list tbody').append(`
-                        <tr class="fw-bolder fs-8 border bg-secondary">
-                            <td colspan="4" class="text-center"> Total : </td>
-                            <td class="text-end">${total_qty_claim?total_qty_claim:'-'}</td>
-                            <td class="text-end">${total_qty_dikirim?total_qty_dikirim:'-'}</td>
-                            <td colspan="2"></td>
-                        </tr>
-                    `);
 
                     // pagination
                     $('#table_list .pagination').empty();
@@ -133,39 +121,20 @@ function report(page = 1) {
 }
 
 $(document).ready(function () {
-    $("#tgl_claim").on('focus', function () {
-        $("#tgl_claim").daterangepicker({
-            format: 'DD/MM/YYYY',
-            startDate: date.tgl_claim.start,
-            endDate: date.tgl_claim.end,
-            ranges: {
-                "Hari ini": [moment(), moment()],
-                "Kemarin": [moment().subtract(1, "days"), moment().subtract(1, "days")],
-                "1 minggu terakhir": [moment().subtract(6, "days"), moment()],
-                "Bulan ini": [moment().startOf("month"), moment().endOf("month")],
-                "Bulan Kemarin": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
-            }
-        }, function (start, end) {
-            date.tgl_claim.start = start
-            date.tgl_claim.end = end
-        });
-    });
-
-    $("#tgl_terima").on('focus', function () {
-        $("#tgl_terima").daterangepicker({
-            startDate: date.tgl_terima.start,
-            endDate: date.tgl_terima.end,
-            ranges: {
-                "Hari ini": [moment(), moment()],
-                "Kemarin": [moment().subtract(1, "days"), moment().subtract(1, "days")],
-                "1 minggu terakhir": [moment().subtract(6, "days"), moment()],
-                "Bulan ini": [moment().startOf("month"), moment().endOf("month")],
-                "Bulan Kemarin": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
-            }
-        }, function (start, end) {
-            date.tgl_terima.start = start
-            date.tgl_terima.end = end
-        });
+    $("#tgl_klaim").daterangepicker({
+        format: 'DD/MM/YYYY',
+        startDate: date.tgl_klaim.start,
+        endDate: date.tgl_klaim.end,
+        ranges: {
+            "Hari ini": [moment(), moment()],
+            "Kemarin": [moment().subtract(1, "days"), moment().subtract(1, "days")],
+            "1 minggu terakhir": [moment().subtract(6, "days"), moment()],
+            "Bulan ini": [moment().startOf("month"), moment().endOf("month")],
+            "Bulan Kemarin": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+        }
+    }, function (start, end) {
+        date.tgl_klaim.start = start
+        date.tgl_klaim.end = end
     });
 
     $('.btn-smt').on('click', function (e) {
