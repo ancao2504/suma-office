@@ -2138,7 +2138,7 @@ class Service
         $url = 'backend/report/retur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'tgl_klaim'     => $request->tanggal,
+            'tanggal'     => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
             'kd_dealer'     => $request->kd_dealer,
             'page'          => $request->page ?? 1,
@@ -2156,13 +2156,9 @@ class Service
         $body = [
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
-            'tgl_claim'     => $request->tgl_claim,
-            'tgl_terima'    => $request->tgl_terima,
+            'tanggal'     => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
-            'kd_dealer'     => $request->kd_dealer,
-            'no_faktur'     => $request->no_faktur,
-            'kd_part'       => $request->kd_part,
-            'sts'           => $request->sts,
+            'kd_dealer'     => $request->kd_dealer
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2483,6 +2479,7 @@ class Service
             'no_dok'             => $request->no_dok,
             'kd_packer'          => $request->kd_packer,
             'no_meja'            => $request->no_meja,
+            'sts_packing'        => $request->sts_packing
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

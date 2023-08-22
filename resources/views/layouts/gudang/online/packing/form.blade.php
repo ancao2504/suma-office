@@ -2,6 +2,27 @@
 @section('title','Gudang Online')
 @section('subtitle','Packing')
 @push('styles')
+    <style>
+        .timer-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .timer-label {
+            font-size: 1rem;
+            color: #666;
+        }
+
+    </style>
 @endpush
 
 @section('container')
@@ -16,8 +37,8 @@
                     </div>
                     <div class="form-group row mb-2">
                         <div class="col-8">
-                            <label for="no_meja" class="col-form-label">Nomor Meja</label>
-                            <select class="form-select fw-bolder @error('no_meja') is-invalid @enderror" name="no_meja" id="no_meja" onkeydown="focusNextElement(event, this)">
+                            <label for="no_meja" class="col-form-label required">Nomor Meja</label>
+                            <select class="form-select fw-bolder @error('no_meja') is-invalid @enderror" name="no_meja" id="no_meja">
                                 <option value="">Pilih Nomer Meja</option>
                                 {!! $meja !!}
                             </select>
@@ -29,7 +50,7 @@
                         </div>
                         <div class="col-4">
                             <label for="kd_packer" class="col-form-label required">Packer</label>
-                            <input type="text" class="form-control @error('kd_packer') is-invalid @enderror" id="kd_packer" name="kd_packer" value="{{ old('kd_packer')??session('kd_packer') }}" onkeydown="focusNextElement(event, this)">
+                            <input type="text" class="form-control @error('kd_packer') is-invalid @enderror" id="kd_packer" name="kd_packer" value="{{ old('kd_packer')??session('kd_packer') }}">
                             @error('kd_packer')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -40,7 +61,7 @@
                     <div class="form-group row mb-2">
                         <label for="no_dok" class="col-form-label required">Nomor WH</label>
                         <div class="input-group has-validation">
-                            <input type="text" class="form-control @error('no_dok') is-invalid @enderror" id="no_dok" name="no_dok" value="{{ old('no_dok') }}" onkeydown="focusNextElement(event, this)">
+                            <input type="text" class="form-control @error('no_dok') is-invalid @enderror" id="no_dok" name="no_dok" value="{{ old('no_dok') }}">
                             <span class="input-group-text bg-primary" style="cursor: pointer;" id="btn_nowh" data-bs-toggle="modal" data-bs-target="#autocomplateKonsumen"><i class="bi bi-search text-white"></i></span>
                             @error('no_dok')
                             <div class="invalid-feedback">
@@ -70,10 +91,24 @@
                             </table>
                         </div>
                     </div>
+                    <div class="timer-container" hidden>
+                        <div class="timer" id="timer">00:00:00</div>
+                        <div class="timer-label">Proses Packing</div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success w-100" id="btn_submit">Simpan</button>
+                <div class="row w-100">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-success w-100" id="btn_submit_start">MULAI</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="btn btn-success w-100" id="btn_submit_finish">SELESAI</button>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="button" class="btn btn-warning w-100" id="btn_submit_reset" hidden>Ulangi Proses Packing</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

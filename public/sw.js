@@ -10,8 +10,7 @@ self.addEventListener("install", function (event) {
 });
 
 const filesToCache = [
-    '/',
-    '/offline.html'
+    '../public'
 ];
 
 const checkResponse = function (request) {

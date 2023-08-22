@@ -51,8 +51,8 @@
 							</div>
 
 							<div class="fv-row mb-10">
-								<label class="form-label fs-6 fw-bolder text-dark">Email</label>
-								<input class="form-control form-control-lg form-control-solid" type="text" name="email" autocomplete="off"
+								<label class="form-label fs-6 fw-bolder text-dark">Email atau Username</label>
+								<input class="form-control form-control-lg form-control-solid" type="text" name="email" autocomplete="off" placeholder="Email atau Username"
                                     @if(old('email'))
                                         value="{{ old('email') }}"
                                     @else
@@ -66,7 +66,7 @@
 								<div class="d-flex flex-stack mb-2">
 									<label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
 								</div>
-								<input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off"
+								<input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" placeholder="Password"
                                     @if(Cookie::has('password')) value="{{ Cookie::get('password') }}" @endif/>
 							</div>
 

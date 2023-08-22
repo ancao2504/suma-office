@@ -4,6 +4,10 @@ let date = {
         end: moment().endOf('month')
     }
 }
+var formatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+});
 
 function report(page = 1) {
     loading.block();
@@ -12,7 +16,7 @@ function report(page = 1) {
         $('#table_list tbody').empty();
         $('#table_list tbody').html(`
             <tr>
-                <td colspan="16" class="text-center text-primary">
+                <td colspan="24" class="text-center text-primary">
                     <div class="text-center">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -24,7 +28,7 @@ function report(page = 1) {
         $.post(window.location.href,
             {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                tgl_klaim: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
+                tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
                 kd_sales: $('#kd_sales').val(),
                 kd_dealer: $('#kd_dealer').val(),
                 page: page,
@@ -38,11 +42,12 @@ function report(page = 1) {
                     if($.isEmptyObject(response.data.data) && response.data.data.length == 0){
                         $('#table_list tbody').html(`
                             <tr>
-                                <td colspan="16" class="text-center text-danger"> Tidak ada data </td>
+                                <td colspan="24" class="text-center text-danger"> Tidak ada data </td>
                             </tr>
                         `);
                         return false;
                     }
+                    $('#title_dokumen').text(moment(date.tgl_klaim.start).locale('id').format('DD MMMM YYYY') + ' s/d ' + moment(date.tgl_klaim.end).locale('id').format('DD MMMM YYYY'));
 
                     let no = response.data.from;
                     $.each(response.data.data, function (key, value) {
@@ -52,18 +57,25 @@ function report(page = 1) {
                                 <td class="ps-3 pe-3">${value.no_klaim??'-'}</td>
                                 <td class="ps-3 pe-3">${value.kd_part??'-'}</td>
                                 <td class="ps-3 pe-3">${value.tgl_klaim?moment(value.tgl_klaim).format('YYYY/MM/DD'):'-'}</td>
-                                <td class="ps-3 pe-3">${value.tgl_approve?moment(value.tgl_approve).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_rtoko?moment(value.tgl_rtoko).format('YYYY/MM/DD'):'-'}</td>
                                 <td class="ps-3 pe-3">${value.tgl_retur?moment(value.tgl_retur).format('YYYY/MM/DD'):'-'}</td>
                                 <td class="ps-3 pe-3">${value.tgl_jwb?moment(value.tgl_jwb).format('YYYY/MM/DD'):'-'}</td>
-                                <td class="ps-3 pe-3">${value.kd_dealer??'-'}</td>
                                 <td class="ps-3 pe-3">${value.kd_sales??'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_dealer??'-'}</td>
                                 <td class="ps-3 pe-3">${value.kd_supp??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.sts_stock??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.sts_min??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.sts_klaim??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_approve)==1)?'<i class="bi bi-check-lg"></i>':'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_selesai)==1)?'<i class="bi bi-check-lg"></i>':'-'}</td>
                                 <td class="ps-3 pe-3">${value.keterangan??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${value.qty_klaim??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${value.qty_jwb??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_barang_terima??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_barang_tolak??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_uang_terima??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_uang_tolak??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.total_ca?formatter.format(value.total_ca):'-'}</td>
                             </tr>
                         `);
                     });
@@ -152,7 +164,7 @@ $(document).ready(function () {
             },
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                tgl_klaim: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
+                tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
                 kd_sales: $('#kd_sales').val(),
                 kd_dealer: $('#kd_dealer').val()
             }

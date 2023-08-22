@@ -1,9 +1,11 @@
-function form_clear(){
+function form_clear(ca = true){
     $('#jml').val('');
     $('#alasan').val('RETUR').trigger('change');
-    $('#ca').val('');
     $('#ket').val('');
     $('#keputusan').val('TERIMA').trigger('change');
+    if(ca){
+        $('#ca').val('');
+    }
 }
 
 function formatRibuan(input) {
@@ -71,7 +73,7 @@ function simpan(request){
                     view_table.find('td:eq(7)').html(response.data.ket);
                     view_table.find('.btn_jwb').data('a', btoa(JSON.stringify(data)));
 
-                    form_clear();
+                    form_clear(false);
                     if(parseFloat(view_table.find('td:eq(5)').text()) == parseFloat(view_table.find('td:eq(6)').text())){
                         $('#jwb_modal').modal('hide');
                     }
@@ -111,6 +113,8 @@ function simpan(request){
                     }
                 });
             }
+    }).always(function () {
+        loading.release();
     }).fail(function (err) {
         swal.fire({
             title: 'Perhatian!',
@@ -127,7 +131,6 @@ function simpan(request){
             }
         });
     });
-    loading.release();
 }
 
 $(document).ready(function () {
@@ -236,6 +239,8 @@ $(document).ready(function () {
                     }
                 });
             }
+        }).always(function () {
+            loading.release();
         }).fail(function (err) {
             swal.fire({
                 title: 'Perhatian!',
@@ -252,7 +257,6 @@ $(document).ready(function () {
                 }
             });
         });
-        loading.release();
     });
 
     $('.btn_simpan_tmp:not([disabled])').on('click', function () {

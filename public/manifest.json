@@ -1,17 +1,23 @@
 {
-    "name": "Suma Parts Mobile Ordering",
-    "short_name": "Suma-PMO",
-    "start_url": "/index.php",
+    "name": "Suma Office",
+    "short_name": "Suma-Office",
+    "start_url": "../",
     "background_color": "#ffffff",
-    "description": "Suma Parts Mobile Ordering Application",
+    "description": "Suma Office Application",
     "display": "fullscreen",
     "theme_color": "#ffffff",
     "icons": [
         {
-            "src": "https://suma-honda.id/assets/images/logo/ic_suma.png",
+            "src": "https://suma-honda.id/ic_suma 512x512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "https://suma-honda.id/ic_suma 192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
         }
     ]
 }

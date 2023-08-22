@@ -1212,7 +1212,7 @@ class ApiOptionsController extends Controller
             $data = DB::table('wh_time')
             ->lock('with (nolock)')
             ->select(
-                'wh_time.no_dok','dealer.nm_dealer', 'faktur.ket','faktur.kd_ekspedisi'
+                'wh_time.no_dok','dealer.nm_dealer', 'faktur.ket','faktur.kd_ekspedisi', 'wh_time.tanggal3 as tgl_start','wh_time.jam3 as jam_start','wh_time.tanggal4 as tgl_finish','wh_time.jam4 as jam_finish'
             )
             ->joinSub(function ($query) use ($request) {
                 $query->select('no_dok', 'no_faktur')
@@ -1247,10 +1247,10 @@ class ApiOptionsController extends Controller
                 $data = $data->first();
             } else if ($request->option == 'page') {
                 $data = $data
-                ->whereNull('wh_time.kd_lokpack')
-                ->whereNull('wh_time.no_sj')
+                ->whereNull('wh_time.tanggal3')
+                ->whereNull('wh_time.jam3')
                 ->orderBy('wh_time.no_dok', 'asc')
-                ->groupBy('wh_time.no_dok', 'dealer.nm_dealer', 'faktur.ket', 'faktur.kd_ekspedisi')
+                ->groupBy('wh_time.no_dok', 'dealer.nm_dealer', 'faktur.ket', 'faktur.kd_ekspedisi','wh_time.tanggal3','wh_time.jam3','wh_time.tanggal4','wh_time.jam4')
                 ->paginate($request->per_page);
             }
 

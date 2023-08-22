@@ -58,8 +58,8 @@
 							<span class="fs-8 d-block">Surabaya</span>
 						</div>
 						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">Klaim</span>
-							{{-- <span class="fs-7 d-block">-</span> --}}
+							<span class="fs-5 d-block">Retur</span>
+							<span class="fs-7 d-block" id="title_dokumen"></span>
 						</div>
 					</div>
 					<!--begin::card-body-->
@@ -68,37 +68,50 @@
 							<table class="table table-row-dashed table-row-gray-300 align-middle">
 								<thead class="border">
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Part Number</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No Dokumen</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
 										<th scope="col" colspan="4" class="w-auto ps-3 pe-3">Tanggal</th>
 										<th scope="col" colspan="3" class="w-auto ps-3 pe-3">Kode</th>
-										<th scope="col" colspan="3" class="w-auto ps-3 pe-3">Status</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+										<th scope="col" colspan="5" class="w-auto ps-3 pe-3">Status</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Keterangan</th>
 										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">QTY</th>
+										<th scope="col" colspan="6" class="w-auto ps-3 pe-3">Jawab</th>
 									</tr>
 									<tr class="fs-8 fw-bolder text-muted text-center">
 
-										<th scope="col" class="ps-3 pe-3">Retur Sales</th>
-										<th scope="col" class="ps-3 pe-3">Aprove SPV</th>
-										<th scope="col" class="ps-3 pe-3">Klaim Supplier</th>
-										<th scope="col" class="ps-3 pe-3">Di Jawab</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Retur Sales</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Retur SPV</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim Supplier</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Di Jawab</th>
 
-										<th scope="col" class="ps-3 pe-3">Dealer</th>
-										<th scope="col" class="ps-3 pe-3">Sales</th>
-										<th scope="col" class="ps-3 pe-3">Supplier</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Sales</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Dealer</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Supplier</th>
 
-										<th scope="col" class="ps-3 pe-3">Stock</th>
-										<th scope="col" class="ps-3 pe-3">Minimum</th>
-										<th scope="col" class="ps-3 pe-3">Klaim</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Stock</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Minimum</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Approve SPV</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">selesai</th>
 										
-										<th scope="col" class="ps-3 pe-3">Klaim</th>
-										<th scope="col" class="ps-3 pe-3">Jawab</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Retur</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Jawab</th>
+
+										<th scope="col" colspan="2" class="ps-3 pe-3">Ganti Barang</th>
+										<th scope="col" colspan="3" class="ps-3 pe-3">Ganti Uang</th>
+									</tr>
+									<tr class="fs-8 fw-bolder text-muted text-center">
+										<th scope="col" class="ps-3 pe-3">Terima</th>
+										<th scope="col" class="ps-3 pe-3">Tolak</th>
+										<th scope="col" class="ps-3 pe-3">Terima</th>
+										<th scope="col" class="ps-3 pe-3">Tolak</th>
+										<th scope="col" class="ps-3 pe-3">Total</th>
 									</tr>
 								</thead>
 								<tbody class="border">
 									<tr class="fw-bolder fs-8 border">
-                                        <td colspan="16" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
+                                        <td colspan="24" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
                                     </tr>
 								</tbody>
 							</table>

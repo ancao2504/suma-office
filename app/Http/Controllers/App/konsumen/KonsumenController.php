@@ -52,7 +52,7 @@ class KonsumenController extends Controller
                 'layouts.konsumen.konsumen',
                 [
                     'title_menu'    => 'Konsumen',
-                    'data'          => json_decode($responseApi)->data,
+                    'data'          => $responseApi->data,
                     'lokasi'        => $lokasi,
                 ],
             );

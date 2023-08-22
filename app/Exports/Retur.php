@@ -29,21 +29,28 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'no_klaim',
-            'kd_part',
-            'tgl_klaim',
-            'tgl_approve',
-            'tgl_retur',
-            'tgl_jwb',
-            'kd_dealer',
-            'kd_sales',
-            'kd_supp',
-            'sts_klaim',
-            'sts_stock',
-            'sts_min',
+            'No Dokumen',
+            'Kode Part',
+            'Tgl Klaim',
+            'Tgl Klaim SPV',
+            'Tgl Retur Supplier',
+            'Tgl Jawab Supplier',
+            'Kode Salse',
+            'Kode Dealer',
+            'Kode Supplier',
+            'Status Stock',
+            'Status Minimum',
+            'Status Klaim',
+            'Status Approve SPV',
+            'Setatus Retur Selesai',
             'keterangan',
-            'qty_klaim',
-            'qty_jwb'
+            'QTY Klaim',
+            'QTY Dijawab',
+            'QTY Ganti Barang Diterima',
+            'QTY Ganti Barang Ditolak',
+            'QTY Ganti Uang Terima',
+            'QTY Ganti Uang Tolak',
+            'Total Ganti Uang'
         ];
     }
 }

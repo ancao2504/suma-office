@@ -44,14 +44,20 @@ class PackingController extends Controller
                 'no_dok'    => 'required',
                 'no_meja'   => 'required',
                 'kd_packer' => 'required',
+                'sts_packing'    => 'required'
             ],[
                 'no_meja.required'      => 'Meja tidak boleh kosong!',
                 'kd_packer.required'    => 'Packer tidak boleh kosong!',
                 'no_dok.required'        => 'Nomer WH tidak boleh kosong!',
+                'sts_packing.required'        => 'Status Tidak boleh kosong!',
             ]);
 
             if ($validate->fails()) {
-                return redirect()->back()->withErrors($validate->errors())->withInput();
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => $validate->errors(),
+                    'data'      => ''
+                ], 200);
             }
 
 
@@ -62,12 +68,24 @@ class PackingController extends Controller
                 $request->session()->put('no_meja', $request->no_meja);
                 $request->session()->put('kd_packer', $request->kd_packer);
 
-                return redirect()->back()->with('success', $messageApi);
+                return Response()->json([
+                    'status'    => 1,
+                    'message'   => $messageApi,
+                    'data'      => $responseApi->data
+                ], 200);
             }
             
-            return redirect()->back()->with('failed', $messageApi);
+            return Response()->json([
+                'status'    => 0,
+                'message'   => $messageApi,
+                'data'      => ''
+            ], 200);
         } catch (\Throwable $exception) {
-            return redirect()->back()->with('failed', 'Maaf terjadi kesalahan pada Server, coba ulangi beberapa saat lagi!');
+            return Response()->json([
+                'status'    => 2,
+                'message'   => 'Maaf terjadi kesalahan pada Server, coba ulangi beberapa saat lagi!',
+                'data'      => ''
+            ], 200);
         }
     }
 

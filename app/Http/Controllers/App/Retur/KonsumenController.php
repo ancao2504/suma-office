@@ -25,6 +25,7 @@ class KonsumenController extends Controller
                 'per_page' => 10
             ]);
         }
+
         $request->merge(['option' => ['page']]);
         $responseApi = json_decode(Service::ReturKonsumenDaftar($request));
         $statusApi = $responseApi->status??0;

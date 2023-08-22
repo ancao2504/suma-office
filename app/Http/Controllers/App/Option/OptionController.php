@@ -1993,7 +1993,7 @@ class OptionController extends Controller
                             (object)[ 'option' => 'text', 'class' => 'w-auto fs-7', 'key' => 'no_dok'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
                                 (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
-                                    'data' => [(object)['key' => 'kd','value' => ['no_dok','nm_dealer','ket','kd_ekspedisi']]]
+                                    'data' => [(object)['key' => 'kd','value' => ['no_dok','nm_dealer','ket','kd_ekspedisi','tgl_start','jam_start','tgl_finish','jam_finish']]]
                                 ],
                             ]],
                         ],

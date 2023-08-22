@@ -39,6 +39,7 @@
 					<!--begin::Card-->
 					<div class="card-header align-items-center py-5 gap-2 gap-md-5">
 						<div class="card-title" id="btn_filter">
+							@if (session('app_user_id') == 'MD_H3_MGMT')
 							<div class="dropdown d-inline-block me-2">
 								<button class="btn btn-light-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 									<i class="bi bi-file-earmark-arrow-down fs-4"></i> Export
@@ -47,6 +48,7 @@
 									<li><a id="btn_export" class="dropdown-item" href="#">EXEL</a></li>
 								</ul>
 							</div>
+							@endif
 							<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_report">
 								<i class="bi bi-filter fs-1"></i> Filter
 							</button>

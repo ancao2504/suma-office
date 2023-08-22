@@ -32,15 +32,18 @@ class ReturController extends Controller
                         'klaim_dtl.sts_klaim',
                         'klaim_dtl.sts_min',
                         'klaim_dtl.sts_stock',
+                        'klaim.status_approve',
+                        'klaim.status_end',
                         'klaim.companyid'
                     )
                     ->from('klaim')
                     ->join('klaim_dtl', function ($join) {
                         $join->on('klaim_dtl.no_dokumen', '=', 'klaim.no_dokumen')
                             ->on('klaim_dtl.companyid', '=', 'klaim.companyid');
-                    });
+                    })
+                    ->where('klaim.companyid', $request->companyid);
                     if(!empty($request->tanggal)){
-                        $query = $query->whereBetween(DB::raw('CONVERT(DATE, klaim.tgl_klaim)'), $request->tanggal);
+                        $query = $query->whereBetween(DB::raw('CONVERT(DATE, klaim.tgl_dokumen)'), $request->tanggal);
                     }
                     if(!empty($request->kd_dealer)){
                         $query = $query->where('klaim.kd_dealer', $request->kd_dealer);
@@ -53,13 +56,12 @@ class ReturController extends Controller
                 'klaim.no_dokumen as no_klaim',
                 'klaim.kd_part',
                 'klaim.tgl_dokumen as tgl_klaim',
-                'rtoko.tanggal as tgl_approve',
+                'rtoko.tanggal as tgl_rtoko',
                 'retur.tglretur as tgl_retur',
                 'retur.tgl_jwb as tgl_jwb',
-                DB::raw("CASE
-                    WHEN klaim.sts_klaim = 1 THEN 'Supplier'
-                    ELSE 'Tidak Klaim'
-                END AS sts_klaim"),
+                'klaim.kd_sales',
+                'klaim.kd_dealer',
+                'retur.kd_supp',
                 DB::raw("CASE
                     WHEN klaim.sts_stock = 1 THEN 'Ganti Barang'
                     WHEN klaim.sts_stock = 2 THEN 'Stock 0'
@@ -67,26 +69,36 @@ class ReturController extends Controller
                     ELSE null
                 END AS sts_stock"),
                 DB::raw("CASE
-                    WHEN klaim.sts_min = 1 THEN 'Minimum'
-                    ELSE 'Tidak'
+                    WHEN klaim.sts_min = 1 THEN 'IYA'
+                    ELSE 'TIDAK'
                 END AS sts_min"),
-                'klaim.kd_dealer',
-                'klaim.kd_sales',
-                'retur.kd_supp',
-                'klaim.qty_klaim',
-                'rtoko.qty_rtoko',
-                'retur.jmlretur as qty_retur',
-                'retur.qty_jwb as qty_jwb',
+                DB::raw("CASE
+                    WHEN klaim.sts_klaim = 1 THEN 'IYA'
+                    ELSE 'TIDAK'
+                END AS sts_klaim"),
+                DB::raw("CASE
+                    WHEN klaim.status_approve = 1 THEN 1
+                    ELSE 0
+                END AS sts_approve"),
+                DB::raw("CASE
+                    WHEN klaim.status_end = 1 THEN 1
+                    ELSE 0
+                END AS sts_selesai"),
                 DB::raw("CASE
                     WHEN retur.ket is not null THEN SUBSTRING(retur.ket, CHARINDEX('|', retur.ket) + 1, LEN(retur.ket) - CHARINDEX('|', retur.ket))
                     WHEN rtoko.ket is not null THEN rtoko.ket
                     WHEN klaim.keterangan is not null THEN klaim.keterangan
                     ELSE null
                 END AS keterangan"),
-                'retur.ket_jwb as ket_jwb',
-                'klaim.companyid'
+                'klaim.qty_klaim',
+                'retur.qty_jwb as qty_jwb',
+                'jwb.qty_ganti_barang_terima',
+                'jwb.qty_ganti_barang_tolak',
+                'jwb.qty_ganti_uang_terima',
+                'jwb.qty_ganti_uang_tolak',
+                'jwb.total_ca'
             )
-            ->leftJoinSub(function ($query) {
+            ->leftJoinSub(function ($query) use ($request){
                 $query->select(
                     'rtoko.no_retur',
                     'rtoko_dtl.no_klaim',
@@ -99,6 +111,7 @@ class ReturController extends Controller
                     'rtoko.CompanyId'
                 )
                 ->from('rtoko')
+                ->where('rtoko.companyid', $request->companyid)
                 ->join('rtoko_dtl', function ($join) {
                     $join->on('rtoko_dtl.no_retur', '=', 'rtoko.no_retur')
                         ->on('rtoko_dtl.CompanyId', '=', 'rtoko.CompanyId');
@@ -126,7 +139,9 @@ class ReturController extends Controller
                 ->join('retur_dtl', function ($join) {
                     $join->on('retur_dtl.no_retur', '=', 'retur.no_retur')
                         ->on('retur_dtl.CompanyId', '=', 'retur.CompanyId');
-                });
+                })
+                ->where('retur.CompanyId', $request->companyid);
+
                 if(!empty($request->kd_supp)){
                     $query = $query->where('retur.kd_supp', $request->kd_supp);
                 }
@@ -134,6 +149,43 @@ class ReturController extends Controller
                 $join->on('retur.no_klaim', '=', 'rtoko.no_retur')
                     ->on('retur.kd_part', '=', 'klaim.kd_part')
                     ->on('retur.CompanyId', '=', 'klaim.companyid');
+            })
+            ->leftJoinSub(function ($query) use ($request){
+                $query->select(
+                    'no_retur',
+                    'no_klaim',
+                    'kd_part',
+                    'CompanyId',
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'RETUR' and keputusan = 'TERIMA' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_barang_terima"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'RETUR' and keputusan = 'TOLAK' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_barang_tolak"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'CA' and keputusan = 'TERIMA' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_uang_terima"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'CA' and keputusan = 'TOLAK' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_uang_tolak"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'CA' and keputusan = 'TERIMA' THEN ca
+                        ELSE 0
+                    END) AS total_ca")
+                )
+                ->from('jwb_claim')
+                ->where('CompanyId', $request->companyid)
+                ->groupBy('no_retur','no_klaim','kd_part','CompanyId');
+            }, 'jwb', function($join){
+                $join->on('jwb.no_retur', 'retur.no_retur')
+                ->on('jwb.no_klaim', 'retur.no_klaim')
+                ->on('jwb.kd_part', 'retur.kd_part')
+                ->on('jwb.CompanyId', 'klaim.companyid')
+                ->where('klaim.status_end', '=', 1);
             })
             ->orderBy('klaim.no_dokumen', 'asc')
             ->paginate($request->per_page);
@@ -167,15 +219,18 @@ class ReturController extends Controller
                     'klaim_dtl.sts_klaim',
                     'klaim_dtl.sts_min',
                     'klaim_dtl.sts_stock',
+                    'klaim.status_approve',
+                    'klaim.status_end',
                     'klaim.companyid'
                 )
                 ->from('klaim')
                 ->join('klaim_dtl', function ($join) {
                     $join->on('klaim_dtl.no_dokumen', '=', 'klaim.no_dokumen')
                         ->on('klaim_dtl.companyid', '=', 'klaim.companyid');
-                });
+                })
+                ->where('klaim.companyid', $request->companyid);
                 if(!empty($request->tanggal)){
-                    $query = $query->whereBetween(DB::raw('CONVERT(DATE, klaim.tgl_klaim)'), $request->tanggal);
+                    $query = $query->whereBetween(DB::raw('CONVERT(DATE, klaim.tgl_dokumen)'), $request->tanggal);
                 }
                 if(!empty($request->kd_dealer)){
                     $query = $query->where('klaim.kd_dealer', $request->kd_dealer);
@@ -188,16 +243,12 @@ class ReturController extends Controller
                 'klaim.no_dokumen as no_klaim',
                 'klaim.kd_part',
                 'klaim.tgl_dokumen as tgl_klaim',
-                'rtoko.tanggal as tgl_approve',
+                'rtoko.tanggal as tgl_rtoko',
                 'retur.tglretur as tgl_retur',
                 'retur.tgl_jwb as tgl_jwb',
-                'klaim.kd_dealer',
                 'klaim.kd_sales',
+                'klaim.kd_dealer',
                 'retur.kd_supp',
-                DB::raw("CASE
-                    WHEN klaim.sts_klaim = 1 THEN 'Supplier'
-                    ELSE 'Tidak Klaim'
-                END AS sts_klaim"),
                 DB::raw("CASE
                     WHEN klaim.sts_stock = 1 THEN 'Ganti Barang'
                     WHEN klaim.sts_stock = 2 THEN 'Stock 0'
@@ -205,9 +256,21 @@ class ReturController extends Controller
                     ELSE null
                 END AS sts_stock"),
                 DB::raw("CASE
-                    WHEN klaim.sts_min = 1 THEN 'Minimum'
-                    ELSE 'Tidak'
+                    WHEN klaim.sts_min = 1 THEN 'IYA'
+                    ELSE 'TIDAK'
                 END AS sts_min"),
+                DB::raw("CASE
+                    WHEN klaim.sts_klaim = 1 THEN 'IYA'
+                    ELSE 'TIDAK'
+                END AS sts_klaim"),
+                DB::raw("CASE
+                    WHEN klaim.status_approve = 1 THEN 1
+                    ELSE 0
+                END AS sts_approve"),
+                DB::raw("CASE
+                    WHEN klaim.status_end = 1 THEN 1
+                    ELSE 0
+                END AS sts_selesai"),
                 DB::raw("CASE
                     WHEN retur.ket is not null THEN SUBSTRING(retur.ket, CHARINDEX('|', retur.ket) + 1, LEN(retur.ket) - CHARINDEX('|', retur.ket))
                     WHEN rtoko.ket is not null THEN rtoko.ket
@@ -215,9 +278,14 @@ class ReturController extends Controller
                     ELSE null
                 END AS keterangan"),
                 'klaim.qty_klaim',
-                'retur.qty_jwb as qty_jwb'
+                'retur.qty_jwb as qty_jwb',
+                'jwb.qty_ganti_barang_terima',
+                'jwb.qty_ganti_barang_tolak',
+                'jwb.qty_ganti_uang_terima',
+                'jwb.qty_ganti_uang_tolak',
+                'jwb.total_ca'
             )
-            ->leftJoinSub(function ($query) {
+            ->leftJoinSub(function ($query) use ($request){
                 $query->select(
                     'rtoko.no_retur',
                     'rtoko_dtl.no_klaim',
@@ -230,6 +298,7 @@ class ReturController extends Controller
                     'rtoko.CompanyId'
                 )
                 ->from('rtoko')
+                ->where('rtoko.companyid', $request->companyid)
                 ->join('rtoko_dtl', function ($join) {
                     $join->on('rtoko_dtl.no_retur', '=', 'rtoko.no_retur')
                         ->on('rtoko_dtl.CompanyId', '=', 'rtoko.CompanyId');
@@ -257,7 +326,9 @@ class ReturController extends Controller
                 ->join('retur_dtl', function ($join) {
                     $join->on('retur_dtl.no_retur', '=', 'retur.no_retur')
                         ->on('retur_dtl.CompanyId', '=', 'retur.CompanyId');
-                });
+                })
+                ->where('retur.CompanyId', $request->companyid);
+
                 if(!empty($request->kd_supp)){
                     $query = $query->where('retur.kd_supp', $request->kd_supp);
                 }
@@ -265,6 +336,43 @@ class ReturController extends Controller
                 $join->on('retur.no_klaim', '=', 'rtoko.no_retur')
                     ->on('retur.kd_part', '=', 'klaim.kd_part')
                     ->on('retur.CompanyId', '=', 'klaim.companyid');
+            })
+            ->leftJoinSub(function ($query) use ($request){
+                $query->select(
+                    'no_retur',
+                    'no_klaim',
+                    'kd_part',
+                    'CompanyId',
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'RETUR' and keputusan = 'TERIMA' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_barang_terima"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'RETUR' and keputusan = 'TOLAK' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_barang_tolak"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'CA' and keputusan = 'TERIMA' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_uang_terima"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'CA' and keputusan = 'TOLAK' THEN qty_jwb
+                        ELSE 0
+                    END) AS qty_ganti_uang_tolak"),
+                    DB::raw("sum (CASE
+                    WHEN alasan = 'CA' and keputusan = 'TERIMA' THEN ca
+                        ELSE 0
+                    END) AS total_ca")
+                )
+                ->from('jwb_claim')
+                ->where('CompanyId', $request->companyid)
+                ->groupBy('no_retur','no_klaim','kd_part','CompanyId');
+            }, 'jwb', function($join){
+                $join->on('jwb.no_retur', 'retur.no_retur')
+                ->on('jwb.no_klaim', 'retur.no_klaim')
+                ->on('jwb.kd_part', 'retur.kd_part')
+                ->on('jwb.CompanyId', 'klaim.companyid')
+                ->where('klaim.status_end', '=', 1);
             })
             ->orderBy('klaim.no_dokumen', 'asc')
             ->get();

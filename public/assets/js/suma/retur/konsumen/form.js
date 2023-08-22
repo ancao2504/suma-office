@@ -225,6 +225,8 @@ function simpan(tamp){
                     }
                 });
             }
+    }).always(function () {
+        loading.release();
     }).fail(function (err) {
         swal.fire({
             title: 'Perhatian!',
@@ -241,7 +243,6 @@ function simpan(tamp){
             }
         });
     });
-    loading.release();
 }
 
 function edit_detail(val){

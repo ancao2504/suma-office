@@ -63,12 +63,11 @@ class ApiAuthController extends Controller
                 //     $join->on('users.companyid', '=', 'kode_company.kd_honda')
                 //         ->orOn('users.companyid', '=', 'kode_company.kd_fdr');
                 // })
-                ->where('email', $request->get('email'))
+                ->orWhere('email', $request->get('email'))
+                ->orWhere('user_id', $request->get('email'))
                 ->first();
 
-            if (!Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember_me'))) {
-                return Response::responseWarning("Kombinasi email dan password tidak sesuai");
-            } else {
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember_me')) || Auth::attempt(['user_id' => $request->email, 'password' => $request->password], $request->get('remember_me'))) {
                 if ((Hash::check(trim($request->get('password')), $sql->password, [])) == true) {
                     DB::transaction(function () use ($request, $sql) {
                         DB::update('exec SP_UserApioffice_Simpan ?,?,?,?,?,?', [
@@ -120,6 +119,8 @@ class ApiAuthController extends Controller
                 } else {
                     return Response::responseWarning("Kombinasi email dan password tidak sesuai");
                 }
+            } else {
+                return Response::responseWarning("Kombinasi email dan password tidak sesuai");
             }
         } catch (\Exception $exception) {
             return Response::responseError($request->get('email'), 'API', Route::getCurrentRoute()->action['controller'],
