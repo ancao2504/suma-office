@@ -2,15 +2,12 @@
 
 namespace app\Http\Controllers\App\Reports;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
 use App\Exports\Konsumen;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\App\Option\OptionController;
 
 class KonsumenController extends Controller
