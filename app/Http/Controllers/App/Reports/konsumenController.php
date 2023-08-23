@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\App\Reports;
+namespace app\Http\Controllers\App\Reports;
 
 use Illuminate\Support\Str;
 use App\Helpers\App\Service;
