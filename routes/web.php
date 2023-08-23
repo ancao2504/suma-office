@@ -50,7 +50,7 @@ use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 use App\Online\Tokopedia\OrderController as OrderTokopediaController;
 use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
-use app\Http\Controllers\App\Reports\KonsumenController as ReportKonsumen;
+use App\Reports\KonsumenController as ReportKonsumen;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
 
