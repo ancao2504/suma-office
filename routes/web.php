@@ -649,28 +649,26 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         });
 
         Route::name('report.')->group(function () {
-            Route::controller(Controller::class)->group(function () {
-                Route::name('faktur.')->group(function () {
-                    Route::controller(ReportFaktur::class)->group(function () {
-                        Route::get('report/faktur', 'index')->name('index');
-                        Route::post('report/faktur', 'data')->name('data');
-                        Route::post('report/faktur/export',  'export')->name('export');
-                    });
+            Route::name('faktur.')->group(function () {
+                Route::controller(ReportFaktur::class)->group(function () {
+                    Route::get('report/faktur', 'index')->name('index');
+                    Route::post('report/faktur', 'data')->name('data');
+                    Route::post('report/faktur/export',  'export')->name('export');
                 });
-                Route::name('retur.')->group(function () {
-                    Route::controller(ReportRetur::class)->group(function () {
-                        Route::get('report/retur', 'index')->name('index');
-                        Route::post('report/retur', 'data')->name('data');
-                        Route::post('report/retur/export',  'export')->name('export');
-                    });
+            });
+            Route::name('retur.')->group(function () {
+                Route::controller(ReportRetur::class)->group(function () {
+                    Route::get('report/retur', 'index')->name('index');
+                    Route::post('report/retur', 'data')->name('data');
+                    Route::post('report/retur/export',  'export')->name('export');
                 });
-                Route::name('konsumen.')->group(function () {
-                    Route::controller(ReportKonsumenController::class)->group(function () {
-                        Route::get('report/konsumen/', 'index')->name('index');
-                        Route::post('report/konsumen/daftar', 'daftarKonsumen')->name('daftar');
-                        Route::post('report/konsumen/daftar/export', 'exportDaftarKonsumen')->name('daftar.export');
-                        Route::post('report/konsumen/histori', 'dataHistoriKonsumen')->name('histori');
-                    });
+            });
+            Route::name('konsumen.')->group(function () {
+                Route::controller(ReportKonsumenController::class)->group(function () {
+                    Route::get('report/konsumen', 'index')->name('index');
+                    Route::post('report/konsumen/daftar', 'daftarKonsumen')->name('daftar');
+                    Route::post('report/konsumen/daftar/export', 'exportDaftarKonsumen')->name('daftar.export');
+                    Route::post('report/konsumen/histori', 'dataHistoriKonsumen')->name('histori');
                 });
             });
         });
