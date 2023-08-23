@@ -37,7 +37,7 @@
     </head>
 
     <!--begin::Body-->
-	<body id="kt_body" class="print-content-only">
+	<body id="kt_body" class="print-content-only header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed">
         <div id="loading" style="position: fixed; width: 100%; height: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: none;">
             <div class="d-flex flex-column flex-center w-100 h-100">
                 <div class="text-center" id="loading-message">
@@ -143,7 +143,6 @@
             </div>
         </div>
 
-        @yield('after-container')
         <script src="{{ asset('/sw.js') }}"></script>
         <script>
             if (!navigator.serviceWorker.controller) {
@@ -173,30 +172,10 @@
 		<!--begin::Javascript-->
 		<script>
             const base_url = "{{ url('/') }}";
-            const url_dsb = {
-                estimasi_cart: "{{ route('orders.cart.index.estimasi-cart') }}",
-                cart_index: "{{ route('orders.cart.index.index') }}"
-            };
 
             window.onbeforeunload = function(event) {
                 loading.block();
             };
-
-            // dokumen ready
-            $(document).ready(function() {
-                @if(session()->get('app_user_role_id') == 'MD_H3_MGMT' || session()->get('app_user_role_id') == 'MD_H3_KORSM' ||
-                    session()->get('app_user_role_id') == 'MD_H3_SM')
-                    @if ($title_menu != 'Cart')
-                    estimasiTotalCart();
-                    @else
-                        $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                        document.getElementById('kt_body').removeAttribute("style");
-                    @endif
-                @else
-                    $('#kt_body').addClass('header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed');
-                    document.getElementById('kt_body').removeAttribute("style");
-                @endif
-            });
         </script>
         <script src="{{ asset('assets/js/suma/main/index.js') }}?v={{ time() }}"></script>
 		<script src="{{ asset('assets/js/custom/module/loading.js') }}?v={{ time() }}"></script>
@@ -205,12 +184,5 @@
 
         @extends('components.swalfailed')
         @extends('components.swalsuccess')
-
-        @include('layouts.option.optionsalesmanindex')
-        @include('layouts.option.optiondealerindex')
-
-        <script src="{{ asset('assets/js/suma/option/salesmanindex.js') }}?v={{ time() }}"></script>
-        <script src="{{ asset('assets/js/suma/option/dealerindex.js') }}?v={{ time() }}"></script>
-
 	</body>
 </html>
