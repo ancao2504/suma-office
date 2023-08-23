@@ -75,7 +75,7 @@
                     <div class="col-md-12">
                         <div class="alert alert-danger" role="alert">
                             <h4 class="alert-heading">Error</h4>
-                            <p>{{ $message }}</p>
+                            <p>{{ $message??'Maff terjadi kesalahan, mohon coba lagi!' }}</p>
                         </div>
                     </div>
                 @endif
