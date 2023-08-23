@@ -275,6 +275,6 @@
     
 </script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/getKlaim.js') }}?v={{ time() }}"></script>
-<script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/getpart.js') }}?v={{ time() }}"></script>
+<script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/getPart.js') }}?v={{ time() }}"></script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/form.js') }}?v={{ time() }}"></script>
 @endpush

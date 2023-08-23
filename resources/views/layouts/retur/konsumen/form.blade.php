@@ -337,7 +337,7 @@
 
 @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getDealer.js') }}?v={{ time() }}"></script>
-<script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getpart.js') }}?v={{ time() }}"></script>
+<script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getPart.js') }}?v={{ time() }}"></script>
 @endif
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/form.js') }}?v={{ time() }}"></script>
 @endpush
