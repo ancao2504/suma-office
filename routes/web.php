@@ -41,7 +41,7 @@ use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
 use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
-use App\Reports\KonsumenController as ReportKonsumenController;
+use App\Reports\KonsumenController as ReportKonsumen;
 use App\Online\ApproveOrderController as ApproveOrderController;
 use App\Reports\ReturController as ReportRetur;
 use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
@@ -664,7 +664,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
             Route::name('konsumen.')->group(function () {
-                Route::controller(ReportKonsumenController::class)->group(function () {
+                Route::controller(ReportKonsumen::class)->group(function () {
                     Route::get('report/konsumen', 'index')->name('index');
                     Route::post('report/konsumen/daftar', 'daftarKonsumen')->name('daftar');
                     Route::post('report/konsumen/daftar/export', 'exportDaftarKonsumen')->name('daftar.export');
