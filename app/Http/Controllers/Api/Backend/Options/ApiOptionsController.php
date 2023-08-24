@@ -922,7 +922,7 @@ class ApiOptionsController extends Controller
 
             if(!empty($request->no_retur)){
                 $data = $data->JoinSub(function ($query) use ($request) {
-                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part', 'rtoko_dtl.jumlah','rtoko_dtl.ket' ,'rtoko_dtl.CompanyId')
+                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part', 'rtoko_dtl.jumlah','rtoko_dtl.no_klaim', 'rtoko_dtl.ket' ,'rtoko_dtl.CompanyId')
                     ->from('rtoko_dtl')
                     ->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%')
                     ->where('rtoko_dtl.CompanyId', $request->companyid)
@@ -933,10 +933,9 @@ class ApiOptionsController extends Controller
                 })->leftJoinSub(function($query) use ($request){
                     $query->select('klaim_dtl.no_produksi', 'klaim_dtl.no_dokumen','klaim_dtl.CompanyId')
                     ->from('klaim_dtl')
-                    ->where('klaim_dtl.CompanyId', $request->companyid)
-                    ->where('klaim_dtl.no_dokumen', 'LIKE', '%'.$request->no_retur . '%');
+                    ->where('klaim_dtl.CompanyId', $request->companyid);
                 }, 'klaim_dtl', function($join){
-                    $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_retur')
+                    $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_klaim')
                     ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
                 });
 
