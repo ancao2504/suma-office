@@ -529,6 +529,7 @@
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">ONLINE</span>
                         </div>
                     </div>
+                    @if (in_array(session()->get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_OL_ADMIN', 'MD_REQ_API']))
                     <div data-kt-menu-trigger="click"
                         class="menu-item menu-accordion {{ Request::is('online/pemindahan/*') ? 'here hover show' : '' }}">
                         <span class="menu-link">
@@ -825,50 +826,6 @@
                             </div>
                         </div>
                     </div>
-                    <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion {{ Request::is('online/historysaldo/*') ? 'here hover show' : '' }}">
-                        <span class="menu-link">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: assets/media/icons/duotune/communication/com014.svg-->
-                                <span class="svg-icon svg-icon-muted svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3" d="M3 3V17H7V21H15V9H20V3H3Z" fill="currentColor" />
-                                        <path
-                                            d="M20 22H3C2.4 22 2 21.6 2 21V3C2 2.4 2.4 2 3 2H20C20.6 2 21 2.4 21 3V21C21 21.6 20.6 22 20 22ZM19 4H4V8H19V4ZM6 18H4V20H6V18ZM6 14H4V16H6V14ZM6 10H4V12H6V10ZM10 18H8V20H10V18ZM10 14H8V16H10V14ZM10 10H8V12H10V10ZM14 18H12V20H14V18ZM14 14H12V16H14V14ZM14 10H12V12H14V10ZM19 14H17V20H19V14ZM19 10H17V12H19V10Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span
-                                class="menu-title {{ Request::is('online/historysaldo/*') ? 'active' : '' }}">History
-                                Saldo</span>
-                            <span class="menu-arrow"></span>
-                        </span>
-
-                        <div
-                            class="menu-sub menu-sub-accordion {{ Request::is('online/historysaldo/tokopedia/*') ? 'show' : '' }}">
-                            <div class="menu-item">
-                                <a class="menu-link {{ Request::is('online/historysaldo/tokopedia/*') ? 'active' : '' }}"
-                                    href="{{ url('/online/historysaldo/tokopedia/daftar') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Tokopedia</span>
-                                </a>
-                            </div>
-                            <div class="menu-item">
-                                <a class="menu-link {{ Request::is('online/historysaldo/shopee/*') ? 'active' : '' }}"
-                                    href="{{ url('/online/historysaldo/shopee/daftar/group') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Shopee</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('online/serahterima/*') ? 'active' : '' }}"
                             href="{{ url('/online/serahterima/daftar') }}">
@@ -893,6 +850,50 @@
                             <span class="menu-title {{ Request::is('online/serahterima/*') ? 'active' : '' }}">Serah
                                 Terima</span>
                         </a>
+                    </div>
+                    @endif
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Request::is('online/historysaldo/*') ? 'here hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: assets/media/icons/duotune/communication/com014.svg-->
+                                <span class="svg-icon svg-icon-muted svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none">
+                                        <path opacity="0.3" d="M3 3V17H7V21H15V9H20V3H3Z" fill="currentColor" />
+                                        <path
+                                            d="M20 22H3C2.4 22 2 21.6 2 21V3C2 2.4 2.4 2 3 2H20C20.6 2 21 2.4 21 3V21C21 21.6 20.6 22 20 22ZM19 4H4V8H19V4ZM6 18H4V20H6V18ZM6 14H4V16H6V14ZM6 10H4V12H6V10ZM10 18H8V20H10V18ZM10 14H8V16H10V14ZM10 10H8V12H10V10ZM14 18H12V20H14V18ZM14 14H12V16H14V14ZM14 10H12V12H14V10ZM19 14H17V20H19V14ZM19 10H17V12H19V10Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span
+                                class="menu-title {{ Request::is('online/historysaldo/*') ? 'active' : '' }}">History
+                                Saldo</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <div
+                            class="menu-sub menu-sub-accordion {{ Request::is('online/historysaldo/tokopedia/*') ? 'show' : '' }}">
+                            <div class="menu-item">
+                                <a class="menu-link {{ Request::is('online/historysaldo/tokopedia/*') ? 'active' : '' }}"
+                                    href="{{ url('/online/historysaldo/tokopedia/daftar') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Tokopedia</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a class="menu-link {{ Request::is('online/historysaldo/shopee/*') ? 'active' : '' }}"
+                                    href="{{ url('/online/historysaldo/shopee/daftar/group') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Shopee</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 @endif
 
