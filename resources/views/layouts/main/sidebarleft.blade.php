@@ -543,7 +543,7 @@
                 @endif
 
 
-                @if (in_array(session()->get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_OL_ADMIN', 'MD_REQ_API']))
+                @if (in_array(session()->get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_OL_ADMIN', 'MD_REQ_API','MD_H3_FIN']))
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">ONLINE</span>
@@ -866,6 +866,7 @@
                                 Saldo</span>
                             <span class="menu-arrow"></span>
                         </span>
+
                         <div
                             class="menu-sub menu-sub-accordion {{ Request::is('online/historysaldo/tokopedia/*') ? 'show' : '' }}">
                             <div class="menu-item">
