@@ -102,6 +102,7 @@ class SupplierJawabController extends Controller
                     // ! =====================================
                     if( !empty($request->no_jwb) && collect($jwb)->where('no_jwb',$request->no_jwb)->isNotEmpty()){
                         $data += [
+                            'kd_jwb'            => $request->no_jwb.'='.trim($request->no_klaim),
                             'no_jwb'            => $request->no_jwb,
                         ];
                         // ! Juka sudah ada maka update
@@ -115,6 +116,7 @@ class SupplierJawabController extends Controller
                         ->update($data);
                     } else {
                         $data += [
+                            'kd_jwb'            => ((collect($jwb)->max('no_jwb')??0) + 1).'='.trim($request->no_klaim),
                             'no_jwb'            => ((collect($jwb)->max('no_jwb')??0) + 1),
                         ];
                         // ! Jika belum ada maka insert
