@@ -191,7 +191,7 @@
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="kode_claim" class="col-sm-2 col-form-label">Kode Claim</label>
+                        <label for="kode_claim" class="col-sm-2 col-form-label required">Kode Claim</label>
                         <div class="col-sm-10">
                             <div class="row">
                                 <div class="col-6">
@@ -232,7 +232,7 @@
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="diterima" class="col-sm-2 col-form-label">Diterima Oleh</label>
+                        <label for="diterima" class="col-sm-2 col-form-label required">Diterima Oleh</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="diterima" name="diterima" placeholder="Diterima Oleh" value="" required>
                         </div>
