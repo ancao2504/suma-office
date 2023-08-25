@@ -79,9 +79,7 @@ function simpan(request){
                     view_table.find('.btn_jwb').data('a', btoa(JSON.stringify(data)));
 
                     form_clear(false);
-                    if(parseFloat(view_table.find('td:eq(5)').text()) == parseFloat(view_table.find('td:eq(6)').text())){
-                        $('#jwb_modal').modal('hide');
-                    }
+                    $('#jwb_modal').modal('hide');
                     return false;
                 }
                 swal.fire({
