@@ -159,8 +159,7 @@ class SupplierController extends Controller
                         foreach ($data_detail as $key => $value) {
                             $data_detail[$key]->detail_jwb = DB::table('jwb_claim')
                             ->select(
-                                '*',
-                                DB::raw("'".$data_detail[$key]->status_end."' as status_end")
+                                '*'
                                 )
                             ->where('jwb_claim.no_retur', $request->no_retur)
                             ->where('jwb_claim.no_klaim', $value->no_klaim)

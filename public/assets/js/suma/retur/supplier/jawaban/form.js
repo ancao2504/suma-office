@@ -71,7 +71,7 @@ function simpan(request){
 
                     let view_table = $('#list_detail tr[data-key="'+request.no_klaim + request.kd_part+'"]');
                     let data = JSON.parse(atob(view_table.find('.btn_jwb').data('a')));
-                    
+
                     data.detail_jwb = response.data.detail_jwb;
 
                     view_table.find('td:eq(6)').html(response.data.qty);
@@ -187,7 +187,7 @@ $(document).ready(function () {
                     <td class="text-center">${item.keputusan}</td>
                     <td>${item.ket??''}</td>
                     <td class="text-center">
-                        ${item.status_end != '1'?`
+                        ${item.sts_end != '1'?`
                         <a role="button" data-a="${data_del}" class="btn_jwb_hapus btn-sm btn-icon btn-danger my-1"><i class="fas fa-trash text-white"></i></a>
                         `:''}
                     </td>
