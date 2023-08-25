@@ -251,6 +251,15 @@ $(document).ready(function () {
 
     $(".btn_simpan_tmp").click(function (e) {
         e.preventDefault();
+        if($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() == ''){
+            toastr.warning('Kode Claim Harus diisi', "Peringatan");
+            return false;
+        }
+        if($('#diterima').val() == ''){
+            toastr.warning('Diterima Harus diisi', "Peringatan");
+            $('#diterima').focus();
+            return false;
+        }
         simpan(true);
     });
     

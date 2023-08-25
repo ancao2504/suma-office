@@ -57,73 +57,30 @@ class SupplierJawabController extends Controller
             $simpan = DB::transaction(function () use ($request) {
                 // ! Jika tamp true maka akan simpan ke tamp
                 if((boolean)$request->tamp){
-                    // ! Mengetahui berapa yang sudah di JWB
-                    // ! =====================================
-                    $jwb = DB::table('jwb_claim')
-                    ->select('*')
-                    ->where('no_retur', $request->no_retur)
-                    ->where('no_klaim', $request->no_klaim)
-                    ->where('kd_part', $request->kd_part)
-                    ->where('CompanyId', $request->companyid)
-                    ->get();
-                    // ! Mengetahui berapa yang di ajukan
-                    // ! =====================================
-                    $retur = DB::table('retur_dtl')
-                    ->where('no_retur', $request->no_retur)
-                    ->where('no_klaim', $request->no_klaim)
-                    ->where('kd_part', $request->kd_part)
-                    ->where('CompanyId', $request->companyid)
-                    ->select('jmlretur')
-                    ->first();
-                    // ! Cek yang dijawab sekarang + sebelumnya apakah melebihi qty yang di ajukan
-                    // ! =====================================
-                    if(
-                        (empty($request->no_jwb) && ((float)$request->qty_jwb + (float)(collect($jwb)->sum('qty_jwb')??0)) > (float)$retur->jmlretur) 
-                        || 
-                        (!empty($request->no_jwb) && ((float)(collect($jwb)->sum('qty_jwb')??0) - (float)$request->qty_jwb) > (float)$retur->jmlretur)
-                    ){
-                        return (object) array('status' => 0, 'message' => 'Jawaban melebihi jumlah klaim');
-                    }
-                    // ! data yangakan di simpan atau update
-                    $data = [
-                        'no_retur'          => $request->no_retur,
-                        'no_klaim'          => trim($request->no_klaim),
-                        'kd_part'           => trim($request->kd_part),
-                        'tgl_jwb'           => date('Y-m-d H:i:s'),
-                        'qty_jwb'           => $request->qty_jwb,
-                        'alasan'            => $request->alasan,
-                        'ca'                => ($request->alasan=="CA")?$request->ca:null,
-                        'keputusan'         => $request->keputusan,
-                        'ket'               => $request->ket,
-                        'usertime'          => (string)(date('Y-m-d H:i:s').'='.$request->user_id),
-                        'CompanyId'         => $request->companyid
-                    ];
-                    // ! cek jika no_jwb sudah ada
-                    // ! =====================================
-                    if( !empty($request->no_jwb) && collect($jwb)->where('no_jwb',$request->no_jwb)->isNotEmpty()){
-                        $data += [
-                            'kd_jwb'            => $request->no_jwb.'='.trim($request->no_klaim),
-                            'no_jwb'            => $request->no_jwb,
+                    $simpan = DB::select('
+                    SET NOCOUNT ON;
+                    exec SP_jwb_claim_simpanTemp ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+                        $request->no_retur,
+                        trim($request->no_klaim),
+                        trim($request->kd_part),
+                        date('Y-m-d H:i:s'),
+                        $request->qty_jwb,
+                        $request->alasan,
+                        ($request->alasan=="CA")?$request->ca:0,
+                        $request->keputusan,
+                        $request->ket??null,
+                        $request->companyid,
+                        $request->user_id
+                    ]);
+
+                    if($simpan[0]->status == 0){
+                        return (object)[
+                            'status'    => (int)$simpan[0]->status,
+                            'message'   => $simpan[0]->message,
+                            'data'      => ''
                         ];
-                        // ! Juka sudah ada maka update
-                        // ! =====================================
-                        DB::table('jwb_claim')
-                        ->where('no_jwb', $request->no_jwb)
-                        ->where('no_retur', $request->no_retur)
-                        ->where('no_klaim', $request->no_klaim)
-                        ->where('kd_part', $request->kd_part)
-                        ->where('CompanyId', $request->companyid)
-                        ->update($data);
-                    } else {
-                        $data += [
-                            'kd_jwb'            => ((collect($jwb)->max('no_jwb')??0) + 1).'='.trim($request->no_klaim),
-                            'no_jwb'            => ((collect($jwb)->max('no_jwb')??0) + 1),
-                        ];
-                        // ! Jika belum ada maka insert
-                        // ! =====================================
-                        DB::table('jwb_claim')
-                        ->insert($data);
                     }
+
                     // ! Mengambilkembali jumlah jwb dab jml tolak atupun terima
                     // ! =====================================
                     $cek = DB::table('jwb_claim')
@@ -132,18 +89,62 @@ class SupplierJawabController extends Controller
                     ->where('kd_part', $request->kd_part)
                     ->where('CompanyId', $request->companyid)
                     ->select(
-                        DB::raw('isnull(sum(qty_jwb), 0) as qty_jwb'), 
+                        'CompanyId',
+                        'alasan',
+                        'ca',
+                        'kd_part',
+                        'keputusan',
+                        'ket',
+                        'no_jwb',
+                        'no_klaim',
+                        'no_retur',
+                        'qty_jwb',
+                        'tgl_jwb',
+                        'usertime',
+                        'sts_end',
+                        DB::raw('isnull(sum(qty_jwb), 0) as qty_jwb_total'),
                         DB::raw("isnull(sum(case when keputusan = 'TERIMA' then qty_jwb else null end), 0) as terima"),
                         DB::raw("isnull(sum(case when keputusan = 'TOLAK' then qty_jwb else null end), 0) as tolak")
                     )
-                    ->first();
+                    ->groupBy(
+                        'CompanyId',
+                        'alasan',
+                        'ca',
+                        'kd_part',
+                        'keputusan',
+                        'ket',
+                        'no_jwb',
+                        'no_klaim',
+                        'no_retur',
+                        'qty_jwb',
+                        'tgl_jwb',
+                        'usertime',
+                        'sts_end'
+                    )->get();
                     // ! Jika tidak mengalami masalah maka akan return success
                     // ! =====================================
                     $data = [
-                        'qty'   => $cek->qty_jwb,
-                        'ket'       => $cek->terima . ' TERIMA '.$cek->tolak.' TOLAK ',
-                        'detail'    => $data
+                        'qty'   => $cek[0]->qty_jwb_total,
+                        'ket'       => $cek[0]->terima . ' TERIMA '.$cek[0]->tolak.' TOLAK ',
+                        'detail_jwb'    => collect($cek)->map(function($item){
+                            return [
+                                'CompanyId' => $item->CompanyId,
+                                'alasan' => $item->alasan,
+                                'ca' => $item->ca,
+                                'kd_part' => $item->kd_part,
+                                'keputusan' => $item->keputusan,
+                                'ket' => $item->ket,
+                                'no_jwb' => $item->no_jwb,
+                                'no_klaim' => $item->no_klaim,
+                                'no_retur' => $item->no_retur,
+                                'qty_jwb' => $item->qty_jwb,
+                                'tgl_jwb' => $item->tgl_jwb,
+                                'usertime' => $item->usertime,
+                                'sts_end' => $item->sts_end,
+                            ];
+                        })
                     ];
+
                     return (object) array('status' => 1, 'message' => 'success', 'data' => $data);
                 }
                 // ! Jika inggin simpan Semua Jawaban dan menerapkan memo dna minimum

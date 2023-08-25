@@ -43,31 +43,36 @@ function simpan(request){
         function (response) {
             if (response.status == '1') {
                 if(request.tamp){
-                    const data_del = btoa(JSON.stringify({
-                        no_retur: request.no_retur,
-                        no_klaim: request.no_klaim,
-                        kd_part: request.kd_part,
-                        no_jwb: response.data.detail.no_jwb,
-                    }));
+                    console.log(response.data);
+                    $('#list-jwb').html('');
+                    response.data.detail_jwb.forEach(function (item, index) {
+                        const data_del = btoa(JSON.stringify({
+                            no_retur: item.no_retur,
+                            no_klaim: item.no_klaim,
+                            kd_part: item.kd_part,
+                            no_jwb: item.no_jwb
+                        }));
+                        $('#list-jwb').append(`
+                            <tr class="fw-bolder fs-8 border" data-i="${item.no_jwb}">
+                                <td class="text-center">${moment(item.tgl_jwb).format('YYYY/MM/DD HH:mm:ss')}</td>
+                                <td class="text-end">${formatRibuan(item.qty_jwb)}</td>
+                                <td class="text-center">${(item.alasan == 'CA' ? 'Ganti Uang' : 'Ganti barang')}</td>
+                                <td class="text-end">${formatRibuan(item.ca)}</td>
+                                <td class="text-center">${item.keputusan}</td>
+                                <td>${item.ket??''}</td>
+                                <td class="text-center">
+                                    ${item.sts_end != '1'?`
+                                    <a role="button" data-a="${data_del}" class="btn_jwb_hapus btn-sm btn-icon btn-danger my-1"><i class="fas fa-trash text-white"></i></a>
+                                    `:''}
+                                </td>
+                            </tr>
+                        `);
+                    });
 
-                    $('#list-jwb .text_not_data').remove();
-                    $('#list-jwb').append(`
-                        <tr class="fw-bolder fs-8 border" data-i="${response.data.detail.no_jwb}">
-                            <td class="text-center">${moment($('#tgl_claim').val()).format('YYYY/MM/DD HH:mm:ss')}</td>
-                            <td class="text-end">${formatRibuan($('#jml').val())}</td>
-                            <td class="text-center">${($('#alasan').val()== 'CA' ? 'Ganti Uang' : 'Ganti barang')}</td>
-                            <td class="text-end">${($('#alasan').val()== 'CA' ?formatRibuan($('#ca').val()):'')}</td>
-                            <td class="text-center">${$('#keputusan').val()}</td>
-                            <td>${$('#ket').val()??''}</td>
-                            <td class="text-center">
-                                <a role="button" data-a="${data_del}" class="btn_jwb_hapus btn-sm btn-icon btn-danger my-1"><i class="fas fa-trash text-white"></i></a>
-                            </td>
-                        </tr>
-                    `);
                     let view_table = $('#list_detail tr[data-key="'+request.no_klaim + request.kd_part+'"]');
                     let data = JSON.parse(atob(view_table.find('.btn_jwb').data('a')));
-
-                    data.detail_jwb.push(response.data.detail);
+                    
+                    data.detail_jwb = response.data.detail_jwb;
 
                     view_table.find('td:eq(6)').html(response.data.qty);
                     view_table.find('td:eq(7)').html(response.data.ket);
