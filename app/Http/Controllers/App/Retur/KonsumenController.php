@@ -143,6 +143,7 @@ class KonsumenController extends Controller
                     'data'      => ''
                 ]);
             }
+            
             $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;
@@ -182,9 +183,11 @@ class KonsumenController extends Controller
         if(!empty($request->kd_part)){
             $rules += [
                 'kd_part' => 'required',
+                'no_produksi' => 'required',
             ];
             $messages += [
                 'kd_part.required' => 'Part Number Tidak boleh kososng',
+                'no_produksi.required' => 'No Produksi Tidak boleh kososng',
             ];
         }
 

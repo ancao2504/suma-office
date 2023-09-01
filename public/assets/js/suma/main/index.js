@@ -1,3 +1,14 @@
+function enter_input() {
+    // menganti enter ke tab jika dia input, select, textarea
+    $('body').find("input, select, textarea").on('keypress',function(e) {
+        if (e.key === 'Enter') {
+            var inputs = $('body').find("input, select, textarea").filter(':visible:not([disabled]):not([readonly])');
+            inputs[inputs.index(this) + 1].focus();
+            e.preventDefault();
+        }
+    });
+}
+
 $(document).ready(function() {
     $('body').on('click', '.menu-item a', function(e) {
         loading.block();
@@ -19,12 +30,5 @@ $(document).ready(function() {
         Swal.close();
     });
 
-    // menganti enter ke tab jika dia input, select, textarea
-    $("input, select, textarea").on('keypress',function(e) {
-        if (e.key === 'Enter') {
-            var inputs = $("input, select, textarea").filter(':visible:not([disabled]):not([readonly])');
-            inputs[inputs.index(this) + 1].focus();
-            e.preventDefault();
-        }
-    });
+    enter_input();
 });

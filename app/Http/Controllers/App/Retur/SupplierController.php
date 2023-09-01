@@ -24,7 +24,8 @@ class SupplierController extends Controller
             $request->merge(['per_page' => 10]);
         }
         try {
-            $request->merge(['option' => ['page']]);
+            $request->merge(['option' => ['page','with_detail']]);
+            // return Service::ReturSupplierDaftar($request);
             $responseApi = json_decode(Service::ReturSupplierDaftar($request));
             $statusApi = $responseApi->status??0;
 

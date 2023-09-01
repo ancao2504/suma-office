@@ -1720,21 +1720,23 @@ class OptionController extends Controller
                         'size' => 'modal-lg',
                     ],
                     'cari' => (object)[
-                        'title' => 'No Klaim',
+                        'title' => 'cari',
                         'value' => $request->no_retur,
                     ],
                     'table' => (object)[
                         'thead' => [
+                            (object)['class' => 'w-50px', 'text' => 'Dealer'],
                             (object)['class' => 'w-50px', 'text' => 'Nomor Klaim'],
                             (object)['class' => 'w-50px', 'text' => 'Tanggal Klaim'],
                             (object)['class' => 'w-25', 'text' => 'Action'],
                         ],
                         'tbody' => [
+                            (object)[ 'option' => 'text', 'class' => 'w-50px text-center', 'key' => 'kd_dealer'],
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'no_retur'],
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'tanggal'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
                                 (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
-                                    'data' => [(object)['key' => 'a','value' => ['no_retur','tanggal']]]
+                                    'data' => [(object)['key' => 'a','value' => ['no_retur','tanggal','kd_dealer']]]
                                 ],
                             ]],
                         ],
@@ -1764,7 +1766,7 @@ class OptionController extends Controller
                 $table = (object)[
                     'thead' => [
                         (object)['class' => 'w-50px', 'text' => 'kode Part'],
-                        (object)['class' => 'w-200px', 'text' => 'nama Part'],
+                        (object)['class' => 'w-100px', 'text' => 'nama Part'],
                         (object)['class' => 'w-25', 'text' => 'Action'],
                     ],
                     'tbody' => [

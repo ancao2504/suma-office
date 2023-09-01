@@ -248,7 +248,6 @@ $(document).ready(function () {
             }
         });
     });
-
     $(".btn_simpan_tmp").click(function (e) {
         e.preventDefault();
         if($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() == ''){
@@ -262,7 +261,6 @@ $(document).ready(function () {
         }
         simpan(true);
     });
-    
     $("#list_detail").on('click','.btn_dtl_delete', function (e) {
         let val = JSON.parse(atob($(this).data('a')));
         Swal.fire({

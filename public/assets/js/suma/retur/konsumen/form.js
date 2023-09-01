@@ -18,21 +18,92 @@ function validasi_sts_stock(){
     }
 }
 
+function listDetail(detail){
+    if ((Array.isArray(detail) || typeof detail === 'object') && (detail.length == 0 || Object.keys(detail).length == 0)) {
+        $('#list-retur').html(`
+            <tr class="fw-bolder fs-8 border text_not_data">
+                <td colspan="11" class="text-center">Tidak ada data</td>
+            </tr>
+        `);
+        return false;
+    }
+    $.each(detail, function (index, data) {
+        let dta_edt = JSON.stringify({
+            no_retur: data.no_dokumen,
+            no_produksi: data.no_produksi,
+            kd_part: data.kd_part,
+            nm_part: data.nm_part,
+            stock: data.stock,
+            jumlah: data.qty,
+            sts_stock: data.sts_stock,
+            sts_klaim: data.sts_klaim,
+            sts_min: data.sts_min,
+            ket: data.keterangan
+        });
+        let dta_del = JSON.stringify({
+            no_retur: data.no_dokumen,
+            kd_part: data.kd_part,
+            no_produksi: data.no_produksi
+        });
+
+        $('#list-retur').append(`
+            <tr class="fw-bolder fs-8 border" data-key="${String(data.kd_part)+String(data.no_produksi)}">
+                <td class="text-center">${index + 1}</td>
+                <td>${data.no_produksi}</td>
+                <td>${data.kd_part}</td>
+                <td class="text-end">${1}</td>
+                <td>${data.tgl_ganti??'-'}</td>
+                <td>${data.qty_ganti?number_format(data.qty_ganti, 0, '.', ','):'-'}</td>
+                <td class="text-center">
+                    ${(data.sts_stock == 1)?'<span class="badge badge-light-primary">Ganti Barang</span>':''}
+                    ${(data.sts_stock == 2)?'<span class="badge badge-light-primary">Stock 0</span>':''}
+                    ${(data.sts_stock == 3)?'<span class="badge badge-light-primary">Retur</span>':''}
+                </td>
+                <td class="text-center">
+                    ${(data.sts_min == 1)?'<span class="badge badge-light-info">Minimum</span>':''}
+                    ${(data.sts_min == 0)?'<span class="badge badge-light-info">Tidak</span>':''}
+                </td>
+                <td class="text-center">
+                    ${(data.sts_klaim == 1)?'<span class="badge badge-light-warning">klaim ke Supplier</span>':''}
+                    ${(data.sts_klaim == 2)?'<span class="badge badge-light-warning">Tidak Melakukan Apapun</span>':''}
+                </td>
+                <td>${data.keterangan??'-'}</td>
+                <td class="text-center">
+                    <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="${btoa(dta_edt)}" class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
+                    <a role="button" data-a="${btoa(dta_del)}" class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
+                </td>
+            </tr>
+        `);
+    });
+}
+
 function detail_clear(){
-    $('#no_produksi').val('');
+    $('#input_no_produk').html(`
+        <div class="col-2 mt-3">
+            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" required>
+        </div>
+    `);
+
     $('#kd_part').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');
-
+    $('#kd_part').attr('disabled', false);
+    $('.list-part').attr('disabled', false);
     $('#nm_part').val('');
     $('#stock').val('');
     $('#qty_retur').val(1);
+    $('#qty_retur').attr('disabled', false);
     $('#ket').val('');
     $('#sts_stock').val('').trigger('change');
 }
 
 function simpan(tamp){
     loading.block();
+    let no_produksi = [];
+    for (let x = 1; x <= parseInt($('#qty_retur').val()); x++) {
+        no_produksi.push($('#no_produksi'+x).val());
+    }
+    
     $.post(base_url + "/retur/konsumen/form",
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
@@ -46,7 +117,7 @@ function simpan(tamp){
             kd_dealer: $('#kd_dealer').val(),
             kd_cabang: $('#kd_cabang').val(),
             
-            no_produksi: $('#no_produksi').val(),
+            no_produksi: no_produksi,
             kd_part: $('#kd_part').val(),
             qty_retur: $('#qty_retur').val(),
             ket: $('#ket').val(),
@@ -79,89 +150,10 @@ function simpan(tamp){
                 }
                 $('#detail_modal').modal('hide');
 
-                let dta_edt = JSON.stringify({
-                    no_retur: $('#no_retur').val(),
-                    no_produksi: $('#no_produksi').val(),
-                    kd_part: $('#kd_part').val(),
-                    nm_part: $('#nm_part').val(),
-                    stock: $('#stock').val(),
-                    jumlah: $('#qty_retur').val(),
-                    sts_stock: $('#sts_stock').val(),
-                    sts_klaim: $('#sts_klaim').val(),
-                    sts_min: $('#sts_minimum').val(),
-                    ket: $('#ket').val()
-                });
-                let dta_del = JSON.stringify({
-                    no_retur: $('#no_retur').val(),
-                    kd_part: $('#kd_part').val()
-                });
-
-                if($('#kd_part').val() != '' && $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').length == 0){
-
-                    $('#list-retur .text_not_data').remove();
-
-                    $('#list-retur').append(`
-                        <tr class="fw-bolder fs-8 border" data-key="${$('#kd_part').val()}">
-                            <td class="text-center">${$('#list-retur tr').length + 1}</td>
-                            <td>${$('#kd_part').val()}</td>
-                            <td class="text-end">${$('#qty_retur').val()}</td>
-                            <td>${$('#no_produksi').val()}</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td class="text-center">
-                                ${
-                                    ($('#sts_stock').val() == 1) ? '<span class="badge badge-light-primary">Ganti Barang</span>' : 
-                                    ($('#sts_stock').val() == 2) ? '<span class="badge badge-light-primary">Stock 0</span>' : 
-                                    ( ($('#sts_stock').val() == 3) ? '<span class="badge badge-light-primary">Retur</span>' : '<span class="badge badge-light-info">Belum di atur</span>')
-                                }
-                            </td>
-                            <td class="text-center">
-                                ${
-                                    
-                                    ($('#sts_minimum').val() == 1) ? '<span class="badge badge-light-info">Minimum</span>' : 
-                                    ($('#sts_minimum').val() == 0) ? '<span class="badge badge-light-info">Tidak</span>' : '<span class="badge badge-light-info">Belum di atur</span>'
-                                }
-                            </td>
-                            <td class="text-center">
-                                ${
-                                    ($('#sts_klaim').val() == 1) ? '<span class="badge badge-light-warning">klaim ke Supplier</span>' : 
-                                    ($('#sts_klaim').val() == 2) ? '<span class="badge badge-light-warning">Tidak Melakukan Apapun</span>' : '<span class="badge badge-light-info">Belum di atur</span>'
-                                }
-                            </td>
-                            <td>${($('#ket').val()??'-')}</td>
-                            <td class="text-center">
-                                <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a='${btoa(dta_edt)}' class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
-                                <a role="button" data-a='${btoa(dta_del)}' class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
-                            </td>
-                        </tr>
-                    `);
-                } else {
-
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(2)').text($('#qty_retur').val());
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(3)').text($('#no_produksi').val());
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(4)').text('-');
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(5)').text('-');
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(6)').html(
-                        ($('#sts_stock').val() == 1) ? '<span class="badge badge-light-primary">Ganti Barang</span>' : 
-                        ($('#sts_stock').val() == 2) ? '<span class="badge badge-light-primary">Stock 0</span>' : 
-                        ( ($('#sts_stock').val() == 3) ? '<span class="badge badge-light-primary">Retur</span>' : '<span class="badge badge-light-info">Belum di atur</span>'));
-
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(7)').html(
-                        ($('#sts_minimum').val() == 1) ? '<span class="badge badge-light-info">Minimum</span>' : 
-                        ($('#sts_minimum').val() == 0) ? '<span class="badge badge-light-info">Tidak</span>' : '<span class="badge badge-light-info">Belum di atur</span>');
-
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(8)').html(
-                        ($('#sts_klaim').val() == 1) ? '<span class="badge badge-light-warning">klaim ke Supplier</span>' : 
-                        ($('#sts_klaim').val() == 2) ? '<span class="badge badge-light-warning">Tidak Melakukan Apapun</span>' : '<span class="badge badge-light-info">Belum di atur</span>');
-
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(9)').text($('#ket').val());
-                    $('#list-retur tr[data-key="'+$('#kd_part').val()+'"]').find('td:eq(10)').html(`
-                        <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a='${btoa(dta_edt)}' class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
-                        <a role="button" data-a='${btoa(dta_del)}' class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
-                    `);
-                }
-
                 detail_clear();
+                $('#list-retur').html('');
+                
+                listDetail(response.data.detail)
             }
             if (response.status == '0') {
                 if ((Array.isArray(response.data) || typeof response.data === 'object') && (response.data.length > 0 || Object.keys(response.data).length > 0)) {
@@ -246,18 +238,23 @@ function simpan(tamp){
 }
 
 function edit_detail(val){
+    detail_clear()
     $('#list-retur tr').removeClass('bg-secondary');
-    $('#no_produksi').val(val.no_produksi);
+
     $('#kd_part').val(val.kd_part);
+    $('#kd_part').attr('disabled', true);
+    $('.list-part').attr('disabled', true);
+    $('#no_produksi1').val(val.no_produksi);
+    $('#no_produksi1').attr('disabled', true);
+    $('#qty_retur').val(val.jumlah);
+    $('#qty_retur').attr('disabled', true);
     $('#nm_part').val(val.nm_part);
     $('#stock').val(val.stock);
-    $('#qty_retur').val(val.jumlah);
     $('#ket').val(val.ket);
     $('#sts_stock option[value="' + val.sts_stock + '"]').prop('selected', true).trigger('change');
     $('#sts_klaim option[value="' + val.sts_klaim + '"]').prop('selected', true);
     $('#sts_minimum option[value="' + val.sts_min + '"]').prop('selected', true);
 }
-
 $(document).ready(function () {
     $("#tgl_retur").flatpickr().setDate(moment($("#tgl_retur").val()).format('YYYY-MM-DD'));
 
@@ -299,6 +296,11 @@ $(document).ready(function () {
         });
     });
     $(".btn_simpan_tmp").click(function (e) {
+        if($('#qty_retur').val() == 0){
+            toastr.warning('Qty Retur Harus lebih dari 0', "Peringatan");
+            $('#qty_retur').focus();
+            return false;
+        }
         e.preventDefault();
         simpan(true);
     });
@@ -306,7 +308,7 @@ $(document).ready(function () {
     $("#list_detail").on('click','.btn_dtl_delete', function (e) {
         let val = JSON.parse(atob($(this).data('a')));
         Swal.fire({
-            html: 'Apakah Anda Yakin Menghapus Detail Retur dengan <b>Kd Part ' + val.kd_part +'</b>',
+            html: 'Apakah Anda Yakin Menghapus Detail Retur dengan <b>Kode Part : ' + val.kd_part +'</b> dengan <b>No Produksi : '+val.no_produksi+'</b>',
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Hapus!",
@@ -324,10 +326,11 @@ $(document).ready(function () {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         no_retur: $('#no_retur').val(),
                         kd_part: val.kd_part,
+                        no_produksi: val.no_produksi
                     },
                     function (response) {
                         if (response.status == '1') {
-                            $('#list-retur').find('tr[data-key="'+val.kd_part+'"]').remove();
+                            $('#list-retur').find('tr[data-key="'+String(val.kd_part)+String(val.no_produksi)+'"]').remove();
                             if ($('#list-retur').find('tr').length == 0) {
                                 $('#list-retur').html(`
                                     <tr class="fw-bolder fs-8 border text_not_data">
@@ -379,10 +382,41 @@ $(document).ready(function () {
                 });
             }
         });
-
     });
-    
-    $('#sts_stock, #qty_retur').on('change', function () {
+    $('#qty_retur').on('change', function () {
+        if($(this).val() == 0 || $(this).val() == ''){
+            $(this).val(1);
+        }else if(parseInt($(this).val()) > 100){
+            $('#qty_retur').val(100);
+        }
+
+        validasi_sts_stock();
+
+        if(parseInt($('#input_no_produk .col-2').length) < parseInt($(this).val())){
+            for (let x = parseInt($('#input_no_produk .col-2').length)+1; x <= parseInt($(this).val()); x++) {
+                $('#input_no_produk').append(`
+                    <div class="col-2 mt-3">
+                        <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" required>
+                    </div>
+                `);
+            }
+        } else {
+            for (; parseInt($('#input_no_produk .col-2').length) > parseInt($(this).val());) {
+                let emptyInput = $('#input_no_produk .col-2 input').filter(function () {
+                    return this.value == '';
+                });
+                console.log(emptyInput);
+                if (emptyInput.length > 0) {
+                    emptyInput.parent('.col-2').last().remove();
+                } else {
+                    $('#input_no_produk .col-2').last().remove();
+                }
+            }
+        }
+
+        enter_input();
+    });
+    $('#sts_stock').on('change', function () {
         validasi_sts_stock();
     });
     $('#part-list').on('click','.pilih' ,function () {
@@ -394,34 +428,28 @@ $(document).ready(function () {
                 toastr.warning('Kode Sales Harus diisi', "Peringatan");
                 $('#kd_sales').focus();
                 return false;
-                break;
             case ($('#tgl_retur').val() == ''):
                 toastr.warning('Tanggal Retur Harus diisi', "Peringatan");
                 $('#tgl_retur').focus();
                 return false;
-                break;
             case ($('#jenis_konsumen').val() == '0' && $('#kd_dealer').val() == ''):
                 toastr.warning('Kode Dealer Harus diisi', "Peringatan");
                 $('#kd_dealer').focus();
                 return false;
-                break;
             case ($('#jenis_konsumen').val() == '1' && $('#kd_cabang').val() == ''):
                 toastr.warning('Kode Cabang Harus diisi', "Peringatan");
                 $('#kd_cabang').focus();
                 return false;
-                break;
         }
         $('#detail_modal').modal('show');
         detail_clear();
     });
-
     $('#warning_modal').on('click','.btn_warning_edit', function () {
         let val = JSON.parse(atob($('#list_detail').find('tr[data-key="'+$(this).data('key')+'"] td a.btn_dtl_edit').data('a')));
         edit_detail(val);
         $('#warning_modal').modal('show');
         $('#detail_modal').modal('show');
     });
-
     $('#detail_modal').on('change','#sts_stock', function () {
         if ($(this).val() == '') {
             $('#detail_modal  #sts_minimum').html(`<option value="">Pilih Status Minimum</option>`);

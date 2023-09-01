@@ -852,6 +852,8 @@
                         </a>
                     </div>
                     @endif
+                    
+                    @if (in_array(session()->get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_H3_FIN']))
                     <div data-kt-menu-trigger="click"
                         class="menu-item menu-accordion {{ Request::is('online/historysaldo/*') ? 'here hover show' : '' }}">
                         <span class="menu-link">
@@ -895,6 +897,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 @endif
 
                 @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_WH_OL']))

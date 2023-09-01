@@ -2007,7 +2007,7 @@ class Service
             'kd_dealer'     => trim($request->kd_dealer),
             'kd_cabang'     => trim($request->kd_cabang),
             // ! data detail
-            'no_produksi'   => trim($request->no_produksi),
+            'no_produksi'   => $request->no_produksi,
             'kd_part'       => trim($request->kd_part),
             'qty_retur'     => $request->qty_retur,
             'ket'           => $request->ket,
@@ -2070,6 +2070,7 @@ class Service
             'user_id'       => trim($request->session()->get('app_user_id')),
             'no_retur'      => $request->no_retur,
             'kd_part'       => trim($request->kd_part),
+            'no_produksi'   => $request->no_produksi,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

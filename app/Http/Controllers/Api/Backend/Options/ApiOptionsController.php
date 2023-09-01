@@ -931,9 +931,21 @@ class ApiOptionsController extends Controller
                     $join->on('part.kd_part', '=', 'rtoko_dtl.kd_part')
                         ->on('part.CompanyId', '=', 'rtoko_dtl.CompanyId');
                 })->leftJoinSub(function($query) use ($request){
-                    $query->select('klaim_dtl.no_produksi', 'klaim_dtl.no_dokumen','klaim_dtl.CompanyId')
+                    $query->select('klaim_dtl.no_dokumen','klaim_dtl.kd_part','klaim_dtl.CompanyId','klaim_dtl.sts_klaim',
+                    DB::raw("
+                    STUFF(
+                        (SELECT ', ' + a.no_produksi
+                            FROM klaim_dtl a
+                            WHERE a.no_dokumen = klaim_dtl.no_dokumen
+                            AND a.kd_part = klaim_dtl.kd_part
+                            AND a.sts_klaim = klaim_dtl.sts_klaim
+                            AND a.companyid = klaim_dtl.companyid
+                            FOR XML PATH('')
+                        ),1, 2, ''
+                    ) AS no_produksi"))
                     ->from('klaim_dtl')
-                    ->where('klaim_dtl.CompanyId', $request->companyid);
+                    ->where('klaim_dtl.CompanyId', $request->companyid)
+                    ->groupBy('klaim_dtl.no_dokumen','klaim_dtl.kd_part','klaim_dtl.CompanyId','klaim_dtl.sts_klaim');
                 }, 'klaim_dtl', function($join){
                     $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_klaim')
                     ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
@@ -1005,10 +1017,10 @@ class ApiOptionsController extends Controller
             $messages = [];
             if (!empty($request->no_retur)) {
                 $rules += [
-                    'no_retur' => 'min:5',
+                    'no_retur' => 'min:2',
                 ];
                 $messages += [
-                    'no_retur.min' => 'No Klaim minimal 5 karakter',
+                    'no_retur.min' => 'No Klaim minimal 2 karakter',
                 ];
             }
 
@@ -1030,23 +1042,22 @@ class ApiOptionsController extends Controller
                         $query->select('rtoko_dtl.no_retur as no_dokumen','rtoko_dtl.status')
                             ->from('rtoko_dtl')
                             ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
-                            ->where('rtoko_dtl.CompanyId', $request->companyid);
-                            
-                            if (!empty($request->no_retur)) {
-                                $query = $query->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%');
-                            }
-
-                            $query = $query->groupBy('rtoko_dtl.no_retur','rtoko_dtl.status','rtoko_dtl.CompanyId');
+                            ->where('rtoko_dtl.CompanyId', $request->companyid)
+                            ->groupBy('rtoko_dtl.no_retur','rtoko_dtl.status','rtoko_dtl.CompanyId');
                     }, 'rtoko_dtl', function ($join) {
                         $join->on('rtoko.no_retur', '=', 'rtoko_dtl.no_dokumen');
                     })
                     ->where('rtoko.CompanyId', $request->companyid);
                     if (!empty($request->no_retur)) {
-                        $query = $query->where('rtoko.no_retur', 'LIKE', '%'.$request->no_retur . '%');
+                        $query = $query->where(function($query) use ($request){
+                            $query->where('rtoko.no_retur', 'LIKE', '%'.$request->no_retur . '%')
+                            ->orWhere('rtoko.kd_dealer', 'LIKE', '%'.$request->no_retur . '%')
+                            ->orWhere('rtoko.tanggal', 'LIKE', '%'.$request->no_retur . '%');
+                        });
                     }
                     return $query;
             }, 'retur')
-            ->select('retur.no_retur','retur.tanggal');
+            ->select('retur.no_retur','retur.tanggal','kd_dealer');
 
             // ! ------------------------------------
             // ! Jika data first atau get (paginate)
@@ -1057,7 +1068,7 @@ class ApiOptionsController extends Controller
                 $data = $data
                 ->orderBy('retur.tanggal', 'desc')
                 ->orderBy('retur.no_retur', 'desc')
-                ->groupBy('retur.no_retur','retur.tanggal')
+                ->groupBy('retur.no_retur','retur.tanggal','retur.kd_dealer')
                 ->paginate($request->per_page);
             }
 

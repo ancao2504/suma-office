@@ -105,9 +105,9 @@
                     <thead class="border">
                         <tr class="fs-8 fw-bolder text-muted text-center">
                             <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+                            <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">part Number</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Qty Retur</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
                             <th rowspan="2" class="w-50px ps-3 pe-3">tgl Ganti</th>
                             <th rowspan="2" class="w-50px ps-3 pe-3">Qty Ganti</th>
                             <th colspan="3" class="w-50px ps-3 pe-3">status</th>
@@ -144,15 +144,16 @@
                                 ]);
                                 $dta_del = json_encode((object)[
                                     'no_retur' => $detail->no_dokumen,
-                                    'kd_part' => $detail->kd_part
+                                    'kd_part' => $detail->kd_part,
+                                    'no_produksi' => $detail->no_produksi
                                 ]);
                             @endphp
 
-                            <tr class="fw-bolder fs-8 border" data-key="{{ ($detail->kd_part??'') }}">
+                            <tr class="fw-bolder fs-8 border" data-key="{{ ((string)$detail->kd_part.(string)$detail->no_produksi) }}">
                                 <td class="text-center">{{ $loop->iteration }}</td>
+                                <td>{{ ($detail->no_produksi??'-') }}</td>
                                 <td>{{ ($detail->kd_part??'-') }}</td>
                                 <td class="text-end">{{ number_format($detail->qty, 0, '.', ',')??'-' }}</td>
-                                <td>{{ ($detail->no_produksi??'-') }}</td>
                                 <td>{{ ($detail->tgl_ganti??'-') }}</td>
                                 <td>{{ ($detail->qty_ganti?number_format($detail->qty_ganti, 0, '.', ','):'-') }}</td>
                                 <td class="text-center">
@@ -234,12 +235,6 @@
                 <h3>2. Informasi Produk</h3>
                 <div class="col-xl-12 border rounded mb-3 p-2">
                     <div class="form-group row mb-2">
-                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="no_produksi" name="no_produksi" placeholder="Masukkan No Produksi" value="" required>
-                        </div>
-                    </div>
-                    <div class="form-group row mb-2">
                         <label for="kd_part" class="col-sm-2 col-form-label required">Part Number</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3">
@@ -258,6 +253,16 @@
                         <label for="qty_retur" class="col-sm-2 col-form-label">Jumlah</label>
                         <div class="col-sm-4">
                             <input type="number" class="form-control" id="qty_retur" name="qty_retur" min="1" placeholder="Masukkan QTY Retur" value="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
+                        <div class="col-sm-10">
+                            <div class="row" id="input_no_produk">
+                                <div class="col-2 mt-3">
+                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Helpers\Api\Response;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
+use app\Http\Controllers\Api\Backend\Retur\SupplierController as  supplierWithDetail;
 
 class KonsumenController extends Controller
 {
@@ -211,6 +212,7 @@ class KonsumenController extends Controller
                         'sts_stock' => 'required',
                         'sts_klaim' => 'required',
                         'sts_min' => 'required',
+                        'no_produksi' => 'required',
                     ];
                     $messages += [
                         'kd_part.required' => 'Part Number Kososng',
@@ -219,6 +221,7 @@ class KonsumenController extends Controller
                         'sts_stock.required' => 'Status Stock Kososng',
                         'sts_klaim.required' => 'Status Retur Kososng',
                         'sts_min.required' => 'Status Min Kososng',
+                        'no_produksi.required' => 'No Produksi Kososng',
                     ];
                 }
             }
@@ -242,7 +245,7 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 if($request->tamp == 'true'){
 
-                    //! simpan pada tabel klaimTmp 
+                    //! simpan pada tabel klaimTmp
                     DB::table($request->table[0])
                     ->updateOrInsert([
                         'no_dokumen'        => $request->no_retur,
@@ -257,16 +260,55 @@ class KonsumenController extends Controller
                         'usertime'          => (date('Y-m-d H:i:s').'='.$request->user_id)
                     ]);
 
-                    if(!empty($request->kd_part)){
-                        //! simpan pada tabel klaimtmp_dtl
+                    //! filter agar no_produksi tidak duplikat pada request yang sama
+                    $request->merge(['no_produksi' => collect($request->no_produksi)->unique()->toArray()]);
+
+                    // ! cek data yang sudah ada
+                    $cek = DB::table($request->table[1])
+                    ->select('no_produksi')
+                    ->where('no_dokumen', $request->no_retur)
+                    ->where('companyid', $request->companyid)
+                    ->where('kd_part', $request->kd_part)
+                    ->whereIn('no_produksi', $request->no_produksi)
+                    ->get();
+                    
+                    $data = (object)[
+                        //! ambil yang tidak ada
+                        'insert'   => array_diff($request->no_produksi, $cek->pluck('no_produksi')->toArray()),
+                        // !ambil jika ada
+                        'update'   => array_intersect($request->no_produksi, $cek->pluck('no_produksi')->toArray()),
+                    ];
+
+                    //! simpan pada tabel klaimtmp_dtl
+                    if($data->insert){
                         DB::table($request->table[1])
-                        ->updateOrInsert([
-                            'no_dokumen'    => $request->no_retur,
-                            'companyid'     => $request->companyid,
-                            'kd_part'       => $request->kd_part,
-                        ], [
-                            'qty'           => $request->qty_retur,
-                            'no_produksi'   => ($request->no_produksi??null),
+                        ->insert(collect($data->insert)
+                        ->map(function($value) use ($request){
+                            return [
+                                'no_dokumen'    => $request->no_retur,
+                                'kd_part'       => $request->kd_part,
+                                'CompanyId'     => $request->companyid,
+                                'qty'           => 1,
+                                'no_produksi'   => $value,
+                                'sts_stock'     => ($request->sts_stock??0),
+                                'sts_klaim'     => ($request->sts_klaim??0),
+                                'sts_min'       => ($request->sts_min??0),
+                                'keterangan'    => ($request->ket??null),
+                                'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
+                            ];
+                        })
+                        ->toArray());
+                    }
+
+                    //! Update pada tabel klaimtmp_dtl
+                    if($data->update){
+                        DB::table($request->table[1])
+                        ->whereIn('no_produksi', $data->update)
+                        ->where('no_dokumen', $request->no_retur)
+                        ->where('companyid', $request->companyid)
+                        ->where('kd_part', $request->kd_part)
+                        ->update([
+                            'qty'           => 1,
                             'sts_stock'     => ($request->sts_stock??0),
                             'sts_klaim'     => ($request->sts_klaim??0),
                             'sts_min'       => ($request->sts_min??0),
@@ -274,8 +316,29 @@ class KonsumenController extends Controller
                             'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
                         ]);
                     }
+
+                    $request->merge(['option' => ['tamp','with_detail']]);
+                    $request->merge(['page' => 1]);
+                    $request->merge(['per_page' => 10]);
                     return (object)[
                         'status'    => true,
+                        'data'      => $this->index($request)->original['data']
+                    ];
+                }
+
+                // ! ======================================================
+                // ! Validasi apakah ada produk yang di Klaim
+                // ! ======================================================
+
+                $data_detail = DB::table($request->table[1])
+                ->select('*')
+                ->where('no_dokumen', $request->no_retur)
+                ->where('companyid', $request->companyid);
+
+                if(!$data_detail->exists()){
+                    return (object)[
+                        'status'    => false,
+                        'message'   => 'Tidak ada produk yang di Klaim',
                         'data'      => ''
                     ];
                 }
@@ -295,23 +358,6 @@ class KonsumenController extends Controller
                 ->addSelect('company.kd_rak','company.kd_lokasi')
                 ->addSelect('klaim_dtlTmp.sts_stock','klaim_dtlTmp.qty','klaim_dtlTmp.no_produksi','klaim_dtlTmp.sts_klaim', 'klaim_dtlTmp.sts_min', 'klaim_dtlTmp.keterangan')
                 ->addSelect('klaim_dtlTmp.no_dokumen', 'klaim_dtlTmp.companyid');
-
-                // ! ======================================================
-                // ! Validasi apakah ada produk yang di Klaim
-                // ! ======================================================
-
-                $data_detail = DB::table($request->table[1])
-                ->select('*')
-                ->where('no_dokumen', $request->no_retur)
-                ->where('companyid', $request->companyid);
-
-                if(!$data_detail->exists()){
-                    return (object)[
-                        'status'    => false,
-                        'message'   => 'Tidak ada produk yang di Klaim',
-                        'data'      => ''
-                    ];
-                }
 
                 $validasi_stock = $validasi_stock
                 ->JoinSub($data_detail, 'klaim_dtlTmp', function ($join) {
@@ -351,7 +397,7 @@ class KonsumenController extends Controller
                 $data_error = collect($validasi_stock)
                 ->where('sts_min',1)
                 ->where('sts_stock',1)
-                // ->where('stock','<','qty')
+                ->where('stock','<','qty')
                 ->filter(function($value, $key){
                     return (float)$value->stock < (float)$value->qty;
                 })
@@ -424,7 +470,7 @@ class KonsumenController extends Controller
                             'kd_part'       => $value->kd_part,
                             'CompanyId'     => $request->companyid,
                             'qty'           => $value->qty,
-                            'no_produksi'   => ($value->no_produksi??null),
+                            'no_produksi'   => $value->no_produksi,
                             'sts_stock'     => ($value->sts_stock??null),
                             'sts_klaim'     => ($value->sts_klaim??null),
                             'sts_min'       => ($value->sts_min??null),
@@ -502,8 +548,14 @@ class KonsumenController extends Controller
             // ! Jika menambahkan validasi
             // ! ------------------------------------
             if(!empty($request->kd_part) && (!empty($request->no_retur) && $request->no_retur == $request->user_id)){
-                $rules += ['kd_part' => 'required'];
-                $messages += ['kd_part.required' => 'Part Number Tidak boleh kososng'];
+                $rules += [
+                            'kd_part' => 'required',
+                            'no_produksi' => 'required',
+                        ];
+                $messages += [
+                                'kd_part.required' => 'Part Number Tidak boleh kososng',
+                                'no_produksi.required' => 'NO Produksi Tidak boleh kososng'
+                            ];
             }
 
             // ! ------------------------------------
@@ -525,6 +577,7 @@ class KonsumenController extends Controller
                     DB::table($request->tb[1])
                         ->where('no_dokumen', $request->no_retur)
                         ->where('kd_part', $request->kd_part)
+                        ->where('no_produksi', $request->no_produksi)
                         ->where('companyid', $request->companyid)
                         ->delete();
                 });

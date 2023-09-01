@@ -170,15 +170,26 @@
                         <div class="col-sm-4">
                             <input type="number" class="form-control" id="qty_klaim" name="qty_klaim" min="1" placeholder="Jumlah Klaim" value="" disabled>
                         </div>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="no_produksi" name="no_produksi" placeholder="No Produk" value="">
-                        </div>
                         <label for="no_ps" class="col-sm-2 col-form-label">No Packing Sheet</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="no_ps" name="no_ps" placeholder="Masukkan No Packing Sheet" value="" required>
+                        </div>
+                    </div>
+                    {{-- <div class="form-group row mb-2">
+                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="no_produksi" name="no_produksi" value="" disabled>
+                        </div>
+                        
+                    </div> --}}
+                    <div class="form-group row mb-2">
+                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
+                        <div class="col-sm-10">
+                            <div class="row" id="input_no_produk">
+                                <div class="col-2 mt-3">
+                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" disabled>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

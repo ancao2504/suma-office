@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Helpers\Api\Response;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SupplierController extends Controller
 {
@@ -62,47 +63,65 @@ class SupplierController extends Controller
 
             $data = DB::table(function($query) use ($request){
                 $query->select('*')
-                ->from($request->tb[0])
-                ->where($request->tb[0].'.CompanyId', $request->companyid);
-                
-                if(!empty($request->no_retur)){
-                    $query = $query->where(function($query) use ($request){
-                        $query->where($request->tb[0].'.no_retur', 'LIKE', '%'.$request->no_retur.'%')
-                        ->orWhere($request->tb[0].'.kd_supp', 'LIKE', '%'.$request->no_retur.'%');
-                    });
-                }
-            }, $request->tb[0]);
+                ->from($request->tb[0] . ' as retur')
+                ->where('retur.CompanyId', $request->companyid);
+            }, 'retur');
 
             if(in_array('page', $request->option)){
                 $data = $data
-                ->joinSub(function($query) use ($request){
-                    $query->select(
-                        'retur_dtl.no_retur',
-                        DB::raw('isnull(sum(retur_dtl.jmlretur),0) as jmlretur'),
-                        DB::raw('isnull(sum(retur_dtl.qty_jwb),0) as qty_jwb'),
-                        'retur_dtl.CompanyId'
-                    )
-                    ->from($request->tb[1])
-                    ->where('retur_dtl.CompanyId',$request->companyid)
-                    ->groupBy('retur_dtl.no_retur', 'retur_dtl.CompanyId');
-                }, 'detail', function($join){
-                    $join->on('detail.no_retur', '=', 'retur.no_retur')
-                    ->on('detail.CompanyId', '=', 'retur.CompanyId');
-                })
                 ->select(
-                    $request->tb[0].'.*',
-                    'detail.jmlretur',
-                    'detail.qty_jwb'
+                    'retur.no_retur',
+                    'retur.tglretur',
+                    'retur.kd_supp',
+                    'retur.total',
+                    DB::raw('isnull(sum(retur_dtl.qty_jwb),0) as qty_jwb')
                 );
 
+                if(in_array('with_detail',$request->option)){
+                    $data= $data->join($request->tb[1] . ' as retur_dtl', function($join) {
+                        $join->on('retur_dtl.no_retur', '=', 'retur.no_retur')
+                        ->on('retur_dtl.CompanyId', '=', 'retur.CompanyId');
+                    });
+                }
+
+                if(!empty($request->no_retur)){
+                    $data = $data->where(function($query) use ($request){
+                        $query->where('retur.no_retur', 'like', '%'.$request->no_retur.'%')
+                        ->orWhere('retur.kd_supp', 'like', '%'.$request->no_retur.'%')
+                        ->orWhere('retur_dtl.kd_part', 'like', '%'.$request->no_retur.'%')
+                        ->orWhere('retur_dtl.no_klaim', 'like', '%'.$request->no_retur.'%');
+                    });
+                }
+
                 $data = $data
+                // group by retur.no_retur,retur.tglretur,retur.kd_supp,retur.total
+                ->groupBy('retur.no_retur','retur.tglretur','retur.kd_supp','retur.total')
                 ->orderBy('tglretur', 'desc')
                 ->orderBy('no_retur', 'desc')
                 ->paginate($request->per_page);
-            } else if(in_array('first', $request->option)){
+
+                $dataDetail = DB::table($request->tb[1])
+                ->select(
+                    'no_retur',
+                    'no_klaim',
+                    'kd_part'
+                )
+                ->where('CompanyId', $request->companyid)
+                ->whereIn('no_retur', collect($data->items())->pluck('no_retur')->toArray())
+                ->groupBy('no_retur','no_klaim','kd_part')
+                ->get();
+
+                collect($data->items())->map(function($item) use ($dataDetail){
+                    $item->detail = $dataDetail->where('no_retur', $item->no_retur)->values();
+                    return $item;
+                });
+
+                // dd(collect($data->items())->pluck('no_retur')->toArray());
+
+            } elseif(in_array('first', $request->option)){
                 $data = $data->first();
 
-            } else if(in_array('with_detail',$request->option) || in_array('with_jwb',$request->option)){
+            } elseif(in_array('with_detail',$request->option) || in_array('with_jwb',$request->option)){
                 $data = $data->first();
                 if(!empty($data)){
                     $data_detail = DB::table(function ($query) use ($request) {

@@ -3,9 +3,9 @@
 return [
     'app' => [
         'url' => [
-            'base'  => 'https://suma-honda.id',
-            'api'   => 'http://124.158.154.66/suma-office/public/api',
-            'images' => 'https://suma-honda.id/images',
+            'base'  => 'http://localhost:8888',
+            'api'   => 'http://localhost:8888/suma-office/public/api',
+            'images' => 'http://localhost:8888/images',
         ], 'key' => [
             'username'  => 'suma-honda-sby',
             'password'  => 'Password200%'
