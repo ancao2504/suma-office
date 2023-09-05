@@ -276,6 +276,8 @@ $(document).ready(function() {
             timer.tanggal = moment(data_complate.tgl_start, 'YYYY-MM-DD');
             timer.jam = moment(data_complate.jam_start, 'HH:mm:ss');
             $('#btn_submit_start').attr("disabled", true);
+            $('#btn_submit_finish').attr("disabled", false);
+            $('#btn_submit_reset').attr("hidden", true);
             $('.timer-container').attr("hidden", false);
         }
 
