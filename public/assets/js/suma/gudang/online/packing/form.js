@@ -352,6 +352,9 @@ $(document).ready(function() {
 
     function updateTimer() {
         let diffDuration = moment.duration(moment().diff(moment(timer.jam, 'HH:mm:ss')));
+        if(diffDuration.hours() < 0){
+            diffDuration = moment.duration(moment().diff(moment(timer.tanggal, 'DD/MM/YYYY')));
+        }
         document.getElementById('timer').innerText = `${diffDuration.hours().toString().padStart(2, '0')}:${diffDuration.minutes().toString().padStart(2, '0')}:${diffDuration.seconds().toString().padStart(2, '0')}`;
     }
     setInterval(updateTimer, 1000);
