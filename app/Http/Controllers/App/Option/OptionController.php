@@ -1989,10 +1989,12 @@ class OptionController extends Controller
                     'table' => (object)[
                         'thead' => [
                             (object)['class' => 'w-auto', 'text' => 'Nomor WH'],
+                            (object)['class' => 'w-auto', 'text' => 'Status'],
                             (object)['class' => 'w-auto', 'text' => 'Action'],
                         ],
                         'tbody' => [
                             (object)[ 'option' => 'text', 'class' => 'w-auto fs-7', 'key' => 'no_dok'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto fs-7 text-center', 'key' => 'status'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
                                 (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
                                     'data' => [(object)['key' => 'kd','value' => ['no_dok','nm_dealer','ket','kd_ekspedisi','tgl_start','jam_start','tgl_finish','jam_finish']]]

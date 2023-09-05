@@ -289,6 +289,7 @@ $(document).ready(function() {
         if(data_complate.tgl_start == null && data_complate.tgl_finish == null){
             $('#btn_submit_start').attr("disabled", false);
             $('#btn_submit_finish').attr("disabled", true);
+            $('.timer-container').attr("hidden", true);
         }
     });
 

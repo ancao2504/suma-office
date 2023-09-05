@@ -35,7 +35,7 @@
                                     <td class="w-25px ps-3 pe-3 text-center">{{ $no++ }}</td>
                                     @foreach ($table?->tbody as $item)
                                         @if ($item?->option == 'text')
-                                            <td class="{{ $item->class }} ps-3 pe-3">@if(!is_array($item->key)){{ $value->{$item->key} }}@else @foreach ($item->key as $key){{ $value->{$key}.' ' }}@endforeach @endif</td>
+                                            <td class="{{ $item->class }} ps-3 pe-3">@if(!is_array($item->key)){!! $value->{$item->key} !!}@else @foreach ($item->key as $key){{ $value->{$key}.' ' }}@endforeach @endif</td>
                                         @elseif ($item?->option == 'button')
                                             <td class="{{ $item->class }} ps-3 pe-3 text-center">
                                                 @foreach ($item?->button as $button)

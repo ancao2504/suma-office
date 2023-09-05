@@ -1222,7 +1222,21 @@ class ApiOptionsController extends Controller
             $data = DB::table('wh_time')
             ->lock('with (nolock)')
             ->select(
-                'wh_time.no_dok','dealer.nm_dealer', 'faktur.ket','faktur.kd_ekspedisi', 'wh_time.tanggal3 as tgl_start','wh_time.jam3 as jam_start','wh_time.tanggal4 as tgl_finish','wh_time.jam4 as jam_finish'
+                'wh_time.no_dok',
+                'dealer.nm_dealer',
+                'faktur.ket',
+                'faktur.kd_ekspedisi',
+                'wh_time.tanggal3 as tgl_start',
+                'wh_time.jam3 as jam_start',
+                'wh_time.tanggal4 as tgl_finish',
+                'wh_time.jam4 as jam_finish',
+                DB::raw('
+                CASE
+                    WHEN tanggal3 IS NULL AND jam3 IS NULL THEN \'<span class="badge badge-light-danger">Belum diproses</span>\'
+                    WHEN tanggal3 IS NOT NULL AND jam3 IS NOT NULL AND tanggal4 IS NULL AND jam4 IS NULL THEN \'<span class="badge badge-light-warning">Proses</span>\'
+                    WHEN tanggal3 IS NOT NULL AND jam3 IS NOT NULL AND tanggal4 IS NOT NULL AND jam4 IS NOT NULL THEN \'<span class="badge badge-light-success">Selesai</span>\'
+                END AS status
+            ')
             )
             ->joinSub(function ($query) use ($request) {
                 $query->select('no_dok', 'no_faktur')
@@ -1255,11 +1269,15 @@ class ApiOptionsController extends Controller
 
             if ($request->option == 'first') {
                 $data = $data->first();
-            } else if ($request->option == 'page') {
+            } elseif ($request->option == 'page') {
                 $data = $data
-                ->whereNull('wh_time.tanggal3')
-                ->whereNull('wh_time.jam3')
-                ->orderBy('wh_time.no_dok', 'asc')
+                ->where(function($query){
+                    $query->whereNull('wh_time.tanggal3')->orWhereDate('wh_time.tanggal3', date('Y-m-d'));
+                })
+                ->where(function($query){
+                    $query->whereNull('wh_time.jam3')->orWhereTime('wh_time.jam3', '<=', date('H:i:s'));
+                })
+                ->orderBy('wh_time.no_dok', 'desc')
                 ->groupBy('wh_time.no_dok', 'dealer.nm_dealer', 'faktur.ket', 'faktur.kd_ekspedisi','wh_time.tanggal3','wh_time.jam3','wh_time.tanggal4','wh_time.jam4')
                 ->paginate($request->per_page);
             }
