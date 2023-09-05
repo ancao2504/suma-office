@@ -1277,7 +1277,8 @@ class ApiOptionsController extends Controller
                 ->where(function($query){
                     $query->whereNull('wh_time.jam3')->orWhereTime('wh_time.jam3', '<=', date('H:i:s'));
                 })
-                ->orderBy('wh_time.no_dok', 'desc')
+                ->orderBy('wh_time.tanggal4', 'asc')
+                ->orderBy('wh_time.tanggal3', 'desc')
                 ->groupBy('wh_time.no_dok', 'dealer.nm_dealer', 'faktur.ket', 'faktur.kd_ekspedisi','wh_time.tanggal3','wh_time.jam3','wh_time.tanggal4','wh_time.jam4')
                 ->paginate($request->per_page);
             }
