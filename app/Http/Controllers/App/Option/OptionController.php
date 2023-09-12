@@ -1965,6 +1965,25 @@ class OptionController extends Controller
         }
     }
 
+    public static function PackerPackingOnline(){
+        $responseApi = Service::dataPackerPackingOnline();
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+        if ($statusApi == 1) {
+            $data = json_decode($responseApi)->data;
+            $respon = '';
+            foreach ($data as $key => $value) {
+                $respon .= '<option value="'.$value->kd_pack.'">'.$value->kd_pack.'</option>';
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else {
+            if($messageApi == null){
+                $messageApi = 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi';
+            }
+            return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        }
+    }
+
     public static function WH(Request $request){
         $responseApi = json_decode(Service::dataWH($request));
         $statusApi = $responseApi?->status;

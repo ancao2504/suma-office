@@ -46,6 +46,7 @@ use Api\Backend\Profile\ApiUserController;
 use Api\Backend\Reports\FakturController as ReportFaktur;
 use Api\Backend\Reports\KonsumenController as Reportkonsumen;
 use Api\Backend\Reports\ReturController as ReportRetur;
+use Api\Backend\Reports\PackingController as ReportPacking;
 use Api\Backend\Retur\KonsumenController as ReturKonsumen;
 use Api\Backend\Retur\SupplierController as ReturSupplier;
 use Api\Backend\Retur\SupplierJawabController as ReturSupplierJawab;
@@ -159,6 +160,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/typemotor', 'dataTypemotor')->name('typemotor');
                     Route::post('/backend/ukuranring', 'dataUkuranRing')->name('ukuranring');
                     Route::post('/backend/gudang/paking/online/meja', 'dataMejaPackingOnline')->name('meja');
+                    Route::post('/backend/gudang/paking/online/packer', 'dataPackerPackingOnline')->name('packer');
                     Route::post('/backend/gudang/wh', 'dataWH')->name('wh');
                     Route::post('/backend/cabang', 'dataCabang')->name('cabang');
                     // ! end sby
@@ -584,6 +586,13 @@ Route::group(['middleware' => 'authBasic'], function () {
                         Route::post('/backend/report/retur',  'index')->name('index');
                         Route::post('/backend/report/retur',  'data')->name('data');
                         Route::post('/backend/report/retur/export',  'export')->name('export');
+                    });
+                });
+                Route::name('packing.')->group(function () {
+                    Route::controller(ReportPacking::class)->group(function () {
+                        Route::post('/backend/report/packing',  'index')->name('index');
+                        Route::post('/backend/report/packing',  'data')->name('data');
+                        Route::post('/backend/report/packing/export',  'export')->name('export');
                     });
                 });
                 Route::name('konsumen.')->group(function () {

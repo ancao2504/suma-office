@@ -1213,6 +1213,36 @@ class ApiOptionsController extends Controller
         }
     }
 
+    public function dataPackerPackingOnline(Request $request){
+        try{
+            $data = DB::table('dbhonda.dbo.wh_time')
+            ->select('wh_time.kd_pack')
+            ->joinSub(function ($query){
+                $query->select('kd_dealer', 'nm_dealer')
+                    ->from('dbhonda.dbo.dealer')
+                    ->where('kd_area', 'i8');
+            }, 'dealer', function ($join) {
+                $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer');
+            })
+            ->whereNotNull('wh_time.kd_pack')
+            ->where('wh_time.kd_pack', '!=', '')
+            ->distinct()
+            ->orderBy('kd_pack', 'asc')
+            ->get();
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
     public function dataWH(Request $request){
         try{
             if (!in_array($request->per_page, [10, 50, 100, 500])) {
@@ -1241,7 +1271,8 @@ class ApiOptionsController extends Controller
             ->joinSub(function ($query) use ($request) {
                 $query->select('no_dok', 'no_faktur')
                     ->from('wh_dtl')
-                    ->where('CompanyId', $request->companyid);
+                    ->where('CompanyId', $request->companyid)
+                    ->groupBy('no_dok', 'no_faktur');
             }, 'wh_dtl', function ($join) {
                 $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok');
             })

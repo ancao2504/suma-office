@@ -46,13 +46,12 @@ class SupplierController extends Controller
                 return Response::responseWarning($validate->errors()->first());
             }
 
-            
             if(empty($request->no_retur) && in_array('tamp',$request->option)){
                 $request->merge(['no_retur' => $request->user_id]);
             }
 
             if(!in_array($request->per_page, [10,50,100,500])){
-                $request->replace(['per_page' => 10]); 
+                $request->replace(['per_page' => 10]);
             }
 
             
@@ -65,6 +64,9 @@ class SupplierController extends Controller
                 $query->select('*')
                 ->from($request->tb[0] . ' as retur')
                 ->where('retur.CompanyId', $request->companyid);
+                if(in_array('tamp', $request->option)){
+                    $query->where('retur.Kd_Key', $request->user_id);
+                }
             }, 'retur');
 
             if(in_array('page', $request->option)){
@@ -94,10 +96,11 @@ class SupplierController extends Controller
                 }
 
                 $data = $data
-                // group by retur.no_retur,retur.tglretur,retur.kd_supp,retur.total
+                // ! tampilkan hanya 2 tahun terakhir
+                ->whereBetween('retur.tglretur', [date('Y-m-d', strtotime('-2 year')), date('Y-m-d')])
                 ->groupBy('retur.no_retur','retur.tglretur','retur.kd_supp','retur.total')
+                ->orderByRaw('case when isnull(sum(retur_dtl.qty_jwb),0) < retur.total then 0 else 1 end asc')
                 ->orderBy('tglretur', 'desc')
-                ->orderBy('no_retur', 'desc')
                 ->paginate($request->per_page);
 
                 $dataDetail = DB::table($request->tb[1])
@@ -115,13 +118,13 @@ class SupplierController extends Controller
                     $item->detail = $dataDetail->where('no_retur', $item->no_retur)->values();
                     return $item;
                 });
-
-                // dd(collect($data->items())->pluck('no_retur')->toArray());
-
             } elseif(in_array('first', $request->option)){
                 $data = $data->first();
 
             } elseif(in_array('with_detail',$request->option) || in_array('with_jwb',$request->option)){
+                if(!empty($request->no_retur) && in_array('with_jwb',$request->option)){
+                    $data = $data->where('retur.no_retur', $request->no_retur);
+                }
                 $data = $data->first();
                 if(!empty($data)){
                     $data_detail = DB::table(function ($query) use ($request) {
@@ -140,38 +143,38 @@ class SupplierController extends Controller
                                 'diterima',
                                 'CompanyId'
                             )
-                        ->from($request->tb[1])
-                        ->where($request->tb[1].'.CompanyId', $request->companyid);
+                        ->from($request->tb[1]. ' as retur_dtl')
+                        ->where('retur_dtl.CompanyId', $request->companyid);
                     if(!empty($request->no_retur) || in_array($request->option, ['tamp'])){
-                        $query->where($request->tb[1].'.no_retur', $request->no_retur);
+                        $query->where('retur_dtl.no_retur', $request->no_retur);
                     }
-                    }, $request->tb[1])
+                    }, 'retur_dtl')
                     ->leftJoinSub(function($query) use ($request){
                         $query->select('part.kd_part', 'part.ket','part.CompanyId','hrg_pokok')
                         ->from('part')
                         ->where('part.CompanyId', $request->companyid);
-                    }, 'part', function($join) use ($request){
-                        $join->on('part.kd_part', '=', $request->tb[1].'.kd_part')
-                        ->on('part.CompanyId', '=', $request->tb[1].'.CompanyId');
+                    }, 'part', function($join) {
+                        $join->on('part.kd_part', '=', 'retur_dtl.kd_part')
+                        ->on('part.CompanyId', '=', 'retur_dtl.CompanyId');
                     })
                     ->leftJoinSub(function($query) use ($request){
                         $query->select('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim', 'rtoko_dtl.ket','rtoko_dtl.status_end','rtoko_dtl.CompanyId')
                         ->from('rtoko_dtl')
                         ->where('rtoko_dtl.CompanyId', $request->companyid)
                         ->groupBy('rtoko_dtl.no_retur', 'rtoko_dtl.kd_part', 'rtoko_dtl.no_klaim','rtoko_dtl.ket', 'rtoko_dtl.status_end','rtoko_dtl.CompanyId');
-                    }, 'rtoko_dtl', function($join) use ($request){
-                        $join->on('rtoko_dtl.no_retur', '=', $request->tb[1].'.no_klaim')
-                        ->on('rtoko_dtl.kd_part', '=', $request->tb[1].'.kd_part')
-                        ->on('rtoko_dtl.CompanyId', '=', $request->tb[1].'.CompanyId');
+                    }, 'rtoko_dtl', function($join) {
+                        $join->on('rtoko_dtl.no_retur', '=', 'retur_dtl.no_klaim')
+                        ->on('rtoko_dtl.kd_part', '=', 'retur_dtl.kd_part')
+                        ->on('rtoko_dtl.CompanyId', '=', 'retur_dtl.CompanyId');
                     })
                     ->select(
-                        $request->tb[1].'.*',
+                        'retur_dtl.*',
                         'part.ket as nm_part',
                         'part.hrg_pokok',
                         'rtoko_dtl.ket as ket_klaim',
                         'rtoko_dtl.status_end'
                     )
-                    ->orderBy($request->tb[1].'.no_klaim', 'desc')
+                    ->orderBy('retur_dtl.no_klaim', 'desc')
                     ->get();
                     
                     if(in_array('with_jwb', $request->option)){
@@ -191,7 +194,7 @@ class SupplierController extends Controller
 
                             $data_detail[$key]->qty_jwb = $detail_jwb->sum('qty_jwb');
 
-                            $data_detail[$key]->ket_jwb = 
+                            $data_detail[$key]->ket_jwb =
                                 $detail_jwb->where('keputusan','TERIMA')->sum('qty_jwb').' TERIMA ' .
                                 $detail_jwb->where('keputusan','TOLAK')->sum('qty_jwb').' TOLAK ';
                         }
@@ -260,7 +263,6 @@ class SupplierController extends Controller
                 // ! ======================================================
                 if($request->no_retur == $request->user_id){
                     if(!empty($request->kd_part)){
-
                         $a = DB::table(function ($query) use ($request) {
                             $query->select('rtoko.no_retur','rtoko.kd_dealer', 'rtoko_dtl.no_faktur', 'rtoko_dtl.Kd_lokasi', 'rtoko_dtl.jumlah', 'rtoko.tanggal','rtoko.CompanyId')
                             ->from('rtoko')
@@ -287,7 +289,6 @@ class SupplierController extends Controller
                         ->update([
                             'status' => 1
                         ]);
-
                         //! simpan pada tabel retur_dtltmp
                         DB::table('retur_dtltmp')
                         ->updateOrInsert([
@@ -304,7 +305,7 @@ class SupplierController extends Controller
                             'jmlretur'      =>  $a->jumlah,
                             'ket'           => ($request->ket??null),
                             'diterima'      => ($request->diterima??0),
-                            'no_produksi'   => ($request->no_produksi??null),
+                            'no_produksi'   => $request->no_produksi,
                             'tgl_pemakaian' => $request->tgl_pemakaian,
                             'tgl_claim'     => $a->tanggal,
                             'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
@@ -321,7 +322,7 @@ class SupplierController extends Controller
                     },'b')
                     ->first();
 
-                    //! simpan pada tabel returtmp 
+                    //! simpan pada tabel returtmp
                     DB::table('returtmp')
                     ->updateOrInsert([
                         'returtmp.Kd_Key'            => $request->user_id,
@@ -351,7 +352,7 @@ class SupplierController extends Controller
                     $request->companyid,
                     $request->user_id
                 ]);
-                
+
                 return (object)[
                     'status'    => (int)$simpan[0]->status,
                     'data'      => $simpan[0]->data
@@ -361,7 +362,7 @@ class SupplierController extends Controller
             // ! jika true succes jika false terdapat validasi yang gagal
             if($simpan->status == 1){
                 return Response::responseSuccess('success', $simpan->data);
-            } else if ($simpan->status == 0){
+            } elseif ($simpan->status == 0){
                 return Response::responseWarning($simpan->data, '');
             }
             
@@ -409,8 +410,7 @@ class SupplierController extends Controller
             });
             return response::responseSuccess('success', '');
         }catch (\Exception $exception) {
-            return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
-                        $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));
+            return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],$request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));
         };
     }
 }

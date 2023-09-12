@@ -34,6 +34,13 @@
         <link rel="manifest" href="{{ asset('/manifest.json') }}">
 
         @stack('styles')
+        <style>
+            @media print {
+                #menu_klik_Kanan{
+                    display: none !important;
+                }
+            }
+        </style>
     </head>
 
     <!--begin::Body-->

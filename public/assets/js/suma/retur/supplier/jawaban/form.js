@@ -24,7 +24,6 @@ function simpan(request){
         tamp:request.tamp,
         no_retur: request.no_retur,
     }
-
     if(request.tamp){
         param = {
             ...param,
@@ -43,7 +42,6 @@ function simpan(request){
         function (response) {
             if (response.status == '1') {
                 if(request.tamp){
-                    console.log(response.data);
                     $('#list-jwb').html('');
                     response.data.detail_jwb.forEach(function (item, index) {
                         const data_del = btoa(JSON.stringify({
@@ -73,7 +71,6 @@ function simpan(request){
                     let data = JSON.parse(atob(view_table.find('.btn_jwb').data('a')));
 
                     data.detail_jwb = response.data.detail_jwb;
-
                     view_table.find('td:eq(6)').html(response.data.qty);
                     view_table.find('td:eq(7)').html(response.data.ket);
                     view_table.find('.btn_jwb').data('a', btoa(JSON.stringify(data)));

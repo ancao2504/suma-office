@@ -64,8 +64,6 @@
                 </table>
             </div>
         </div>
-        <span class="text-muted fs-8"><span class="required"></span>Data <b>qty Jawab</b> sudah memenuhi klaim maka data tersebut akan <b>diproses</b> jika <b>simpan semua jawaban</b></span>
-        <span class="text-muted fs-8"><span class="required"></span>Simpan Semua Jawaban <b>hanya memproses</b> data yang <b>sebelumnya belum diproses</b></span>
         <div class="modal-footer">
             <button type="button" class="btn btn-success text-white btn_simpan" data-a="{{ base64_encode(json_encode((object)['no_retur' => $data->no_retur,'tamp'=>0])) }}">Simpan Semua Jawaban</button>
             <a href="{{ Route('retur.supplier.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>

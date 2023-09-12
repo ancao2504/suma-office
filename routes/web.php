@@ -41,6 +41,7 @@ use App\Profile\UserController;
 use App\Reports\FakturController as ReportFaktur;
 use App\Reports\KonsumenController as ReportKonsumen;
 use App\Reports\ReturController as ReportRetur;
+use App\Reports\PackingController as ReportPacking;
 use App\Retur\KonsumenController as ReturKonsumen;
 use App\Retur\SupplierController as ReturSupplier;
 use App\Retur\SupplierJawabController as ReturSupplierJawab;
@@ -654,6 +655,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::get('report/faktur', 'index')->name('index');
                     Route::post('report/faktur', 'data')->name('data');
                     Route::post('report/faktur/export',  'export')->name('export');
+                });
+            });
+            Route::name('packing.')->group(function () {
+                Route::controller(ReportPacking::class)->group(function () {
+                    Route::get('report/packing', 'index')->name('index');
+                    Route::post('report/packing', 'data')->name('data');
+                    Route::post('report/packing/export',  'export')->name('export');
                 });
             });
             Route::name('retur.')->group(function () {

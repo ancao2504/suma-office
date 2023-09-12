@@ -2151,6 +2151,22 @@ class Service
         return $response;
     }
 
+    public static function ReportPackingData($request){
+        $url = 'backend/report/packing';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'tanggal'     => $request->tanggal,
+            'no_meja'      => $request->no_meja,
+            'kd_packing'     => $request->kd_packing,
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
     public static function ExprotReportRetur($request){
         $url = 'backend/report/retur/export';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -2160,6 +2176,20 @@ class Service
             'tanggal'     => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
             'kd_dealer'     => $request->kd_dealer
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function ExprotReportPacking($request){
+        $url = 'backend/report/packing/export';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'tanggal'     => $request->tanggal,
+            'no_meja'      => $request->no_meja,
+            'kd_packing'     => $request->kd_packing
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2451,6 +2481,14 @@ class Service
 
     public static function dataMejaPackingOnline(){
         $url = 'backend/gudang/paking/online/meja';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function dataPackerPackingOnline(){
+        $url = 'backend/gudang/paking/online/packer';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [];
         $response = ApiRequest::requestPost($url, $header, $body);

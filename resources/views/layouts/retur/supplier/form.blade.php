@@ -273,7 +273,6 @@
 <div class="modal fade" tabindex="-1" id="klaim-list">
 </div>
 <!--end::Modal Part data-->
-
 @endsection
 
 @push('scripts')
@@ -283,7 +282,6 @@
     const old = {
         kd_supp: @json(($data->kd_supp??'')),
     };
-    
 </script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/getKlaim.js') }}?v={{ time() }}"></script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/getPart.js') }}?v={{ time() }}"></script>

@@ -4,14 +4,20 @@ function detail_clear(){
     $('#no_klaim').val('');
     $('#no_klaim').removeClass('is-valid');
     $('#no_klaim').removeClass('is-invalid');
+    $('#no_klaim').attr('disabled', false);
     $('#tgl_claim').val('');
     $('#kd_part').val('');
     $('#ket_klaim').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');
+    $('#kd_part').attr('disabled', false);
     $('#nm_part').val('');
     $('#qty_klaim').val('');
-    $('#no_produksi').val('');
+    $('#input_no_produk').html(`
+        <div class="col-2 mt-3">
+            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" disabled>
+        </div>
+    `);
     $('#kode_claim_kualitas').val('').trigger('change');
     $('#kode_claim_non_kualitas').val('').trigger('change');
     $('#kode_claim').val('');
@@ -34,6 +40,11 @@ function simpan(tamp){
         } 
 
 
+        let no_produksi = [];
+        for (let x = 1; x <= parseInt($('#qty_klaim').val()); x++) {
+            no_produksi.push($('#no_produksi'+x).val());
+        }
+
         $.post(base_url + "/retur/supplier/form",
             {
                 _token: $('meta[name="csrf-token"]').attr('content'),
@@ -47,7 +58,7 @@ function simpan(tamp){
                 tgl_claim: $('#tgl_claim').val(),
                 kd_part: $('#kd_part').val(),
                 qty_klaim: $('#qty_klaim').val(),
-                no_produksi: $('#no_produksi').val(),
+                no_produksi: no_produksi.join(','),
                 ket: ket,
                 diterima: $('#diterima').val(),
             },
@@ -71,21 +82,18 @@ function simpan(tamp){
                         return false;
                     }
                     $('#detail_modal').modal('hide');
-
                     let dta_edt = JSON.stringify({
                         no_ps : $('#no_ps').val(),
                         // no_dus : $('#no_dus').val(),
                         no_klaim : $('#no_klaim').val(),
                         tgl_claim : $('#tgl_claim').val(),
-                        no_produksi : $('#no_produksi').val(),
+                        no_produksi : no_produksi.join(','),
                         kd_part : $('#kd_part').val(),
                         nm_part : $('#nm_part').val(),
                         ket : (
                             ($('#kode_claim_kualitas').val().split('|')[0] == 'I')? $('#kode_claim_kualitas').val()+$('#ket').val() :
                             ($('#kode_claim_non_kualitas').val().split('|')[0] == 'Q')? $('#kode_claim_non_kualitas').val()+$('#ket').val() :
-
                             ($('#kode_claim_kualitas').val() != '' && $('#kode_claim_non_kualitas').val() == '')? $('#kode_claim_kualitas').val() :
-
                             ($('#kode_claim_kualitas').val() == '' && $('#kode_claim_non_kualitas').val() != '')? $('#kode_claim_non_kualitas').val() : ''
                         ),
                         jumlah : $('#qty_klaim').val(),
@@ -96,7 +104,6 @@ function simpan(tamp){
                         no_klaim: $('#no_klaim').val(),
                         kd_part: $('#kd_part').val()
                     });
-
                     if($('#no_klaim').val() != '' && $('#list-retur tr[data-key="'+($('#no_klaim').val()+$('#kd_part').val())+'"]').length == 0){
 
                         $('#list-retur .text_not_data').remove();
@@ -200,12 +207,22 @@ function edit_detail(val){
     // $('#no_dus').val(val.no_dus);
     $('#no_klaim').val(val.no_klaim);
     $('#no_klaim').addClass('is-valid');
+    $('#no_klaim').attr('disabled', true);
     $('#tgl_claim').val(val.tgl_claim);
     $('#kd_part').val(val.kd_part);
     $('#kd_part').addClass('is-valid');
+    $('#kd_part').attr('disabled', true);
     $('#nm_part').val(val.nm_part);
     $('#qty_klaim').val(val.jumlah);
-    $('#no_produksi').val(val.no_produksi);
+    const no_produksi = val.no_produksi.split(',');
+    $('#input_no_produk').html('');
+    $.each(no_produksi, function (index, value) {
+        $('#input_no_produk').append(`
+            <div class="col-2 mt-3">
+                <input type="text" class="form-control" id="no_produksi${index}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
+            </div>
+        `);
+    });
     $('#ket_klaim').val(val.ket_klaim);
 
     if(val.ket.split('|')[0] == 'I' || val.ket.split('|')[0] == 'Q'){

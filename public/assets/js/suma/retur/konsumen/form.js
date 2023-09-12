@@ -108,7 +108,6 @@ function simpan(tamp){
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
             tamp: tamp,
-
             no_retur: $('#no_retur').val(),
             kd_sales: $('#kd_sales').val(),
             tgl_retur: $('#tgl_retur').val(),
@@ -116,7 +115,6 @@ function simpan(tamp){
             pc:$('#jenis_konsumen').val(),
             kd_dealer: $('#kd_dealer').val(),
             kd_cabang: $('#kd_cabang').val(),
-            
             no_produksi: no_produksi,
             kd_part: $('#kd_part').val(),
             qty_retur: $('#qty_retur').val(),
@@ -164,10 +162,10 @@ function simpan(tamp){
                             <thead class="border">
                                 <tr class="fs-8 fw-bolder text-muted text-center">
                                     <th rowspan="2" class="w-auto ps-3 pe-3">No</th>
+                                    <th rowspan="2" class="w-auto ps-3 pe-3">No Produksi</th>
                                     <th rowspan="2" class="w-auto ps-3 pe-3">part Number</th>
                                     <th colspan="2" class="w-auto ps-3 pe-3">Qty</th>
                                     <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
-                                    <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
                                 </tr>
                                 <tr class="fs-8 fw-bolder text-muted text-center">
                                     <th class="w-auto ps-3 pe-3">Retur</th>
@@ -179,13 +177,11 @@ function simpan(tamp){
                             view += `
                                 <tr class="fw-bolder fs-8 border">
                                     <td class="text-center">${index + 1}</td>
+                                    <td>${data.no_produksi}</td>
                                     <td>${data.kd_part}</td>
                                     <td class="text-end">${data.qty}</td>
                                     <td class="text-end">${data.stock}</td>
                                     <td class="text-center"><span class="badge badge-light-danger">${data.keterangan}</span></td>
-                                    <td class="text-center">
-                                        <a role="button" data-key="${data.kd_part}" class="btn_warning_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
-                                    </td>
                                 </tr>
                             `;
                         });
@@ -296,11 +292,42 @@ $(document).ready(function () {
         });
     });
     $(".btn_simpan_tmp").click(function (e) {
-        if($('#qty_retur').val() == 0){
-            toastr.warning('Qty Retur Harus lebih dari 0', "Peringatan");
-            $('#qty_retur').focus();
+        if($('#detail_modal').find('#kd_part').val() == ''){
+            toastr.warning('Kode Part Harus diisi', "Peringatan");
+            $('#detail_modal').find('#kd_part').focus();
             return false;
         }
+        if($('#detail_modal').find('#qty_retur').val() == 0){
+            toastr.warning('Qty Retur Harus lebih dari 0', "Peringatan");
+            $('#detail_modal').find('#qty_retur').focus();
+            return false;
+        }
+        if($('#input_no_produk').find('.col-2').length > 0){
+            let emptyInput = $('#input_no_produk .col-2 input').filter(function () {
+                return this.value == '';
+            });
+            if (emptyInput.length > 0) {
+                toastr.warning('No Produksi Harus diisi semua', "Peringatan");
+                emptyInput.focus();
+                return false;
+            }
+        }
+        if($('#detail_modal').find('#sts_stock').val() == ''){
+            toastr.warning('Status Stock Harus diisi', "Peringatan");
+            $('#detail_modal').find('#sts_stock').focus();
+            return false;
+        }
+        if($('#detail_modal').find('#sts_minimum').val() == ''){
+            toastr.warning('Status Minimum Harus diisi', "Peringatan");
+            $('#detail_modal').find('#sts_minimum').focus();
+            return false;
+        }
+        if($('#detail_modal').find('#sts_klaim').val() == ''){
+            toastr.warning('Status Klaim Harus diisi', "Peringatan");
+            $('#detail_modal').find('#sts_klaim').focus();
+            return false;
+        }
+
         e.preventDefault();
         simpan(true);
     });

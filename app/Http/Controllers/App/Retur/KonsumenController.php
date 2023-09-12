@@ -63,8 +63,8 @@ class KonsumenController extends Controller
         } else {
             array_push($option, 'tamp');
         }
-
         $request->merge(['option' => $option]);
+        
         $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
         $statusApiRetur = $responseApiRetur->status??0;
 
@@ -99,13 +99,11 @@ class KonsumenController extends Controller
     public function store(Request $request)
     {
         try {
-
             $rules = [];
             $messages = [];
-
             // ! ------------------------------------
             // ! Jika menambahkan validasi
-            if($request->no_retur == $request->user_id){
+            if($request->tamp == 'true'){
                 if(!empty($request->pc) && $request->pc == 1){
                     $rules += ['kd_cabang' => 'required'];
                     $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
@@ -113,26 +111,23 @@ class KonsumenController extends Controller
                     $rules += ['kd_dealer' => 'required'];
                     $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
                 }
-
-                if(!empty($request->kd_part)){
-                    $rules += [
-                        'kd_part' => 'required',
-                        'qty_retur' => 'required|numeric|min:1',
-                        'sts_stock' => 'required',
-                        'sts_klaim' => 'required',
-                        'sts_min' => 'required',
-                    ];
-                    $messages += [
-                        'kd_part.required' => 'Part Number Kososng',
-                        'qty_retur.required' => 'QTY Claim Kososng',
-                        'qty_retur.min' => 'QTY Pada Claim Minimal 1',
-                        'sts_stock.required' => 'Status Stock Kososng',
-                        'sts_klaim.required' => 'Status Retur Kososng',
-                        'sts_min.required' => 'Status Min Kososng',
-                    ];
-                }
+                
+                $rules += [
+                    'kd_part' => 'required',
+                    'qty_retur' => 'required|numeric|min:1',
+                    'sts_stock' => 'required',
+                    'sts_klaim' => 'required',
+                    'sts_minimum' => 'required',
+                ];
+                $messages += [
+                    'kd_part.required' => 'Part Number tidak boleh kososng',
+                    'qty_retur.required' => 'QTY Claim Tidak Boleh Kososng',
+                    'qty_retur.min' => 'QTY Pada Claim Minimal 1',
+                    'sts_stock.required' => 'Status Stock tidak boleh kososng',
+                    'sts_klaim.required' => 'Status Retur tidak boleh kososng',
+                    'sts_minimum.required' => 'Status Min tidak boleh kososng',
+                ];
             }
-
             // ! megecek validasi dan menampilkan pesan error
             // ! ------------------------------------
             $validate = Validator::make($request->all(), $rules,$messages);
@@ -143,7 +138,6 @@ class KonsumenController extends Controller
                     'data'      => ''
                 ]);
             }
-            
             $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;

@@ -80,7 +80,11 @@ function clear_part(){
     $('#kd_part').val('');
     $('#nm_part').val('');
     $('#qty_klaim').val('');
-    $('#no_produksi').val('');
+    $('#input_no_produk').html(`
+        <div class="col-2 mt-3">
+            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" disabled>
+        </div>
+    `);
     $('#ket_klaim').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');

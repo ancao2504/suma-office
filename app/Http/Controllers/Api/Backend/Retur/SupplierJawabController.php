@@ -102,30 +102,12 @@ class SupplierJawabController extends Controller
                         'tgl_jwb',
                         'usertime',
                         'sts_end',
-                        DB::raw('isnull(sum(qty_jwb), 0) as qty_jwb_total'),
-                        DB::raw("isnull(sum(case when keputusan = 'TERIMA' then qty_jwb else null end), 0) as terima"),
-                        DB::raw("isnull(sum(case when keputusan = 'TOLAK' then qty_jwb else null end), 0) as tolak")
-                    )
-                    ->groupBy(
-                        'CompanyId',
-                        'alasan',
-                        'ca',
-                        'kd_part',
-                        'keputusan',
-                        'ket',
-                        'no_jwb',
-                        'no_klaim',
-                        'no_retur',
-                        'qty_jwb',
-                        'tgl_jwb',
-                        'usertime',
-                        'sts_end'
                     )->get();
                     // ! Jika tidak mengalami masalah maka akan return success
                     // ! =====================================
                     $data = [
-                        'qty'   => $cek[0]->qty_jwb_total,
-                        'ket'       => $cek[0]->terima . ' TERIMA '.$cek[0]->tolak.' TOLAK ',
+                        'qty'   => collect($cek)->sum('qty_jwb'),
+                        'ket'    => collect($cek)->where('keputusan', 'TERIMA')->sum('qty_jwb').' TERIMA '.collect($cek)->where('keputusan', 'TOLAK')->sum('qty_jwb').' TOLAK ',
                         'detail_jwb'    => collect($cek)->map(function($item){
                             return [
                                 'CompanyId' => $item->CompanyId,

@@ -50,7 +50,7 @@ class KonsumenController extends Controller
             }
 
             if(!in_array($request->per_page, [10,50,100,500])){
-                $request->replace(['per_page' => 10]); 
+                $request->replace(['per_page' => 10]);
             }
 
             $request->merge(['tb' => ['klaim','klaim_dtl']]);
@@ -58,88 +58,90 @@ class KonsumenController extends Controller
                 $request->merge(['tb' => ['klaimTmp','klaim_dtlTmp']]);
             }
 
-            $data = DB::table($request->tb[0])
+            $data = DB::table($request->tb[0] . ' as klaim')
                 ->leftJoinSub(function($query) use ($request){
                     $query->select('kd_dealer', 'nm_dealer', 'alamat1', 'kota', 'CompanyId')
                     ->from('dealer')
                     ->where('CompanyId', $request->companyid);
-                }, 'dealer', function($join) use ($request){
-                    $join->on($request->tb[0].'.kd_dealer', '=', 'dealer.kd_dealer')
-                    ->on($request->tb[0].'.companyid', '=', 'dealer.CompanyId');
+                }, 'dealer', function($join){
+                    $join->on('klaim.kd_dealer', '=', 'dealer.kd_dealer')
+                    ->on('klaim.companyid', '=', 'dealer.CompanyId');
                 })
                 ->leftJoinSub(function($query) use ($request){
                     $query->select('kd_sales', 'nm_sales', 'CompanyId')
                     ->from('salesman')
                     ->where('CompanyId', $request->companyid);
-                }, 'salesman', function($join) use ($request){
-                    $join->on($request->tb[0].'.kd_sales', '=', 'salesman.kd_sales')
-                    ->on($request->tb[0].'.companyid', '=', 'salesman.CompanyId');
+                }, 'salesman', function($join){
+                    $join->on('klaim.kd_sales', '=', 'salesman.kd_sales')
+                    ->on('klaim.companyid', '=', 'salesman.CompanyId');
                 })
                 ->leftJoinSub(function($query) use ($request){
                     $query->select('no_retur','no_klaim', 'CompanyId')
                     ->from('rtoko_dtl')
                     ->where('CompanyId', $request->companyid);
-                }, 'rtoko', function($join) use ($request){
-                    $join->on($request->tb[0].'.no_dokumen', '=', 'rtoko.no_klaim')
-                    ->on($request->tb[0].'.companyid', '=', 'rtoko.CompanyId');
+                }, 'rtoko', function($join){
+                    $join->on('klaim.no_dokumen', '=', 'rtoko.no_klaim')
+                    ->on('klaim.companyid', '=', 'rtoko.CompanyId');
                 })
                 ->lock('with (nolock)')
-                ->select($request->tb[0].'.no_dokumen','rtoko.no_retur', $request->tb[0].'.tgl_dokumen', $request->tb[0].'.tgl_entry', $request->tb[0].'.kd_sales', 'salesman.nm_sales', $request->tb[0].'.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota',$request->tb[0].'.status_approve',$request->tb[0].'.status_end',$request->tb[0].'.pc')
-                ->where($request->tb[0].'.companyid', $request->companyid);
+                ->select('klaim.no_dokumen','rtoko.no_retur', 'klaim.tgl_dokumen', 'klaim.tgl_entry', 'klaim.kd_sales', 'salesman.nm_sales', 'klaim.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota','klaim.status_approve','klaim.status_end','klaim.pc')
+                ->where('klaim.companyid', $request->companyid);
 
-            if(!empty($request->no_retur)){
+            if(!empty($request->no_retur) && !in_array('tamp', $request->option)){
                 $data = $data->where(function($query) use ($request){
-                    $query->where($request->tb[0].'.no_dokumen', 'LIKE', '%'.$request->no_retur.'%')
+                    $query->where('klaim.no_dokumen', 'LIKE', '%'.$request->no_retur.'%')
                     ->orWhere('rtoko.no_retur', 'LIKE', '%'.$request->no_retur.'%')
                     ->orWhere('salesman.kd_sales', 'LIKE', '%'.$request->no_retur.'%')
                     ->orWhere('dealer.kd_dealer', 'LIKE', '%'.$request->no_retur.'%');
                 });
+            } elseif(in_array('tamp', $request->option)) {
+                $data = $data->where('klaim.no_dokumen', $request->no_retur);
             }
 
             if(!in_array($request->role_id, ['MD_H3_MGMT']) && !in_array('tamp', $request->option)){
-                $data = $data->where($request->tb[0].'.Kd_sales', $request->user_id);
+                $data = $data->where('klaim.Kd_sales', $request->user_id);
             }
 
             if(in_array('page', $request->option)){
                 $data = $data
-                ->groupBy($request->tb[0].'.no_dokumen','rtoko.no_retur', $request->tb[0].'.tgl_dokumen', $request->tb[0].'.tgl_entry', $request->tb[0].'.kd_sales', 'salesman.nm_sales', $request->tb[0].'.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota',$request->tb[0].'.status_approve',$request->tb[0].'.status_end',$request->tb[0].'.pc',$request->tb[0].'.usertime')
-                ->where($request->tb[0].'.companyid', $request->companyid)
-                ->orderBy($request->tb[0].'.status_approve', 'asc')
-                ->orderBy($request->tb[0].'.status_end', 'asc')
-                ->orderBy($request->tb[0].'.no_dokumen', 'desc')
-                ->orderBy($request->tb[0].'.usertime', 'asc')
-                ->orderBy($request->tb[0].'.tgl_dokumen', 'desc')
+                ->groupBy('klaim.no_dokumen','rtoko.no_retur', 'klaim.tgl_dokumen', 'klaim.tgl_entry', 'klaim.kd_sales', 'salesman.nm_sales', 'klaim.kd_dealer', 'dealer.nm_dealer', 'dealer.alamat1', 'dealer.kota','klaim.status_approve','klaim.status_end','klaim.pc','klaim.usertime')
+                ->where('klaim.companyid', $request->companyid)
+                ->orderBy('klaim.status_approve', 'asc')
+                ->orderBy('klaim.status_end', 'asc')
+                ->orderBy('klaim.no_dokumen', 'desc')
+                ->orderBy('klaim.usertime', 'asc')
+                ->orderBy('klaim.tgl_dokumen', 'desc')
                 ->paginate($request->per_page);
 
-            } else if(in_array('first', $request->option)){
+            } elseif(in_array('first', $request->option)){
                 $data = $data->first();
 
-            } else if(in_array('with_detail', $request->option)){
+            } elseif(in_array('with_detail', $request->option)){
                 $data = $data->first();
                 if(!empty($data)){
-                    $data_detail = DB::table($request->tb[1])
+                    $data_detail = DB::table($request->tb[1] . ' as klaim_dtl')
                     ->lock('with (nolock)')
                     ->select(
-                        $request->tb[1].'.no_dokumen',
-                        $request->tb[1].'.kd_part',
+                        'klaim_dtl.no_dokumen',
+                        'klaim_dtl.kd_part',
                         'part.nm_part',
-                        $request->tb[1].'.qty',
-                        $request->tb[1].'.no_produksi',
-                        $request->tb[1].'.tgl_ganti',
-                        $request->tb[1].'.qty_ganti',
-                        $request->tb[1].'.sts_stock',
-                        $request->tb[1].'.sts_klaim',
-                        $request->tb[1].'.sts_min',
-                        $request->tb[1].'.keterangan',
+                        'klaim_dtl.qty',
+                        'klaim_dtl.no_produksi',
+                        'klaim_dtl.tgl_ganti',
+                        'klaim_dtl.qty_ganti',
+                        'klaim_dtl.sts_stock',
+                        'klaim_dtl.sts_klaim',
+                        'klaim_dtl.sts_min',
+                        'klaim_dtl.keterangan',
                     )
                     ->selectRaw('(ISNULL(tbStLokasiRak.Stock,0) - (ISNULL(stlokasi.min,0) + ISNULL(stlokasi.in_transit,0) + ISNULL(part.kanvas,0) + ISNULL(part.in_transit,0))) as stock')
                     ->leftJoinSub(function($query) use ($request){
                         $query->select('kd_part', 'ket as nm_part', 'CompanyId','part.kanvas','part.in_transit')
                         ->from('part')
                         ->where('CompanyId', $request->companyid);
-                    }, 'part', function($join) use ($request){
-                        $join->on($request->tb[1].'.kd_part', '=', 'part.kd_part')
-                        ->on($request->tb[1].'.companyid', '=', 'part.CompanyId');
+                    }, 'part', function($join){
+                        $join->on('klaim_dtl.kd_part', '=', 'part.kd_part')
+                        ->on('klaim_dtl.companyid', '=', 'part.CompanyId');
                     })->JoinSub(function ($query) use ($request) {
                         $query->select('*')
                             ->from('company')
@@ -167,8 +169,8 @@ class KonsumenController extends Controller
                         ->on('part.CompanyId', '=', 'tbStLokasiRak.CompanyId');
                     });
                     
-                    $data_detail = $data_detail->where($request->tb[1].'.companyid', $request->companyid)
-                    ->where($request->tb[1].'.no_dokumen', $request->no_retur)
+                    $data_detail = $data_detail->where('klaim_dtl.companyid', $request->companyid)
+                    ->where('klaim_dtl.no_dokumen', $request->no_retur)
                     ->get();
                     
                     $data->detail = $data_detail;
@@ -193,10 +195,9 @@ class KonsumenController extends Controller
         try{
             $rules = [];
             $messages = [];
-
             // ! ------------------------------------
             // ! Jika menambahkan validasi
-            if($request->no_retur == $request->user_id){
+            if($request->tamp == 'true'){
                 if(!empty($request->pc) && $request->pc == 1){
                     $rules += ['kd_cabang' => 'required'];
                     $messages += ['kd_cabang.required' => 'Kode Cabang Kososng'];
@@ -205,25 +206,21 @@ class KonsumenController extends Controller
                     $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
                 }
 
-                if(!empty($request->kd_part)){
-                    $rules += [
-                        'kd_part' => 'required',
-                        'qty_retur' => 'required|numeric|min:1',
-                        'sts_stock' => 'required',
-                        'sts_klaim' => 'required',
-                        'sts_min' => 'required',
-                        'no_produksi' => 'required',
-                    ];
-                    $messages += [
-                        'kd_part.required' => 'Part Number Kososng',
-                        'qty_retur.required' => 'QTY Claim Kososng',
-                        'qty_retur.min' => 'QTY Pada Claim Minimal 1',
-                        'sts_stock.required' => 'Status Stock Kososng',
-                        'sts_klaim.required' => 'Status Retur Kososng',
-                        'sts_min.required' => 'Status Min Kososng',
-                        'no_produksi.required' => 'No Produksi Kososng',
-                    ];
-                }
+                $rules += [
+                    'kd_part' => 'required',
+                    'qty_retur' => 'required|numeric|min:1',
+                    'sts_stock' => 'required',
+                    'sts_klaim' => 'required',
+                    'sts_min' => 'required'
+                ];
+                $messages += [
+                    'kd_part.required' => 'Part Number Kososng',
+                    'qty_retur.required' => 'QTY Claim Kososng',
+                    'qty_retur.min' => 'QTY Pada Claim Minimal 1',
+                    'sts_stock.required' => 'Status Stock Kososng',
+                    'sts_klaim.required' => 'Status Retur Kososng',
+                    'sts_min.required' => 'Status Min Kososng',
+                ];
             }
 
             // ! megecek validasi dan menampilkan pesan error
@@ -394,21 +391,28 @@ class KonsumenController extends Controller
                 // ! ======================================================
                 // ! Validasi Stock
                 // ! ======================================================
-                $data_error = collect($validasi_stock)
+
+                // ! get data dari validasi stock diatas yang sts_min = 1 dan sts_stock = 1 di group by kd_part
+                $data_request = collect($validasi_stock)
                 ->where('sts_min',1)
                 ->where('sts_stock',1)
-                ->where('stock','<','qty')
-                ->filter(function($value, $key){
-                    return (float)$value->stock < (float)$value->qty;
-                })
-                ->map(function($value, $key){
-                    return [
-                        'kd_part'   => $value->kd_part,
-                        'qty'       => $value->qty,
-                        'stock'     => $value->stock,
-                        'keterangan'   => 'Stock tidak mencukupi'
-                    ];
-                })->toArray();
+                ->groupBy('kd_part')
+                ->toArray();
+                
+                $data_error = [];
+                foreach($data_request as $key => $value){
+                    // ! looping kd_part yang sudah di group by ambil total qty yang di klaim apakah lebih besar dari stock jika lebih besar maka simpan pada data_error
+                    if(collect($value)->sum('qty') > $value[0]->stock){
+                        $data_error[] = [
+                            'no_produksi'   => implode('<br>', collect($value)->pluck('no_produksi')->toArray()),
+                            'kd_part'       => $key,
+                            'qty'           => collect($value)->sum('qty'),
+                            'stock'         => $value[0]->stock,
+                            'keterangan'   => 'Stock tidak mencukupi'
+                        ];
+                    }
+                }
+                // ! jika data_error lebih dari 0 maka tampilkan pesan error
                 if(count($data_error) > 0){
                     return (object)[
                         'status'    => false,
@@ -504,7 +508,6 @@ class KonsumenController extends Controller
                         0,
                         (string)$request->companyid
                     ]);
-
                     if($request->pc == 0){
                         $request->merge(['no_retur' => $simpan[0]->no_retur]);
                     }

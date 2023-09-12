@@ -29,7 +29,15 @@ function Part(requst){
                         $('#kd_part').val(dataJson.kd_part);
                         $('#nm_part').val(dataJson.nm_part);
                         $('#qty_klaim').val(dataJson.jumlah);
-                        $('#no_produksi').val(dataJson.no_produksi);
+                        const no_produksi = dataJson.no_produksi.split(',');
+                        $('#input_no_produk').html('');
+                        $.each(no_produksi, function (index, value) {
+                            $('#input_no_produk').append(`
+                                <div class="col-2 mt-3">
+                                    <input type="text" class="form-control" id="no_produksi${index + 1}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
+                                </div>
+                            `);
+                        });
                         $('#ket_klaim').val(dataJson.ket);
                         $('#kd_part').removeClass('is-invalid');
                         $('#kd_part').addClass('is-valid');
@@ -90,19 +98,15 @@ $('#part-list').on('click','.pilih' ,function () {
     $('#kd_part').val(data.kd_part);
     $('#nm_part').val(data.nm_part);
     $('#qty_klaim').val(data.jumlah);
-    // $('#no_produksi').val(data.no_produksi);
-    // pada data.no_produksi adalah sebauh string aaaaa,bbbb,cccc ubah menjadi array dengan split
     const no_produksi = data.no_produksi.split(',');
-    // input_no_produk
     $('#input_no_produk').html('');
     $.each(no_produksi, function (index, value) {
         $('#input_no_produk').append(`
             <div class="col-2 mt-3">
-                <input type="text" class="form-control" id="no_produksi${index}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
+                <input type="text" class="form-control" id="no_produksi${index + 1}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
             </div>
         `);
     });
-
     $('#ket_klaim').val(data.ket);
     $('#part-list .close').trigger('click')
 })
