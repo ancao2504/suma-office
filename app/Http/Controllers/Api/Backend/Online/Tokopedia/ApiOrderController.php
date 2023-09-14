@@ -1068,7 +1068,7 @@ class ApiOrderController extends Controller
                             'disc_header'   => 0,
                             'disc_header_rp'=> 0,
                             'disc_rp'       => 0,
-                            'disc_rp1'      => 0,
+                            'disc_rp1'      => (double)$nominal_diskon,
                             'total'         => (double)$sub_total,
                         ]),
                         'detail'            => $data_detail_order
