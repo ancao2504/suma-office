@@ -207,6 +207,31 @@ class ApiOrderController extends Controller
                             $keterangan_status = 'Order finished';
                         }
 
+                        $data_voucher = [];
+                        $nominal_diskon = 0;
+
+                        if(!empty($data->promo_order_detail->summary_promo)) {
+                            foreach($data->promo_order_detail->summary_promo as $voucher) {
+                                $nominal_diskon = 0;
+
+                                if(Str::contains(strtoupper(trim($voucher->name)), 'SUMA')) {
+                                    foreach($voucher->cashback_details as $voucher_detail) {
+                                        foreach($voucher_detail->budget_details as $budget_detail) {
+                                            if($budget_detail->budget_type == 2 || $budget_detail->budget_type == 3) {
+                                                $nominal_diskon = (double)$nominal_diskon + (double)$budget_detail->benefit_amount;
+                                            }
+                                        }
+                                    }
+
+                                    $data_voucher[] = [
+                                        'name'              => strtoupper(trim($voucher->name)),
+                                        'cashback_amount'   => (double)$nominal_diskon,
+                                    ];
+                                }
+                            }
+                        }
+
+
                         $data_order[] = [
                             'order_id'          => $data->order_id,
                             'nomor_invoice'     => $data->invoice_ref_num,
@@ -238,6 +263,7 @@ class ApiOrderController extends Controller
                                 'accept_deadline'           => $data->shipment_fulfillment->accept_deadline,
                                 'confirm_shipping_deadline' => $data->shipment_fulfillment->confirm_shipping_deadline,
                             ],
+                            'voucher'           => $data_voucher,
                             'faktur'            => $data_faktur
                                                     ->where('keterangan', strtoupper(trim($data->invoice_ref_num)))
                                                     ->values()
@@ -421,6 +447,29 @@ class ApiOrderController extends Controller
                         $keterangan_status = 'Order finished';
                     }
 
+                    $data_voucher = [];
+                    $nominal_diskon = 0;
+
+                    if(!empty($dataTokopedia->promo_order_detail->summary_promo)) {
+                        foreach($dataTokopedia->promo_order_detail->summary_promo as $voucher) {
+                            $nominal_diskon = 0;
+                            if(Str::contains(strtoupper(trim($voucher->name)), 'SUMA')) {
+                                foreach($voucher->cashback_details as $voucher_detail) {
+                                    foreach($voucher_detail->budget_details as $budget_detail) {
+                                        if($budget_detail->budget_type == 2 || $budget_detail->budget_type == 3) {
+                                            $nominal_diskon = (double)$nominal_diskon + (double)$budget_detail->benefit_amount;
+                                        }
+                                    }
+                                }
+
+                                $data_voucher[] = [
+                                    'name'              => strtoupper(trim($voucher->name)),
+                                    'cashback_amount'   => (double)$nominal_diskon,
+                                ];
+                            }
+                        }
+                    }
+
                     $data_order[] = [
                         'order_id'          => $dataTokopedia->order_id,
                         'nomor_invoice'     => $dataTokopedia->invoice_number,
@@ -452,6 +501,7 @@ class ApiOrderController extends Controller
                             'accept_deadline'           => $dataTokopedia->shipment_fulfillment->accept_deadline,
                             'confirm_shipping_deadline' => $dataTokopedia->shipment_fulfillment->confirm_shipping_deadline,
                         ],
+                        'voucher'           => $data_voucher,
                         'faktur'            => $data_faktur
                                                 ->where('keterangan', strtoupper(trim($dataTokopedia->invoice_number)))
                                                 ->values()
@@ -557,6 +607,29 @@ class ApiOrderController extends Controller
                     ]);
                 }
 
+                $data_voucher = [];
+                $nominal_diskon = 0;
+
+                if(!empty($dataTokopedia->promo_order_detail->summary_promo)) {
+                    foreach($dataTokopedia->promo_order_detail->summary_promo as $voucher) {
+                        $nominal_diskon = 0;
+                        if(Str::contains(strtoupper(trim($voucher->name)), 'SUMA')) {
+                            foreach($voucher->cashback_details as $voucher_detail) {
+                                foreach($voucher_detail->budget_details as $budget_detail) {
+                                    if($budget_detail->budget_type == 2 || $budget_detail->budget_type == 3) {
+                                        $nominal_diskon = (double)$nominal_diskon + (double)$budget_detail->benefit_amount;
+                                    }
+                                }
+                            }
+
+                            $data_voucher[] = [
+                                'name'              => strtoupper(trim($voucher->name)),
+                                'cashback_amount'   => (double)$nominal_diskon,
+                            ];
+                        }
+                    }
+                }
+
                 $data_tokopedia = new Collection();
                 $data_tokopedia->push((object) [
                     'order_id'          => $dataTokopedia->order_id,
@@ -588,6 +661,7 @@ class ApiOrderController extends Controller
                         'is_confirm_shipping'   => $dataTokopedia->shipment_fulfillment->is_confirm_shipping,
                         'is_item_delivered'     => $dataTokopedia->shipment_fulfillment->is_item_delivered,
                     ],
+                    'voucher'           => $data_voucher,
                     'detail'            => $data_product_tokopedia
                 ]);
 
@@ -1161,6 +1235,29 @@ class ApiOrderController extends Controller
 
                 $order_id_tokopedia = $dataTokopedia->order_id;
 
+                $data_voucher = [];
+                $nominal_diskon = 0;
+
+                if(!empty($dataTokopedia->promo_order_detail->summary_promo)) {
+                    foreach($dataTokopedia->promo_order_detail->summary_promo as $voucher) {
+                        $nominal_diskon = 0;
+                        if(Str::contains(strtoupper(trim($voucher->name)), 'SUMA')) {
+                            foreach($voucher->cashback_details as $voucher_detail) {
+                                foreach($voucher_detail->budget_details as $budget_detail) {
+                                    if($budget_detail->budget_type == 2 || $budget_detail->budget_type == 3) {
+                                        $nominal_diskon = (double)$nominal_diskon + (double)$budget_detail->benefit_amount;
+                                    }
+                                }
+                            }
+
+                            $data_voucher[] = [
+                                'name'              => strtoupper(trim($voucher->name)),
+                                'cashback_amount'   => (double)$nominal_diskon,
+                            ];
+                        }
+                    }
+                }
+
                 foreach($dataTokopedia->order_info->order_detail as $data) {
                     if(strtoupper(trim($data_product_id_marketplace)) == '') {
                         $data_product_id_marketplace = $data->product_id;
@@ -1519,7 +1616,7 @@ class ApiOrderController extends Controller
                                             ->sum('jumlah'),
                     'rh'                => 'R',
                     'bo'                => 'T',
-                    'discrp1'           => 0,
+                    'discrp1'           => (double)$nominal_diskon,
                     'companyid'         => strtoupper(trim($request->get('companyid'))),
                     'usertime'          => $usertime,
                 );
@@ -1552,7 +1649,7 @@ class ApiOrderController extends Controller
                                         ->sum('jumlah'),
                 'rh'                => 'R',
                 'bo'                => 'H',
-                'discrp1'           => 0,
+                'discrp1'           => (double)$nominal_diskon,
                 'companyid'         => strtoupper(trim($request->get('companyid'))),
                 'usertime'          => $usertime,
             );
@@ -1592,14 +1689,20 @@ class ApiOrderController extends Controller
 
             $result = DB::select($sql, [ $request->get('companyid') ]);
 
+            $jumlah_insert_faktur = 0;
+
             foreach($result as $data) {
-                DB::transaction(function () use ($request, $data) {
+                $jumlah_insert_faktur = (double)$jumlah_insert_faktur + 1;
+
+                DB::transaction(function () use ($request, $data, $jumlah_insert_faktur) {
                     DB::insert('exec SP_Faktur_Simpan_New7 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [
                         trim(strtoupper($data->kd_key)), trim(strtoupper($data->no_faktur)), trim(strtoupper($data->no_faktur)),
                         trim($data->tgl_faktur), trim(strtoupper($data->no_pof)), trim(strtoupper($data->kd_beli)),
                         trim(strtoupper($data->kd_sales)), trim(strtoupper($data->kd_dealer)), trim(strtoupper($data->ket)),
                         (double)$data->disc2, (double)$data->umur_faktur, trim($data->tgl_akhir_faktur), trim($data->kd_tpc),
-                        trim(strtoupper($data->rh)), trim(strtoupper($data->bo)), (double)$data->discrp1, 'T', '', '', '', '', '', '',
+                        trim(strtoupper($data->rh)), trim(strtoupper($data->bo)),
+                        ((double)$jumlah_insert_faktur == 1) ? (double)$data->discrp1 : 0,
+                        'T', '', '', '', '', '', '',
                         trim(strtoupper($request->get('user_id'))).'=SUMAOFFICE', trim(strtoupper($data->companyid)),
                         1, 1, '', 0, trim(strtoupper(config('constants.api.tokopedia.kode_lokasi'))),
                         trim(strtoupper($data->kd_ekspedisi))
