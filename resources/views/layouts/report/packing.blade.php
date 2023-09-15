@@ -58,7 +58,7 @@
 							<span class="fs-8 d-block">Surabaya</span>
 						</div>
 						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">Packing</span>
+							<span class="fs-5 d-block">PACKING</span>
 							<span class="fs-7 d-block" id="title_dokumen"></span>
 						</div>
 					</div>
@@ -137,19 +137,37 @@
 								<label for="tgl_packing" class="form-label">Tanggal Packing</label>
 								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_packing"/>
 							</div>
+							
+							<div class="col-lg-6 mb-3">
+								<label for="jenis_data" class="form-label">Jenis Data</label>
+								<select id="jenis_data" name="jenis_data" class="form-select">
+									<option selected value="1">Pilih Jenis Data</option>
+									<option value="2">Data Per Dokumen</option>
+									<option value="3">Data Group</option>
+								</select>
+							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-6 mb-3">
+							<div class="col-lg-6 mb-3" hidden>
+								<label for="group_by" class="form-label">Group By</label>
+								<select id="group_by" name="group_by" class="form-select">
+									<option selected value="1">Pilih Jenis Group</option>
+									<option value="2">No Meja</option>
+									<option value="3">Packer</option>
+									<option value="4">No Meja dan Packer</option>
+								</select>
+							</div>
+							<div class="col-lg-6 mb-3" hidden>
 								<label for="no_meja" class="form-label">No Meja</label>
 								<select id="no_meja" name="no_meja" class="form-select">
 									<option selected value="">Semua Meja</option>
 									{!! $meja !!}
 								</select>
 							</div>
-							<div class="form-group col-lg-6">
-								<label for="kd_packing" class="form-label">Pcking</label>
-								<select id="kd_packing" name="kd_packing" class="form-select">
-									<option selected value="">Semua Pcking</option>
+							<div class="col-lg-6" hidden>
+								<label for="kd_packer" class="form-label">Packer</label>
+								<select id="kd_packer" name="kd_packer" class="form-select">
+									<option selected value="">Semua Packer</option>
 									{!! $packer !!}
 								</select>
 							</div>

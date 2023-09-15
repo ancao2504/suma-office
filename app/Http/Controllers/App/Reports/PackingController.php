@@ -38,6 +38,20 @@ class PackingController extends Controller
     public function data(Request $request)
     {
         try {
+            if($request->jenis_data == 1){
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => 'Pilih jenis data terlebih dahulu',
+                    'data'      => ''
+                ], 200);
+            }
+            if(!empty($request->group_by) && $request->jenis_data == 3 && $request->group_by == 1){
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => 'Group By Harus Diisi',
+                    'data'      => ''
+                ], 200);
+            }
             $responseApi = Service::ReportPackingData($request);
             if (json_decode($responseApi)->status == 1) {
                 return Response()->json([
@@ -63,10 +77,27 @@ class PackingController extends Controller
 
     public function export(Request $request){
         try {
+            if($request->jenis_data == 1){
+                return Response()->json([
+                    'status'    => 0,
+                    'message'   => 'Pilih jenis data terlebih dahulu',
+                    'data'      => ''
+                ], 200);
+            }
+            if(!empty($request->group_by)){
+                if($request->group_by == 2){
+                    $request->merge(['group_by' => ['kd_lokpack']]);
+                }elseif($request->group_by == 3){
+                    $request->merge(['group_by' => ['kd_pack']]);
+                }elseif($request->group_by == 4){
+                    $request->merge(['group_by' => ['kd_lokpack', 'kd_pack']]);
+                }
+            }
+
             $responseApi = Service::ExprotReportPacking($request);
             if (json_decode($responseApi)->status == 1) {
                 $data = json_decode($responseApi)->data;
-                return Excel::download(new Packing($data), 'Packing.xlsx');
+                return Excel::download(new Packing($data,$request), 'Packing.xlsx');
             } else {
                 return Response()->json([
                     'status'    => 0,
