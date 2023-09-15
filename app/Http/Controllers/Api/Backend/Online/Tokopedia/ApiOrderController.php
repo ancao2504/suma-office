@@ -1697,7 +1697,7 @@ class ApiOrderController extends Controller
                 $jumlah_insert_faktur = (double)$jumlah_insert_faktur + 1;
 
                 DB::transaction(function () use ($request, $data, $jumlah_insert_faktur, $nama_voucher) {
-                    DB::insert('exec SP_Faktur_Simpan_New8 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [
+                    DB::insert('exec SP_Faktur_Simpan_New8 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [
                         trim(strtoupper($data->kd_key)), trim(strtoupper($data->no_faktur)), trim(strtoupper($data->no_faktur)),
                         trim($data->tgl_faktur), trim(strtoupper($data->no_pof)), trim(strtoupper($data->kd_beli)),
                         trim(strtoupper($data->kd_sales)), trim(strtoupper($data->kd_dealer)), trim(strtoupper($data->ket)),
@@ -1709,7 +1709,8 @@ class ApiOrderController extends Controller
                         1, 1, '', 0, trim(strtoupper(config('constants.api.tokopedia.kode_lokasi'))),
                         trim(strtoupper($data->kd_ekspedisi)),
                         ((double)$data->discrp1 > 0) ? 1 : 0,
-                        ((double)$data->discrp1 > 0) ? strtoupper(trim($nama_voucher)) : ''
+                        ((double)$data->discrp1 > 0) ? strtoupper(trim($nama_voucher)) : '',
+                        ((double)$data->discrp1 > 0) ? strtoupper(trim($request->get('user_id'))) : ''
                     ]);
                 });
 
