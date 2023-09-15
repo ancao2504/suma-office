@@ -2157,7 +2157,9 @@ class Service
         $body = [
             'tanggal'     => $request->tanggal,
             'no_meja'      => $request->no_meja,
-            'kd_packing'     => $request->kd_packing,
+            'kd_packer'     => $request->kd_packer,
+            'jenis_data'    => $request->jenis_data,
+            'group_by'      => $request->group_by,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
@@ -2189,7 +2191,9 @@ class Service
             'user_id'       => trim($request->session()->get('app_user_id')),
             'tanggal'     => $request->tanggal,
             'no_meja'      => $request->no_meja,
-            'kd_packing'     => $request->kd_packing
+            'kd_packer'     => $request->kd_packer,
+            'jenis_data'    => $request->jenis_data,
+            'group_by'      => $request->group_by
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

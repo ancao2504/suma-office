@@ -9,13 +9,15 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class Packing implements FromCollection, WithHeadings, ShouldAutoSize
 {
     private $data;
+    private $request;
     
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($data)
+    public function __construct($data, $request)
     {
         $this->data = $data;
+        $this->request = $request;
     }
     
     public function collection(){
@@ -28,16 +30,35 @@ class Packing implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function headings(): array
     {
-        return [
-            'No Dokumen',
-            'Jumlah Faktur',
-            'Kode Dealer',
-            'Tanggal',
-            'Kode Packer',
-            'No Meja',
-            'Waktu Mulai',
-            'Waktu Selesai',
-            'Waktu Proses',
-        ];
+        if($this->request->jenis_data == 2){
+            $header =  [
+                'No Dokumen',
+                'Jumlah Faktur',
+                'Kode Dealer',
+                'Tanggal',
+                'Kode Packer',
+                'No Meja',
+                'Waktu Mulai',
+                'Waktu Selesai',
+                'Waktu Proses',
+            ];
+        } elseif($this->request->jenis_data == 3){
+            $header =  [
+                'Jumlah Dokumen',
+                'Jumlah Faktur',
+                'Jumlah Dealer',
+                'Tanggal',
+            ];
+            foreach ($this->request->group_by as $value) {
+                if($value == 'kd_pack'){
+                    $header[] = 'Kode Packer';
+                } elseif($value == 'kd_lokpack'){
+                    $header[] = 'No Meja';
+                }
+            }
+            $header[] = 'Rata-rata Waktu Proses';
+        }
+
+        return $header;
     }
 }
