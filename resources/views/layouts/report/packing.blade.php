@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
 @section('title','Report')
-@section('subtitle','Retur')
+@section('subtitle','Packing')
 @push('styles')
 	<style>
 		@media print {
