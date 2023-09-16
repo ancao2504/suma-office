@@ -83,7 +83,7 @@
 										<th scope="col" colspan="1" class="ps-3 pe-3">Proses</th>
 									</tr>
 								</thead>
-								<tbody class="border">
+								<tbody class="border" id="tbody-header">
 									<tr class="fw-bolder fs-8 border">
                                         <td colspan="10" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
                                     </tr>

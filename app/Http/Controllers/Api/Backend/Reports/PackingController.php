@@ -105,6 +105,35 @@ class PackingController extends Controller
                 ->groupBy('wh_time.no_dok', 'dealer.kd_dealer', 'wh_time.tanggal', 'wh_time.kd_pack', 'wh_time.kd_lokpack', 'wh_time.waktu_mulai', 'wh_time.waktu_selesai', 'wh_time.waktu_proses')
                 ->paginate($request->per_page);
 
+                $dataDetail = collect(DB::table(function ($query) use ($data) {
+                    $query->select(
+                        'no_dok',
+                        'no_faktur',
+                        'CompanyId'
+                    )
+                    ->from('wh_dtl')
+                    ->whereIn('no_dok', collect($data->items())->pluck('no_dok')->toArray());
+                }, 'wh_dtl')
+                ->leftJoin('fakt_dtl', function ($join) {
+                    $join->on('wh_dtl.no_faktur', '=', 'fakt_dtl.no_faktur')
+                        ->on('wh_dtl.CompanyId', '=', 'fakt_dtl.CompanyId');
+                })
+                ->leftJoin('part', function ($join) {
+                    $join->on('fakt_dtl.kd_part', '=', 'part.kd_part')
+                        ->on('fakt_dtl.CompanyId', '=', 'part.CompanyId');
+                })
+                ->select(
+                    'wh_dtl.no_dok',
+                    'fakt_dtl.kd_part',
+                    'part.ket as nm_part',
+                    'fakt_dtl.jml_order as jml_part'
+                )
+                ->get())->groupBy('no_dok');
+
+                foreach ($data->items() as $key => $value) {
+                    $data->items()[$key]->detail = $dataDetail[$value->no_dok];
+                }
+
             } elseif ($request->jenis_data == 3){
                 // ! ==========================================
                 // ! ============== Group BY ==================

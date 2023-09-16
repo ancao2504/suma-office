@@ -21,8 +21,8 @@ function report(page = 1) {
     loading.block();
     $('#table_list tfoot').addClass('d-none');
     $('#table_list .card-footer').addClass('d-none');
-    $('#table_list tbody').empty();
-    $('#table_list tbody').html(`
+    $('#table_list #tbody-header').empty();
+    $('#table_list #tbody-header').html(`
             <tr>
                 <td colspan="10" class="text-center text-primary">
                     <div class="text-center">
@@ -44,15 +44,13 @@ function report(page = 1) {
             page: page,
             per_page: $('#per_page').val(),
         }, function (response) {
-            console.log(response);
             if (response.status == '1') {
-                console.log(response.data);
                 $('body').attr('data-kt-aside-minimize', 'on');
                 $('#kt_aside_toggle').addClass('active');
 
-                $('#table_list tbody').empty();
+                $('#table_list #tbody-header').empty();
                 if ($.isEmptyObject(response.data.data) && response.data.data.length == 0) {
-                    $('#table_list tbody').html(`
+                    $('#table_list #tbody-header').html(`
                             <tr>
                                 <td colspan="10" class="text-center text-danger"> Tidak ada data </td>
                             </tr>
@@ -81,8 +79,8 @@ function report(page = 1) {
                             </tr>
                         `);
                     $.each(response.data.data, function (key, value) {
-                        $('#table_list tbody').append(`
-                                <tr class="fw-bolder fs-8 border">
+                        $('#table_list #tbody-header').append(`
+                                <tr class="fw-bolder fs-8 border ${value.detail.length > 0 ? 'data-header' : ''}" style="cursor: pointer;">
                                     <td class="ps-3 pe-3 text-center">${no++}</td>
                                     <td class="ps-3 pe-3 text-center">${value.no_dok ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-end">${value.jumlah_faktur ?? '-'}</td>
@@ -95,6 +93,44 @@ function report(page = 1) {
                                     <td class="ps-3 pe-3 text-center">${value.waktu_proses ?? '-'}</td>
                                 </tr>
                             `);
+
+                        if (value.detail.length > 0) {
+                            $('#table_list #tbody-header').append(`
+                                <tr class="fw-bolder fs-8 border d-none">
+                                    <td colspan="10" class="p-10">
+                                        <div class="table-responsive">
+                                            <table class="table table-row-dashed table-row-gray-300 align-middle">
+                                                <thead class="border">
+                                                    <tr class="fs-8 fw-bolder text-muted text-center">
+                                                        <th scope="col" class="w-50px ps-3 pe-3">No</th>
+                                                        <th scope="col" class="w-auto ps-3 pe-3">Part Number</th>
+                                                        <th scope="col" class="w-auto ps-3 pe-3">Nama Part</th>
+                                                        <th scope="col" class="w-auto ps-3 pe-3">Jumlah</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                ${value.detail.map((data, index) => {
+                                                    return `
+                                                        <tr class="fw-bolder fs-8 border">
+                                                            <td class="ps-3 pe-3 text-center">${index + 1}</td>
+                                                            <td class="ps-3 pe-3">${data.kd_part ?? '-'}</td>
+                                                            <td class="ps-3 pe-3">${data.nm_part ?? '-'}</td>
+                                                            <td class="ps-3 pe-3 text-end">${data.jml_part ?? '-'}</td>
+                                                        </tr>
+                                                    `;
+                                                }).join('')}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `);
+                        }
+                    });
+
+                    $('#table_list .data-header').on('click', function () {
+                        $(this).toggleClass('bg-secondary');
+                        $(this).next().toggleClass('d-none');
                     });
 
                     $('#table_list .pagination').empty();
@@ -123,7 +159,7 @@ function report(page = 1) {
                             </tr>
                         `);
                     $.each(response.data.data, function (key, value) {
-                        $('#table_list tbody').append(`
+                        $('#table_list #tbody-header').append(`
                                 <tr class="fw-bolder fs-8 border">
                                     <td class="ps-3 pe-3 text-center">${no++}</td>
                                     <td class="ps-3 pe-3 text-end">${value.jml_nodok ?? '-'}</td>
@@ -151,7 +187,7 @@ function report(page = 1) {
             }
             if (response.status == '0') {
                 toastr.error(response.message, "Error");
-                $('#table_list tbody').html(`
+                $('#table_list #tbody-header').html(`
                     <tr>
                         <td colspan="10" class="text-center text-danger">
                             ${response.message}
@@ -281,7 +317,7 @@ $(document).ready(function () {
         }).done(function (response) {
             if (response.status == '0') {
                 toastr.error(response.message, "Error");
-                $('#table_list tbody').html(`
+                $('#table_list #tbody-header').html(`
                 <tr>
                     <td colspan="10" class="text-center text-danger">
                         ${response.message}
