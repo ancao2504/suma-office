@@ -80,7 +80,7 @@ function report(page = 1) {
                         `);
                     $.each(response.data.data, function (key, value) {
                         $('#table_list #tbody-header').append(`
-                                <tr class="fw-bolder fs-8 border ${value.detail.length > 0 ? 'data-header' : ''}" style="cursor: pointer;">
+                                <tr class="fw-bolder fs-8 border ${Object.keys(value.detail).length > 0 ? 'data-header' : ''}" style="cursor: pointer;">
                                     <td class="ps-3 pe-3 text-center">${no++}</td>
                                     <td class="ps-3 pe-3 text-center">${value.no_dok ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-end">${value.jumlah_faktur ?? '-'}</td>
@@ -93,34 +93,38 @@ function report(page = 1) {
                                     <td class="ps-3 pe-3 text-center">${value.waktu_proses ?? '-'}</td>
                                 </tr>
                             `);
-
-                        if (value.detail.length > 0) {
+                        if (Object.keys(value.detail).length > 0) {
                             $('#table_list #tbody-header').append(`
                                 <tr class="fw-bolder fs-8 border d-none">
                                     <td colspan="10" class="p-10">
                                         <div class="table-responsive">
-                                            <table class="table table-row-dashed table-row-gray-300 align-middle">
-                                                <thead class="border">
-                                                    <tr class="fs-8 fw-bolder text-muted text-center">
-                                                        <th scope="col" class="w-50px ps-3 pe-3">No</th>
-                                                        <th scope="col" class="w-auto ps-3 pe-3">Part Number</th>
-                                                        <th scope="col" class="w-auto ps-3 pe-3">Nama Part</th>
-                                                        <th scope="col" class="w-auto ps-3 pe-3">Jumlah</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                ${value.detail.map((data, index) => {
-                                                    return `
-                                                        <tr class="fw-bolder fs-8 border">
-                                                            <td class="ps-3 pe-3 text-center">${index + 1}</td>
-                                                            <td class="ps-3 pe-3">${data.kd_part ?? '-'}</td>
-                                                            <td class="ps-3 pe-3">${data.nm_part ?? '-'}</td>
-                                                            <td class="ps-3 pe-3 text-end">${data.jml_part ?? '-'}</td>
+                                            ${Object.keys(value.detail).map((data, index) => {
+                                            return `
+                                                <span class="badge badge-light-primary fw-bolder mb-2">${data ?? '-'}</span>
+                                                <table class="table table-row-dashed table-row-gray-300 align-middle">
+                                                    <thead class="border">
+                                                        <tr class="fs-8 fw-bolder text-muted text-center">
+                                                            <th scope="col" class="w-50px ps-3 pe-3">No</th>
+                                                            <th scope="col" class="w-auto ps-3 pe-3">Part Number</th>
+                                                            <th scope="col" class="w-auto ps-3 pe-3">Nama Part</th>
+                                                            <th scope="col" class="w-auto ps-3 pe-3">Jumlah</th>
                                                         </tr>
-                                                    `;
-                                                }).join('')}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody class="border">
+                                                    ${value.detail[data].map((value, index) => {
+                                                        return `
+                                                            <tr class="fw-bolder fs-8 border">
+                                                                <td class="ps-3 pe-3 text-center">${index + 1}</td>
+                                                                <td class="ps-3 pe-3">${value.kd_part ?? '-'}</td>
+                                                                <td class="ps-3 pe-3">${value.nm_part ?? '-'}</td>
+                                                                <td class="ps-3 pe-3 text-end">${value.jml_part ?? '-'}</td>
+                                                            </tr>
+                                                        `;
+                                                    }).join('')}
+                                                    </tbody>
+                                                </table>
+                                            `;
+                                        }).join('')}
                                         </div>
                                     </td>
                                 </tr>

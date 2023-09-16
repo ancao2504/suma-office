@@ -124,12 +124,17 @@ class PackingController extends Controller
                 })
                 ->select(
                     'wh_dtl.no_dok',
+                    'wh_dtl.no_faktur',
                     'fakt_dtl.kd_part',
                     'part.ket as nm_part',
                     'fakt_dtl.jml_order as jml_part'
                 )
                 ->get())->groupBy('no_dok');
-
+                foreach ($dataDetail as $key => $value) {
+                    $dataDetail[$key] = $value
+                    ->sortBy('no_faktur')
+                    ->groupBy('no_faktur');
+                }
                 foreach ($data->items() as $key => $value) {
                     $data->items()[$key]->detail = $dataDetail[$value->no_dok];
                 }
