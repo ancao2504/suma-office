@@ -930,30 +930,11 @@ class ApiOptionsController extends Controller
                 }, 'rtoko_dtl', function ($join) {
                     $join->on('part.kd_part', '=', 'rtoko_dtl.kd_part')
                         ->on('part.CompanyId', '=', 'rtoko_dtl.CompanyId');
-                })->leftJoinSub(function($query) use ($request){
-                    $query->select('klaim_dtl.no_dokumen','klaim_dtl.kd_part','klaim_dtl.CompanyId','klaim_dtl.sts_klaim',
-                    DB::raw("
-                    STUFF(
-                        (SELECT ', ' + a.no_produksi
-                            FROM klaim_dtl a
-                            WHERE a.no_dokumen = klaim_dtl.no_dokumen
-                            AND a.kd_part = klaim_dtl.kd_part
-                            AND a.sts_klaim = klaim_dtl.sts_klaim
-                            AND a.companyid = klaim_dtl.companyid
-                            FOR XML PATH('')
-                        ),1, 2, ''
-                    ) AS no_produksi"))
-                    ->from('klaim_dtl')
-                    ->where('klaim_dtl.CompanyId', $request->companyid)
-                    ->groupBy('klaim_dtl.no_dokumen','klaim_dtl.kd_part','klaim_dtl.CompanyId','klaim_dtl.sts_klaim');
-                }, 'klaim_dtl', function($join){
-                    $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_klaim')
-                    ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
                 });
 
                 //! ganti select default
-                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi','rtoko_dtl.ket')
-                ->groupBy('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','klaim_dtl.no_produksi','rtoko_dtl.ket');
+                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','rtoko_dtl.ket')
+                ->groupBy('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','rtoko_dtl.ket');
             }
 
             // ! ------------------------------------
@@ -992,8 +973,34 @@ class ApiOptionsController extends Controller
             
             if($request->option[0] == 'first'){
                 $data = $data->first();
-            }else if($request->option[0] == 'page'){
+            }elseif($request->option[0] == 'page'){
                 $data = $data->paginate($request->per_page);
+            }
+
+            if(!empty($request->no_retur) && $request->option[0] == 'page'){
+                $dataNoProduk = collect(
+                    DB::table(function ($query) use ($request) {
+                        $query->select('rtoko_dtl.no_klaim','rtoko_dtl.CompanyId')
+                        ->from('rtoko_dtl')
+                        ->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%')
+                        ->where('rtoko_dtl.CompanyId', $request->companyid)
+                        ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
+                        ->groupBy('rtoko_dtl.no_klaim','rtoko_dtl.CompanyId');
+                    },'rtoko_dtl')->leftJoin('klaim_dtl', function($join){
+                        $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_klaim')
+                        ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
+                    })
+                    ->select('klaim_dtl.kd_part','klaim_dtl.no_produksi')
+                    ->get()
+                )->groupBy('kd_part');
+
+                foreach($data->items() as $key => $value){
+                    if(!empty($dataNoProduk[$value->kd_part])){
+                        $data->items()[$key]->no_produksi = $dataNoProduk[$value->kd_part]->pluck('no_produksi');
+                    } else {
+                        $data->items()[$key]->no_produksi = [];
+                    }
+                }
             }
 
             return Response::responseSuccess('success', $data);
@@ -1064,7 +1071,7 @@ class ApiOptionsController extends Controller
             // ! ------------------------------------
             if($request->option[0] == 'first'){
                 $data = $data->orderBy('retur.tanggal', 'desc')->first();
-            }else if($request->option[0] == 'page'){
+            }elseif($request->option[0] == 'page'){
                 $data = $data
                 ->orderBy('retur.tanggal', 'desc')
                 ->orderBy('retur.no_retur', 'desc')
@@ -1216,7 +1223,7 @@ class ApiOptionsController extends Controller
     public function dataPackerPackingOnline(Request $request){
         try{
             $data = DB::table('dbhonda.dbo.wh_time')
-            ->select('wh_time.kd_pack')
+            ->select('wh_time.kd_pack','karyawan.nama as nm_pack')
             ->joinSub(function ($query){
                 $query->select('kd_dealer', 'nm_dealer')
                     ->from('dbhonda.dbo.dealer')
@@ -1224,10 +1231,15 @@ class ApiOptionsController extends Controller
             }, 'dealer', function ($join) {
                 $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer');
             })
+            ->leftjoin('karyawan' , function($join){
+                $join->on('karyawan.kode', '=', 'wh_time.kd_pack')
+                ->on('karyawan.CompanyId', '=', 'wh_time.CompanyId');
+            })
             ->whereNotNull('wh_time.kd_pack')
             ->where('wh_time.kd_pack', '!=', '')
+            ->where('karyawan.kode', '!=', '')
             ->distinct()
-            ->orderBy('kd_pack', 'asc')
+            ->orderBy('nama', 'asc')
             ->get();
 
             return Response::responseSuccess('success', $data);

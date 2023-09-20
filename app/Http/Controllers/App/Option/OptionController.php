@@ -1973,7 +1973,7 @@ class OptionController extends Controller
             $data = json_decode($responseApi)->data;
             $respon = '';
             foreach ($data as $key => $value) {
-                $respon .= '<option value="'.$value->kd_pack.'">'.$value->kd_pack.'</option>';
+                $respon .= '<option value="'.$value->kd_pack.'">'.$value->kd_pack.' - '.$value->nm_pack.'</option>';
             }
             return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
         } else {

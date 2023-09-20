@@ -305,7 +305,7 @@ class SupplierController extends Controller
                             'jmlretur'      =>  $a->jumlah,
                             'ket'           => ($request->ket??null),
                             'diterima'      => ($request->diterima??0),
-                            'no_produksi'   => $request->no_produksi,
+                            'no_produksi'   => null,
                             'tgl_pemakaian' => $request->tgl_pemakaian,
                             'tgl_claim'     => $a->tanggal,
                             'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)

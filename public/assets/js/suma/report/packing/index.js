@@ -4,10 +4,10 @@ let date = {
         end: moment().endOf('month')
     }
 }
-var formatter = new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-});
+// var formatter = new Intl.NumberFormat('id-ID', {
+//     style: 'currency',
+//     currency: 'IDR',
+// });
 
 function report(page = 1) {
     if($('#jenis_data').val() == '1'){
@@ -64,15 +64,18 @@ function report(page = 1) {
                     $('#table_list thead').html(`
                             <tr class="fs-8 fw-bolder text-muted text-center">
                                 <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">No</th>
-                                <th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
-                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Jumlah Faktur</th>
-                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">kode Dealer</th>
+                                <th scope="col" rowspan="2" class="w-150px ps-3 pe-3">No Dokumen</th>
                                 <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
-                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Packer</th>
+                                <th scope="col" colspan="3" class="w-auto ps-3 pe-3">Jumlah</th>
+                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">kode Dealer</th>
+                                <th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Packer</th>
                                 <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Meja</th>
                                 <th scope="col" colspan="3" class="w-auto ps-3 pe-3">Waktu</th>
                             </tr>
                             <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Faktur</th>
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Part</th>
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Part (Pcs)</th>
                                 <th scope="col" colspan="1" class="ps-3 pe-3">Mulai</th>
                                 <th scope="col" colspan="1" class="ps-3 pe-3">Selesai</th>
                                 <th scope="col" colspan="1" class="ps-3 pe-3">Proses</th>
@@ -83,10 +86,12 @@ function report(page = 1) {
                                 <tr class="fw-bolder fs-8 border ${Object.keys(value.detail).length > 0 ? 'data-header' : ''}" style="cursor: pointer;">
                                     <td class="ps-3 pe-3 text-center">${no++}</td>
                                     <td class="ps-3 pe-3 text-center">${value.no_dok ?? '-'}</td>
-                                    <td class="ps-3 pe-3 text-end">${value.jumlah_faktur ?? '-'}</td>
-                                    <td class="ps-3 pe-3">${value.kd_dealer ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-center">${value.tanggal ? moment(value.tanggal).format('YYYY/MM/DD') : '-'}</td>
-                                    <td class="ps-3 pe-3">${value.kd_pack ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-end">${value.jml_faktur ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-end">${value.jml_item ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-end">${value.jml_pcs ?? '-'}</td>
+                                    <td class="ps-3 pe-3">${value.kd_dealer ?? '-'}</td>
+                                    <td class="ps-3 pe-3">${value.nm_packing ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-center">${value.kd_lokpack ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-center">${value.waktu_mulai ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-center">${value.waktu_selesai ?? '-'}</td>
@@ -96,7 +101,7 @@ function report(page = 1) {
                         if (Object.keys(value.detail).length > 0) {
                             $('#table_list #tbody-header').append(`
                                 <tr class="fw-bolder fs-8 border d-none">
-                                    <td colspan="10" class="p-10">
+                                    <td colspan="100" class="p-10">
                                         <div class="table-responsive">
                                             ${Object.keys(value.detail).map((data, index) => {
                                             return `
@@ -117,7 +122,7 @@ function report(page = 1) {
                                                                 <td class="ps-3 pe-3 text-center">${index + 1}</td>
                                                                 <td class="ps-3 pe-3">${value.kd_part ?? '-'}</td>
                                                                 <td class="ps-3 pe-3">${value.nm_part ?? '-'}</td>
-                                                                <td class="ps-3 pe-3 text-end">${value.jml_part ?? '-'}</td>
+                                                                <td class="ps-3 pe-3 text-end">${value.jml_part.toLocaleString('id-ID') ?? '-'}</td>
                                                             </tr>
                                                         `;
                                                     }).join('')}
@@ -152,27 +157,34 @@ function report(page = 1) {
                     let no = response.data.from;
                     $('#table_list thead').html(`
                             <tr class="fs-8 fw-bolder text-muted text-center">
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">No</th>
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">Jumlah Dokumen</th>
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">Jumlah Faktur</th>
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">Jumlah Dealer</th>
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">Tanggal</th>
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">Packer</th>
-                                <th scope="col" rowspan="1" class="w-50px ps-3 pe-3">Meja</th>
-                                <th scope="col" rowspan="1" class="w-auto ps-3 pe-3">Rata-rata Waktu Proses</th>
+                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">No</th>
+                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
+                                <th scope="col" colspan="5" class="w-150px ps-3 pe-3">Jumlah</th>
+                                <th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Packer</th>
+                                <th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Meja</th>
+                                <th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Rata-rata Waktu Proses</th>
+                            </tr>
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Dokumen</th>
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Faktur</th>
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Dealer</th>
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Part</th>
+                                <th scope="col" colspan="1" class="w-50px ps-3 pe-3">Part (Pcs)</th>
                             </tr>
                         `);
                     $.each(response.data.data, function (key, value) {
                         $('#table_list #tbody-header').append(`
                                 <tr class="fw-bolder fs-8 border">
                                     <td class="ps-3 pe-3 text-center">${no++}</td>
-                                    <td class="ps-3 pe-3 text-end">${value.jml_nodok ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-center">${value.tanggal ? moment(value.tanggal).format('YYYY/MM/DD') : '-'}</td>
+                                    <td class="ps-3 pe-3 text-end">${value.jml_dok ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-end">${value.jml_faktur ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-end">${value.jml_dealer ?? '-'}</td>
-                                    <td class="ps-3 pe-3 text-center">${value.tanggal ? moment(value.tanggal).format('YYYY/MM/DD') : '-'}</td>
-                                    <td class="ps-3 pe-3">${value.kd_pack ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-end">${value.jml_item ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-end">${value.jml_pcs.toLocaleString('id-ID') ?? '-'}</td>
+                                    <td class="ps-3 pe-3">${value.nm_pack ?? '-'}</td>
                                     <td class="ps-3 pe-3 text-center">${value.kd_lokpack ?? '-'}</td>
-                                    <td class="ps-3 pe-3 text-center">${value.AVG_waktu_proses ?? '-'}</td>
+                                    <td class="ps-3 pe-3 text-center">${value.rata2_waktu_proses ?? '-'}</td>
                                 </tr>
                             `);
                     });
@@ -236,37 +248,31 @@ function report(page = 1) {
 }
 
 $(document).ready(function () {
-    $("#tgl_packing").daterangepicker({
-        format: 'DD/MM/YYYY',
-        startDate: date.tgl_packing.start,
-        endDate: date.tgl_packing.end,
-        ranges: {
-            "Hari ini": [moment(), moment()],
-            "Kemarin": [moment().subtract(1, "days"), moment().subtract(1, "days")],
-            "1 minggu terakhir": [moment().subtract(6, "days"), moment()],
-            "Bulan ini": [moment().startOf("month"), moment().endOf("month")],
-            "Bulan Kemarin": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+    $("#tgl_packing").flatpickr({
+        mode: "range",
+        dateFormat: "d/m/Y",
+        defaultDate: [date.tgl_packing.start, date.tgl_packing.end],
+        onChange: function (selectedDates, dateStr, instance) {
+            date.tgl_packing.start = moment(selectedDates[0]);
+            date.tgl_packing.end = moment(selectedDates[1]);
         }
-    }, function (start, end) {
-        date.tgl_packing.start = start
-        date.tgl_packing.end = end
     });
 
     $('#jenis_data').on('change', function () {
-        if ($(this).val() == '1') {
-            $('#group_by').parents('.col-lg-6').attr('hidden', true);
-            $('#group_by').val('1').trigger('change');
-            $('#no_meja').parents('.col-lg-6').attr('hidden', true);
-            $('#no_meja').val('').trigger('change');
-            $('#kd_packer').parents('.col-lg-6').attr('hidden', true);
-            $('#kd_packer').val('').trigger('change');
-        } else if ($(this).val() == '2') {
+        if ($(this).val() == '2') {
             $('#group_by').parents('.col-lg-6').attr('hidden', true);
             $('#group_by').val('1').trigger('change');
             $('#no_meja').parents('.col-lg-6').attr('hidden', false);
             $('#kd_packer').parents('.col-lg-6').attr('hidden', false);
         } else if ($(this).val() == '3') {
             $('#group_by').parents('.col-lg-6').attr('hidden', false);
+            $('#no_meja').parents('.col-lg-6').attr('hidden', true);
+            $('#no_meja').val('').trigger('change');
+            $('#kd_packer').parents('.col-lg-6').attr('hidden', true);
+            $('#kd_packer').val('').trigger('change');
+        } else {
+            $('#group_by').parents('.col-lg-6').attr('hidden', true);
+            $('#group_by').val('1').trigger('change');
             $('#no_meja').parents('.col-lg-6').attr('hidden', true);
             $('#no_meja').val('').trigger('change');
             $('#kd_packer').parents('.col-lg-6').attr('hidden', true);
@@ -286,6 +292,11 @@ $(document).ready(function () {
         } else if ($(this).val() == '4') {
             $('#kd_packer').parents('.col-lg-6').attr('hidden', false);
             $('#no_meja').parents('.col-lg-6').attr('hidden', false);
+        } else {
+            $('#kd_packer').parents('.col-lg-6').attr('hidden', true);
+            $('#kd_packer').val('').trigger('change');
+            $('#no_meja').parents('.col-lg-6').attr('hidden', true);
+            $('#no_meja').val('').trigger('change');
         }
     });
 

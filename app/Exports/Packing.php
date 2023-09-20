@@ -44,9 +44,11 @@ class Packing implements FromCollection, WithHeadings, ShouldAutoSize
             ];
         } elseif($this->request->jenis_data == 3){
             $header =  [
+                'Jumlah Dealer',
                 'Jumlah Dokumen',
                 'Jumlah Faktur',
-                'Jumlah Dealer',
+                'Jumlah Part',
+                'Jumlah Part (pcs)',
                 'Tanggal',
             ];
             foreach ($this->request->group_by as $value) {

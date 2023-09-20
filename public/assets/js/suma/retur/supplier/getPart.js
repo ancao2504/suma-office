@@ -29,9 +29,8 @@ function Part(requst){
                         $('#kd_part').val(dataJson.kd_part);
                         $('#nm_part').val(dataJson.nm_part);
                         $('#qty_klaim').val(dataJson.jumlah);
-                        const no_produksi = dataJson.no_produksi.split(',');
                         $('#input_no_produk').html('');
-                        $.each(no_produksi, function (index, value) {
+                        $.each(dataJson.no_produksi, function (index, value) {
                             $('#input_no_produk').append(`
                                 <div class="col-2 mt-3">
                                     <input type="text" class="form-control" id="no_produksi${index + 1}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
@@ -98,9 +97,8 @@ $('#part-list').on('click','.pilih' ,function () {
     $('#kd_part').val(data.kd_part);
     $('#nm_part').val(data.nm_part);
     $('#qty_klaim').val(data.jumlah);
-    const no_produksi = data.no_produksi.split(',');
     $('#input_no_produk').html('');
-    $.each(no_produksi, function (index, value) {
+    $.each(data.no_produksi, function (index, value) {
         $('#input_no_produk').append(`
             <div class="col-2 mt-3">
                 <input type="text" class="form-control" id="no_produksi${index + 1}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
