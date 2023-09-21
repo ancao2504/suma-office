@@ -24,7 +24,7 @@ function report(page = 1) {
     $('#table_list #tbody-header').empty();
     $('#table_list #tbody-header').html(`
             <tr>
-                <td colspan="10" class="text-center text-primary">
+                <td colspan="100" class="text-center text-primary">
                     <div class="text-center">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -52,7 +52,7 @@ function report(page = 1) {
                 if ($.isEmptyObject(response.data.data) && response.data.data.length == 0) {
                     $('#table_list #tbody-header').html(`
                             <tr>
-                                <td colspan="10" class="text-center text-danger"> Tidak ada data </td>
+                                <td colspan="100" class="text-center text-danger"> Tidak ada data </td>
                             </tr>
                         `);
                     return false;

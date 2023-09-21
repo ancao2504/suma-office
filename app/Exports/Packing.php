@@ -33,10 +33,12 @@ class Packing implements FromCollection, WithHeadings, ShouldAutoSize
         if($this->request->jenis_data == 2){
             $header =  [
                 'No Dokumen',
-                'Jumlah Faktur',
-                'Kode Dealer',
                 'Tanggal',
-                'Kode Packer',
+                'Jumlah Faktur',
+                'Jumlah Part',
+                'Jumlah Part (Pcs)',
+                'Kode Dealer',
+                'Nama Packing',
                 'No Meja',
                 'Waktu Mulai',
                 'Waktu Selesai',
@@ -44,12 +46,12 @@ class Packing implements FromCollection, WithHeadings, ShouldAutoSize
             ];
         } elseif($this->request->jenis_data == 3){
             $header =  [
+                'Tanggal',
                 'Jumlah Dealer',
                 'Jumlah Dokumen',
                 'Jumlah Faktur',
                 'Jumlah Part',
                 'Jumlah Part (pcs)',
-                'Tanggal',
             ];
             foreach ($this->request->group_by as $value) {
                 if($value == 'kd_pack'){

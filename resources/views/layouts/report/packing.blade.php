@@ -67,25 +67,10 @@
 						<div class="table-responsive">
 							<table class="table table-row-dashed table-row-gray-300 align-middle">
 								<thead class="border">
-									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" rowspan="2" class="w-50px ps-3 pe-3">No</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
-										<th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Jumlah Faktur</th>
-										<th scope="col" rowspan="2" class="w-50px ps-3 pe-3">kode Dealer</th>
-										<th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
-										<th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Packer</th>
-										<th scope="col" rowspan="2" class="w-50px ps-3 pe-3">Meja</th>
-										<th scope="col" colspan="3" class="w-auto ps-3 pe-3">Waktu</th>
-									</tr>
-									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" colspan="1" class="ps-3 pe-3">Mulai</th>
-										<th scope="col" colspan="1" class="ps-3 pe-3">Selesai</th>
-										<th scope="col" colspan="1" class="ps-3 pe-3">Proses</th>
-									</tr>
 								</thead>
 								<tbody class="border" id="tbody-header">
 									<tr class="fw-bolder fs-8 border">
-                                        <td colspan="10" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
+                                        <td colspan="100" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
                                     </tr>
 								</tbody>
 							</table>

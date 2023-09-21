@@ -389,6 +389,7 @@ class PackingController extends Controller
                         'no_dok',
                         'kd_dealer',
                         'tanggal3 as tanggal',
+                        'karyawan.nama as nm_packing',
                         'kd_pack',
                         'kd_lokpack',
                         'jam3 as waktu_mulai',
@@ -397,6 +398,10 @@ class PackingController extends Controller
                         'wh_time.CompanyId',
                     )
                     ->from('wh_time')
+                    ->leftjoin('karyawan', function ($join) {
+                        $join->on('wh_time.kd_pack', '=', 'karyawan.kode')
+                            ->on('wh_time.CompanyId', '=', 'karyawan.CompanyId');
+                    })
                     ->where('tanggal3', '!=', null)
                     ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
 
@@ -409,10 +414,12 @@ class PackingController extends Controller
                 }, 'wh_time')
                 ->select(
                     'wh_time.no_dok',
-                    DB::raw("COUNT(wh_dtl.no_faktur) as jumlah_faktur"),
-                    'dealer.kd_dealer',
                     'wh_time.tanggal',
-                    'wh_time.kd_pack',
+                    DB::raw("COUNT(wh_dtl.no_faktur) as jml_faktur"),
+                    DB::raw("sum([wh_dtl].jml_item) as jml_item"),
+                    DB::raw("sum([wh_dtl].jml_pcs) as jml_pcs"),
+                    'dealer.kd_dealer',
+                    'wh_time.nm_packing',
                     'wh_time.kd_lokpack',
                     'wh_time.waktu_mulai',
                     'wh_time.waktu_selesai',
@@ -420,12 +427,18 @@ class PackingController extends Controller
                 )
                 ->joinSub(function ($query) {
                     $query->select(
-                        'no_dok',
-                        'no_faktur',
-                        'CompanyId'
+                        'wh_dtl.no_dok',
+                        'wh_dtl.no_faktur',
+                        DB::raw("count(fakt_dtl.kd_part) as jml_item"),
+                        DB::raw("sum(fakt_dtl.jml_jual) as jml_pcs"),
+                        'wh_dtl.CompanyId'
                     )
                     ->from('wh_dtl')
-                    ->groupBy('no_dok', 'no_faktur', 'CompanyId');
+                    ->join('fakt_dtl', function ($join) {
+                        $join->on('fakt_dtl.no_faktur', '=', 'wh_dtl.no_faktur')
+                            ->on('fakt_dtl.CompanyId', '=', 'wh_dtl.CompanyId');
+                    })
+                    ->groupBy('wh_dtl.no_dok', 'wh_dtl.no_faktur', 'wh_dtl.CompanyId');
                 }, 'wh_dtl', function ($join) {
                     $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok')
                         ->on('wh_time.CompanyId', '=', 'wh_dtl.CompanyId');
@@ -448,7 +461,7 @@ class PackingController extends Controller
                 })
                 ->orderBy('wh_time.tanggal', 'asc')
                 ->orderBy('wh_time.waktu_mulai', 'asc')
-                ->groupBy('wh_time.no_dok', 'dealer.kd_dealer', 'wh_time.tanggal', 'wh_time.kd_pack', 'wh_time.kd_lokpack', 'wh_time.waktu_mulai', 'wh_time.waktu_selesai', 'wh_time.waktu_proses')
+                ->groupBy('wh_time.no_dok', 'dealer.kd_dealer', 'wh_time.tanggal', 'wh_time.nm_packing', 'wh_time.kd_lokpack', 'wh_time.waktu_mulai', 'wh_time.waktu_selesai', 'wh_time.waktu_proses')
                 ->get();
 
             } elseif ($request->jenis_data == 3){
@@ -456,131 +469,148 @@ class PackingController extends Controller
                 // ! ============== Group BY ==================
                 // ! ==========================================
                 $data = DB::table(function($query) use ($request){
-                    $query->select(
-                        'wh_time.companyid',
-                        'wh_time.tanggal',
-                        DB::raw("count(wh_time.no_dok) as jml_dok"),
-                        DB::raw("sum(jumlah_faktur.jumlah_faktur) as jml_faktur"),
-                        DB::raw("sum(item.jml_item) as jml_item"),
-                        DB::raw("sum(item.jml_pcs) as jml_pcs"),
-                        DB::raw("avg(wh_time.waktu_proses) as rata2")
-                    )
-                    ->from(function($query) use ($request){
                         $query->select(
-                            'wh_time.no_dok',
-                            'wh_time.kd_dealer',
-                            'wh_time.tanggal3 as tanggal',
-                            'wh_time.kd_pack',
-                            'wh_time.kd_lokpack',
-                            'wh_time.jam3 as waktu_mulai',
-                            'wh_time.jam4 as waktu_selesai',
-                            // DB::raw("DATEDIFF(SECOND, '00:00:00',CONVERT(varchar(8),DATEADD(SECOND, DATEDIFF(SECOND, jam3, jam4), 0),108)) AS waktu_proses"),
-                            DB::raw("datediff(second, cast(tanggal3 +' ' + jam3 as datetime), cast(tanggal4 +' ' + jam4 as datetime)) as waktu_proses"),
-                            'wh_time.CompanyId'
+                            'wh_time.companyid',
+                            'wh_time.tanggal',
+                            DB::raw("count(wh_time.no_dok) as jml_dok"),
+                            DB::raw("sum(jumlah_faktur.jml_faktur) as jml_faktur"),
+                            DB::raw("sum(item.jml_item) as jml_item"),
+                            DB::raw("sum(item.jml_pcs) as jml_pcs"),
+                            DB::raw("avg(wh_time.waktu_proses) as rata2")
                         )
-                        ->from(function($query) use ($request){ 
+                        ->from(function($query) use ($request){
                             $query->select(
-                                '*'
+                                'wh_time.no_dok',
+                                'wh_time.kd_dealer',
+                                'wh_time.tanggal3 as tanggal',
+                                'wh_time.kd_pack',
+                                'wh_time.kd_lokpack',
+                                'wh_time.jam3 as waktu_mulai',
+                                'wh_time.jam4 as waktu_selesai',
+                                // DB::raw("DATEDIFF(SECOND, '00:00:00',CONVERT(varchar(8),DATEADD(SECOND, DATEDIFF(SECOND, jam3, jam4), 0),108)) AS waktu_proses"),
+                                DB::raw("datediff(second, cast(tanggal3 +' ' + jam3 as datetime), cast(tanggal4 +' ' + jam4 as datetime)) as waktu_proses"),
+                                'wh_time.CompanyId'
                             )
-                            ->from('wh_time')
-                            ->where('tanggal3', '!=', null)
-                            ->where('kd_lokpack', '!=', null)
-                            ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
-                            if(!empty($request->no_meja)){
-                                $query = $query->where('kd_lokpack', $request->no_meja);
-                            }
-                            if(!empty($request->kd_packer)){
-                                $query = $query->where('kd_pack', $request->kd_packer);
-                            }
+                            ->from(function($query) use ($request){ 
+                                $query->select(
+                                    '*'
+                                )
+                                ->from('wh_time')
+                                ->where('tanggal3', '!=', null)
+                                ->where('kd_lokpack', '!=', null)
+                                ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
+                                if(!empty($request->no_meja)){
+                                    $query = $query->where('kd_lokpack', $request->no_meja);
+                                }
+                                if(!empty($request->kd_packer)){
+                                    $query = $query->where('kd_pack', $request->kd_packer);
+                                }
+                            }, 'wh_time')
+                            ->leftjoin('dealer', function ($join) {
+                                $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer')
+                                    ->on('wh_time.CompanyId', '=', 'dealer.CompanyId');
+                            })
+                            ->where('dealer.kd_area', 'i8');
                         }, 'wh_time')
-                        ->leftjoin('dealer', function ($join) {
-                            $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer')
-                                ->on('wh_time.CompanyId', '=', 'dealer.CompanyId');
+                        ->leftjoin('karyawan', function ($join) {
+                            $join->on('wh_time.kd_pack', '=', 'karyawan.kode')
+                                ->on('wh_time.CompanyId', '=', 'karyawan.CompanyId');
                         })
-                        ->where('dealer.kd_area', 'i8');
-                    }, 'wh_time')
-                    ->leftjoinSub(function ($query) use ($request){
-                        $query->select(
-                            'wh_time.CompanyId',
-                            'wh_time.no_dok',
-                            DB::raw("count(wh_dtl.no_dok) as jumlah_faktur")
-                        )
-                        ->from(function ($query) use ($request) {
+                        ->leftjoinSub(function ($query) use ($request){
                             $query->select(
-                                '*'
+                                'wh_time.CompanyId',
+                                'wh_time.no_dok',
+                                DB::raw("count(wh_dtl.no_dok) as jml_faktur")
                             )
-                            ->from('wh_time')
-                            ->where('tanggal3', '!=', null)
-                            ->where('kd_lokpack', '!=', null)
-                            ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
-                            if(!empty($request->no_meja)){
-                                $query = $query->where('kd_lokpack', $request->no_meja);
-                            }
-                            if(!empty($request->kd_packer)){
-                                $query = $query->where('kd_pack', $request->kd_packer);
-                            }
-                        }, 'wh_time')
-                        ->leftjoin('wh_dtl', function ($join) {
-                            $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok')
-                                ->on('wh_time.CompanyId', '=', 'wh_dtl.CompanyId');
+                            ->from(function ($query) use ($request) {
+                                $query->select(
+                                    '*'
+                                )
+                                ->from('wh_time')
+                                ->where('tanggal3', '!=', null)
+                                ->where('kd_lokpack', '!=', null)
+                                ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
+                                if(!empty($request->no_meja)){
+                                    $query = $query->where('kd_lokpack', $request->no_meja);
+                                }
+                                if(!empty($request->kd_packer)){
+                                    $query = $query->where('kd_pack', $request->kd_packer);
+                                }
+                            }, 'wh_time')
+                            ->leftjoin('wh_dtl', function ($join) {
+                                $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok')
+                                    ->on('wh_time.CompanyId', '=', 'wh_dtl.CompanyId');
+                            })
+                            ->leftjoin('dealer', function ($join) {
+                                $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer')
+                                    ->on('wh_time.CompanyId', '=', 'dealer.CompanyId');
+                            })
+                            ->where('dealer.kd_area', 'i8')
+                            ->groupBy('wh_time.CompanyId', 'wh_time.no_dok');
+                        }, 'jumlah_faktur', function ($join) {
+                            $join->on('wh_time.CompanyId', '=', 'jumlah_faktur.CompanyId')
+                                ->on('wh_time.no_dok', '=', 'jumlah_faktur.no_dok');
                         })
-                        ->leftjoin('dealer', function ($join) {
-                            $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer')
-                                ->on('wh_time.CompanyId', '=', 'dealer.CompanyId');
-                        })
-                        ->where('dealer.kd_area', 'i8')
-                        ->groupBy('wh_time.CompanyId', 'wh_time.no_dok');
-                    }, 'jumlah_faktur', function ($join) {
-                        $join->on('wh_time.CompanyId', '=', 'jumlah_faktur.CompanyId')
-                            ->on('wh_time.no_dok', '=', 'jumlah_faktur.no_dok');
-                    })
-                    ->leftjoinSub(function ($query) use ($request){
-                        $query->select(
-                            'wh_time.CompanyId',
-                            'wh_time.no_dok',
-                            DB::raw("count(wh_dtl.no_dok) as jml_item"),
-                            DB::raw("sum(fakt_dtl.jml_jual) as jml_pcs")
-                        )
-                        ->from(function ($query) use ($request) {
+                        ->leftjoinSub(function ($query) use ($request){
                             $query->select(
-                                '*'
+                                'wh_time.CompanyId',
+                                'wh_time.no_dok',
+                                DB::raw("count(wh_dtl.no_dok) as jml_item"),
+                                DB::raw("sum(fakt_dtl.jml_jual) as jml_pcs")
                             )
-                            ->from('wh_time')
-                            ->where('tanggal3', '!=', null)
-                            ->where('kd_lokpack', '!=', null)
-                            ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
-                            if(!empty($request->no_meja)){
-                                $query = $query->where('kd_lokpack', $request->no_meja);
+                            ->from(function ($query) use ($request) {
+                                $query->select(
+                                    '*'
+                                )
+                                ->from('wh_time')
+                                ->where('tanggal3', '!=', null)
+                                ->where('kd_lokpack', '!=', null)
+                                ->whereBetween(DB::raw('CONVERT(DATE, tanggal3)'), $request->tanggal);
+                                if(!empty($request->no_meja)){
+                                    $query = $query->where('kd_lokpack', $request->no_meja);
+                                }
+                                if(!empty($request->kd_packer)){
+                                    $query = $query->where('kd_pack', $request->kd_packer);
+                                }
+                            }, 'wh_time')
+                            ->leftjoin('wh_dtl', function ($join) {
+                                $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok')
+                                    ->on('wh_time.CompanyId', '=', 'wh_dtl.CompanyId');
+                            })
+                            ->leftjoin('dealer', function ($join) {
+                                $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer')
+                                    ->on('wh_time.CompanyId', '=', 'dealer.CompanyId');
+                            })
+                            ->leftjoin('fakt_dtl', function ($join) {
+                                $join->on('wh_dtl.no_faktur', '=', 'fakt_dtl.no_faktur')
+                                    ->on('wh_time.CompanyId', '=', 'fakt_dtl.CompanyId');
+                            })
+                            ->where('dealer.kd_area', 'i8')
+                            ->where('fakt_dtl.jml_jual', '>', 0)
+                            ->groupBy('wh_time.CompanyId', 'wh_time.no_dok');
+                        }, 'item', function ($join) {
+                            $join->on('wh_time.CompanyId', '=', 'item.CompanyId')
+                                ->on('wh_time.no_dok', '=', 'item.no_dok');
+                        })
+                        ->groupBy('wh_time.CompanyId', 'wh_time.tanggal');
+                        foreach ($request->group_by as $value) {
+                            $query = $query->groupBy($value)
+                            ->addSelect('wh_time.'.$value);
+                            if($value == 'kd_pack'){
+                                $query = $query
+                                ->groupBy('karyawan.nama')
+                                ->addSelect('karyawan.nama as nm_pack');
                             }
-                            if(!empty($request->kd_packer)){
-                                $query = $query->where('kd_pack', $request->kd_packer);
-                            }
-                        }, 'wh_time')
-                        ->leftjoin('wh_dtl', function ($join) {
-                            $join->on('wh_time.no_dok', '=', 'wh_dtl.no_dok')
-                                ->on('wh_time.CompanyId', '=', 'wh_dtl.CompanyId');
-                        })
-                        ->leftjoin('dealer', function ($join) {
-                            $join->on('wh_time.kd_dealer', '=', 'dealer.kd_dealer')
-                                ->on('wh_time.CompanyId', '=', 'dealer.CompanyId');
-                        })
-                        ->leftjoin('fakt_dtl', function ($join) {
-                            $join->on('wh_dtl.no_faktur', '=', 'fakt_dtl.no_faktur')
-                                ->on('wh_time.CompanyId', '=', 'fakt_dtl.CompanyId');
-                        })
-                        ->where('dealer.kd_area', 'i8')
-                        ->where('fakt_dtl.jml_jual', '>', 0)
-                        ->groupBy('wh_time.CompanyId', 'wh_time.no_dok');
-                    }, 'item', function ($join) {
-                        $join->on('wh_time.CompanyId', '=', 'item.CompanyId')
-                            ->on('wh_time.no_dok', '=', 'item.no_dok');
-                    })
-                    ->groupBy('wh_time.CompanyId', 'wh_time.tanggal');
-                    foreach ($request->group_by as $value) {
-                        $query = $query->groupBy($value)
-                        ->addSelect('wh_time.'.$value);
-                    }
+                        }
                 }, 'wh_time')
+                ->select(
+                    'tanggal',
+                    'jml_dealer',
+                    'jml_dok',
+                    'jml_faktur',
+                    'jml_item',
+                    'jml_pcs'
+                )
                 ->leftjoinSub(function ($query) use ($request){
                     $query->select(
                         'wh_time.CompanyId',
@@ -628,22 +658,15 @@ class PackingController extends Controller
                         foreach ($request->group_by as $value) {
                             $join = $join->on('wh_time.'.$value, '=', 'jumlah_dealer.'.$value);
                         }
-                })->select(
-                    'jml_dealer',
-                    'jml_dok',
-                    'jml_faktur',
-                    'jml_item',
-                    'jml_pcs',
-                    'tanggal'
-                )
-                ->orderBy('wh_time.tanggal', 'asc');
+                });
                 foreach ($request->group_by as $value) {
-                    $data  = $data->addSelect('wh_time.'.$value)->orderBy('wh_time.'.$value, 'asc');
+                    $data  = $data->addSelect('wh_time.'.$value);
+                    if($value == 'kd_pack'){
+                        $data = $data->addSelect('wh_time.nm_pack');
+                    }
                 }
                 $data  = $data
-                ->addSelect(
-                    DB::raw("convert(varchar(8), dateadd(second, rata2, '00:00:00'), 108) as rata2_waktu_proses")
-                )
+                ->addSelect(DB::raw("convert(varchar(8), dateadd(second, rata2, '00:00:00'), 108) as rata2_waktu_proses"))
                 ->get();
             }
 
