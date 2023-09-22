@@ -106,12 +106,12 @@
                         <tr class="fs-8 fw-bolder text-muted text-center">
                             <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">part Number</th>
+                            <th rowspan="2" class="w-auto ps-3 pe-3">part Number</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Qty Retur</th>
                             <th rowspan="2" class="w-50px ps-3 pe-3">tgl Ganti</th>
                             <th rowspan="2" class="w-50px ps-3 pe-3">Qty Ganti</th>
                             <th colspan="3" class="w-50px ps-3 pe-3">status</th>
-                            <th rowspan="2" class="min-w-150px ps-3 pe-3">Keterangan</th>
+                            <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
                             @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
                             <th rowspan="2" class="min-w-150px ps-3 pe-3">Action</th>
                             @endif

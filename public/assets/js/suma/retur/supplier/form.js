@@ -41,10 +41,9 @@ function simpan(tamp){
 
 
         let no_produksi = [];
-        for (let x = 1; x <= parseInt($('#qty_klaim').val()); x++) {
+        for (let x = 0; x < parseInt($('#qty_klaim').val()); x++) {
             no_produksi.push($('#no_produksi'+x).val());
         }
-
         $.post(base_url + "/retur/supplier/form",
             {
                 _token: $('meta[name="csrf-token"]').attr('content'),
@@ -214,9 +213,8 @@ function edit_detail(val){
     $('#kd_part').attr('disabled', true);
     $('#nm_part').val(val.nm_part);
     $('#qty_klaim').val(val.jumlah);
-    const no_produksi = val.no_produksi.split(',');
     $('#input_no_produk').html('');
-    $.each(no_produksi, function (index, value) {
+    $.each(val.no_produksi.split(','), function (index, value) {
         $('#input_no_produk').append(`
             <div class="col-2 mt-3">
                 <input type="text" class="form-control" id="no_produksi${index}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>

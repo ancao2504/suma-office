@@ -27,7 +27,8 @@ class ReturController extends Controller
                         'klaim.pc',
                         'klaim.kd_dealer',
                         'klaim.kd_sales',
-                        'klaim_dtl.qty as qty_klaim',
+                        // 'klaim_dtl.qty as qty_klaim',
+                        DB::raw("sum([klaim_dtl].[qty]) as [qty_klaim]"),
                         'klaim_dtl.keterangan',
                         'klaim_dtl.sts_klaim',
                         'klaim_dtl.sts_min',
@@ -41,6 +42,21 @@ class ReturController extends Controller
                         $join->on('klaim_dtl.no_dokumen', '=', 'klaim.no_dokumen')
                             ->on('klaim_dtl.companyid', '=', 'klaim.companyid');
                     })
+                    ->groupBy(
+                        'klaim.no_dokumen',
+                        'klaim.tgl_dokumen',
+                        'klaim_dtl.kd_part',
+                        'klaim.pc',
+                        'klaim.kd_dealer',
+                        'klaim.kd_sales',
+                        'klaim_dtl.keterangan',
+                        'klaim_dtl.sts_klaim',
+                        'klaim_dtl.sts_min',
+                        'klaim_dtl.sts_stock',
+                        'klaim.status_approve',
+                        'klaim.status_end',
+                        'klaim.companyid'
+                    )
                     ->where('klaim.companyid', $request->companyid);
                     if(!empty($request->tanggal)){
                         $query = $query->whereBetween(DB::raw('CONVERT(DATE, klaim.tgl_dokumen)'), $request->tanggal);
