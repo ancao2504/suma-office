@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Controllers\Api\Backend\Konsumen_lokasi;
+namespace app\Http\Controllers\Api\Backend\Konsumen\Konsumen_lokasi;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

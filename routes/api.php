@@ -10,7 +10,7 @@ use Api\Backend\Dashboard\Management\ApiDashboardManagementStockController;
 use Api\Backend\Dashboard\Marketing\ApiDashboardMarketingController;
 use Api\Backend\Gudang\Online\PackingController;
 use Api\Backend\Konsumen\KonsumenController;
-use Api\Backend\Konsumen_lokasi\LokasiController;
+use Api\Backend\Konsumen\Konsumen_lokasi\LokasiController;
 use Api\Backend\Online\ApiApproveOrderController;
 use Api\Backend\Online\ApiPemindahanController as PemindahanMarketplace;
 use Api\Backend\Online\ApiProductController as ProductMarketplace;

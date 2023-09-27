@@ -41,6 +41,7 @@
                                     'no_retur' => $data->no_retur,
                                     'no_klaim' => $detail->no_klaim,
                                     'kd_part' => $detail->kd_part,
+                                    'no_produksi_list' => $detail->no_produksi_list,
                                     'harga' => (float)$detail->hrg_pokok,
                                     'detail_jwb' => $detail->detail_jwb
                                 ]
@@ -86,6 +87,7 @@
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted text-center">
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3">Qty</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Alasan</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">CA</th>
@@ -102,11 +104,20 @@
                 </div>
                 <h5 class="modal-title">Jawaban</h5>
                 <div class="border rounded-3 p-3">
+                    <div class="mb-6" id="tag_no_produksi">
+                    </div>
                     <div class="form-group row mb-2">
                         <label for="jml" class="col-sm-2 col-form-label required">Qty</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="jml" name="jml" placeholder="Masukkan qty" value="" required>
                         </div>
+                        <label for="no_produksi_old" class="col-sm-2 col-form-label">No Produksi</label>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-primary w-150px" id="btn_cari_produksi">
+                                <span class="bi bi-search"></span>
+                            </button>
+                        </div>
+                            
                     </div>
                     <div class="form-group row mb-2">
                         <label for="alasan" class="col-sm-2 col-form-label required">Alasan</label>
@@ -149,6 +160,47 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal_produksi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pilih No Produksi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card-body">
+                <div class="w-100">
+                    <button type="button" class="btn btn-primary mb-3" id="btn_pilih_otomatis">
+                        <span class="bi bi-check-circle"></span>
+                        Pilih Otomatis
+                    </button>
+                </div>
+                <div id="list_produksi" class="table-responsive border rounded-3 mb-10">
+                    <table id="datatable_produksi" class="table table-row-dashed table-row-gray-300 align-middle border">
+                        <thead class="border">
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">Action</th>
+                            </tr>
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                            </tr>
+                        </thead>
+                        <tbody id="list-produksi">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_pilih_produksi" class="btn btn-success text-white">Pilih</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#jwb_modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @endsection
 
 @push('scripts')

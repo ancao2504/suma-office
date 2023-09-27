@@ -171,85 +171,93 @@ class SupplierController extends Controller
                         $join->on('part.kd_part', '=', 'retur_dtl.kd_part')
                             ->on('part.CompanyId', '=', 'retur_dtl.CompanyId');
                     })
-                        ->leftJoinSub(function ($query) use ($request) {
-                            $query->select(
-                                    'rtoko_dtl.no_retur',
-                                    'rtoko_dtl.kd_part',
-                                    'rtoko_dtl.no_klaim',
-                                    'rtoko_dtl.ket',
-                                    'rtoko_dtl.status_end',
-                                    'rtoko_dtl.CompanyId'
-                                )
-                                ->from('rtoko_dtl')
-                                ->where('rtoko_dtl.CompanyId', $request->companyid)
-                                ->groupBy(
-                                    'rtoko_dtl.no_retur',
-                                    'rtoko_dtl.kd_part',
-                                    'rtoko_dtl.no_klaim',
-                                    'rtoko_dtl.ket',
-                                    'rtoko_dtl.status_end',
-                                    'rtoko_dtl.CompanyId'
-                                );
-                        }, 'rtoko_dtl', function ($join) {
-                        $join->on('rtoko_dtl.no_retur', '=', 'retur_dtl.no_klaim')
+                    ->leftJoinSub(function ($query) use ($request) {
+                        $query->select(
+                                'rtoko_dtl.no_retur',
+                                'rtoko_dtl.kd_part',
+                                'rtoko_dtl.no_klaim',
+                                'rtoko_dtl.ket',
+                                'rtoko_dtl.status_end',
+                                'rtoko_dtl.CompanyId'
+                            )
+                            ->from('rtoko_dtl')
+                            ->where('rtoko_dtl.CompanyId', $request->companyid)
+                            ->groupBy(
+                                'rtoko_dtl.no_retur',
+                                'rtoko_dtl.kd_part',
+                                'rtoko_dtl.no_klaim',
+                                'rtoko_dtl.ket',
+                                'rtoko_dtl.status_end',
+                                'rtoko_dtl.CompanyId'
+                            );
+                    }, 'rtoko_dtl', function ($join) {
+                    $join->on('rtoko_dtl.no_retur', '=', 'retur_dtl.no_klaim')
                             ->on('rtoko_dtl.kd_part', '=', 'retur_dtl.kd_part')
                             ->on('rtoko_dtl.CompanyId', '=', 'retur_dtl.CompanyId');
                     })
+                    ->select(
+                        'retur_dtl.*',
+                        'part.ket as nm_part',
+                        'part.hrg_pokok',
+                        'rtoko_dtl.ket as ket_klaim',
+                        'rtoko_dtl.status_end'
+                    )
+                    ->orderBy('retur_dtl.no_klaim', 'desc')
+                    ->get();
+
+                    
+                    if (in_array('with_jwb', $request->option)) {
+                        $detail_jwb = DB::table('jwb_claim')
                         ->select(
-                            'retur_dtl.*',
-                            'part.ket as nm_part',
-                            'part.hrg_pokok',
-                            'rtoko_dtl.ket as ket_klaim',
-                            'rtoko_dtl.status_end'
+                            '*'
                         )
-                        ->orderBy('retur_dtl.no_klaim', 'desc')
+                        ->where('jwb_claim.no_retur', $request->no_retur)
+                        ->whereIn('jwb_claim.no_klaim', collect($data_detail)->pluck('no_klaim')->toArray())
+                        ->whereIn('jwb_claim.kd_part', collect($data_detail)->pluck('kd_part')->toArray())
+                        ->where('jwb_claim.CompanyId', $request->companyid)
+                        ->orderBy('no_jwb', 'asc')
                         ->get();
 
-                    if (in_array('with_jwb', $request->option)) {
                         foreach ($data_detail as $key => $value) {
-                            $data_detail[$key]->detail_jwb = DB::table('jwb_claim')
-                                ->select(
-                                    '*'
-                                )
-                                ->where('jwb_claim.no_retur', $request->no_retur)
-                                ->where('jwb_claim.no_klaim', $value->no_klaim)
-                                ->where('jwb_claim.kd_part', $value->kd_part)
-                                ->where('jwb_claim.CompanyId', $request->companyid)
-                                ->orderBy('no_jwb', 'asc')
-                                ->get();
-
-                            $detail_jwb = collect($data_detail[$key]->detail_jwb);
-
-                            $data_detail[$key]->qty_jwb = $detail_jwb->sum('qty_jwb');
-
+                            $data_detail[$key]->detail_jwb = collect($detail_jwb)
+                                ->where('no_klaim', $value->no_klaim)
+                                ->where('kd_part', $value->kd_part)
+                                ->values();
+                            $data_detail[$key]->qty_jwb = collect($data_detail[$key]->detail_jwb)->sum('qty_jwb');
                             $data_detail[$key]->ket_jwb =
-                                $detail_jwb->where('keputusan', 'TERIMA')->sum('qty_jwb') . ' TERIMA ' .
-                                $detail_jwb->where('keputusan', 'TOLAK')->sum('qty_jwb') . ' TOLAK ';
+                                collect($data_detail[$key]->detail_jwb)->where('keputusan', 'TERIMA')->sum('qty_jwb') . ' TERIMA ' .
+                                collect($data_detail[$key]->detail_jwb)->where('keputusan', 'TOLAK')->sum('qty_jwb') . ' TOLAK ';
                         }
                     }
 
                     $dataProduksi =
-                        DB::table('klaim_dtl')
-                            ->select(
-                                'rtoko_dtl.no_retur',
-                                'klaim_dtl.no_produksi'
-                            )
-                            ->join('rtoko_dtl', function ($join) {
-                                $join->on('rtoko_dtl.no_klaim', '=', 'klaim_dtl.no_dokumen')
-                                    ->on('rtoko_dtl.CompanyId', '=', 'klaim_dtl.CompanyId');
-                            })
-                            ->whereIn('rtoko_dtl.no_retur', collect($data_detail)->pluck('no_klaim')->toArray())
-                            ->where('rtoko_dtl.CompanyId', $request->companyid)
-                            ->get();
+                    DB::table('klaim_dtl')
+                    ->select(
+                        'rtoko_dtl.no_retur',
+                        'rtoko_dtl.kd_part',
+                        'klaim_dtl.no_produksi'
+                    )
+                    ->join('rtoko_dtl', function ($join) {
+                        $join->on('rtoko_dtl.no_klaim', '=', 'klaim_dtl.no_dokumen')
+                            ->on('rtoko_dtl.kd_part', '=', 'klaim_dtl.kd_part')
+                            ->on('rtoko_dtl.CompanyId', '=', 'klaim_dtl.CompanyId');
+                    })
+                    ->whereIn('rtoko_dtl.no_retur', collect($data_detail)->pluck('no_klaim')->toArray())
+                    ->whereIn('rtoko_dtl.kd_part', collect($data_detail)->pluck('kd_part')->toArray())
+                    ->where('klaim_dtl.sts_klaim', 1)
+                    ->where('rtoko_dtl.CompanyId', $request->companyid)
+                    ->get();
 
                     $dataProduksi = collect($dataProduksi)->groupBy('no_retur')->map(function ($item) {
-                        return collect($item)->pluck('no_produksi')->toArray();
-                    })->toArray();
+                        return collect($item)->groupBy('kd_part')->map(function ($item) {
+                            return collect($item)->pluck('no_produksi')->toArray();
+                        });
+                    });
 
                     foreach ($data_detail as $key => $value) {
-                        $data_detail[$key]->no_produksi = implode(', ', $dataProduksi[$value->no_klaim] ?? null);
+                        $data_detail[$key]->no_produksi_list = $dataProduksi[$value->no_klaim][$value->kd_part] ?? [];
                     }
-
+                    
                     $data->detail = $data_detail;
                 }
             }

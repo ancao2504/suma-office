@@ -45,6 +45,10 @@ class SupplierJawabController extends Controller
                     $rules += ['ca' => 'required'];
                     $messages += ['ca.required'  => 'Jumlah Uang Tidak Boleh Kososng'];
                 }
+
+                if ((boolean)$request->tamp && (int)$request->qty_jwb != (int)count(explode(',', $request->no_produksi))) {
+                    return Response::responseWarning('Jumlah no produksi yang dipilih jumlahnya tidak sesuai dengan Qty jawaban');
+                }
             }
 
             // ! megecek validasi dan menampilkan pesan error
@@ -59,10 +63,11 @@ class SupplierJawabController extends Controller
                 if((boolean)$request->tamp){
                     $simpan = DB::select('
                     SET NOCOUNT ON;
-                    exec SP_jwb_claim_simpanTemp ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+                    exec SP_jwb_claim_simpanTemp ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
                         $request->no_retur,
                         trim($request->no_klaim),
                         trim($request->kd_part),
+                        trim($request->no_produksi),
                         date('Y-m-d H:i:s'),
                         $request->qty_jwb,
                         $request->alasan,
@@ -93,6 +98,7 @@ class SupplierJawabController extends Controller
                         'alasan',
                         'ca',
                         'kd_part',
+                        'no_produksi',
                         'keputusan',
                         'ket',
                         'no_jwb',
@@ -114,6 +120,7 @@ class SupplierJawabController extends Controller
                                 'alasan' => $item->alasan,
                                 'ca' => $item->ca,
                                 'kd_part' => $item->kd_part,
+                                'no_produksi' => $item->no_produksi,
                                 'keputusan' => $item->keputusan,
                                 'ket' => $item->ket,
                                 'no_jwb' => $item->no_jwb,
@@ -124,7 +131,7 @@ class SupplierJawabController extends Controller
                                 'usertime' => $item->usertime,
                                 'sts_end' => $item->sts_end,
                             ];
-                        })
+                        })->sortBy('no_jwb')->values()->all()
                     ];
 
                     return (object) array('status' => 1, 'message' => 'success', 'data' => $data);

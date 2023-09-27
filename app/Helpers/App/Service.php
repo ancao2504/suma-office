@@ -2052,6 +2052,7 @@ class Service
             'no_retur'      => $request->no_retur,
             'no_klaim'      => trim($request->no_klaim),
             'kd_part'       => trim($request->kd_part),
+            'no_produksi'   => $request->no_produksi,
             'qty_jwb'       => (float)$request->qty_jwb,
             'alasan'        => $request->alasan,
             'ca'            => (float)$request->ca,

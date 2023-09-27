@@ -4,12 +4,8 @@ namespace app\Http\Controllers\App\Retur;
 
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\App\Option\OptionController;
 
 class SupplierJawabController extends Controller
 {
@@ -77,6 +73,14 @@ class SupplierJawabController extends Controller
                 if($request->alasan == 'CA'){
                     $rules += ['ca' => 'required'];
                     $messages += ['ca.required'  => 'Jumlah Uang Tidak Boleh Kososng'];
+                }
+
+                if ((boolean)$request->tamp && (int)$request->qty_jwb != (int)count(explode(',', $request->no_produksi))) {
+                    return Response()->json([
+                        'status'    => 0,
+                        'message'   => 'Jumlah produksi yang dipilih tidak sesuai dengan Qty jawaban',
+                        'data'      => ''
+                    ], 200);
                 }
             }
             $validate = Validator::make($request->all(), $rules,$messages);

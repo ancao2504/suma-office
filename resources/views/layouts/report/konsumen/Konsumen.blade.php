@@ -199,7 +199,7 @@
 									</div>
 
 									<label for="tgl_tran" class="form-label">Bulan Tahun</label>
-									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value="{{ date('Y-m') }}"/>
+									<input type="month" class="form-control" placeholder="Pick date rage" id="tgl_tran" value=""/>
 
 									<span class="text-end text-gray-600 fs-7"><i class="required"></i> Isi inputan diatas dengan salah satu dari <b>Range Tanggal</b> atau <b>Bulan Tahun</b></span>
 								</div>
