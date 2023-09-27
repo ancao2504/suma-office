@@ -163,7 +163,7 @@ $(document).ready(function () {
     });
 
     $('#jml').on('change', function () {
-        if ($(this).val() < tamp.length) {
+        if ($(this).val() != tamp.length) {
             tamp = [];
         }
         pillNoProduksi();
