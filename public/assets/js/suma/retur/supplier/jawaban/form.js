@@ -19,9 +19,18 @@ function formatRibuan(input) {
     }
 }
 
+function pillNoProduksi(){
+    $('#tag_no_produksi').html('');
+    tamp.forEach(function (item, index) {
+        $('#tag_no_produksi').append(`
+            <span class="text-primary rounded-pill mb-1 px-2 py-2 d-inline-block border border-1 border-primary text-center" style="min-width: 100px">${item.replace(/\s/g, '')}</span>
+        `);
+    });
+}
+
 function simpan(request){
     if ($('#jml').val() != tamp.length && request.tamp) {
-        toastr.warning('Jumlah produksi yang dipilih tidak sesuai dengan Qty jawaban', "Peringatan");
+        toastr.warning('Jumlah No Produksi yang dipilih tidak sesuai dengan Qty jawaban', "Peringatan");
         return false;
     }
     loading.block();
@@ -153,6 +162,13 @@ $(document).ready(function () {
         $(this).val(formatRibuan($(this).val()));
     });
 
+    $('#jml').on('change', function () {
+        if ($(this).val() < tamp.length) {
+            tamp = [];
+        }
+        pillNoProduksi();
+    });
+
     let no_produksi_dsiabled = [];
     $('#list-klaim .btn_jwb').on('click', function () {
         form_clear(false);
@@ -203,18 +219,13 @@ $(document).ready(function () {
                     tamp.push($(item).find('input[type="checkbox"]').val());
                 }
             });
-
-            $('#tag_no_produksi').html('');
-            tamp.forEach(function (item, index) {
-                $('#tag_no_produksi').append(`
-                    <span class="text-primary rounded-pill mb-1 px-2 py-2 d-inline-block border border-1 border-primary text-center" style="min-width: 100px">${item.replace(/\s/g, '')}</span>
-                `);
-            });
-
+            
             if (tamp.length != $('#jml').val()) {
-                toastr.warning('Jumlah produksi yang dipilih tidak sesuai dengan jumlah jawaban', "Peringatan");
+                toastr.warning('Jumlah No Produksi yang dipilih tidak sesuai dengan jumlah jawaban', "Peringatan");
                 return false;
             }
+
+            pillNoProduksi();
 
             $('#modal_produksi').modal('hide');
             $('#jwb_modal').modal('show');

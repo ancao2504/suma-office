@@ -78,7 +78,7 @@ class SupplierJawabController extends Controller
                 if ((boolean)$request->tamp && (int)$request->qty_jwb != (int)count(explode(',', $request->no_produksi))) {
                     return Response()->json([
                         'status'    => 0,
-                        'message'   => 'Jumlah produksi yang dipilih tidak sesuai dengan Qty jawaban',
+                        'message'   => 'Jumlah No Produksi yang dipilih tidak sesuai dengan Qty jawaban',
                         'data'      => ''
                     ], 200);
                 }

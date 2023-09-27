@@ -47,7 +47,7 @@ class SupplierJawabController extends Controller
                 }
 
                 if ((boolean)$request->tamp && (int)$request->qty_jwb != (int)count(explode(',', $request->no_produksi))) {
-                    return Response::responseWarning('Jumlah no produksi yang dipilih jumlahnya tidak sesuai dengan Qty jawaban');
+                    return Response::responseWarning('Jumlah No Produksi yang dipilih jumlahnya tidak sesuai dengan Qty jawaban');
                 }
             }
 
