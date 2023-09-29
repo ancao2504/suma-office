@@ -1559,11 +1559,11 @@ class ApiOrderController extends Controller
                         ->first();
 
 
-                $data_result_faktur->push((object) [
+                $data_result_faktur[] = [
                     'nomor_faktur'  => strtoupper(trim($sql->nomor_faktur)),
                     'status_error'  => strtoupper(trim($sql->status_error)),
                     'keterangan'    => strtoupper(trim($sql->keterangan))
-                ]);
+                ];
             }
 
             return Response::responseSuccess('Data faktur berhasil disimpan dan gagal accept order shopee. Lakukan accept order secara manual.'.
