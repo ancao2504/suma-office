@@ -201,7 +201,7 @@ class ApiDashboardMarketplaceController extends Controller
                     'amount_ol' => (double)$data->amount_ol,
                     'amount_op' => (double)$data->amount_op,
                     'amount_os' => (double)$data->amount_os,
-                    'amount_os' => (double)$data->amount_os,
+                    'amount_ot' => (double)$data->amount_ot,
                 ];
             }
 
