@@ -138,6 +138,7 @@ class KonsumenController extends Controller
                     'data'      => ''
                 ]);
             }
+            
             $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;

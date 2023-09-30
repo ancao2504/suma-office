@@ -8,12 +8,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Jenssegers\Agent\Agent as Agent;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\Response;
 
 
 class AuthController extends Controller {
 
     public function index() {
-        return view('layouts.auth.login');
+        $response = new Response(view('layouts.auth.login'));
+        $response->withCookie(Cookie::make('XSRF-TOKEN', csrf_token(), 120, '/', null, true, true))
+        ->withCookie(Cookie::make('sumahonda_session', csrf_token(), 120, '/', null, true, true));
+        return $response;
     }
 
     public function login(Request $request) {

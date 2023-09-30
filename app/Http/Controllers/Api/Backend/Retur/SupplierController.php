@@ -164,7 +164,7 @@ class SupplierController extends Controller
                         }
                     }, 'retur_dtl')
                         ->leftJoinSub(function ($query) use ($request) {
-                            $query->select('part.kd_part', 'part.ket', 'part.CompanyId', 'hrg_pokok')
+                            $query->select('part.kd_part', 'part.ket', 'part.CompanyId', 'hrg_pokok','het')
                                 ->from('part')
                                 ->where('part.CompanyId', $request->companyid);
                         }, 'part', function ($join) {
@@ -198,7 +198,7 @@ class SupplierController extends Controller
                     ->select(
                         'retur_dtl.*',
                         'part.ket as nm_part',
-                        'part.hrg_pokok',
+                        'part.het',
                         'rtoko_dtl.ket as ket_klaim',
                         'rtoko_dtl.status_end'
                     )

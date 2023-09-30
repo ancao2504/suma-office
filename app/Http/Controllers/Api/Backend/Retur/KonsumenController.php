@@ -552,13 +552,13 @@ class KonsumenController extends Controller
             // ! ------------------------------------
             if(!empty($request->kd_part) && (!empty($request->no_retur) && $request->no_retur == $request->user_id)){
                 $rules += [
-                            'kd_part' => 'required',
-                            'no_produksi' => 'required',
-                        ];
+                    'kd_part' => 'required',
+                    'no_produksi' => 'required',
+                ];
                 $messages += [
-                                'kd_part.required' => 'Part Number Tidak boleh kososng',
-                                'no_produksi.required' => 'NO Produksi Tidak boleh kososng'
-                            ];
+                    'kd_part.required' => 'Part Number Tidak boleh kososng',
+                    'no_produksi.required' => 'NO Produksi Tidak boleh kososng'
+                ];
             }
 
             // ! ------------------------------------
@@ -600,8 +600,14 @@ class KonsumenController extends Controller
             });
             return response::responseSuccess('success', '');
         }catch (\Exception $exception) {
-            return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
-                        $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));
+            return Response::responseError(
+                $request->get('user_id'), 
+                'API', 
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(), 
+                $exception->getMessage(), 
+                $request->get('companyid')
+            );
         };
     }
 }

@@ -9,6 +9,7 @@ function form_clear(ca = true){
         $('#ca').val('');
     }
     $('#tag_no_produksi').html('');
+    tamp = [];
 }
 
 function formatRibuan(input) {
@@ -171,8 +172,10 @@ $(document).ready(function () {
 
     let no_produksi_dsiabled = [];
     $('#list-klaim .btn_jwb').on('click', function () {
+        no_produksi_dsiabled = [];
         form_clear(false);
         const data = JSON.parse(atob($(this).data('a')));
+        
         $('#jwb_no_klaim').html(data.no_klaim);
         $('#jwb_kd_part').html(data.kd_part);
 
@@ -187,7 +190,7 @@ $(document).ready(function () {
                 no_produksi_dsiabled.push(...item.no_produksi.split(','));
             }
         });
-
+        
         $('#modal_produksi #datatable_produksi #list-produksi').html('');
         data.no_produksi_list.forEach(function (item, index) {
             $('#modal_produksi #datatable_produksi #list-produksi').append(`
@@ -196,39 +199,14 @@ $(document).ready(function () {
                     <td class="text-center">${ item.replace(/\s/g, '') }</td>
                     <td class="text-center align-middle">
                         <div class="form-check d-flex justify-content-center align-items-center">
-                            <input class="form-check-input" type="checkbox" value="${item}" ${no_produksi_dsiabled.includes(item)?'checked disabled':''}>
+                            <input class="form-check-input" type="checkbox" value="${item}" ${
+                                (no_produksi_dsiabled.includes(item))
+                                ?'checked disabled':''
+                            }>
                         </div>
                     </td>
                 </tr>
             `);
-        });
-
-        $('#modal_produksi #btn_pilih_otomatis').on('click', function () {
-            $('#modal_produksi #datatable_produksi #list-produksi tr').find('input[type="checkbox"]:not(:disabled)').prop('checked', false);
-            var jml = $('#jml').val();
-            $('#modal_produksi #datatable_produksi #list-produksi tr').find('input[type="checkbox"]:not(:disabled)').each(function (index, item) {
-                if (index < jml) {
-                    $(item).prop('checked', true);
-                }
-            });
-        });
-        $('#modal_produksi #btn_pilih_produksi').on('click', function () {
-            tamp = [];
-            $('#modal_produksi #datatable_produksi #list-produksi tr').each(function (index, item) {
-                if ($(item).find('input[type="checkbox"]').is(':checked') && !$(item).find('input[type="checkbox"]').is(':disabled')) {
-                    tamp.push($(item).find('input[type="checkbox"]').val());
-                }
-            });
-            
-            if (tamp.length != $('#jml').val()) {
-                toastr.warning('Jumlah No Produksi yang dipilih tidak sesuai dengan jumlah jawaban', "Peringatan");
-                return false;
-            }
-
-            pillNoProduksi();
-
-            $('#modal_produksi').modal('hide');
-            $('#jwb_modal').modal('show');
         });
 
         if (data.detail_jwb.length == 0) {
@@ -265,6 +243,7 @@ $(document).ready(function () {
             `);
         });
     });
+    
     $('#btn_cari_produksi').on('click', function () {
         if ($('#jml').val() == '') {
             toastr.warning('QTY jawaban tidak boleh kosong', "Peringatan");
@@ -273,6 +252,35 @@ $(document).ready(function () {
 
         $('#jwb_modal').modal('hide');
         $('#modal_produksi').modal('show');
+    });
+
+    $('#modal_produksi #btn_pilih_produksi').on('click', function () {
+        tamp = [];
+        $('#modal_produksi #datatable_produksi #list-produksi tr').each(function (index, item) {
+            if ($(item).find('input[type="checkbox"]').is(':checked') && !$(item).find('input[type="checkbox"]').is(':disabled')) {
+                tamp.push($(item).find('input[type="checkbox"]').val());
+            }
+        });
+        
+        if (tamp.length != $('#jml').val()) {
+            toastr.warning('Jumlah No Produksi yang dipilih tidak sesuai dengan jumlah jawaban', "Peringatan");
+            return false;
+        }
+
+        pillNoProduksi();
+
+        $('#modal_produksi').modal('hide');
+        $('#jwb_modal').modal('show');
+    });
+
+    $('#modal_produksi #btn_pilih_otomatis').on('click', function () {
+        $('#modal_produksi #datatable_produksi #list-produksi tr').find('input[type="checkbox"]:not(:disabled)').prop('checked', false);
+        var jml = $('#jml').val();
+        $('#modal_produksi #datatable_produksi #list-produksi tr').find('input[type="checkbox"]:not(:disabled)').each(function (index, item) {
+            if (index < jml) {
+                $(item).prop('checked', true);
+            }
+        });
     });
 
     $('#jwb_modal #list-jwb').on('click','.btn_jwb_hapus', function(){
@@ -354,6 +362,7 @@ $(document).ready(function () {
         $(this).attr('disabled', false);
         $(this).html('Simpan');
     });
+
     $('.btn_simpan:not([disabled])').on('click', function () {
         $(this).attr('disabled', true);
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
