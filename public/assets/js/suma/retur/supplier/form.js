@@ -413,4 +413,8 @@ $(document).ready(function () {
             $('#detail_modal  #ket').attr('hidden', true);
         }
     });
+
+    $('#klaim-list').on('click', '.close', function () {
+        $('#detail_modal').modal('show');
+    });
 });

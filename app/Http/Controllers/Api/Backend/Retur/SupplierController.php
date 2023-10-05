@@ -233,9 +233,9 @@ class SupplierController extends Controller
                     $dataProduksi =
                     DB::table('klaim_dtl')
                     ->select(
-                        'rtoko_dtl.no_retur',
-                        'rtoko_dtl.kd_part',
-                        'klaim_dtl.no_produksi'
+                        DB::raw('LTRIM(RTRIM(rtoko_dtl.no_retur)) as no_retur'),
+                        DB::raw('LTRIM(RTRIM(klaim_dtl.kd_part)) as kd_part'),
+                        DB::raw('LTRIM(RTRIM(klaim_dtl.no_produksi)) as no_produksi')
                     )
                     ->join('rtoko_dtl', function ($join) {
                         $join->on('rtoko_dtl.no_klaim', '=', 'klaim_dtl.no_dokumen')
@@ -247,13 +247,13 @@ class SupplierController extends Controller
                     ->where('klaim_dtl.sts_klaim', 1)
                     ->where('rtoko_dtl.CompanyId', $request->companyid)
                     ->get();
-
+                    
                     $dataProduksi = collect($dataProduksi)->groupBy('no_retur')->map(function ($item) {
                         return collect($item)->groupBy('kd_part')->map(function ($item) {
                             return collect($item)->pluck('no_produksi')->toArray();
                         });
                     });
-
+                    
                     foreach ($data_detail as $key => $value) {
                         $data_detail[$key]->no_produksi_list = $dataProduksi[$value->no_klaim][$value->kd_part] ?? [];
                     }

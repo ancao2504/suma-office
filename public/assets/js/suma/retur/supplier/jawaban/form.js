@@ -175,7 +175,7 @@ $(document).ready(function () {
         no_produksi_dsiabled = [];
         form_clear(false);
         const data = JSON.parse(atob($(this).data('a')));
-        
+        jml_uang = data.harga;
         $('#jwb_no_klaim').html(data.no_klaim);
         $('#jwb_kd_part').html(data.kd_part);
 
@@ -190,7 +190,6 @@ $(document).ready(function () {
                 no_produksi_dsiabled.push(...item.no_produksi.split(','));
             }
         });
-        
         $('#modal_produksi #datatable_produksi #list-produksi').html('');
         data.no_produksi_list.forEach(function (item, index) {
             $('#modal_produksi #datatable_produksi #list-produksi').append(`

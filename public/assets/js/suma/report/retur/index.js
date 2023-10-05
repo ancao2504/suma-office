@@ -190,7 +190,6 @@ $(document).ready(function () {
                 });
                 return false;
             }
-            
             var blob = new Blob([response], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             });

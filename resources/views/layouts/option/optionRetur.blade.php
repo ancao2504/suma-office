@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">{{ $modal->title }}</h5>
-            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2 close" data-bs-dismiss="modal">
                 <i class="bi bi-x-lg"></i>
             </div>
         </div>

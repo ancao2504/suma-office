@@ -31,6 +31,7 @@ function Klaim(requst){
                 }
             } else if (requst.option[0] == 'page') {
                 $('#klaim-list').html(response.data);
+                $('#detail_modal').modal('hide');
                 $('#klaim-list').modal('show');
             } else {
                 $('#dealer-list .close').trigger('click')

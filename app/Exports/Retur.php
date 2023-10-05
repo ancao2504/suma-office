@@ -34,7 +34,7 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
             'Tgl Klaim',
             'Tgl Klaim SPV',
             'Tgl Retur Supplier',
-            'Tgl Jawab Supplier',
+            'Tgl Jawab terakhir',
             'Kode Salse',
             'Kode Dealer',
             'Kode Supplier',
