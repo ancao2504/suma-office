@@ -986,10 +986,12 @@ class ApiOptionsController extends Controller
                         ->where('rtoko_dtl.CompanyId', $request->companyid)
                         ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
                         ->groupBy('rtoko_dtl.no_klaim','rtoko_dtl.CompanyId');
-                    },'rtoko_dtl')->leftJoin('klaim_dtl', function($join){
-                        $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_klaim')
-                        ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
+                    }, 'rtoko_dtl')
+                    ->join('klaim_dtl', function($join){
+                        $join->on('rtoko_dtl.no_klaim', '=', 'klaim_dtl.no_dokumen')
+                        ->on('rtoko_dtl.CompanyId', '=', 'klaim_dtl.CompanyId');
                     })
+                    ->where('klaim_dtl.sts_klaim',  '1')
                     ->select('klaim_dtl.kd_part','klaim_dtl.no_produksi')
                     ->get()
                 )->groupBy('kd_part');

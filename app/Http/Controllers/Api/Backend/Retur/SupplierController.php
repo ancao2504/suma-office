@@ -142,21 +142,21 @@ class SupplierController extends Controller
                 $data = $data->first();
                 if (!empty($data)) {
                     $data_detail = DB::table(function ($query) use ($request) {
-                        $query->select(
-                            'no_klaim',
-                            'tgl_claim',
-                            'no_produksi',
-                            'no_ps_klaim',
-                            'kd_dealer',
-                            'kd_part',
-                            'kd_lokasi',
-                            'jmlretur',
-                            'qty_jwb',
-                            'ket',
-                            'ket_jwb',
-                            'diterima',
-                            'CompanyId'
-                        )
+                            $query->select(
+                                'no_klaim',
+                                'tgl_claim',
+                                'no_produksi',
+                                'no_ps_klaim',
+                                'kd_dealer',
+                                'kd_part',
+                                'kd_lokasi',
+                                'jmlretur',
+                                'qty_jwb',
+                                'ket',
+                                'ket_jwb',
+                                'diterima',
+                                'CompanyId'
+                            )
                             ->from($request->tb[1] . ' as retur_dtl')
                             ->where('retur_dtl.CompanyId', $request->companyid);
                         if (!empty($request->no_retur) || in_array($request->option, ['tamp'])) {

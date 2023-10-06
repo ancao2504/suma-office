@@ -250,6 +250,9 @@ class ReturController extends Controller
 
             $dataJawab = collect($dataJawab);
             foreach($data->items() as $value){
+                if($value->sts_klaim == "TIDAK"){
+                    $value->qty_klaim = 0;
+                }
                 $dataNoProduksi = explode(',', $value->no_produksi);
                 foreach($dataNoProduksi as $item){
                     $x = $dataJawab->where('no_retur', $value->no_dok_supp)->where('no_klaim', $value->no_retur)->where('kd_part', $value->kd_part)->where('no_produksi', $item);
@@ -509,6 +512,9 @@ class ReturController extends Controller
 
             $dataJawab = collect($dataJawab);
             foreach($data as $value){
+                if($value->sts_klaim == "TIDAK"){
+                    $value->qty_klaim = 0;
+                }
                 $dataNoProduksi = explode(',', $value->no_produksi);
                 foreach($dataNoProduksi as $item){
                     $x = $dataJawab->where('no_retur', $value->no_dok_supp)->where('no_klaim', $value->no_retur)->where('kd_part', $value->kd_part)->where('no_produksi', $item);

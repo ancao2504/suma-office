@@ -62,7 +62,7 @@
                                 $dta_edt = json_encode((object)[
                                     'no_klaim' => $detail->no_klaim,
                                     'tgl_claim' => $detail->tgl_claim,
-                                    'no_produksi' => $detail->no_produksi,
+                                    'no_produksi' => $detail->no_produksi_list,
                                     'kd_part' => $detail->kd_part,
                                     'nm_part' => $detail->nm_part,
                                     'ket' => $detail->ket,
