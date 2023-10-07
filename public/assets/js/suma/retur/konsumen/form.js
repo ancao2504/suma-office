@@ -80,7 +80,7 @@ function listDetail(detail){
 function detail_clear(){
     $('#input_no_produk').html(`
         <div class="col-2 mt-3">
-            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" required>
+            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
         </div>
     `);
 
