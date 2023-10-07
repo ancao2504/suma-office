@@ -101,7 +101,7 @@ function simpan(tamp){
     loading.block();
     let no_produksi = [];
     for (let x = 1; x <= parseInt($('#qty_retur').val()); x++) {
-        no_produksi.push($('#no_produksi'+x).val());
+        no_produksi.push($('#no_produksi'+x).val().toUpperCase());
     }
     
     $.post(base_url + "/retur/konsumen/form",
