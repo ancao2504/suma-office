@@ -423,7 +423,7 @@ $(document).ready(function () {
             for (let x = parseInt($('#input_no_produk .col-2').length)+1; x <= parseInt($(this).val()); x++) {
                 $('#input_no_produk').append(`
                     <div class="col-2 mt-3">
-                        <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" required>
+                        <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
                     </div>
                 `);
             }

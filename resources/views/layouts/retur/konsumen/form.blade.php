@@ -260,7 +260,7 @@
                         <div class="col-sm-10">
                             <div class="row" id="input_no_produk">
                                 <div class="col-2 mt-3">
-                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" required>
+                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
                                 </div>
                             </div>
                         </div>
