@@ -2539,4 +2539,17 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+
+    public static function uploadFilePriceList($request)
+    {
+        $url = 'backend/uploadfile/pricelist/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nama_file'          => $request->nama_file,
+            'path_file'          => $request->path_file,
+            'ket_file'           => $request->ket_file
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
 }
