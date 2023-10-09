@@ -31,13 +31,13 @@ class UploadFileController extends Controller
 
         $extensi = $request->file('file')->getClientOriginalExtension();
         try {
-            $request->file('file')->move(public_path('Upload/Exel'), $request->nama_file.'.'.$extensi);
+            $request->file('file')->move(public_path('images/upload'), $request->nama_file.'.'.$extensi);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal upload file');
         }
         
         $request->merge([
-            'path_file' => asset('Upload/Exel/'.$request->nama_file.'.'.$extensi)
+            'path_file' => asset('images/upload'.$request->nama_file.'.'.$extensi)
         ]);
 
         $responseApi = json_decode(Service::uploadFilePriceList($request));
