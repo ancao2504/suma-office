@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Backend\Upload;
+namespace App\Http\Controllers\Api\Backend\Upload\File;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

@@ -50,7 +50,7 @@ use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
 use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 use App\Online\Tokopedia\OrderController as OrderTokopediaController;
-use App\Upload\File\MobilePMO\UploadFileController;
+use App\Upload\File\PriceList\UploadFileController;
 use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;

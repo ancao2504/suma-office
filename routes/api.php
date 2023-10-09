@@ -41,7 +41,7 @@ use Api\Backend\Setting\ApiSettingPartNettoDealerController;
 use Api\Backend\Reports\KonsumenController as Reportkonsumen;
 use Api\Backend\Setting\ApiSettingDiskonProdukDealerController;
 use Api\Backend\Online\Shopee\ApiOrderController as OrderShopee;
-use Api\Backend\Upload\PriceListController;
+use Api\Backend\Upload\File\PriceListController;
 use Api\Backend\Online\ApiProductController as ProductMarketplace;
 use Api\Backend\Dashboard\Marketing\ApiDashboardMarketingController;
 use Api\Backend\Online\Shopee\ApiProductController as ProductShopee;

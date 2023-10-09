@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Controllers\App\Upload\File\MobilePMO;
+namespace app\Http\Controllers\App\Upload\File\PriceList;
 
 use App\Helpers\App\Service;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ class UploadFileController extends Controller
 {
     // buat metod upload file android
     function form(){
-        return view('layouts.upload.file.mobilePMO.form',[
+        return view('layouts.upload.file.pricelist.form',[
                 'title_menu'    => 'Upload File'
             ]);
     }
@@ -44,5 +44,7 @@ class UploadFileController extends Controller
         if($responseApi->status == 0){
             return redirect()->back()->with('error', 'Gagal upload file');
         }
+
+        return redirect()->back()->with('success', 'Berhasil upload file');
     }
 }
