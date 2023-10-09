@@ -39,8 +39,7 @@
 					<!--begin::Card-->
 					<div class="card-header align-items-center py-5 gap-2 gap-md-5">
 						<div class="card-title" id="btn_filter">
-							{{-- jika tidak manager tidak bisa --}}
-							@if (session('app_user_role_id') == 'MD_H3_MGMT')
+							@if (session('app_user_role_id') === 'MD_H3_MGMT')
 							<div class="dropdown d-inline-block me-2">
 								<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 									<i class="bi bi-file-earmark-arrow-down fs-4"></i> Export
