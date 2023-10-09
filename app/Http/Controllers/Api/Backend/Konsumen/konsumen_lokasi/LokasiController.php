@@ -54,7 +54,9 @@ class LokasiController extends Controller
                     // ! Jika Bukan efo maka menyimpan data honda dan fdr
                 } else {
                     // ! jika bukan MD_H3_MGMT maka hanya bisa mengunakan lokasi default
-                    if(strtoupper(trim($request->role_id)) != 'MD_H3_MGMT'){
+                    // if(strtoupper(trim($request->role_id)) != 'MD_H3_MGMT'){ ganti jika tidak MD_H3_MGMT atau MD_H3_SPV_PC gunakan !in_array
+                    if(!in_array(strtoupper(trim($request->role_id)), ['MD_H3_MGMT', 'MD_H3_SPV_PC'])) {
+
                         $company->put('honda', (object)[
                             'divisi'    => 'honda',
                             'lokasi'    => (array)[

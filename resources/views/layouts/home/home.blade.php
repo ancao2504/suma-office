@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-lg-6 mb-10">
                 <div class="bg-light bg-opacity-50 rounded-3 pe-10 py-10 px-10">
                     <div class="d-flex flex-center w-60px h-60px rounded-3 bg-light-info bg-opacity-90 mb-10">
@@ -158,7 +158,7 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
     @push('scripts')
     @endpush

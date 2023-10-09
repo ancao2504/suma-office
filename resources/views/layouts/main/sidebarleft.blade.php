@@ -1120,7 +1120,7 @@
                     </div>
                 @endif
 
-                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KAPC']))
+                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SPV_PC', 'MD_H3_KAPC']))
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">Data</span>
@@ -1147,7 +1147,7 @@
                     </div>
                 @endif
 
-                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KAPC','MD_OL_SPV','MD_OL_ADMIN']))
+                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SPV_PC', 'MD_H3_KAPC','MD_OL_SPV','MD_OL_ADMIN']))
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">REPORT</span>
@@ -1208,7 +1208,7 @@
                     </div>
                     @endif
                     
-                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KAPC']))
+                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SPV_PC','MD_H3_KAPC']))
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('report/konsumen*') ? 'active' : '' }}"
                             href="{{ url('/report/konsumen') }}">
