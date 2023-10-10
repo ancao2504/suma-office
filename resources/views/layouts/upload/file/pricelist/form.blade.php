@@ -18,7 +18,7 @@
 							<div class="row">
 								<div class="col-12 mb-3">
 									<div class="form-group row mb-2">
-										<label for="file" class="col-sm-2 col-form-label">Nama File</label>
+										<label for="file" class="col-sm-2 col-form-label required">Nama File</label>
 										<div class="col-sm-9">
 											<input type="text" class="form-control @error('nama_file') is-invalid @enderror" id="nama_file" name="nama_file" placeholder="Nama File" value="{{ old('nama_file') }}">
 											@error('nama_file')
@@ -29,7 +29,7 @@
 								</div>
 								<div class="col-12 mb-3">
 									<div class="form-group row mb-2">
-										<label for="file" class="col-sm-2 col-form-label">File Exel</label>
+										<label for="file" class="col-sm-2 col-form-label required">File Exel</label>
 										<div class="col-sm-9">
 											<input class="form-control @error('file') is-invalid @enderror" type="file" id="file" name="file" accept=".xls, .xlsx">
 											@error('file')
@@ -40,7 +40,7 @@
 								</div>
 								<div class="col-12">
 									<div class="form-group row mb-2">
-										<label for="ket_file" class="col-sm-2 col-form-label">Keterangan</label>
+										<label for="ket_file" class="col-sm-2 col-form-label required">Keterangan</label>
 										<div class="col-sm-9">
 											<textarea type="text" class="form-control @error('ket_file') is-invalid @enderror" data-kt-autosize="true" id="ket_file" name="ket_file" rows="3">{{ old('ket_file') }}</textarea>
 											@error('ket_file')
