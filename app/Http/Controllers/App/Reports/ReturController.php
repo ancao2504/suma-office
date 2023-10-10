@@ -62,6 +62,7 @@ class ReturController extends Controller
     public function export(Request $request){
         try {
             $responseApi = Service::ExprotReportRetur($request);
+
             if (json_decode($responseApi)->status == 1) {
                 $data = json_decode($responseApi)->data;
                 return Excel::download(new Retur($data), 'Retur_Konsumen.xlsx');

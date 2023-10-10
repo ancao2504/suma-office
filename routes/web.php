@@ -1,59 +1,60 @@
 <?php
 
 use App\Auth\AuthController;
-use App\Auth\AuthShopeeController;
-use App\Dashboard\DashboardSalesmanController;
-use App\Dashboard\Marketing\DashboardMarketingController;
-use App\Http\Controllers\App\Gudang\Online\PackingController;
-use App\konsumen\KonsumenController;
-use App\Online\ApproveOrderController as ApproveOrderController;
-use App\Online\PemindahanController as PemindahanMarketplace;
-use App\Online\ProductController;
-use App\Online\SerahTerimaController;
-use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
-use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
-use App\Online\Shopee\OrderController as OrderShopeeController;
-use App\Online\Shopee\PemindahanController as PemindahanShopee;
-use App\Online\Shopee\ProductController as ProductShopee;
-use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
-use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
-use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
-use App\Online\Tokopedia\OrderController as OrderTokopediaController;
-use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
-use App\Online\Tokopedia\ProductController as ProductTokopediaController;
-use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
-use App\Option\OptionController;
-use App\Orders\Cart\CartController;
-use App\Orders\Cart\Index\CartIndexController;
-use App\Orders\FakturController;
-use App\Orders\PembayaranFaktur\PembayaranFakturController;
-use App\Orders\Penerimaan\PembayaranController;
-use App\Orders\Penerimaan\SuratJalanController;
-use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
-use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
-use App\Orders\TrackingOrderController;
-use App\Parts\PartNumberController;
-use App\Parts\StockHarianController;
-use App\Parts\uplooadImageController;
-use App\Profile\AccountController;
-use App\Profile\DealerController;
 use App\Profile\UserController;
-use App\Reports\FakturController as ReportFaktur;
-use App\Reports\KonsumenController as ReportKonsumen;
-use App\Reports\ReturController as ReportRetur;
-use App\Reports\PackingController as ReportPacking;
-use App\Retur\KonsumenController as ReturKonsumen;
-use App\Retur\SupplierController as ReturSupplier;
-use App\Retur\SupplierJawabController as ReturSupplierJawab;
-use App\Setting\CetakUlang\CetakUlangController;
+use App\Option\OptionController;
+use App\Orders\FakturController;
+use App\Online\ProductController;
+use App\Profile\DealerController;
+use App\Auth\AuthShopeeController;
+use App\Profile\AccountController;
+use App\Orders\Cart\CartController;
+use App\Parts\PartNumberController;
+use App\konsumen\KonsumenController;
+use App\Parts\StockHarianController;
+use App\Validasi\ValidasiController;
+use App\Online\SerahTerimaController;
+use App\Parts\uplooadImageController;
+use Illuminate\Support\Facades\Route;
+use App\Visit\PlanningVisitController;
+use App\Orders\TrackingOrderController;
+use App\Dashboard\DashboardSalesmanController;
+use App\Orders\Cart\Index\CartIndexController;
 use App\Setting\Diskon\DiskonDealerController;
 use App\Setting\Diskon\DiskonProdukController;
+use App\Orders\Penerimaan\PembayaranController;
+use App\Orders\Penerimaan\SuratJalanController;
+use App\Reports\ReturController as ReportRetur;
+use App\Setting\CetakUlang\CetakUlangController;
+use App\Reports\FakturController as ReportFaktur;
+use App\Retur\KonsumenController as ReturKonsumen;
+use App\Retur\SupplierController as ReturSupplier;
+use App\Reports\PackingController as ReportPacking;
 use App\setting\Diskon\DiskonProdukDealerController;
+use App\Reports\KonsumenController as ReportKonsumen;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
+use App\Dashboard\Marketing\DashboardMarketingController;
+use App\Online\Shopee\ProductController as ProductShopee;
+use App\Orders\PembayaranFaktur\PembayaranFakturController;
+use App\Retur\SupplierJawabController as ReturSupplierJawab;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
-use App\Validasi\ValidasiController;
-use App\Visit\PlanningVisitController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\App\Gudang\Online\PackingController;
+use App\Online\PemindahanController as PemindahanMarketplace;
+use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
+use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
+use App\Online\Shopee\OrderController as OrderShopeeController;
+use App\Online\Shopee\PemindahanController as PemindahanShopee;
+use App\Online\ApproveOrderController as ApproveOrderController;
+use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
+use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
+use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
+use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
+use App\Online\Tokopedia\OrderController as OrderTokopediaController;
+use App\Upload\File\PriceList\UploadFileController;
+use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
+use App\Online\Tokopedia\ProductController as ProductTokopediaController;
+use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
+use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -690,6 +691,17 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::post('konsumen/delete', 'konsumenDelete')->name('delete');
             });
         });
+
+        Route::name('Upload.')->group(function () {
+            Route::name('file.')->group(function () {
+                Route::controller(UploadFileController::class)->group(function () {
+                    Route::get('/uploadfile/pricelist', 'form')->name('form-pricelist');
+                    Route::post('/uploadfile/pricelist/simpan', 'store')->name('simpan-pricelist');
+                    Route::post('/uploadfile/pricelist/hapus', 'destroy')->name('hapus-pricelist');
+                });
+            });
+        });
+        
         // ! end 
     });
 

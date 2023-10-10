@@ -41,7 +41,7 @@ function simpan(tamp){
 
 
         let no_produksi = [];
-        for (let x = 0; x < parseInt($('#qty_klaim').val()); x++) {
+        for (let x = 1; x < parseInt($('#qty_klaim').val())+1; x++) {
             no_produksi.push($('#no_produksi'+x).val());
         }
         $.post(base_url + "/retur/supplier/form",
@@ -86,7 +86,7 @@ function simpan(tamp){
                         // no_dus : $('#no_dus').val(),
                         no_klaim : $('#no_klaim').val(),
                         tgl_claim : $('#tgl_claim').val(),
-                        no_produksi : no_produksi.join(','),
+                        no_produksi : no_produksi,
                         kd_part : $('#kd_part').val(),
                         nm_part : $('#nm_part').val(),
                         ket : (
@@ -214,7 +214,7 @@ function edit_detail(val){
     $('#nm_part').val(val.nm_part);
     $('#qty_klaim').val(val.jumlah);
     $('#input_no_produk').html('');
-    $.each(val.no_produksi.split(','), function (index, value) {
+    $.each(val.no_produksi, function (index, value) {
         $('#input_no_produk').append(`
             <div class="col-2 mt-3">
                 <input type="text" class="form-control" id="no_produksi${index}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
@@ -412,5 +412,9 @@ $(document).ready(function () {
         }else{
             $('#detail_modal  #ket').attr('hidden', true);
         }
+    });
+
+    $('#klaim-list').on('click', '.close', function () {
+        $('#detail_modal').modal('show');
     });
 });

@@ -986,10 +986,12 @@ class ApiOptionsController extends Controller
                         ->where('rtoko_dtl.CompanyId', $request->companyid)
                         ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
                         ->groupBy('rtoko_dtl.no_klaim','rtoko_dtl.CompanyId');
-                    },'rtoko_dtl')->leftJoin('klaim_dtl', function($join){
-                        $join->on('klaim_dtl.no_dokumen', '=', 'rtoko_dtl.no_klaim')
-                        ->on('klaim_dtl.CompanyId', '=', 'rtoko_dtl.CompanyId');
+                    }, 'rtoko_dtl')
+                    ->join('klaim_dtl', function($join){
+                        $join->on('rtoko_dtl.no_klaim', '=', 'klaim_dtl.no_dokumen')
+                        ->on('rtoko_dtl.CompanyId', '=', 'klaim_dtl.CompanyId');
                     })
+                    ->where('klaim_dtl.sts_klaim',  '1')
                     ->select('klaim_dtl.kd_part','klaim_dtl.no_produksi')
                     ->get()
                 )->groupBy('kd_part');
@@ -1046,11 +1048,11 @@ class ApiOptionsController extends Controller
                 $query->select('*')
                     ->from('rtoko')
                     ->joinSub(function ($query) use ($request) {
-                        $query->select('rtoko_dtl.no_retur as no_dokumen','rtoko_dtl.status')
+                        $query->select('rtoko_dtl.no_retur as no_dokumen','rtoko_dtl.status','rtoko_dtl.kd_part')
                             ->from('rtoko_dtl')
                             ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
                             ->where('rtoko_dtl.CompanyId', $request->companyid)
-                            ->groupBy('rtoko_dtl.no_retur','rtoko_dtl.status','rtoko_dtl.CompanyId');
+                            ->groupBy('rtoko_dtl.no_retur','rtoko_dtl.status','rtoko_dtl.kd_part');
                     }, 'rtoko_dtl', function ($join) {
                         $join->on('rtoko.no_retur', '=', 'rtoko_dtl.no_dokumen');
                     })
@@ -1059,7 +1061,8 @@ class ApiOptionsController extends Controller
                         $query = $query->where(function($query) use ($request){
                             $query->where('rtoko.no_retur', 'LIKE', '%'.$request->no_retur . '%')
                             ->orWhere('rtoko.kd_dealer', 'LIKE', '%'.$request->no_retur . '%')
-                            ->orWhere('rtoko.tanggal', 'LIKE', '%'.$request->no_retur . '%');
+                            ->orWhere('rtoko.tanggal', 'LIKE', '%'.$request->no_retur . '%')
+                            ->orWhere('rtoko_dtl.kd_part', 'LIKE', '%'.$request->no_retur . '%');
                         });
                     }
                     return $query;
@@ -1077,6 +1080,21 @@ class ApiOptionsController extends Controller
                 ->orderBy('retur.no_retur', 'desc')
                 ->groupBy('retur.no_retur','retur.tanggal','retur.kd_dealer')
                 ->paginate($request->per_page);
+
+
+                $detail = collect(DB::table(function ($query) use ($request, $data) {
+                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part')
+                    ->from('rtoko_dtl')
+                    ->where('rtoko_dtl.CompanyId', $request->companyid)
+                    ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
+                    ->whereIn('rtoko_dtl.no_retur', collect($data->items())->pluck('no_retur')->toArray());
+                }, 'rtoko_dtl')
+                ->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part')
+                ->get())->groupBy('no_retur');
+
+                foreach($data->items() as $key => $value){
+                    $data->items()[$key]->detail = $detail[$value->no_retur]->pluck('kd_part');
+                }
             }
 
             return Response::responseSuccess('success', $data);

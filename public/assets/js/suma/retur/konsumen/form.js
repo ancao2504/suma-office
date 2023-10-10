@@ -80,7 +80,7 @@ function listDetail(detail){
 function detail_clear(){
     $('#input_no_produk').html(`
         <div class="col-2 mt-3">
-            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" required>
+            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
         </div>
     `);
 
@@ -101,7 +101,7 @@ function simpan(tamp){
     loading.block();
     let no_produksi = [];
     for (let x = 1; x <= parseInt($('#qty_retur').val()); x++) {
-        no_produksi.push($('#no_produksi'+x).val());
+        no_produksi.push($('#no_produksi'+x).val().toUpperCase());
     }
     
     $.post(base_url + "/retur/konsumen/form",
@@ -423,7 +423,7 @@ $(document).ready(function () {
             for (let x = parseInt($('#input_no_produk .col-2').length)+1; x <= parseInt($(this).val()); x++) {
                 $('#input_no_produk').append(`
                     <div class="col-2 mt-3">
-                        <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" required>
+                        <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
                     </div>
                 `);
             }

@@ -238,7 +238,7 @@
                         <label for="kd_part" class="col-sm-2 col-form-label required">Part Number</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="" required>
+                                <input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="" style="text-transform: uppercase;" required>
                                 <button class="btn btn-primary list-part" type="button">Pilih</button>
                             </div>
                         </div>
@@ -260,7 +260,7 @@
                         <div class="col-sm-10">
                             <div class="row" id="input_no_produk">
                                 <div class="col-2 mt-3">
-                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" required>
+                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
                                 </div>
                             </div>
                         </div>

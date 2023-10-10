@@ -42,7 +42,7 @@
                                     'no_klaim' => $detail->no_klaim,
                                     'kd_part' => $detail->kd_part,
                                     'no_produksi_list' => $detail->no_produksi_list,
-                                    'harga' => (float)$detail->hrg_pokok,
+                                    'harga' => (float)$detail->het,
                                     'detail_jwb' => $detail->detail_jwb
                                 ]
                             @endphp

@@ -205,6 +205,8 @@
 @push('scripts')
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/getDealer.js')}}?v={{ time() }}"></script>
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/index.js')}}?v={{ time() }}"></script>
+	
+	@if (!Agent::isMobile())
 	<script>
 		const tableContainer = $(".table-responsive");
 		const scrollTable = $(".table");
@@ -250,5 +252,6 @@
 			document.body.style.cursor = "default";
 		});
 	</script>
+	@endif
 		
 @endpush

@@ -54,7 +54,7 @@ function report(page = 1) {
                         $('#table_list tbody').append(`
                             <tr class="fw-bolder fs-8 border">
                                 <td class="ps-3 pe-3 text-center">${ no++}</td>
-                                <td class="ps-3 pe-3">${value.no_klaim??'-'}</td>
+                                <td class="ps-3 pe-3">${value.no_klaim.replace(/\s/g, '')??'-'}</td>
                                 <td class="ps-3 pe-3">${value.kd_part??'-'}</td>
                                 <td class="ps-3 pe-3">${value.tgl_klaim?moment(value.tgl_klaim).format('YYYY/MM/DD'):'-'}</td>
                                 <td class="ps-3 pe-3">${value.tgl_rtoko?moment(value.tgl_rtoko).format('YYYY/MM/DD'):'-'}</td>
@@ -190,7 +190,6 @@ $(document).ready(function () {
                 });
                 return false;
             }
-            
             var blob = new Blob([response], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             });

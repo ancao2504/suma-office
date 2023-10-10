@@ -62,7 +62,7 @@
                                 $dta_edt = json_encode((object)[
                                     'no_klaim' => $detail->no_klaim,
                                     'tgl_claim' => $detail->tgl_claim,
-                                    'no_produksi' => $detail->no_produksi,
+                                    'no_produksi' => $detail->no_produksi_list,
                                     'kd_part' => $detail->kd_part,
                                     'nm_part' => $detail->nm_part,
                                     'ket' => $detail->ket,
@@ -144,7 +144,7 @@
                         <label for="no_klaim" class="col-sm-2 col-form-label required">No Klaim</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="no_klaim" name="no_klaim" placeholder="No Klaim" value="" required>
+                                <input type="text" class="form-control" id="no_klaim" name="no_klaim" placeholder="No Klaim" value="" style="text-transform: uppercase;" required>
                                 <button class="btn btn-primary list-klaim" type="button">Pilih</button>
                             </div>
                         </div>
@@ -157,7 +157,7 @@
                         <label for="kd_part" class="col-sm-2 col-form-label required">Part Number</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="">
+                                <input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="" style="text-transform: uppercase;">
                                 <button class="btn btn-primary list-part" type="button">Pilih</button>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                         </div>
                         <label for="no_ps" class="col-sm-2 col-form-label">No Packing Sheet</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="no_ps" name="no_ps" placeholder="Masukkan No Packing Sheet" value="" required>
+                            <input type="text" class="form-control" id="no_ps" name="no_ps" placeholder="Masukkan No Packing Sheet" value="" style="text-transform: uppercase;" required>
                         </div>
                     </div>
                     {{-- <div class="form-group row mb-2">

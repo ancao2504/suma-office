@@ -1630,7 +1630,7 @@ class OptionController extends Controller
             $respon = json_decode($responseApi)->data;
 
             return Response()->json(['status' => 1, 'message' => $messageApi, 'data' => $respon], 200);
-        } else if($statusApi == 0) {
+        } elseif($statusApi == 0) {
             return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
         } else {
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
@@ -1648,7 +1648,7 @@ class OptionController extends Controller
             
             if($request->option == 'first'){
                 $respon = $data;
-            }else if($request->option == 'page'){
+            }elseif($request->option == 'page'){
                 $respon = view('layouts.option.option', [
                     'data' => $data,
                     'modal' => (object)[
@@ -1697,7 +1697,7 @@ class OptionController extends Controller
                 ])->render();
             }
             return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
-        } else if($statusApi == 0) {
+        } elseif($statusApi == 0) {
             return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
         } else {
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
@@ -1712,8 +1712,8 @@ class OptionController extends Controller
             $data = json_decode($responseApi)->data;
             if($request->option[0] == 'first'){
                 $respon = $data;
-            }else if($request->option[0] == 'page'){
-                $respon = view('layouts.option.option', [
+            }elseif($request->option[0] == 'page'){
+                $respon = view('layouts.option.optionRetur', [
                     'data' => $data,
                     'modal' => (object)[
                         'title' => 'List Klaim',
@@ -1722,24 +1722,6 @@ class OptionController extends Controller
                     'cari' => (object)[
                         'title' => 'cari',
                         'value' => $request->no_retur,
-                    ],
-                    'table' => (object)[
-                        'thead' => [
-                            (object)['class' => 'w-50px', 'text' => 'Dealer'],
-                            (object)['class' => 'w-50px', 'text' => 'Nomor Klaim'],
-                            (object)['class' => 'w-50px', 'text' => 'Tanggal Klaim'],
-                            (object)['class' => 'w-25', 'text' => 'Action'],
-                        ],
-                        'tbody' => [
-                            (object)[ 'option' => 'text', 'class' => 'w-50px text-center', 'key' => 'kd_dealer'],
-                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'no_retur'],
-                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'tanggal'],
-                            (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
-                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
-                                    'data' => [(object)['key' => 'a','value' => ['no_retur','tanggal','kd_dealer']]]
-                                ],
-                            ]],
-                        ],
                     ],
                     'per_page' => (object)[
                         'value' => $request->per_page,
