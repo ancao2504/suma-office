@@ -92,7 +92,10 @@
 											<tr class="fw-bolder fs-8 border">
 												<td class="text-center">{{ $loop->iteration }}</td>
 												<td class="text-center">{{ $item->nama_file }}</td>
-												<td class="text-center">{{ $item->tanggal }}</td>
+												<td class="text-center">
+													{{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('D MMMM Y') }}<br>
+													{{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('HH:mm') }}<br>
+												</td>
 												<td class="text-center">{{ $item->keterangan }}</td>
 												<td class="text-center">
 													<a href="{{ $item->lokasi_file }}" class="btn btn-sm btn-success" target="_blank">Download</a>
