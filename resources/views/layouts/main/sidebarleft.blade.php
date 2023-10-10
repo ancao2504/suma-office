@@ -266,52 +266,28 @@
                 @endif
 
                 @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
-                    <div class="menu-item">
-                        <a class="menu-link {{ Request::is('parts/backorder*') ? 'active' : '' }}"
-                            href="{{ route('parts.backorder.daftar') }}">
-                            <span class="menu-icon">
-                                <span class="svg-icon svg-icon-muted svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3"
-                                            d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z"
-                                            fill="currentColor"></path>
-                                        <path
-                                            d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z"
-                                            fill="currentColor"></path>
-                                    </svg>
+                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
+                        <div class="menu-item">
+                            <a class="menu-link {{ Request::is('parts/backorder*') ? 'active' : '' }}"
+                                href="{{ route('parts.backorder.daftar') }}">
+                                <span class="menu-icon">
+                                    <span class="svg-icon svg-icon-muted svg-icon-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3"
+                                                d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z"
+                                                fill="currentColor"></path>
+                                            <path
+                                                d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z"
+                                                fill="currentColor"></path>
+                                        </svg>
+                                    </span>
                                 </span>
-                            </span>
-                            <span class="menu-title {{ Request::is('parts/backorder*') ? 'active' : '' }}">Back
-                                Order</span>
-                        </a>
-                    </div>
-                @endif
-                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_ADMIN']))
-                    <div class="menu-item">
-                        <a class="menu-link {{ Request::is('parts/uploadimage/part*') ? 'active' : '' }}"
-                            href="{{ route('parts.uploadimage.form-input') }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen006.svg-->
-                                <span class="svg-icon svg-icon-muted svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path opacity="0.3"
-                                            d="M22 5V19C22 19.6 21.6 20 21 20H19.5L11.9 12.4C11.5 12 10.9 12 10.5 12.4L3 20C2.5 20 2 19.5 2 19V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5ZM7.5 7C6.7 7 6 7.7 6 8.5C6 9.3 6.7 10 7.5 10C8.3 10 9 9.3 9 8.5C9 7.7 8.3 7 7.5 7Z"
-                                            fill="currentColor" />
-                                        <path
-                                            d="M19.1 10C18.7 9.60001 18.1 9.60001 17.7 10L10.7 17H2V19C2 19.6 2.4 20 3 20H21C21.6 20 22 19.6 22 19V12.9L19.1 10Z"
-                                            fill="currentColor" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span
-                                class="menu-title {{ Request::is('parts/uploadimage/part*') ? 'active' : '' }}">Upload
-                                Gambar
-                                Part</span>
-                        </a>
-                    </div>
+                                <span class="menu-title {{ Request::is('parts/backorder*') ? 'active' : '' }}">Back
+                                    Order</span>
+                            </a>
+                        </div>
+                    @endif
                 @endif
                 @if (in_array(session()->get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KORSM', 'MD_H3_SM']))
                     <div class="menu-item">
@@ -1147,12 +1123,37 @@
                     </div>
                 @endif
 
-                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
+                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_ADMIN']))
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">UPLOAD</span>
                         </div>
                     </div>
+                    
+                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_ADMIN']))
+                        <div class="menu-item">
+                            <a class="menu-link {{ Request::is('parts/uploadimage/part*') ? 'active' : '' }}"
+                                href="{{ route('parts.uploadimage.form-input') }}">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen006.svg-->
+                                    <span class="svg-icon svg-icon-muted svg-icon-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3"
+                                                d="M22 5V19C22 19.6 21.6 20 21 20H19.5L11.9 12.4C11.5 12 10.9 12 10.5 12.4L3 20C2.5 20 2 19.5 2 19V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5ZM7.5 7C6.7 7 6 7.7 6 8.5C6 9.3 6.7 10 7.5 10C8.3 10 9 9.3 9 8.5C9 7.7 8.3 7 7.5 7Z"
+                                                fill="currentColor" />
+                                            <path
+                                                d="M19.1 10C18.7 9.60001 18.1 9.60001 17.7 10L10.7 17H2V19C2 19.6 2.4 20 3 20H21C21.6 20 22 19.6 22 19V12.9L19.1 10Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span
+                                    class="menu-title {{ Request::is('parts/uploadimage/part*') ? 'active' : '' }}">Gambar Part</span>
+                            </a>
+                        </div>
+                    @endif
                     
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
                     <div class="menu-item">
