@@ -697,6 +697,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::controller(UploadFileController::class)->group(function () {
                     Route::get('/uploadfile/pricelist', 'form')->name('form-pricelist');
                     Route::post('/uploadfile/pricelist/simpan', 'store')->name('simpan-pricelist');
+                    Route::post('/uploadfile/pricelist/hapus', 'destroy')->name('hapus-pricelist');
                 });
             });
         });

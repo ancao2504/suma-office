@@ -619,7 +619,9 @@ Route::group(['middleware' => 'authBasic'], function () {
             Route::name('Upload.')->group(function () {
                 Route::name('file.')->group(function () {
                     Route::controller(PriceListController::class)->group(function () {
+                        Route::post('backend/uploadfile/pricelist', 'index')->name('get');
                         Route::post('backend/uploadfile/pricelist/simpan', 'store')->name('simpan');
+                        Route::post('backend/uploadfile/pricelist/hapus', 'destroy')->name('hapus');
                     });
                 });
             });

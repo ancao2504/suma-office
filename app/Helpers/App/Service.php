@@ -2540,6 +2540,16 @@ class Service
         return $response;
     }
 
+    public static function getPriceList($request)
+    {
+        $url = 'backend/uploadfile/pricelist';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nama_file'          => $request->nama_file,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
     public static function uploadFilePriceList($request)
     {
         $url = 'backend/uploadfile/pricelist/simpan';
@@ -2548,6 +2558,17 @@ class Service
             'nama_file'          => $request->nama_file,
             'path_file'          => $request->path_file,
             'ket_file'           => $request->ket_file
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function deleteFilePriceList($request)
+    {
+        $url = 'backend/uploadfile/pricelist/hapus';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nama_file'          => $request->nama_file,
+            'tanggal'            => $request->tanggal,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
