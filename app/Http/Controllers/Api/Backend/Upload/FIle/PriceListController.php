@@ -40,13 +40,12 @@ class PriceListController extends Controller
         }
 
         try {
-            DB::table('pricelist')->updateOrInsert(
-                ['nama_file' => $request->nama_file],
+            DB::table('pricelist')->insert(
                 [
-                    'tanggal'       => date('Y-m-d H:i:s'),
                     'nama_file'     => $request->nama_file,
+                    'tanggal'       => date('Y-m-d H:i:s'),
                     'lokasi_file'   => $request->path_file,
-                    'keterangan'    => $request->ket_file
+                    'keterangan'    => $request->ket_file,
                 ]
             );
 
@@ -61,8 +60,6 @@ class PriceListController extends Controller
                 $request->get('companyid')??null,
             );
         }
-
-        
     }
 
     function destroy(Request $request){
