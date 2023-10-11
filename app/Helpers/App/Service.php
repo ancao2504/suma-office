@@ -2243,7 +2243,7 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
-    
+
     public static function dataSupplier($request){
         $url = 'backend/supplier';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -2293,7 +2293,7 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
-    
+
     public static function dataTypemotor($request){
         $url = 'backend/typemotor';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -2321,7 +2321,7 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
-    
+
     public static function dataFaktur($request){
         $url = 'backend/faktur';
         $header = ['Authorization' => session()->get('Authorization')];
@@ -2403,7 +2403,7 @@ class Service
         return $response;
     }
 
-    
+
     public static function KonsumenDaftar($request)
     {
         $url = 'backend/konsumen';

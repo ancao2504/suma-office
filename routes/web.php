@@ -55,7 +55,10 @@ use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
-
+use App\Online\Tiktok\PemindahanController as PemindahanTiktokController;
+use App\Online\Tiktok\ProductController as ProductTiktokController;
+use App\Online\Tiktok\EkspedisiController as EkspedisiTiktok;
+use App\Online\Tiktok\OrderController as OrderTiktokController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -297,7 +300,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/option/tipemotor', 'optionTipeMotor')->name('tipe-motor');
                 Route::get('/option/groupproduk', 'OptionGroupProduk')->name('group-produk');
                 Route::get('/option/updateharga', 'OptionUpdateHarga')->name('update-harga');
-                
+
                 // ! dari aplikasi suma sby
                 Route::get('/retur', 'retur')->name('option-retur');
                 Route::get('/dealer', 'dealer')->name('option-dealer');
@@ -449,6 +452,23 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         });
                     });
                 });
+
+                Route::name('tiktok.')->group(function () {
+                    Route::controller(PemindahanTiktokController::class)->group(function () {
+                        Route::get('/online/pemindahan/tiktok/daftar', 'daftarPemindahan')->name('daftar');
+
+                        Route::name('form.')->group(function () {
+                            Route::get('/online/pemindahan/tiktok/form/detail', 'formPemindahanDetail')->name('detail');
+                            Route::get('/online/pemindahan/tiktok/form/{nomor_dokumen}', 'formPemindahan')->where('nomor_dokumen', '(.*)')->name('form');
+
+                            Route::name('update.')->group(function () {
+                                Route::post('/online/pemindahan/tiktok/form/update/partnumber', 'updateStockPerPartNumber')->name('part-number');
+                                Route::post('/online/pemindahan/tiktok/form/update/statuspartnumber', 'updateStatusPerPartNumber')->name('status-part-number');
+                                Route::post('/online/pemindahan/tiktok/form/update/dokumen', 'updateStockPerNomorDokumen')->name('dokumen');
+                            });
+                        });
+                    });
+                });
             });
 
             Route::name('updateharga.')->group(function () {
@@ -508,6 +528,15 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     });
                 });
 
+                Route::name('tiktok.')->group(function () {
+                    Route::controller(ProductTiktokController::class)->group(function () {
+                        Route::get('/online/product/tiktok/index', 'index')->name('index');
+                        Route::get('/online/product/tiktok/index/daftar', 'daftarPartNumber')->name('daftar');
+                        Route::post('/online/product/tiktok/index/cek', 'cekProductId')->name('cek');
+                        Route::post('/online/product/tiktok/index/update', 'updateProductId')->name('update');
+                    });
+                });
+
                 Route::controller(ProductController::class)->group(function () {
                     Route::get('/online/product/marketplace/daftar', 'daftarProduct')->name('daftar');
                     Route::get('/online/product/marketplace/form/{part_number}', 'formProduct')->name('form');
@@ -557,6 +586,18 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::get('/online/orders/shopee/single', 'singleOrder')->name('single');
                     });
                 });
+
+                Route::name('tiktok.')->group(function () {
+                    Route::controller(OrderTiktokController::class)->group(function () {
+                        Route::name('form.')->group(function () {
+                            Route::post('/online/orders/tiktok/single/form/proses', 'prosesOrder')->name('proses');
+                            Route::post('/online/orders/tiktok/single/form/pickup', 'prosesPickup')->name('pickup');
+                            Route::get('/online/orders/tiktok/single/form/{nomor_invoice}', 'formOrder')->where('nomor_invoice', '(.*)')->name('form');
+                        });
+                        Route::get('/online/orders/tiktok/daftar', 'daftarOrder')->name('daftar');
+                        Route::get('/online/orders/tiktok/single', 'singleOrder')->name('single');
+                    });
+                });
             });
 
             Route::name('ekspedisi.')->group(function () {
@@ -571,6 +612,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::controller(EkspedisiShopee::class)->group(function () {
                         Route::get('/online/ekspedisi/shopee/daftar', 'daftarEkspedisi')->name('daftar');
                         Route::post('/online/ekspedisi/shopee/simpan', 'simpanEkspedisi')->name('simpan');
+                    });
+                });
+
+                Route::name('tiktok.')->group(function () {
+                    Route::controller(EkspedisiTiktok::class)->group(function () {
+                        Route::get('/online/ekspedisi/tiktok/daftar', 'daftarEkspedisi')->name('daftar');
+                        Route::post('/online/ekspedisi/tiktok/simpan', 'simpanEkspedisi')->name('simpan');
                     });
                 });
             });
@@ -602,6 +650,8 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::post('/online/serahterima/form/shopee/cetaklabel', 'prosesCetakLabelShopee')->name('cetak-label-shopee');
                         Route::post('/online/serahterima/form/tokopedia/requestpickup', 'requestPickupTokopedia')->name('tokopedia-request-pickup');
                         Route::post('/online/serahterima/form/tokopedia/cetaklabel', 'prosesCetakLabelTokopedia')->name('cetak-label-tokopedia');
+                        Route::post('/online/serahterima/form/tiktok/requestpickup', 'requestPickupTiktok')->name('tiktok-request-pickup');
+                        Route::post('/online/serahterima/form/tiktok/cetaklabel', 'prosesCetakLabelTiktok')->name('cetak-label-tiktok');
 
                         Route::post('/online/serahterima/form/proses/requestpickup', 'requestPickupPerNomorFaktur')->name('request-pickup');
                         Route::post('/online/serahterima/form/proses/updatestatus', 'updateStatusPerNomorFaktur')->name('update-status');
@@ -638,7 +688,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                     Route::get('/retur/supplier/form',  'form')->name('form');
                     Route::post('/retur/supplier/form',  'store')->name('store');
                     Route::post('/retur/supplier/delete',  'destroy')->name('delete');
-                    
+
                     Route::name('jawab.')->group(function () {
                         Route::controller(ReturSupplierJawab::class)->group(function () {
                             Route::get('/retur/supplier/jawab/form',  'form')->name('form');
@@ -701,8 +751,6 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 });
             });
         });
-        
-        // ! end 
     });
 
     Route::get('/reportheader', function () {

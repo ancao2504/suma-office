@@ -80,6 +80,7 @@ class ApiAuthController extends Controller
 
                     $status_tokopedia = '';
                     $status_shopee = '';
+                    $status_tiktok = '';
 
                     if(strtoupper(trim($sql->role_id)) == 'MD_H3_MGMT' || strtoupper(trim($sql->role_id)) == 'MD_H3_FIN' ||
                         Str::contains(strtoupper(trim($sql->role_id)), 'OL')) {
@@ -98,6 +99,14 @@ class ApiAuthController extends Controller
                         if($responseShopee->status == 0) {
                             $status_shopee = $responseShopee->message;
                         }
+
+                        // ====================================================================================
+                        // Access Token Tiktok
+                        // ====================================================================================
+                        $responseTiktok = UpdateToken::tiktok($request->get('token'));
+                        if($responseTiktok->status == 0) {
+                            $status_tiktok = $responseTiktok->message;
+                        }
                     }
 
 
@@ -113,6 +122,7 @@ class ApiAuthController extends Controller
                         'photo'     => trim($sql->photo),
                         'tokopedia' => trim($status_tokopedia),
                         'shopee'    => trim($status_shopee),
+                        'tiktok'    => trim($status_tiktok),
                         'companyid' => strtoupper(trim($sql->companyid)),
                     ]);
                     return Response::responseSuccess("success", $data_user->first());

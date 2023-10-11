@@ -63,7 +63,11 @@ use Api\Backend\Online\Tokopedia\ApiEkspedisiController as EkspedisiTokopedia;
 use Api\Backend\Online\Tokopedia\ApiPemindahanController as PemindahanTokopedia;
 use Api\Backend\Online\Tokopedia\ApiUpdateHargaController as UpdateHargaTokopedia;
 use Api\Backend\Online\Tokopedia\ApiHistorySaldoController as HistorySaldoTokopedia;
-
+use Api\Backend\Online\Tiktok\ApiPemindahanController as PemindahanTiktok;
+use Api\Backend\Online\Tiktok\ApiOrderController as OrderTiktok;
+use Api\Backend\Online\Tiktok\ApiProductController as ProductTiktok;
+use Api\Backend\Online\Tiktok\ApiEkspedisiController as EkspedisiTiktok;
+use Api\Backend\Online\Tiktok\ApiShippingController as ShippingTiktok;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -74,6 +78,7 @@ use Api\Backend\Online\Tokopedia\ApiHistorySaldoController as HistorySaldoTokope
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -393,6 +398,17 @@ Route::group(['middleware' => 'authBasic'], function () {
                             Route::post('/backend/online/pemindahan/shopee/update/statuspartnumber', 'updateStatusPerPartNumber');
                         });
                     });
+
+                    Route::name('tiktok.')->group(function () {
+                        Route::controller(PemindahanTiktok::class)->group(function () {
+                            Route::post('/backend/online/pemindahan/tiktok/daftar', 'daftarPemindahan');
+                            Route::post('/backend/online/pemindahan/tiktok/form', 'formPemindahan');
+                            Route::post('/backend/online/pemindahan/tiktok/form/detail', 'formDetailPemindahan');
+                            Route::post('/backend/online/pemindahan/tiktok/form/update/statuspartnumber', 'updateStatusPerPartNumber');
+                            Route::post('/backend/online/pemindahan/tiktok/form/update/partnumber', 'updateStockPerPartNumber');
+                            Route::post('/backend/online/pemindahan/tiktok/form/update/dokumen', 'updateStockPerNomorDokumen');
+                        });
+                    });
                 });
 
                 Route::name('updateharga.')->group(function () {
@@ -441,6 +457,14 @@ Route::group(['middleware' => 'authBasic'], function () {
                         });
                     });
 
+                    Route::name('tiktok.')->group(function () {
+                        Route::controller(ProductTiktok::class)->group(function () {
+                            Route::post('/backend/online/products/tiktok/daftar', 'daftarPartNumber');
+                            Route::post('/backend/online/products/tiktok/cek/productid', 'cekProductId');
+                            Route::post('/backend/online/products/tiktok/update', 'updateProductID');
+                        });
+                    });
+
                     Route::controller(ProductMarketplace::class)->group(function () {
                         Route::post('/backend/online/products/marketplace/daftar',  'DaftarProduct');
                         Route::post('/backend/online/products/marketplace/detail',  'DetailProduct');
@@ -465,6 +489,15 @@ Route::group(['middleware' => 'authBasic'], function () {
                             Route::post('/backend/online/orders/shopee/single', 'singleOrder');
                             Route::post('/backend/online/orders/shopee/form', 'formOrder');
                             Route::post('/backend/online/orders/shopee/proses', 'prosesFaktur');
+                        });
+                    });
+
+                    Route::name('tiktok.')->group(function () {
+                        Route::controller(OrderTiktok::class)->group(function () {
+                            Route::post('/backend/online/orders/tiktok/daftar', 'daftarOrder');
+                            Route::post('/backend/online/orders/tiktok/single', 'singleOrder');
+                            Route::post('/backend/online/orders/tiktok/form', 'formOrder');
+                            Route::post('/backend/online/orders/tiktok/proses', 'prosesFaktur');
                         });
                     });
 
@@ -497,6 +530,13 @@ Route::group(['middleware' => 'authBasic'], function () {
                             Route::post('/backend/online/shipping/shopee/cetak-label', 'prosesCetakLabel');
                         });
                     });
+
+                    Route::name('tiktok.')->group(function () {
+                        Route::controller(ShippingTiktok::class)->group(function () {
+                            Route::post('/backend/online/shipping/tiktok/pickup', 'prosesPickup');
+                            Route::post('/backend/online/shipping/tiktok/cetak-label', 'prosesCetakLabel');
+                        });
+                    });
                 });
 
                 Route::name('ekspedisi.')->group(function () {
@@ -511,6 +551,13 @@ Route::group(['middleware' => 'authBasic'], function () {
                         Route::controller(EkspedisiShopee::class)->group(function () {
                             Route::post('/backend/online/ekspedisi/shopee/daftar', 'daftarEkspedisi');
                             Route::post('/backend/online/ekspedisi/shopee/simpan', 'simpanEkspedisi');
+                        });
+                    });
+
+                    Route::name('tiktok.')->group(function () {
+                        Route::controller(EkspedisiTiktok::class)->group(function () {
+                            Route::post('/backend/online/ekspedisi/tiktok/daftar', 'daftarEkspedisi');
+                            Route::post('/backend/online/ekspedisi/tiktok/simpan', 'simpanEkspedisi');
                         });
                     });
                 });

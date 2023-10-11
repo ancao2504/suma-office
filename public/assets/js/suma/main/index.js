@@ -32,13 +32,13 @@ $(document).ready(function() {
 
     enter_input();
 
-    
+
     // let href = '';
     // $(document).on('contextmenu', function (e) {
     //     e.preventDefault();
     //     e.stopPropagation();
     //     href = ($(e.target).hasClass('menu-title') && $(e.target).parent('a').hasClass('menu-link'))?$(e.target).parent('a').attr('href'):'';
-        
+
     //     ($('body #menu_klik_Kanan').length > 0)?$('body #menu_klik_Kanan').remove():'';
 
     //     $('body').append(`

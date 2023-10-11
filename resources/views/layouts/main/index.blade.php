@@ -179,9 +179,14 @@
 		<script>
             const base_url = "{{ url('/') }}";
 
-            window.onbeforeunload = function(event) {
-                loading.block();
-            };
+            // window.onbeforeunload = function(event) {
+            //     loading.block();
+            // };
+
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     console.log('SELESAI LOAD ALL PAGE');
+            //     loading.release();
+            // });
         </script>
         <script src="{{ asset('assets/js/suma/main/index.js') }}?v={{ time() }}"></script>
 		<script src="{{ asset('assets/js/custom/module/loading.js') }}?v={{ time() }}"></script>

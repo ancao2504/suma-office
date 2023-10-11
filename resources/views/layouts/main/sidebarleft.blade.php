@@ -583,6 +583,15 @@
                                     <span class="menu-title">Shopee</span>
                                 </a>
                             </div>
+                            {{-- <div class="menu-item">
+                                <a class="menu-link {{ Request::is('online/pemindahan/tiktok*') ? 'active' : '' }}"
+                                    href="{{ url('/online/pemindahan/tiktok/daftar') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Tiktok</span>
+                                </a>
+                            </div> --}}
                         </div>
                     </div>
                     <div data-kt-menu-trigger="click"
@@ -678,6 +687,15 @@
                                     <span class="menu-title">Shopee</span>
                                 </a>
                             </div>
+                            {{-- <div class="menu-item">
+                                <a class="menu-link {{ Request::is('online/product/tiktok/*') ? 'active' : '' }}"
+                                    href="{{ url('/online/product/tiktok/index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Tiktok</span>
+                                </a>
+                            </div> --}}
                         </div>
                     </div>
                     <div data-kt-menu-trigger="click"
@@ -771,6 +789,37 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- <div data-kt-menu-trigger="click"
+                                class="menu-item menu-accordion {{ Request::is('online/orders/tiktok/*') ? 'show' : '' }}">
+                                <span class="menu-link">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span
+                                        class="menu-title {{ Request::is('online/orders/tiktok/*') ? 'active' : '' }}">Tiktok</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <div class="menu-sub menu-sub-accordion">
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ Request::is('online/orders/tiktok/daftar*') ? 'active' : '' }}"
+                                            href="{{ url('/online/orders/tiktok/daftar') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">List Order</span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ Request::is('online/orders/tiktok/single*') ? 'active' : '' }}"
+                                            href="{{ url('/online/orders/tiktok/single') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Single Order</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div> --}}
                             @if (in_array(strtoupper(trim(session()->get('app_user_role_id'))), ['MD_H3_MGMT', 'MD_OL_SPV']))
                                 <div class="menu-item">
                                     <a class="menu-link {{ Request::is('online/orders/approve/*') ? 'active' : '' }}"
@@ -826,6 +875,15 @@
                                     <span class="menu-title">Shopee</span>
                                 </a>
                             </div>
+                            {{-- <div class="menu-item">
+                                <a class="menu-link {{ Request::is('online/ekspedisi/tiktok/*') ? 'active' : '' }}"
+                                    href="{{ url('/online/ekspedisi/tiktok/daftar') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Tiktok</span>
+                                </a>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="menu-item">
@@ -854,7 +912,7 @@
                         </a>
                     </div>
                     @endif
-                    
+
                     @if (in_array(session()->get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_SPV', 'MD_H3_FIN']))
                     <div data-kt-menu-trigger="click"
                         class="menu-item menu-accordion {{ Request::is('online/historysaldo/*') ? 'here hover show' : '' }}">
@@ -1129,7 +1187,7 @@
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">UPLOAD</span>
                         </div>
                     </div>
-                    
+
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_ADMIN']))
                         <div class="menu-item">
                             <a class="menu-link {{ Request::is('parts/uploadimage/part*') ? 'active' : '' }}"
@@ -1154,7 +1212,7 @@
                             </a>
                         </div>
                     @endif
-                    
+
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('uploadfile/pricelist*') ? 'active' : '' }}"
@@ -1188,7 +1246,7 @@
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">REPORT</span>
                         </div>
                     </div>
-                    
+
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('report/faktur*') ? 'active' : '' }}"
@@ -1242,7 +1300,7 @@
                         </a>
                     </div>
                     @endif
-                    
+
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SPV_PC','MD_H3_KAPC']))
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('report/konsumen*') ? 'active' : '' }}"
@@ -1265,7 +1323,7 @@
                         </a>
                     </div>
                     @endif
-                    
+
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_OL_SPV','MD_OL_ADMIN']))
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('parts/stockharian*') ? 'active' : '' }}"
