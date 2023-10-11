@@ -365,17 +365,16 @@ Route::group(['middleware' => 'authBasic'], function () {
                             Route::post('/backend/auth/shopee/token/access', 'dataAuthShopee');
                             Route::post('/backend/auth/shopee/token/access/generate', 'generateAuthorizationToken');
                             Route::post('/backend/auth/shopee/token/access/simpan', 'simpanAccessToken');
-
                         });
                     });
                 });
 
                 Route::name('pemindahan.')->group(function () {
                     Route::controller(PemindahanMarketplace::class)->group(function () {
-                            Route::post('/backend/online/pemindahan/marketplace/daftar', 'daftarPemindahan');
-                            Route::post('/backend/online/pemindahan/marketplace/detail', 'detailPemindahan');
-                            Route::post('/backend/online/pemindahan/marketplace/update/stock', 'updateStock')->name('stock-perdokumen');
-                            Route::post('/backend/online/pemindahan/marketplace/update/statuspartnumber', 'updateStatusPerPartNumber');
+                        Route::post('/backend/online/pemindahan/marketplace/daftar', 'daftarPemindahan');
+                        Route::post('/backend/online/pemindahan/marketplace/detail', 'detailPemindahan');
+                        Route::post('/backend/online/pemindahan/marketplace/update/stock', 'updateStock')->name('stock-perdokumen');
+                        Route::post('/backend/online/pemindahan/marketplace/update/statuspartnumber', 'updateStatusPerPartNumber');
                     });
 
                     Route::name('tokopedia.')->group(function () {
