@@ -2,13 +2,13 @@
 
 use Illuminate\Http\Request;
 use Api\Auth\ApiAuthController;
+use Api\Auth\ApiAuthShopeeController;
 use Illuminate\Support\Facades\Route;
 use Api\Backend\Orders\ApiCartController;
 use Api\Backend\Profile\ApiUserController;
 use Api\Backend\Orders\ApiFakturController;
 use Api\Backend\Konsumen\KonsumenController;
 use Api\Backend\Profile\ApiDealerController;
-use Api\Backend\Auth\ApiAuthShopeeController;
 use Api\Backend\Options\ApiOptionsController;
 use Api\Backend\Parts\ApiBackOrderController;
 use Api\Backend\Profile\ApiAccountController;

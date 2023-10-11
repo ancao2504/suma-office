@@ -103,10 +103,10 @@ class ApiAuthController extends Controller
                         // ====================================================================================
                         // Access Token Tiktok
                         // ====================================================================================
-                        $responseTiktok = UpdateToken::tiktok($request->get('token'));
-                        if($responseTiktok->status == 0) {
-                            $status_tiktok = $responseTiktok->message;
-                        }
+                        // $responseTiktok = UpdateToken::tiktok($request->get('token'));
+                        // if($responseTiktok->status == 0) {
+                        //     $status_tiktok = $responseTiktok->message;
+                        // }
                     }
 
 
