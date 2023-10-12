@@ -44,7 +44,7 @@ class KonsumenController extends Controller
                 return Response::responseWarning($validate->errors()->first());
             }
 
-            
+
             if(empty($request->no_retur) && in_array('tamp', $request->option)){
                 $request->merge(['no_retur' => $request->user_id]);
             }
@@ -168,11 +168,11 @@ class KonsumenController extends Controller
                         ->on('company.kd_rak', '=', 'tbStLokasiRak.Kd_Rak')
                         ->on('part.CompanyId', '=', 'tbStLokasiRak.CompanyId');
                     });
-                    
+
                     $data_detail = $data_detail->where('klaim_dtl.companyid', $request->companyid)
                     ->where('klaim_dtl.no_dokumen', $request->no_retur)
                     ->get();
-                    
+
                     $data->detail = $data_detail;
                 }
             }
@@ -189,7 +189,7 @@ class KonsumenController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
+
     public function store(Request $request)
     {
         try{
@@ -257,62 +257,78 @@ class KonsumenController extends Controller
                         'usertime'          => (date('Y-m-d H:i:s').'='.$request->user_id)
                     ]);
 
+
+                    DB::table($request->table[1])
+                    ->updateOrInsert([
+                        'no_dokumen'        => $request->no_retur,
+                        'kd_part'           => $request->kd_part,
+                        'no_produksi'       => $request->no_produksi,
+                        'qty'               => $request->qty_retur,
+                    ],  [
+                        'sts_stock'         => ($request->sts_stock??0),
+                        'sts_klaim'         => ($request->sts_klaim??0),
+                        'sts_min'           => ($request->sts_min??0),
+                        'keterangan'        => ($request->ket??null),
+                        'companyid'         => $request->companyid,
+                        'usertime'          => (date('Y-m-d=H:i:s').'='.$request->user_id)
+                    ]);
+
                     //! filter agar no_produksi tidak duplikat pada request yang sama
-                    $request->merge(['no_produksi' => collect($request->no_produksi)->unique()->toArray()]);
+                    // $request->merge(['no_produksi' => collect($request->no_produksi)->unique()->toArray()]);
 
                     // ! cek data yang sudah ada
-                    $cek = DB::table($request->table[1])
-                    ->select('no_produksi')
-                    ->where('no_dokumen', $request->no_retur)
-                    ->where('companyid', $request->companyid)
-                    ->where('kd_part', $request->kd_part)
-                    ->whereIn('no_produksi', $request->no_produksi)
-                    ->get();
-                    
-                    $data = (object)[
-                        //! ambil yang tidak ada
-                        'insert'   => array_diff($request->no_produksi, $cek->pluck('no_produksi')->toArray()),
-                        // !ambil jika ada
-                        'update'   => array_intersect($request->no_produksi, $cek->pluck('no_produksi')->toArray()),
-                    ];
+                    // $cek = DB::table($request->table[1])
+                    // ->select('no_produksi')
+                    // ->where('no_dokumen', $request->no_retur)
+                    // ->where('companyid', $request->companyid)
+                    // ->where('kd_part', $request->kd_part)
+                    // ->whereIn('no_produksi', $request->no_produksi)
+                    // ->get();
+
+                    // $data = (object)[
+                    //     //! ambil yang tidak ada
+                    //     'insert'   => array_diff($request->no_produksi, $cek->pluck('no_produksi')->toArray()),
+                    //     // !ambil jika ada
+                    //     'update'   => array_intersect($request->no_produksi, $cek->pluck('no_produksi')->toArray()),
+                    // ];
 
                     //! simpan pada tabel klaimtmp_dtl
-                    if($data->insert){
-                        DB::table($request->table[1])
-                        ->insert(collect($data->insert)
-                        ->map(function($value) use ($request){
-                            return [
-                                'no_dokumen'    => $request->no_retur,
-                                'kd_part'       => $request->kd_part,
-                                'CompanyId'     => $request->companyid,
-                                'qty'           => 1,
-                                'no_produksi'   => $value,
-                                'sts_stock'     => ($request->sts_stock??0),
-                                'sts_klaim'     => ($request->sts_klaim??0),
-                                'sts_min'       => ($request->sts_min??0),
-                                'keterangan'    => ($request->ket??null),
-                                'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
-                            ];
-                        })
-                        ->toArray());
-                    }
+                    // if($data->insert){
+                    //     DB::table($request->table[1])
+                    //     ->insert(collect($data->insert)
+                    //     ->map(function($value) use ($request){
+                    //         return [
+                    //             'no_dokumen'    => $request->no_retur,
+                    //             'kd_part'       => $request->kd_part,
+                    //             'CompanyId'     => $request->companyid,
+                    //             'qty'           => 1,
+                    //             'no_produksi'   => $value,
+                    //             'sts_stock'     => ($request->sts_stock??0),
+                    //             'sts_klaim'     => ($request->sts_klaim??0),
+                    //             'sts_min'       => ($request->sts_min??0),
+                    //             'keterangan'    => ($request->ket??null),
+                    //             'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
+                    //         ];
+                    //     })
+                    //     ->toArray());
+                    // }
 
                     //! Update pada tabel klaimtmp_dtl
-                    if($data->update){
-                        DB::table($request->table[1])
-                        ->whereIn('no_produksi', $data->update)
-                        ->where('no_dokumen', $request->no_retur)
-                        ->where('companyid', $request->companyid)
-                        ->where('kd_part', $request->kd_part)
-                        ->update([
-                            'qty'           => 1,
-                            'sts_stock'     => ($request->sts_stock??0),
-                            'sts_klaim'     => ($request->sts_klaim??0),
-                            'sts_min'       => ($request->sts_min??0),
-                            'keterangan'    => ($request->ket??null),
-                            'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
-                        ]);
-                    }
+                    // if($data->update){
+                    //     DB::table($request->table[1])
+                    //     ->whereIn('no_produksi', $data->update)
+                    //     ->where('no_dokumen', $request->no_retur)
+                    //     ->where('companyid', $request->companyid)
+                    //     ->where('kd_part', $request->kd_part)
+                    //     ->update([
+                    //         'qty'           => 1,
+                    //         'sts_stock'     => ($request->sts_stock??0),
+                    //         'sts_klaim'     => ($request->sts_klaim??0),
+                    //         'sts_min'       => ($request->sts_min??0),
+                    //         'keterangan'    => ($request->ket??null),
+                    //         'usertime'      => (date('Y-m-d H:i:s').'='.$request->user_id)
+                    //     ]);
+                    // }
 
                     $request->merge(['option' => ['tamp','with_detail']]);
                     $request->merge(['page' => 1]);
@@ -398,7 +414,7 @@ class KonsumenController extends Controller
                 ->where('sts_stock',1)
                 ->groupBy('kd_part')
                 ->toArray();
-                
+
                 $data_error = [];
                 foreach($data_request as $key => $value){
                     // ! looping kd_part yang sudah di group by ambil total qty yang di klaim apakah lebih besar dari stock jika lebih besar maka simpan pada data_error
@@ -412,6 +428,7 @@ class KonsumenController extends Controller
                         ];
                     }
                 }
+
                 // ! jika data_error lebih dari 0 maka tampilkan pesan error
                 if(count($data_error) > 0){
                     return (object)[
@@ -438,12 +455,12 @@ class KonsumenController extends Controller
                     $request->merge(['no_retur' => $number]);
                     $request->merge(['hapus_tamp' => true]);
                 }
-                
+
                 $header = DB::table($request->table[0])
                 ->select(
                     DB::raw("'".$request->no_retur."' as no_dokumen"),
                     DB::raw("'".$request->tgl_retur."' as tgl_dokumen"),
-                    'tgl_entry', 
+                    'tgl_entry',
                     DB::raw("'".$request->kd_sales."' as kd_sales"),
                     DB::raw("'".($request->pc??0)."' as pc"),
                     DB::raw("'".(($request->pc==1)?$request->kd_cabang:$request->kd_dealer)."' as kd_dealer"),
@@ -493,7 +510,7 @@ class KonsumenController extends Controller
                     ->where('companyid', $request->companyid)
                     ->update((array)$header);
                 }
-                
+
                 if($request->role_id == 'MD_H3_MGMT'){
                     // ! terdapat minimum, input ke rtoko
                     $simpan = DB::select("
@@ -534,7 +551,7 @@ class KonsumenController extends Controller
             } else if ($simpan->status == false){
                 return Response::responseWarning($simpan->message, $simpan->data);
             }
-            
+
         }catch (\Exception $exception) {
             return Response::responseError($request->get('user_id'), 'API', Route::getCurrentRoute()->action['controller'],
                         $request->route()->getActionMethod(), $exception->getMessage(), $request->get('companyid'));
@@ -601,11 +618,11 @@ class KonsumenController extends Controller
             return response::responseSuccess('success', '');
         }catch (\Exception $exception) {
             return Response::responseError(
-                $request->get('user_id'), 
-                'API', 
+                $request->get('user_id'),
+                'API',
                 Route::getCurrentRoute()->action['controller'],
-                $request->route()->getActionMethod(), 
-                $exception->getMessage(), 
+                $request->route()->getActionMethod(),
+                $exception->getMessage(),
                 $request->get('companyid')
             );
         };

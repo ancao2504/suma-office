@@ -127,4 +127,13 @@ $(document).ready(function () {
             per_page: 10
         });
     });
+
+    $('#kd_sales').on('change', function () {
+        $('#kd_dealer').val('');
+        $('#kd_dealer').removeClass('is-valid');
+        $('#kd_dealer').removeClass('is-invalid');
+        $('#nm_dealer').val('');
+        $('#alamat1').val('');
+        $('#kotasj').val('');
+    });
 });

@@ -3,7 +3,7 @@ function lokasi() {
     for (const [key, item] of Object.entries(company[$('input[name="divisi"]:checked').val()].lokasi)) {
         $('#company').append(`<option value="${item.companyid}">${item.companyid}</option>`);
     };
-    
+
     $('#lokasi').html('');
     for (const [key, item] of Object.entries(company[$('input[name="divisi"]:checked').val()].lokasi)) {
         if(item.companyid == $('#company').val()){
@@ -37,7 +37,7 @@ let status = {
 function cekfaktur(){
     loading.block();
     $.ajax({
-        url: base_url + '/faktur',
+        url: base_url + '/faktur/konsumen',
         type: "GET",
         data: {
             option      : 'first',
@@ -74,7 +74,7 @@ function cekfaktur(){
                     status.faktur = true;
                     return false;
                 }
-                
+
                 status.faktur = true;
                 $('#inputNomorFaktur').val(response.data.no_faktur);
                 $('#inputNomorFaktur').removeClass('is-invalid').addClass('is-valid');
@@ -203,7 +203,7 @@ function ceknik(request){
             }
         });
     });
-    
+
     loading.release();
 }
 function validasi (targert, message) {
@@ -345,7 +345,7 @@ $(document).ready(function () {
     $("#inputTanggalLahir").flatpickr({
         dateFormat: "d-m-Y",
     });
-    
+
     $('#merk_motor').on('change', function () {
         if ($(this).val() == 'Lainya') {
             $('#merk_motor_lainya').attr('hidden', false);
@@ -428,9 +428,9 @@ $(document).ready(function () {
     $('#autocomplateKonsumen').on('click','#btn_cari', function () {
         ceknik({option:'page'});
     });
-    // pagination .page-item yang tidak ada class active atau disabled 
+    // pagination .page-item yang tidak ada class active atau disabled
     $('#autocomplateKonsumen').on('click','.pagination .page-item:not(.active):not(.disabled) .page-link', function () {
-        ceknik({option:'page', page:$(this).attr('href').split('=')[1]});   
+        ceknik({option:'page', page:$(this).attr('href').split('=')[1]});
     });
     $('#autocomplateKonsumen').on('click','#per_page', function () {
         ceknik({option:'page', per_page:$(this).val()});
@@ -481,7 +481,7 @@ $(document).ready(function () {
             $('#keterangan_mengetahui').removeClass('is-invalid');
             $('#keterangan_mengetahui').next('invalid-feedback').remove();
         }
-        
+
         if ($('#inputNomorFaktur').val() != '' && $('#inputNamaPelanggan').val() != '' && $('#inputTempatLahir').val() != '' && $('#inputTanggalLahir').val() != '' && $('#inputAlamat').val() != '' && $('#inputTelepon').val() != '' && $('#inputNopol').val() != '' && $('#merk_motor').val() != '' && $('#tipe_motor').val() != '' && $('#selectMengetahui').val() != '') {
             if (status.faktur == false) {
                 $('#inputNomorFaktur').focus();
@@ -490,7 +490,7 @@ $(document).ready(function () {
             simpan();
         }
     });
-    
+
     if (old.merk != '') {
         $('#merk_motor').val(old.merk).trigger('change');
     }

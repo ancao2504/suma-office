@@ -40,7 +40,7 @@ class UploadFileController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal upload file');
         }
-        
+
         $request->merge([
             'path_file' => asset('images/upload/'.$request->nama_file.'.'.$extensi)
         ]);
@@ -73,7 +73,7 @@ class UploadFileController extends Controller
         if($responseApi->status == 0){
             return redirect()->back()->with('error', 'Gagal hapus file');
         }
-        
+
         $path = preg_replace('/.*\/images\//', 'images/', $responseApi->data);
 
         if(file_exists($path)){

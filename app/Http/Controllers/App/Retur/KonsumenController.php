@@ -64,7 +64,7 @@ class KonsumenController extends Controller
             array_push($option, 'tamp');
         }
         $request->merge(['option' => $option]);
-        
+
         $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
         $statusApiRetur = $responseApiRetur->status??0;
 
@@ -83,7 +83,7 @@ class KonsumenController extends Controller
                 'title_menu' => 'Retur Konsumen',
                 'title_page' => 'Tambah',
             ];
-            
+
             return view('layouts.retur.konsumen.form', $data);
         }else {
             return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
@@ -111,7 +111,7 @@ class KonsumenController extends Controller
                     $rules += ['kd_dealer' => 'required'];
                     $messages += ['kd_dealer.required' => 'kode Dealer Kososng'];
                 }
-                
+
                 $rules += [
                     'kd_part' => 'required',
                     'qty_retur' => 'required|numeric|min:1',
@@ -138,7 +138,8 @@ class KonsumenController extends Controller
                     'data'      => ''
                 ]);
             }
-            
+
+            return Service::ReturKonsumenSimpan($request);
             $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;

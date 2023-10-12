@@ -235,6 +235,15 @@
                 <h3>2. Informasi Produk</h3>
                 <div class="col-xl-12 border rounded mb-3 p-2">
                     <div class="form-group row mb-2">
+                        <label for="kd_part" class="col-sm-2 col-form-label required">No Faktur</label>
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="no_faktur" name="no_faktur" placeholder="No Faktur" value="" style="text-transform: uppercase;" required>
+                                {{-- <button class="btn btn-primary list-faktur" type="button">Pilih</button> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
                         <label for="kd_part" class="col-sm-2 col-form-label required">Part Number</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3">
@@ -242,7 +251,7 @@
                                 <button class="btn btn-primary list-part" type="button">Pilih</button>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-5">
                             <input type="text" class="form-control bg-secondary" id="nm_part" name="nm_part" placeholder="Nama Part" value="" readonly>
                         </div>
                         <div class="col-sm-1 mt-3 mt-sm-0">
@@ -250,19 +259,31 @@
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="qty_retur" class="col-sm-2 col-form-label">Jumlah</label>
+                        <label for="qty_retur" class="col-sm-2 col-form-label required">Jumlah</label>
                         <div class="col-sm-4">
                             <input type="number" class="form-control" id="qty_retur" name="qty_retur" min="1" placeholder="Masukkan QTY Retur" value="1" required>
                         </div>
+                        <label for="no_produksi" class="col-sm-2 col-form-label required">No Produksi</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="no_produksi" name="no_produksi" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
+                        </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
-                        <div class="col-sm-10">
-                            <div class="row" id="input_no_produk">
-                                <div class="col-2 mt-3">
-                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
-                                </div>
-                            </div>
+                        <label for="tgl_claim" class="col-sm-2 col-form-label required">Tanggal Klaim</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="tgl_klaim" name="tgl_klaim" placeholder="Masukkan Tanggal Klaim" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}"
+                            @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                                disabled
+                            @endif
+                            >
+                        </div>
+                        <label for="tgl_claim" class="col-sm-2 col-form-label required">Tanggal Pakai</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="tgl_pakai" name="tgl_pakai" placeholder="Masukkan Tanggal Pakai" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}"
+                            @if (!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT'))
+                                disabled
+                            @endif
+                            >
                         </div>
                     </div>
                 </div>
@@ -285,7 +306,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="form-group row mb-2">
                         <label for="sts_minimum" class="col-sm-2 col-form-label required">Status Minimum</label>
                         <div class="col-sm-4">
@@ -323,6 +344,11 @@
 <div class="modal fade" tabindex="-1" id="part-list">
 </div>
 <!--end::Modal Part data-->
+
+<!--begin::Modal Part data-->
+<div class="modal fade" tabindex="-1" id="faktur-list">
+</div>
+<!--end::Modal Part data-->
 @endif
 
 @endsection
@@ -340,9 +366,10 @@
     };
 </script>
 
+<script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/form.js') }}?v={{ time() }}"></script>
 @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getDealer.js') }}?v={{ time() }}"></script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getPart.js') }}?v={{ time() }}"></script>
+<script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getFaktur.js') }}?v={{ time() }}"></script>
 @endif
-<script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/form.js') }}?v={{ time() }}"></script>
 @endpush

@@ -1,8 +1,8 @@
 function Faktur(requst) {
     $.get(base_url+'/faktur',{
         option: requst.option,
-        kd_sales: requst.kd_sales,
-        kd_dealer: requst.kd_dealer,
+        kd_sales: $('#kd_sales').val(),
+        kd_dealer: $('#kd_dealer').val(),
         no_faktur: requst.no_faktur,
     }, function (response) {
         if(response.status == '1'){
@@ -70,8 +70,6 @@ $('#no_faktur').on('change', function () {
 
     Faktur({
         option: 'first',
-        kd_sales: $('#kd_sales').val(),
-        kd_dealer: $('#kd_dealer').val(),
         no_faktur: $('#no_faktur').val()
     });
 });

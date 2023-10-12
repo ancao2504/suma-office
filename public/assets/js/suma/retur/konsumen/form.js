@@ -51,7 +51,7 @@ function listDetail(detail){
                 <td class="text-center">${index + 1}</td>
                 <td>${data.no_produksi}</td>
                 <td>${data.kd_part}</td>
-                <td class="text-end">${1}</td>
+                <td class="text-end">${data.qty}</td>
                 <td>${data.tgl_ganti??'-'}</td>
                 <td>${data.qty_ganti?number_format(data.qty_ganti, 0, '.', ','):'-'}</td>
                 <td class="text-center">
@@ -78,11 +78,11 @@ function listDetail(detail){
 }
 
 function detail_clear(){
-    $('#input_no_produk').html(`
-        <div class="col-2 mt-3">
-            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
-        </div>
-    `);
+    // $('#input_no_produk').html(`
+    //     <div class="col-2 mt-3">
+    //         <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
+    //     </div>
+    // `);
 
     $('#kd_part').val('');
     $('#kd_part').removeClass('is-valid');
@@ -91,6 +91,8 @@ function detail_clear(){
     $('.list-part').attr('disabled', false);
     $('#nm_part').val('');
     $('#stock').val('');
+    $('#no_produksi').val('');
+    $('#no_produksi').attr('disabled', false);
     $('#qty_retur').val(1);
     $('#qty_retur').attr('disabled', false);
     $('#ket').val('');
@@ -99,11 +101,11 @@ function detail_clear(){
 
 function simpan(tamp){
     loading.block();
-    let no_produksi = [];
-    for (let x = 1; x <= parseInt($('#qty_retur').val()); x++) {
-        no_produksi.push($('#no_produksi'+x).val().toUpperCase());
-    }
-    
+    // let no_produksi = [];
+    // for (let x = 1; x <= parseInt($('#qty_retur').val()); x++) {
+    //     no_produksi.push($('#no_produksi'+x).val().toUpperCase());
+    // }
+
     $.post(base_url + "/retur/konsumen/form",
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
@@ -115,7 +117,8 @@ function simpan(tamp){
             pc:$('#jenis_konsumen').val(),
             kd_dealer: $('#kd_dealer').val(),
             kd_cabang: $('#kd_cabang').val(),
-            no_produksi: no_produksi,
+            // no_produksi: no_produksi,
+            no_produksi: $('#no_produksi').val(),
             kd_part: $('#kd_part').val(),
             qty_retur: $('#qty_retur').val(),
             ket: $('#ket').val(),
@@ -150,7 +153,7 @@ function simpan(tamp){
 
                 detail_clear();
                 $('#list-retur').html('');
-                
+
                 listDetail(response.data.detail)
             }
             if (response.status == '0') {
@@ -240,8 +243,10 @@ function edit_detail(val){
     $('#kd_part').val(val.kd_part);
     $('#kd_part').attr('disabled', true);
     $('.list-part').attr('disabled', true);
-    $('#no_produksi1').val(val.no_produksi);
-    $('#no_produksi1').attr('disabled', true);
+    // $('#no_produksi1').val(val.no_produksi);
+    // $('#no_produksi1').attr('disabled', true);
+    $('#no_produksi').val(val.no_produksi);
+    $('#no_produksi').attr('disabled', true);
     $('#qty_retur').val(val.jumlah);
     $('#qty_retur').attr('disabled', true);
     $('#nm_part').val(val.nm_part);
@@ -253,6 +258,8 @@ function edit_detail(val){
 }
 $(document).ready(function () {
     $("#tgl_retur").flatpickr().setDate(moment($("#tgl_retur").val()).format('YYYY-MM-DD'));
+    $("#tgl_klaim").flatpickr().setDate(moment($("#tgl_klaim").val()).format('YYYY-MM-DD'));
+    $("#tgl_pakai").flatpickr().setDate(moment($("#tgl_pakai").val()).format('YYYY-MM-DD'));
 
     $('#kd_cabang').val(old.kd_cabang).trigger('change');
     $('#kd_sales').val(old.kd_sales).trigger('change');
@@ -302,16 +309,16 @@ $(document).ready(function () {
             $('#detail_modal').find('#qty_retur').focus();
             return false;
         }
-        if($('#input_no_produk').find('.col-2').length > 0){
-            let emptyInput = $('#input_no_produk .col-2 input').filter(function () {
-                return this.value == '';
-            });
-            if (emptyInput.length > 0) {
-                toastr.warning('No Produksi Harus diisi semua', "Peringatan");
-                emptyInput.focus();
-                return false;
-            }
-        }
+        // if($('#input_no_produk').find('.col-2').length > 0){
+        //     let emptyInput = $('#input_no_produk .col-2 input').filter(function () {
+        //         return this.value == '';
+        //     });
+        //     if (emptyInput.length > 0) {
+        //         toastr.warning('No Produksi Harus diisi semua', "Peringatan");
+        //         emptyInput.focus();
+        //         return false;
+        //     }
+        // }
         if($('#detail_modal').find('#sts_stock').val() == ''){
             toastr.warning('Status Stock Harus diisi', "Peringatan");
             $('#detail_modal').find('#sts_stock').focus();
@@ -331,7 +338,7 @@ $(document).ready(function () {
         e.preventDefault();
         simpan(true);
     });
-    
+
     $("#list_detail").on('click','.btn_dtl_delete', function (e) {
         let val = JSON.parse(atob($(this).data('a')));
         Swal.fire({
@@ -410,39 +417,39 @@ $(document).ready(function () {
             }
         });
     });
-    $('#qty_retur').on('change', function () {
-        if($(this).val() == 0 || $(this).val() == ''){
-            $(this).val(1);
-        }else if(parseInt($(this).val()) > 100){
-            $('#qty_retur').val(100);
-        }
+    // $('#qty_retur').on('change', function () {
+    //     if($(this).val() == 0 || $(this).val() == ''){
+    //         $(this).val(1);
+    //     }else if(parseInt($(this).val()) > 100){
+    //         $('#qty_retur').val(100);
+    //     }
 
-        validasi_sts_stock();
+    //     validasi_sts_stock();
 
-        if(parseInt($('#input_no_produk .col-2').length) < parseInt($(this).val())){
-            for (let x = parseInt($('#input_no_produk .col-2').length)+1; x <= parseInt($(this).val()); x++) {
-                $('#input_no_produk').append(`
-                    <div class="col-2 mt-3">
-                        <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
-                    </div>
-                `);
-            }
-        } else {
-            for (; parseInt($('#input_no_produk .col-2').length) > parseInt($(this).val());) {
-                let emptyInput = $('#input_no_produk .col-2 input').filter(function () {
-                    return this.value == '';
-                });
-                console.log(emptyInput);
-                if (emptyInput.length > 0) {
-                    emptyInput.parent('.col-2').last().remove();
-                } else {
-                    $('#input_no_produk .col-2').last().remove();
-                }
-            }
-        }
+    //     if(parseInt($('#input_no_produk .col-2').length) < parseInt($(this).val())){
+    //         for (let x = parseInt($('#input_no_produk .col-2').length)+1; x <= parseInt($(this).val()); x++) {
+    //             $('#input_no_produk').append(`
+    //                 <div class="col-2 mt-3">
+    //                     <input type="text" class="form-control" id="no_produksi${x}" name="no_produksi[]" placeholder="No Produksi" value="" style="text-transform: uppercase;" required>
+    //                 </div>
+    //             `);
+    //         }
+    //     } else {
+    //         for (; parseInt($('#input_no_produk .col-2').length) > parseInt($(this).val());) {
+    //             let emptyInput = $('#input_no_produk .col-2 input').filter(function () {
+    //                 return this.value == '';
+    //             });
+    //             console.log(emptyInput);
+    //             if (emptyInput.length > 0) {
+    //                 emptyInput.parent('.col-2').last().remove();
+    //             } else {
+    //                 $('#input_no_produk .col-2').last().remove();
+    //             }
+    //         }
+    //     }
 
-        enter_input();
-    });
+    //     enter_input();
+    // });
     $('#sts_stock').on('change', function () {
         validasi_sts_stock();
     });

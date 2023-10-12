@@ -1569,7 +1569,7 @@ class OptionController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            
+
             if($request->option == 'first'){
                 $respon = $data;
             } else if($request->option == 'select'){
@@ -1620,9 +1620,10 @@ class OptionController extends Controller
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
         }
     }
-    public static function faktur(Request $request){
+    public static function fakturKonsumen(Request $request){
         $request->merge(['divisi' => (in_array(($request->companyid??strtoupper(trim($request->session()->get('app_user_company_id')))), collect(session('app_user_company')->fdr->lokasi)->pluck('companyid')->toArray()))?'fdr':'honda']);
-        $responseApi = Service::dataFaktur($request);
+
+        $responseApi = Service::dataFakturKonsumen($request);
         $statusApi = json_decode($responseApi)?->status;
         $messageApi =  json_decode($responseApi)?->message;
 
@@ -1645,7 +1646,7 @@ class OptionController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            
+
             if($request->option == 'first'){
                 $respon = $data;
             }elseif($request->option == 'page'){
@@ -1702,6 +1703,82 @@ class OptionController extends Controller
         } else {
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
         }
+    }
+    public static function fakturKlaim(Request $request){
+        $responseApi = Service::dataFakturKlaim($request);
+        dd($responseApi);
+        $statusApi = json_decode($responseApi)?->status;
+        $messageApi =  json_decode($responseApi)?->message;
+
+        // if ($statusApi == 1) {
+        //     $data = json_decode($responseApi)->data;
+        //     if($request->option[0] == 'first'){
+        //         $respon = $data;
+        //     }else if($request->option[0] == 'page'){
+        //         $table = (object)[
+        //             'thead' => [
+        //                 (object)['class' => 'w-50px', 'text' => 'kode Part'],
+        //                 (object)['class' => 'w-100px', 'text' => 'nama Part'],
+        //                 (object)['class' => 'w-25', 'text' => 'Action'],
+        //             ],
+        //             'tbody' => [
+        //                 (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
+        //                 (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+        //                 (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+        //                     (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+        //                         'data' => [(object)['key' => 'a','value' => 'kd_part']]
+        //                     ],
+        //                 ]],
+        //             ],
+        //         ];
+
+        //         if(!empty($request->option[1]) && $request->option[1] == 'with_stock'){
+        //             $table = (object)[
+        //                 'thead' => [
+        //                     (object)['class' => 'w-50px', 'text' => 'kode Part'],
+        //                     (object)['class' => 'w-200px', 'text' => 'nama Part'],
+        //                     (object)['class' => 'w-20px', 'text' => 'Stock'],
+        //                     (object)['class' => 'w-25', 'text' => 'Action'],
+        //                 ],
+        //                 'tbody' => [
+        //                     (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
+        //                     (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+        //                     (object)[ 'option' => 'text', 'class' => 'w-20px text-end', 'key' => 'stock'],
+        //                     (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
+        //                         (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+        //                             'data' => [(object)['key' => 'a','value' => ['kd_part','nm_part','stock']]]
+        //                         ],
+        //                     ]],
+        //                 ],
+        //             ];
+        //         }
+
+        //         if(!empty($request->no_retur)){
+        //             $table->tbody[2]->button[0]->data[0]->value = ['kd_part','nm_part','jumlah','no_produksi','ket'];
+        //         }
+
+        //         $respon = view('layouts.option.option', [
+        //             'data' => $data,
+        //             'modal' => (object)[
+        //                 'title' => 'List Part',
+        //                 'size' => 'modal-lg',
+        //             ],
+        //             'cari' => (object)[
+        //                 'title' => 'Kode Part',
+        //                 'value' => $request->kd_part,
+        //             ],
+        //             'table' => $table,
+        //             'per_page' => (object)[
+        //                 'value' => $request->per_page,
+        //             ]
+        //         ])->render();
+        //     }
+        //     return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        // } else if($statusApi == 0) {
+        //     return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
+        // } else {
+        //     return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        // }
     }
     public static function retur(Request $request){
         $responseApi = Service::dataRetur($request);
@@ -1782,7 +1859,7 @@ class OptionController extends Controller
                         ],
                     ];
                 }
-                
+
                 if(!empty($request->no_retur)){
                     $table->tbody[2]->button[0]->data[0]->value = ['kd_part','nm_part','jumlah','no_produksi','ket'];
                 }
@@ -1817,7 +1894,7 @@ class OptionController extends Controller
 
         if ($statusApi == 1) {
             $data = json_decode($responseApi)->data;
-            
+
             if($request->option == 'first'){
                 $respon = $data;
             }else if($request->option == 'select'){
@@ -1973,7 +2050,7 @@ class OptionController extends Controller
 
         if ($statusApi == 1) {
             $data = $responseApi->data;
-            
+
             if($request->option == 'first'){
                 $respon = $data;
             }else if($request->option == 'page'){
@@ -2034,5 +2111,5 @@ class OptionController extends Controller
             return Response()->json(['status' => 0, 'message' => $messageApi, 'data'=> ''], 200);
         }
     }
-    // ! 
+    // !
 }

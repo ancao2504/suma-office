@@ -560,7 +560,7 @@ class ApiOptionsController extends Controller
                 $data = $data->get();
             } else if($request->option == 'page'){
                 if(!empty($request->search)){
-                    $data = $data 
+                    $data = $data
                     ->orWhere('nik_konsumen.nik', 'like', '%'.$request->search.'%')
                     ->orWhere('nik_konsumen.nama', 'like', '%'.$request->search.'%')
                     ->orWhere('nik_konsumen.telepon', 'like', '%'.$request->search.'%')
@@ -601,7 +601,7 @@ class ApiOptionsController extends Controller
             $validate = Validator::make($request->all(), $rules, $messages);
 
             if ($validate->fails()) {
-                
+
                 return Response::responseWarning($validate->errors()->first());
             }
 
@@ -658,7 +658,7 @@ class ApiOptionsController extends Controller
             $validate = Validator::make($request->all(), $rules, $messages);
 
             if ($validate->fails()) {
-                
+
                 return Response::responseWarning($validate->errors()->first());
             }
 
@@ -735,7 +735,7 @@ class ApiOptionsController extends Controller
             $validate = Validator::make($request->all(), $rules, $messages);
 
             if ($validate->fails()) {
-                
+
                 return Response::responseWarning($validate->errors()->first());
             }
 
@@ -746,6 +746,7 @@ class ApiOptionsController extends Controller
 
             $data = DB::table('dealer')
                 ->lock('with (nolock)')->select('kd_dealer', 'nm_dealer', 'alamat1', 'kotasj')
+                ->where('kd_sales', $request->kd_sales)
                 ->where('CompanyId', $request->companyid);
 
             if (!empty($request->kd_sales)) {
@@ -774,8 +775,8 @@ class ApiOptionsController extends Controller
             );
         }
     }
-    
-    public function dataFaktur(Request $request) {
+
+    public function dataFakturKonsumen(Request $request) {
         try {
             // ! Validasi ---------------------------------------------
             $validate = Validator::make($request->all(), [
@@ -785,7 +786,7 @@ class ApiOptionsController extends Controller
             ]);
 
             if ($validate->fails()) {
-                
+
                 return Response::responseWarning($validate->errors()->first());
             }
 
@@ -835,7 +836,9 @@ class ApiOptionsController extends Controller
             if($request->option == 'first'){
                 $data = $data->first();
             } else if($request->option == 'page'){
-                $data = $data->paginate($request->per_page);
+                $data = $data
+                ->orderBy('faktur.tgl_faktur', 'desc')
+                ->paginate($request->per_page);
             }
 
             return Response::responseSuccess('success' , $data);
@@ -970,7 +973,7 @@ class ApiOptionsController extends Controller
                     ->on('part.CompanyId', '=', 'tbStLokasiRak.CompanyId');
                 });
             }
-            
+
             if($request->option[0] == 'first'){
                 $data = $data->first();
             }elseif($request->option[0] == 'page'){
@@ -1152,7 +1155,7 @@ class ApiOptionsController extends Controller
             $validate = Validator::make($request->all(), $rules, $messages);
 
             if ($validate->fails()) {
-                
+
                 return Response::responseWarning($validate->errors()->first());
             }
             // ! End Validasi -----------------------------------------
@@ -1192,7 +1195,7 @@ class ApiOptionsController extends Controller
             $validate = Validator::make($request->all(), $rules, $messages);
 
             if ($validate->fails()) {
-                
+
                 return Response::responseWarning($validate->errors()->first());
             }
             // ! End Validasi -----------------------------------------
@@ -1207,7 +1210,7 @@ class ApiOptionsController extends Controller
             } else if($request->option == 'select'){
                 $data = collect($data->get())->groupBy('MerkMotor');
             }
-            
+
             return Response::responseSuccess('success', $data);
         } catch(\Exception $e){
             return Response::responseError(
@@ -1278,7 +1281,7 @@ class ApiOptionsController extends Controller
             if (!in_array($request->per_page, [10, 50, 100, 500])) {
                 $request->merge(['per_page' => 10]);
             }
-            
+
             $data = DB::table('wh_time')
             ->lock('with (nolock)')
             ->select(
@@ -1377,5 +1380,5 @@ class ApiOptionsController extends Controller
             );
         }
     }
-    // ! 
+    // !
 }

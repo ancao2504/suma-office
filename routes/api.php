@@ -159,7 +159,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/retur', 'dataRetur')->name('retur');
                     Route::post('/backend/supplier', 'dataSupplier')->name('supplier');
                     Route::post('/backend/dealer', 'dataDealer')->name('dealer');
-                    Route::post('/backend/faktur', 'dataFaktur')->name('faktur');
+                    Route::post('/backend/faktur/konsumen', 'dataFakturKonsumen')->name('faktur-konsumen');
                     Route::post('/backend/part', 'dataPart')->name('part');
                     Route::post('/backend/produk', 'dataProduk')->name('produk');
                     Route::post('/backend/merekmotor', 'dataMerekmotor')->name('merekmotor');

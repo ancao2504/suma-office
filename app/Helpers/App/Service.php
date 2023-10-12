@@ -2014,6 +2014,8 @@ class Service
             'sts_stock'     => $request->sts_stock,
             'sts_klaim'     => $request->sts_klaim,
             'sts_min'       => $request->sts_minimum,
+            'tgl_klaim'     => $request->tgl_klaim,
+            'tgl_pakai'     => $request->tgl_pakai
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2322,8 +2324,8 @@ class Service
         return $response;
     }
 
-    public static function dataFaktur($request){
-        $url = 'backend/faktur';
+    public static function dataFakturKonsumen($request){
+        $url = 'backend/faktur/konsumen';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
             'companyid'     => ($request->companyid??strtoupper(trim($request->session()->get('app_user_company_id')))),
@@ -2351,6 +2353,21 @@ class Service
             'search'        => $request->search,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function dataFakturKlaim($request){
+        $url = 'backend/faktur/klaim';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => ($request->companyid??strtoupper(trim($request->session()->get('app_user_company_id')))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => $request->option,
+            'no_faktur'     => $request->no_faktur,
+            'kd_sales'      => $request->kd_sales,
+            'kd_dealer'     => $request->kd_dealer
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
