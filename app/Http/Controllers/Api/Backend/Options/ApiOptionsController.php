@@ -835,6 +835,7 @@ class ApiOptionsController extends Controller
 
             if($request->option == 'first'){
                 $data = $data
+                ->orderBy('faktur.tgl_faktur', 'desc')
                 ->first();
             } else if($request->option == 'page'){
                 $data = $data
