@@ -1,14 +1,23 @@
 function lokasi() {
     $('#company').html(``);
     for (const [key, item] of Object.entries(company[$('input[name="divisi"]:checked').val()].lokasi)) {
-        $('#company').append(`<option value="${item.companyid}">${item.companyid}</option>`);
+        if(old.company != '' && old.company.toUpperCase() == item.companyid.toUpperCase()){
+            $('#company').append(`<option value="${item.companyid}" selected>${item.companyid}</option>`);
+        } else {
+            $('#company').append(`<option value="${item.companyid}">${item.companyid}</option>`);
+        }
     };
 
     $('#lokasi').html('');
     for (const [key, item] of Object.entries(company[$('input[name="divisi"]:checked').val()].lokasi)) {
         if(item.companyid == $('#company').val()){
             item.kd_lokasi.forEach(item => {
-                $('#lokasi').append(`<option value="${item}">${item}</option>`);
+                if (old.lokasi != '' && old.lokasi.toUpperCase() == item.toUpperCase()) {
+                    $('#lokasi').append(`<option value="${item}" selected>${item}</option>`);
+                    return false;
+                } else {
+                    $('#lokasi').append(`<option value="${item}">${item}</option>`);
+                }
             });
         }
     };

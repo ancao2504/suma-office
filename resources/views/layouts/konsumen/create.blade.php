@@ -40,7 +40,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        
+
                                         {{-- @error('divisi')
                                             <div class="row g-9 justify-content-center">
                                                 <div class="text-start fs-8 text-danger col-md-8 col-lg-8 col-xxl-8"><span class="required"></span>{{ $message }}</div>
@@ -221,8 +221,9 @@
         const old = {
             merk: '{{ $data->merk??'' }}',
             tipe: '{{ $data->type??'' }}',
+            company: '{{ $data->companyid??'' }}',
+            lokasi: '{{ $data->kd_lokasi??'' }}',
         };
     </script>
-
 	<script language="JavaScript" src="{{ asset('assets/js/suma/konsumen/Create.js') }}?v={{ time() }}"></script>
 @endpush
