@@ -67,7 +67,7 @@
 								<thead class="border">
 									<tr  class="fs-8 fw-bolder text-muted text-center">
 										<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_faktur">Tgl Transaksi</span></th>
+										<th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_input">Tgl Transaksi</span></th>
 										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="jenis_motor">Jenis Motor</span></th>
 										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="tipe_motor">Tipe Motor</span></th>
 										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="merek_motor">Merek Motor</span></th>
@@ -94,7 +94,7 @@
 											@foreach ($data->data as $key => $value)
 											<tr class="fw-bolder fs-8 border">
 												<td class="text-center">{{ $no++ }}</td>
-												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_faktur)) }}</td>
+												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_input)) }}</td>
 												<td class="text-start">{{ ($value->jenis??'-') }}</td>
 												<td class="text-start">{{ ($value->type??'-') }}</td>
 												<td class="text-start">{{ ($value->merk??'-') }}</td>
@@ -105,12 +105,12 @@
 												<td class="text-start">{{ ($value->tgl_lahir==null?'-':date('d/m/Y', strtotime($value->tgl_lahir))) }}</td>
 												<td class="text-start">{{ ($value->alamat??'-') }}</td>
 												<td class="text-start">{{ ($value->telepon??'-') }}</td>
-												<td class="text-center">{{ ($value->divisi??'-') }}</td>
-												<td class="text-center">{{ ($value->CompanyId??'-') }}</td>
-												<td class="text-center">{{ ($value->kd_lokasi??'-') }}</td>
+												<td class="text-center">{{ (strtoupper($value->divisi)??'-') }}</td>
+												<td class="text-center">{{ (strtoupper($value->CompanyId)??'-') }}</td>
+												<td class="text-center">{{ (strtoupper($value->kd_lokasi)??'-') }}</td>
 											</tr>
 											@endforeach
-											
+
 										@endif
 									@else
 										<tr><td colspan="15" class="text-center text-dark">Atur Filter terlebih dahulu</td></tr>
@@ -311,7 +311,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				
+
 				<div class="row">
 					<div class="col-lg-6 pb-15">
 						<label for="urutkan_collom" class="form-label">Urutkan Berdasarkan : </label>

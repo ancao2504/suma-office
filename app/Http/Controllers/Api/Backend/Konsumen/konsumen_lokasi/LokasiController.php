@@ -22,8 +22,8 @@ class LokasiController extends Controller
     public function index(Request $request)
     {
         try {
-                $compeny_default = DB::table(DB::raw('dbhonda.dbo.kode_company'))->where('kd_fdr', $request->companyid)->orWhere('kd_honda', $request->companyid)->first();    
-                
+                $compeny_default = DB::table(DB::raw('dbhonda.dbo.kode_company'))->where('kd_fdr', $request->companyid)->orWhere('kd_honda', $request->companyid)->first();
+
                 // ! jika dia efo maka hanya menyimpan data fdr tidak kd lokasi KB
                 $fdr_kd_lokasi = DB::table(DB::raw('dbsuma.dbo.lokasi'))->where('CompanyId', strtoupper(trim($compeny_default->kd_fdr)));
                 if(Str::contains(trim($request->username), 'EFO')) {
@@ -80,21 +80,27 @@ class LokasiController extends Controller
                             'companyid' => [strtoupper(trim($compeny_default->kd_honda)),strtoupper(trim($compeny_default->kd_fdr))],
                             'kd_lokasi' => array_merge(DB::table(DB::raw('dbhonda.dbo.lokasi'))->where('CompanyId', strtoupper(trim($compeny_default->kd_honda)))->pluck('kd_lokasi')->toArray(), $fdr_kd_lokasi),
                         ]);
-                    } 
+                    }
                     else {
                         $data = DB::table('kode_company')
                         ->select('kd_honda', 'kd_fdr')
                         ->get();
+
+                        $nm_honda = DB::table('dbhonda.dbo.company')->select('CompanyId', 'ket')->get();
+                        $nm_fdr = DB::table('dbsuma.dbo.company')->select('CompanyId', 'ket')->get();
+
                         $honda = [];
                         $fdr = [];
                         foreach($data as $key => $value) {
                             $honda[strtoupper(trim($value->kd_honda))] = (object)[
                                 'companyid' => strtoupper(trim($value->kd_honda)),
+                                'nm_cabang' => collect($nm_honda)->where('CompanyId', strtoupper(trim($value->kd_honda)))->first()->ket ?? '',
                                 'kd_lokasi' => DB::table(DB::raw('dbhonda.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_honda)))->pluck('kd_lokasi')->toArray(),
                             ];
 
                             $fdr[strtoupper(trim($value->kd_fdr))] = (object)[
                                 'companyid' => strtoupper(trim($value->kd_fdr)),
+                                'nm_cabang' => collect($nm_fdr)->where('CompanyId', strtoupper(trim($value->kd_fdr)))->first()->ket ?? '',
                                 'kd_lokasi' => DB::table(DB::raw('dbsuma.dbo.lokasi'))->where('CompanyId', strtoupper(trim($value->kd_fdr)))->pluck('kd_lokasi')->toArray(),
                             ];
                         }
@@ -113,10 +119,8 @@ class LokasiController extends Controller
                             'companyid' => array_merge(collect($honda)->pluck('companyid')->toArray(),collect($fdr)->pluck('companyid')->toArray()),
                             'kd_lokasi' => array_merge(collect($honda)->pluck('kd_lokasi')->flatten()->all(), collect($fdr)->pluck('kd_lokasi')->flatten()->all()),
                         ]);
-
                     }
                 }
-            
             return Response::responseSuccess('success', $company);
         } catch (\Throwable $exception) {
             return Response::responseError($request->get('user_id'), 'API', route::getCurrentRoute()->action['controller'],

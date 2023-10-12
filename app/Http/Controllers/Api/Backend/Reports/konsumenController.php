@@ -13,8 +13,6 @@ class KonsumenController extends Controller
     public function daftarKonsumen(Request $request)
     {
         try {
-            $menu_aktif = [];
-
             //!  validasi
             $validator = Validator::make($request->all(), [
                 'divisi' => 'required',
@@ -32,16 +30,34 @@ class KonsumenController extends Controller
                 ], 200);
             }
 
-            array_push($menu_aktif, 'divisi');
-
             if($request->divisi == 'honda'){
                 $request->merge(['db' => 'dbhonda.dbo.']);
             } else {
                 $request->merge(['db' => 'dbsuma.dbo.']);
             }
             // ! end validasi
-            $data = DB::table(DB::raw($request->db.'faktur'))
-            ->lock('WITH(NOLOCK)')
+            $data = DB::table(
+                function ($query) use ($request) {
+                    $query->select(
+                        'fakt_dtl.no_faktur',
+                        'faktur.tgl_faktur',
+                        'fakt_dtl.kd_part',
+                        'fakt_dtl.companyid',
+                        'fakt_dtl.kd_lokasi'
+                    )->from(DB::raw($request->db.'fakt_dtl'))
+                    ->join($request->db.'faktur', function ($join) {
+                        $join->on('faktur.no_faktur', 'fakt_dtl.no_faktur')
+                        ->on('faktur.CompanyId', 'fakt_dtl.companyid');
+                    })
+                    ->where('fakt_dtl.companyid', $request->companyid);
+                    if (!empty($request->kd_lokasi)){
+                        $query = $query->whereIn('fakt_dtl.kd_lokasi', Arr::wrap($request->kd_lokasi));
+                    }
+                    if (!empty($request->kd_part)) {
+                        $query = $query->where('fakt_dtl.kd_part', 'like', '%' . $request->kd_part . '%');
+                    }
+                }, 'faktur'
+            )
             ->select(
                 'konsumen.nama',
                 'konsumen.tgl_lahir',
@@ -53,148 +69,96 @@ class KonsumenController extends Controller
                 'part.kd_part',
                 'part.ket',
                 DB::raw("CASE WHEN part.jenis = '' THEN NULL ELSE part.jenis END as ring"),
-                'faktur.tgl_faktur',
+                'konsumen.tanggal as tgl_input',
                 DB::raw("'".$request->divisi."' as divisi"),
                 'faktur.CompanyId',
-                'fakt_dtl.kd_lokasi'
-            )->JoinSub(function ($query) use ($request) {
-                $query->select('fakt_dtl.no_faktur', 'fakt_dtl.companyid', 'fakt_dtl.kd_lokasi','fakt_dtl.kd_part')
-                ->from(DB::raw($request->db.'fakt_dtl'))
-                ->where('fakt_dtl.companyid', $request->companyid);
-                
-                if(!empty($request->kd_lokasi)){
-                    $query = $query->whereIn('fakt_dtl.kd_lokasi', Arr::wrap($request->kd_lokasi));
-                }
-            }, 'fakt_dtl', function ($join) {
-                $join->on('faktur.no_faktur', 'fakt_dtl.no_faktur')
-                ->on('faktur.CompanyId', 'fakt_dtl.companyid');
-            })->leftJoinSub(function ($query) use ($request){
+                'faktur.kd_lokasi'
+            )
+            ->JoinSub(function ($query) use ($request) {
                 $query->select(
-                'konsumen.companyid',
-                'konsumen.no_faktur',
-                'konsumen.tanggal',
-                'konsumen.nik',
-                'konsumen.nama',
-                'konsumen.tempat_lahir',
-                'konsumen.tgl_lahir',
-                'konsumen.alamat',
-                'konsumen.telepon',
-                'konsumen.email',
-                'konsumen.nopol',
-                'konsumen.jenis',
-                'konsumen.merk',
-                'konsumen.type',
-                'konsumen.tahun_motor',
-                'konsumen.keterangan',
-                'konsumen.mengetahui',
-                'konsumen.keterangan_mengetahui',
-                )->groupBy(
-                'konsumen.companyid',
-                'konsumen.no_faktur',
-                'konsumen.tanggal',
-                'konsumen.nik',
-                'konsumen.nama',
-                'konsumen.tempat_lahir',
-                'konsumen.tgl_lahir',
-                'konsumen.alamat',
-                'konsumen.telepon',
-                'konsumen.email',
-                'konsumen.nopol',
-                'konsumen.jenis',
-                'konsumen.merk',
-                'konsumen.type',
-                'konsumen.tahun_motor',
-                'konsumen.keterangan',
-                'konsumen.mengetahui',
-                'konsumen.keterangan_mengetahui')
-                ->from(DB::raw($request->db.'konsumen'))
-                ->where('konsumen.companyid', $request->companyid);
-            }, 'konsumen', function ($join) {
-                $join->on('faktur.no_faktur', 'konsumen.no_faktur')
-                ->on('faktur.CompanyId', 'konsumen.companyid');
-            })
-            ->leftJoinSub(function ($query) use ($request){
-                $query->select('*')
-                ->from(DB::raw($request->db.'part'))
-                ->where('part.CompanyId', $request->companyid);
-            }, 'part', function ($join) {
-                $join->on('fakt_dtl.kd_part', 'part.kd_part')
-                ->on('faktur.CompanyId', 'part.CompanyId');
-            })
-            ->leftJoinSub(function ($query) use ($request){
-                $query->select('*')
-                ->from(DB::raw($request->db.'sub'));
-            }, 'sub', function ($join) {
-                $join->on('part.kd_sub', 'sub.kd_sub');
-            })
-            ->leftJoinSub(function ($query) use ($request){
-                $query->select('*')
-                ->from(DB::raw($request->db.'produk'));
-            }, 'produk', function ($join) {
-                $join->on('sub.kd_produk', 'produk.kd_produk');
-            })
-            ->where('faktur.CompanyId', $request->companyid);
-            
-            if(!empty($request->tgl_transaksi)){
-                if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
-                    $data = $data->whereMonth('faktur.tgl_faktur', date('m', strtotime($request->tgl_transaksi[0])))
-                    ->whereYear('faktur.tgl_faktur', date('Y', strtotime($request->tgl_transaksi[0])));
-                } else {
-                    $data = $data->whereBetween('faktur.tgl_faktur', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
-                }
-                array_push($menu_aktif, 'tgl_faktur');
-            } 
-            // else {
-            //     $data = $data->whereMonth('faktur.tgl_faktur', date('m'))
-            //     ->whereYear('faktur.tgl_faktur', date('Y'));
-            //     array_push($menu_aktif, 'tgl_faktur');
-            // }
-
-            if(!empty($request->jenis_motor)){
-                $data = $data->where('konsumen.jenis', 'like', '%'.$request->jenis_motor.'%');
-                array_push($menu_aktif, 'jenis_motor');
-            }
-            if (!empty($request->tipe_motor)) {
-                $data = $data->where('konsumen.type', 'like', '%'.$request->tipe_motor.'%');
-                array_push($menu_aktif, 'tipe_motor');
-            }
-            if (!empty($request->merek_motor)) {
-                $data = $data->where('konsumen.merk', 'like', '%'.$request->merek_motor.'%');
-                array_push($menu_aktif, 'merek_motor');
-            }
-            if (!empty($request->kd_part)) {
-                $data = $data->where('part.kd_part', 'like', '%' . $request->kd_part . '%');
-                array_push($menu_aktif, 'kd_part');
-            }
-            if (!empty($request->jenis_part)) {
-                $data = $data->where('part.jenis', 'like', '%' . $request->jenis_part . '%');
-                array_push($menu_aktif, 'jenis_part');
-            }
-            if(!empty($request->tgl_lahir)){
-                if (count(Arr::wrap($request->tgl_lahir)) == 1) {
-                    $data = $data->whereMonth('konsumen.tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
-                } else {
-                    $data = $data->whereRaw('MONTH(konsumen.tgl_lahir) BETWEEN ? AND ?', [date('m', strtotime($request->tgl_lahir[0])), date('m', strtotime($request->tgl_lahir[1]))])
-                    ->whereRaw('DAY(konsumen.tgl_lahir) BETWEEN ? AND ?', [date('d', strtotime($request->tgl_lahir[0])), date('d', strtotime($request->tgl_lahir[1]))]);
-                }
-                array_push($menu_aktif, 'tgl_lahir');
-            }
-            
-            if(!empty($request->filter)){
-                foreach ($request->filter as $key => $value) {
-                    if(in_array($key, ['tgl_faktur','kd_lokasi','kd_part','merk','type','jenis','nama','tgl_lahir','telepon']) && in_array($value, ['asc', 'desc'])){
-                                                match ($key) {
-                            'tgl_faktur' => $data->orderBy('faktur.'.$key, $value),
-                            'kd_part' => $data->orderBy('part.'.$key, $value),
-                            'tgl_lahir' => $data->orderByRaw('MONTH(konsumen.tgl_lahir) '.$value.', DAY(konsumen.tgl_lahir) '.$value),
-                            default => in_array($key, ['merk', 'type', 'jenis', 'nama', 'telepon']) ? $data->orderBy('konsumen.'.$key, $value) : $data,
-                        };
+                    'companyid',
+                    'no_faktur',
+                    'tanggal',
+                    'nik',
+                    'nama',
+                    'tempat_lahir',
+                    'tgl_lahir',
+                    'alamat',
+                    'telepon',
+                    'email',
+                    'nopol',
+                    'jenis',
+                    'merk',
+                    'type',
+                    'tahun_motor',
+                    'keterangan',
+                    'mengetahui',
+                    'keterangan_mengetahui'
+                )->from(DB::raw($request->db.'konsumen'))
+                ->where('companyid', $request->companyid);
+                if(!empty($request->tgl_transaksi)){
+                    if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
+                        $query = $query->whereMonth('tanggal', date('m', strtotime($request->tgl_transaksi[0])))
+                        ->whereYear('tanggal', date('Y', strtotime($request->tgl_transaksi[0])));
+                    } else {
+                        $query = $query->whereBetween('tanggal', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
                     }
                 }
-            }
+                if(!empty($request->tgl_lahir)){
+                    if (count(Arr::wrap($request->tgl_lahir)) == 1) {
+                        $query = $query->whereMonth('tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
+                    } else {
+                        $query = $query->whereRaw('MONTH(tgl_lahir) BETWEEN ? AND ?', [date('m', strtotime($request->tgl_lahir[0])), date('m', strtotime($request->tgl_lahir[1]))])
+                        ->whereRaw('DAY(tgl_lahir) BETWEEN ? AND ?', [date('d', strtotime($request->tgl_lahir[0])), date('d', strtotime($request->tgl_lahir[1]))]);
+                    }
+                }
+                if (!empty($request->merek_motor)) {
+                    $query = $query->where('merk', 'like', '%'.$request->merek_motor.'%');
+                }
+                if (!empty($request->tipe_motor)) {
+                    $query = $query->where('type', 'like', '%'.$request->tipe_motor.'%');
+                }
+                if(!empty($request->jenis_motor)){
+                    $query = $query->where('jenis', 'like', '%'.$request->jenis_motor.'%');
+                }
+
+                $query = $query->groupBy(
+                    'companyid',
+                    'no_faktur',
+                    'tanggal',
+                    'nik',
+                    'nama',
+                    'tempat_lahir',
+                    'tgl_lahir',
+                    'alamat',
+                    'telepon',
+                    'email',
+                    'nopol',
+                    'jenis',
+                    'merk',
+                    'type',
+                    'tahun_motor',
+                    'keterangan',
+                    'mengetahui',
+                    'keterangan_mengetahui'
+                );
+            }, 'konsumen', function ($join) {
+                $join->on('faktur.no_faktur', 'konsumen.no_faktur');
+            })
+            ->leftJoinSub(function ($query) use ($request) {
+                $query->select('*')
+                ->from(DB::raw($request->db.'part'))
+                ->where('CompanyId', $request->companyid);
+                if (!empty($request->kd_part)) {
+                    $query = $query->where('part.kd_part', 'like', '%' . $request->kd_part . '%');
+                }
+            }, 'part', function ($join) {
+                $join->on('part.kd_part', 'faktur.kd_part');
+            });
+
             return Response()->json([
                 'status'    => 1,
-                'data'      => ['data' => $data->paginate($request->per_page), 'filter' => $menu_aktif],
+                'data'      => ['data' => $data->paginate($request->per_page)],
                 'message'   => 'success',
             ], 200);
         } catch (\Exception $e) {
@@ -213,20 +177,41 @@ class KonsumenController extends Controller
             } else {
                 $request->merge(['db' => 'dbsuma.dbo.']);
             }
-            
-            $data = DB::table(DB::raw($request->db.'faktur'))
-            ->lock('WITH(NOLOCK)')
+
+            $data = DB::table(
+                function ($query) use ($request) {
+                    $query->select(
+                        'fakt_dtl.no_faktur',
+                        'faktur.tgl_faktur',
+                        'fakt_dtl.kd_part',
+                        'fakt_dtl.companyid',
+                        'fakt_dtl.kd_lokasi',
+                        'fakt_dtl.jml_jual'
+                    )->from(DB::raw($request->db.'fakt_dtl'))
+                    ->join('faktur', function ($join) {
+                        $join->on('faktur.no_faktur', 'fakt_dtl.no_faktur')
+                        ->on('faktur.CompanyId', 'fakt_dtl.companyid');
+                    })
+                    ->where('fakt_dtl.companyid', $request->companyid);
+                    if (!empty($request->kd_lokasi)){
+                        $query = $query->whereIn('fakt_dtl.kd_lokasi', Arr::wrap($request->kd_lokasi));
+                    }
+                    if (!empty($request->kd_part)) {
+                        $query = $query->where('fakt_dtl.kd_part', 'like', '%' . $request->kd_part . '%');
+                    }
+                }, 'faktur'
+            )
             ->select(
                 'faktur.no_faktur',
                 'faktur.tgl_faktur',
                 'produk.kd_produk',
-                'fakt_dtl.kd_part',
+                'faktur.kd_part',
                 'part.ket as nama_part',
                 'part.type as type_part',
                 'part.jenis as jenis_part',
                 'part.kategori as kategori_part',
                 'part.pattern',
-                'fakt_dtl.jml_jual',
+                'faktur.jml_jual',
                 'konsumen.tanggal as tgl_input_konsumen',
                 'konsumen.nik',
                 'konsumen.nama',
@@ -243,74 +228,90 @@ class KonsumenController extends Controller
                 'konsumen.keterangan',
                 'konsumen.mengetahui',
                 'konsumen.keterangan_mengetahui',
-                'fakt_dtl.kd_lokasi',
+                'faktur.kd_lokasi',
                 'faktur.CompanyId',
                 DB::raw("'".$request->divisi."' as divisi")
             )->JoinSub(function ($query) use ($request) {
-                $query->select('fakt_dtl.no_faktur', 'fakt_dtl.companyid', 'fakt_dtl.kd_lokasi','fakt_dtl.kd_part','fakt_dtl.jml_jual')
-                ->from(DB::raw($request->db.'fakt_dtl'))
-                ->where('fakt_dtl.companyid', $request->companyid);
-                
-                if(!empty($request->kd_lokasi)){
-                    $query = $query->whereIn('fakt_dtl.kd_lokasi', Arr::wrap($request->kd_lokasi));
-                }
-            }, 'fakt_dtl', function ($join) {
-                $join->on('faktur.no_faktur', 'fakt_dtl.no_faktur')
-                ->on('faktur.CompanyId', 'fakt_dtl.companyid');
-            })->leftJoinSub(function ($query) use ($request){
                 $query->select(
-                'konsumen.companyid',
-                'konsumen.no_faktur',
-                'konsumen.tanggal',
-                'konsumen.nik',
-                'konsumen.nama',
-                'konsumen.tempat_lahir',
-                'konsumen.tgl_lahir',
-                'konsumen.alamat',
-                'konsumen.telepon',
-                'konsumen.email',
-                'konsumen.nopol',
-                'konsumen.jenis',
-                'konsumen.merk',
-                'konsumen.type',
-                'konsumen.tahun_motor',
-                'konsumen.keterangan',
-                'konsumen.mengetahui',
-                'konsumen.keterangan_mengetahui',
-                )->groupBy(
-                'konsumen.companyid',
-                'konsumen.no_faktur',
-                'konsumen.tanggal',
-                'konsumen.nik',
-                'konsumen.nama',
-                'konsumen.tempat_lahir',
-                'konsumen.tgl_lahir',
-                'konsumen.alamat',
-                'konsumen.telepon',
-                'konsumen.email',
-                'konsumen.nopol',
-                'konsumen.jenis',
-                'konsumen.merk',
-                'konsumen.type',
-                'konsumen.tahun_motor',
-                'konsumen.keterangan',
-                'konsumen.mengetahui',
-                'konsumen.keterangan_mengetahui')
-                ->from(DB::raw($request->db.'konsumen'))
-                ->where('konsumen.companyid', $request->companyid);
+                    'companyid',
+                    'no_faktur',
+                    'tanggal',
+                    'nik',
+                    'nama',
+                    'tempat_lahir',
+                    'tgl_lahir',
+                    'alamat',
+                    'telepon',
+                    'email',
+                    'nopol',
+                    'jenis',
+                    'merk',
+                    'type',
+                    'tahun_motor',
+                    'keterangan',
+                    'mengetahui',
+                    'keterangan_mengetahui'
+                )->from(DB::raw($request->db.'konsumen'))
+                ->where('companyid', $request->companyid);
+                if(!empty($request->tgl_transaksi)){
+                    if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
+                        $query = $query->whereMonth('tanggal', date('m', strtotime($request->tgl_transaksi[0])))
+                        ->whereYear('tanggal', date('Y', strtotime($request->tgl_transaksi[0])));
+                    } else {
+                        $query = $query->whereBetween('tanggal', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
+                    }
+                }
+                if(!empty($request->tgl_lahir)){
+                    if (count(Arr::wrap($request->tgl_lahir)) == 1) {
+                        $query = $query->whereMonth('tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
+                    } else {
+                        $query = $query->whereRaw('MONTH(tgl_lahir) BETWEEN ? AND ?', [date('m', strtotime($request->tgl_lahir[0])), date('m', strtotime($request->tgl_lahir[1]))])
+                        ->whereRaw('DAY(tgl_lahir) BETWEEN ? AND ?', [date('d', strtotime($request->tgl_lahir[0])), date('d', strtotime($request->tgl_lahir[1]))]);
+                    }
+                }
+                if (!empty($request->merek_motor)) {
+                    $query = $query->where('merk', 'like', '%'.$request->merek_motor.'%');
+                }
+                if (!empty($request->tipe_motor)) {
+                    $query = $query->where('type', 'like', '%'.$request->tipe_motor.'%');
+                }
+                if(!empty($request->jenis_motor)){
+                    $query = $query->where('jenis', 'like', '%'.$request->jenis_motor.'%');
+                }
+
+                $query = $query->groupBy(
+                    'companyid',
+                    'no_faktur',
+                    'tanggal',
+                    'nik',
+                    'nama',
+                    'tempat_lahir',
+                    'tgl_lahir',
+                    'alamat',
+                    'telepon',
+                    'email',
+                    'nopol',
+                    'jenis',
+                    'merk',
+                    'type',
+                    'tahun_motor',
+                    'keterangan',
+                    'mengetahui',
+                    'keterangan_mengetahui'
+                );
             }, 'konsumen', function ($join) {
-                $join->on('faktur.no_faktur', 'konsumen.no_faktur')
-                ->on('faktur.CompanyId', 'konsumen.companyid');
+                $join->on('faktur.no_faktur', 'konsumen.no_faktur');
             })
-            ->leftJoinSub(function ($query) use ($request){
+            ->leftJoinSub(function ($query) use ($request) {
                 $query->select('*')
                 ->from(DB::raw($request->db.'part'))
-                ->where('part.CompanyId', $request->companyid);
+                ->where('CompanyId', $request->companyid);
+                if (!empty($request->kd_part)) {
+                    $query = $query->where('part.kd_part', 'like', '%' . $request->kd_part . '%');
+                }
             }, 'part', function ($join) {
-                $join->on('fakt_dtl.kd_part', 'part.kd_part')
-                ->on('faktur.CompanyId', 'part.CompanyId');
-            })
-            ->leftJoinSub(function ($query) use ($request){
+                $join->on('part.kd_part', 'faktur.kd_part');
+            }) ->leftJoinSub(function ($query) use ($request){
                 $query->select('*')
                 ->from(DB::raw($request->db.'sub'));
             }, 'sub', function ($join) {
@@ -321,58 +322,7 @@ class KonsumenController extends Controller
                 ->from(DB::raw($request->db.'produk'));
             }, 'produk', function ($join) {
                 $join->on('sub.kd_produk', 'produk.kd_produk');
-            })
-            ->where('faktur.CompanyId', $request->companyid);
-            
-            if(!empty($request->tgl_transaksi)){
-                if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
-                    $data = $data->whereMonth('faktur.tgl_faktur', date('m', strtotime($request->tgl_transaksi[0])))
-                    ->whereYear('faktur.tgl_faktur', date('Y', strtotime($request->tgl_transaksi[0])));
-                } else {
-                    $data = $data->whereBetween('faktur.tgl_faktur', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
-                }
-            } 
-            // else {
-            //     $data = $data->whereMonth('faktur.tgl_faktur', date('m'))
-            //     ->whereYear('faktur.tgl_faktur', date('Y'));
-            // }
-
-            if(!empty($request->jenis_motor)){
-                $data = $data->where('konsumen.jenis', 'like', '%'.$request->jenis_motor.'%');
-            }
-            if (!empty($request->tipe_motor)) {
-                $data = $data->where('konsumen.type', 'like', '%'.$request->tipe_motor.'%');
-            }
-            if (!empty($request->merek_motor)) {
-                $data = $data->where('konsumen.merk', 'like', '%'.$request->merek_motor.'%');
-            }
-            if (!empty($request->kd_part)) {
-                $data = $data->where('part.kd_part', 'like', '%' . $request->kd_part . '%');
-            }
-            if (!empty($request->jenis_part)) {
-                $data = $data->where('part.jenis', 'like', '%' . $request->jenis_part . '%');
-            }
-            if(!empty($request->tgl_lahir)){
-                if (count(Arr::wrap($request->tgl_lahir)) == 1) {
-                    $data = $data->whereMonth('konsumen.tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
-                } else {
-                    $data = $data->whereRaw('MONTH(konsumen.tgl_lahir) BETWEEN ? AND ?', [date('m', strtotime($request->tgl_lahir[0])), date('m', strtotime($request->tgl_lahir[1]))])
-                    ->whereRaw('DAY(konsumen.tgl_lahir) BETWEEN ? AND ?', [date('d', strtotime($request->tgl_lahir[0])), date('d', strtotime($request->tgl_lahir[1]))]);
-                }
-            }
-            
-            if(!empty($request->filter)){
-                foreach ($request->filter as $key => $value) {
-                    if(in_array($key, ['tgl_faktur','kd_lokasi','kd_part','merk','type','jenis','nama','tgl_lahir','telepon']) && in_array($value, ['asc', 'desc'])){
-                                                match ($key) {
-                            'tgl_faktur' => $data->orderBy('faktur.'.$key, $value),
-                            'kd_part' => $data->orderBy('part.'.$key, $value),
-                            'tgl_lahir' => $data->orderByRaw('MONTH(konsumen.tgl_lahir) '.$value.', DAY(konsumen.tgl_lahir) '.$value),
-                            default => in_array($key, ['merk', 'type', 'jenis', 'nama', 'telepon']) ? $data->orderBy('konsumen.'.$key, $value) : $data,
-                        };
-                    }
-                }
-            }
+            });
 
             return Response()->json([
                 'status'    => 1,

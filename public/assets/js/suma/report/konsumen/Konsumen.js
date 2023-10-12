@@ -56,13 +56,10 @@ function request_data(page){
             if($('#filter_report #lokasi').val() == ''){
                 $('#filter_report #lokasi').val(response.old.request.kd_lokasi).trigger('change');
             }
-            // response.old.filter looping
-            // #kt_post #table_list #{item}
-            response.old.filter.forEach(function(item) {
-                console.log(item);
-                // ubah warna text menjadi primary pada boostrap
-                $('#kt_post #table_list #'+item).addClass('text-primary');
-            });
+
+            // response.old.filter.forEach(function(item) {
+            //     $('#kt_post #table_list #'+item).addClass('text-primary');
+            // });
 
             loading.release();
             ada_data = true;
@@ -104,7 +101,7 @@ $('document').ready(function() {
 
             const honda_lokasi = lokasi['honda'].lokasi;
             Object.keys(honda_lokasi).map(function(item) {
-                $('#filter_report #company').append(`<option value="${honda_lokasi[item].companyid}">${honda_lokasi[item].companyid}</option>`);
+                $('#filter_report #company').append(`<option value="${honda_lokasi[item].companyid}">${honda_lokasi[item].companyid} (${honda_lokasi[item].nm_cabang})</option>`);
             });
         } else if ($(this).val().toLowerCase() == 'fdr') {
             $('.text-kd_part').text('Ukuran Ban');
@@ -113,7 +110,7 @@ $('document').ready(function() {
 
             const fdr_lokasi = lokasi['fdr'].lokasi;
             Object.keys(fdr_lokasi).map(function(item) {
-                $('#filter_report #company').append(`<option value="${fdr_lokasi[item].companyid}">${fdr_lokasi[item].companyid}</option>`);
+                $('#filter_report #company').append(`<option value="${fdr_lokasi[item].companyid}">${fdr_lokasi[item].companyid} (${fdr_lokasi[item].nm_cabang})</option>`);
             });
         }
     });
@@ -311,7 +308,7 @@ $('document').ready(function() {
                 });
                 return false;
             }
-            
+
             var blob = new Blob([response], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             });

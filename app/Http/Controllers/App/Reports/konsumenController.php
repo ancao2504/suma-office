@@ -19,7 +19,6 @@ class KonsumenController extends Controller
      */
     public function index(Request $request)
     {
-        // dd(json_decode(service::LokasiAll($request)));
         if(empty(session()->get('app_user_company'))){
             $data = json_decode(service::LokasiAll($request));
             if($data->status == 0){
@@ -82,13 +81,13 @@ class KonsumenController extends Controller
             if(empty($request->companyid)) {
                 $request->merge(['companyid' => collect(collect($lokasi)->first()->lokasi)->first()->companyid]);
             }
-            
+
             if(empty($request->kd_lokasi) || !in_array($request->kd_lokasi, $lokasi->lokasi_valid->kd_lokasi)){
                 $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
             }
-            
+
             $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
-            
+
             $responseApi = json_decode(Service::ReportKonsumenData($request));
             if ($responseApi->status == 1) {
                 $view = view(
@@ -103,7 +102,7 @@ class KonsumenController extends Controller
                     'status'    => 1,
                     'message'   => 'success',
                     'data'      => Str::between($view->with('data', $responseApi->data->data)->render(), '<!--begin::Card-->', '<!--end::Card-->'),
-                    'old'       => (object)['filter' => $responseApi->data->filter, 'request' => $request->except('_token')]
+                    'old'       => (object)['request' => $request->except('_token')]
                 ], 200);
             } else {
                 return Response()->json([
