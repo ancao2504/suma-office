@@ -29,7 +29,7 @@
 								</div>
 								<div class="col-12 mb-3">
 									<div class="form-group row mb-2">
-										<label for="file" class="col-sm-2 col-form-label required">File Exel</label>
+										<label for="file" class="col-sm-2 col-form-label required">File Excel</label>
 										<div class="col-sm-9">
 											<input class="form-control @error('file') is-invalid @enderror" type="file" id="file" name="file" accept=".xls, .xlsx">
 											@error('file')
