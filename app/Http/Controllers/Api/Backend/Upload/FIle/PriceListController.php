@@ -45,6 +45,7 @@ class PriceListController extends Controller
                     'nama_file'     => $request->nama_file,
                     'tanggal'       => date('Y-m-d H:i:s'),
                     'lokasi_file'   => $request->path_file,
+                    'ukuran_file'   => $request->ukuran_file,
                     'keterangan'    => $request->ket_file,
                 ]
             );

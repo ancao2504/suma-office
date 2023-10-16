@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
 @section('title','Upload')
-@section('subtitle','Exel - Pricelist')
+@section('subtitle','Excel - Pricelist')
 @push('styles')
 @endpush
 
@@ -77,6 +77,7 @@
 									<tr class="fs-8 fw-bolder text-muted text-center">
 										<th scope="col" rowspan="1" class="w-auto ps-3 pe-3">No</th>
 										<th scope="col" rowspan="1" class="w-auto ps-3 pe-3">Nama File</th>
+										<th scope="col" rowspan="1" class="w-auto ps-3 pe-3">Ukuran File</th>
 										<th scope="col" rowspan="1" class="w-auto ps-3 pe-3">Tanggal Upload</th>
 										<th scope="col" rowspan="1" class="w-auto ps-3 pe-3">Keterangan</th>
 										<th scope="col" rowspan="1" class="w-auto ps-3 pe-3">Action</th>
@@ -92,6 +93,7 @@
 											<tr class="fw-bolder fs-8 border">
 												<td class="text-center">{{ $loop->iteration }}</td>
 												<td class="text-center">{{ $item->nama_file }}</td>
+												<td class="text-center">{{ $item->ukuran_file??'-' }} Kb</td>
 												<td class="text-center">
 													{{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('D MMMM Y') }}<br>
 													{{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('HH:mm') }}<br>
@@ -132,8 +134,8 @@
 				</div>
 			</div>
 			<!--end::Row-->
-			
-			
+
+
 		</div>
 		<!--end::Container-->
 	</div>

@@ -2007,6 +2007,7 @@ class Service
             'kd_dealer'     => trim($request->kd_dealer),
             'kd_cabang'     => trim($request->kd_cabang),
             // ! data detail
+            'no_faktur'     => trim($request->no_faktur),
             'no_produksi'   => $request->no_produksi,
             'kd_part'       => trim($request->kd_part),
             'qty_retur'     => $request->qty_retur,
@@ -2072,6 +2073,7 @@ class Service
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
             'no_retur'      => $request->no_retur,
+            'no_faktur'     => $request->no_faktur,
             'kd_part'       => trim($request->kd_part),
             'no_produksi'   => $request->no_produksi,
         ];
@@ -2383,6 +2385,7 @@ class Service
             'kd_part'       => $request->kd_part,
             'kd_sales'      => $request->kd_sales,
             'no_retur'      => $request->no_retur,
+            'kd_dealer'     => $request->kd_dealer,
             'no_faktur'     => $request->no_faktur,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
@@ -2574,6 +2577,7 @@ class Service
         $body = [
             'nama_file'          => $request->nama_file,
             'path_file'          => $request->path_file,
+            'ukuran_file'        => $request->ukuran_file,
             'ket_file'           => $request->ket_file
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
