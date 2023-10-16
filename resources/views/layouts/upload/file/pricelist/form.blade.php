@@ -93,7 +93,7 @@
 											<tr class="fw-bolder fs-8 border">
 												<td class="text-center">{{ $loop->iteration }}</td>
 												<td class="text-center">{{ $item->nama_file }}</td>
-												<td class="text-center">{{ $item->ukuran_file??'-' }} Kb</td>
+												<td class="text-center">{{ $item->ukuran_file??'-' }} KB</td>
 												<td class="text-center">
 													{{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('D MMMM Y') }}<br>
 													{{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('HH:mm') }}<br>
