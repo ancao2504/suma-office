@@ -37,7 +37,7 @@ class UploadFileController extends Controller
         $extensi = $request->file('file')->getClientOriginalExtension();
         try {
             $request->merge([
-                'ukuran_file' => round(($request->file('file')->getSize() / 1024), 2)
+                'ukuran_file' => round(($request->file('file')->getSize() / 1024), 3)
             ]);
             $request->file('file')->move('images/upload', $request->nama_file.'.'.$extensi);
         } catch (\Throwable $th) {
