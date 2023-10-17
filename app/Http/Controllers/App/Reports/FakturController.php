@@ -34,7 +34,7 @@ class FakturController extends Controller
         } else if($responseApiSales->status == 0 || $responseApiProduk->status == 0){
             if ($responseApiSales->status == 0) {
                 return redirect()->back()->with('failed', $responseApiSales->message);
-            } else if (json_decode($responseApiProduk)->status == 0) {
+            } else if ($responseApiProduk->status == 0) {
                 return redirect()->back()->with('failed', $responseApiProduk->message);
             }
         } else {
