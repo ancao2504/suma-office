@@ -1240,7 +1240,7 @@
                     @endif
                 @endif
 
-                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SPV_PC', 'MD_H3_KAPC','MD_OL_SPV','MD_OL_ADMIN']))
+                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SPV_PC', 'MD_H3_KAPC','MD_OL_SPV','MD_OL_ADMIN','MD_H3_KORSM']))
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">REPORT</span>
