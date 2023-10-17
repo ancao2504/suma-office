@@ -32,10 +32,10 @@ class FakturController extends Controller
                 ]
             );
         } else if($responseApiSales->status == 0 || $responseApiProduk->status == 0){
-            if (json_decode($responseApiSales)->status == 0) {
-                return redirect()->back()->with('failed', json_decode($responseApiSales)->message);
+            if ($responseApiSales->status == 0) {
+                return redirect()->back()->with('failed', $responseApiSales->message);
             } else if (json_decode($responseApiProduk)->status == 0) {
-                return redirect()->back()->with('failed', json_decode($responseApiProduk)->message);
+                return redirect()->back()->with('failed', $responseApiProduk->message);
             }
         } else {
             return redirect()->back()->with('failed', 'Maaf, terjadi kesalahan. Silahkan coba lagi');
@@ -43,12 +43,12 @@ class FakturController extends Controller
     }
 
     public function data(Request $request)
-    { 
+    {
         try {
             $responseApi = Service::ReportFakturData($request);
             if (json_decode($responseApi)->status == 1) {
                 $data = json_decode($responseApi)->data;
-                
+
                 return Response()->json([
                     'status'    => 1,
                     'message'   => 'success',
@@ -70,7 +70,7 @@ class FakturController extends Controller
         }
     }
 
-    
+
     public function export(Request $request)
     {
         try {
