@@ -1247,7 +1247,7 @@
                         </div>
                     </div>
 
-                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
+                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT','MD_H3_KORSM']))
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('report/faktur*') ? 'active' : '' }}"
                             href="{{ url('/report/faktur') }}">
