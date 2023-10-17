@@ -24,9 +24,15 @@
 		<link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
 
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
+		<link href="{{ asset('assets/css/stylesuma.css') }}" rel="stylesheet" type="text/css" />
+
+        <!--Dark Skin-->
+        {{-- <link href="{{ asset('assets/plugins/global/plugins.dark.bundle.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/style.dark.bundle.css') }}" rel="stylesheet" type="text/css" /> --}}
+
+        <!--Light Skin-->
 		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-		<link href="{{ asset('assets/css/stylesuma.css') }}" rel="stylesheet" type="text/css" />
 
         <!-- PWA  -->
         <meta name="theme-color" content="#ffffff"/>
