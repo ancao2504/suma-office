@@ -221,7 +221,6 @@ $(document).ready(function() {
 
     $('#type_notifikasi').change(function () {
         var selectedValues = $(this).val();
-        console.log(selectedValues);
 
         var isPofSelected = (selectedValues == 'POF') ? true : false;
         var isCampaignSelected = (selectedValues == 'CAMPAIGN') ? true : false;
