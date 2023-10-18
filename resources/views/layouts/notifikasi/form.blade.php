@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
-@section('title','Notifikasi')
-@section('subtitle','')
+@section('title','')
+@section('subtitle','Notifikasi')
 @push('styles')
 <!-- Include stylesheet -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
