@@ -729,6 +729,14 @@ class Service
         $response = ApiRequest::requestPost($request, $header, $body);
         return $response;
     }
+    public static function OptionUser()
+    {
+        $request = 'backend/options/user';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
 
     public static function OptionUpdateHarga($kode_lokasi, $page, $per_page, $search, $companyid)
     {
@@ -2590,6 +2598,28 @@ class Service
         $body = [
             'nama_file'          => $request->nama_file,
             'tanggal'            => $request->tanggal,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function dataPOF($request)
+    {
+        $url = 'backend/pof';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'          => $request->session()->get('app_user_company_id'),
+            'no_pof'          => $request->no_pof,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function dataCampaign($request)
+    {
+        $url = 'backend/campaign';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'          => $request->session()->get('app_user_company_id'),
+            'no_camp'          => $request->no_camp,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

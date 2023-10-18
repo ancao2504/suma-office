@@ -30,6 +30,7 @@ use App\Reports\FakturController as ReportFaktur;
 use App\Retur\KonsumenController as ReturKonsumen;
 use App\Retur\SupplierController as ReturSupplier;
 use App\Reports\PackingController as ReportPacking;
+use App\Upload\File\PriceList\UploadFileController;
 use App\setting\Diskon\DiskonProdukDealerController;
 use App\Reports\KonsumenController as ReportKonsumen;
 use App\Setting\HargaNetto\HargaNettoPartsControllers;
@@ -39,26 +40,26 @@ use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Retur\SupplierJawabController as ReturSupplierJawab;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Http\Controllers\App\Gudang\Online\PackingController;
+use App\Notifikasi\NotifikasiController;
 use App\Online\PemindahanController as PemindahanMarketplace;
 use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
+use App\Online\Tiktok\EkspedisiController as EkspedisiTiktok;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormController;
 use App\Online\Shopee\OrderController as OrderShopeeController;
 use App\Online\Shopee\PemindahanController as PemindahanShopee;
+use App\Online\Tiktok\OrderController as OrderTiktokController;
 use App\Online\ApproveOrderController as ApproveOrderController;
 use App\Online\Shopee\UpdateHargaController as UpdateHargaShopee;
 use App\Online\Shopee\HistorySaldoController as HistorySaldoShopee;
+use App\Online\Tiktok\ProductController as ProductTiktokController;
 use App\Online\Tokopedia\EkspedisiController as EkspedisiTokopedia;
 use App\Orders\PurchaseOrderForm\PurchaseOrderFormDetailController;
 use App\Online\Tokopedia\OrderController as OrderTokopediaController;
-use App\Upload\File\PriceList\UploadFileController;
+use App\Online\Tiktok\PemindahanController as PemindahanTiktokController;
 use App\Online\Tokopedia\HistorySaldoController as HistorySaldoTokopedia;
 use App\Online\Tokopedia\ProductController as ProductTokopediaController;
 use App\Online\Tokopedia\PemindahanController as PemindahanTokopediaController;
 use App\Online\Tokopedia\UpdateHargaController as UpdateHargaTokopediaController;
-use App\Online\Tiktok\PemindahanController as PemindahanTiktokController;
-use App\Online\Tiktok\ProductController as ProductTiktokController;
-use App\Online\Tiktok\EkspedisiController as EkspedisiTiktok;
-use App\Online\Tiktok\OrderController as OrderTiktokController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -302,9 +303,12 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/option/updateharga', 'OptionUpdateHarga')->name('update-harga');
 
                 // ! dari aplikasi suma sby
+                Route::get('/pof', 'pof')->name('option-pof');
+                Route::get('/campaign', 'campaign')->name('option-campaign');
                 Route::get('/retur', 'retur')->name('option-retur');
                 Route::get('/dealer', 'dealer')->name('option-dealer');
                 Route::get('/faktur/konsumen', 'fakturKonsumen')->name('option-faktur-konsumen');
+                Route::get('/faktur/klaim', 'fakturKlaim')->name('option-faktur-klaim');
                 Route::get('/part', 'part')->name('option-part');
                 Route::get('/part/stock', 'partStock')->name('option-part-stock');
                 Route::get('/produk', 'produk')->name('option-produk');
@@ -387,6 +391,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::post('/validasi/dealersalesman', 'validasiDealerSalesman')->name('dealer-salesman');
                 Route::post('/validasi/produk', 'validasiProduk')->name('produk');
                 Route::post('/validasi/partnumber', 'validasiPartNumber')->name('part-number');
+            });
+        });
+
+        Route::name('notifikasi.')->group(function () {
+            Route::controller(NotifikasiController::class)->group(function () {
+                Route::get('/notifikasi/form', 'form')->name('form');
+                Route::post('/notifikasi/send', 'send')->name('send');
             });
         });
 

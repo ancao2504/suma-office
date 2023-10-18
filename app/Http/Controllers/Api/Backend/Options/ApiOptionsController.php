@@ -280,6 +280,26 @@ class ApiOptionsController extends Controller
         }
     }
 
+    public function optionUser(Request $request)
+    {
+        try {
+            $sql = DB::table('users')->lock('with (nolock)')
+                ->selectRaw("user_id, name, jabatan, role_id")
+                ->orderBy('user_id', 'asc')
+                ->get();
+            return Response::responseSuccess('success', $sql);
+        } catch (\Exception $exception) {
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $exception->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
     public function optionSalesman(Request $request)
     {
         try {
@@ -746,16 +766,13 @@ class ApiOptionsController extends Controller
 
             $data = DB::table('dealer')
                 ->lock('with (nolock)')->select('kd_dealer', 'nm_dealer', 'alamat1', 'kotasj')
-                ->where('kd_sales', $request->kd_sales)
                 ->where('CompanyId', $request->companyid);
-
-            if (!empty($request->kd_sales)) {
-                $data = $data->where('kd_dealer',  'LIKE', '%' . $request->kd_dealer . '%');
-            }
-
-            if (!empty($request->kd_dealer)) {
-                $data = $data->where('kd_dealer',  'LIKE', '%' . $request->kd_dealer . '%');
-            }
+                if (!empty($request->kd_sales)) {
+                    $data = $data->where('kd_sales', $request->kd_sales);
+                }
+                if (!empty($request->kd_dealer)) {
+                    $data = $data->where('kd_dealer',  'LIKE', '%' . $request->kd_dealer . '%');
+                }
             if ($request->option == 'first') {
                 $data = $data->first();
             } else if ($request->option == 'select') {
@@ -914,6 +931,9 @@ class ApiOptionsController extends Controller
                     if (!empty($request->kd_sales)) {
                         $query = $query->where('faktur.kd_sales', $request->kd_sales);
                     }
+                    if (!empty($request->kd_dealer)) {
+                        $query = $query->where('faktur.kd_dealer', $request->kd_dealer);
+                    }
                     $query = $query->where('faktur.no_faktur', 'LIKE', '%'.$request->no_faktur . '%');
                 }, 'faktur', function ($join) {
                     $join->on('part.kd_part', '=', 'faktur.kd_part')
@@ -945,7 +965,7 @@ class ApiOptionsController extends Controller
             // ! Jika data first atau get (paginate)
             // ! ------------------------------------
             if(!empty($request->option[1]) && $request->option[1] == 'with_stock'){
-                $data = $data->select('part.kd_part','part.nm_part')
+                $data = $data->select('part.kd_part','part.nm_part', 'faktur.jml_jual as limit_jumlah')
                 ->selectRaw('(ISNULL(tbStLokasiRak.Stock,0) - (ISNULL(stlokasi.min,0) + ISNULL(stlokasi.in_transit,0) + ISNULL(part.kanvas,0) + ISNULL(part.in_transit,0))) as stock')
                 ->JoinSub(function ($query) use ($request) {
                     $query->select('*')
@@ -1020,6 +1040,82 @@ class ApiOptionsController extends Controller
                 $request->get('companyid')
             );
         }
+    }
+
+    public function dataFakturKlaim(Request $request) {
+        // try {
+            // ! Validasi ---------------------------------------------
+            $validate = Validator::make($request->all(), [
+                'no_faktur' => 'min:5',
+            ],[
+                'no_faktur.min' => 'No Faktur minimal 5 karakter',
+            ]);
+
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
+
+            if(!in_array($request->option, ['first', 'page'])){
+                $request->merge(['option' => 'first']);
+            }
+
+            $data = DB::table(function ($query) use ($request) {
+                $query->select(
+                        'faktur.no_faktur',
+                        'faktur.tgl_faktur',
+                        'faktur.kd_dealer',
+                        'faktur.kd_sales',
+                        'faktur.CompanyId'
+                    )
+                    ->from('faktur')
+                    ->join('fakt_dtl', function ($join) {
+                        $join->on('faktur.no_faktur', '=', 'fakt_dtl.no_faktur')
+                            ->on('faktur.CompanyId', '=', 'fakt_dtl.CompanyId');
+                    })
+                    ->where('faktur.CompanyId', $request->companyid);
+
+                    if (!empty($request->kd_dealer)) {
+                        $query = $query->where('faktur.kd_dealer', $request->kd_dealer);
+                    }
+                    if (!empty($request->kd_sales)) {
+                        $query = $query->where('faktur.kd_sales', $request->kd_sales);
+                    }
+                    if (!empty($request->no_faktur)) {
+                        $query = $query->where('faktur.no_faktur', 'LIKE', '%'.$request->no_faktur . '%');
+                    }
+
+                    $query = $query->groupBy(
+                        'faktur.no_faktur',
+                        'faktur.tgl_faktur',
+                        'faktur.kd_dealer',
+                        'faktur.kd_sales',
+                        'faktur.CompanyId'
+                    );
+                }, 'faktur')
+                ->select(
+                    'faktur.no_faktur',
+                    'faktur.tgl_faktur'
+                )
+                ->orderBy('faktur.tgl_faktur', 'desc');
+
+            if($request->option == 'first'){
+                $data = $data->first();
+            } elseif($request->option == 'page'){
+                $data = $data
+                ->paginate($request->per_page);
+            }
+
+            return Response::responseSuccess('success' , $data);
+        // } catch (\Exception $e) {
+        //     return Response::responseError(
+        //         $request->get('user_id'),
+        //         'API',
+        //         Route::getCurrentRoute()->action['controller'],
+        //         $request->route()->getActionMethod(),
+        //         $e->getMessage(),
+        //         $request->get('companyid')
+        //     );
+        // }
     }
 
     public function dataRetur(Request $request){
@@ -1382,4 +1478,67 @@ class ApiOptionsController extends Controller
         }
     }
     // !
+
+    public function dataPof(Request $request)
+    {
+        try {
+            // ! Validasi ---------------------------------------------
+            $validate = Validator::make($request->all(), [
+                'no_pof' => 'min:5',
+            ],[
+                'no_pof.min' => 'No POF minimal 5 karakter',
+            ]);
+
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
+            $sql = DB::table('pof')->lock('with (nolock)')
+                ->selectRaw("no_pof as kode")
+                ->where('CompanyId', $request->companyid)
+                ->where('no_pof', 'like', $request->no_pof.'%')
+                ->orderBy('no_pof', 'desc')
+                ->first();
+            return Response::responseSuccess('success', $sql);
+        } catch (\Exception $exception) {
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $exception->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+    public function dataCampaign(Request $request)
+    {
+        try {
+            // ! Validasi ---------------------------------------------
+            $validate = Validator::make($request->all(), [
+                'no_camp' => 'min:4',
+            ],[
+                'no_camp.min' => 'No Campaign minimal 4 karakter',
+            ]);
+
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
+            $sql = DB::table('camp')->lock('with (nolock)')
+                ->selectRaw("no_camp as kode")
+                ->where('CompanyId', $request->companyid)
+                ->where('no_camp', 'like', $request->no_camp.'%')
+                ->orderBy('no_camp', 'desc')
+                ->first();
+            return Response::responseSuccess('success', $sql);
+        } catch (\Exception $exception) {
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $exception->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
 }

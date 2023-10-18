@@ -143,6 +143,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/options/dealersalesman', 'optionDealerSalesman')->name('option-dealer-salesman');
                     Route::post('/backend/options/kabupaten', 'optionKabupaten')->name('option-kabupaten');
                     Route::post('/backend/options/roleuser', 'optionRoleUser')->name('option-role-user');
+                    Route::post('/backend/options/user', 'optionUser')->name('option-user');
                     Route::post('/backend/options/classproduk', 'optionClassProduk')->name('option-class-produk');
                     Route::post('/backend/options/groupproduk', 'optionGroupProduk')->name('option-group-produk');
                     Route::post('/backend/options/levelproduk', 'optionLevelProduk')->name('option-level-produk');
@@ -155,11 +156,14 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/options/ekspedisionline', 'optionEkspedisiOnline')->name('option-ekspedisi-online');
                     // ! sby
                     Route::post('/backend/option/konsumen', 'dataKonsumen')->name('konsumen');
+                    Route::post('/backend/pof', 'dataPof')->name('pof');
+                    Route::post('/backend/campaign', 'dataCampaign')->name('campaign');
                     Route::post('/backend/salesman', 'dataSalesman')->name('salesman');
                     Route::post('/backend/retur', 'dataRetur')->name('retur');
                     Route::post('/backend/supplier', 'dataSupplier')->name('supplier');
                     Route::post('/backend/dealer', 'dataDealer')->name('dealer');
                     Route::post('/backend/faktur/konsumen', 'dataFakturKonsumen')->name('faktur-konsumen');
+                    Route::post('/backend/faktur/klaim', 'dataFakturKlaim')->name('faktur-klaim');
                     Route::post('/backend/part', 'dataPart')->name('part');
                     Route::post('/backend/produk', 'dataProduk')->name('produk');
                     Route::post('/backend/merekmotor', 'dataMerekmotor')->name('merekmotor');
