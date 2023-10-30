@@ -718,7 +718,7 @@ class ApiOrderController extends Controller
                     $jumlah_faktur = (double)$jumlah_faktur + 1;
 
                     $data_faktur_detail_temp->push((object) [
-                        'pictures'      => trim(config('constants.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
+                        'pictures'      => trim(config('constants.app.url.images')).'/'.strtoupper(trim($data->part_number)).'.jpg',
                         'nomor_faktur'  => strtoupper(trim($data->nomor_faktur)),
                         'part_number'   => strtoupper(trim($data->part_number)),
                         'nama_part'     => strtoupper(trim($data->nama_part)),

@@ -12,7 +12,7 @@
         </div>
         @endif
         <div class="imgpartframe">
-            <img src="{{ config('constants.app.app_images_url') }}/parts/{{ trim($data->part_number) }}.jpg"
+            <img src="{{ config('constants.app.app_images_url') }}/{{ trim($data->part_number) }}.jpg"
             class="card-img-top imgpartlist imgparthelper" alt="{{ trim($data->part_number) }}"
             onerror="this.onerror=null; this.src='{{ URL::asset('assets/images/background/part_image_not_found.png') }}'">
         </div>

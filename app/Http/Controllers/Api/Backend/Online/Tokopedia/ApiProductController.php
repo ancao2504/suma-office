@@ -171,7 +171,7 @@ class ApiProductController extends Controller
                     'description'   => trim($data->description),
                     'het'           => (double)$data->het,
                     'stock'         => (double)$data->stock,
-                    'images'        => config('constants.url.images').'/'.strtoupper(trim($data->part_number)).'.jpg',
+                    'images'        => config('constants.app.url.images').'/'.strtoupper(trim($data->part_number)).'.jpg',
                     'marketplace'   => $data_marketplace
                 ];
             }

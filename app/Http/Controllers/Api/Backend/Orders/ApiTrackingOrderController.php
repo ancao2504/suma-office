@@ -351,7 +351,7 @@ class ApiTrackingOrderController extends Controller
                     'disc_detail'   => (double)$data->disc_detail,
                     'total_detail'  => (double)$data->jumlah,
                     'het'           => (double)$data->het,
-                    'image_part'    => trim(config('constants.url.images')).'/'.trim($data->part_number).'.jpg'
+                    'image_part'    => trim(config('constants.app.url.images')).'/'.trim($data->part_number).'.jpg'
                 ]);
             }
 
