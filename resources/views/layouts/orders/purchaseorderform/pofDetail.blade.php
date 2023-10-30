@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="d-flex">
             <span class="symbol symbol-100px me-5">
-                <span class="symbol-label" style="background-image:url({{config('constants.app.app_images_url')}}/{{strtoupper(trim($data_detail->part_number))}}.jpg), url({{ asset('assets/images/background/part_image_not_found.png') }});"></span>
+                <span class="symbol-label" style="background-image:url({{config('constants.app.url.images')}}/{{strtoupper(trim($data_detail->part_number))}}.jpg), url({{ asset('assets/images/background/part_image_not_found.png') }});"></span>
             </span>
             <div class="flex-grow-1">
                 <div class="row">
