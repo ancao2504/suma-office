@@ -1,4 +1,11 @@
+let limit_jumlah = 1;
+let limit_stock = 0;
 function Part(requst){
+    if($('#detail_modal').find('#no_faktur').val() == ''){
+        Invalid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), 'No Faktur Harus diisi');
+        return false;
+    }
+
     loading.block();
     $('#part-list').find('tbody').html(`
     <tr>
@@ -12,7 +19,9 @@ function Part(requst){
     </tr>`);
     $.get(base_url+'/part',{
         option: requst.option,
+        no_faktur: $('#no_faktur').val(),
         kd_sales: $('#kd_sales').val(),
+        kd_dealer: $('#kd_dealer').val(),
         kd_part: requst.kd_part,
         page : requst.page,
         per_page : requst.per_page
@@ -21,25 +30,30 @@ function Part(requst){
             let dataJson = response.data;
             if(requst.option[0] == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.error('Part Number Tidak Ditemukan!', "info");
-                    $('#kd_part').addClass('is-invalid');
-                    $('#kd_part').removeClass('is-valid');
+                    $('#nm_part').val('');
+                    $('#stock').val('');
+                    Invalid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), 'Part Number Tidak Ditemukan');
                 } else {
                     $('#kd_part').val(dataJson.kd_part);
                     $('#nm_part').val(dataJson.nm_part);
                     $('#stock').val(dataJson.stock);
+                    limit_stock = data.stock;
+                    limit_jumlah = dataJson.limit_jumlah;
                     $('#kd_part').removeClass('is-invalid');
                     $('#kd_part').addClass('is-valid');
+                    valid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), '');
                 }
+                loading.release();
             } else if (requst.option[0] == 'page') {
                 $('#part-list').html(response.data);
+                valid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), '');
                 $('#part-list').modal('show');
             } else {
                 $('#dealer-list .close').trigger('click')
             }
         }
         if (response.status == '0') {
-            toastr.warning(response.message, "Peringatan");
+            Invalid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), response.message);
         }
         if (response.status == '2') {
             swal.fire({
@@ -76,14 +90,20 @@ function Part(requst){
             }
         });
     });
+
+    loading.release();
 }
 
 
 $('#part-list').on('click','.pilih' ,function () {
     const data = JSON.parse(atob($(this).data('a')));
     $('#kd_part').val(data.kd_part);
+    valid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), '');
     $('#nm_part').val(data.nm_part);
     $('#stock').val(data.stock);
+    limit_stock = data.stock;
+    limit_jumlah = data.limit_jumlah;
+    console.log(limit_jumlah);
     $('#part-list .close').trigger('click')
 })
 

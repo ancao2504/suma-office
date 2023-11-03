@@ -53,16 +53,29 @@ function report(page = 1) {
                     $.each(response.data.data, function (key, value) {
                         $('#table_list tbody').append(`
                             <tr class="fw-bolder fs-8 border">
-                                <td class="ps-3 pe-3 text-center">${no++}</td>
-                                <td class="ps-3 pe-3">${value.kd_dealer??'-'}</td>
-                                <td class="ps-3 pe-3">${value.nm_dealer??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${ no++}</td>
+                                <td class="ps-3 pe-3">${value.no_klaim.replace(/\s/g, '')??'-'}</td>
                                 <td class="ps-3 pe-3">${value.kd_part??'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_klaim?moment(value.tgl_klaim).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_rtoko?moment(value.tgl_rtoko).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_retur?moment(value.tgl_retur).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.tgl_jwb?moment(value.tgl_jwb).format('YYYY/MM/DD'):'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_sales??'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_dealer??'-'}</td>
+                                <td class="ps-3 pe-3">${value.kd_supp??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${value.sts_stock??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${value.sts_min??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${value.sts_klaim??'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_approve)==1)?'<i class="bi bi-check-lg"></i>':'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_selesai)==1)?'<i class="bi bi-check-lg"></i>':'-'}</td>
+                                <td class="ps-3 pe-3">${value.keterangan??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${value.qty_klaim??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${value.qty_jwb??'-'}</td>
-                                <td class="ps-3 pe-3 text-center">${value.tgl_pakai??'-'}</td>
-                                <td class="ps-3 pe-3 text-center">${value.tgl_klaim??'-'}</td>
-                                <td class="ps-3 pe-3">${value.pemakaian??'-'}</td>
-                                <td class="ps-3 pe-3">${value.ket??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_barang_terima??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_barang_tolak??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_uang_terima??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.qty_ganti_uang_tolak??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.total_ca?formatter.format(value.total_ca):'-'}</td>
                             </tr>
                         `);
                     });
@@ -152,6 +165,7 @@ $(document).ready(function () {
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
+                kd_sales: $('#kd_sales').val(),
                 kd_dealer: $('#kd_dealer').val()
             }
         }).done(function (response) {
@@ -181,7 +195,7 @@ $(document).ready(function () {
             });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + date.tgl_klaim.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_klaim.end.format('DD-MM-YYYY') : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + '.xlsx';
+            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + date.tgl_klaim.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_klaim.end.format('DD-MM-YYYY') : '') + ($('#kd_sales').val() != ''? ' Sales =' + $('#kd_sales').val() : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + '.xlsx';
             link.click();
             link.remove();
         }).fail(function (jqXHR, textStatus, error) {
@@ -204,7 +218,7 @@ $(document).ready(function () {
         });
 
 
-
+        
         // window.open(baseurl + `/report/retur/konsumen/export?tgl_claim=${$('#tgl_claim').val() == '' ? '' : [date.tgl_claim.start.format('YYYY-MM-DD'), date.tgl_claim.end.format('YYYY-MM-DD')]}&tgl_terima=${$('#tgl_terima').val() == '' ? '' : [date.tgl_terima.start.format('YYYY-MM-DD'), date.tgl_terima.end.format('YYYY-MM-DD')]}&kd_sales=${$('#kd_sales').val()}&kd_dealer=${$('#kd_dealer').val()}&no_faktur=${$('#no_faktur').val()}&kd_part=${$('#kd_part').val()}&sts=${$('#sts').val()}`, '_blank');
     });
 

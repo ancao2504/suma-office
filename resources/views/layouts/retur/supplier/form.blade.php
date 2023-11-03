@@ -17,18 +17,20 @@
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="no_retur" name="no_retur" value="{{ session('app_user_id') }}" disabled>
                     </div>
-                    <label for="tgl_claim" class="col-sm-2 col-form-label">Tanggal Retur</label>
+                    <label for="tgl_retur" class="col-sm-2 col-form-label">Tanggal Retur</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tglretur)?date('Y-m-d'):$data->tglretur)) }}" required>
+                        <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tglretur)?date('Y-m-d'):$data->tglretur)) }}" required @if (count($data->detail??[]) > 0) disabled @endif>
+                        <div class="invalid-feedback" id="error_tgl_retur"></div>
                     </div>
                 </div>
                 <div class="form-group row mb-2">
                     <label for="kd_supp" class="col-sm-2 col-form-label">Kode Supplier</label>
                     <div class="col-sm-6">
-                        <select name="kd_supp" id="kd_supp" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Supplier">
+                        <select name="kd_supp" id="kd_supp" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Supplier" @if (count($data->detail??[]) > 0) disabled @endif>
                             <option></option>
                             {!! $supplier !!}
                         </select>
+                        <div class="invalid-feedback" id="error_kd_supp"></div>
                     </div>
                 </div>
             </div>
@@ -41,7 +43,6 @@
                         <tr class="fs-8 fw-bolder text-muted text-center">
                             <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">No Klaim</th>
-                            <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal Klaim</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Part Number</th>
                             <th rowspan="2" class="w-auto ps-3 pe-3">Nama Part</th>
                             <th rowspan="2" class="w-100px ps-3 pe-3">Qty</th>
@@ -61,8 +62,7 @@
                             @php
                                 $dta_edt = json_encode((object)[
                                     'no_klaim' => $detail->no_klaim,
-                                    'tgl_claim' => $detail->tgl_claim,
-                                    'no_produksi' => $detail->no_produksi_list,
+                                    'no_produksi' => $detail->no_produksi,
                                     'kd_part' => $detail->kd_part,
                                     'nm_part' => $detail->nm_part,
                                     'ket' => $detail->ket,
@@ -80,7 +80,6 @@
                             <tr class="fw-bolder fs-8 border" data-key="{{ ($detail->no_klaim.$detail->kd_part) }}">
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ ($detail->no_klaim??'-') }}</td>
-                                <td>{{ date('Y/m/d', strtotime($detail->tgl_claim))??'-' }}</td>
                                 <td>{{ ($detail->kd_part??'-') }}</td>
                                 <td>{{ ($detail->nm_part??'-') }}</td>
                                 <td class="text-end">{{ number_format($detail->jmlretur, 0, '.', ',')??'-' }}</td>
@@ -135,30 +134,22 @@
                 <h3>2. Informasi Produk</h3>
                 <div class="col-xl-12 border rounded mb-3 p-2">
                     <div class="form-group row mb-2">
-                        {{-- <label for="no_dus" class="col-sm-2 col-form-label">Nomor DUS</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="no_dus" name="no_dus" placeholder="Masukkan No DUS" value="" required>
-                        </div> --}}
-                    </div>
-                    <div class="form-group row mb-2">
                         <label for="no_klaim" class="col-sm-2 col-form-label required">No Klaim</label>
                         <div class="col-sm-4">
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-3 has-validation">
+                                <button class="btn btn-primary list-klaim" type="button"><i class="fas fa-search"></i></button>
                                 <input type="text" class="form-control" id="no_klaim" name="no_klaim" placeholder="No Klaim" value="" style="text-transform: uppercase;" required>
-                                <button class="btn btn-primary list-klaim" type="button">Pilih</button>
+                                <div class="invalid-feedback" id="error_no_klaim"></div>
                             </div>
-                        </div>
-                        <label for="tgl_claim" class="col-sm-2 col-form-label">Tanggal Klaim</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="tgl_claim" name="tgl_claim" placeholder="Tanggal Klaim" value="" disabled>
                         </div>
                     </div>
                     <div class="form-group row mb-2">
                         <label for="kd_part" class="col-sm-2 col-form-label required">Part Number</label>
                         <div class="col-sm-4">
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-3 has-validation">
+                                <button class="btn btn-primary list-part" type="button"><i class="fas fa-search"></i></button>
                                 <input type="text" class="form-control" id="kd_part" name="kd_part" placeholder="Part Number" value="" style="text-transform: uppercase;">
-                                <button class="btn btn-primary list-part" type="button">Pilih</button>
+                                <div class="invalid-feedback" id="error_kd_part"></div>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -175,23 +166,13 @@
                             <input type="text" class="form-control" id="no_ps" name="no_ps" placeholder="Masukkan No Packing Sheet" value="" style="text-transform: uppercase;" required>
                         </div>
                     </div>
-                    {{-- <div class="form-group row mb-2">
+                    <div class="form-group row mb-2">
                         <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="no_produksi" name="no_produksi" value="" disabled>
                         </div>
-                        
-                    </div> --}}
-                    <div class="form-group row mb-2">
-                        <label for="no_produksi" class="col-sm-2 col-form-label">No Produksi</label>
-                        <div class="col-sm-10">
-                            <div class="row" id="input_no_produk">
-                                <div class="col-2 mt-3">
-                                    <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" disabled>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                    <span class="text-muted"><span class="required"></span> Jika No Retur atau Part Tidak di temukan maka Supplier Pada Master Part Masih Kososng</span>
                 </div>
                 <h3>3. Informasi Retur</h3>
                 <div class="mb-3 border rounded p-2">
@@ -219,6 +200,7 @@
                                         <option value="H|Dimensi Tidak Sesuai Spek">(H) Dimensi Tidak Sesuai Spek</option>
                                         <option value="I|">Lainya</option>
                                     </select>
+                                    <div class="invalid-feedback" id="error_kode_claim"></div>
                                 </div>
                                 <div class="col-6">
                                     <label for="kode_claim_non_kualitas" class="col col-form-label">Claim Non Kualitas</label>
@@ -278,7 +260,7 @@
 @push('scripts')
 <!-- script tambanhan -->
 <script>
-    
+
     const old = {
         kd_supp: @json(($data->kd_supp??'')),
     };

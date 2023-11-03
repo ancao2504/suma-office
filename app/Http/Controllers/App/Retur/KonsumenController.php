@@ -25,20 +25,25 @@ class KonsumenController extends Controller
                 'per_page' => 10
             ]);
         }
+        if(!in_array($request->per_page_end, [10,50,100,500])){
+            $request->merge([
+                'per_page_end' => 10
+            ]);
+        }
 
         $request->merge(['option' => ['page']]);
-        $responseApi = json_decode(Service::ReturKonsumenDaftar($request));
-        $statusApi = $responseApi->status??0;
-
-        if ($statusApi == 1) {
+        $responseApiBelumSelesai = json_decode(Service::ReturKonsumenDaftar($request));
+        $request->merge(['option' => ['page','end']]);
+        $responseApiSudahSelesai = json_decode(Service::ReturKonsumenDaftar($request));
+        if (($responseApiBelumSelesai->status??0) == 1 && ($responseApiSudahSelesai->status??0) == 1) {
             return view(
                 'layouts.retur.konsumen.index',
                 [
-                    'old_request' => (object)[
-                        'no_retur' => $request->no_retur ?? '',
-                        'per_page' => $request->per_page ?? 10,
+                    'request' => $request,
+                    'data' => (object)[
+                        'bm' => $responseApiBelumSelesai->data,
+                        'ss' => $responseApiSudahSelesai->data,
                     ],
-                    'data' => $responseApi->data,
                     'title_menu' => 'Retur Konsumen',
                 ]
             );
@@ -53,6 +58,44 @@ class KonsumenController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function form(Request $request)
+    {
+        $option = [
+            'with_detail',
+        ];
+
+        if(!empty($request->id)){
+            $request->merge(['no_retur' => base64_decode($request->id)]);
+        } else {
+            array_push($option, 'tamp');
+        }
+        $request->merge(['option' => $option]);
+        $responseApiRetur = json_decode(Service::ReturKonsumenDaftar($request));
+
+        $statusApiRetur = $responseApiRetur->status??0;
+
+        $request->merge(['option' => 'select']);
+        $responseApi_cabang = OptionController::cabang($request)->getData();
+        $statusApi_cabang = $responseApi_cabang->status??0;
+
+        $responseApi_sales = OptionController::salesman($request)->getData();
+        $statusApi_sales = $responseApi_sales->status??0;
+
+        if ($statusApi_sales == 1 && $statusApi_cabang == 1 && $statusApiRetur == 1) {
+            $data = [
+                'sales' => $responseApi_sales->data,
+                'cabang' => $responseApi_cabang->data,
+                'data' => $responseApiRetur->data,
+                'title_menu' => 'Retur Konsumen',
+                'title_page' => 'Tambah',
+            ];
+
+            return view('layouts.retur.konsumen.form', $data);
+        }else {
+            return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
+        }
+    }
+
+    public function formPengantian(Request $request)
     {
         $option = [
             'with_detail',
@@ -139,7 +182,6 @@ class KonsumenController extends Controller
                 ]);
             }
 
-            return Service::ReturKonsumenSimpan($request);
             $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;

@@ -87,7 +87,6 @@
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted text-center">
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3">Qty</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Alasan</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">CA</th>
@@ -104,20 +103,12 @@
                 </div>
                 <h5 class="modal-title">Jawaban</h5>
                 <div class="border rounded-3 p-3">
-                    <div class="mb-6" id="tag_no_produksi">
-                    </div>
                     <div class="form-group row mb-2">
                         <label for="jml" class="col-sm-2 col-form-label required">Qty</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="jml" name="jml" placeholder="Masukkan qty" value="" required>
+                            <div class="invalid-feedback" id="error_jml"></div>
                         </div>
-                        <label for="no_produksi_old" class="col-sm-2 col-form-label">No Produksi</label>
-                        <div class="col-sm-4">
-                            <button type="button" class="btn btn-primary w-150px" id="btn_cari_produksi">
-                                <span class="bi bi-search"></span>
-                            </button>
-                        </div>
-                            
                     </div>
                     <div class="form-group row mb-2">
                         <label for="alasan" class="col-sm-2 col-form-label required">Alasan</label>
@@ -126,12 +117,14 @@
                                 <option value="RETUR">Ganti barang</option>
                                 <option value="CA">Ganti Uang</option>
                             </select>
+                            <div class="invalid-feedback" id="error_alasan"></div>
                         </div>
                         <div id="input_ca" class="col-sm-6" hidden>
                             <div class="row">
                                 <label for="ca" class="col-sm-4 col-form-label">Jumlah Uang</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="ca" name="ca" min="1" placeholder="Masukkan Jumlah Uang" value="" required>
+                                    <div class="invalid-feedback" id="error_ca"></div>
                                 </div>
                             </div>
                         </div>
@@ -139,8 +132,9 @@
                     <div class="form-group row mb-2">
                         <label for="ket" class="col-sm-2 col-form-label">Keterangan</label>
                         <div class="col-sm-10">
-                            <textarea type="text" class="form-control" data-kt-autosize="true" id="ket" name="ket" rows="3"> </textarea>
+                            <textarea type="text" class="form-control" data-kt-autosize="true" id="ket" name="ket" rows="3"></textarea>
                         </div>
+                        <div class="invalid-feedback" id="error_ket"></div>
                     </div>
                     <div class="form-group row mb-2">
                         <label for="keputusan" class="col-sm-2 col-form-label required">Keputusan</label>
@@ -149,6 +143,7 @@
                                 <option value="TERIMA">TERIMA</option>
                                 <option value="TOLAK">TOLAK</option>
                             </select>
+                            <div class="invalid-feedback" id="error_keputusan"></div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +156,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal_produksi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="modal_produksi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -197,7 +192,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 

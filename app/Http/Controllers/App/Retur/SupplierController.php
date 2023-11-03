@@ -67,7 +67,7 @@ class SupplierController extends Controller
                 'title_menu' => 'Retur Supplier',
                 'title_page' => 'Tambah',
             ];
-            
+
             return view('layouts.retur.supplier.form', $data);
         }else {
             return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
@@ -82,8 +82,8 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge(['option' => explode('|', $request->ket)[0]]);
         try {
+            $request->merge(['option' => explode('|', $request->ket)[0]]);
             if(in_array($request->ket, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'O', 'P'])){
                 match ($request->ket) {
                     'A' => $request->merge(['ket' => 'A|Karat/Korosi']),

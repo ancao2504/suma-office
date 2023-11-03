@@ -24,7 +24,7 @@
                     <tbody class="border">
                         @if ($data->total == 0)
                             <tr class="fw-bolder fs-8 border">
-                                <td colspan=" {{ count($table->thead) + 1 }}" class="text-center">Tidak ada data</td>
+                                <td colspan="99" class="text-center">Tidak ada data</td>
                             </tr>
                         @else
                         @php

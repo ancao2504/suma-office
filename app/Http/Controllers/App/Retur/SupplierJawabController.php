@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class SupplierJawabController extends Controller
 {
 
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,7 +28,7 @@ class SupplierJawabController extends Controller
                 'title_menu' => 'Supplier Jawab',
                 'title_page' => 'Jawab',
             ];
-            
+
             return view('layouts.retur.supplier.jawab.form', $data);
         }else {
             return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
@@ -74,16 +74,9 @@ class SupplierJawabController extends Controller
                     $rules += ['ca' => 'required'];
                     $messages += ['ca.required'  => 'Jumlah Uang Tidak Boleh Kososng'];
                 }
-
-                if ((boolean)$request->tamp && (int)$request->qty_jwb != (int)count(explode(',', $request->no_produksi))) {
-                    return Response()->json([
-                        'status'    => 0,
-                        'message'   => 'Jumlah No Produksi yang dipilih tidak sesuai dengan Qty jawaban',
-                        'data'      => ''
-                    ], 200);
-                }
             }
             $validate = Validator::make($request->all(), $rules,$messages);
+
             if ($validate->fails()) {
                 return Response()->json([
                     'status'    => 0,
@@ -91,6 +84,7 @@ class SupplierJawabController extends Controller
                     'data'      => ''
                 ]);
             }
+
             $responseApi = json_decode(Service::ReturSupplierjawabSimpan($request));
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;

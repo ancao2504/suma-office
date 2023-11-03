@@ -1,5 +1,7 @@
 function Part(requst){
-    if($('#no_klaim').val() != ''){
+    if($('#no_klaim').val() == ''){
+        Invalid([$('#no_klaim')], $('#error_no_klaim'), 'No Klaim Tidak Boleh Kosong!');
+    }
         loading.block();
         $('#part-list').find('tbody').html(`
         <tr>
@@ -13,6 +15,7 @@ function Part(requst){
         </tr>`);
         $.get(base_url+'/part',{
             option: requst.option,
+            kd_supp: $('#kd_supp').val(),
             no_retur: $('#detail_modal #no_klaim').val(),
             kd_part: requst.kd_part,
             page : requst.page,
@@ -21,22 +24,13 @@ function Part(requst){
             if(response.status == '1'){
                 let dataJson = response.data;
                 if(requst.option[0] == 'first'){
-                    if (jQuery.isEmptyObject(dataJson)) {
-                        toastr.warning('Part Number Tidak Ditemukan!', "info");
-                        $('#kd_part').addClass('is-invalid');
-                        $('#kd_part').removeClass('is-valid');
+                    if (jQuery.isEmptyObject(dataJson || null)) {
+                        Invalid([$('#kd_part')], $('#error_kd_part'), 'Part Number Tidak Ditemukan!');
                     } else {
                         $('#kd_part').val(dataJson.kd_part);
                         $('#nm_part').val(dataJson.nm_part);
                         $('#qty_klaim').val(dataJson.jumlah);
-                        $('#input_no_produk').html('');
-                        $.each(dataJson.no_produksi, function (index, value) {
-                            $('#input_no_produk').append(`
-                                <div class="col-2 mt-3">
-                                    <input type="text" class="form-control" id="no_produksi${index + 1}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
-                                </div>
-                            `);
-                        });
+                        $('#no_produksi').val(dataJson.no_produksi.join(', '));
                         $('#ket_klaim').val(dataJson.ket);
                         $('#kd_part').removeClass('is-invalid');
                         $('#kd_part').addClass('is-valid');
@@ -45,11 +39,15 @@ function Part(requst){
                     $('#part-list').html(response.data);
                     $('#part-list').modal('show');
                 } else {
-                    $('#dealer-list .close').trigger('click')
+                    $('#dealer-list .close').trigger('click');
                 }
             }
             if (response.status == '0') {
-                toastr.warning(response.message, "Peringatan");
+                Invalid([$('#kd_part')], $('#error_kd_part'), response.message);
+                $('#nm_part').val('');
+                $('#qty_klaim').val('');
+                $('#no_produksi').val('');
+                $('#ket_klaim').val('');
             }
             if (response.status == '2') {
                 swal.fire({
@@ -86,77 +84,82 @@ function Part(requst){
                 }
             });
         });
-    } else {
-        toastr.warning('No Klaim Tidak Boleh Kosong!', "Error");
-    }
 }
 
 
-$('#part-list').on('click','.pilih' ,function () {
-    const data = JSON.parse(atob($(this).data('a')));
-    $('#kd_part').val(data.kd_part);
-    $('#nm_part').val(data.nm_part);
-    $('#qty_klaim').val(data.jumlah);
-    $('#input_no_produk').html('');
-    $.each(data.no_produksi, function (index, value) {
-        $('#input_no_produk').append(`
-            <div class="col-2 mt-3">
-                <input type="text" class="form-control" id="no_produksi${index + 1}" name="no_produksi[]" placeholder="No Produksi" value="${value}" disabled>
-            </div>
-        `);
+$(document).ready(function () {
+    $('#part-list').on('click','.pilih' ,function () {
+        const data = JSON.parse(atob($(this).data('a')));
+        $('#kd_part').val(data.kd_part);
+        $('#kd_part').removeClass('is-invalid');
+        $('#kd_part').addClass('is-valid');
+        $('#nm_part').val(data.nm_part);
+        $('#qty_klaim').val(data.jumlah);
+        $('#input_no_produk').html('');
+        $('#no_produksi').val(data.no_produksi.join(', '));
+        $('#ket_klaim').val(data.ket);
+        $('#part-list .close').trigger('click')
+    })
+
+    $('#kd_part').on('change', function () {
+        if ($('#no_klaim').hasClass('is-invalid') || $('#no_klaim').val() == '') {
+            $('#kd_part').val('');
+            return false;
+        }
+
+        $('#ket_part').val('');
+        if($('#kd_part').val() == ''){
+            $('#kd_part').removeClass('is-valid');
+            return false;
+        }
+
+        Part({
+            option: ['first'],
+            kd_part: $(this).val(),
+            page : 1,
+            per_page : 10
+        });
     });
-    $('#ket_klaim').val(data.ket);
-    $('#part-list .close').trigger('click')
-})
 
-$('#kd_part').on('change', function () {
-    $('#ket_part').val('');
-    if($('#kd_part').val() == ''){
-        $('#kd_part').removeClass('is-valid');
-        return false;
-    }
+    $('.list-part').on('click', function () {
+        if ($('#no_klaim').hasClass('is-invalid') || $('#no_klaim').val() == '') {
+            $('#kd_part').val('');
+            return false;
+        }
 
-    Part({
-        option: ['first'],
-        kd_part: $(this).val(),
-        page : 1,
-        per_page : 10
+        Part({
+            option: ['page'],
+            page : 1,
+            per_page : 10
+        });
     });
-});
 
-$('.list-part').on('click', function () {
-    Part({
-        option: ['page'],
-        page : 1,
-        per_page : 10
+    $('#part-list').on('click', '.pagination .page-item', function () {
+        Part({
+            option: ['page'],
+            page : $(this).find('a').attr('href').split('page=')[1],
+            per_page : $('#part-list').find('#per_page').val()
+        });
     });
-});
 
-$('#part-list').on('click', '.pagination .page-item', function () {
-    Part({
-        option: ['page'],
-        page : $(this).find('a').attr('href').split('page=')[1],
-        per_page : $('#part-list').find('#per_page').val()
+    $('#part-list').on('change','#per_page', function () {
+        Part({
+            option: ['page'],
+            kd_part: $('#part-list').find('#cari').val(),
+            page : 1,
+            per_page : $(this).val()
+        });
     });
-});
 
-$('#part-list').on('change','#per_page', function () {
-    Part({
-        option: ['page'],
-        kd_part: $('#part-list').find('#cari').val(),
-        page : 1,
-        per_page : $(this).val()
+    $('#part-list').on('change','#cari', function () {
+        $('#part-list').find('#btn_cari').trigger('click');
     });
-});
-
-$('#part-list').on('change','#cari', function () {
-    $('#part-list').find('#btn_cari').trigger('click');
-});
-$('#part-list').on('click','#btn_cari', function () {
-    Part({
-        option: ['page'],
-        kd_part: $('#part-list').find('#cari').val(),
-        page : 1,
-        per_page : $('#part-list').find('#per_page').val()
+    $('#part-list').on('click','#btn_cari', function () {
+        Part({
+            option: ['page'],
+            kd_part: $('#part-list').find('#cari').val(),
+            page : 1,
+            per_page : $('#part-list').find('#per_page').val()
+        });
     });
 });

@@ -155,7 +155,8 @@ class SupplierController extends Controller
                                 'ket',
                                 'ket_jwb',
                                 'diterima',
-                                'CompanyId'
+                                'CompanyId',
+                                'usertime',
                             )
                             ->from($request->tb[1] . ' as retur_dtl')
                             ->where('retur_dtl.CompanyId', $request->companyid);
@@ -202,10 +203,10 @@ class SupplierController extends Controller
                         'rtoko_dtl.ket as ket_klaim',
                         'rtoko_dtl.status_end'
                     )
-                    ->orderBy('retur_dtl.no_klaim', 'desc')
+                    ->orderBy('retur_dtl.usertime', 'asc')
                     ->get();
 
-                    
+
                     if (in_array('with_jwb', $request->option)) {
                         $detail_jwb = DB::table('jwb_claim')
                         ->select(
@@ -223,10 +224,10 @@ class SupplierController extends Controller
                                 ->where('no_klaim', $value->no_klaim)
                                 ->where('kd_part', $value->kd_part)
                                 ->values();
-                            $data_detail[$key]->qty_jwb = collect($data_detail[$key]->detail_jwb)->sum('qty_jwb');
+                            $data_detail[$key]->qty_jwb = collect($data_detail[$key]->detail_jwb)->where('sts_end', 1)->sum('qty_jwb');
                             $data_detail[$key]->ket_jwb =
-                                collect($data_detail[$key]->detail_jwb)->where('keputusan', 'TERIMA')->sum('qty_jwb') . ' TERIMA ' .
-                                collect($data_detail[$key]->detail_jwb)->where('keputusan', 'TOLAK')->sum('qty_jwb') . ' TOLAK ';
+                                collect($data_detail[$key]->detail_jwb)->where('keputusan', 'TERIMA')->where('sts_end', 1)->sum('qty_jwb') . ' TERIMA ' .
+                                collect($data_detail[$key]->detail_jwb)->where('keputusan', 'TOLAK')->where('sts_end', 1)->sum('qty_jwb') . ' TOLAK ';
                         }
                     }
 
@@ -247,17 +248,17 @@ class SupplierController extends Controller
                     ->where('klaim_dtl.sts_klaim', 1)
                     ->where('rtoko_dtl.CompanyId', $request->companyid)
                     ->get();
-                    
+
                     $dataProduksi = collect($dataProduksi)->groupBy('no_retur')->map(function ($item) {
                         return collect($item)->groupBy('kd_part')->map(function ($item) {
                             return collect($item)->pluck('no_produksi')->toArray();
                         });
                     });
-                    
+
                     foreach ($data_detail as $key => $value) {
                         $data_detail[$key]->no_produksi_list = $dataProduksi[$value->no_klaim][$value->kd_part] ?? [];
                     }
-                    
+
                     $data->detail = $data_detail;
                 }
             }
@@ -327,11 +328,11 @@ class SupplierController extends Controller
                 // ! ======================================================
                 if ($request->no_retur == $request->user_id) {
                     if (!empty($request->kd_part)) {
+                        // ! cek apakah sudah pernah di klaim
                         $a = DB::table(function ($query) use ($request) {
                             $query->select(
                                     'rtoko.no_retur',
                                     'rtoko.kd_dealer',
-                                    'rtoko_dtl.no_faktur',
                                     'rtoko_dtl.Kd_lokasi',
                                     'rtoko_dtl.jumlah',
                                     'rtoko.tanggal',
@@ -349,8 +350,8 @@ class SupplierController extends Controller
                                 }, 'rtoko_dtl', function ($join) {
                                 $join->on('rtoko_dtl.no_retur', '=', 'rtoko.no_retur')
                                     ->on('rtoko_dtl.CompanyId', '=', 'rtoko.CompanyId');
-                            });
-                        }, 'a')
+                                });
+                            }, 'a')
                             ->first();
 
                         //! ubah status pada rtoko_dtl menjadi 1 dimana agar tidak bisa di klaim lagi
@@ -361,6 +362,7 @@ class SupplierController extends Controller
                             ->update([
                                 'status' => 1
                             ]);
+
                         //! simpan pada tabel retur_dtltmp
                         DB::table('retur_dtltmp')
                             ->updateOrInsert([
@@ -371,13 +373,12 @@ class SupplierController extends Controller
                                 'retur_dtltmp.kd_part' => $request->kd_part,
                             ], [
                                 'kd_dealer' => $a->kd_dealer,
-                                'no_faktur' => $a->no_faktur,
                                 'no_ps_klaim' => $request->no_ps,
                                 'kd_lokasi' => $a->Kd_lokasi,
                                 'jmlretur' => $a->jumlah,
                                 'ket' => ($request->ket ?? null),
                                 'diterima' => ($request->diterima ?? 0),
-                                'no_produksi' => null,
+                                'no_produksi' => ($request->no_produksi ?? null),
                                 'tgl_pemakaian' => $request->tgl_pemakaian,
                                 'tgl_claim' => $a->tanggal,
                                 'usertime' => (date('Y-m-d H:i:s') . '=' . $request->user_id)
@@ -418,6 +419,62 @@ class SupplierController extends Controller
                     ];
                 }
 
+                $cekSupplierPart = DB::table(function ($query) use ($request){
+                    $query->select(
+                        'returtmp.kd_supp',
+                        'retur_dtltmp.no_klaim',
+                        'retur_dtltmp.kd_part',
+                        'returtmp.companyid'
+                    )
+                    ->from('returtmp')
+                    ->join('retur_dtltmp', function ($join) {
+                        $join->on('retur_dtltmp.no_retur', '=', 'returtmp.no_retur')
+                            ->on('retur_dtltmp.CompanyId', '=', 'returtmp.CompanyId');
+                    })
+                    ->where('returtmp.Kd_Key', $request->user_id)
+                    ->where('returtmp.CompanyId', $request->companyid);
+                }, 'retur')
+                ->join('part', function ($join) {
+                    $join->on('part.kd_part', '=', 'retur.kd_part')
+                        ->on('part.CompanyId', '=', 'retur.CompanyId');
+                })
+                ->select(
+                    'retur.no_klaim',
+                    'retur.kd_supp as supp_retur',
+                    'retur.kd_part as part_retur',
+                    'part.kd_suppa as supp_part',
+                    'part.kd_part as part_part'
+                )
+                ->whereRaw('retur.kd_supp <> part.kd_suppa')
+                ->get();
+
+                if (count($cekSupplierPart) > 0) {
+                    return (object) [
+                        'status' => 0,
+                        'data' => 'Part yang di retur tidak sesuai dengan supplier yang di pilih <b>'. collect($cekSupplierPart)->pluck('supp_retur')->first()
+                        .'</b><br>
+                        <table class="table table-row-dashed table-row-gray-300 align-middle border mt-3">
+                            <thead class="border">
+                                <tr class="fs-8 fw-bolder text-muted text-center">
+                                    <th>No Klaim</th>
+                                    <th>Part Retur</th>
+                                    <th>Supplier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ' . collect($cekSupplierPart)->map(function ($item) {
+                                return '
+                                <tr class="fw-bolder fs-8 border">
+                                    <td>' . $item->no_klaim . '</td>
+                                    <td>' . $item->part_retur . '</td>
+                                    <td>' . $item->supp_part . '</td>
+                                </tr>';
+                            })->implode('').'
+                            </tbody>
+                        </table>'
+                    ];
+                }
+
                 // ! ======================================================
                 // ! Simpan Data
                 // ! ======================================================
@@ -428,7 +485,6 @@ class SupplierController extends Controller
                     $request->companyid,
                     $request->user_id
                 ]);
-
                 return (object) [
                     'status' => (int) $simpan[0]->status,
                     'data' => $simpan[0]->data
@@ -492,11 +548,11 @@ class SupplierController extends Controller
             return response::responseSuccess('success', '');
         } catch (\Exception $exception) {
             return Response::responseError(
-                $request->get('user_id'), 
-                'API', 
-                Route::getCurrentRoute()->action['controller'], 
-                $request->route()->getActionMethod(), 
-                $exception->getMessage(), 
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $exception->getMessage(),
                 $request->get('companyid')
             );
         };

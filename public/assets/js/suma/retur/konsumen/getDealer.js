@@ -1,4 +1,11 @@
 function Dealer(requst) {
+    if ($('#kd_sales').val() == '') {
+        Invalid([$('#kd_sales')], $('#error_kd_sales'), 'Kode Sales Tidak Boleh Kosong!');
+        return false;
+    } else {
+        valid([$('#kd_sales')], $('#error_kd_sales'), '');
+    }
+
     loading.block();
     $.get(base_url+'/dealer',{
         option: requst.option,
@@ -11,16 +18,14 @@ function Dealer(requst) {
             let dataJson = response.data;
             if(requst.option == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.warning('Kd Dealer Tidak Ditemukan!', "info");
-                    $('#kd_dealer').addClass('is-invalid');
-                    $('#kd_dealer').removeClass('is-valid');
+                    $('#kd_dealer').val('');
+                    Invalid([$('#kd_dealer')], $('#error_kd_dealer'), 'Kd Dealer Tidak Ditemukan!');
                 } else {
                     $('#kd_dealer').val(dataJson.kd_dealer);
                     $('#nm_dealer').val(dataJson.nm_dealer);
                     $('#alamat1').val(dataJson.alamat1);
                     $('#kotasj').val(dataJson.kotasj);
-                    $('#kd_dealer').addClass('is-valid');
-                    $('#kd_dealer').removeClass('is-invalid');
+                    valid([$('#kd_dealer')], $('#error_kd_dealer'), '');
                 }
             } else if (requst.option == 'page') {
                 $('#dealer-list').html(response.data);
@@ -30,7 +35,8 @@ function Dealer(requst) {
             $('#dealer-list .close').trigger('click')
         }
         if (response.status == '0') {
-            toastr.warning(response.message, "Peringatan");
+            $('#kd_dealer').val('');
+            Invalid([$('#kd_dealer')], $('#error_kd_dealer'), response.message);
         }
         if (response.status == '2') {
             swal.fire({

@@ -45,10 +45,6 @@ class SupplierJawabController extends Controller
                     $rules += ['ca' => 'required'];
                     $messages += ['ca.required'  => 'Jumlah Uang Tidak Boleh Kososng'];
                 }
-
-                if ((boolean)$request->tamp && (int)$request->qty_jwb != (int)count(explode(',', $request->no_produksi))) {
-                    return Response::responseWarning('Jumlah No Produksi yang dipilih jumlahnya tidak sesuai dengan Qty jawaban');
-                }
             }
 
             // ! megecek validasi dan menampilkan pesan error
@@ -57,17 +53,16 @@ class SupplierJawabController extends Controller
             if ($validate->fails()) {
                 return Response::responseWarning($validate->errors()->first());
             }
-            
+
             $simpan = DB::transaction(function () use ($request) {
                 // ! Jika tamp true maka akan simpan ke tamp
                 if((boolean)$request->tamp){
                     $simpan = DB::select('
                     SET NOCOUNT ON;
-                    exec SP_jwb_claim_simpanTemp ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+                    exec SP_jwb_claim_simpanTemp ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
                         $request->no_retur,
                         trim($request->no_klaim),
                         trim($request->kd_part),
-                        trim($request->no_produksi),
                         date('Y-m-d H:i:s'),
                         $request->qty_jwb,
                         $request->alasan,
@@ -86,7 +81,7 @@ class SupplierJawabController extends Controller
                         ];
                     }
 
-                    // ! Mengambilkembali jumlah jwb dab jml tolak atupun terima
+                    // ! Mengambilkembali jumlah jwb dan jml tolak atupun terima
                     // ! =====================================
                     $cek = DB::table('jwb_claim')
                     ->where('no_retur', $request->no_retur)
@@ -98,7 +93,6 @@ class SupplierJawabController extends Controller
                         'alasan',
                         'ca',
                         'kd_part',
-                        'no_produksi',
                         'keputusan',
                         'ket',
                         'no_jwb',
@@ -120,7 +114,6 @@ class SupplierJawabController extends Controller
                                 'alasan' => $item->alasan,
                                 'ca' => $item->ca,
                                 'kd_part' => $item->kd_part,
-                                'no_produksi' => $item->no_produksi,
                                 'keputusan' => $item->keputusan,
                                 'ket' => $item->ket,
                                 'no_jwb' => $item->no_jwb,
@@ -146,6 +139,7 @@ class SupplierJawabController extends Controller
                     $request->companyid,
                     date('d-m-Y')
                 ]);
+
                 return (object)[
                     'status'    => (int)$simpan[0]->status,
                     'message'   => $simpan[0]->message,
@@ -165,7 +159,7 @@ class SupplierJawabController extends Controller
         }
     }
 
-    
+
     public function destroy(Request $request)
     {
         try {
@@ -205,12 +199,12 @@ class SupplierJawabController extends Controller
             ->where('kd_part', $request->kd_part)
             ->where('CompanyId', $request->companyid)
             ->select(
-                DB::raw('isnull(sum(qty_jwb), 0) as qty_jwb'), 
+                DB::raw('isnull(sum(qty_jwb), 0) as qty_jwb'),
                 DB::raw("isnull(sum(case when keputusan = 'TERIMA' then qty_jwb else null end), 0) as terima"),
                 DB::raw("isnull(sum(case when keputusan = 'TOLAK' then qty_jwb else null end), 0) as tolak")
             )
             ->first();
-            
+
             return response::responseSuccess('success', [
                 'qty'   => $cek->qty_jwb,
                 'ket'   => $cek->terima . ' TERIMA '.$cek->tolak.' TOLAK '

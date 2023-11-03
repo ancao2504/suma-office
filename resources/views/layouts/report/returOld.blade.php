@@ -40,7 +40,7 @@
 							<li><a id="export_exel" class="dropdown-item" href="#">EXEL</a></li>
 						</ul>
 					</div>
-
+					
 					<button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-faktur">
 						Filter
 					</button>
@@ -68,25 +68,50 @@
 							<table class="table table-row-dashed table-row-gray-300 align-middle">
 								<thead class="border">
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Kode Dealer</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Nama Dealer</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Tipe</th>
-										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">qty</th>
-										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Pemakaian</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Uraian Klaim</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No Dokumen</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
+										<th scope="col" colspan="4" class="w-auto ps-3 pe-3">Tanggal</th>
+										<th scope="col" colspan="3" class="w-auto ps-3 pe-3">Kode</th>
+										<th scope="col" colspan="5" class="w-auto ps-3 pe-3">Status</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Keterangan</th>
+										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">QTY</th>
+										<th scope="col" colspan="6" class="w-auto ps-3 pe-3">Jawab</th>
 									</tr>
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" class="w-auto ps-3 pe-3 text-end">Klaim</th>
-										<th scope="col" class="w-auto ps-3 pe-3 text-end">Jawab</th>
-										<th scope="col" class="w-auto ps-3 pe-3">Pakai</th>
-										<th scope="col" class="w-auto ps-3 pe-3">Klaim</th>
+
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Retur Sales</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Retur SPV</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim Supplier</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Di Jawab</th>
+
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Sales</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Dealer</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Supplier</th>
+
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Stock</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Minimum</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Approve SPV</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">selesai</th>
+										
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Retur</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Jawab</th>
+
+										<th scope="col" colspan="2" class="ps-3 pe-3">Ganti Barang</th>
+										<th scope="col" colspan="3" class="ps-3 pe-3">Ganti Uang</th>
+									</tr>
+									<tr class="fs-8 fw-bolder text-muted text-center">
+										<th scope="col" class="ps-3 pe-3">Terima</th>
+										<th scope="col" class="ps-3 pe-3">Tolak</th>
+										<th scope="col" class="ps-3 pe-3">Terima</th>
+										<th scope="col" class="ps-3 pe-3">Tolak</th>
+										<th scope="col" class="ps-3 pe-3">Total</th>
 									</tr>
 								</thead>
 								<tbody class="border">
 									<tr class="fw-bolder fs-8 border">
-                                        <td colspan="99" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
+                                        <td colspan="24" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
                                     </tr>
 								</tbody>
 							</table>
@@ -119,9 +144,9 @@
 	<!--end::Post-->
 
 
-
+	
 	<div class="modal fade" tabindex="-1" id="filter-faktur">
-		<div class="modal-dialog modal-md">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Filter</h5>
@@ -134,11 +159,20 @@
 				</div>
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-lg-12 mb-3">
+							<div class="col-lg-6 mb-3">
 								<label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
 								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
 							</div>
-							<div class="form-group col-lg-12">
+						</div>
+						<div class="row">
+							<div class="col-lg-6 mb-3">
+								<label for="kd_sales" class="form-label">kode Sales</label>
+								<select id="kd_sales" name="kd_sales" class="form-select" aria-label="Default select example" required>
+									<option selected value="">Semua Sales</option>
+									{!! $sales !!}
+								</select>
+							</div>
+							<div class="form-group col-lg-6">
 								<label for="kd_dealer" class="form-label">Kode Dealer</label>
 								<div class="input-group mb-3">
 									<input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
@@ -147,7 +181,7 @@
 							</div>
 						</div>
 					</div>
-
+					
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary btn-smt" data-bs-dismiss="modal">Simpan</button>
@@ -155,7 +189,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 <!--begin::Modal Dealer data-->
 <div class="modal fade" tabindex="-1" id="dealer-list">
 </div>
@@ -171,7 +205,7 @@
 @push('scripts')
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/getDealer.js')}}?v={{ time() }}"></script>
 	<script language="JavaScript" src="{{ asset('assets/js/suma/report/retur/index.js')}}?v={{ time() }}"></script>
-
+	
 	@if (!Agent::isMobile())
 	<script>
 		const tableContainer = $(".table-responsive");
@@ -219,5 +253,5 @@
 		});
 	</script>
 	@endif
-
+		
 @endpush

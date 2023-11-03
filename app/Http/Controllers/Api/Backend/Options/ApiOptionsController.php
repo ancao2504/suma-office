@@ -899,17 +899,36 @@ class ApiOptionsController extends Controller
             // ! -----------------------------------------
 
             $data = DB::table(function ($query) use ($request) {
-                $query->select('part.kd_part', 'part.ket as nm_part', 'part.het', 'part.hrg_pokok', 'part.kd_sub','part.CompanyId','part.kanvas','part.in_transit','part.min_gudang','part.min_htl')
+                $query->select(
+                        'part.kd_part',
+                        'part.ket as nm_part',
+                        'part.het',
+                        'part.hrg_pokok',
+                        'part.kd_sub',
+                        'part.CompanyId',
+                        'part.kanvas',
+                        'part.in_transit',
+                        'part.min_gudang',
+                        'part.min_htl'
+                    )
                     ->from('part')
                     ->where('part.CompanyId', $request->companyid)
-                    ->whereRaw("isnull(part.del_send, 0)=0")
+                    // ->whereRaw("isnull(part.del_send, 0)=0")
                     ->whereRaw("isnull(part.het, 0) > 0");
-                if (!empty($request->kd_part)) {
-                    $query = $query->where('part.kd_part', 'LIKE', '%'.$request->kd_part . '%');
-                }
-                return $query;
+                    if (!empty($request->kd_part)) {
+                        $query = $query->where('part.kd_part', 'LIKE', '%'.$request->kd_part . '%');
+                    }
+                    if (!empty($request->kd_supp)) {
+                        $query = $query->where('part.kd_suppa', $request->kd_supp);
+                    }
             }, 'part')
-            ->select('part.kd_part', 'part.nm_part', 'part.het', 'part.hrg_pokok', 'part.kd_sub');
+            ->select(
+                'part.kd_part',
+                'part.nm_part',
+                'part.het',
+                'part.hrg_pokok',
+                'part.kd_sub'
+            );
 
             // ! ------------------------------------
             // ! Jika di join dengan faktur
@@ -946,7 +965,14 @@ class ApiOptionsController extends Controller
 
             if(!empty($request->no_retur)){
                 $data = $data->JoinSub(function ($query) use ($request) {
-                    $query->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part', 'rtoko_dtl.jumlah','rtoko_dtl.no_klaim', 'rtoko_dtl.ket' ,'rtoko_dtl.CompanyId')
+                    $query->select(
+                        'rtoko_dtl.no_retur',
+                        'rtoko_dtl.kd_part',
+                        'rtoko_dtl.jumlah',
+                        'rtoko_dtl.no_klaim',
+                        'rtoko_dtl.ket',
+                        'rtoko_dtl.CompanyId'
+                    )
                     ->from('rtoko_dtl')
                     ->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%')
                     ->where('rtoko_dtl.CompanyId', $request->companyid)
@@ -957,8 +983,19 @@ class ApiOptionsController extends Controller
                 });
 
                 //! ganti select default
-                $data = $data->select('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','rtoko_dtl.ket')
-                ->groupBy('part.kd_part', 'part.nm_part','rtoko_dtl.jumlah','rtoko_dtl.ket');
+                $data = $data->select(
+                    'part.kd_part',
+                    'part.nm_part',
+                    // 'rtoko_dtl.jumlah',
+                    DB::raw('sum(rtoko_dtl.jumlah) as jumlah'),
+                    'rtoko_dtl.ket'
+                )
+                ->groupBy(
+                    'part.kd_part',
+                    'part.nm_part',
+                    // 'rtoko_dtl.jumlah',
+                    'rtoko_dtl.ket'
+                );
             }
 
             // ! ------------------------------------
@@ -1001,15 +1038,21 @@ class ApiOptionsController extends Controller
                 $data = $data->paginate($request->per_page);
             }
 
-            if(!empty($request->no_retur) && $request->option[0] == 'page'){
+            if(!empty($request->no_retur) && ($request->option[0] == 'page' || $request->option[0] == 'first')){
                 $dataNoProduk = collect(
                     DB::table(function ($query) use ($request) {
-                        $query->select('rtoko_dtl.no_klaim','rtoko_dtl.CompanyId')
+                        $query->select(
+                            'rtoko_dtl.no_klaim',
+                            'rtoko_dtl.CompanyId'
+                        )
                         ->from('rtoko_dtl')
                         ->where('rtoko_dtl.no_retur', 'LIKE', '%'.$request->no_retur . '%')
                         ->where('rtoko_dtl.CompanyId', $request->companyid)
                         ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
-                        ->groupBy('rtoko_dtl.no_klaim','rtoko_dtl.CompanyId');
+                        ->groupBy(
+                            'rtoko_dtl.no_klaim',
+                            'rtoko_dtl.CompanyId'
+                        );
                     }, 'rtoko_dtl')
                     ->join('klaim_dtl', function($join){
                         $join->on('rtoko_dtl.no_klaim', '=', 'klaim_dtl.no_dokumen')
@@ -1020,15 +1063,26 @@ class ApiOptionsController extends Controller
                     ->get()
                 )->groupBy('kd_part');
 
-                foreach($data->items() as $key => $value){
-                    if(!empty($dataNoProduk[$value->kd_part])){
-                        $data->items()[$key]->no_produksi = $dataNoProduk[$value->kd_part]->pluck('no_produksi');
-                    } else {
-                        $data->items()[$key]->no_produksi = [];
+                if($request->option[0] == 'page'){
+                    if (!empty($data) || $data?->total() > 0) {
+                        foreach($data->items() as $key => $value){
+                            if(!empty($dataNoProduk[$value->kd_part])){
+                                $data->items()[$key]->no_produksi = $dataNoProduk[$value->kd_part]->pluck('no_produksi');
+                            } else {
+                                $data->items()[$key]->no_produksi = [];
+                            }
+                        }
+                    }
+                } elseif ($request->option[0] == 'first'){
+                    if (!empty($data)){
+                        if(!empty($dataNoProduk[$data->kd_part])){
+                            $data->no_produksi = $dataNoProduk[$data->kd_part]->pluck('no_produksi');
+                        } else {
+                            $data->no_produksi = [];
+                        }
                     }
                 }
             }
-
             return Response::responseSuccess('success', $data);
         } catch(\Exception $e){
             return Response::responseError(
@@ -1043,7 +1097,7 @@ class ApiOptionsController extends Controller
     }
 
     public function dataFakturKlaim(Request $request) {
-        // try {
+        try {
             // ! Validasi ---------------------------------------------
             $validate = Validator::make($request->all(), [
                 'no_faktur' => 'min:5',
@@ -1106,16 +1160,16 @@ class ApiOptionsController extends Controller
             }
 
             return Response::responseSuccess('success' , $data);
-        // } catch (\Exception $e) {
-        //     return Response::responseError(
-        //         $request->get('user_id'),
-        //         'API',
-        //         Route::getCurrentRoute()->action['controller'],
-        //         $request->route()->getActionMethod(),
-        //         $e->getMessage(),
-        //         $request->get('companyid')
-        //     );
-        // }
+        } catch (\Exception $e) {
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
     }
 
     public function dataRetur(Request $request){
@@ -1145,7 +1199,7 @@ class ApiOptionsController extends Controller
             // ! -----------------------------------------
 
             $data = DB::table(function ($query) use ($request) {
-                $query->select('*')
+                $query->select('rtoko.*')
                     ->from('rtoko')
                     ->joinSub(function ($query) use ($request) {
                         $query->select('rtoko_dtl.no_retur as no_dokumen','rtoko_dtl.status','rtoko_dtl.kd_part')
@@ -1156,6 +1210,16 @@ class ApiOptionsController extends Controller
                     }, 'rtoko_dtl', function ($join) {
                         $join->on('rtoko.no_retur', '=', 'rtoko_dtl.no_dokumen');
                     })
+                    ->joinSub(function ($query) use ($request) {
+                        $query->select('part.kd_part','part.kd_suppa')
+                            ->from('part')
+                            ->where('part.CompanyId', $request->companyid);
+                            if (!empty($request->kd_supp)) {
+                                $query = $query->where('part.kd_suppa', $request->kd_supp);
+                            }
+                    }, 'part', function ($join) {
+                        $join->on('rtoko_dtl.kd_part', '=', 'part.kd_part');
+                    })
                     ->where('rtoko.CompanyId', $request->companyid);
                     if (!empty($request->no_retur)) {
                         $query = $query->where(function($query) use ($request){
@@ -1165,7 +1229,6 @@ class ApiOptionsController extends Controller
                             ->orWhere('rtoko_dtl.kd_part', 'LIKE', '%'.$request->no_retur . '%');
                         });
                     }
-                    return $query;
             }, 'retur')
             ->select('retur.no_retur','retur.tanggal','kd_dealer');
 
@@ -1189,11 +1252,21 @@ class ApiOptionsController extends Controller
                     ->whereRaw("isnull(rtoko_dtl.status, 0)=0")
                     ->whereIn('rtoko_dtl.no_retur', collect($data->items())->pluck('no_retur')->toArray());
                 }, 'rtoko_dtl')
+                ->joinSub(function ($query) use ($request) {
+                    $query->select('part.kd_part','part.kd_suppa')
+                        ->from('part')
+                        ->where('part.CompanyId', $request->companyid);
+                        if (!empty($request->kd_supp)) {
+                            $query = $query->where('part.kd_suppa', $request->kd_supp);
+                        }
+                }, 'part', function ($join) {
+                    $join->on('rtoko_dtl.kd_part', '=', 'part.kd_part');
+                })
                 ->select('rtoko_dtl.no_retur','rtoko_dtl.kd_part')
                 ->get())->groupBy('no_retur');
 
                 foreach($data->items() as $key => $value){
-                    $data->items()[$key]->detail = $detail[$value->no_retur]->pluck('kd_part');
+                    $data->items()[$key]->detail = $detail[$value->no_retur]->unique('kd_part')->pluck('kd_part');
                 }
             }
 

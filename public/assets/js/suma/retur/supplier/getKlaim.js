@@ -13,6 +13,7 @@ function Klaim(requst){
     $.get(base_url+'/retur',{
         option: requst.option,
         no_retur: requst.no_retur,
+        kd_supp: $('#kd_supp').val(),
         page : requst.page,
         per_page : requst.per_page
     }, function (response) {
@@ -20,16 +21,25 @@ function Klaim(requst){
             let dataJson = response.data;
             if(requst.option[0] == 'first'){
                 if (jQuery.isEmptyObject(dataJson)) {
-                    toastr.warning('No Klaim Tidak Ditemukan atau sudah di tambahkan pada Retur!', "info");
-                    $('#no_klaim').addClass('is-invalid');
-                    $('#no_klaim').removeClass('is-valid');
+                    Invalid([$('#no_klaim')], $('#error_no_klaim'), 'No Klaim Tidak Ditemukan atau sudah di tambahkan pada Retur!');
                 } else {
                     $('#no_klaim').val(dataJson.no_retur);
-                    $('#tgl_claim').val(dataJson.tanggal);
                     $('#no_klaim').removeClass('is-invalid');
                     $('#no_klaim').addClass('is-valid');
+
+                    $('.list-part').trigger('click');
                 }
             } else if (requst.option[0] == 'page') {
+                if (jQuery.isEmptyObject(dataJson)) {
+                    $('#klaim-list').find('tbody').html(`
+                    <tr>
+                        <td colspan="5" class="text-center text-primary">
+                            <div class="text-center">
+                                <h5>Data Tidak Ditemukan!</h5>
+                            </div>
+                        </td>
+                    </tr>`);
+                }
                 $('#klaim-list').html(response.data);
                 $('#detail_modal').modal('hide');
                 $('#klaim-list').modal('show');
@@ -38,7 +48,7 @@ function Klaim(requst){
             }
         }
         if (response.status == '0') {
-            toastr.warning(response.message, "Peringatan");
+            Invalid([$('#no_klaim')], $('#error_no_klaim'), response.message);
         }
         if (response.status == '2') {
             swal.fire({
@@ -81,11 +91,7 @@ function clear_part(){
     $('#kd_part').val('');
     $('#nm_part').val('');
     $('#qty_klaim').val('');
-    $('#input_no_produk').html(`
-        <div class="col-2 mt-3">
-            <input type="text" class="form-control" id="no_produksi1" name="no_produksi[]" placeholder="No Produksi" value="" disabled>
-        </div>
-    `);
+    $('#no_produksi').val('');
     $('#ket_klaim').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');
@@ -97,15 +103,25 @@ $(document).ready(function () {
     $('#klaim-list').on('click','.pilih' ,function () {
         const data = JSON.parse(atob($(this).data('a')));
         $('#no_klaim').val(data.no_retur);
-        $('#tgl_claim').val(data.tanggal);
+        $('#no_klaim').removeClass('is-invalid');
+        $('#no_klaim').addClass('is-valid');
         clear_part();
         $('#klaim-list .close').trigger('click')
+        $('.list-part').trigger('click');
     })
 
     $('#no_klaim').on('change', function () {
         $('#ket_part').val('');
         if($('#no_klaim').val() == ''){
             $('#no_klaim').removeClass('is-valid');
+            $('#no_klaim').removeClass('is-invalid');
+            $('#kd_part').val('');
+            $('#kd_part').removeClass('is-valid');
+            $('#kd_part').removeClass('is-invalid');
+            $('#nm_part').val('');
+            $('#qty_klaim').val('');
+            $('#no_produksi').val('');
+            $('#ket_klaim').val('');
             return false;
         }
 

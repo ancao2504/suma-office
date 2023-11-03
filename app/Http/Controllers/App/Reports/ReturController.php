@@ -18,25 +18,26 @@ class ReturController extends Controller
      */
     public function index(Request $request)
     {
-        $request->merge(['option' => 'select']);
-        $responseApiSales = OptionController::salesman($request)->getData();
-        if ($responseApiSales->status == 1) {
+        // $request->merge(['option' => 'select']);
+        // $responseApiSales = OptionController::salesman($request)->getData();
+        // if ($responseApiSales->status == 1) {
             return view(
                 'layouts.report.retur',
                 [
                     'title_menu' => 'Report Retur',
-                    'sales' => $responseApiSales->data
+                    // 'sales' => $responseApiSales->data
                 ]
             );
-        } else {
-            return redirect()->back()->with('failed', $responseApiSales->message);
-        }
+        // } else {
+        //     return redirect()->back()->with('failed', $responseApiSales->message);
+        // }
     }
 
     public function data(Request $request)
     {
         try {
             $responseApi = Service::ReportReturData($request);
+
             if (json_decode($responseApi)->status == 1) {
                 return Response()->json([
                     'status'    => 1,
@@ -62,7 +63,6 @@ class ReturController extends Controller
     public function export(Request $request){
         try {
             $responseApi = Service::ExprotReportRetur($request);
-
             if (json_decode($responseApi)->status == 1) {
                 $data = json_decode($responseApi)->data;
                 return Excel::download(new Retur($data), 'Retur_Konsumen.xlsx');

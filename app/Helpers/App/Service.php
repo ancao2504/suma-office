@@ -1976,7 +1976,9 @@ class Service
             'option'        => $request->option,
             'no_retur'      => trim($request->no_retur),
             'page'          => $request->page ?? 1,
+            'page_end'          => $request->page_end ?? 1,
             'per_page'      => $request->per_page ?? 10,
+            'per_page_end'      => $request->per_page_end ?? 10,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2005,7 +2007,7 @@ class Service
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
             'role_id'       => strtoupper(trim($request->session()->get('app_user_role_id'))),
-            'tamp'          => $request->tamp,
+            'tamp'          => (int)$request->tamp,
             'option'        => trim($request->option),
             // ! data Header
             'no_retur'      => $request->no_retur,
@@ -2152,7 +2154,7 @@ class Service
         $url = 'backend/report/retur';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'tanggal'     => $request->tanggal,
+            'tanggal'       => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
             'kd_dealer'     => $request->kd_dealer,
             'page'          => $request->page ?? 1,
@@ -2390,6 +2392,7 @@ class Service
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
             'option'        => $request->option,
+            'kd_supp'       => $request->kd_supp,
             'kd_part'       => $request->kd_part,
             'kd_sales'      => $request->kd_sales,
             'no_retur'      => $request->no_retur,
@@ -2409,6 +2412,7 @@ class Service
             'user_id'       => trim($request->session()->get('app_user_id')),
             'option'        => $request->option,
             'no_retur'      => $request->no_retur,
+            'kd_supp'       => $request->kd_supp,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
         ];
