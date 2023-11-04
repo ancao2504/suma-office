@@ -675,9 +675,9 @@ Route::group(['middleware' => 'authBasic'], function () {
                         Route::post('backend/uploadfile/pricelist/hapus', 'destroy')->name('hapus');
                     });
                     Route::controller(TypeMotorController::class)->group(function () {
-                        Route::post('backend/uploadimage/typemotor', 'master')->name('get');
-                        Route::post('backend/uploadimage/typemotordetail', 'detail')->name('get');
-                        Route::post('backend/uploadfile/motormaster/simpan', 'store')->name('simpan');
+                        Route::post('backend/uploadimage/typemotor', 'master');
+                        Route::post('backend/uploadimage/typemotordetail', 'detail');
+                        Route::post('backend/uploadfile/motormaster/simpan', 'store');
                     });
                 });
             });
