@@ -12,9 +12,9 @@ class UploadImageController extends Controller
 {
     // buat metod upload file android
     function form(Request $request){
+        return Service::getTypeMotor();
         $ResponApiMaster = json_decode(Service::getTypeMotor());
         $ResponApiDetail = json_decode(Service::getTypeMotorDetail());
-        return $ResponApiMaster->status;
         if($ResponApiMaster->status == 0 && $ResponApiDetail->status == 0){
             return redirect()->back()->with('error', 'Tejadi kesalahan, silahkan coba lagi');
         }
