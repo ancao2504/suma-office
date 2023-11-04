@@ -18,6 +18,7 @@ use Api\Backend\Parts\ApiStockHarianController;
 use Api\Backend\Validasi\ApiValidasiController;
 use Api\Backend\Gudang\Online\PackingController;
 use Api\Backend\Online\ApiSerahTerimaController;
+use Api\Backend\Upload\File\PriceListController;
 use Api\Backend\Online\ApiApproveOrderController;
 use Api\Backend\Orders\ApiPenerimaanSJController;
 use Api\Backend\Visit\ApiPlanningVisitController;
@@ -41,16 +42,21 @@ use Api\Backend\Setting\ApiSettingPartNettoDealerController;
 use Api\Backend\Reports\KonsumenController as Reportkonsumen;
 use Api\Backend\Setting\ApiSettingDiskonProdukDealerController;
 use Api\Backend\Online\Shopee\ApiOrderController as OrderShopee;
-use Api\Backend\Upload\File\PriceListController;
+use Api\Backend\Online\Tiktok\ApiOrderController as OrderTiktok;
 use Api\Backend\Online\ApiProductController as ProductMarketplace;
 use Api\Backend\Dashboard\Marketing\ApiDashboardMarketingController;
 use Api\Backend\Online\Shopee\ApiProductController as ProductShopee;
+use Api\Backend\Online\Tiktok\ApiProductController as ProductTiktok;
 use Api\Backend\Retur\SupplierJawabController as ReturSupplierJawab;
 use Api\Backend\Online\Shopee\ApiShippingController as ShippingShopee;
+use Api\Backend\Online\Tiktok\ApiShippingController as ShippingTiktok;
 use Api\Backend\Online\Tokopedia\ApiOrderController as OrderTokopedia;
+use Api\Backend\Upload\File\TypeMotorController;
 use Api\Backend\Online\ApiPemindahanController as PemindahanMarketplace;
 use Api\Backend\Online\Shopee\ApiEkspedisiController as EkspedisiShopee;
+use Api\Backend\Online\Tiktok\ApiEkspedisiController as EkspedisiTiktok;
 use Api\Backend\Online\Shopee\ApiPemindahanController as PemindahanShopee;
+use Api\Backend\Online\Tiktok\ApiPemindahanController as PemindahanTiktok;
 use Api\Backend\Online\Tokopedia\ApiProductController as ProductTokopedia;
 use Api\Backend\Dashboard\Management\ApiDashboardManagementSalesController;
 use Api\Backend\Dashboard\Management\ApiDashboardManagementStockController;
@@ -63,11 +69,6 @@ use Api\Backend\Online\Tokopedia\ApiEkspedisiController as EkspedisiTokopedia;
 use Api\Backend\Online\Tokopedia\ApiPemindahanController as PemindahanTokopedia;
 use Api\Backend\Online\Tokopedia\ApiUpdateHargaController as UpdateHargaTokopedia;
 use Api\Backend\Online\Tokopedia\ApiHistorySaldoController as HistorySaldoTokopedia;
-use Api\Backend\Online\Tiktok\ApiPemindahanController as PemindahanTiktok;
-use Api\Backend\Online\Tiktok\ApiOrderController as OrderTiktok;
-use Api\Backend\Online\Tiktok\ApiProductController as ProductTiktok;
-use Api\Backend\Online\Tiktok\ApiEkspedisiController as EkspedisiTiktok;
-use Api\Backend\Online\Tiktok\ApiShippingController as ShippingTiktok;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -672,6 +673,11 @@ Route::group(['middleware' => 'authBasic'], function () {
                         Route::post('backend/uploadfile/pricelist', 'index')->name('get');
                         Route::post('backend/uploadfile/pricelist/simpan', 'store')->name('simpan');
                         Route::post('backend/uploadfile/pricelist/hapus', 'destroy')->name('hapus');
+                    });
+                    Route::controller(TypeMotorController::class)->group(function () {
+                        Route::post('backend/uploadimage/typemotor', 'master')->name('get');
+                        Route::post('backend/uploadimage/typemotordetail', 'detail')->name('get');
+                        Route::post('backend/uploadfile/motormaster/simpan', 'store')->name('simpan');
                     });
                 });
             });

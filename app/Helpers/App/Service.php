@@ -2582,6 +2582,23 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+
+    public static function getTypeMotor()
+    {
+        $url = 'backend/uploadimage/typemotor';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function getTypeMotorDetail()
+    {
+        $url = 'backend/uploadimage/typemotordetail';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
     public static function uploadFilePriceList($request)
     {
         $url = 'backend/uploadfile/pricelist/simpan';
@@ -2624,6 +2641,48 @@ class Service
         $body = [
             'companyid'          => $request->session()->get('app_user_company_id'),
             'no_camp'          => $request->no_camp,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function uploadFileMotorMaster($request)
+    {
+        $url = 'backend/uploadfile/motormaster/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'option' => 'master',
+            'm_kd_master' => $request->m_kd_master,
+            'm_nama' => $request->m_nama,
+            'm_jenis' => $request->m_jenis,
+            'm_logo_path' => $request->m_logo_path,
+            'm_gambar_path' => $request->m_gambar_path
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function uploadFileMotorDetail($request)
+    {
+        $url = 'backend/uploadfile/motormaster/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'option' => 'detail',
+            'd_kd_master' => $request->d_kd_master,
+            'd_kd_detail' => $request->d_kd_detail
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function uploadFileMotorDetailImage($request)
+    {
+        $url = 'backend/uploadfile/motormaster/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'option' => 'detail_image',
+            'di_kd_detail' => $request->di_kd_detail,
+            'di_gambar_path' => $request->di_gambar_path
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
