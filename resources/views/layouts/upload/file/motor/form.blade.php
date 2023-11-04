@@ -135,6 +135,7 @@
                                             @error('d_kd_detail')
                                                 <div class="font-weight-bold text-danger">{{ $message }}</div>
                                             @enderror
+                                            <span class="text-muted"><span class="required"></span>Pilih lebih dari 1 pilihan gunakan <b>CTRL + klik pilihan</b> atau gunakan <b>SHIFT</b> untuk block pilihan </span>
 										</div>
 									</div>
 								</div>
