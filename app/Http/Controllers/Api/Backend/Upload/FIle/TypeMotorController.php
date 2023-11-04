@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 class TypeMotorController extends Controller
 {
     function master(){
+        return 'master';
         $data = DB::table('typemotor_ms')
         ->select('kd_type', 'nama', 'jenis')
         ->orderBy('kd_type', 'asc')
