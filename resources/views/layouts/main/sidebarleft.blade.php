@@ -1241,7 +1241,7 @@
 
                     <div class="menu-item">
                         <a class="menu-link {{ Request::is('uploadimage/motor*') ? 'active' : '' }}"
-                            href="{{ url('/uploadimage/montor') }}">
+                            href="{{ url('/uploadimage/motor') }}">
                             <span class="menu-icon">
                                 <span class="svg-icon svg-icon-muted svg-icon-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
