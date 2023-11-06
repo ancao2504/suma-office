@@ -89,6 +89,8 @@
                         </form>
 					</div>
 				</div>
+				<div id="list-gambar-master" class="d-none" style="height: 230px; white-space: nowrap; overflow-x: scroll; overflow-y: hidden;">
+				</div>
                 {{--  --}}
 				<div class="card card-xl-stretch shadow">
                     <div class="card-header pt-6">
@@ -188,7 +190,7 @@
 						</form>
 					</div>
 				</div>
-				<div id="list-gambar" style="height: 230px; white-space: nowrap; overflow-x: scroll; overflow-y: hidden;">
+				<div id="list-gambar-detail" style="height: 230px; white-space: nowrap; overflow-x: scroll; overflow-y: hidden;">
 				</div>
 			</div>
 			<!--end::Row-->
@@ -201,6 +203,7 @@
 
 @push('scripts')
 <script>
+    const MasterGambar = @json($kd_master);
     const DetailGambar = @json($kd_detail);
     $('#di_kd_detail').on('change', function() {
 		let kd_detail = $(this).val();
@@ -211,9 +214,9 @@
 		if (gambar == null) {
 			gambar = [];
 		}
-		$('#list-gambar').html('');
+		$('#list-gambar-detail').html('');
 		gambar.forEach(function (item, index) {
-			$('#list-gambar').append(`
+			$('#list-gambar-detail').append(`
 			<div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;">
 				<div class="card border border-dark rounded">
 					<div class="d-flex justify-content-center">
@@ -230,5 +233,44 @@
 			`);
 		});
 	});
+
+    $('#d_kd_master').on('change', function() {
+        let kd_master = $(this).val();
+        let data = MasterGambar.filter(function (el) {
+            return el.kd_type == kd_master;
+        });
+        const logo = JSON.parse(data[0].logo);
+        const gambar = JSON.parse(data[0].gambar);
+        $('#list-gambar-master').html('');
+        logo.forEach(function (item, index) {
+            $('#list-gambar-master').append(`
+                <div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;">
+                    <div class="card border border-dark rounded">
+                        <div class="d-flex justify-content-center">
+                            <div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/master/logo/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+        gambar.forEach(function (item, index) {
+            $('#list-gambar-master').append(`
+                <div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;">
+                    <div class="card border border-dark rounded">
+                        <div class="d-flex justify-content-center">
+                            <div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/master/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+        if (logo.length == 0 && gambar.length == 0) {
+            $('#list-gambar-master').addClass('d-none');
+        }else {
+            $('#list-gambar-master').removeClass('d-none');
+        }
+    });
 </script>
 @endpush

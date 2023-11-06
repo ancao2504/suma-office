@@ -12,7 +12,7 @@ class TypeMotorController extends Controller
 {
     function master(){
         $data = DB::table('typemotor_ms')
-        ->select('kd_type', 'nama', 'jenis')
+        ->select('*')
         ->orderBy('kd_type', 'asc')
         ->get();
 
