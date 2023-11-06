@@ -244,7 +244,7 @@
         $('#list-gambar-master').html('');
         logo.forEach(function (item, index) {
             $('#list-gambar-master').append(`
-                <div class="card rounded" style="display: inline-block; margin-right: 10px;">
+                <div class="card rounded" style="display: inline-block; width: auto; margin-right: 10px;">
                     <div class="card border border-dark rounded">
                         <div class="d-flex justify-content-center">
                             <div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/master/logo/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
