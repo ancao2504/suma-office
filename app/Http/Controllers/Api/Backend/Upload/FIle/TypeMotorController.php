@@ -20,7 +20,10 @@ class TypeMotorController extends Controller
     }
     function detail(){
         $data = DB::table('typemotor')
-        ->select('kd_type', 'typemkt', 'ket')
+        ->leftJoin('typemotor_img', function($join){
+            $join->on('typemotor.typemkt', '=', 'typemotor_img.typemkt');
+        })
+        ->select('typemotor.kd_type', 'typemotor.typemkt', 'typemotor.ket', 'typemotor_img.gambar')
         ->orderBy('typemkt', 'asc')
         ->get();
 

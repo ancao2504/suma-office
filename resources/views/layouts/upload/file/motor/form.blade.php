@@ -11,7 +11,6 @@
 		<div id="kt_content_container" class="container-xxl">
 			<!--begin::Row-->
 			<div class="row gy-5 g-xl-8">
-
 				<div class="card card-xl-stretch shadow">
                     <div class="card-header pt-6">
                         <h3 class="card-title fw-bolder text-dark">Master</h3>
@@ -90,7 +89,6 @@
                         </form>
 					</div>
 				</div>
-
                 {{--  --}}
 				<div class="card card-xl-stretch shadow">
                     <div class="card-header pt-6">
@@ -125,7 +123,7 @@
                                             <select class="form-select mb-3 @error('d_kd_detail') border-1 border-danger @enderror" size="10"  multiple aria-label="Pilih Kode Detail" name="d_kd_detail[]" id="d_kd_detail">
                                                 @foreach ($kd_detail as $item)
                                                     <option value="{{ $item->typemkt }}">
-                                                        ({{ $item->typemkt }})
+                                                        ({{ $item->kd_type??'-' }})({{ $item->typemkt }})
                                                         @if ($item->ket != null)
                                                             {{ $item->ket }}
                                                         @endif
@@ -144,7 +142,6 @@
 						</form>
 					</div>
 				</div>
-
                 {{--  --}}
 				<div class="card card-xl-stretch shadow">
                     <div class="card-header pt-6">
@@ -191,8 +188,11 @@
 						</form>
 					</div>
 				</div>
+				<div id="list-gambar" style="height: 230px; white-space: nowrap; overflow-x: scroll; overflow-y: hidden;">
+				</div>
 			</div>
 			<!--end::Row-->
+                <!--end::container-->
 		</div>
 		<!--end::Container-->
 	</div>
@@ -200,4 +200,35 @@
 @endsection
 
 @push('scripts')
+<script>
+    const DetailGambar = @json($kd_detail);
+    $('#di_kd_detail').on('change', function() {
+		let kd_detail = $(this).val();
+		let data = DetailGambar.filter(function (el) {
+			return el.typemkt == kd_detail;
+		});
+		gambar = JSON.parse(data[0].gambar);
+		if (gambar == null) {
+			gambar = [];
+		}
+		$('#list-gambar').html('');
+		gambar.forEach(function (item, index) {
+			$('#list-gambar').append(`
+			<div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;">
+				<div class="card border border-dark rounded">
+					<div class="d-flex justify-content-center">
+						<div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+							<div class="bg-dark" style="width: 100%; height: 50px; position: absolute; bottom: 0; opacity: 0.8;">
+								<div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+									<span class="text-white">${data[0].ket}<span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			`);
+		});
+	});
+</script>
 @endpush

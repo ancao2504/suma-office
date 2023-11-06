@@ -587,7 +587,6 @@ class KonsumenController extends Controller
 
         // ! parameter index untuk mengambil data temporeri dan mengambil data detail
         $request->merge(['option' => ['tamp','with_detail']]);
-
         return (object)[
             'status'    => true,
             'data'      => (object)[
