@@ -156,6 +156,7 @@ class KonsumenController extends Controller
                 $join->on('part.kd_part', 'faktur.kd_part');
             })
             ->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
+            ->orderBy('faktur.no_faktur', 'ASC')
             ->paginate($request->per_page);
 
             return Response()->json([
@@ -325,6 +326,7 @@ class KonsumenController extends Controller
                 ->on('sub.CompanyId', 'produk.CompanyId');
             })
             ->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
+            ->orderBy('faktur.no_faktur', 'ASC')
             ->get();
 
             return Response()->json([
