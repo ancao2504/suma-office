@@ -97,7 +97,7 @@
         </div>
         <div class="modal-footer">
             <a role="button" class="btn btn-success text-white btn_simpan">Simpan Pengajuan</a>
-            <a href="{{ Route('retur.supplier.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{ URL::previous() }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>

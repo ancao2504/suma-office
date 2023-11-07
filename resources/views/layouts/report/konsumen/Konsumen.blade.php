@@ -318,14 +318,14 @@
 						<div class="w-100 h-100">
 							<select name="urutkan_collom" id="urutkan_collom" class="form-select" data-placeholder="Pilih Urutan">
 								<option value="">Pilih Collom</option>
-								<option value="tgl_faktur">Tanggal Transaksi</option>
-								<option value="kd_part" class="text-kd_part">Kode Part</option>
-								<option value="merk">Merek Motor</option>
-								<option value="type">Tipe Motor</option>
-								<option value="jenis">Jenis Motor</option>
-								<option value="nama">Nama</option>
-								<option value="tgl_lahir">Tanggal Lahir</option>
-								<option value="telepon">Telepon</option>
+								<option value="faktur.tgl_faktur">Tanggal Transaksi</option>
+								<option value="fakt_dtl.kd_part" class="text-kd_part">Kode Part</option>
+								<option value="konsumen.merk">Merek Motor</option>
+								<option value="konsumen.type">Tipe Motor</option>
+								<option value="konsumen.jenis">Jenis Motor</option>
+								<option value="konsumen.nama">Nama</option>
+								<option value="konsumen.tgl_lahir">Tanggal Lahir</option>
+								<option value="konsumen.telepon">Telepon</option>
 							</select>
 						</div>
 					</div>

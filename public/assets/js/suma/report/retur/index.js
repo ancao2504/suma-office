@@ -58,10 +58,9 @@ function report(page = 1) {
                                 <td class="ps-3 pe-3">${value.nm_dealer??'-'}</td>
                                 <td class="ps-3 pe-3">${value.kd_part??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${value.qty_klaim??'-'}</td>
-                                <td class="ps-3 pe-3 text-end">${value.qty_jwb??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.tgl_pakai??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.tgl_klaim??'-'}</td>
-                                <td class="ps-3 pe-3">${value.pemakaian??'-'}</td>
+                                <td class="ps-3 pe-3 text-end">${value.pemakaian??'-'}</td>
                                 <td class="ps-3 pe-3">${value.ket??'-'}</td>
                             </tr>
                         `);

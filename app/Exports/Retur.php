@@ -57,10 +57,9 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
             'Nama Dealer',
             'Tipe',
             'qty Klaim',
-            'qty Jawab',
             'tanggal klaim',
             'tanggal pakai',
-            'pemakaian',
+            'pemakaian (Hari)',
             'Uraian Klaim',
         ];
     }

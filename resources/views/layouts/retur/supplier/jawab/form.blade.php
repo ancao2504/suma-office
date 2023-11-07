@@ -67,7 +67,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-success text-white btn_simpan" data-a="{{ base64_encode(json_encode((object)['no_retur' => $data->no_retur,'tamp'=>0])) }}">Simpan Semua Jawaban</button>
-            <a href="{{ Route('retur.supplier.index') }}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{ URL::previous() }}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>

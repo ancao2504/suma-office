@@ -298,10 +298,9 @@ class ReturController extends Controller
                     dealer.nm_dealer,
                     rtoko_dtl.kd_part,
                     klaim_dtl.qty as qty_klaim,
-                    jwb.qty_jwb,
                     klaim_dtl.tgl_pakai,
                     klaim_dtl.tgl_klaim,
-                    CONVERT(NVARCHAR(10),DATEDIFF(MONTH, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim)) +' Bulan '+ CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim) % 30)) + ' Hari' AS pemakaian,
+                    CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim))) + ' Hari' AS pemakaian,
                     SUBSTRING(retur_dtl.ket, CHARINDEX('|', retur_dtl.ket) + 1, LEN(retur_dtl.ket)) as ket
                 from (
                     select  *
@@ -333,29 +332,14 @@ class ReturController extends Controller
                                         retur_dtl.kd_part = rtoko_dtl.kd_part and
                                         retur_dtl.CompanyId = rtoko_dtl.CompanyId
                 inner join dealer on dealer.kd_dealer = rtoko.kd_dealer
-                left join (
-                    select
-                        no_klaim as no_rtoko,
-                        kd_part,
-                        sum(qty_jwb) as qty_jwb
-                    from
-                        jwb_claim
-                    where sts_end = 1 and CompanyId = '{$request->companyid}'
-                    group by
-                        no_klaim,
-                        kd_part
-                ) as jwb on rtoko.no_retur = jwb.no_rtoko and rtoko_dtl.kd_part = jwb.kd_part
             ";
             $data = DB::table(DB::raw("($sql) as a"))
-
-                // sum(qty_klaim) as qty_klaim,
                 ->selectRaw("
                 no_retur,
                 kd_dealer,
                 nm_dealer,
                 kd_part,
                 sum(qty_klaim) as qty_klaim,
-                isnull(sum(qty_jwb),0) as qty_jwb,
                 REPLACE(CONVERT(NVARCHAR(10), tgl_pakai, 105), '-', '/') as tgl_pakai,
                 REPLACE(CONVERT(NVARCHAR(10), tgl_klaim, 105), '-', '/') as tgl_klaim,
                 pemakaian,
@@ -371,8 +355,8 @@ class ReturController extends Controller
                 pemakaian,
                 ket
             ")
-                ->orderBy("kd_dealer", "asc")
-                ->paginate($request->per_page);
+            ->orderBy("kd_dealer", "asc")
+            ->paginate($request->per_page);
 
             return Response()->json([
                 'status' => 1,
@@ -686,7 +670,6 @@ class ReturController extends Controller
                 nm_dealer,
                 kd_part,
                 sum(qty_klaim) as qty_klaim,
-                isnull(sum(qty_jwb),0) as qty_jwb,
                 REPLACE(CONVERT(NVARCHAR(10), tgl_pakai, 105), '-', '/') as tgl_pakai,
                 REPLACE(CONVERT(NVARCHAR(10), tgl_klaim, 105), '-', '/') as tgl_klaim,
                 pemakaian,
@@ -698,10 +681,9 @@ class ReturController extends Controller
                     dealer.nm_dealer,
                     rtoko_dtl.kd_part,
                     klaim_dtl.qty as qty_klaim,
-                    jwb.qty_jwb,
                     klaim_dtl.tgl_pakai,
                     klaim_dtl.tgl_klaim,
-                    CONVERT(NVARCHAR(10),DATEDIFF(MONTH, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim)) +' Bulan '+ CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim) % 30)) + ' Hari' AS pemakaian,
+                    CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim))) AS pemakaian,
                     SUBSTRING(retur_dtl.ket, CHARINDEX('|', retur_dtl.ket) + 1, LEN(retur_dtl.ket)) as ket
                 from (
                     select  *
@@ -733,18 +715,6 @@ class ReturController extends Controller
                                         retur_dtl.kd_part = rtoko_dtl.kd_part and
                                         retur_dtl.CompanyId = rtoko_dtl.CompanyId
                 inner join dealer on dealer.kd_dealer = rtoko.kd_dealer
-                left join (
-                    select
-                        no_klaim as no_rtoko,
-                        kd_part,
-                        sum(qty_jwb) as qty_jwb
-                    from
-                        jwb_claim
-                    where sts_end = 1 and CompanyId = '{$request->companyid}'
-                    group by
-                        no_klaim,
-                        kd_part
-                ) as jwb on rtoko.no_retur = jwb.no_rtoko and rtoko_dtl.kd_part = jwb.kd_part
             ) as a
             group by
                 no_retur,
@@ -762,7 +732,6 @@ class ReturController extends Controller
                 nm_dealer,
                 kd_part,
                 qty_klaim,
-                qty_jwb,
                 tgl_pakai,
                 tgl_klaim,
                 pemakaian,

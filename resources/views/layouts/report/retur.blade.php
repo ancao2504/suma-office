@@ -72,14 +72,12 @@
 										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Kode Dealer</th>
 										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Nama Dealer</th>
 										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Tipe</th>
-										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">qty</th>
+										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Qty Klaim</th>
 										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
 										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Pemakaian</th>
 										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Uraian Klaim</th>
 									</tr>
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" class="w-auto ps-3 pe-3 text-end">Klaim</th>
-										<th scope="col" class="w-auto ps-3 pe-3 text-end">Jawab</th>
 										<th scope="col" class="w-auto ps-3 pe-3">Pakai</th>
 										<th scope="col" class="w-auto ps-3 pe-3">Klaim</th>
 									</tr>
@@ -117,7 +115,6 @@
 		<!--end::Container-->
 	</div>
 	<!--end::Post-->
-
 
 
 	<div class="modal fade" tabindex="-1" id="filter-faktur">

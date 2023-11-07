@@ -30,7 +30,11 @@ function request_data(page){
             page: page,
             per_page: $('#table_list').find('#per_page').val(),
 
-            filter: {[$('#filter_urutkan #urutkan_collom').val()] : $('#filter_urutkan #urutkan').val()},
+            filter: {
+                // [$('#filter_urutkan #urutkan_collom').val()] : $('#filter_urutkan #urutkan').val()
+                'collom' : $('#filter_urutkan #urutkan_collom').val(),
+                'by' : $('#filter_urutkan #urutkan').val()
+            },
         },
         dataType: 'json',
         success: function(response) {
