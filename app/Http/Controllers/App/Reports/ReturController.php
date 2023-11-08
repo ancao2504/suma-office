@@ -37,7 +37,6 @@ class ReturController extends Controller
     {
         try {
             $responseApi = Service::ReportReturData($request);
-
             if (json_decode($responseApi)->status == 1) {
                 return Response()->json([
                     'status'    => 1,

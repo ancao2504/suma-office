@@ -331,7 +331,7 @@ class ReturController extends Controller
                 inner join retur_dtl on retur_dtl.no_klaim = rtoko_dtl.no_retur and
                                         retur_dtl.kd_part = rtoko_dtl.kd_part and
                                         retur_dtl.CompanyId = rtoko_dtl.CompanyId
-                inner join dealer on dealer.kd_dealer = rtoko.kd_dealer
+                inner join dealer on dealer.kd_dealer = rtoko.kd_dealer and dealer.CompanyId = rtoko.CompanyId
             ";
             $data = DB::table(DB::raw("($sql) as a"))
                 ->selectRaw("
