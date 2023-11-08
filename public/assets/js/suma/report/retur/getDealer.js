@@ -71,7 +71,8 @@ $(document).ready(function () {
             option: 'first',
             kd_dealer: $(this).data('a')
         });
-        $('#dealer-list .close').trigger('click')
+        $('#dealer-list .close').trigger('click');
+        $('#filter-report').modal('show');
     });
 
     $('#dealer-list').on('change','#per_page', function () {
@@ -114,7 +115,8 @@ $(document).ready(function () {
         });
     });
 
-    $('.list-dealer').on('click', function () {
+    $('#filter-report #list-dealer').on('click', function () {
+        $('#filter-report').modal('hide');
         Dealer({
             option: 'page',
             kd_dealer: $('#dealer-list').find('#cari').val(),

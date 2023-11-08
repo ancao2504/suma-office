@@ -41,7 +41,7 @@
 						</ul>
 					</div>
 
-					<button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-faktur">
+					<button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-report">
 						Filter
 					</button>
 				</div>
@@ -117,12 +117,11 @@
 	<!--end::Post-->
 
 
-	<div class="modal fade" tabindex="-1" id="filter-faktur">
+	<div class="modal fade" tabindex="-1" id="filter-report">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Filter</h5>
-
 					<!--begin::Close-->
 					<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 						<i class="bi bi-x-lg"></i>
@@ -130,19 +129,17 @@
 					<!--end::Close-->
 				</div>
 					<div class="modal-body">
-						<div class="row">
-							<div class="col-lg-12 mb-3">
-								<label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
-								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
-							</div>
-							<div class="form-group col-lg-12">
-								<label for="kd_dealer" class="form-label">Kode Dealer</label>
-								<div class="input-group mb-3">
-									<input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
-									<button class="btn btn-primary list-dealer" type="button">Pilih</button>
-								</div>
-							</div>
-						</div>
+                        <div class="mb-3">
+                            <label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
+                            <input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="kd_dealer" class="form-label">Kode Dealer</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
+                                <button class="btn btn-primary" id="list-dealer" type="button">Pilih</button>
+                            </div>
+                        </div>
 					</div>
 
 					<div class="modal-footer">

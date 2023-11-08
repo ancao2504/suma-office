@@ -1,7 +1,7 @@
 let date = {
     tgl_klaim: {
-        start: moment().startOf('month'),
-        end: moment().endOf('month')
+        start: moment().startOf('month').format('YYYY-MM-DD'),
+        end: moment().endOf('month').format('YYYY-MM-DD'),
     }
 }
 var formatter = new Intl.NumberFormat('id-ID', {
@@ -28,7 +28,7 @@ function report(page = 1) {
         $.post(window.location.href,
             {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
+                tanggal: [date.tgl_klaim.start, date.tgl_klaim.end],
                 kd_sales: $('#kd_sales').val(),
                 kd_dealer: $('#kd_dealer').val(),
                 page: page,
@@ -119,21 +119,32 @@ function report(page = 1) {
 }
 
 $(document).ready(function () {
-    $("#tgl_klaim").daterangepicker({
-        format: 'DD/MM/YYYY',
-        startDate: date.tgl_klaim.start,
-        endDate: date.tgl_klaim.end,
-        ranges: {
-            "Hari ini": [moment(), moment()],
-            "Kemarin": [moment().subtract(1, "days"), moment().subtract(1, "days")],
-            "1 minggu terakhir": [moment().subtract(6, "days"), moment()],
-            "Bulan ini": [moment().startOf("month"), moment().endOf("month")],
-            "Bulan Kemarin": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+    // $("#filter-report #tgl_klaim").daterangepicker({
+    //     format: 'DD/MM/YYYY',
+    //     startDate: date.tgl_klaim.start,
+    //     endDate: date.tgl_klaim.end,
+    //     ranges: {
+    //         "Hari ini": [moment(), moment()],
+    //         "Kemarin": [moment().subtract(1, "days"), moment().subtract(1, "days")],
+    //         "1 minggu terakhir": [moment().subtract(6, "days"), moment()],
+    //         "Bulan ini": [moment().startOf("month"), moment().endOf("month")],
+    //         "Bulan Kemarin": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+    //     }
+    // }, function (start, end) {
+    //     date.tgl_klaim.start = start
+    //     date.tgl_klaim.end = end
+    // });
+    $("#filter-report #tgl_klaim").flatpickr({
+        altInput: true,
+        altFormat: "d/m/Y",
+        dateFormat: "Y-m-d",
+        mode: "range",
+        defaultDate: [date.tgl_klaim.start, date.tgl_klaim.end],
+        onChange: function (selectedDates, dateStr, instance) {
+            date.tgl_klaim.start = moment(selectedDates[0]).format('YYYY-MM-DD');
+            date.tgl_klaim.end = moment(selectedDates[1]).format('YYYY-MM-DD');
         }
-    }, function (start, end) {
-        date.tgl_klaim.start = start
-        date.tgl_klaim.end = end
-    });
+    })
 
     $('.btn-smt').on('click', function (e) {
         e.preventDefault();
@@ -150,7 +161,7 @@ $(document).ready(function () {
             },
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
-                tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
+                tanggal: [date.tgl_klaim.start, date.tgl_klaim.end],
                 kd_dealer: $('#kd_dealer').val()
             }
         }).done(function (response) {
@@ -180,7 +191,7 @@ $(document).ready(function () {
             });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + date.tgl_klaim.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_klaim.end.format('DD-MM-YYYY') : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + '.xlsx';
+            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + moment(date.tgl_klaim.start).format('DD-MM-YYYY') + ' s/d ' + moment(date.tgl_klaim.end).format('DD-MM-YYYY') : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + '.xlsx';
             link.click();
             link.remove();
         }).fail(function (jqXHR, textStatus, error) {
@@ -201,10 +212,6 @@ $(document).ready(function () {
         }).always(function () {
             loading.release();
         });
-
-
-
-        // window.open(baseurl + `/report/retur/konsumen/export?tgl_claim=${$('#tgl_claim').val() == '' ? '' : [date.tgl_claim.start.format('YYYY-MM-DD'), date.tgl_claim.end.format('YYYY-MM-DD')]}&tgl_terima=${$('#tgl_terima').val() == '' ? '' : [date.tgl_terima.start.format('YYYY-MM-DD'), date.tgl_terima.end.format('YYYY-MM-DD')]}&kd_sales=${$('#kd_sales').val()}&kd_dealer=${$('#kd_dealer').val()}&no_faktur=${$('#no_faktur').val()}&kd_part=${$('#kd_part').val()}&sts=${$('#sts').val()}`, '_blank');
     });
 
     $('#table_list .pagination').on('click', '.page-item:not(.disabled)', function () {
