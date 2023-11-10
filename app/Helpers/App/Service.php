@@ -2582,6 +2582,16 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+    public static function getVBVersion($request)
+    {
+        $url = 'backend/uploadfile/vb';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'version'          => $request->version,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
 
     public static function getTypeMotor()
     {
@@ -2612,6 +2622,17 @@ class Service
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
     }
+    public static function SimpanVBVersion($request)
+    {
+        $url = 'backend/uploadfile/vb/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'version'          => $request->version,
+            'path_file'          => $request->path_file
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
     public static function deleteFilePriceList($request)
     {
         $url = 'backend/uploadfile/pricelist/hapus';
@@ -2619,6 +2640,16 @@ class Service
         $body = [
             'nama_file'          => $request->nama_file,
             'tanggal'            => $request->tanggal,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function deleteVBVersion($request)
+    {
+        $url = 'backend/uploadfile/vb/hapus';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'version'          => $request->version
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
