@@ -35,7 +35,7 @@ class VBUpdateController extends Controller
                 'path_file' => 'https://suma.vb.honda.suma-honda.id/'.$request->file('file')->getClientOriginalName(),
             ]);
 
-            $request->file('file')->move('../home/sumahond/suma.vb.honda', $request->file('file')->getClientOriginalName());
+            $request->file('file')->move('/home/sumahond/suma.vb.honda', $request->file('file')->getClientOriginalName());
 
             $responseApi = json_decode(Service::SimpanVBVersion($request));
             if($responseApi->status == 0){
