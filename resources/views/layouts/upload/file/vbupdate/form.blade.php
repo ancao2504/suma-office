@@ -140,7 +140,6 @@
 @push('scripts')
 <script>
     document.getElementById('myFormSubmit').addEventListener('submit', function(event) {
-        event.preventDefault();
         loading.block();
     });
 </script>
