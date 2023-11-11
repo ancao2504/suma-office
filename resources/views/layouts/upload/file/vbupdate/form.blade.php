@@ -13,7 +13,7 @@
 			<div class="row gy-5 g-xl-8">
 				<div class="card card-xl-stretch shadow">
 					<div class="card-body">
-						<form method="post" action="{{ route('Upload.file.simpan-update-vb') }}" enctype="multipart/form-data">
+						<form method="post" action="{{ route('Upload.file.simpan-update-vb') }}" enctype="multipart/form-data" id="myFormSubmit">
 							@csrf
 							<div class="row">
                                 <div class="col-12 mb-3">
@@ -138,4 +138,10 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.getElementById('myFormSubmit').addEventListener('submit', function(event) {
+        event.preventDefault();
+        loading.block();
+    });
+</script>
 @endpush
