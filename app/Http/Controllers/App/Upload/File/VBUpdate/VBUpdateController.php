@@ -23,19 +23,30 @@ class VBUpdateController extends Controller
     function store(Request $request){
         $request->validate([
             'version' => 'required|string',
+            'divisi' => 'required|string',
             'file'      => 'required',
         ],[
             'version.required'    => 'Version tidak boleh kosong',
             'version.string'      => 'Version harus berupa string',
+            'divisi.required'    => 'Divisi tidak boleh kosong',
+            'divisi.string'      => 'Divisi harus berupa string',
             'file.required'    => 'File tidak boleh kosong'
         ]);
 
         try {
+            if($request->divisi == 'HONDA'){
+                $path = '/sumavb/honda';
+                $url = 'https://suma-honda.id/sumavb/honda/';
+            } elseif ($request->divisi == 'GENERAL'){
+                $path = '/sumavb/general';
+                $url = 'https://suma-honda.id/sumavb/general/';
+            }
+
             $request->merge([
-                'path_file' => 'https://suma.vb.honda.suma-honda.id/'.$request->file('file')->getClientOriginalName(),
+                'path_file' => $url.$request->file('file')->getClientOriginalName(),
             ]);
 
-            $request->file('file')->move('/home/sumahond/suma.vb.honda', $request->file('file')->getClientOriginalName());
+            $request->file('file')->move($path, $request->file('file')->getClientOriginalName());
 
             $responseApi = json_decode(Service::SimpanVBVersion($request));
             if($responseApi->status == 0){
@@ -53,9 +64,11 @@ class VBUpdateController extends Controller
     function destroy(Request $request){
 
         $validasi = Validator::make($request->all(), [
-            'version'   => 'required|string'
+            'version'   => 'required|string',
+            'divisi'    => 'required|string',
         ],[
             'version.required'    => 'Version tidak boleh kosong',
+            'version.string'      => 'Version harus berupa string',
         ]);
 
         if($validasi->fails()){

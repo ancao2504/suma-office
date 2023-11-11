@@ -2627,8 +2627,9 @@ class Service
         $url = 'backend/uploadfile/vb/simpan';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'version'          => $request->version,
-            'path_file'          => $request->path_file
+            'version'           => $request->version,
+            'divisi'            => $request->divisi,
+            'path_file'         => $request->path_file
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2649,7 +2650,8 @@ class Service
         $url = 'backend/uploadfile/vb/hapus';
         $header = ['Authorization' => session()->get('Authorization')];
         $body = [
-            'version'          => $request->version
+            'version'          => $request->version,
+            'divisi'           => $request->divisi,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

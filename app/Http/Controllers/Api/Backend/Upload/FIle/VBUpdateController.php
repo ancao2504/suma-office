@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 class VBUpdateController extends Controller
 {
     function index(Request $request){
-        $data = DB::table('program_exe');
+        $data = DB::table(DB::raw('dbhonda.dbo.program_exe'));
         if($request->get('version')){
-            $data = $data->where('version', 'like', '%'.$request->get('version').'%');
+            $data = $data
+            ->where('version', 'like', '%'.$request->get('version').'%')
+            ->orWhere('divisi', 'like', '%'.$request->get('version').'%');
         }
         $data =$data
         ->orderBy('version','desc')
@@ -26,10 +28,13 @@ class VBUpdateController extends Controller
     function store(Request $request){
         $validate = Validator::make($request->all(), [
             'version' => 'required|string',
+            'divisi' => 'required|string',
             'path_file' => 'required|string',
         ],[
             'version.required'    => 'Version tidak boleh kosong',
             'version.string'      => 'Version harus berupa string',
+            'divisi.required'    => 'Divisi tidak boleh kosong',
+            'divisi.string'      => 'Divisi harus berupa string',
             'path_file.required'    => 'Path file tidak boleh kosong',
             'path_file.string'      => 'Path file harus berupa string',
         ]);
@@ -39,9 +44,9 @@ class VBUpdateController extends Controller
 
         try {
             DB::transaction(function () use ($request){
-                DB::table('program_exe')
+                DB::table(DB::raw('dbhonda.dbo.program_exe'))
                 ->updateOrInsert(
-                    ['version' => $request->version],
+                    ['version' => $request->version, 'divisi' => $request->divisi],
                     [
                         'path_download'   => $request->path_file
                     ]
@@ -62,9 +67,13 @@ class VBUpdateController extends Controller
     }
     function destroy(Request $request){
         $validate = Validator::make($request->all(), [
-            'version' => 'required|string'
+            'version' => 'required|string',
+            'divisi' => 'required|string',
         ],[
             'version.required'    => 'Version tidak boleh kosong',
+            'version.string'      => 'Version harus berupa string',
+            'divisi.required'    => 'Divisi tidak boleh kosong',
+            'divisi.string'      => 'Divisi harus berupa string',
         ]);
         if ($validate->fails()) {
             return Response::responseWarning($validate->errors()->first());
@@ -72,7 +81,8 @@ class VBUpdateController extends Controller
 
         try {
             DB::transaction(function () use ($request){
-                DB::table('program_exe')
+                DB::table(DB::raw('dbhonda.dbo.program_exe'))
+                ->where('divisi', $request->divisi)
                 ->where('version', $request->version)
                 ->delete();
             });
