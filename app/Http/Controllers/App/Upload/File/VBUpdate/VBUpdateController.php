@@ -35,10 +35,10 @@ class VBUpdateController extends Controller
 
         try {
             if($request->divisi == 'HONDA'){
-                $path = '/sumavb/honda';
+                $path = 'sumavb/honda';
                 $url = 'https://suma-honda.id/sumavb/honda/';
             } elseif ($request->divisi == 'GENERAL'){
-                $path = '/sumavb/general';
+                $path = 'sumavb/general';
                 $url = 'https://suma-honda.id/sumavb/general/';
             }
 
