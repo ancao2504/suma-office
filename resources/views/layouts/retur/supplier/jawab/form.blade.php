@@ -67,7 +67,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-success text-white btn_simpan" data-a="{{ base64_encode(json_encode((object)['no_retur' => $data->no_retur,'tamp'=>0])) }}">Simpan Semua Jawaban</button>
-            <a href="{{ URL::previous() }}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{(strtok(URL::previous(),'?') == strtok(URL::current(),'?'))?route('retur.supplier.index'):URL::previous()}}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>
@@ -82,27 +82,7 @@
                     <span class="d-block mb-0 pb-0 fs-4 fw-bold" id="jwb_no_klaim">-</span>
                     <span class="d-block mt-0 pt-0 fs-5" id="jwb_kd_part">-</span>
                 </div>
-                <div id="list_jwb" class="table-responsive border rounded-3 mb-10">
-                    <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
-                        <thead class="border">
-                            <tr class="fs-8 fw-bolder text-muted text-center">
-                                <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
-                                <th rowspan="2" class="w-50px ps-3 pe-3">Qty</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3">Alasan</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3">CA</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3">Keputusan</th>
-                                <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
-                                <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
-                            </tr>
-                            <tr class="fs-8 fw-bolder text-muted text-center">
-                            </tr>
-                        </thead>
-                        <tbody id="list-jwb">
-                        </tbody>
-                    </table>
-                </div>
-                <h5 class="modal-title">Jawaban</h5>
-                <div class="border rounded-3 p-3">
+                <div class="border rounded-3 p-3 mb-10">
                     <div class="form-group row mb-2">
                         <label for="jml" class="col-sm-2 col-form-label required">Qty</label>
                         <div class="col-sm-4">
@@ -146,6 +126,26 @@
                             <div class="invalid-feedback" id="error_keputusan"></div>
                         </div>
                     </div>
+                </div>
+                <h5 class="modal-title">List Jawaban</h5>
+                <div id="list_jwb" class="table-responsive border rounded-3">
+                    <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
+                        <thead class="border">
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3">Qty</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">Alasan</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">CA</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">Keputusan</th>
+                                <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+                                <th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
+                            </tr>
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                            </tr>
+                        </thead>
+                        <tbody id="list-jwb">
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal-footer">

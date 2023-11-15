@@ -1,5 +1,3 @@
-let limit_jumlah = 1;
-let limit_stock = 0;
 function Part(requst){
     if($('#detail_modal').find('#no_faktur').val() == ''){
         Invalid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), 'No Faktur Harus diisi');
@@ -103,7 +101,6 @@ $('#part-list').on('click','.pilih' ,function () {
     $('#stock').val(data.stock);
     limit_stock = data.stock;
     limit_jumlah = data.limit_jumlah;
-    console.log(limit_jumlah);
     $('#part-list .close').trigger('click')
 })
 

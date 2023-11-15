@@ -2376,10 +2376,13 @@ class Service
         $body = [
             'companyid'     => ($request->companyid??strtoupper(trim($request->session()->get('app_user_company_id')))),
             'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_retur'      => $request->no_retur,
             'option'        => $request->option,
             'no_faktur'     => $request->no_faktur,
             'kd_sales'      => $request->kd_sales,
-            'kd_dealer'     => $request->kd_dealer
+            'kd_dealer'     => $request->kd_dealer,
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;

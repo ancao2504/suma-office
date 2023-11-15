@@ -1098,15 +1098,17 @@ class ApiOptionsController extends Controller
 
     public function dataFakturKlaim(Request $request) {
         try {
-            // ! Validasi ---------------------------------------------
-            $validate = Validator::make($request->all(), [
-                'no_faktur' => 'min:5',
-            ],[
-                'no_faktur.min' => 'No Faktur minimal 5 karakter',
-            ]);
+            if($request->option == 'first'){
+                // ! Validasi ---------------------------------------------
+                $validate = Validator::make($request->all(), [
+                    'no_faktur' => 'min:5',
+                ],[
+                    'no_faktur.min' => 'No Faktur minimal 5 karakter',
+                ]);
 
-            if ($validate->fails()) {
-                return Response::responseWarning($validate->errors()->first());
+                if ($validate->fails()) {
+                    return Response::responseWarning($validate->errors()->first());
+                }
             }
 
             if(!in_array($request->option, ['first', 'page'])){
@@ -1135,7 +1137,10 @@ class ApiOptionsController extends Controller
                         $query = $query->where('faktur.kd_sales', $request->kd_sales);
                     }
                     if (!empty($request->no_faktur)) {
-                        $query = $query->where('faktur.no_faktur', 'LIKE', '%'.$request->no_faktur . '%');
+                        $query = $query->where(function($query) use ($request){
+                            $query->Where('faktur.no_faktur', 'LIKE', '%'.$request->no_faktur . '%')
+                            ->orWhere('fakt_dtl.kd_part', 'LIKE', '%'.$request->no_faktur . '%');
+                        });
                     }
 
                     $query = $query->groupBy(
@@ -1149,16 +1154,34 @@ class ApiOptionsController extends Controller
                 ->select(
                     'faktur.no_faktur',
                     'faktur.tgl_faktur'
-                )
-                ->orderBy('faktur.tgl_faktur', 'desc');
+                );
 
             if($request->option == 'first'){
-                $data = $data->first();
+                $data = $data
+                ->orderBy('faktur.tgl_faktur', 'desc')
+                ->first();
             } elseif($request->option == 'page'){
                 $data = $data
+                ->orderBy('faktur.tgl_faktur', 'desc')
                 ->paginate($request->per_page);
-            }
+                $dataDetail = collect(DB::table('fakt_dtl')
+                    ->select('no_faktur', 'kd_part', 'jml_jual')
+                    ->whereIn('no_faktur', collect($data->items())->pluck('no_faktur')->toArray())
+                    ->where('CompanyId', $request->companyid)
+                    ->get());
 
+                foreach($data->items() as $key => $value){
+                    $value->detailPart = $dataDetail
+                                            ->where('no_faktur', $value->no_faktur)
+                                            ->where('jml_jual', '>', 0)
+                                            ->map(function ($item) {
+                                                return (object)[
+                                                    'kd_part' => $item->kd_part,
+                                                    'jml_jual' => $item->jml_jual,
+                                                ];
+                                            })->values();
+                }
+            }
             return Response::responseSuccess('success' , $data);
         } catch (\Exception $e) {
             return Response::responseError(

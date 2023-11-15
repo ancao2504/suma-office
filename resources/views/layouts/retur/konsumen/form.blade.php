@@ -221,7 +221,7 @@
             @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT'))
             <a role="button" class="btn btn-success text-white btn_simpan">Simpan @if (session('app_user_role_id') == 'MD_H3_MGMT')dan Approve @elseif (session('app_user_role_id') != 'MD_H3_MGMT')Pengajuan @endif</a>
             @endif
-            <a href="{{ URL::previous() }}" role="button" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{(strtok(URL::previous(),'?') == strtok(URL::current(),'?'))?route('retur.konsumen.index'):URL::previous()}}" role="button" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>
@@ -263,8 +263,8 @@
                         <label for="kd_part" class="col-sm-2 col-form-label required">No Faktur</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3 has-validation">
+                                <button class="btn btn-primary list-faktur" type="button"><i class="bi bi-search"></i></button>
                                 <input type="text" class="form-control" id="no_faktur" name="no_faktur" placeholder="No Faktur" value="" style="text-transform: uppercase;" required>
-                                {{-- <button class="btn btn-primary list-faktur" type="button">Pilih</button> --}}
                                 <div class="invalid-feedback" id="error_no_faktur"></div>
                             </div>
                         </div>

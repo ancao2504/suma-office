@@ -18,19 +18,19 @@ class ReturController extends Controller
      */
     public function index(Request $request)
     {
-        // $request->merge(['option' => 'select']);
-        // $responseApiSales = OptionController::salesman($request)->getData();
-        // if ($responseApiSales->status == 1) {
+        $request->merge(['option' => 'select']);
+        $responseApiSales = OptionController::salesman($request)->getData();
+        if ($responseApiSales->status == 1) {
             return view(
                 'layouts.report.retur',
                 [
                     'title_menu' => 'Report Retur',
-                    // 'sales' => $responseApiSales->data
+                    'sales' => $responseApiSales->data
                 ]
             );
-        // } else {
-        //     return redirect()->back()->with('failed', $responseApiSales->message);
-        // }
+        } else {
+            return redirect()->back()->with('failed', $responseApiSales->message);
+        }
     }
 
     public function data(Request $request)

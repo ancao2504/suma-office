@@ -1,9 +1,13 @@
 function Faktur(requst) {
+    loading.block();
     $.get(base_url+'/faktur/klaim',{
         option: requst.option,
         kd_sales: $('#kd_sales').val(),
         kd_dealer: $('#kd_dealer').val(),
-        no_faktur: requst.no_faktur,
+        no_faktur: requst.no_faktur??$('#faktur-list #no_faktur').val(),
+        no_retur: $('#no_retur').val(),
+        page : requst.page,
+        per_page : requst.per_page,
     }, function (response) {
         if(response.status == '1'){
             let dataJson = response.data;
@@ -11,13 +15,18 @@ function Faktur(requst) {
                 if (jQuery.isEmptyObject(dataJson)) {
                     Invalid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), 'No Faktur tidak ditemukan');
                 } else {
-                    $('#no_faktur').val(dataJson.no_faktur);
-                    $("#tgl_pakai").flatpickr().setDate(moment(dataJson.tgl_faktur).format('YYYY-MM-DD'));
-                    $('#no_faktur').addClass('is-valid');
-                    $('#no_faktur').removeClass('is-invalid');
+                    $('#detail_modal #no_faktur').val(dataJson.no_faktur);
+                    $("#detail_modal #tgl_pakai").flatpickr().setDate(moment(dataJson.tgl_faktur).format('YYYY-MM-DD'));
+                    $('#detail_modal #no_faktur').addClass('is-valid');
+                    $('#detail_modal #no_faktur').removeClass('is-invalid');
                     valid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), '');
                     $('.list-part').trigger('click');
                 }
+            }else if (requst.option == 'page') {
+                $('#faktur-list').html(dataJson);
+                valid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), '');
+                $('#detail_modal').modal('hide');
+                $('#faktur-list').modal('show');
             }
         }
         if (response.status == '0') {
@@ -57,20 +66,74 @@ function Faktur(requst) {
             }
         });
     });
+    loading.release();
 }
 
-$('#no_faktur').on('change', function () {
-    if($('#no_faktur').val() == ''){
-        $('#no_faktur').removeClass('is-valid');
-        $('#kd_part').val('');
-        $('#kd_part').removeClass('is-valid');
-        $('#nm_part').val('');
-        $('#stock').val('');
-        return false;
-    }
+// document ready
+$(document).ready(function () {
 
-    Faktur({
-        option: 'first',
-        no_faktur: $('#no_faktur').val()
+    $('#no_faktur').on('change', function () {
+        if($('#no_faktur').val() == ''){
+            $('#no_faktur').removeClass('is-valid');
+            $('#kd_part').val('');
+            $('#kd_part').removeClass('is-valid');
+            $('#nm_part').val('');
+            $('#stock').val('');
+            return false;
+        }
+
+        Faktur({
+            option: 'first',
+            no_faktur: $('#detail_modal #no_faktur').val(),
+            page : 1,
+            per_page : 10
+
+        });
+    });
+
+    $('#faktur-list').on('click','.pilih' ,function () {
+        const a =  JSON.parse(atob($(this).data('a')));
+        $('#detail_modal #no_faktur').val(a.no_faktur);
+        $("#detail_modal #tgl_pakai").flatpickr().setDate(moment(a.tgl_faktur).format('YYYY-MM-DD'));
+        $('#faktur-list').modal('hide');
+        $('#detail_modal').modal('show');
+        valid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), '');
+        $('#detail_modal .list-part').trigger('click');
+    })
+
+    $('.list-faktur').on('click', function () {
+        Faktur({
+            option: 'page',
+            page : 1,
+            per_page : 10
+        });
+    });
+
+    $('#faktur-list').on('click', '.pagination .page-item', function () {
+        Faktur({
+            option: 'page',
+            page : $(this).find('a').attr('href').split('page=')[1],
+            per_page : $('#faktur-list').find('#per_page').val()
+        });
+    });
+
+    $('#faktur-list').on('change','#per_page', function () {
+        Faktur({
+            option: 'page',
+            page : 1,
+            per_page : $(this).val()
+        });
+    });
+
+    $('#faktur-list').on('change','#cari', function () {
+        $('#faktur-list').find('#btn_cari').trigger('click');
+    });
+
+    $('#faktur-list').on('click','#btn_cari', function () {
+        Faktur({
+            option: 'page',
+            page : 1,
+            per_page : $('#faktur-list').find('#per_page').val()
+        });
     });
 });

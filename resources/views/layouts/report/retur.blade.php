@@ -68,18 +68,29 @@
 							<table class="table table-row-dashed table-row-gray-300 align-middle">
 								<thead class="border">
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">No</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Kode Dealer</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Nama Dealer</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Tipe</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Qty Klaim</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Dealer</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nama Dealer</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Sales</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
+										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">Qty</th>
 										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Pemakaian</th>
-										<th scope="col" rowspan="2" class="w-auto ps-3 pe-3">Uraian Klaim</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Pemakaian</th>
+										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Keterangan</th>
+										<th scope="col" colspan="5" class="w-auto ps-3 pe-3">Status</th>
 									</tr>
 									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" class="w-auto ps-3 pe-3">Pakai</th>
-										<th scope="col" class="w-auto ps-3 pe-3">Klaim</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Jawab</th>
+
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Pakai</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Stock</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Minimum</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">Approve SPV</th>
+										<th scope="col" rowspan="2" class="ps-3 pe-3">selesai</th>
 									</tr>
 								</thead>
 								<tbody class="border">
@@ -116,12 +127,12 @@
 	</div>
 	<!--end::Post-->
 
-
 	<div class="modal fade" tabindex="-1" id="filter-report">
-		<div class="modal-dialog modal-md">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Filter</h5>
+
 					<!--begin::Close-->
 					<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 						<i class="bi bi-x-lg"></i>
@@ -129,17 +140,28 @@
 					<!--end::Close-->
 				</div>
 					<div class="modal-body">
-                        <div class="mb-3">
-                            <label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
-                            <input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="kd_dealer" class="form-label">Kode Dealer</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
-                                <button class="btn btn-primary" id="list-dealer" type="button">Pilih</button>
-                            </div>
-                        </div>
+						<div class="row">
+							<div class="col-lg-6 mb-3">
+								<label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
+								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-6 mb-3">
+								<label for="kd_sales" class="form-label">kode Sales</label>
+								<select id="kd_sales" name="kd_sales" class="form-select" aria-label="Default select example" required>
+									<option selected value="">Semua Sales</option>
+									{!! $sales !!}
+								</select>
+							</div>
+							<div class="form-group col-lg-6">
+								<label for="kd_dealer" class="form-label">Kode Dealer</label>
+								<div class="input-group mb-3">
+									<input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
+									<button class="btn btn-primary" id="list-dealer" type="button">Pilih</button>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					<div class="modal-footer">

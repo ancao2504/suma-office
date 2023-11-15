@@ -102,7 +102,7 @@ function simpan(request){
                 }
                 swal.fire({
                     title: 'Perhatian!',
-                    text: response.message,
+                    html: response.message,
                     icon: 'success',
                     confirmButtonText: 'OK',
                     customClass: {
@@ -118,7 +118,7 @@ function simpan(request){
             if (response.status == '0') {
                 swal.fire({
                     title: 'Perhatian!',
-                    text: response.message,
+                    html: response.message,
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     customClass: {
@@ -130,7 +130,7 @@ function simpan(request){
             if (response.status == '2') {
                 swal.fire({
                     title: 'Perhatian!',
-                    text: response.message,
+                    html: response.message,
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     customClass: {

@@ -67,7 +67,7 @@
                         @csrf
                         <div id="infoCartTotal"></div>
 						<div class="post d-flex flex-column-fluid" id="kt_post">
-							<div id="kt_content_container" class="container-xxl">
+							<div id="kt_content_container" class="container-fluid">
 								@yield('container')
 							</div>
 						</div>

@@ -29,6 +29,9 @@
 
 	<div class="card card-xl-stretch shadow">
 		<div class="table-responsive pt-4">
+            <div class="modal-header">
+                <h5 class="modal-title">Klaim Selesai</h5>
+            </div>
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">
@@ -136,6 +139,9 @@
 	</div>
 	<div class="card card-xl-stretch shadow">
 		<div class="table-responsive pt-4">
+            <div class="modal-header">
+                <h5 class="modal-title">Klaim Proses</h5>
+            </div>
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">

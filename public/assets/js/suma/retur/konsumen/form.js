@@ -1,22 +1,6 @@
-function validasi_sts_stock(){
-    if ($('#sts_stock').val() == 1) {
-        if (parseInt($('#qty_retur').val()) > parseInt(limit_stock)) {
-            Swal.fire({
-                title: 'Perhatian!',
-                text: 'Stock Saat ini tidak mencukupi',
-                icon: 'warning',
-                confirmButtonText: 'OK',
-                customClass: {
-                    confirmButton: 'btn btn-secondary'
-                },
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                }
-            });
-        }
-    }
-}
+
+let limit_jumlah = 1;
+let limit_stock = 0;
 
 function Invalid(el, el_error, text){
     el.forEach(function (e) {
@@ -133,7 +117,7 @@ function detail_clear(){
     $("#tgl_klaim").flatpickr().setDate(moment().format('YYYY-MM-DD'));
     $("#tgl_pakai").flatpickr().setDate(moment().format('YYYY-MM-DD'));
     $('#ket').val('');
-    $('#sts_stock').val('').trigger('change');
+    $('#sts_stock').val('');
 }
 
 function simpan(tamp){
@@ -313,12 +297,13 @@ function simpan(tamp){
 }
 
 function edit_detail(val){
-    detail_clear()
+    limit_stock = val.stock;
+    limit_jumlah = parseInt(val.limit_jumlah);
+    detail_clear();
     $('#detail_modal .modal-title').text('Edit Detail');
     $('#list-retur tr').removeClass('bg-secondary');
     $('#no_faktur').val(val.no_faktur);
     $('#no_faktur').attr('disabled', true);
-    limit_jumlah = val.limit_jumlah;
     $('#kd_part').val(val.kd_part);
     $('#kd_part').attr('disabled', true);
     $('.list-part').attr('disabled', true);
@@ -423,6 +408,26 @@ function delete_detail(val){
     });
 }
 
+function validasi_sts_stock(){
+    if ($('#sts_stock').val() >= 1) {
+        if (parseInt($('#qty_retur').val()) > parseInt(limit_stock)) {
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Stock Saat ini tidak mencukupi',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'btn btn-secondary'
+                },
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                }
+            });
+        }
+    }
+}
+
 $(document).ready(function () {
     $("#tgl_retur").flatpickr().setDate(moment($("#tgl_retur").val()).format('YYYY-MM-DD'));
 
@@ -524,7 +529,7 @@ $(document).ready(function () {
         } else {
             valid([$('#detail_modal').find('#sts_klaim')], $('#detail_modal').find('#error_sts_klaim'), '');
         }
-        console.log(limit_jumlah);
+
         if (parseInt($('#qty_retur').val()) > parseInt(limit_jumlah)) {
             Swal.fire({
                 title: 'Perhatian!',
