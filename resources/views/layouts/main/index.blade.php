@@ -51,7 +51,7 @@
 
     <!--begin::Body-->
 	<body id="kt_body" class="print-content-only header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed">
-        <div id="loading" style="position: fixed; width: 100%; height: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: none;">
+        <div id="loading" style="position: fixed; width: 100%; height: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.5); z-index: 9999999999; display: none;">
             <div class="d-flex flex-column flex-center w-100 h-100">
                 <div class="text-center" id="loading-message">
                 </div>

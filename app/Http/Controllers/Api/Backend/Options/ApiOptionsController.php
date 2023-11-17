@@ -935,13 +935,29 @@ class ApiOptionsController extends Controller
             if (!empty($request->no_faktur)) {
                 $data = $data->JoinSub(function ($query) use ($request) {
                     //! sub join dengan faktur
-                    $query->select('fakt_dtl.no_faktur','fakt_dtl.kd_part', 'fakt_dtl.jml_jual', 'fakt_dtl.harga', 'fakt_dtl.disc1','faktur.kd_sales','faktur.CompanyId')
+                    $query->select(
+                        'fakt_dtl.no_faktur',
+                        'fakt_dtl.kd_part',
+                        'fakt_dtl.jml_jual',
+                        'fakt_dtl.harga',
+                        'fakt_dtl.disc1',
+                        'faktur.kd_sales',
+                        'faktur.CompanyId'
+                    )
                     ->from('faktur')
                     ->joinSub(function ($query) use ($request) {
-                        $query->select('fakt_dtl.no_faktur','fakt_dtl.kd_part', 'fakt_dtl.jml_jual', 'fakt_dtl.harga', 'fakt_dtl.disc1','fakt_dtl.CompanyId')
-                            ->from('fakt_dtl')
-                            ->where('fakt_dtl.CompanyId', $request->companyid)
-                            ->where('fakt_dtl.no_faktur', 'LIKE', '%'.$request->no_faktur . '%');
+                        $query->select(
+                            'fakt_dtl.no_faktur',
+                            'fakt_dtl.kd_part',
+                            'fakt_dtl.jml_jual',
+                            'fakt_dtl.harga',
+                            'fakt_dtl.disc1',
+                            'fakt_dtl.CompanyId'
+                        )
+                        ->from('fakt_dtl')
+                        ->where('fakt_dtl.CompanyId', $request->companyid)
+                        ->where('fakt_dtl.no_faktur', 'LIKE', '%'.$request->no_faktur . '%')
+                        ->where('fakt_dtl.jml_jual', '!=', 0);
                     }, 'fakt_dtl', function ($join) {
                         $join->on('faktur.no_faktur', '=', 'fakt_dtl.no_faktur')
                             ->on('faktur.CompanyId', '=', 'fakt_dtl.CompanyId');
@@ -960,7 +976,13 @@ class ApiOptionsController extends Controller
                 });
 
                 //! select tambahan
-                $data = $data->selectRaw('faktur.no_faktur, faktur.jml_jual, faktur.harga, faktur.disc1, faktur.kd_sales');
+                $data = $data->selectRaw(
+                    'faktur.no_faktur,
+                    faktur.jml_jual,
+                    faktur.harga,
+                    faktur.disc1,
+                    faktur.kd_sales'
+                );
             }
 
             if(!empty($request->no_retur)){

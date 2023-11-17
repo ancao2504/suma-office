@@ -41,7 +41,6 @@ function Part(requst){
                     $('#kd_part').addClass('is-valid');
                     valid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), '');
                 }
-                loading.release();
             } else if (requst.option[0] == 'page') {
                 $('#part-list').html(response.data);
                 valid([$('#detail_modal').find('#kd_part')], $('#detail_modal').find('#error_kd_part'), '');
@@ -69,8 +68,6 @@ function Part(requst){
                 }
             });
         }
-    }).always(function () {
-        loading.release();
     }).fail(function (jqXHR, textStatus, error) {
         $('#part-list .close').trigger('click')
         Swal.fire({
@@ -89,7 +86,9 @@ function Part(requst){
         });
     });
 
-    loading.release();
+    $(document).ajaxStop(function () {
+        loading.release();
+    });
 }
 
 

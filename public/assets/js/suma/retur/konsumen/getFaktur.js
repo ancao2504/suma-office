@@ -48,8 +48,6 @@ function Faktur(requst) {
                 }
             });
         }
-    }).always(function () {
-        loading.release();
     }).fail(function (jqXHR, textStatus, error) {
         Swal.fire({
             title: 'Error ' + jqXHR.status,
@@ -66,12 +64,13 @@ function Faktur(requst) {
             }
         });
     });
-    loading.release();
+    $(document).ajaxStop(function () {
+        loading.release();
+    });
 }
 
 // document ready
 $(document).ready(function () {
-
     $('#no_faktur').on('change', function () {
         if($('#no_faktur').val() == ''){
             $('#no_faktur').removeClass('is-valid');

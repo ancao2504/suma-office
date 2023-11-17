@@ -30,116 +30,6 @@
 	<div class="card card-xl-stretch shadow">
 		<div class="table-responsive pt-4">
             <div class="modal-header">
-                <h5 class="modal-title">Klaim Selesai</h5>
-            </div>
-			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
-				<thead class="border">
-					<tr class="fs-8 fw-bolder text-muted text-center">
-						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-						<th
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
-						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
-						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
-						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')
-						<th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
-						@endif
-					</tr>
-					<tr class="fs-8 fw-bolder text-muted text-center">
-						<th class="w-50px ps-3 pe-3">Dokumen</th>
-						<th class="w-50px ps-3 pe-3">Input</th>
-						<th class="w-50px ps-3 pe-3">Sales</th>
-						<th class="w-150px ps-3 pe-3"><span class="badge badge-light-primary">Dealer</span>/
-							<span class="badge badge-light-success">Cabang</span></th>
-						<th class="w-50px ps-3 pe-3">Approve</th>
-						<th class="w-50px ps-3 pe-3">Selesai</th>
-					</tr>
-				</thead>
-				<tbody class="border">
-					@if ($data->ss->total == 0)
-					<tr>
-						<td colspan="10" class="text-center">
-							<span class="fw-bold">Tidak ada data</span>
-						</td>
-					</tr>
-					@else
-					@php
-						$no = $data->ss->from;
-					@endphp
-					@foreach ($data->ss->data as $a)
-					<tr class="fw-bolder fs-8 border">
-						<td class="text-center">{{  $no++ }}</td>
-						<td>{{ $a->no_dokumen }}</td>
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')
-							<td>{{ $a->no_retur }}</td>
-						@endif
-						<td>{{ date('Y/m/d', strtotime($a->tgl_dokumen)) }}</td>
-						<td>{{ date('Y/m/d', strtotime($a->tgl_entry)) }}</td>
-						<td class="text-center">{{ $a->kd_sales }}</td>
-						<td class="text-center">
-							@if ($a->pc == 0)
-								<span class="badge badge-light-primary">{{ $a->kd_dealer }}</span>
-							@else
-								<span class="badge badge-light-success">{{ $a->kd_dealer }}</span>
-							@endif
-						</td>
-						<td class="text-center">
-							@if ($a->status_approve==1)
-								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
-							@endif
-						</td>
-						<td class="text-center">
-							@if ($a->status_end==1)
-								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
-							@endif
-						</td>
-						<td class="text-center">
-							@if ($a->status_approve==1 || session('app_user_role_id') != 'MD_H3_MGMT')
-							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
-							class="btn-sm btn-icon btn-primary d-inline-block mt-1 text-white"><span class="bi bi-eye"></span></a>
-							@endif
-						</td>
-					</tr>
-					@endforeach
-					@endif
-				</tbody>
-			</table>
-		</div>
-		<div class="card-footer justify-content-center">
-			<div colspan="8" class="d-flex justify-content-between">
-				<div class="form-group">
-					<select class="form-select form-select-sm" name="per_page_end" id="per_page_end">
-						<option value="10" @if ($request->per_page_end == 10 ) selected @endif>10</option>
-						<option value="50" @if ($request->per_page_end == 50 ) selected @endif>50</option>
-						<option value="100" @if ($request->per_page_end == 100 ) selected @endif>100</option>
-						<option value="500" @if ($request->per_page_end == 500 ) selected @endif>500</option>
-					</select>
-				</div>
-				<div id="page">
-					@php
-						$paginator = new Illuminate\Pagination\LengthAwarePaginator(
-							$data->ss->data,
-							$data->ss->total,
-							$data->ss->per_page,
-							$data->ss->current_page,
-							['path' => Request::url(), 'query' => [
-                                'page' => $data->ss->current_page,
-                                'page_end' => $request->page_end,
-                                'per_page' => $request->per_page,
-                                'per_page_end' => $request->per_page_end,
-                                'no_retur' => $request->no_retur
-                                ]
-                            ]
-						);
-					@endphp
-                    {{ $paginator->links() }}
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="card card-xl-stretch shadow">
-		<div class="table-responsive pt-4">
-            <div class="modal-header">
                 <h5 class="modal-title">Klaim Proses</h5>
             </div>
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
@@ -241,6 +131,116 @@
                                     'per_page' => $request->per_page,
                                     'per_page_end' => $request->per_page_end,
                                     'no_retur' => $request->no_retur
+                                ]
+                            ]
+						);
+					@endphp
+                    {{ $paginator->links() }}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card card-xl-stretch shadow">
+		<div class="table-responsive pt-4">
+            <div class="modal-header">
+                <h5 class="modal-title">Klaim Selesai</h5>
+            </div>
+			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
+				<thead class="border">
+					<tr class="fs-8 fw-bolder text-muted text-center">
+						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+						<th
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
+						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
+						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
+						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')
+						<th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
+						@endif
+					</tr>
+					<tr class="fs-8 fw-bolder text-muted text-center">
+						<th class="w-50px ps-3 pe-3">Dokumen</th>
+						<th class="w-50px ps-3 pe-3">Input</th>
+						<th class="w-50px ps-3 pe-3">Sales</th>
+						<th class="w-150px ps-3 pe-3"><span class="badge badge-light-primary">Dealer</span>/
+							<span class="badge badge-light-success">Cabang</span></th>
+						<th class="w-50px ps-3 pe-3">Approve</th>
+						<th class="w-50px ps-3 pe-3">Selesai</th>
+					</tr>
+				</thead>
+				<tbody class="border">
+					@if ($data->ss->total == 0)
+					<tr>
+						<td colspan="10" class="text-center">
+							<span class="fw-bold">Tidak ada data</span>
+						</td>
+					</tr>
+					@else
+					@php
+						$no = $data->ss->from;
+					@endphp
+					@foreach ($data->ss->data as $a)
+					<tr class="fw-bolder fs-8 border">
+						<td class="text-center">{{  $no++ }}</td>
+						<td>{{ $a->no_dokumen }}</td>
+						@if (session('app_user_role_id') == 'MD_H3_MGMT')
+							<td>{{ $a->no_retur }}</td>
+						@endif
+						<td>{{ date('Y/m/d', strtotime($a->tgl_dokumen)) }}</td>
+						<td>{{ date('Y/m/d', strtotime($a->tgl_entry)) }}</td>
+						<td class="text-center">{{ $a->kd_sales }}</td>
+						<td class="text-center">
+							@if ($a->pc == 0)
+								<span class="badge badge-light-primary">{{ $a->kd_dealer }}</span>
+							@else
+								<span class="badge badge-light-success">{{ $a->kd_dealer }}</span>
+							@endif
+						</td>
+						<td class="text-center">
+							@if ($a->status_approve==1)
+								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
+							@endif
+						</td>
+						<td class="text-center">
+							@if ($a->status_end==1)
+								<i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
+							@endif
+						</td>
+						<td class="text-center">
+							@if ($a->status_approve==1 || session('app_user_role_id') != 'MD_H3_MGMT')
+							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
+							class="btn-sm btn-icon btn-primary d-inline-block mt-1 text-white"><span class="bi bi-eye"></span></a>
+							@endif
+						</td>
+					</tr>
+					@endforeach
+					@endif
+				</tbody>
+			</table>
+		</div>
+		<div class="card-footer justify-content-center">
+			<div colspan="8" class="d-flex justify-content-between">
+				<div class="form-group">
+					<select class="form-select form-select-sm" name="per_page_end" id="per_page_end">
+						<option value="10" @if ($request->per_page_end == 10 ) selected @endif>10</option>
+						<option value="50" @if ($request->per_page_end == 50 ) selected @endif>50</option>
+						<option value="100" @if ($request->per_page_end == 100 ) selected @endif>100</option>
+						<option value="500" @if ($request->per_page_end == 500 ) selected @endif>500</option>
+					</select>
+				</div>
+				<div id="page">
+					@php
+						$paginator = new Illuminate\Pagination\LengthAwarePaginator(
+							$data->ss->data,
+							$data->ss->total,
+							$data->ss->per_page,
+							$data->ss->current_page,
+							['path' => Request::url(), 'query' => [
+                                'page' => $data->ss->current_page,
+                                'page_end' => $request->page_end,
+                                'per_page' => $request->per_page,
+                                'per_page_end' => $request->per_page_end,
+                                'no_retur' => $request->no_retur
                                 ]
                             ]
 						);
