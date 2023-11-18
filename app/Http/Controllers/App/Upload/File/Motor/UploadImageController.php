@@ -161,8 +161,8 @@ class UploadImageController extends Controller
             $responseApi = json_decode(Service::uploadFileMotorDetailImage($request));
             if($responseApi->status == 0){
                 foreach ($path->gambar as $key => $value) {
-                    if (File::exists(public_path('images/upload/motor/'.$value))) {
-                        File::delete(public_path('images/upload/motor/'.$value));
+                    if (file_exists('images/upload/motor/'.$value)) {
+                        unlink('images/upload/motor/'.$value);
                     }
                 }
                 return redirect()->back()->with('error', 'Gagal upload file');
