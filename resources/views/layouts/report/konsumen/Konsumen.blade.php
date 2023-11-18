@@ -32,129 +32,125 @@
 @endpush
 
 @section('container')
-	<div class="post d-flex flex-column-fluid" id="kt_post">
-		<div id="kt_content_container" class="container-xxl">
-			<div class="row gy-5 g-xl-8">
-				<div class="card card-xl-stretch shadow" id="table_list">
-					<!--begin::Card-->
-					<div class="card-header align-items-center py-5 gap-2 gap-md-5">
-						<div class="card-title" id="btn_filter">
-							@if (session('app_user_role_id') === 'MD_H3_MGMT')
-							<div class="dropdown d-inline-block me-2">
-								<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-									<i class="bi bi-file-earmark-arrow-down fs-4"></i> Export
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-									<li><a id="btn_export" class="dropdown-item" href="#">EXEL</a></li>
-								</ul>
-							</div>
-							@endif
-							<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_report">
-								<i class="bi bi-filter fs-1"></i> Filter
-							</button>
-							<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_urutkan">
-								<i class="bi bi-sort-down fs-1"></i> Urutkan Data
-							</button>
-						</div>
-						<div class="card-toolbar">
-							<div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-							</div>
-						</div>
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-row-dashed table-row-gray-300 align-middle border">
-								<thead class="border">
-									<tr  class="fs-8 fw-bolder text-muted text-center">
-										<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_input">Tgl Transaksi</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="jenis_motor">Jenis Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="tipe_motor">Tipe Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="merek_motor">Merek Motor</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span class="text-part" id="jenis_part">Jenis Part</span></th>
-										<th rowspan="2" class="w-100px ps-3 pe-3"><span class="text-kd_part" id="kd_part">kode Part</span></th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">Ket part</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3" id="nama">Nama Konsumen</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="tgl_lahir">Tgl lahir</span></th>
-										<th rowspan="2" class="w-100px ps-3 pe-3">Alamat</th>
-										<th rowspan="2" class="w-100px ps-3 pe-3" id="telepon">Telepon</th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Divisi</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span>Company</span></th>
-										<th rowspan="2" class="w-50px ps-3 pe-3"><span id="divisi">Lokasi</span></th>
-									</tr>
-								</thead>
-								<tbody class="border">
-									@if (!empty($data))
-										@if($data->total == 0)
-											<tr><td colspan="15" class="text-center text-dark">Tidak ada data</td></tr
-										@else
-										@php
-											$no = $data->from;
-										@endphp
-											@foreach ($data->data as $key => $value)
-											<tr class="fw-bolder fs-8 border">
-												<td class="text-center">{{ $no++ }}</td>
-												<td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_input)) }}</td>
-												<td class="text-start">{{ ($value->jenis??'-') }}</td>
-												<td class="text-start">{{ ($value->type??'-') }}</td>
-												<td class="text-start">{{ ($value->merk??'-') }}</td>
-												<td class="text-start">{{ ($value->ring??'-') }}</td>
-												<td class="text-start">{{ ($value->kd_part??'-') }}</td>
-												<td class="text-start">{{ ($value->ket??'-') }}</td>
-												<td class="text-start">{{ ($value->nama??'-') }}</td>
-												<td class="text-start">{{ ($value->tgl_lahir==null?'-':date('d/m/Y', strtotime($value->tgl_lahir))) }}</td>
-												<td class="text-start">{{ ($value->alamat??'-') }}</td>
-												<td class="text-start">{{ ($value->telepon??'-') }}</td>
-												<td class="text-center">{{ (strtoupper($value->divisi)??'-') }}</td>
-												<td class="text-center">{{ (strtoupper($value->CompanyId)??'-') }}</td>
-												<td class="text-center">{{ (strtoupper($value->kd_lokasi)??'-') }}</td>
-											</tr>
-											@endforeach
+    <div class="row gy-5 g-xl-8">
+        <div class="card card-xl-stretch shadow" id="table_list">
+            <!--begin::Card-->
+            <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+                <div class="card-title" id="btn_filter">
+                    @if (session('app_user_role_id') === 'MD_H3_MGMT')
+                    <div class="dropdown d-inline-block me-2">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-file-earmark-arrow-down fs-4"></i> Export
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a id="btn_export" class="dropdown-item" href="#">EXEL</a></li>
+                        </ul>
+                    </div>
+                    @endif
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_report">
+                        <i class="bi bi-filter fs-1"></i> Filter
+                    </button>
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#filter_urutkan">
+                        <i class="bi bi-sort-down fs-1"></i> Urutkan Data
+                    </button>
+                </div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-row-dashed table-row-gray-300 align-middle border">
+                        <thead class="border">
+                            <tr  class="fs-8 fw-bolder text-muted text-center">
+                                <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_input">Tgl Transaksi</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span id="jenis_motor">Jenis Motor</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span id="tipe_motor">Tipe Motor</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span id="merek_motor">Merek Motor</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span class="text-part" id="jenis_part">Jenis Part</span></th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3"><span class="text-kd_part" id="kd_part">kode Part</span></th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">Ket part</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3" id="nama">Nama Konsumen</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span id="tgl_lahir">Tgl lahir</span></th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">Alamat</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3" id="telepon">Telepon</th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span>Divisi</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span>Company</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3"><span id="divisi">Lokasi</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="border">
+                            @if (!empty($data))
+                                @if($data->total == 0)
+                                    <tr><td colspan="15" class="text-center text-dark">Tidak ada data</td></tr
+                                @else
+                                @php
+                                    $no = $data->from;
+                                @endphp
+                                    @foreach ($data->data as $key => $value)
+                                    <tr class="fw-bolder fs-8 border">
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_input)) }}</td>
+                                        <td class="text-start">{{ ($value->jenis??'-') }}</td>
+                                        <td class="text-start">{{ ($value->type??'-') }}</td>
+                                        <td class="text-start">{{ ($value->merk??'-') }}</td>
+                                        <td class="text-start">{{ ($value->ring??'-') }}</td>
+                                        <td class="text-start">{{ ($value->kd_part??'-') }}</td>
+                                        <td class="text-start">{{ ($value->ket??'-') }}</td>
+                                        <td class="text-start">{{ ($value->nama??'-') }}</td>
+                                        <td class="text-start">{{ ($value->tgl_lahir==null?'-':date('d/m/Y', strtotime($value->tgl_lahir))) }}</td>
+                                        <td class="text-start">{{ ($value->alamat??'-') }}</td>
+                                        <td class="text-start">{{ ($value->telepon??'-') }}</td>
+                                        <td class="text-center">{{ (strtoupper($value->divisi)??'-') }}</td>
+                                        <td class="text-center">{{ (strtoupper($value->CompanyId)??'-') }}</td>
+                                        <td class="text-center">{{ (strtoupper($value->kd_lokasi)??'-') }}</td>
+                                    </tr>
+                                    @endforeach
 
-										@endif
-									@else
-										<tr><td colspan="15" class="text-center text-dark">Atur Filter terlebih dahulu</td></tr>
-									@endif
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="card-footer">
-						@if (!empty($data))
-						<div class="d-flex justify-content-between">
-							<div class="form-group">
-								<select class="form-select form-select-sm" name="per_page" id="per_page">
-									<option value="10" @if ($data->per_page == 10) selected @endif>10</option>
-									<option value="50" @if ($data->per_page == 50) selected @endif>50</option>
-									<option value="100" @if ($data->per_page == 100) selected @endif>100</option>
-									<option value="500" @if ($data->per_page == 500) selected @endif>500</option>
-								</select>
-							</div>
-							<nav aria-label="...">
-								<ul class="pagination justify-content-center">
-									@php
-										$paginator = new Illuminate\Pagination\LengthAwarePaginator(
-											$data->data,
-											$data->total,
-											$data->per_page,
-											$data->current_page,
-											[
-												'path' => '#',
-											]
-										);
-									@endphp
-									{{ $paginator->links() }}
-								</ul>
-							</nav>
-						</div>
-						<span class="mt-3 badge badge-success jmldta">Jumlah data : {{ number_format($data->total, 0, ',') }}</span>
-						@endif
-					</div>
-					<!--end::Card-->
-				</div>
-			</div>
-		</div>
-	</div>
+                                @endif
+                            @else
+                                <tr><td colspan="15" class="text-center text-dark">Atur Filter terlebih dahulu</td></tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                @if (!empty($data))
+                <div class="d-flex justify-content-between">
+                    <div class="form-group">
+                        <select class="form-select form-select-sm" name="per_page" id="per_page">
+                            <option value="10" @if ($data->per_page == 10) selected @endif>10</option>
+                            <option value="50" @if ($data->per_page == 50) selected @endif>50</option>
+                            <option value="100" @if ($data->per_page == 100) selected @endif>100</option>
+                            <option value="500" @if ($data->per_page == 500) selected @endif>500</option>
+                        </select>
+                    </div>
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                            @php
+                                $paginator = new Illuminate\Pagination\LengthAwarePaginator(
+                                    $data->data,
+                                    $data->total,
+                                    $data->per_page,
+                                    $data->current_page,
+                                    [
+                                        'path' => '#',
+                                    ]
+                                );
+                            @endphp
+                            {{ $paginator->links() }}
+                        </ul>
+                    </nav>
+                </div>
+                <span class="mt-3 badge badge-success jmldta">Jumlah data : {{ number_format($data->total, 0, ',') }}</span>
+                @endif
+            </div>
+            <!--end::Card-->
+        </div>
+    </div>
 
 	<div class="modal fade" tabindex="-1" id="filter_report">
 		<div class="modal-dialog modal-fullscreen">

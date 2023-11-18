@@ -26,106 +26,98 @@
 @endpush
 
 @section('container')
-	<!--begin::Post-->
-	<div class="post d-flex flex-column-fluid">
-		<!--begin::Container-->
-		<div class="container-xxl">
-			<div class="row mb-3" id="btn_filter">
-				<div class="col p-3">
-					<div class="dropdown d-inline-block me-2">
-						<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="bi bi-file-earmark-arrow-down"></i> Export
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-							<li><a id="export_exel" class="dropdown-item" href="#">EXEL</a></li>
-						</ul>
-					</div>
+    <div class="row mb-3" id="btn_filter">
+        <div class="col p-3">
+            <div class="dropdown d-inline-block me-2">
+                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-file-earmark-arrow-down"></i> Export
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a id="export_exel" class="dropdown-item" href="#">EXEL</a></li>
+                </ul>
+            </div>
 
-					<button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-report">
-						Filter
-					</button>
-				</div>
-				<div class="col"></div>
-				<div class="col"></div>
-			</div>
-			<!--begin::Row-->
-			<div class="row gy-5 g-xl-8">
-				<div class="card card-xl-stretch shadow print_view" id="table_list">
-					<div class="card-body row">
-						<div class="col-4 text-start fw-bolder">
-							<span class="fs-7 d-block">PT Kharisma Suma Jaya Sakti</span>
-							<span class="fs-8 d-block">JL Rungkut Industri III/20</span>
-							<span class="fs-8 d-block">Surabaya</span>
-						</div>
-						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">Retur</span>
-							<span class="fs-7 d-block" id="title_dokumen"></span>
-						</div>
-					</div>
-					<!--begin::card-body-->
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-row-dashed table-row-gray-300 align-middle">
-								<thead class="border">
-									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No</th>
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Dealer</th>
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nama Dealer</th>
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Sales</th>
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
-										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">Qty</th>
-										<th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Pemakaian</th>
-										<th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Keterangan</th>
-										<th scope="col" colspan="5" class="w-auto ps-3 pe-3">Status</th>
-									</tr>
-									<tr class="fs-8 fw-bolder text-muted text-center">
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Jawab</th>
+            <button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-report">
+                Filter
+            </button>
+        </div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+    <!--begin::Row-->
+    <div class="row gy-5 g-xl-8">
+        <div class="card card-xl-stretch shadow print_view" id="table_list">
+            <div class="card-body row">
+                <div class="col-4 text-start fw-bolder">
+                    <span class="fs-7 d-block">PT Kharisma Suma Jaya Sakti</span>
+                    <span class="fs-8 d-block">JL Rungkut Industri III/20</span>
+                    <span class="fs-8 d-block">Surabaya</span>
+                </div>
+                <div class="col-4 fw-bolder text-center">
+                    <span class="fs-5 d-block">Retur</span>
+                    <span class="fs-7 d-block" id="title_dokumen"></span>
+                </div>
+            </div>
+            <!--begin::card-body-->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-row-dashed table-row-gray-300 align-middle">
+                        <thead class="border">
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Dealer</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nama Dealer</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Sales</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
+                                <th scope="col" colspan="2" class="w-auto ps-3 pe-3">Qty</th>
+                                <th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Pemakaian</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Keterangan</th>
+                                <th scope="col" colspan="5" class="w-auto ps-3 pe-3">Status</th>
+                            </tr>
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Jawab</th>
 
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Pakai</th>
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Pakai</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
 
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Stock</th>
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Minimum</th>
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
-										<th scope="col" rowspan="2" class="ps-3 pe-3">Approve SPV</th>
-										<th scope="col" rowspan="2" class="ps-3 pe-3">selesai</th>
-									</tr>
-								</thead>
-								<tbody class="border">
-									<tr class="fw-bolder fs-8 border">
-                                        <td colspan="99" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
-                                    </tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<!--end::card-body-->
-					<div class="card-footer d-none">
-						<div class="d-flex justify-content-between">
-							<div class="form-group">
-								<select class="form-select form-select-sm" name="per_page" id="per_page">
-									<option value="10" selected>10</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-									<option value="500">500</option>
-								</select>
-							</div>
-							<nav aria-label="...">
-								<ul class="pagination justify-content-center">
-								</ul>
-							</nav>
-						</div>
-						<span class="mt-3 badge badge-success jmldta"></span>
-					</div>
-				</div>
-			</div>
-			<!--end::Row-->
-		</div>
-		<!--end::Container-->
-	</div>
-	<!--end::Post-->
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Stock</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Minimum</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Approve SPV</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border">
+                            <tr class="fw-bolder fs-8 border">
+                                <td colspan="99" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--end::card-body-->
+            <div class="card-footer d-none">
+                <div class="d-flex justify-content-between">
+                    <div class="form-group">
+                        <select class="form-select form-select-sm" name="per_page" id="per_page">
+                            <option value="10" selected>10</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                        </select>
+                    </div>
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                        </ul>
+                    </nav>
+                </div>
+                <span class="mt-3 badge badge-success jmldta"></span>
+            </div>
+        </div>
+    </div>
+    <!--end::Row-->
 
 	<div class="modal fade" tabindex="-1" id="filter-report">
 		<div class="modal-dialog modal-lg">

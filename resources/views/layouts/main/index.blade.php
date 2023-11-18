@@ -67,7 +67,7 @@
                         @csrf
                         <div id="infoCartTotal"></div>
 						<div class="post d-flex flex-column-fluid" id="kt_post">
-							<div id="kt_content_container" class="container-fluid">
+							<div id="kt_content_container" class="@if(request()->is('report/*')) container-fluid @else container-xxl @endif">
 								@yield('container')
 							</div>
 						</div>

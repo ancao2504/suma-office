@@ -26,84 +26,76 @@
 @endpush
 
 @section('container')
-	<!--begin::Post-->
-	<div class="post d-flex flex-column-fluid">
-		<!--begin::Container-->
-		<div class="container-xxl">
-			<div class="row mb-3" id="btn_filter">
-				<div class="col p-3">
-					<div class="dropdown d-inline-block me-2">
-						<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="bi bi-file-earmark-arrow-down"></i> Export
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-							<li><a id="export_exel" class="dropdown-item" href="#">EXEL</a></li>
-						</ul>
-					</div>
-					
-					<button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-faktur">
-						Filter
-					</button>
-				</div>
-				<div class="col"></div>
-				<div class="col"></div>
-			</div>
-			<!--begin::Row-->
-			<div class="row gy-5 g-xl-8">
-				<div class="card card-xl-stretch shadow print_view" id="table_list">
-					<div class="card-body row">
-						<div class="col-4 text-start fw-bolder">
-							<span class="fs-7 d-block">PT Kharisma Suma Jaya Sakti</span>
-							<span class="fs-8 d-block">JL Rungkut Industri III/20</span>
-							<span class="fs-8 d-block">Surabaya</span>
-						</div>
-						<div class="col-4 fw-bolder text-center">
-							<span class="fs-5 d-block">PACKING</span>
-							<span class="fs-7 d-block" id="title_dokumen"></span>
-						</div>
-					</div>
-					<!--begin::card-body-->
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-row-dashed table-row-gray-300 align-middle">
-								<thead class="border">
-								</thead>
-								<tbody class="border" id="tbody-header">
-									<tr class="fw-bolder fs-8 border">
-                                        <td colspan="100" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
-                                    </tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<!--end::card-body-->
-					<div class="card-footer d-none">
-						<div class="d-flex justify-content-between">
-							<div class="form-group">
-								<select class="form-select form-select-sm" name="per_page" id="per_page">
-									<option value="10" selected>10</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-									<option value="500">500</option>
-								</select>
-							</div>
-							<nav aria-label="...">
-								<ul class="pagination justify-content-center">
-								</ul>
-							</nav>
-						</div>
-						<span class="mt-3 badge badge-success jmldta"></span>
-					</div>
-				</div>
-			</div>
-			<!--end::Row-->
-		</div>
-		<!--end::Container-->
-	</div>
-	<!--end::Post-->
+    <div class="row mb-3" id="btn_filter">
+        <div class="col p-3">
+            <div class="dropdown d-inline-block me-2">
+                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-file-earmark-arrow-down"></i> Export
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a id="export_exel" class="dropdown-item" href="#">EXEL</a></li>
+                </ul>
+            </div>
+
+            <button type="button" class="btn btn-primary me-2 mt-3 mt-md-0 btnfiltter" data-bs-toggle="modal" data-bs-target="#filter-faktur">
+                Filter
+            </button>
+        </div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
+    <!--begin::Row-->
+    <div class="row gy-5 g-xl-8">
+        <div class="card card-xl-stretch shadow print_view" id="table_list">
+            <div class="card-body row">
+                <div class="col-4 text-start fw-bolder">
+                    <span class="fs-7 d-block">PT Kharisma Suma Jaya Sakti</span>
+                    <span class="fs-8 d-block">JL Rungkut Industri III/20</span>
+                    <span class="fs-8 d-block">Surabaya</span>
+                </div>
+                <div class="col-4 fw-bolder text-center">
+                    <span class="fs-5 d-block">PACKING</span>
+                    <span class="fs-7 d-block" id="title_dokumen"></span>
+                </div>
+            </div>
+            <!--begin::card-body-->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-row-dashed table-row-gray-300 align-middle">
+                        <thead class="border">
+                        </thead>
+                        <tbody class="border" id="tbody-header">
+                            <tr class="fw-bolder fs-8 border">
+                                <td colspan="100" class="text-center text-danger"> Data akan tampil jika sudah mengatur Filter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--end::card-body-->
+            <div class="card-footer d-none">
+                <div class="d-flex justify-content-between">
+                    <div class="form-group">
+                        <select class="form-select form-select-sm" name="per_page" id="per_page">
+                            <option value="10" selected>10</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                        </select>
+                    </div>
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                        </ul>
+                    </nav>
+                </div>
+                <span class="mt-3 badge badge-success jmldta"></span>
+            </div>
+        </div>
+    </div>
+    <!--end::Row-->
 
 
-	
+
 	<div class="modal fade" tabindex="-1" id="filter-faktur">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -122,7 +114,7 @@
 								<label for="tgl_packing" class="form-label">Tanggal Packing</label>
 								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_packing"/>
 							</div>
-							
+
 							<div class="col-lg-6 mb-3">
 								<label for="jenis_data" class="form-label">Jenis Data</label>
 								<select id="jenis_data" name="jenis_data" class="form-select">
@@ -158,7 +150,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary btn-smt" data-bs-dismiss="modal">Simpan</button>
@@ -166,7 +158,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 <!--begin::Modal Dealer data-->
 <div class="modal fade" tabindex="-1" id="dealer-list">
 </div>
@@ -226,5 +218,5 @@
 			document.body.style.cursor = "default";
 		});
 	</script>
-		
+
 @endpush
