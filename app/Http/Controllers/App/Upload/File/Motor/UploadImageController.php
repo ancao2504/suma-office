@@ -26,7 +26,6 @@ class UploadImageController extends Controller
 
     function storeMaster(Request $request){
 
-        dd(public_path('images/upload/motor/master/logo/'));
         $request->validate([
             'm_kd_master' => 'required|string',
             'm_nama' => 'required|string',
@@ -77,6 +76,7 @@ class UploadImageController extends Controller
             $responseApi = json_decode(Service::uploadFileMotorMaster($request));
 
             if($responseApi->status == 0){
+                dd();
                 foreach ($path->logo as $key => $value) {
                     if (File::exists(public_path('images/upload/motor/master/logo/'.$value))) {
                         File::delete(public_path('images/upload/motor/master/logo/'.$value));
