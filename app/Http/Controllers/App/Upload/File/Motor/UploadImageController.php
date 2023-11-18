@@ -75,8 +75,7 @@ class UploadImageController extends Controller
 
             $responseApi = json_decode(Service::uploadFileMotorMaster($request));
 
-            if($responseApi->status == 0){
-                dd();
+            // if($responseApi->status == 0){
                 foreach ($path->logo as $key => $value) {
                     if (File::exists(public_path('images/upload/motor/master/logo/'.$value))) {
                         File::delete(public_path('images/upload/motor/master/logo/'.$value));
@@ -87,8 +86,8 @@ class UploadImageController extends Controller
                         File::delete(public_path('images/upload/motor/master/'.$value));
                     }
                 }
-                return redirect()->back()->with('error', 'Gagal upload file');
-            }
+                // return redirect()->back()->with('error', 'Gagal upload file');
+            // }
 
             return redirect()->back()->with('success', 'Berhasil Menyimpan Data Master');
 
