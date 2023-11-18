@@ -574,7 +574,9 @@ $(document).ready(function () {
     });
 
     $('#sts_stock').on('change', function () {
-        validasi_sts_stock();
+        if ($(this).val() == '1' || $(this).val() == '3') {
+            validasi_sts_stock();
+        }
     });
     $('#part-list').on('click','.pilih' ,function () {
         validasi_sts_stock();

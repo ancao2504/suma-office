@@ -25,6 +25,8 @@ class UploadImageController extends Controller
     }
 
     function storeMaster(Request $request){
+
+        dd(public_path('images/upload/motor/master/logo/'));
         $request->validate([
             'm_kd_master' => 'required|string',
             'm_nama' => 'required|string',
