@@ -77,13 +77,16 @@ class UploadImageController extends Controller
 
             // if($responseApi->status == 0){
                 foreach ($path->logo as $key => $value) {
-                    if (File::exists(public_path('images/upload/motor/master/logo/'.$value))) {
-                        File::delete(public_path('images/upload/motor/master/logo/'.$value));
+                    // if (File::exists(public_path('images/upload/motor/master/logo/'.$value))) {
+                    //     File::delete(public_path('images/upload/motor/master/logo/'.$value));
+                    // }
+                    if (file_exists('images/upload/motor/master/logo/'.$value)) {
+                        unlink('images/upload/motor/master/logo/'.$value);
                     }
                 }
                 foreach ($path->gambar as $key => $value) {
-                    if (File::exists(public_path('images/upload/motor/master/'.$value))) {
-                        File::delete(public_path('images/upload/motor/master/'.$value));
+                    if (file_exists('images/upload/motor/master/'.$value)) {
+                        unlink('images/upload/motor/master/'.$value);
                     }
                 }
                 // return redirect()->back()->with('error', 'Gagal upload file');
