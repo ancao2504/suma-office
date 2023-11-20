@@ -191,8 +191,6 @@ class ReturController extends Controller
                 if(!empty($dataFilter[$item->no_klaim][$item->kd_part])){
                     (int)$qtyJwbTamp = (int)$item->qty_jwb;
                     foreach($dataFilter[$item->no_klaim][$item->kd_part] as $key => $value){
-                        // if($item->kd_part == 'FB5LB'){
-                            // dd($dataFilter[$item->no_klaim][$item->kd_part], $value, $qtyJwbTamp);
                             if($qtyJwbTamp >= 0){
                                 if((int)$qtyJwbTamp > (int)$value->qty_klaim){
                                     $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$value->qty_klaim;
@@ -209,7 +207,6 @@ class ReturController extends Controller
                             } else {
                                 $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb =  0;
                             }
-                        // }
                     }
 
                 }

@@ -67,8 +67,8 @@ function report(page = 1) {
                                 <td class="ps-3 pe-3 text-center min-w-100px">${value.sts_stock??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.sts_min??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.sts_klaim??'-'}</td>
-                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_approve)==1)?'<i class="bi bi-check-lg"></i>':'-'}</td>
-                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_selesai)==1)?'<i class="bi bi-check-lg"></i>':'-'}</td>
+                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_approve)==1)?'<i class="bi bi-check-lg"></i>':'<i class="bi bi-dash"></i>'}</td>
+                                <td class="ps-3 pe-3 text-center">${(parseInt(value.sts_selesai)==1)?'<i class="bi bi-check-lg"></i>':'<i class="bi bi-dash"></i>'}</td>
                             </tr>
                         `);
                     });

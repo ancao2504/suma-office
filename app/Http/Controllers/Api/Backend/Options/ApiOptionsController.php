@@ -1150,7 +1150,8 @@ class ApiOptionsController extends Controller
                         $join->on('faktur.no_faktur', '=', 'fakt_dtl.no_faktur')
                             ->on('faktur.CompanyId', '=', 'fakt_dtl.CompanyId');
                     })
-                    ->where('faktur.CompanyId', $request->companyid);
+                    ->where('faktur.CompanyId', $request->companyid)
+                    ->where('fakt_dtl.jml_jual', '>', 0);
 
                     if (!empty($request->kd_dealer)) {
                         $query = $query->where('faktur.kd_dealer', $request->kd_dealer);
@@ -1160,8 +1161,8 @@ class ApiOptionsController extends Controller
                     }
                     if (!empty($request->no_faktur)) {
                         $query = $query->where(function($query) use ($request){
-                            $query->Where('faktur.no_faktur', 'LIKE', '%'.$request->no_faktur . '%')
-                            ->orWhere('fakt_dtl.kd_part', 'LIKE', '%'.$request->no_faktur . '%');
+                            $query->Where('fakt_dtl.kd_part', 'LIKE', '%'.$request->no_faktur . '%')
+                            ->orWhere('faktur.no_faktur', 'LIKE', '%'.$request->no_faktur . '%');
                         });
                     }
 
@@ -1190,18 +1191,18 @@ class ApiOptionsController extends Controller
                     ->select('no_faktur', 'kd_part', 'jml_jual')
                     ->whereIn('no_faktur', collect($data->items())->pluck('no_faktur')->toArray())
                     ->where('CompanyId', $request->companyid)
+                    ->where('jml_jual', '>', 0)
                     ->get());
 
                 foreach($data->items() as $key => $value){
                     $value->detailPart = $dataDetail
-                                            ->where('no_faktur', $value->no_faktur)
-                                            ->where('jml_jual', '>', 0)
-                                            ->map(function ($item) {
-                                                return (object)[
-                                                    'kd_part' => $item->kd_part,
-                                                    'jml_jual' => $item->jml_jual,
-                                                ];
-                                            })->values();
+                        ->where('no_faktur', $value->no_faktur)
+                        ->map(function ($item) {
+                            return (object)[
+                                'kd_part' => $item->kd_part,
+                                'jml_jual' => $item->jml_jual,
+                            ];
+                        })->values();
                 }
             }
             return Response::responseSuccess('success' , $data);
