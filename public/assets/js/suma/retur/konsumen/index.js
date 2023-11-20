@@ -15,7 +15,7 @@ $(function () {
     // delete data -----------------------------------------------------------
     $('.btnDelete').on('click', function () {
         Swal.fire({
-            html: 'Apakah Anda Yakin Menghapus Retur dengan <b>No Retur : ' + $(this).data('id') +'</b>',
+            html: 'Apakah Anda Yakin Menghapus Retur dengan <b>No Klaim : ' + $(this).data('id') +'</b>',
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Hapus!",
