@@ -217,10 +217,10 @@
 		$('#list-gambar-detail').html('');
 		gambar.forEach(function (item, index) {
 			$('#list-gambar-detail').append(`
-			<div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;" onclick="window.open('${base_url+'/images/upload/motor/'+item}', '_blank');">
+			<div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;" onclick="window.open('${item}', '_blank');">
 				<div class="card border border-dark rounded">
 					<div class="d-flex justify-content-center">
-						<div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+						<div class="bg-image rounded" style="background-image: url('${item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
 							<div class="bg-dark" style="width: 100%; height: 50px; position: absolute; bottom: 0; opacity: 0.8;">
 								<div class="d-flex justify-content-center align-items-center" style="height: 100%;">
 									<span class="text-white">${data[0].ket}<span>
@@ -244,10 +244,10 @@
         $('#list-gambar-master').html('');
         logo.forEach(function (item, index) {
             $('#list-gambar-master').append(`
-                <div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;" onclick="window.open('${base_url+'/images/upload/motor/master/logo/'+item}', '_blank');">
+                <div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;" onclick="window.open('${item}', '_blank');">
                     <div class="card border border-dark rounded">
                         <div class="d-flex justify-content-center">
-                            <div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/master/logo/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                            <div class="bg-image rounded" style="background-image: url('${item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
                             </div>
                         </div>
                     </div>
@@ -256,10 +256,10 @@
         });
         gambar.forEach(function (item, index) {
             $('#list-gambar-master').append(`
-                <div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;" onclick="window.open('${base_url+'/images/upload/motor/master/'+item}', '_blank');">
+                <div class="card rounded" style="display: inline-block; width: 200px; margin-right: 10px;" onclick="window.open('${item}', '_blank');">
                     <div class="card border border-dark rounded">
                         <div class="d-flex justify-content-center">
-                            <div class="bg-image rounded" style="background-image: url('${base_url+'/images/upload/motor/master/'+item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
+                            <div class="bg-image rounded" style="background-image: url('${item}'); width: 100%; height: 200px; background-size: cover; background-position: center; background-repeat: no-repeat;">
                             </div>
                         </div>
                     </div>
