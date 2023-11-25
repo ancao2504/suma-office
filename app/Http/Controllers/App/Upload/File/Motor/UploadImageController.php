@@ -55,10 +55,10 @@ class UploadImageController extends Controller
                 'gambar' => []
             ];
             foreach ($request->m_logo as $key => $value) {
-                $path->logo[] = $value->getClientOriginalName();
+                $path->logo[] = asset($value->getClientOriginalName());
             }
             foreach ($request->m_gambar as $key => $value) {
-                $path->gambar[] = $value->getClientOriginalName();
+                $path->gambar[] = asset($value->getClientOriginalName());
             }
 
             foreach ($request->m_logo as $key => $value) {
@@ -148,7 +148,7 @@ class UploadImageController extends Controller
             ];
 
             foreach ($request->di_gambar as $key => $value) {
-                $path->gambar[] = $value->getClientOriginalName();
+                $path->gambar[] = asset($value->getClientOriginalName());
             }
             foreach ($request->di_gambar as $key => $value) {
                 $value->move('images/upload/motor', $value->getClientOriginalName());
