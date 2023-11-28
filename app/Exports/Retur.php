@@ -29,6 +29,7 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
                 $item->nm_dealer,
                 $item->kd_sales,
                 $item->kd_part,
+                $item->no_klaim,
                 $item->qty_klaim,
                 $item->qty_jwb,
                 $item->tgl_klaim,
@@ -47,35 +48,12 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function headings(): array
     {
-        // return [
-        //     'No Dokumen',
-        //     'Kode Part',
-        //     'Tgl Klaim',
-        //     'Tgl Klaim SPV',
-        //     'Tgl Retur Supplier',
-        //     'Tgl Jawab terakhir',
-        //     'Kode Salse',
-        //     'Kode Dealer',
-        //     'Kode Supplier',
-        //     'Status Stock',
-        //     'Status Minimum',
-        //     'Status Klaim',
-        //     'Status Approve SPV',
-        //     'Setatus Retur Selesai',
-        //     'keterangan',
-        //     'QTY Klaim',
-        //     'QTY Dijawab',
-        //     'QTY Ganti Barang Diterima',
-        //     'QTY Ganti Barang Ditolak',
-        //     'QTY Ganti Uang Terima',
-        //     'QTY Ganti Uang Tolak',
-        //     'Total Ganti Uang'
-        // ];
         return [
             'Kode Dealer',
             'Nama Dealer',
             'Kode Sales',
             'Part Number',
+            'Nomer Dokumen',
             'QTY Klaim',
             'QTY Jawab',
             'Tanggal Klaim',
@@ -86,7 +64,7 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
             'Status Minimum',
             'Status Klaim',
             'Status Approve',
-            'Status Selesai'
+            'Status Jawab'
         ];
     }
 }

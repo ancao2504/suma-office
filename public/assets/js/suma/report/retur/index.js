@@ -58,6 +58,7 @@ function report(page = 1) {
                                 <td class="ps-3 pe-3 min-w-150px">${value.nm_dealer??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.kd_sales??'-'}</td>
                                 <td class="ps-3 pe-3 min-w-80px">${value.kd_part??'-'}</td>
+                                <td class="ps-3 pe-3 min-w-50px text-center">${value.no_klaim??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${value.qty_klaim??'-'}</td>
                                 <td class="ps-3 pe-3 text-end">${(value.qty_jwb)??'-'}</td>
                                 <td class="ps-3 pe-3 text-center">${value.tgl_pakai??'-'}</td>

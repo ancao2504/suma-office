@@ -79,6 +79,7 @@ class KonsumenController extends Controller
 
         if ($statusApi_sales == 1 && $statusApi_cabang == 1 && $statusApiRetur == 1) {
             $data = [
+                'tamp' => in_array('tamp', $option) ? true : false,
                 'sales' => $responseApi_sales->data,
                 'cabang' => $responseApi_cabang->data,
                 'data' => $responseApiRetur->data,

@@ -100,6 +100,7 @@ function listDetail(detail){
 }
 
 function detail_clear(){
+    $('.list-faktur').attr('disabled', false);
     $('#no_faktur').val('');
     $('#no_faktur').removeClass('is-valid');
     $('#no_faktur').removeClass('is-invalid');
@@ -302,6 +303,7 @@ function edit_detail(val){
     detail_clear();
     $('#detail_modal .modal-title').text('Edit Detail');
     $('#list-retur tr').removeClass('bg-secondary');
+    $('.list-faktur').attr('disabled', true);
     $('#no_faktur').val(val.no_faktur);
     $('#no_faktur').attr('disabled', true);
     $('#kd_part').val(val.kd_part);
@@ -321,6 +323,7 @@ function edit_detail(val){
 }
 
 function delete_detail(val){
+    console.log(val);
     loading.block();
     $.post(base_url + '/retur/konsumen/delete',
         {
@@ -554,7 +557,6 @@ $(document).ready(function () {
 
     $("#list_detail").on('click','.btn_dtl_delete', function (e) {
         let val = JSON.parse(atob($(this).data('a')));
-
         Swal.fire({
             html: 'Apakah Anda Yakin Menghapus Detail Retur dengan <br>' + '<table class="table table-sm">' + '<tr><td>No Faktur</td><td>:</td><td><b>' + val.no_faktur + '</b></td></tr>' + '<tr><td>Kode Part</td><td>:</td><td><b>' + val.kd_part + '</b></td></tr>' + '<tr><td>No Produksi</td><td>:</td><td><b>' + val.no_produksi + '</b></td></tr>' + '</table>',
             icon: "warning",

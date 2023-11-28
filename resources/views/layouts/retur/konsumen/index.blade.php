@@ -13,7 +13,7 @@
 				<!--begin::Search-->
 				<div class="d-flex align-items-center position-relative my-1">
 					<span class="svg-icon svg-icon-1 position-absolute ms-4"><i class="bi bi-search"></i></span>
-					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="{{ $request->no_retur }}" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, Sales, Dealer/cabang"/>
+					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="{{ $request->no_retur }}" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, @if (session('app_user_role_id') == 'MD_H3_MGMT')Sales,@endif Dealer/cabang"/>
 				</div>
 				<!--end::Search-->
 			</div>
@@ -36,8 +36,7 @@
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">
 						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-						<th
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
+						<th @if (session('app_user_role_id') == 'MD_H3_MGMT')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
@@ -52,7 +51,7 @@
 						<th class="w-150px ps-3 pe-3"><span class="badge badge-light-primary">Dealer</span>/
 							<span class="badge badge-light-success">Cabang</span></th>
 						<th class="w-50px ps-3 pe-3">Approve</th>
-						<th class="w-50px ps-3 pe-3">Selesai</th>
+						<th class="w-50px ps-3 pe-3">Jawab</th>
 					</tr>
 				</thead>
 				<tbody class="border">
@@ -143,7 +142,7 @@
 	<div class="card card-xl-stretch shadow">
 		<div class="table-responsive pt-4">
             <div class="modal-header">
-                <h5 class="modal-title">Klaim Selesai</h5>
+                <h5 class="modal-title">Klaim Selesai Jawab</h5>
             </div>
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
@@ -165,7 +164,7 @@
 						<th class="w-150px ps-3 pe-3"><span class="badge badge-light-primary">Dealer</span>/
 							<span class="badge badge-light-success">Cabang</span></th>
 						<th class="w-50px ps-3 pe-3">Approve</th>
-						<th class="w-50px ps-3 pe-3">Selesai</th>
+						<th class="w-50px ps-3 pe-3">Jawab</th>
 					</tr>
 				</thead>
 				<tbody class="border">

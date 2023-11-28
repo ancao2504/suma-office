@@ -1,6 +1,6 @@
 function Dealer(requst) {
     if ($('#kd_sales').val() == '') {
-        Invalid([$('#kd_sales')], $('#error_kd_sales'), 'Kode Sales Tidak Boleh Kosong!');
+        Invalid([$('#kd_sales'),$('#kd_sales + span .select2-selection')], $('#error_kd_sales'), 'Kode Sales Harus diisi');
         return false;
     } else {
         valid([$('#kd_sales')], $('#error_kd_sales'), '');

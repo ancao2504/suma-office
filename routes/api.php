@@ -681,9 +681,9 @@ Route::group(['middleware' => 'authBasic'], function () {
                         Route::post('backend/uploadfile/motormaster/simpan', 'store')->name('simpan_master_detail');
                     });
                     Route::controller(VBUpdateController::class)->group(function () {
-                        Route::post('backend/uploadfile/vb', 'index')->name('get');
-                        Route::post('backend/uploadfile/vb/simpan', 'store')->name('simpan');
-                        Route::post('backend/uploadfile/vb/hapus', 'destroy')->name('hapus');
+                        Route::post('backend/uploadfile/vb', 'index');
+                        Route::post('backend/uploadfile/vb/simpan', 'store');
+                        Route::post('backend/uploadfile/vb/hapus', 'destroy');
                     });
                 });
             });

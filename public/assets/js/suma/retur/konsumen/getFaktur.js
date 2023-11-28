@@ -27,6 +27,11 @@ function Faktur(requst) {
                 valid([$('#detail_modal').find('#no_faktur')], $('#detail_modal').find('#error_no_faktur'), '');
                 $('#detail_modal').modal('hide');
                 $('#faktur-list').modal('show');
+
+                $('#kd_part').val('');
+                $('#kd_part').removeClass('is-valid');
+                $('#nm_part').val('');
+                $('#stock').val('');
             }
         }
         if (response.status == '0') {

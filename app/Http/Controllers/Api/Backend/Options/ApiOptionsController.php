@@ -778,7 +778,9 @@ class ApiOptionsController extends Controller
             } else if ($request->option == 'select') {
                 $data = $data->get();
             } else if ($request->option == 'page') {
-                $data = $data->paginate($request->per_page);
+                $data = $data
+                ->orderBy('kd_dealer', 'asc')
+                ->paginate($request->per_page);
             }
             return Response::responseSuccess('success', $data);
         } catch (\Exception $e) {

@@ -61,7 +61,7 @@
             <!--begin::card-body-->
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-row-dashed table-row-gray-300 align-middle">
+                    <table class="table table-row-dashed table-row-gray-300 align-middle table-hover">
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted text-center">
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">No</th>
@@ -69,6 +69,7 @@
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nama Dealer</th>
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Sales</th>
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
+                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nomer Dokumen</th>
                                 <th scope="col" colspan="2" class="w-auto ps-3 pe-3">Qty</th>
                                 <th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Pemakaian</th>

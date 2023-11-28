@@ -483,8 +483,11 @@ class KonsumenController extends Controller
         ->leftJoin('rtoko_dtl', function ($join) {
             $join->on('rtoko_dtl.no_klaim', '=', 'klaim.no_dokumen')
                 ->on('rtoko_dtl.companyid', '=', 'klaim.companyid');
-        })
-        ->select(
+        });
+        if ($request->no_retur != $request->user_id) {
+            $cekPartFaktur = $cekPartFaktur->where('klaim_dtl.no_dokumen','!=', $request->no_retur);
+        }
+        $cekPartFaktur = $cekPartFaktur->select(
             'klaim.no_dokumen',
             'rtoko_dtl.no_retur',
             'klaim_dtl.no_faktur',
@@ -549,6 +552,7 @@ class KonsumenController extends Controller
         ->where('kd_part', $request->kd_part)
         ->where('no_produksi', strtoupper($request->no_produksi))
         ->count() > 0) {
+
             // ! Update data pada tabel klaim_dtlTmp
             DB:: table($request->table[1])
             ->where('companyid', $request->companyid)
@@ -586,7 +590,11 @@ class KonsumenController extends Controller
         }
 
         // ! parameter index untuk mengambil data temporeri dan mengambil data detail
-        $request->merge(['option' => ['tamp','with_detail']]);
+        if ($request->no_retur != $request->user_id) {
+            $request->merge(['option' => ['with_detail']]);
+        } else{
+            $request->merge(['option' => ['tamp','with_detail']]);
+        }
         return (object)[
             'status'    => true,
             'data'      => (object)[
@@ -929,7 +937,7 @@ class KonsumenController extends Controller
             }
 
             // ! hapus detail
-            if(!empty($request->kd_part) && $request->no_retur == $request->user_id){
+            if(!empty($request->kd_part)){
                 DB::transaction(function () use ($request) {
                     DB::table($request->tb[1])
                         ->where('no_dokumen', $request->no_retur)
