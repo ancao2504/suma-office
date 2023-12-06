@@ -149,6 +149,19 @@ $(document).ready(function () {
     });
 
     $('#export_exel').on('click', function () {
+        if($('#table_list tbody tr:first td:first').hasClass('text-danger')){
+            swal.fire({
+                title: 'Perhatian!',
+                text: 'Tidak ada data yang akan di export, silahkan filter data terlebih dahulu',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'btn btn-secondary'
+                },
+                allowOutsideClick: false
+            });
+            return false;
+        }
         loading.block();
         $.ajax({
             url: window.location.origin + window.location.pathname + '/export',
@@ -184,6 +197,7 @@ $(document).ready(function () {
                 });
                 return false;
             }
+
             var blob = new Blob([response], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             });

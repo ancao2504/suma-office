@@ -5,11 +5,13 @@ function detail_clear(){
     $('#no_klaim').removeClass('is-valid');
     $('#no_klaim').removeClass('is-invalid');
     $('#no_klaim').attr('disabled', false);
+    $('.list-klaim').attr('disabled', false);
     $('#kd_part').val('');
     $('#ket_klaim').val('');
     $('#kd_part').removeClass('is-valid');
     $('#kd_part').removeClass('is-invalid');
     $('#kd_part').attr('disabled', false);
+    $('.list-part').attr('disabled', false);
     $('#nm_part').val('');
     $('#qty_klaim').val('');
     $('#input_no_produk').html(`
@@ -238,9 +240,11 @@ function edit_detail(val){
     $('#no_klaim').val(val.no_klaim);
     $('#no_klaim').addClass('is-valid');
     $('#no_klaim').attr('disabled', true);
+    $('.list-klaim').attr('disabled', true);
     $('#kd_part').val(val.kd_part);
     $('#kd_part').addClass('is-valid');
     $('#kd_part').attr('disabled', true);
+    $('.list-part').attr('disabled', true);
     $('#nm_part').val(val.nm_part);
     $('#qty_klaim').val(val.jumlah);
     $('#no_produksi').val(val.no_produksi);

@@ -97,7 +97,7 @@
 							@endif
 
 							@if ($a->status_approve==1 || session('app_user_role_id') != 'MD_H3_MGMT')
-							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
+							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }}"
 							class="btn-sm btn-icon btn-primary d-inline-block mt-1 text-white"><span class="bi bi-eye"></span></a>
 							@endif
 						</td>

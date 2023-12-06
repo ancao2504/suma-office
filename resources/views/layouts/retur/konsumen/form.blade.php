@@ -22,7 +22,7 @@
                     <label for="kd_sales" class="col-sm-2 col-form-label required">Kd Sales</label>
                     <div class="col-sm-4">
                         <select name="kd_sales" id="kd_sales" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Sales"
-                        @if ((!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT')) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
+                        @if ((session('app_user_role_id') != 'MD_H3_MGMT') || (!empty($data) && $data->status_approve == 1) || (!empty($data) &&  (!empty($data->detail??null) || count($data->detail??[]) != 0)))
                             disabled
                         @endif
                         >
@@ -199,12 +199,15 @@
                                 <td>{{ ($detail->keterangan??'-') }}</td>
                                 <td>{{ ($detail->tgl_ganti?date('Y/m/d', strtotime($detail->tgl_ganti)):'-') }}</td>
                                 <td>{{ ($detail->qty_ganti?number_format($detail->qty_ganti, 0, '.', ','):'-') }}</td>
-                                @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
                                 <td class="text-center">
-                                    <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="{{ base64_encode($dta_edt) }}" class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
-                                    <a role="button" data-a="{{ base64_encode($dta_del) }}" class="btn_dtl_delete btn-sm btn-icon btn-danger my-1" data-bs-toggle="modal" data-bs-target="#delet-retur"><i class="fas fa-trash text-white"></i></a>
+                                    @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
+                                        <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="{{ base64_encode($dta_edt) }}" class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
+                                        <a role="button" data-a="{{ base64_encode($dta_del) }}" class="btn_dtl_delete btn-sm btn-icon btn-danger my-1"><i class="fas fa-trash text-white"></i></a>
+                                    @endif
+                                    {{-- <a role="button" data-bs-toggle="modal"
+                                    data-bs-target="#jwb-form"
+                                    class="btn-sm btn-icon btn-success text-white"><span class="bi bi-chat-right-dots"></span></a> --}}
                                 </td>
-                                @endif
                                 {{-- @if ($detail->qty_jwb > 0)
                                     <td class="text-center">
                                         <a href="{{ route('retur.konsumen.form',['id' => base64_encode($detail->no_faktur)]) }} }}" class="btn-sm btn-icon btn-success d-inline-block mt-1 text-white"><span class="bi bi-box-arrow-up-right"></span></a>
@@ -377,6 +380,95 @@
 </div>
 <!--end::Modal Part data-->
 @endif
+
+
+<!--begin::Modal Jawab data-->
+{{-- <div class="modal fade" id="jwb-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-3" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-fullscreen-md-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Jawab</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row align-items-start">
+                    <div class="col-md-12">
+                        <h3 class="text-start">Jawaban dari Gudang</h3>
+                    </div>
+                </div>
+                <div class="table-responsive border rounded-3">
+                    <table id="datatable_jwb" class="table table-row-dashed table-row-gray-300 align-middle border">
+                        <thead class="border">
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+                                <th rowspan="2" class="min-w-100px ps-3 pe-3">part Number</th>
+                                <th colspan="2" class="w-50px ps-3 pe-3">qty</th>
+                                <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fw-bolder fs-8 border">
+                                <td colspan="99" class="text-center">Tidak ada data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mb-3 row align-items-start mt-10">
+                    <div class="col-md-12">
+                        <h3 class="text-start">Form Jawab</h3>
+                    </div>
+                </div>
+                <div class="mb-3 row align-items-center border rounded p-3">
+                    <div class="col-md-12 mb-5">
+                        <a role="button" class="btn btn-primary" id="auto_jwb">Isi Otomatis</a>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="quantity" class="form-label">Quantity Jawab</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity[]" placeholder="Enter quantity" min="1">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="description" class="form-label">Keterangan</label>
+                        <select class="form-select" id="description" name="description[]">
+                            <option value="Terima Ganti barang">Terima Ganti barang</option>
+                            <option value="Terima Ganti uang">Terima Ganti uang</option>
+                            <option value="Tolak">Tolak</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mt-5 text-end">
+                        <button type="button" class="btn btn-primary" id="add_jwb">Add</button>
+                    </div>
+
+                </div>
+                <div class="mb-3 row align-items-start mt-10">
+                    <div class="col-md-12">
+                        <h3 class="text-start">Jawaban Ke Konsumen</h3>
+                    </div>
+                </div>
+                <div class="table-responsive border rounded-3">
+                    <table id="datatable_jwb" class="table table-row-dashed table-row-gray-300 align-middle border">
+                        <thead class="border">
+                            <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
+                                <th rowspan="2" class="min-w-100px ps-3 pe-3">part Number</th>
+                                <th colspan="2" class="w-50px ps-3 pe-3">qty</th>
+                                <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fw-bolder fs-8 border">
+                                <td colspan="99" class="text-center">Tidak ada data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> --}}
+<!--end::Modal Jawab data-->
 
 @endsection
 

@@ -112,7 +112,7 @@ class KonsumenController extends Controller
                 $data = $data->where('klaim.no_dokumen', $request->no_retur);
             }
 
-            if(!in_array($request->role_id, ['MD_H3_MGMT']) && !in_array('tamp', $request->option)){
+            if(in_array($request->role_id, ['MD_H3_SM']) && !in_array('tamp', $request->option)){
                 $data = $data->where('klaim.Kd_sales', $request->user_id);
             }
 
