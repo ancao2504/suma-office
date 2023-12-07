@@ -127,13 +127,13 @@ function simpan(tamp){
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
             tamp: tamp,
-            no_retur: $('#no_retur').val(),
-            kd_sales: $('#kd_sales').val(),
+            no_retur: old.no_retur??$('#no_retur').val(),
+            kd_sales: old.kd_sales??$('#kd_sales').val(),
             no_faktur: $('#no_faktur').val(),
             tgl_retur: $('#tgl_retur').val(),
             tgl_klaim: $('#tgl_klaim').val(),
             tgl_pakai: $('#tgl_pakai').val(),
-            kd_dealer: $('#kd_dealer').val(),
+            kd_dealer: old.kd_cabang??$('#kd_dealer').val(),
             pc: $('#jenis_konsumen').val(),
             kd_cabang: $('#kd_cabang').val(),
             no_produksi: $('#no_produksi').val(),
@@ -328,7 +328,7 @@ function delete_detail(val){
     $.post(base_url + '/retur/konsumen/delete',
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
-            no_retur: $('#no_retur').val(),
+            no_retur: old.no_retur??$('#no_retur').val(),
             no_faktur: val.no_faktur,
             kd_part: val.kd_part,
             no_produksi: val.no_produksi

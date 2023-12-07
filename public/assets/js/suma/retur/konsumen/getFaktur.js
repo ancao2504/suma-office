@@ -2,10 +2,10 @@ function Faktur(requst) {
     loading.block();
     $.get(base_url+'/faktur/klaim',{
         option: requst.option,
-        kd_sales: $('#kd_sales').val(),
-        kd_dealer: $('#kd_dealer').val(),
+        kd_sales: old.kd_sales??$('#kd_sales').val(),
+        kd_dealer: old.kd_cabang??$('#kd_dealer').val(),
         no_faktur: requst.no_faktur??$('#faktur-list #no_faktur').val(),
-        no_retur: $('#no_retur').val(),
+        no_retur: old.no_retur??$('#no_retur').val(),
         page : requst.page,
         per_page : requst.per_page,
     }, function (response) {

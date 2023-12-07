@@ -476,7 +476,9 @@
 <!-- script tambanhan -->
 <script>
     const old = {
-        kd_cabang: @json(((($data->pc??0) == 1)?$data->kd_dealer:'')),
+        no_retur: @json($data->no_dokumen??session('app_user_id')),
+        kd_cabang: @json($data->kd_dealer??null),
+        tgl_dokumen: @json(date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen))),
         @if ($data->kd_sales??false)
             kd_sales:@json(($data->kd_sales??''))
         @elseif (session('app_user_role_id')=='MD_H3_SM')

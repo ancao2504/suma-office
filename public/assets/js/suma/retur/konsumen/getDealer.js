@@ -9,7 +9,7 @@ function Dealer(requst) {
     loading.block();
     $.get(base_url+'/dealer',{
         option: requst.option,
-        kd_sales: $('#kd_sales').val(),
+        kd_sales: old.kd_sales??$('#kd_sales').val(),
         kd_dealer: requst.kd_dealer,
         page: requst.page,
         per_page: requst.per_page

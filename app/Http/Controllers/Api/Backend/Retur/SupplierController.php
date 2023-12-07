@@ -316,7 +316,7 @@ class SupplierController extends Controller
             }
 
             // ! megecek validasi dan menampilkan pesan error
-            // ! ------------------------------------
+            // ! --------------------------------------------
             $validate = Validator::make($request->all(), $rules, $messages);
             if ($validate->fails()) {
                 return Response::responseWarning($validate->errors()->first());
@@ -333,10 +333,10 @@ class SupplierController extends Controller
                             $query->select(
                                     'rtoko.no_retur',
                                     'rtoko.kd_dealer',
+                                    'rtoko_dtl.kd_part',
                                     'rtoko_dtl.Kd_lokasi',
                                     'rtoko_dtl.jumlah',
-                                    'rtoko.tanggal',
-                                    'rtoko.CompanyId'
+                                    'rtoko.tanggal'
                                 )
                                 ->from('rtoko')
                                 ->where('rtoko.no_retur', $request->no_klaim)
@@ -348,11 +348,44 @@ class SupplierController extends Controller
                                         ->where('rtoko_dtl.kd_part', $request->kd_part)
                                         ->where('rtoko_dtl.CompanyId', $request->companyid);
                                 }, 'rtoko_dtl', function ($join) {
-                                $join->on('rtoko_dtl.no_retur', '=', 'rtoko.no_retur')
-                                    ->on('rtoko_dtl.CompanyId', '=', 'rtoko.CompanyId');
+                                    $join->on('rtoko_dtl.no_retur', '=', 'rtoko.no_retur');
                                 });
-                            }, 'a')
+                            }, 'rtoko')
+                            ->joinSub(function ($query) use ($request) {
+                                $query->select('kd_part', 'kd_suppa')
+                                    ->from('part')
+                                    ->where('kd_part', $request->kd_part)
+                                    ->where('CompanyId', $request->companyid);
+                            }, 'part', function ($join) {
+                                $join->on('part.kd_part', '=', 'rtoko.kd_part');
+                            })
                             ->first();
+
+                        // ! Cek pastikan part yang di klaim memiliki kd_supp yang sama
+                        $tampRetur = DB::table(function ($query) use ($request) {
+                            $query->select(
+                                    'retur_dtltmp.no_retur',
+                                    'retur_dtltmp.kd_part'
+                                )
+                                ->from('retur_dtltmp')
+                                ->where('retur_dtltmp.no_retur', $request->user_id)
+                                ->where('retur_dtltmp.CompanyId', $request->companyid);
+                            }, 'retur')
+                            ->leftJoinSub(function ($query) use ($request) {
+                                $query->select('kd_part', 'kd_suppa')
+                                    ->from('part')
+                                    ->where('part.CompanyId', $request->companyid);
+                            }, 'part', function ($join) {
+                                $join->on('part.kd_part', '=', 'retur.kd_part');
+                            })
+                            ->first();
+
+                        if ($a->kd_suppa != ($tampRetur->kd_suppa ?? $request->kd_supp)) {
+                            return (object) [
+                                'status' => 0,
+                                'data' => 'Supplier harus sama pada 1 dokumen, Part yang anda simpan memiliki supplier : <b>' . $a->kd_suppa . '</b> sedangkan supplier pada dokumen : <b>' . ($tampRetur->kd_suppa ?? $request->kd_supp) . '</b>'
+                            ];
+                        }
 
                         //! ubah status pada rtoko_dtl menjadi 1 dimana agar tidak bisa di klaim lagi
                         DB::table('rtoko_dtl')
@@ -406,7 +439,7 @@ class SupplierController extends Controller
                             'returtmp.no_retur' => $request->user_id,
                             'returtmp.CompanyId' => $request->companyid,
                         ], [
-                            'Kd_supp' => $request->kd_supp,
+                            'Kd_supp' => ($tampRetur->kd_suppa ?? $request->kd_supp),
                             'tglretur' => $request->tgl_retur,
                             'total' => $b->total ?? 0,
                             'sts_jurnal' => ($request->sts_jurnal ?? 0),
@@ -544,6 +577,19 @@ class SupplierController extends Controller
                     ->update([
                         'status' => 0
                     ]);
+
+                //! cek apakah sudah tidak ada data pada retur_dtltmp jika tidak hapus data pada returtmp
+                $cek = DB::table('retur_dtltmp')
+                    ->where('no_retur', $request->user_id)
+                    ->where('CompanyId', $request->companyid)
+                    ->first();
+
+                if (empty($cek)) {
+                    DB::table('returtmp')
+                        ->where('no_retur', $request->user_id)
+                        ->where('CompanyId', $request->companyid)
+                        ->delete();
+                }
             });
             return response::responseSuccess('success', '');
         } catch (\Exception $exception) {

@@ -13,7 +13,7 @@ function Klaim(requst){
     $.get(base_url+'/retur',{
         option: requst.option,
         no_retur: requst.no_retur,
-        kd_supp: $('#kd_supp').val(),
+        kd_supp: old.kd_supp??$('#kd_supp').val(),
         page : requst.page,
         per_page : requst.per_page
     }, function (response) {

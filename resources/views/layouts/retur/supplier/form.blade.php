@@ -262,7 +262,7 @@
 <script>
 
     const old = {
-        kd_supp: @json(($data->kd_supp??'')),
+        kd_supp: @json(($data->kd_supp??null)),
     };
 </script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/supplier/getKlaim.js') }}?v={{ time() }}"></script>

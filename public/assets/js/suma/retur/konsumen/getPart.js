@@ -18,8 +18,8 @@ function Part(requst){
     $.get(base_url+'/part',{
         option: requst.option,
         no_faktur: $('#no_faktur').val(),
-        kd_sales: $('#kd_sales').val(),
-        kd_dealer: $('#kd_dealer').val(),
+        kd_sales: old.kd_sales??$('#kd_sales').val(),
+        kd_dealer: old.kd_cabang??$('#kd_dealer').val(),
         kd_part: requst.kd_part,
         page : requst.page,
         per_page : requst.per_page

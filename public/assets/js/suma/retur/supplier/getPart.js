@@ -15,7 +15,7 @@ function Part(requst){
         </tr>`);
         $.get(base_url+'/part',{
             option: requst.option,
-            kd_supp: $('#kd_supp').val(),
+            kd_supp: old.kd_supp??$('#kd_supp').val(),
             no_retur: $('#detail_modal #no_klaim').val(),
             kd_part: requst.kd_part,
             page : requst.page,

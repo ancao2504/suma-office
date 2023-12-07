@@ -85,7 +85,7 @@ function simpan(tamp){
         {
             _token: $('meta[name="csrf-token"]').attr('content'),
             no_retur: ((tamp==1)?$('#no_retur').val():Math.floor(Math.random() * 1000000000) + 1),
-            kd_supp: $('#kd_supp').val(),
+            kd_supp: old.kd_supp??$('#kd_supp').val(),
             tgl_retur: $('#tgl_retur').val(),
 
             no_ps: $('#no_ps').val(),
@@ -282,7 +282,10 @@ function delete_detail(val){
                     `);
 
                     $('#kd_supp').attr('disabled', false);
+                    $('#kd_supp').val('').trigger('change');
                     $('#tgl_retur').attr('disabled', false);
+
+                    old.kd_supp = null;
                 } else {
                     $('#list-retur tr').each(function (i) {
                         $(this).find('td:eq(0)').text(i + 1);
