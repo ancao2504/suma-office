@@ -4,10 +4,21 @@ let date = {
         end: moment().endOf('month')
     }
 }
-var formatter = new Intl.NumberFormat('id-ID', {
+let formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
 });
+
+let filter_data = {
+    _token: '',
+    tanggal: [],
+    kd_sales: '',
+    kd_jenis: '',
+    kd_dealer: '',
+    nm_dealer: '',
+    page: 1,
+    per_page: 10,
+};
 
 function report(page = 1) {
     loading.block();
@@ -26,14 +37,8 @@ function report(page = 1) {
             </tr>`);
 
         $.post(window.location.href,
-            {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
-                kd_sales: $('#kd_sales').val(),
-                kd_dealer: $('#kd_dealer').val(),
-                page: page,
-                per_page: $('#per_page').val(),
-            }, function (response) {
+            filter_data
+            , function (response) {
                 if (response.status == '1') {
                     $('body').attr('data-kt-aside-minimize', 'on');
                     $('#kt_aside_toggle').addClass('active');
@@ -145,6 +150,14 @@ $(document).ready(function () {
 
     $('.btn-smt').on('click', function (e) {
         e.preventDefault();
+        filter_data = {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
+            kd_sales: $('#kd_sales').val(),
+            kd_jenis: $('#kd_jenis').val(),
+            kd_dealer: $('#kd_jenis').val() == 1 ? $('#kd_dealer').val() : $('#kd_cabang').val(),
+            nm_dealer: $('#kd_jenis').val() == 1 ? $('#kd_dealer').val() : $('#kd_cabang option:selected').text(),
+        };
         report(1);
     });
 
@@ -169,12 +182,7 @@ $(document).ready(function () {
             xhrFields: {
                 responseType: 'blob'
             },
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                tanggal: [date.tgl_klaim.start.format('YYYY-MM-DD'), date.tgl_klaim.end.format('YYYY-MM-DD')],
-                kd_sales: $('#kd_sales').val(),
-                kd_dealer: $('#kd_dealer').val()
-            }
+            data: filter_data
         }).done(function (response) {
             if (response.status == '0') {
                 toastr.error(response.message, "Error");
@@ -203,7 +211,13 @@ $(document).ready(function () {
             });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = 'Retur Konsumen_' + ($('#tgl_claim').val() != ''? ' Tanggal Claim =' + date.tgl_klaim.start.format('DD-MM-YYYY') + ' s/d ' + date.tgl_klaim.end.format('DD-MM-YYYY') : '') + ($('#kd_sales').val() != ''? ' Sales =' + $('#kd_sales').val() : '') + ($('#kd_dealer').val() != ''? ' Dealer =' + $('#kd_dealer').val() : '') + '.xlsx';
+            link.download = 'Retur Konsumen_' +
+            (filter_data.tanggal.length > 0 ? ' Tanggal Claim = ' + filter_data.tanggal[0] + ' s/d ' + filter_data.tanggal[1] : '') +
+            (filter_data.kd_sales != ''? ', Sales = ' + filter_data.kd_sales : ', Sales = Semua Sales') +
+            (filter_data.kd_jenis == ''? ', Semua Data Dealer dan Cabang' : '') +
+            (filter_data.kd_jenis == '1'? (', Dealer = ' + (filter_data.kd_dealer != ''? filter_data.nm_dealer : 'Semua Dealer')) : '') +
+            (filter_data.kd_jenis == '2'? (', Cabang = ' + (filter_data.kd_dealer != ''? filter_data.nm_dealer : 'Semua Cabang')) : '') +
+            '.xlsx';
             link.click();
             link.remove();
         }).fail(function (jqXHR, textStatus, error) {
@@ -232,5 +246,18 @@ $(document).ready(function () {
 
     $('#table_list #per_page').on('change', function () {
         report(1);
+    });
+
+    $('#kd_jenis').on('change', function () {
+        if ($(this).val() == 1) {
+            $('#kdDealer').removeClass('d-none');
+            $('#kdCabang').addClass('d-none');
+        } else if ($(this).val() == 2) {
+            $('#kdDealer').addClass('d-none');
+            $('#kdCabang').removeClass('d-none');
+        } else {
+            $('#kdDealer').addClass('d-none');
+            $('#kdCabang').addClass('d-none');
+        }
     });
 });

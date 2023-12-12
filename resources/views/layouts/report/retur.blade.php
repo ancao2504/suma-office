@@ -138,8 +138,6 @@
 								<label for="tgl_klaim" class="form-label">Tanggal Retur Sales</label>
 								<input class="form-control" placeholder="Pilih Tanggal" id="tgl_klaim"/>
 							</div>
-						</div>
-						<div class="row">
 							<div class="col-lg-6 mb-3">
 								<label for="kd_sales" class="form-label">kode Sales</label>
 								<select id="kd_sales" name="kd_sales" class="form-select" aria-label="Default select example" required>
@@ -147,12 +145,29 @@
 									{!! $sales !!}
 								</select>
 							</div>
-							<div class="form-group col-lg-6">
+						</div>
+						<div class="row">
+							<div class="col-lg-6 mb-3">
+								<label for="kd_jenis" class="form-label">Jenis Konsumen</label>
+								<select id="kd_jenis" name="kd_jenis" class="form-select" aria-label="Default select example" required>
+									<option selected value="">Semua Jenis</option>
+									<option value="1">Dealer</option>
+									<option value="2">Cabang</option>
+								</select>
+							</div>
+							<div class="form-group col-lg-6 d-none" id="kdDealer">
 								<label for="kd_dealer" class="form-label">Kode Dealer</label>
 								<div class="input-group mb-3">
 									<input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Kode Dealer" value="" required>
 									<button class="btn btn-primary" id="list-dealer" type="button">Pilih</button>
 								</div>
+							</div>
+							<div class="col-lg-6 mb-3 d-none" id="kdCabang">
+								<label for="kd_cabang" class="form-label">kode Cabang</label>
+								<select id="kd_cabang" name="kd_cabang" class="form-select" aria-label="Default select example" required>
+									<option selected value="">Semua Cabang</option>
+									{!! $cabang !!}
+								</select>
 							</div>
 						</div>
 					</div>

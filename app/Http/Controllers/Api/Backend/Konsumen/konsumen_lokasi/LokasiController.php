@@ -2,7 +2,6 @@
 
 namespace app\Http\Controllers\Api\Backend\Konsumen\Konsumen_lokasi;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Helpers\Api\Response;
@@ -10,7 +9,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Validator;
 
 class LokasiController extends Controller
 {

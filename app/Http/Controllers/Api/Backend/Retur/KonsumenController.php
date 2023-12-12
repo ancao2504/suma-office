@@ -115,7 +115,7 @@ class KonsumenController extends Controller
             if(in_array($request->role_id, ['MD_H3_SM']) && !in_array('tamp', $request->option)){
                 $data = $data->where('klaim.Kd_sales', $request->user_id);
             }
-
+            // ! Data klaim pagination
             if(in_array('page', $request->option)){
 
                 $data = $data
@@ -149,9 +149,12 @@ class KonsumenController extends Controller
                     $data = $data->where('klaim.status_end', 0)
                     ->paginate($request->per_page, ['*'], 'page', $request->page);
                 }
+
+                // ! 1 data klaim
             } elseif(in_array('first', $request->option)){
                 $data = $data->first();
 
+                // ! 1 data klaim dengan detail
             } elseif(in_array('with_detail', $request->option)){
                 $data = $data->first();
                 if(!empty($data)){
@@ -428,7 +431,7 @@ class KonsumenController extends Controller
         })
         ->get();
 
-        if ($cekJmlQtyPart->count() > 0) {
+        if ($cekJmlQtyPart->count() > 0 && $request->pc == 0) {
             $cekJmlQtyPart = $cekJmlQtyPart->first();
             // ! Jika qty part klaim melebihi qty part pada faktur maka tampilkan pesan Peringatan
             if ($cekJmlQtyPart->qty_klaim > $cekJmlQtyPart->qty_faktur) {

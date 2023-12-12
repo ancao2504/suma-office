@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class SupplierController extends Controller
 {
@@ -69,6 +68,7 @@ class SupplierController extends Controller
                 }
             }, 'retur');
 
+            // ! Data untuk Pagination
             if (in_array('page', $request->option)) {
                 $data = $data
                     ->select(
@@ -133,8 +133,13 @@ class SupplierController extends Controller
                         ->values();
                     return $item;
                 });
+
+                // ! Pemangilan 1 data
             } elseif (in_array('first', $request->option)) {
                 $data = $data->first();
+
+
+                // ! Pemnagilan 1 data dengan detail
             } elseif (in_array('with_detail', $request->option) || in_array('with_jwb', $request->option)) {
                 if (!empty($request->no_retur) && in_array('with_jwb', $request->option)) {
                     $data = $data->where('retur.no_retur', $request->no_retur);
@@ -206,7 +211,7 @@ class SupplierController extends Controller
                     ->orderBy('retur_dtl.usertime', 'asc')
                     ->get();
 
-
+                        // ! jika ada data detail dengan Jawaban
                     if (in_array('with_jwb', $request->option)) {
                         $detail_jwb = DB::table('jwb_claim')
                         ->select(

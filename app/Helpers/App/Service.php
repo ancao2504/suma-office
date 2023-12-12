@@ -2156,6 +2156,7 @@ class Service
         $body = [
             'tanggal'       => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
+            'kd_jenis'      => $request->kd_jenis,
             'kd_dealer'     => $request->kd_dealer,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
@@ -2192,6 +2193,7 @@ class Service
             'user_id'       => trim($request->session()->get('app_user_id')),
             'tanggal'     => $request->tanggal,
             'kd_sales'      => $request->kd_sales,
+            'kd_jenis'      => $request->kd_jenis,
             'kd_dealer'     => $request->kd_dealer
         ];
         $response = ApiRequest::requestPost($url, $header, $body);

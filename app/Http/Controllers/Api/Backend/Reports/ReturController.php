@@ -10,7 +10,7 @@ class ReturController extends Controller
 {
     public function data(Request $request)
     {
-        try {
+        // try {
             if(empty($request->page)){
                 $request->merge(['page' => 1]);
             }
@@ -26,7 +26,7 @@ class ReturController extends Controller
                     klaim.no_dokumen as no_klaim,
                     rtoko.no_retur as no_rtoko,
                     klaim.kd_dealer,
-                    dealer.nm_dealer,
+                    IIF(klaim.pc = '0', dealer.nm_dealer, cabang.nm_cabang) as nm_dealer,
                     [klaim].[kd_sales],
                     [klaim].[kd_part],
                     klaim.qty_klaim,
@@ -68,6 +68,11 @@ class ReturController extends Controller
                     if (!empty($request->kd_sales)){
                         $sql .= " and [klaim].[kd_sales] = '{$request->kd_sales}'";
                     }
+                    if ($request->kd_jenis == 1) {
+                        $sql .= " and [klaim].[pc] = '0'";
+                    } else if ($request->kd_jenis == 2) {
+                        $sql .= " and [klaim].[pc] = '1'";
+                    }
                     $sql .="
                     group by
                         klaim_dtl.no_faktur,
@@ -86,9 +91,12 @@ class ReturController extends Controller
                         [klaim].[status_approve],
                         [klaim].[status_end]
                 ) klaim
-                inner join (
+                left join (
                     select kd_dealer, nm_dealer from dealer where CompanyId = '{$request->companyid}'
                 ) dealer on dealer.kd_dealer = klaim.kd_dealer
+                left join (
+                    select kd_cabang, nm_cabang from cabang where CompanyId = '{$request->companyid}'
+                ) cabang on cabang.kd_cabang = klaim.kd_dealer
                 inner join (
                     select
                         no_faktur,
@@ -111,7 +119,7 @@ class ReturController extends Controller
                         [rtoko].[CompanyId]
                     from [rtoko]
                     inner join [rtoko_dtl] on [rtoko_dtl].[no_retur] = [rtoko].[no_retur] and [rtoko_dtl].[CompanyId] = [rtoko].[CompanyId]
-                    where [rtoko].[companyid] = '{$request->companyid}'
+                    where [rtoko].[companyid] = '{$request->companyid}' and rtoko_dtl.no_klaim is not null
                 ) as [rtoko] on [rtoko].[no_klaim] = [klaim].[no_dokumen] and [rtoko].[kd_part] = [klaim].[kd_part]
                 left join
                 (
@@ -227,13 +235,13 @@ class ReturController extends Controller
                 'message'   => 'success',
                 'data'      => $paginationData
             ], 200);
-        } catch (\Exception $e) {
-            return Response()->json([
-                'status'    => 2,
-                'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
-                'data'      => ''
-            ], 200);
-        }
+        // } catch (\Exception $e) {
+        //     return Response()->json([
+        //         'status'    => 2,
+        //         'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
+        //         'data'      => ''
+        //     ], 200);
+        // }
     }
 
     public function export(Request $request){
@@ -246,7 +254,7 @@ class ReturController extends Controller
                     klaim.no_dokumen as no_klaim,
                     rtoko.no_retur as no_rtoko,
                     klaim.kd_dealer,
-                    dealer.nm_dealer,
+                    IIF(klaim.pc = '0', dealer.nm_dealer, cabang.nm_cabang) as nm_dealer,
                     [klaim].[kd_sales],
                     [klaim].[kd_part],
                     klaim.qty_klaim,
@@ -288,6 +296,11 @@ class ReturController extends Controller
                     if (!empty($request->kd_sales)){
                         $sql .= " and [klaim].[kd_sales] = '{$request->kd_sales}'";
                     }
+                    if ($request->kd_jenis == 1) {
+                        $sql .= " and [klaim].[pc] = '0'";
+                    } else if ($request->kd_jenis == 2) {
+                        $sql .= " and [klaim].[pc] = '1'";
+                    }
                     $sql .="
                     group by
                         klaim_dtl.no_faktur,
@@ -306,9 +319,12 @@ class ReturController extends Controller
                         [klaim].[status_approve],
                         [klaim].[status_end]
                 ) klaim
-                inner join (
+                left join (
                     select kd_dealer, nm_dealer from dealer where CompanyId = '{$request->companyid}'
                 ) dealer on dealer.kd_dealer = klaim.kd_dealer
+                left join (
+                    select kd_cabang, nm_cabang from cabang where CompanyId = '{$request->companyid}'
+                ) cabang on cabang.kd_cabang = klaim.kd_dealer
                 inner join (
                     select
                         no_faktur,
@@ -331,7 +347,7 @@ class ReturController extends Controller
                         [rtoko].[CompanyId]
                     from [rtoko]
                     inner join [rtoko_dtl] on [rtoko_dtl].[no_retur] = [rtoko].[no_retur] and [rtoko_dtl].[CompanyId] = [rtoko].[CompanyId]
-                    where [rtoko].[companyid] = '{$request->companyid}'
+                    where [rtoko].[companyid] = '{$request->companyid}' and rtoko_dtl.no_klaim is not null
                 ) as [rtoko] on [rtoko].[no_klaim] = [klaim].[no_dokumen] and [rtoko].[kd_part] = [klaim].[kd_part]
                 left join
                 (
