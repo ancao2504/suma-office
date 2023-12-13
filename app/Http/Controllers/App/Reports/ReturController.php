@@ -37,9 +37,8 @@ class ReturController extends Controller
 
     public function data(Request $request)
     {
-        // try {
+        try {
             $responseApi = Service::ReportReturData($request);
-            // return $responseApi;
             if (json_decode($responseApi)->status == 1) {
                 return Response()->json([
                     'status'    => 1,
@@ -53,13 +52,13 @@ class ReturController extends Controller
                     'data'      => ''
                 ], 200);
             }
-        // } catch (\Exception $e) {
-        //     return Response()->json([
-        //         'status'    => 2,
-        //         'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
-        //         'data'      => ''
-        //     ], 200);
-        // }
+        } catch (\Exception $e) {
+            return Response()->json([
+                'status'    => 2,
+                'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
+                'data'      => ''
+            ], 200);
+        }
     }
 
     public function export(Request $request){

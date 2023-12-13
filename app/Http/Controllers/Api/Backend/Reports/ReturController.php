@@ -10,7 +10,7 @@ class ReturController extends Controller
 {
     public function data(Request $request)
     {
-        // try {
+        try {
             if(empty($request->page)){
                 $request->merge(['page' => 1]);
             }
@@ -235,13 +235,13 @@ class ReturController extends Controller
                 'message'   => 'success',
                 'data'      => $paginationData
             ], 200);
-        // } catch (\Exception $e) {
-        //     return Response()->json([
-        //         'status'    => 2,
-        //         'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
-        //         'data'      => ''
-        //     ], 200);
-        // }
+        } catch (\Exception $e) {
+            return Response()->json([
+                'status'    => 2,
+                'message'   => 'Maaf, terjadi kesalahan. Silahkan coba lagi',
+                'data'      => ''
+            ], 200);
+        }
     }
 
     public function export(Request $request){
@@ -276,8 +276,8 @@ class ReturController extends Controller
                         [klaim].[pc],
                         [klaim].[kd_dealer],
                         [klaim].[kd_sales],
-                        REPLACE(CONVERT(NVARCHAR(10), tgl_pakai, 105), '-', '/') as tgl_pakai,
-                        REPLACE(CONVERT(NVARCHAR(10), tgl_klaim, 105), '-', '/') as tgl_klaim,
+                        CONVERT(NVARCHAR(10), tgl_pakai, 105) as tgl_pakai,
+                        CONVERT(NVARCHAR(10), tgl_klaim, 105) as tgl_klaim,
                         CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim))) AS pemakaian,
                         sum([klaim_dtl].[qty]) as [qty_klaim],
                         [klaim_dtl].[keterangan],
@@ -309,8 +309,8 @@ class ReturController extends Controller
                         [klaim].[pc],
                         [klaim].[kd_dealer],
                         [klaim].[kd_sales],
-                        REPLACE(CONVERT(NVARCHAR(10), tgl_pakai, 105), '-', '/'),
-                        REPLACE(CONVERT(NVARCHAR(10), tgl_klaim, 105), '-', '/'),
+                        CONVERT(NVARCHAR(10), tgl_pakai, 105),
+                        CONVERT(NVARCHAR(10), tgl_klaim, 105),
                         CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim))),
                         [klaim_dtl].[keterangan],
                         [klaim_dtl].[sts_klaim],
