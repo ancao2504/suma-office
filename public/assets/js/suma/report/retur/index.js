@@ -21,7 +21,7 @@ let filter_data = {
 };
 
 function report(page = 1) {
-    filter_data = {...filter_data, ...{page:page}};
+    filter_data = {...filter_data, ...{page:page, per_page:$('#per_page').val()}};
     loading.block();
         $('#table_list tfoot').addClass('d-none');
         $('#table_list .card-footer').addClass('d-none');
