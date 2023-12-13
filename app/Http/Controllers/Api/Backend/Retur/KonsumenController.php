@@ -804,16 +804,16 @@ class KonsumenController extends Controller
         // ! membuat data yang akan di simpan pada tabel klaim
         $header = DB::table($request->table[0])
         ->selectRaw(
-            "'".$request->no_retur."' as no_dokumen,
-            '".$request->tgl_retur."' as tgl_dokumen,
+            "'$request->no_retur' as no_dokumen,
+            '$request->tgl_retur' as tgl_dokumen,
             tgl_entry,
-            '".$request->kd_sales."' as kd_sales,
+            '$request->kd_sales' as kd_sales,
             '".($request->pc??0)."' as pc,
             '".(($request->pc==1)?$request->kd_cabang:$request->kd_dealer)."' as kd_dealer,
-            case when '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_approve,
-            case when ((".collect($validasi_stock)->where('sts_klaim','1')->count()." = 0 and ".$request->pc." = 0) or (".$request->pc." = 1)) and '".$request->role_id."' = 'MD_H3_MGMT' then 1 else 0 end as status_end,
+            case when ('$request->role_id' = 'MD_H3_MGMT' or '$request->role_id' = 'MD_H3_KORSM') then 1 else 0 end as status_approve,
+            case when ((".collect($validasi_stock)->where('sts_klaim','1')->count()." = 0 and $request->pc = 0) or ($request->pc = 1)) and ('$request->role_id' = 'MD_H3_MGMT' or '$request->role_id' = 'MD_H3_KORSM') then 1 else 0 end as status_end,
             usertime,
-            '".$request->companyid."' as companyid"
+            '$request->companyid' as companyid"
         );
 
         // ! jika

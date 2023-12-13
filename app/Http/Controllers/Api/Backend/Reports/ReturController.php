@@ -60,13 +60,13 @@ class ReturController extends Controller
                         [klaim].[status_end]
                     from [klaim]
                     inner join [klaim_dtl] on [klaim_dtl].[no_dokumen] = [klaim].[no_dokumen] and [klaim_dtl].[companyid] = [klaim].[companyid]
-                    where [klaim].[companyid] = '{$request->companyid}' and
+                    where [klaim].[companyid] = '$request->companyid' and
                     CONVERT(DATE, klaim_dtl.tgl_klaim) between '{$request->tanggal[0]}' and '{$request->tanggal[1]}'";
                     if (!empty($request->kd_dealer)){
-                        $sql .= " and [klaim].[kd_dealer] = '{$request->kd_dealer}'";
+                        $sql .= " and [klaim].[kd_dealer] = '$request->kd_dealer'";
                     }
                     if (!empty($request->kd_sales)){
-                        $sql .= " and [klaim].[kd_sales] = '{$request->kd_sales}'";
+                        $sql .= " and [klaim].[kd_sales] = '$request->kd_sales'";
                     }
                     if ($request->kd_jenis == 1) {
                         $sql .= " and [klaim].[pc] = '0'";
@@ -92,10 +92,10 @@ class ReturController extends Controller
                         [klaim].[status_end]
                 ) klaim
                 left join (
-                    select kd_dealer, nm_dealer from dealer where CompanyId = '{$request->companyid}'
+                    select kd_dealer, nm_dealer from dealer where CompanyId = '$request->companyid'
                 ) dealer on dealer.kd_dealer = klaim.kd_dealer
                 left join (
-                    select kd_cabang, nm_cabang from cabang where CompanyId = '{$request->companyid}'
+                    select kd_cabang, nm_cabang from cabang where CompanyId = '$request->companyid'
                 ) cabang on cabang.kd_cabang = klaim.kd_dealer
                 inner join (
                     select
@@ -103,7 +103,7 @@ class ReturController extends Controller
                         kd_part
                     from
                         fakt_dtl
-                    where CompanyId = '{$request->companyid}'
+                    where CompanyId = '$request->companyid'
                 ) as fakt_dtl on fakt_dtl.no_faktur = klaim.no_faktur and fakt_dtl.kd_part = klaim.kd_part
                 left join
                 (
@@ -119,7 +119,7 @@ class ReturController extends Controller
                         [rtoko].[CompanyId]
                     from [rtoko]
                     inner join [rtoko_dtl] on [rtoko_dtl].[no_retur] = [rtoko].[no_retur] and [rtoko_dtl].[CompanyId] = [rtoko].[CompanyId]
-                    where [rtoko].[companyid] = '{$request->companyid}' and rtoko_dtl.no_klaim is not null
+                    where [rtoko].[companyid] = '$request->companyid' and rtoko_dtl.no_klaim is not null
                 ) as [rtoko] on [rtoko].[no_klaim] = [klaim].[no_dokumen] and [rtoko].[kd_part] = [klaim].[kd_part]
                 left join
                 (
@@ -136,7 +136,7 @@ class ReturController extends Controller
                         [retur_dtl].[ket_jwb],
                         [retur].[CompanyId] from [retur]
                     inner join [retur_dtl] on [retur_dtl].[no_retur] = [retur].[no_retur] and [retur_dtl].[CompanyId] = [retur].[CompanyId]
-                    where [retur].[CompanyId] = '{$request->companyid}'
+                    where [retur].[CompanyId] = '$request->companyid'
                 ) as [retur] on [retur].[no_klaim] = [rtoko].[no_retur] and [retur].[kd_part] = [klaim].[kd_part]
             ";
 
@@ -288,13 +288,13 @@ class ReturController extends Controller
                         [klaim].[status_end]
                     from [klaim]
                     inner join [klaim_dtl] on [klaim_dtl].[no_dokumen] = [klaim].[no_dokumen] and [klaim_dtl].[companyid] = [klaim].[companyid]
-                    where [klaim].[companyid] = '{$request->companyid}' and
+                    where [klaim].[companyid] = '$request->companyid' and
                     CONVERT(DATE, klaim_dtl.tgl_klaim) between '{$request->tanggal[0]}' and '{$request->tanggal[1]}'";
                     if (!empty($request->kd_dealer)){
-                        $sql .= " and [klaim].[kd_dealer] = '{$request->kd_dealer}'";
+                        $sql .= " and [klaim].[kd_dealer] = '$request->kd_dealer'";
                     }
                     if (!empty($request->kd_sales)){
-                        $sql .= " and [klaim].[kd_sales] = '{$request->kd_sales}'";
+                        $sql .= " and [klaim].[kd_sales] = '$request->kd_sales'";
                     }
                     if ($request->kd_jenis == 1) {
                         $sql .= " and [klaim].[pc] = '0'";
@@ -320,10 +320,10 @@ class ReturController extends Controller
                         [klaim].[status_end]
                 ) klaim
                 left join (
-                    select kd_dealer, nm_dealer from dealer where CompanyId = '{$request->companyid}'
+                    select kd_dealer, nm_dealer from dealer where CompanyId = '$request->companyid'
                 ) dealer on dealer.kd_dealer = klaim.kd_dealer
                 left join (
-                    select kd_cabang, nm_cabang from cabang where CompanyId = '{$request->companyid}'
+                    select kd_cabang, nm_cabang from cabang where CompanyId = '$request->companyid'
                 ) cabang on cabang.kd_cabang = klaim.kd_dealer
                 inner join (
                     select
@@ -331,7 +331,7 @@ class ReturController extends Controller
                         kd_part
                     from
                         fakt_dtl
-                    where CompanyId = '{$request->companyid}'
+                    where CompanyId = '$request->companyid'
                 ) as fakt_dtl on fakt_dtl.no_faktur = klaim.no_faktur and fakt_dtl.kd_part = klaim.kd_part
                 left join
                 (
@@ -347,7 +347,7 @@ class ReturController extends Controller
                         [rtoko].[CompanyId]
                     from [rtoko]
                     inner join [rtoko_dtl] on [rtoko_dtl].[no_retur] = [rtoko].[no_retur] and [rtoko_dtl].[CompanyId] = [rtoko].[CompanyId]
-                    where [rtoko].[companyid] = '{$request->companyid}' and rtoko_dtl.no_klaim is not null
+                    where [rtoko].[companyid] = '$request->companyid' and rtoko_dtl.no_klaim is not null
                 ) as [rtoko] on [rtoko].[no_klaim] = [klaim].[no_dokumen] and [rtoko].[kd_part] = [klaim].[kd_part]
                 left join
                 (
@@ -364,7 +364,7 @@ class ReturController extends Controller
                         [retur_dtl].[ket_jwb],
                         [retur].[CompanyId] from [retur]
                     inner join [retur_dtl] on [retur_dtl].[no_retur] = [retur].[no_retur] and [retur_dtl].[CompanyId] = [retur].[CompanyId]
-                    where [retur].[CompanyId] = '{$request->companyid}'
+                    where [retur].[CompanyId] = '$request->companyid'
                 ) as [retur] on [retur].[no_klaim] = [rtoko].[no_retur] and [retur].[kd_part] = [klaim].[kd_part]
             ";
 
