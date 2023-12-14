@@ -170,6 +170,7 @@ class ReturController extends Controller
             ->orderBy('tgl_klaim', 'asc')
             ->get();
 
+            // ! ambil data jawaban
             $dataJawab = DB::table('jwb_claim')
             ->selectRaw(
                 '
@@ -191,29 +192,68 @@ class ReturController extends Controller
             )
             ->get();
 
+            // ! klompokan berdasarkan no rtoko dan kd part
             $dataFilter = collect($data)->groupBy('no_rtoko')->map(function($item){
                 return $item->groupBy('kd_part');
             });
 
+            // ? ---------------------------------------------------------------------------------------------
+            // ? Info : $dataFilter = [no_rtoko => [kd_part => [data]]]
+            // ? Info : $item->no_klaim merupakan sama dengan no_rtoko
+            // ? ---------------------------------------------------------------------------------------------
+
             $dataJawab->map(function($item) use ($dataFilter, $data) {
+                // ! jika data filter tidak kosong
                 if(!empty($dataFilter[$item->no_klaim][$item->kd_part])){
+                    // ! tampung qty jawaban dari data jawaban
                     (int)$qtyJwbTamp = (int)$item->qty_jwb;
+                    // ! looping data yang sudah di group by
                     foreach($dataFilter[$item->no_klaim][$item->kd_part] as $key => $value){
                             if($qtyJwbTamp >= 0){
+                                // ! membandingkan pada nomer rtoko dan part apakah jumlah jawabannya lebih besar dari jumlah klaim
                                 if((int)$qtyJwbTamp > (int)$value->qty_klaim){
-                                    $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$value->qty_klaim;
+                                    // ! jika lebih besar maka qty jawaban di isi dengan qty klaim
+                                    $data
+                                        ->where('no_retur', $value->no_retur)
+                                        ->where('no_faktur', $value->no_faktur)
+                                        ->where('no_klaim', $value->no_klaim)
+                                        ->where('kd_part', $value->kd_part)
+                                        ->first()->qty_jwb = (int)$value->qty_klaim;
+                                    // ! qty jawaban tampungan dikurangi dengan qty klaim
                                     (int)$qtyJwbTamp = ((int)$qtyJwbTamp - (int)$value->qty_klaim);
+
+                                    // ! jika qty jawaban sama dengan qty klaim
                                 } elseif((int)$qtyJwbTamp == (int)$value->qty_klaim){
-                                    $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$value->qty_klaim;
-
+                                    // ! maka qty jawaban di isi dengan qty klaim
+                                    $data
+                                        ->where('no_retur', $value->no_retur)
+                                        ->where('no_faktur', $value->no_faktur)
+                                        ->where('no_klaim', $value->no_klaim)
+                                        ->where('kd_part', $value->kd_part)
+                                        ->first()->qty_jwb = (int)$value->qty_klaim;
+                                    // ! qty jawaban tampungan di isi dengan 0
                                     (int)$qtyJwbTamp = 0;
-                                } elseif((int)$qtyJwbTamp < (int)$value->qty_klaim){
-                                    $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$qtyJwbTamp;
 
+                                    // ! jika qty jawaban lebih kecil dari qty klaim
+                                } elseif((int)$qtyJwbTamp < (int)$value->qty_klaim){
+                                    // ! maka qty jawaban di isi dengan qty jawaban tampungan
+                                    $data
+                                        ->where('no_retur', $value->no_retur)
+                                        ->where('no_faktur', $value->no_faktur)
+                                        ->where('no_klaim', $value->no_klaim)
+                                        ->where('kd_part', $value->kd_part)
+                                        ->first()->qty_jwb = (int)$qtyJwbTamp;
+                                    // ! qty jawaban tampungan di isi dengan 0
                                     (int)$qtyJwbTamp = 0;
                                 }
                             } else {
-                                $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb =  0;
+                                // ! jika qty jawaban tampungan kurang dari 0 maka qty jawaban di isi dengan 0
+                                $data
+                                    ->where('no_retur', $value->no_retur)
+                                    ->where('no_faktur', $value->no_faktur)
+                                    ->where('no_klaim', $value->no_klaim)
+                                    ->where('kd_part', $value->kd_part)
+                                    ->first()->qty_jwb =  0;
                             }
                     }
 
@@ -429,19 +469,40 @@ class ReturController extends Controller
                     foreach($dataFilter[$item->no_klaim][$item->kd_part] as $key => $value){
                         if($qtyJwbTamp >= 0){
                             if((int)$qtyJwbTamp > (int)$value->qty_klaim){
-                                $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$value->qty_klaim;
+                                $data
+                                    ->where('no_retur', $value->no_retur)
+                                    ->where('no_faktur', $value->no_faktur)
+                                    ->where('no_klaim', $value->no_klaim)
+                                    ->where('kd_part', $value->kd_part)
+                                    ->first()->qty_jwb = (int)$value->qty_klaim;
+
                                 (int)$qtyJwbTamp = ((int)$qtyJwbTamp - (int)$value->qty_klaim);
                             } elseif((int)$qtyJwbTamp == (int)$value->qty_klaim){
-                                $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$value->qty_klaim;
+                                $data
+                                    ->where('no_retur', $value->no_retur)
+                                    ->where('no_faktur', $value->no_faktur)
+                                    ->where('no_klaim', $value->no_klaim)
+                                    ->where('kd_part', $value->kd_part)
+                                    ->first()->qty_jwb = (int)$value->qty_klaim;
 
                                 (int)$qtyJwbTamp = 0;
                             } elseif((int)$qtyJwbTamp < (int)$value->qty_klaim){
-                                $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb = (int)$qtyJwbTamp;
+                                $data
+                                    ->where('no_retur', $value->no_retur)
+                                    ->where('no_faktur', $value->no_faktur)
+                                    ->where('no_klaim', $value->no_klaim)
+                                    ->where('kd_part', $value->kd_part)
+                                    ->first()->qty_jwb = (int)$qtyJwbTamp;
 
                                 (int)$qtyJwbTamp = 0;
                             }
                         } else {
-                            $data->where('no_retur', $value->no_retur)->where('no_faktur', $value->no_faktur)->where('no_klaim', $value->no_klaim)->where('kd_part', $value->kd_part)->first()->qty_jwb =  0;
+                            $data
+                                ->where('no_retur', $value->no_retur)
+                                ->where('no_faktur', $value->no_faktur)
+                                ->where('no_klaim', $value->no_klaim)
+                                ->where('kd_part', $value->kd_part)
+                                ->first()->qty_jwb =  0;
                         }
                     }
                 }
