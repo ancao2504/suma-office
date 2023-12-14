@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use app\Http\Controllers\Api\Backend\Retur\SupplierController as  supplierWithDetail;
 
 class KonsumenController extends Controller
 {
@@ -136,19 +135,12 @@ class KonsumenController extends Controller
                     'klaim.usertime'
                 )
                 ->orderByRaw(
-                    'klaim.status_approve asc,
-                    klaim.no_dokumen desc,
-                    klaim.usertime asc,
-                    klaim.tgl_dokumen desc'
-                );
-
-                if (in_array('end', $request->option)){
-                    $data = $data->where('klaim.status_end', 1)
-                    ->paginate($request->per_page_end, ['*'], 'page', $request->page_end);
-                } else {
-                    $data = $data->where('klaim.status_end', 0)
-                    ->paginate($request->per_page, ['*'], 'page', $request->page);
-                }
+                    'status_approve asc,
+                    status_end asc,
+                    tgl_dokumen desc,
+                    klaim.no_dokumen desc'
+                )
+                ->paginate($request->per_page);
 
                 // ! 1 data klaim
             } elseif(in_array('first', $request->option)){
@@ -864,7 +856,7 @@ class KonsumenController extends Controller
             ->update((array)$header);
         }
 
-        if($request->role_id == 'MD_H3_MGMT'){
+        if($request->role_id == 'MD_H3_MGMT' || $request->role_id == 'MD_H3_KORSM'){
             // ! terdapat minimum, input ke rtoko
             $simpan = DB::select("
             SET NOCOUNT ON;

@@ -1590,14 +1590,14 @@ class OptionController extends Controller
                     ],
                     'table' => (object)[
                         'thead' => [
-                            (object)['class' => 'w-50px', 'text' => 'kode Dealer'],
+                            (object)['class' => 'w-20px', 'text' => 'kode Dealer'],
                             (object)['class' => 'w-200px', 'text' => 'nama Dealer'],
                             (object)['class' => 'w-200px', 'text' => 'alamat'],
                             (object)['class' => 'w-50px', 'text' => 'kota'],
                             (object)['class' => 'w-auto', 'text' => 'Action'],
                         ],
                         'tbody' => [
-                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_dealer'],
+                            (object)[ 'option' => 'text', 'class' => 'w-20px', 'key' => 'kd_dealer'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_dealer'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'alamat1'],
                             (object)[ 'option' => 'text','class' => 'w-50px', 'key' => 'kotasj'],

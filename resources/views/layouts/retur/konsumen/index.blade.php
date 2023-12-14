@@ -13,7 +13,7 @@
 				<!--begin::Search-->
 				<div class="d-flex align-items-center position-relative my-1">
 					<span class="svg-icon svg-icon-1 position-absolute ms-4"><i class="bi bi-search"></i></span>
-					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="{{ $request->no_retur }}" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, @if (session('app_user_role_id') == 'MD_H3_MGMT')Sales,@endif Dealer/cabang"/>
+					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="{{ $request->no_retur }}" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, @if (session('app_user_role_id') == 'MD_H3_MGMT' ||  session('app_user_role_id') == 'MD_H3_KORSM')Sales,@endif Dealer/cabang"/>
 				</div>
 				<!--end::Search-->
 			</div>
@@ -25,22 +25,16 @@
 				<!--end::Menu Tambah-->
 			</div>
 		</div>
-	</div>
-
-	<div class="card card-xl-stretch shadow">
 		<div class="table-responsive pt-4">
-            <div class="modal-header">
-                <h5 class="modal-title">Klaim Proses</h5>
-            </div>
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
 					<tr class="fs-8 fw-bolder text-muted text-center">
 						<th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-						<th @if (session('app_user_role_id') == 'MD_H3_MGMT')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
+						<th @if (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')colspan="2"@endif rowspan="2" class="w-auto ps-3 pe-3">No Dokumen</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Tanggal</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Kode</th>
 						<th colspan="2" class="w-50px ps-3 pe-3">Status</th>
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')
+						@if (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')
 						<th rowspan="2" class="w-auto ps-3 pe-3">Action</th>
 						@endif
 					</tr>
@@ -55,7 +49,7 @@
 					</tr>
 				</thead>
 				<tbody class="border">
-					@if ($data->bm->total == 0)
+					@if ($data->total == 0)
 					<tr>
 						<td colspan="10" class="text-center">
 							<span class="fw-bold">Tidak ada data</span>
@@ -63,13 +57,13 @@
 					</tr>
 					@else
 					@php
-						$no = $data->bm->from;
+						$no = $data->from;
 					@endphp
-					@foreach ($data->bm->data as $a)
+					@foreach ($data->data as $a)
 					<tr class="fw-bolder fs-8 border">
 						<td class="text-center">{{  $no++ }}</td>
 						<td>{{ $a->no_dokumen }}</td>
-						@if (session('app_user_role_id') == 'MD_H3_MGMT')
+						@if (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')
 							<td>{{ $a->no_retur }}</td>
 						@endif
 						<td>{{ date('Y/m/d', strtotime($a->tgl_dokumen)) }}</td>
@@ -88,15 +82,18 @@
 							@endif
 						</td>
 						<td class="text-center">
+							@if ($a->status_end==1)
+                                <i class="fs-1 bi bi-bookmark-check-fill text-success"></i>
+                            @endif
 						</td>
 						<td class="text-center">
-							@if ($a->status_approve!=1 && $a->status_end!=1 && session('app_user_role_id') == 'MD_H3_MGMT')
+							@if ($a->status_approve!=1 && $a->status_end!=1 && (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM'))
 							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }} }}"
 							class="btn-sm btn-icon btn-warning d-inline-block mt-1"><span class="bi bi-pencil"></span></a>
 							<a class="btn-sm btn-icon btn-danger text-white d-inline-block mt-1 btnDelete" role="button" data-id="{{ $a->no_dokumen}}"><span class="bi bi-trash"></span></a>
 							@endif
 
-							@if ($a->status_approve==1 || session('app_user_role_id') != 'MD_H3_MGMT')
+							@if ($a->status_approve==1 || session('app_user_role_id') == 'MD_H3_SM')
 							<a href="{{ route('retur.konsumen.form',['id' => base64_encode($a->no_dokumen)]) }}"
 							class="btn-sm btn-icon btn-primary d-inline-block mt-1 text-white"><span class="bi bi-eye"></span></a>
 							@endif
@@ -120,12 +117,12 @@
 				<div id="page">
 					@php
 						$paginator = new Illuminate\Pagination\LengthAwarePaginator(
-							$data->bm->data,
-							$data->bm->total,
-							$data->bm->per_page,
-							$data->bm->current_page,
+							$data->data,
+							$data->total,
+							$data->per_page,
+							$data->current_page,
 							['path' => Request::url(), 'query' => [
-                                    'page' => $data->bm->current_page,
+                                    'page' => $data->current_page,
                                     'page_end' => $request->page_end,
                                     'per_page' => $request->per_page,
                                     'per_page_end' => $request->per_page_end,
@@ -139,10 +136,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="card card-xl-stretch shadow">
+	{{-- <div class="card card-xl-stretch shadow">
 		<div class="table-responsive pt-4">
             <div class="modal-header">
-                <h5 class="modal-title">Klaim Selesai Jawab</h5>
+                <h5 class="modal-title">SELESAI</h5>
             </div>
 			<table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle">
 				<thead class="border">
@@ -248,7 +245,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 </div>
 <!--end::Row-->
 @endsection

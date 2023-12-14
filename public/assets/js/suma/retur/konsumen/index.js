@@ -1,14 +1,14 @@
 $(function () {
     $('#per_page').on('change', function () {
-        window.location = window.location.origin + window.location.pathname + '?page=1&page_end=1&per_page='+$(this).val()+'&per_page_end='+$('#per_page_end').val()+'&no_retur=' + $('#cari').val();
+        window.location = window.location.origin + window.location.pathname + '?page=1&per_page='+$(this).val()+'&no_retur=' + $('#cari').val();
         loading.block()
     });
     $('#per_page_end').on('change', function () {
-        window.location = window.location.origin + window.location.pathname + '?page=1&page_end=1&per_page='+$('#per_page').val()+'&per_page_end='+$(this).val()+'&no_retur=' + $('#cari').val();
+        window.location = window.location.origin + window.location.pathname + '?page=1&per_page='+$('#per_page').val()+'&no_retur=' + $('#cari').val();
         loading.block()
     });
     $('#cari').on('change', function () {
-        window.location = window.location.origin + window.location.pathname + '?page=1&page_end=1&per_page='+$('#per_page').val()+'&per_page_end='+$('#per_page_end').val()+'&no_retur=' + $(this).val();
+        window.location = window.location.origin + window.location.pathname + '?page=1&per_page='+$('#per_page').val()+'&no_retur=' + $(this).val();
         loading.block()
     });
 

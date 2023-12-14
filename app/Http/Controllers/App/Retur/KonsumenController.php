@@ -22,25 +22,15 @@ class KonsumenController extends Controller
                 'per_page' => 10
             ]);
         }
-        if(!in_array($request->per_page_end, [10,50,100,500])){
-            $request->merge([
-                'per_page_end' => 10
-            ]);
-        }
 
         $request->merge(['option' => ['page']]);
-        $responseApiBelumSelesai = json_decode(Service::ReturKonsumenDaftar($request));
-        $request->merge(['option' => ['page','end']]);
-        $responseApiSudahSelesai = json_decode(Service::ReturKonsumenDaftar($request));
-        if (($responseApiBelumSelesai->status??0) == 1 && ($responseApiSudahSelesai->status??0) == 1) {
+        $responseApiBelum = json_decode(Service::ReturKonsumenDaftar($request));
+        if (($responseApiBelum->status??0) == 1) {
             return view(
                 'layouts.retur.konsumen.index',
                 [
                     'request' => $request,
-                    'data' => (object)[
-                        'bm' => $responseApiBelumSelesai->data,
-                        'ss' => $responseApiSudahSelesai->data,
-                    ],
+                    'data' => $responseApiBelum->data,
                     'title_menu' => 'Retur Konsumen',
                 ]
             );

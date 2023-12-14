@@ -13,6 +13,10 @@ function Invalid(el, el_error, text){
         e.addClass('is-invalid');
     });
     el_error.text(text);
+
+    $('html, body').animate({
+        scrollTop: (el[0].offsetTop - 150)
+    }, 500);
 }
 
 function valid(el, el_error, text){

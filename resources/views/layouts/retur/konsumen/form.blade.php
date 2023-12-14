@@ -200,7 +200,7 @@
                                 <td>{{ ($detail->tgl_ganti?date('Y/m/d', strtotime($detail->tgl_ganti)):'-') }}</td>
                                 <td>{{ ($detail->qty_ganti?number_format($detail->qty_ganti, 0, '.', ','):'-') }}</td>
                                 <td class="text-center">
-                                    @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
+                                    @if (empty($data) || ($data->status_approve != 1 && (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')) || $tamp == true)
                                         <a role="button" data-bs-toggle="modal" href="#detail_modal" data-a="{{ base64_encode($dta_edt) }}" class="btn_dtl_edit btn-sm btn-icon btn-warning my-1"><i class="fas fa-edit text-dark"></i></a>
                                         <a role="button" data-a="{{ base64_encode($dta_del) }}" class="btn_dtl_delete btn-sm btn-icon btn-danger my-1"><i class="fas fa-trash text-white"></i></a>
                                     @endif
@@ -221,8 +221,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
-            <a role="button" class="btn btn-success text-white btn_simpan">Simpan @if (session('app_user_role_id') == 'MD_H3_MGMT')dan Approve @elseif (session('app_user_role_id') != 'MD_H3_MGMT')Pengajuan @endif</a>
+            @if (empty($data) || ($data->status_approve != 1 && (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')) || $tamp == true)
+            <a role="button" class="btn btn-success text-white btn_simpan">Simpan @if ((session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM'))dan Approve @elseif (session('app_user_role_id') != 'MD_H3_MGMT')Pengajuan @endif</a>
             @endif
             <a href="{{(strtok(URL::previous(),'?') == strtok(URL::current(),'?'))?route('retur.konsumen.index'):URL::previous()}}" role="button" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
@@ -230,7 +230,7 @@
 </div>
 <!--end::Row-->
 
-@if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
+@if (empty($data) || ($data->status_approve != 1 && (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')) || $tamp == true)
 
 <!-- Modal warning -->
 <div class="modal fade" id="warning_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-3" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -488,7 +488,7 @@
 </script>
 
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/form.js') }}?v={{ time() }}"></script>
-@if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
+@if (empty($data) || ($data->status_approve != 1 && (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')) || $tamp == true)
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getDealer.js') }}?v={{ time() }}"></script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getPart.js') }}?v={{ time() }}"></script>
 <script language="JavaScript" src="{{ asset('assets/js/suma/retur/konsumen/getFaktur.js') }}?v={{ time() }}"></script>

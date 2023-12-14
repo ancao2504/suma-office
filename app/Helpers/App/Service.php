@@ -1976,9 +1976,7 @@ class Service
             'option'        => $request->option,
             'no_retur'      => trim($request->no_retur),
             'page'          => $request->page ?? 1,
-            'page_end'          => $request->page_end ?? 1,
-            'per_page'      => $request->per_page ?? 10,
-            'per_page_end'      => $request->per_page_end ?? 10,
+            'per_page'      => $request->per_page ?? 10
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
