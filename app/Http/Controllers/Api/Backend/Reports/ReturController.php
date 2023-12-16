@@ -142,7 +142,7 @@ class ReturController extends Controller
 
             $data = DB::table(DB::raw("($sql) as a"))
             ->selectRaw(
-                '
+                "
                     no_faktur,
                     no_retur,
                     no_klaim,
@@ -152,7 +152,7 @@ class ReturController extends Controller
                     kd_sales,
                     kd_part,
                     qty_klaim,
-                    0 as qty_jwb,
+                    IIF(sts_klaim = 'IYA', 0, null) as qty_jwb,
                     tgl_klaim,
                     tgl_pakai,
                     pemakaian,
@@ -162,7 +162,7 @@ class ReturController extends Controller
                     sts_klaim,
                     sts_approve,
                     sts_selesai
-                '
+                "
             )
             ->orderBy('kd_dealer', 'asc')
             ->orderBy('kd_sales', 'asc')
@@ -410,7 +410,7 @@ class ReturController extends Controller
 
             $data = DB::table(DB::raw("($sql) as a"))
             ->selectRaw(
-                '
+                "
                     no_faktur,
                     no_retur,
                     no_klaim,
@@ -420,7 +420,7 @@ class ReturController extends Controller
                     kd_sales,
                     kd_part,
                     qty_klaim,
-                    0 as qty_jwb,
+                    IIF(sts_klaim = 'IYA', 0, null) as qty_jwb,
                     tgl_klaim,
                     tgl_pakai,
                     pemakaian,
@@ -430,7 +430,7 @@ class ReturController extends Controller
                     sts_klaim,
                     sts_approve,
                     sts_selesai
-                '
+                "
             )
             ->orderBy('kd_dealer', 'asc')
             ->orderBy('kd_sales', 'asc')
