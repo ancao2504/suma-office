@@ -45,7 +45,7 @@
 						<th class="w-150px ps-3 pe-3"><span class="badge badge-light-primary">Dealer</span>/
 							<span class="badge badge-light-success">Cabang</span></th>
 						<th class="w-50px ps-3 pe-3">Approve</th>
-						<th class="w-50px ps-3 pe-3">Jawab</th>
+						<th class="w-50px ps-3 pe-3">Selesai</th>
 					</tr>
 				</thead>
 				<tbody class="border">

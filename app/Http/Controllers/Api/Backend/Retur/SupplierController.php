@@ -568,32 +568,46 @@ class SupplierController extends Controller
             }
 
             DB::transaction(function () use ($request) {
+                // ! hapus data pada retur_dtltmp
                 DB::table('retur_dtltmp')
                     ->where('no_retur', $request->user_id)
                     ->where('no_klaim', $request->no_klaim)
                     ->where('kd_part', $request->kd_part)
                     ->where('CompanyId', $request->companyid)
-                    ->delete();
+                ->delete();
 
+                // ! ubah status pada rtoko_dtl menjadi 0 dimana agar bisa di klaim lagi
                 DB::table('rtoko_dtl')
                     ->where('no_retur', $request->no_klaim)
                     ->where('kd_part', $request->kd_part)
                     ->where('CompanyId', $request->companyid)
-                    ->update([
-                        'status' => 0
-                    ]);
+                ->update([
+                    'status' => 0
+                ]);
+
+                // ! menghitungkan total pada returtmp menghitungulang retur_dtltmp
+                DB::table('returtmp')
+                    ->where('no_retur', $request->user_id)
+                    ->where('CompanyId', $request->companyid)
+                ->update([
+                    'total' => DB::table('retur_dtltmp')
+                        ->where('no_retur', $request->user_id)
+                        ->where('CompanyId', $request->companyid)
+                        ->sum('jmlretur')
+                ]);
 
                 //! cek apakah sudah tidak ada data pada retur_dtltmp jika tidak hapus data pada returtmp
                 $cek = DB::table('retur_dtltmp')
                     ->where('no_retur', $request->user_id)
                     ->where('CompanyId', $request->companyid)
-                    ->first();
+                ->first();
 
+                // ! jika tidak ada data retur_dtltmp hapus data pada returtmp
                 if (empty($cek)) {
                     DB::table('returtmp')
                         ->where('no_retur', $request->user_id)
                         ->where('CompanyId', $request->companyid)
-                        ->delete();
+                    ->delete();
                 }
             });
             return response::responseSuccess('success', '');

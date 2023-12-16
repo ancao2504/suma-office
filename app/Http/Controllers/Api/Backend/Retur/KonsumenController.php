@@ -498,7 +498,7 @@ class KonsumenController extends Controller
             $info =
             'Part dari No Faktur yang sama Sudah Ada pada Klaim Sebelumnya pada
             <br>No Klaim : <b>' . $cekPartFaktur->first()->no_dokumen .'</b>'.
-            ($cekPartFaktur->first()->no_retur?'
+            ((!empty($cekPartFaktur->first()->no_retur) && ($request->role_id == 'MD_H3_MGMT' || $request->role_id == 'MD_H3_KORSM'))?'
                 <br>No Retur : <b>'.$cekPartFaktur->first()->no_retur.'</b>'
             :
                 '').
@@ -557,9 +557,9 @@ class KonsumenController extends Controller
             ->where('no_produksi', strtoupper($request->no_produksi))
             ->update([
                     'qty'               => $request->qty_retur,
-                    'sts_stock'         => ($request->sts_stock??0),
-                    'sts_klaim'         => ($request->sts_klaim??0),
-                    'sts_min'           => ($request->sts_min??0),
+                    'sts_stock'         => ($request->sts_stock??2),
+                    'sts_klaim'         => ($request->sts_klaim??1),
+                    'sts_min'           => ($request->sts_min??1),
                     'tgl_klaim'         => ($request->tgl_klaim??null),
                     'tgl_pakai'         => ($request->tgl_pakai??null),
                     'keterangan'        => ($request->ket??null)
@@ -573,9 +573,9 @@ class KonsumenController extends Controller
                 'kd_part'           => $request->kd_part,
                 'no_produksi'       => strtoupper($request->no_produksi),
                 'qty'               => $request->qty_retur,
-                'sts_stock'         => ($request->sts_stock??0),
-                'sts_klaim'         => ($request->sts_klaim??0),
-                'sts_min'           => ($request->sts_min??0),
+                'sts_stock'         => ($request->sts_stock??2),
+                'sts_klaim'         => ($request->sts_klaim??1),
+                'sts_min'           => ($request->sts_min??1),
                 'tgl_klaim'         => ($request->tgl_klaim??null),
                 'tgl_pakai'         => ($request->tgl_pakai??null),
                 'keterangan'        => ($request->ket??null),
@@ -697,32 +697,30 @@ class KonsumenController extends Controller
         foreach($data_requestA as $key => $value){
             $a = collect($value);
             $pesan = [];
-
             foreach($a as $key2 => $item){
                 // ! cek apakah part sudah di hapus dari supplier
                 if($item->sts_stock != 1 && $item->del_send > 0){
-                    $pesan[] = ['Part Sudah Tidak Di Supplay oleh supplier'];
+                    array_push($pesan, 'Part Sudah Tidak Di Supplay oleh supplier');
                 }
 
                 // ! cek apakah qty klaim melebihi jumlah jual pada faktur
                 if($item->qty > $item->jml_jual){
-                    $pesan[] = ['Qty Klaim Melebihi Jumlah Jual Pada Faktur'];
+                    array_push($pesan, 'Qty Klaim Melebihi Jumlah Jual Pada Faktur');
                 }
 
                 // ! cek apakah jumlah jual pada faktur 0
                 if($item->jml_jual == 0){
-                    $pesan[] = ['Jumlah Jual 0 Pada Faktur'];
+                    array_push($pesan, 'Jumlah Jual 0 Pada Faktur');
                 }
 
                 // ! cek stock
                 if($item->sts_stock == 1 && $item->stock < $item->qty){
-                    $pesan[] = ['Stock Tidak Mencukupi'];
+                    array_push($pesan, 'Stock Tidak Mencukupi');
                 }
             }
-
             // ! jika terdapat pesan error maka masukan ke dalam array $data_error
             if(count($pesan) > 0){
-                $data_error[] = [
+                array_push($data_error, [
                     'no_produksi'   => implode('<br>', $a->pluck('no_produksi')->toArray()),
                     'no_faktur'     => implode('<br>', $a->pluck('no_faktur')->unique()->toArray()),
                     'kd_part'       => $key,
@@ -730,7 +728,7 @@ class KonsumenController extends Controller
                     'jml_jual'      => $value[0]->jml_jual,
                     'stock'         => $value[0]->stock,
                     'keterangan'    => $pesan
-                ];
+                ]);
             }
         }
 
@@ -770,11 +768,10 @@ class KonsumenController extends Controller
         if(count($data_error) > 0){
             return (object)[
                 'status'    => false,
-                'message'   => 'Terdapat Kesalahan',
+                'message'   => 'Peringatan Terdapat Kesalahan',
                 'data'      => (array)$data_error
             ];
         }
-
         if($request->no_retur == $request->user_id){
             $romawi = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 

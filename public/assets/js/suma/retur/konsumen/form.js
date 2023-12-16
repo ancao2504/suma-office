@@ -149,6 +149,7 @@ function simpan(tamp){
             sts_klaim: $('#sts_klaim').val(),
         },
         function (response) {
+            console.log(response);
             if (response.status == '1') {
                 if(tamp == 0){
                     swal.fire({
@@ -195,56 +196,122 @@ function simpan(tamp){
                 }
             }
             if (response.status == '0') {
+                // cek ukuran layar jika != mobile
                 if ((Array.isArray(response.data) || typeof response.data === 'object') && (response.data.length > 0 || Object.keys(response.data).length > 0)) {
-                    $('#warning_modal .modal-title').text(response.message);
-                        let view = `
-                        <div id="list_detail" class="table-responsive border rounded-3">
-                        <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
-                            <thead class="border">
-                                <tr class="fs-8 fw-bolder text-muted text-center">
-                                    <th rowspan="2" class="w-auto ps-3 pe-3">No</th>
-                                    <th rowspan="2" class="w-auto ps-3 pe-3">No Faktur</th>
-                                    <th rowspan="2" class="w-auto ps-3 pe-3">part Number</th>
-                                    <th rowspan="2" class="w-auto ps-3 pe-3">No Produksi</th>
-                                    <th colspan="3" class="w-auto ps-3 pe-3">Qty</th>
-                                    <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
-                                </tr>
-                                <tr class="fs-8 fw-bolder text-muted text-center">
-                                    <th class="w-auto ps-3 pe-3">Jml Jual</th>
-                                    <th class="w-auto ps-3 pe-3">Klaim</th>
-                                    <th class="w-auto ps-3 pe-3">Stock</th>
-                                </tr>
-                            </thead>
-                            <tbody id="list-retur">`;
-                        $.each(response.data, function (index, data) {
+                    let view = ``;
+                    if (window.innerWidth > 767) {
+                        $('#warning_modal .modal-title').text(response.message);
                             view += `
-                                <tr class="fw-bolder fs-8 border">
-                                    <td class="text-center">${index + 1}</td>
-                                    <td>${data.no_faktur}</td>
-                                    <td>${data.kd_part}</td>
-                                    <td>${data.no_produksi}</td>
-                                    <td class="text-end">${data.jml_jual}</td>
-                                    <td class="text-end">${data.qty}</td>
-                                    <td class="text-end">${data.stock}</td>
-                                    <td>
-                                        <ul class="m-0">`;
-                                    $.each(data.keterangan, function (index, data) {
-                                        view += `
-                                            <li class="mb-1">
-                                                <span class="badge badge-light-danger">
-                                                    ${data}
-                                                </span>
-                                            </li>
-                                        `;
-                                    });
-                            view += `   </ul>
-                                    </td>
-                                </tr>`;
-                        });
+                            <div id="list_detail" class="table-responsive border rounded-3">
+                            <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
+                                <thead class="border">
+                                    <tr class="fs-8 fw-bolder text-muted text-center">
+                                        <th rowspan="2" class="w-auto ps-3 pe-3">No</th>
+                                        <th rowspan="2" class="w-auto ps-3 pe-3">No Faktur</th>
+                                        <th rowspan="2" class="w-auto ps-3 pe-3">part Number</th>
+                                        <th rowspan="2" class="w-auto ps-3 pe-3">No Produksi</th>
+                                        <th colspan="3" class="w-auto ps-3 pe-3">Qty</th>
+                                        <th rowspan="2" class="w-auto ps-3 pe-3">Keterangan</th>
+                                    </tr>
+                                    <tr class="fs-8 fw-bolder text-muted text-center">
+                                        <th class="w-auto ps-3 pe-3">Jml Jual</th>
+                                        <th class="w-auto ps-3 pe-3">Klaim</th>
+                                        <th class="w-auto ps-3 pe-3">Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-retur">`;
+                            $.each(response.data, function (index, data) {
+                                view += `
+                                    <tr class="fw-bolder fs-8 border">
+                                        <td class="text-center">${index + 1}</td>
+                                        <td>${data.no_faktur}</td>
+                                        <td>${data.kd_part}</td>
+                                        <td>${data.no_produksi}</td>
+                                        <td class="text-end">${data.jml_jual}</td>
+                                        <td class="text-end">${data.qty}</td>
+                                        <td class="text-end">${data.stock}</td>
+                                        <td>
+                                            <ul class="m-0">`;
+                                        $.each(data.keterangan, function (index, data) {
+                                            view += `
+                                                <li class="mb-1">
+                                                    <span class="badge badge-light-danger">
+                                                        ${data}
+                                                    </span>
+                                                </li>
+                                            `;
+                                        });
+                                view += `   </ul>
+                                        </td>
+                                    </tr>`;
+                            });
 
-                    view +=`</tbody>
-                        </table>
-                    </div>`;
+                        view +=`</tbody>
+                            </table>
+                        </div>`;
+                    } else {
+                        $('#warning_modal .modal-title').text(response.message);
+                            $.each(response.data, function (index, data) {
+                                view += `<div class="p-3 border border-2 rounded shadow-sm mt-3">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="fw-bolder fs-6 text-muted">No Faktur</div>
+                                                    <div class="fw-bolder fs-6">${data.no_faktur}</div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="fw-bolder fs-6 text-muted">part Number</div>
+                                                    <div class="fw-bolder fs-6">${data.kd_part}</div>
+                                                </div>
+                                                <div class="col-6">
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="fw-bolder fs-6 text-muted">No Produksi</div>
+                                                    <div class="fw-bolder fs-6">${data.no_produksi}</div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div id="list_detail" class="table-responsive border rounded-3 my-3">
+                                                        <table id="datatable_classporduk" class="table table-row-dashed table-row-gray-300 align-middle border">
+                                                            <thead class="border">
+                                                                <tr class="fs-6 fw-bolder text-muted text-center">
+                                                                    <th class="w-auto ps-3 pe-3">Jml Jual</th>
+                                                                    <th class="w-auto ps-3 pe-3">Klaim</th>
+                                                                    <th class="w-auto ps-3 pe-3">Stock</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="list-retur">`;
+                                                            view += `
+                                                                <tr class="fw-bolder fs-6 border">
+                                                                    <td class="text-center">${data.jml_jual}</td>
+                                                                    <td class="text-center">${data.qty}</td>
+                                                                    <td class="text-center">${data.stock}</td>
+                                                                </tr>`;
+                                                            view +=`</tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="fw-bolder fs-6 text-muted">Keterangan</div>
+                                                    <div class="fw-bolder fs-6">`;
+                                                        $.each(data.keterangan, function (index, data) {
+                                                            view += `
+                                                                <span class="badge badge-light-danger fs-6">
+                                                                *
+                                                                    ${data}
+                                                                </span>
+                                                            `;
+                                                        });
+                                    view += `       </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `;
+                            });
+                    }
 
                     $('#warning_modal .modal-body').html(view);
                     $('#detail_modal').modal('hide');
@@ -579,15 +646,6 @@ $(document).ready(function () {
         });
     });
 
-    $('#sts_stock').on('change', function () {
-        if ($(this).val() == '1' || $(this).val() == '3') {
-            validasi_sts_stock();
-        }
-    });
-    $('#part-list').on('click','.pilih' ,function () {
-        validasi_sts_stock();
-    });
-
     $("#add_detail").on('click', function (e) {
         if ($('#kd_sales').val() == '') {
             Invalid([$('#kd_sales'),$('#kd_sales + span .select2-selection')], $('#error_kd_sales'), 'Kode Sales Harus diisi');
@@ -625,7 +683,23 @@ $(document).ready(function () {
         $('#detail_modal').modal('show');
     });
 
+    $('#part-list').on('click','.pilih' ,function () {
+        validasi_sts_stock();
+    });
+
     $('#detail_modal').on('change','#sts_stock', function () {
+        if ($('#kd_part').val() == '' || $('#kd_part').val() == null) {
+            Invalid([$('#kd_part')], $('#error_kd_part'), 'Kode Part Harus diisi');
+            $('#sts_stock option[value=""]').prop('selected', true).trigger('change');
+            return false;
+        } else {
+            valid([$('#kd_part')], $('#error_kd_part'), '');
+        }
+
+        if ($(this).val() == '1' || $(this).val() == '3') {
+            validasi_sts_stock();
+        }
+
         if ($(this).val() == '') {
             $('#detail_modal  #sts_minimum').html(`<option value="">Pilih Status Minimum</option>`);
             $('#detail_modal  #sts_klaim').html(`<option value="">Pilih Status Klaim</option>`);
@@ -637,11 +711,20 @@ $(document).ready(function () {
             $('#detail_modal  #sts_klaim').html(`<option value="1">klaim ke Supplier</option>`);
         } else if ($(this).val() == '3') {
             $('#detail_modal  #sts_minimum').html(`<option value="1">Minimum</option><option value="0">Tidak</option>`);
-            $('#detail_modal  #sts_klaim').html(`<option value="1">klaim ke Supplier</option><option value="2">Tidak Melakukan Apapun</option>`);
+            $('#detail_modal  #sts_minimum').trigger('change');
+
         }
     });
 
-    // qty_retur change
+    $('#detail_modal').on('change','#sts_minimum', function () {
+        console.log($(this).val());
+        if ($(this).val() == '1' && $('#detail_modal  #sts_stock').val() == '3') {
+            $('#detail_modal  #sts_klaim').html(`<option value="1">klaim ke Supplier</option><option value="2">Tidak Melakukan Apapun</option>`);
+        } else if ($(this).val() == '0' && $('#detail_modal  #sts_stock').val() == '3') {
+            $('#detail_modal  #sts_klaim').html(`<option value="2">Tidak Melakukan Apapun</option>`);
+        }
+    });
+
     $('#detail_modal').on('change','#qty_retur', function () {
         if (parseInt($(this).val()) > parseInt(limit_jumlah)) {
             Swal.fire({

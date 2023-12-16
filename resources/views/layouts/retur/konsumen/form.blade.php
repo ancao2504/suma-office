@@ -22,7 +22,7 @@
                     <label for="kd_sales" class="col-sm-2 col-form-label required">Kd Sales</label>
                     <div class="col-sm-4">
                         <select name="kd_sales" id="kd_sales" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Sales"
-                        @if ((session('app_user_role_id') != 'MD_H3_MGMT') || (!empty($data) && $data->status_approve == 1) || (!empty($data) &&  (!empty($data->detail??null) || count($data->detail??[]) != 0)))
+                        @if ((session('app_user_role_id') != 'MD_H3_MGMT' && session('app_user_role_id') != 'MD_H3_KORSM') || (!empty($data) && $data->status_approve == 1) || (!empty($data) &&  (!empty($data->detail??null) || count($data->detail??[]) != 0)))
                             disabled
                         @endif
                         >
@@ -34,7 +34,7 @@
                     <label for="tgl_claim" class="col-sm-2 col-form-label required">Tanggal Dokumen</label>
                     <div class="col-sm-3">
                         <input type="text" class="form-control" id="tgl_retur" name="tgl_retur" placeholder="Masukkan Tanggal" value="{{date('Y-m-d', strtotime(empty($data->tgl_dokumen)?date('Y-m-d'):$data->tgl_dokumen)) }}"
-                        @if (!empty($data) &&  ($data->status_approve == 1 || ($tamp == false && $data->status_approve != 1 && session('app_user_role_id') != 'MD_H3_MGMT')))
+                        @if (!empty($data) &&  ($data->status_approve == 1 || ($tamp == false && $data->status_approve != 1 && (session('app_user_role_id') != 'MD_H3_MGMT' && session('app_user_role_id') != 'MD_H3_KORSM'))))
                             disabled
                         @endif
                         >
@@ -45,7 +45,7 @@
                     <label for="jenis_konsumen" class="col-sm-2 col-form-label required">jenis Konsumen</label>
                     <div class="col-sm-4">
                         <select name="jenis_konsumen" id="jenis_konsumen" class="form-select form-control" data-placeholder="Pilih Jenis Konsumen"
-                        @if ((!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT')) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
+                        @if ((!empty($data) &&  ($data->status_approve == 1 || (session('app_user_role_id') != 'MD_H3_MGMT' && session('app_user_role_id') != 'MD_H3_KORSM'))) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
                             disabled
                         @endif
                         >
@@ -60,11 +60,11 @@
                         <label for="kd_dealer" class="col-sm-2 col-form-label required">Kd Dealer</label>
                         <div class="col-sm-4">
                             <div class="input-group mb-3 has-validation">
-                                <button class="btn btn-primary list-dealer" type="button" @if ((!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT')) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
+                                <button class="btn btn-primary list-dealer" type="button" @if ((!empty($data) &&  ($data->status_approve == 1 || (session('app_user_role_id') != 'MD_H3_MGMT' && session('app_user_role_id') != 'MD_H3_KORSM'))) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
                                     disabled
                                 @endif><i class="bi bi-search"></i></button>
                                 <input type="text" class="form-control" id="kd_dealer" name="kd_dealer" placeholder="Masukkan Kd Dealer" value="{{ ((($data->pc??0) != 1)?($data->kd_dealer??null):null) }}"
-                                @if ((!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT')) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
+                                @if ((!empty($data) &&  ($data->status_approve == 1 || (session('app_user_role_id') != 'MD_H3_MGMT' && session('app_user_role_id') != 'MD_H3_KORSM'))) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
                                     disabled
                                 @endif
                                 >
@@ -90,7 +90,7 @@
                         <label for="kd_cabang" class="col-sm-2 col-form-label required">kode Cabang</label>
                         <div class="col-sm-9">
                             <select name="kd_cabang" id="kd_cabang" class="form-select form-control" data-control="select2" data-placeholder="Pilih kode Cabang"
-                            @if ((!empty($data) &&  ($data->status_approve == 1 || session('app_user_role_id') != 'MD_H3_MGMT')) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
+                            @if ((!empty($data) &&  ($data->status_approve == 1 || (session('app_user_role_id') != 'MD_H3_MGMT' && session('app_user_role_id') != 'MD_H3_KORSM'))) || (!empty($data->detail??null) || count($data->detail??[]) != 0))
                                 disabled
                             @endif
                             >
@@ -102,7 +102,7 @@
                     </div>
                 </div>
             </div>
-            @if (empty($data) || ($data->status_approve != 1 && session('app_user_role_id') == 'MD_H3_MGMT') || $tamp == true)
+            @if (empty($data) || ($data->status_approve != 1 && (session('app_user_role_id') == 'MD_H3_MGMT' || session('app_user_role_id') == 'MD_H3_KORSM')) || $tamp == true)
             <div class="mb-3">
                 <a role="button" id="add_detail" class="btn btn-primary" >Tambah Detail</a>
             </div>
@@ -353,6 +353,60 @@
                             </select>
                             <div class="invalid-feedback" id="error_sts_klaim"></div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 border rounded p-2">
+                    <span><span class="required"></span> Informasi tentang status diatas :</span>
+                    <div class="table-responsive border rounded-3">
+                        <table id="datatable_jwb" class="table table-row-dashed table-row-gray-300 align-middle border">
+                            <thead class="border">
+                                <tr class="fs-8 fw-bolder text-muted text-center">
+                                    <th class="max-w-200px ps-3 pe-3">Status Stock</th>
+                                    <th class="max-w-200px ps-3 pe-3">Status Minimum</th>
+                                    <th class="max-w-200px ps-3 pe-3">Status Klaim</th>
+                                    <th class="w-auto ps-3 pe-3">keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">Ganti Barang</td>
+                                    <td class="text-center">Minimum</td>
+                                    <td class="text-center">klaim ke Supplier</td>
+                                    <td class="text-start">Retur kondisi ada Stock</td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">Ganti Barang</td>
+                                    <td class="text-center">Minimum</td>
+                                    <td class="text-center">Tidak Melakukan Apapun</td>
+                                    <td class="text-start">Retur Barang Rusak Ganti Barang</td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">Stock 0</td>
+                                    <td class="text-center">Minimum</td>
+                                    <td class="text-center">klaim ke Supplier</td>
+                                    <td class="text-start">Retur kondisi stock 0</td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">Retur</td>
+                                    <td class="text-center">Minimum</td>
+                                    <td class="text-center">klaim ke Supplier</td>
+                                    <td class="text-start">Retur kondisi stock 0/ada stock</td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">Retur</td>
+                                    <td class="text-center">Minimum</td>
+                                    <td class="text-center">Tidak Melakukan Apapun</td>
+                                    <td class="text-start">Retur barang rusak Ganti Uang/Brang</td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">Retur</td>
+                                    <td class="text-center">Tidak Minimum</td>
+                                    <td class="text-center">Tidak Melakukan Apapun</td>
+                                    <td class="text-start">Retur kondisi Mengembalikan barang dan akan menjadi Stock</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </form>

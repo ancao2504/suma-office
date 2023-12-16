@@ -435,7 +435,7 @@
                     </div>
                 @endif
 
-                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_SM']))
+                @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT', 'MD_H3_KORSM','MD_H3_SM']))
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">RETUR</span>
@@ -468,7 +468,7 @@
                         </a>
                     </div>
 
-                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT']))
+                    @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT','MD_H3_KORSM']))
                         <div class="menu-item">
                             <a class="menu-link {{ Request::is('retur/supplier*') ? 'active' : '' }}"
                                 href="{{ url('/retur/supplier') }}">
