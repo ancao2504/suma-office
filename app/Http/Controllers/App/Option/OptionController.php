@@ -1801,12 +1801,14 @@ class OptionController extends Controller
                         'thead' => [
                             (object)['class' => 'w-50px', 'text' => 'kode Part'],
                             (object)['class' => 'w-200px', 'text' => 'nama Part'],
+                            (object)['class' => 'w-20px', 'text' => 'Jumlah Jual'],
                             (object)['class' => 'w-20px', 'text' => 'Stock'],
                             (object)['class' => 'w-25', 'text' => 'Action'],
                         ],
                         'tbody' => [
                             (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'kd_part'],
                             (object)[ 'option' => 'text', 'class' => 'w-200px', 'key' => 'nm_part'],
+                            (object)[ 'option' => 'text', 'class' => 'w-20px text-end', 'key' => 'limit_jumlah'],
                             (object)[ 'option' => 'text', 'class' => 'w-20px text-end', 'key' => 'stock'],
                             (object)[ 'option' => 'button', 'class' => 'w-auto text-center', 'button' => [
                                 (object)[ 'class' => 'btn btn-sm btn-primary me-2 pilih', 'text' => 'Pilih',
