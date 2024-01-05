@@ -318,12 +318,10 @@ class KonsumenController extends Controller
                 ->on('part.CompanyId', 'faktur.CompanyId');
             })
             ->leftjoin($request->db.'sub', function ($join) {
-                $join->on('part.kd_sub', 'sub.kd_sub')
-                ->on('part.CompanyId', 'sub.CompanyId');
+                $join->on('part.kd_sub', 'sub.kd_sub');
             })
             ->leftJoin($request->db.'produk', function ($join) {
-                $join->on('sub.kd_produk', 'produk.kd_produk')
-                ->on('sub.CompanyId', 'produk.CompanyId');
+                $join->on('sub.kd_produk', 'produk.kd_produk');
             })
             ->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
             ->orderBy('faktur.no_faktur', 'ASC')
