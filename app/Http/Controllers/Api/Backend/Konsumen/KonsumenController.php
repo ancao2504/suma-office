@@ -58,7 +58,7 @@ class KonsumenController extends Controller
                 DB::raw("isnull(konsumen.keterangan, '') as keterangan"),
                 DB::raw("isnull(konsumen.kd_lokasi, '') as kd_lokasi")
             );
-            
+
             if ($request->divisi == 'honda') {
                 $data = $data->addSelect(DB::raw("'Honda' as divisi"));
             } else if ($request->divisi == 'fdr') {
@@ -67,8 +67,7 @@ class KonsumenController extends Controller
 
             if($request->option == 'page'){
                 $data = $data->where('konsumen.companyid', '=', trim($request->companyid))
-                ->whereIn('konsumen.kd_lokasi',  Arr::wrap($request->kd_lokasi))
-                ->groupBy('konsumen.id', 'konsumen.tanggal', 'konsumen.nama', 'konsumen.tgl_lahir', 'konsumen.nik', 'konsumen.nopol', 'konsumen.no_faktur', 'konsumen.companyid', 'konsumen.keterangan',  'konsumen.kd_lokasi');
+                ->whereIn('konsumen.kd_lokasi',  Arr::wrap($request->kd_lokasi));
 
                 if (!empty($request->search)) {
                     match ($request->by){
@@ -82,8 +81,9 @@ class KonsumenController extends Controller
                 } else {
                     $data = $data->whereYear('konsumen.tanggal', date('Y'));
                 }
-                
+
                 $data = $data->orderBy('konsumen.tanggal', 'desc')
+                ->orderBy('konsumen.usertime', 'desc')
                 ->paginate($request->per_page);
             } else if ($request->option == 'first'){
                 $data = $data->select('*')
@@ -97,7 +97,7 @@ class KonsumenController extends Controller
                 ->where('konsumen.kd_lokasi',  $request->kd_lokasi)
                 ->first();
             }
-            
+
             return Response::responseSuccess('success', $data);
         } catch (\Throwable $exception) {
             return Response::responseError($request->get('user_id'), 'API', route::getCurrentRoute()->action['controller'],
@@ -192,8 +192,8 @@ class KonsumenController extends Controller
 
         DB::transaction(function () use ($request) {
             DB::insert('exec sp_konsumen_simpan ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [
-                trim($request->id), 
-                trim($request->divisi), 
+                trim($request->id),
+                trim($request->divisi),
                 trim(strtoupper($request->nomor_faktur)),
                 trim(strtoupper($request->nama_pelanggan)),
                 trim(strtoupper($request->nik)),
@@ -214,7 +214,7 @@ class KonsumenController extends Controller
                 trim(strtoupper(date('Y-m-d=H:i:s').'#'. $request->user_id)),
                 trim(strtoupper($request->kd_lokasi)),
             ]);
-            
+
         });
 
         return Response::responseSuccess('Konsumen'. ($request->id ? ' berhasil diubah' : ' baru berhasil ditambahkan'));
