@@ -254,7 +254,7 @@ function simpan(){
             companyid               : $('#company').val(),
             kd_lokasi               : $('#lokasi').val(),
             nomor_faktur            : $('#inputNomorFaktur').val(),
-            nik                     : $('#inputNik').val(),
+            nik                     : $('#inputNIK').val(),
             nama_pelanggan          : $('#inputNamaPelanggan').val(),
             tempat_lahir            : $('#inputTempatLahir').val(),
             tanggal_lahir           : $('#inputTanggalLahir').val(),
