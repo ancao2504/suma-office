@@ -83,7 +83,7 @@ class KonsumenController extends Controller
                 }
 
                 $data = $data->orderBy('konsumen.tanggal', 'desc')
-                ->orderBy('konsumen.usertime', 'desc')
+                ->orderBy('konsumen.id', 'desc')
                 ->paginate($request->per_page);
             } else if ($request->option == 'first'){
                 $data = $data->select('*')
