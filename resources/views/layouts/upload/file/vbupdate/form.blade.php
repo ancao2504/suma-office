@@ -24,6 +24,7 @@
                                                 <option value="">Pilih Divisi</option>
                                                 <option value="HONDA">HONDA</option>
                                                 <option value="GENERAL">GENERAL</option>
+                                                <option value="VALIDASI">VALIDASI</option>
                                             </select>
                                         </div>
                                     </div>
