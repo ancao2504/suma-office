@@ -40,6 +40,9 @@ class VBUpdateController extends Controller
             } elseif ($request->divisi == 'GENERAL'){
                 $path = 'sumavb/general';
                 $url = 'https://suma-honda.id/sumavb/general/';
+            } elseif ($request->divisi == 'VALIDASI') {
+                $path = 'sumavb/validasi';
+                $url = 'https://suma-honda.id/sumavb/validasi/';
             }
 
             $request->merge([
