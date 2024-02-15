@@ -97,7 +97,7 @@
         </div>
         <div class="modal-footer">
             <a role="button" class="btn btn-success text-white btn_simpan">Simpan Pengajuan</a>
-            <a href="{{(strtok(URL::previous(),'?') == strtok(URL::current(),'?'))?route('retur.supplier.index'):URL::previous()}}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{URL::previous()}}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>

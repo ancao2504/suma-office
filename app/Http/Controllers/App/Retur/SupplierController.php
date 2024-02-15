@@ -10,40 +10,6 @@ use App\Http\Controllers\App\Option\OptionController;
 
 class SupplierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        if(!in_array($request->per_page, [10,50,100,500])){
-            $request->merge(['per_page' => 10]);
-        }
-        try {
-            $request->merge(['option' => ['page','with_detail']]);
-            $responseApi = json_decode(Service::ReturSupplierDaftar($request));
-            $statusApi = $responseApi->status??0;
-
-            if ($statusApi == 1) {
-                return view(
-                    'layouts.retur.supplier.index',
-                    [
-                        'old_request' => (object)[
-                            'no_retur' => $request->no_retur ?? '',
-                            'per_page' => $request->per_page ?? 10,
-                        ],
-                        'data' => $responseApi->data,
-                        'title_menu' => 'Retur Supplier',
-                    ]
-                );
-            }else {
-                return redirect()->back()->withInput()->with('failed', $responseApi->message);
-            }
-        } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('failed', 'Maaf terjadi kesalahan, silahkan coba lagi');
-        }
-    }
 
     /**
      * Show the form for creating a new resource.

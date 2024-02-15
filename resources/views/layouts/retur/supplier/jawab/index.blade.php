@@ -13,16 +13,55 @@
 				<!--begin::Search-->
 				<div class="d-flex align-items-center position-relative my-1">
 					<span class="svg-icon svg-icon-1 position-absolute ms-4"><i class="bi bi-search"></i></span>
-					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="{{ $old_request->no_retur }}" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, Kode Supplier, no Klaim, Part Number"/>
+					<input type="text" data-kt-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search" id="cari" name="cari" value="" data-bs-trigger="hover focus" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Dapat mencari No Dokumen, Kode Supplier, no Klaim, Part Number"/>
+
+                    <select class="form-select form-select-solid mx-3" name="filter_jenis_jawab" id="filter_jenis_jawab">
+                        <option value="1">Semua Jawaban</option>
+                        <option value="2">Belum Dijawab</option>
+                        <option value="3">Sudah Dijawab</option>
+                    </select>
+                    {{-- button open modal --}}
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_1">Filter</button>
+                    <!--begin::Modal-->
+                    <div class="modal fade" tabindex="-1" id="kt_modal_1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <label for="" class="form-label">Pilih Collumn</label>
+                                    <div class="input-group has-validation">
+                                        <select class="form-select form-select-solid text-dark w-450px" data-control="select2" data-placeholder="Select an option" multiple="multiple" name="filter_column_order" id="filter_column_order">
+                                            <option></option>
+                                            <option value="no_retur">No Retur</option>
+                                            <option value="tglretur">Tanggal</option>
+                                            <option value="kd_supp">Kode Supplier</option>
+                                            <option value="jmlretur">Qty Retur</option>
+                                            <option value="qty_jwb">Qty Jawab</option>
+                                        </select>
+                                        <div class="invalid-feedback" id="error_filter_column_order"></div>
+                                    </div>
+                                    <label for="" class="form-label">Filter</label>
+                                    <div class="input-group has-validation">
+                                        <select class="form-select form-select-solid" name="filter_order" id="filter_order">
+                                            <option value="">Pilih Filter</option>
+                                            <option value="asc">Terkecil</option>
+                                            <option value="desc">Terbesar</option>
+                                        </select>
+                                        <div class="invalid-feedback" id="error_filter_order"></div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="btn_filter">Terapkan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Modal-->
 				</div>
 				<!--end::Search-->
 			</div>
 			<div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-				<!--begin::Menu Tambah-->
-				<a href="{{ route('retur.supplier.form') }}" class="btn btn-primary">
-					Tambah Retur
-				</a>
-				<!--end::Menu Tambah-->
 			</div>
 		</div>
 		<div class="table-responsive">
@@ -83,7 +122,7 @@
 				</tbody>
 			</table>
 		</div>
-		
+
 		<div class="card-footer justify-content-center">
 			<div colspan="8" class="d-flex justify-content-between">
 				<div class="form-group">

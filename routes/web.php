@@ -40,6 +40,7 @@ use App\Dashboard\Marketing\DashboardMarketingController;
 use App\Online\Shopee\ProductController as ProductShopee;
 use App\Orders\PembayaranFaktur\PembayaranFakturController;
 use App\Retur\SupplierJawabController as ReturSupplierJawab;
+use App\Retur\SupplierJawabPSController as ReturSupplierJawabPS;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Http\Controllers\App\Gudang\Online\PackingController;
 use App\Online\PemindahanController as PemindahanMarketplace;
@@ -308,6 +309,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                 Route::get('/pof', 'pof')->name('option-pof');
                 Route::get('/campaign', 'campaign')->name('option-campaign');
                 Route::get('/retur', 'retur')->name('option-retur');
+                Route::get('/Rtoko', 'Rtoko')->name('option-Rtoko');
                 Route::get('/dealer', 'dealer')->name('option-dealer');
                 Route::get('/faktur/konsumen', 'fakturKonsumen')->name('option-faktur-konsumen');
                 Route::get('/faktur/klaim', 'fakturKlaim')->name('option-faktur-klaim');
@@ -697,16 +699,34 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             });
             Route::name('supplier.')->group(function () {
                 Route::controller(ReturSupplier::class)->group(function () {
-                    Route::get('/retur/supplier',  'index')->name('index');
                     Route::get('/retur/supplier/form',  'form')->name('form');
                     Route::post('/retur/supplier/form',  'store')->name('store');
                     Route::post('/retur/supplier/delete',  'destroy')->name('delete');
 
                     Route::name('jawab.')->group(function () {
                         Route::controller(ReturSupplierJawab::class)->group(function () {
+                            // CA
+                            Route::get('/retur/supplier/jawab/ca',  'index')->name('index');
                             Route::get('/retur/supplier/jawab/form',  'form')->name('form');
                             Route::post('/retur/supplier/jawab/form',  'store')->name('store');
                             Route::post('/retur/supplier/jawab/delete',  'destroy')->name('delete');
+                        });
+
+                        Route::name('PS.')->group(function () {
+                            Route::controller(ReturSupplierJawabPS::class)->group(function () {
+
+                                Route::get('/retur/supplier/jawab/ps',  'indexPS')->name('index');
+
+                                // stor header
+                                Route::post('/retur/supplier/jawab/ps',  'storePS')->name('store-ps');
+                                // store detail TMP
+                                Route::post('/retur/supplier/jawab/ps/detail',  'storePSDetail')->name('store-detail');
+                                // store FIx
+                                Route::post('/retur/supplier/jawab/ps/store',  'store')->name('store');
+
+                                Route::post('/retur/supplier/jawab/ps/delete',  'destroyPS')->name('delete');
+                                Route::post('/retur/supplier/jawab/ps/detail/delete',  'destroyPSDetail')->name('delete-detail');
+                            });
                         });
                     });
                 });

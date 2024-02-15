@@ -918,7 +918,7 @@ class ApiOptionsController extends Controller
                     // ->whereRaw("isnull(part.del_send, 0)=0")
                     ->whereRaw("isnull(part.het, 0) > 0");
                     if (!empty($request->kd_part)) {
-                        $query = $query->where('part.kd_part', 'LIKE', '%'.$request->kd_part . '%');
+                        $query = $query->where('part.kd_part', 'LIKE', $request->kd_part . '%');
                     }
                     if (!empty($request->kd_supp)) {
                         $query = $query->where('part.kd_suppa', $request->kd_supp);
@@ -1057,7 +1057,9 @@ class ApiOptionsController extends Controller
             }
 
             if($request->option[0] == 'first'){
-                $data = $data->first();
+                $data = $data
+                ->orderByRaw('part.kd_part ASC')
+                ->first();
             }elseif($request->option[0] == 'page'){
                 $data = $data->paginate($request->per_page);
             }
@@ -1316,6 +1318,96 @@ class ApiOptionsController extends Controller
                 foreach($data->items() as $key => $value){
                     $data->items()[$key]->detail = $detail[$value->no_retur]->unique('kd_part')->pluck('kd_part');
                 }
+            }
+
+            return Response::responseSuccess('success', $data);
+        } catch(\Exception $e){
+            return Response::responseError(
+                $request->get('user_id'),
+                'API',
+                Route::getCurrentRoute()->action['controller'],
+                $request->route()->getActionMethod(),
+                $e->getMessage(),
+                $request->get('companyid')
+            );
+        }
+    }
+
+    public function dataRtoko(Request $request){
+        try {
+            // ! ---------------------------------------------
+            // ! Validasi
+            $rules = [];
+            $messages = [];
+            if (!empty($request->no_retur)) {
+                $rules += [
+                    'no_retur' => 'min:3',
+                ];
+                $messages += [
+                    'no_retur.min' => 'No Retur Toko minimal 3 karakter',
+                ];
+            }
+
+            $validate = Validator::make($request->all(), $rules,$messages);
+            if ($validate->fails()) {
+                return Response::responseWarning($validate->errors()->first());
+            }
+
+            if(!in_array($request->per_page, ['10', '50', '100'])){
+                $request->merge(['per_page' => '10']);
+            }
+            // ! End Validasi
+            // ! -----------------------------------------
+
+
+            $sql = "
+                select
+                    retur.no_retur,
+                    retur.no_klaim,
+                    rtoko.kd_part,
+                    rtoko.kd_dealer,
+                    FORMAT(CAST(tanggal AS DATE), 'yyyy/MM/dd') as tgl_rtoko,
+                    FORMAT(CAST(tglretur AS DATE), 'yyyy/MM/dd') as tgl_retur,
+                    jumlah as jml_rtoko
+                from (
+                select
+                    rtoko.no_retur,
+                    tanggal,
+                    kd_dealer,
+                    kd_part,
+                    jumlah
+                from rtoko
+                inner join rtoko_dtl on rtoko_dtl.no_retur = rtoko.no_retur and rtoko_dtl.CompanyId = rtoko.CompanyId
+                where kd_part = '{$request->kd_part}' and isnull(status, 0)=1 and rtoko.CompanyId = '{$request->companyid}'
+                ) rtoko
+                inner join (
+                select
+                    retur.no_retur,
+                    no_klaim,
+                    kd_part,
+                    kd_dealer,
+                    tglretur
+                from retur
+                inner join retur_dtl on retur_dtl.no_retur = retur.no_retur and retur_dtl.CompanyId = retur.CompanyId
+                where retur.CompanyId = '{$request->companyid}' and kd_part = '{$request->kd_part}'
+                ) as retur on retur.no_klaim = rtoko.no_retur and retur.kd_part = rtoko.kd_part and retur.kd_dealer = rtoko.kd_dealer
+            ";
+
+            $data = DB::table(DB::raw("($sql) as a"));
+
+            if (!empty($request->no_retur)) {
+                $data = $data->where('a.no_retur', 'like', '%' . $request->no_retur . '%')
+                            ->orWhere('a.no_klaim', 'like', '%' . $request->no_retur . '%')
+                            ->orWhere('a.kd_dealer', 'like', '%' . $request->no_retur . '%');
+            }
+
+            if($request->option[0] == 'first'){
+                $data = $data->orderBy('a.tgl_rtoko', 'desc')->first();
+            }elseif($request->option[0] == 'page'){
+                $data = $data
+                ->orderBy('a.tgl_rtoko', 'desc')
+                ->orderBy('a.no_retur', 'desc')
+                ->paginate($request->per_page);
             }
 
             return Response::responseSuccess('success', $data);

@@ -1989,7 +1989,25 @@ class Service
             'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
             'user_id'       => trim($request->session()->get('app_user_id')),
             'option'        => $request->option,
+            'filter'        => $request->filter ?? [],
             'no_retur'      => trim($request->no_retur),
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function ReturSupplierJawabDaftarPS($request)
+    {
+        $url = 'backend/retur/supplier/jawab/ps';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => $request->option,
+            'search'        => $request->search ?? null,
+            'tanggal'       => $request->tanggal ?? [],
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
         ];
@@ -2064,11 +2082,60 @@ class Service
             'no_klaim'      => trim($request->no_klaim),
             'kd_part'       => trim($request->kd_part),
             'no_produksi'   => $request->no_produksi,
+            'no_ps'         => strtoupper(trim($request->no_ps)),
             'qty_jwb'       => (float)$request->qty_jwb,
             'alasan'        => $request->alasan,
             'ca'            => (float)$request->ca,
             'keputusan'     => $request->keputusan,
             'ket'           => $request->ket,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function ReturSupplierjawabSimpanPS($request)
+    {
+        $url = 'backend/retur/supplier/jawab/ps/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_ps'         => strtoupper(trim($request->no_ps)),
+            'tgl_ps'        => $request->tgl_ps,
+            'kd_part'       => trim($request->kd_part),
+            'qty'           => (float)$request->qty,
+            'ket'           => $request->ket,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function ReturSupplierjawabSimpanPSDetail($request)
+    {
+        $url = 'backend/retur/supplier/jawab/ps/detail/simpan';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_retur'         => strtoupper(trim($request->no_retur)),
+            'no_ca'         => strtoupper(trim($request->no_ca)),
+            'jml'           => (int)$request->jml,
+            'alasan'           => $request->alasan,
+            'ca'           => $request->ca,
+            'keputusan'           => $request->keputusan,
+            'ket'           => $request->ket,
+            'kd_ps'         => strtoupper(trim($request->kd_ps)),
+            'tgl_ps'        => $request->tgl_ps,
+            'jml_ps'           => (int)$request->jml_ps,
+            'kd_part'         => strtoupper(trim($request->kd_part)),
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }public static function ReturSupplierjawabPSSimpan($request)
+    {
+        $url = 'backend/retur/supplier/jawab/ps/store';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2113,6 +2180,40 @@ class Service
             'no_klaim' => $request->no_klaim,
             'kd_part' => $request->kd_part,
             'no_jwb'      => $request->no_jwb,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+
+    public static function ReturSupplierJwbPSDelete($request)
+    {
+        $url = 'backend/retur/supplier/jawab/ps/delete';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_ps' => strtoupper(trim($request->no_ps)),
+            'tgl_ps' => $request->tgl_ps,
+            'kd_part' => $request->kd_part,
+            'qty_jwb'      => (int)$request->qty_jwb,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function ReturSupplierJwbPSDetailDelete($request)
+    {
+        $url = 'backend/retur/supplier/jawab/ps/detail/delete';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'no_jwb' => trim($request->no_jwb),
+            'no_ps' => strtoupper(trim($request->no_ps)),
+            'tgl_ps' => $request->tgl_ps,
+            'kd_part' => $request->kd_part,
+            'qty_jwb'      => (int)$request->qty_jwb,
+            'no_retur' => $request->no_retur,
+            'no_klaim' => $request->no_klaim,
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2416,6 +2517,21 @@ class Service
             'option'        => $request->option,
             'no_retur'      => $request->no_retur,
             'kd_supp'       => $request->kd_supp,
+            'page'          => $request->page ?? 1,
+            'per_page'      => $request->per_page ?? 10,
+        ];
+        $response = ApiRequest::requestPost($url, $header, $body);
+        return $response;
+    }
+    public static function dataRtoko($request){
+        $url = 'backend/Rtoko';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'companyid'     => strtoupper(trim($request->session()->get('app_user_company_id'))),
+            'user_id'       => trim($request->session()->get('app_user_id')),
+            'option'        => $request->option,
+            'no_retur'      => $request->no_retur,
+            'kd_part'       => $request->kd_part,
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
         ];

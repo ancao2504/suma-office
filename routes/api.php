@@ -49,6 +49,7 @@ use Api\Backend\Dashboard\Marketing\ApiDashboardMarketingController;
 use Api\Backend\Online\Shopee\ApiProductController as ProductShopee;
 use Api\Backend\Online\Tiktok\ApiProductController as ProductTiktok;
 use Api\Backend\Retur\SupplierJawabController as ReturSupplierJawab;
+use Api\Backend\Retur\SupplierJawabPSController as ReturSupplierJawabPS;
 use Api\Backend\Upload\File\VBUpdateController;
 use Api\Backend\Online\Shopee\ApiShippingController as ShippingShopee;
 use Api\Backend\Online\Tiktok\ApiShippingController as ShippingTiktok;
@@ -162,6 +163,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/campaign', 'dataCampaign')->name('campaign');
                     Route::post('/backend/salesman', 'dataSalesman')->name('salesman');
                     Route::post('/backend/retur', 'dataRetur')->name('retur');
+                    Route::post('/backend/Rtoko', 'dataRtoko')->name('retur');
                     Route::post('/backend/supplier', 'dataSupplier')->name('supplier');
                     Route::post('/backend/dealer', 'dataDealer')->name('dealer');
                     Route::post('/backend/faktur/konsumen', 'dataFakturKonsumen')->name('faktur-konsumen');
@@ -620,8 +622,22 @@ Route::group(['middleware' => 'authBasic'], function () {
                     });
                     Route::name('jawab.')->group(function () {
                         Route::controller(ReturSupplierJawab::class)->group(function () {
+                            // CA
                             Route::post('/backend/retur/supplier/jawab/simpan',  'store')->name('store');
                             Route::post('/backend/retur/supplier/jawab/delete',  'destroy')->name('delete');
+                        });
+                        Route::name('detail.')->group(function () {
+                            Route::controller(ReturSupplierJawabPS::class)->group(function () {
+                                // PS
+                                Route::post('/backend/retur/supplier/jawab/ps',  'daftarJawabPS');
+                                Route::post('/backend/retur/supplier/jawab/ps/simpan',  'storePS');
+                                Route::post('/backend/retur/supplier/jawab/ps/delete',  'destroyPS');
+
+                                Route::post('/backend/retur/supplier/jawab/ps/detail/simpan',  'storePSDetail');
+                                Route::post('/backend/retur/supplier/jawab/ps/detail/delete',  'destroyPSDetail');
+
+                                Route::post('/backend/retur/supplier/jawab/ps/store',  'store');
+                            });
                         });
                     });
                 });

@@ -149,7 +149,6 @@ function simpan(tamp){
             sts_klaim: $('#sts_klaim').val(),
         },
         function (response) {
-            console.log(response);
             if (response.status == '1') {
                 if(tamp == 0){
                     swal.fire({
@@ -717,7 +716,6 @@ $(document).ready(function () {
     });
 
     $('#detail_modal').on('change','#sts_minimum', function () {
-        console.log($(this).val());
         if ($(this).val() == '1' && $('#detail_modal  #sts_stock').val() == '3') {
             $('#detail_modal  #sts_klaim').html(`<option value="1">klaim ke Supplier</option><option value="2">Tidak Melakukan Apapun</option>`);
         } else if ($(this).val() == '0' && $('#detail_modal  #sts_stock').val() == '3') {

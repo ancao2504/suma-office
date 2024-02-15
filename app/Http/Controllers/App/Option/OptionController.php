@@ -1769,6 +1769,63 @@ class OptionController extends Controller
             return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
         }
     }
+    public static function Rtoko(Request $request){
+        $responseApi = json_decode(Service::dataRtoko($request));
+        $statusApi = $responseApi?->status??false;
+
+        if ($statusApi == 1) {
+            $data = $responseApi->data;
+            if($request->option[0] == 'first'){
+                $respon = $data;
+            }elseif($request->option[0] == 'page'){
+                $respon = view('layouts.option.option', [
+                    'data' => $data,
+                    'modal' => (object)[
+                        'title' => 'List Rtoko',
+                        'size' => 'modal-lg',
+                    ],
+                    'cari' => (object)[
+                        'title' => 'Search',
+                        'value' => $request->no_retur,
+                    ],
+                    'table' => (object)[
+                        'thead' => [
+                            (object)['class' => 'w-100px', 'text' => 'No Retur CA'],
+                            (object)['class' => 'w-100px', 'text' => 'No Retur Toko'],
+                            (object)['class' => 'w-100px', 'text' => 'tanggal Retur Supplier'],
+                            (object)['class' => 'w-100px', 'text' => 'tanggal Retur Toko'],
+                            (object)['class' => 'w-100px', 'text' => 'Dealer'],
+                            (object)['class' => 'w-100px', 'text' => 'Part'],
+                            (object)['class' => 'w-100px', 'text' => 'Jumlah Retur Toko'],
+                            (object)['class' => 'w-auto', 'text' => 'Action'],
+                        ],
+                        'tbody' => [
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'no_retur'],
+                            (object)[ 'option' => 'text', 'class' => 'w-50px', 'key' => 'no_klaim'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto text-center', 'key' => 'tgl_retur'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto text-center', 'key' => 'tgl_rtoko'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto', 'key' => 'kd_dealer'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto', 'key' => 'kd_part'],
+                            (object)[ 'option' => 'text', 'class' => 'w-auto text-end', 'key' => 'jml_rtoko'],
+                            (object)[ 'option' => 'button', 'class' => 'w-auto', 'button' => [
+                                (object)[ 'class' => 'btn btn-primary me-2 pilih', 'text' => 'Pilih',
+                                'data' => [(object)['key' => 'a','value' => ['no_retur','no_klaim','kd_part','jml_rtoko']]]
+                            ],
+                            ]],
+                        ],
+                    ],
+                    'per_page' => (object)[
+                        'value' => $request->per_page,
+                    ]
+                ])->render();
+            }
+            return Response()->json(['status' => 1, 'message' => 'success', 'data' => $respon], 200);
+        } else if($statusApi == 0) {
+            return Response()->json(['status' => 0, 'message' => $responseApi?->message, 'data'=> ''], 200);
+        } else {
+            return Response()->json(['status' => 2, 'message' => 'Maaf terjadi kesalahan, silahkan coba beberapa saat lagi', 'data'=> ''], 200);
+        }
+    }
     public static function part(Request $request){
         $responseApi = Service::dataPart($request);
         $statusApi = json_decode($responseApi)?->status;

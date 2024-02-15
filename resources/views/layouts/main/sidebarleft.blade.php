@@ -469,9 +469,11 @@
                     </div>
 
                     @if (in_array(Session::get('app_user_role_id'), ['MD_H3_MGMT','MD_H3_KORSM']))
-                        <div class="menu-item">
-                            <a class="menu-link {{ Request::is('retur/supplier*') ? 'active' : '' }}"
-                                href="{{ url('/retur/supplier') }}">
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion {{ Request::is('retur/supplier*') ? 'here hover show' : '' }}">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: assets/media/icons/duotune/communication/com014.svg-->
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/technology/teh005.svg-->
                                     <span class="svg-icon svg-icon-muted svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -485,10 +487,43 @@
                                     </span>
                                     <!--end::Svg Icon-->
                                 </span>
-                                <span
-                                    class="menu-title {{ Request::is('retur/supplier*') ? 'active' : '' }}">Supplier</span>
-                            </a>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span
+                                class="menu-title {{ Request::is('retur/supplier*') ? 'active' : '' }}">Supplier</span>
+                            <span class="menu-arrow"></span>
+                        </span>
+                        <div
+                            class="menu-sub menu-sub-accordion {{ Request::is('online/pemindahan/marketplace*') ? 'show' : '' }}">
+                            <div class="menu-item">
+                                <a class="menu-link {{ Request::is('retur/supplier/form*') ? 'active' : '' }}"
+                                    href="{{ url('/retur/supplier/form') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Form Supplier</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a class="menu-link {{ Request::is('retur/supplier/jawab/ca*') ? 'active' : '' }}"
+                                    href="{{ url('/retur/supplier/jawab/ca') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Jawab Supplier CA</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a class="menu-link {{ Request::is('retur/supplier/jawab/ps*') ? 'active' : '' }}"
+                                    href="{{ url('/retur/supplier/jawab/ps') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Jawab Supplier PS</span>
+                                </a>
+                            </div>
                         </div>
+                    </div>
                         {{-- <div class="menu-item">
                             <a class="menu-link {{ Request::is('retur/supplier*') ? 'active' : '' }}"
                                 href="{{ url('/retur/supplier') }}">

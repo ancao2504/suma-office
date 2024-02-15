@@ -67,7 +67,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-success text-white btn_simpan" data-a="{{ base64_encode(json_encode((object)['no_retur' => $data->no_retur,'tamp'=>0])) }}">Simpan Semua Jawaban</button>
-            <a href="{{(strtok(URL::previous(),'?') == strtok(URL::current(),'?'))?route('retur.supplier.index'):URL::previous()}}" id="btn-back" class="btn btn-secondary">Kembali</a>
+            <a href="{{URL::previous()}}" id="btn-back" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>
@@ -84,14 +84,20 @@
                 </div>
                 <div class="border rounded-3 p-3 mb-10">
                     <div class="form-group row mb-2">
-                        <label for="jml" class="col-sm-2 col-form-label required">Qty</label>
+                        <label for="no_ps" class="col-sm-3 col-form-label">No Packing Sheet</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="no_ps" name="no_ps" placeholder="Masukkan No Packing Sheet" value="" style="text-transform: uppercase;" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label for="jml" class="col-sm-3 col-form-label required">Qty</label>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" id="jml" name="jml" placeholder="Masukkan qty" value="" required>
                             <div class="invalid-feedback" id="error_jml"></div>
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="alasan" class="col-sm-2 col-form-label required">Alasan</label>
+                        <label for="alasan" class="col-sm-3 col-form-label required">Alasan</label>
                         <div class="col-sm-4">
                             <select name="alasan" id="alasan" class="form-select form-control" aria-label="Default select example" required>
                                 <option value="RETUR">Ganti barang</option>
@@ -110,14 +116,14 @@
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="ket" class="col-sm-2 col-form-label">Keterangan</label>
-                        <div class="col-sm-10">
+                        <label for="ket" class="col-sm-3 col-form-label">Keterangan</label>
+                        <div class="col-sm-9">
                             <textarea type="text" class="form-control" data-kt-autosize="true" id="ket" name="ket" rows="3"></textarea>
                         </div>
                         <div class="invalid-feedback" id="error_ket"></div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="keputusan" class="col-sm-2 col-form-label required">Keputusan</label>
+                        <label for="keputusan" class="col-sm-3 col-form-label required">Keputusan</label>
                         <div class="col-sm-4">
                             <select name="keputusan" id="keputusan" class="form-select" aria-label="Default select example" required>
                                 <option value="TERIMA">TERIMA</option>
@@ -133,6 +139,7 @@
                         <thead class="border">
                             <tr class="fs-8 fw-bolder text-muted text-center">
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Tanggal</th>
+                                <th rowspan="2" class="w-100px ps-3 pe-3">No PS</th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3">Qty</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">Alasan</th>
                                 <th rowspan="2" class="w-100px ps-3 pe-3">CA</th>

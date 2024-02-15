@@ -115,7 +115,7 @@ function simpan(tamp){
                         allowOutsideClick: false
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = base_url + '/retur/supplier';
+                            window.location.href = base_url + '/retur/supplier/form';
                         }
                     });
                     return false;

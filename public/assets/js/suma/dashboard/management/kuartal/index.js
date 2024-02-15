@@ -38,7 +38,6 @@ $('#selectFilterOptionCompany').change(function () {
 $(document).ready(function () {
     $('#btnFilterMasterData').on('click', function (e) {
         e.preventDefault();
-        console.log(data_filter.kabupaten);
         $('#inputFilterYear').val(data_filter.year);
         $('#selectFilterOptionCompany').val(data_filter.option_company);
         $('#inputFilterCompanyId').val(data_filter.companyid);

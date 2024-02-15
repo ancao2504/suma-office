@@ -334,7 +334,6 @@ $(document).ready(function () {
             data: { nomor_invoice: nomor_invoice, _token: _token },
 
             success: function (response) {
-                console.log(response);
                 loading.release();
 
                 if(response.status == true) {

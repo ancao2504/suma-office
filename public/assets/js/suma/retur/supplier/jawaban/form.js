@@ -1,4 +1,5 @@
 function form_clear(ca = true){
+    $('#no_ps').val('');
     $('#jml').val('');
     $('#alasan').val('RETUR').trigger('change');
     $('#ket').val('');
@@ -57,6 +58,7 @@ function simpan(request){
             no_retur: request.no_retur,
             no_klaim: request.no_klaim,
             kd_part: request.kd_part,
+            no_ps: $('#no_ps').val(),
             qty_jwb: $('#jml').val().replace(/\./g, ''),
             alasan: $('#alasan').val(),
             ca: $('#ca').val().replace(/\./g, ''),
@@ -81,6 +83,7 @@ function simpan(request){
                         $('#list-jwb').append(`
                             <tr class="fw-bolder fs-8 border" data-i="${item.no_jwb}">
                                 <td class="text-center">${moment(item.tgl_jwb).format('YYYY/MM/DD HH:mm:ss')}</td>
+                                <td class="text-start">${item.no_ps??'-'}</td>
                                 <td class="text-end">${formatRibuan(item.qty_jwb)}</td>
                                 <td class="text-center">${(item.alasan == 'CA' ? 'Ganti Uang' : 'Ganti barang')}</td>
                                 <td class="text-end">${formatRibuan(item.ca)}</td>
@@ -174,6 +177,7 @@ function hapus(request){
             no_jwb: request.no_jwb,
             no_retur: request.no_retur,
             no_klaim: request.no_klaim,
+            no_ps: request.no_ps,
             kd_part: request.kd_part,
         },
         function (response) {
@@ -255,7 +259,7 @@ $(document).ready(function () {
 
         $('#list-jwb').html('');
 
-        $('#jwb_modal .btn_simpan_tmp').data('a', btoa(JSON.stringify({ tamp:data.tamp,no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
+        $('#jwb_modal .btn_simpan_tmp').data('a', btoa(JSON.stringify({ tamp:data.tamp, no_ps: data.no_ps, no_retur: data.no_retur, no_klaim: data.no_klaim, kd_part: data.kd_part })));
 
         $('#jwb_modal #ca').val(data.harga).trigger('keyup');
 
@@ -271,12 +275,14 @@ $(document).ready(function () {
             const data_del = btoa(JSON.stringify({
                 no_retur: data.no_retur,
                 no_klaim: data.no_klaim,
+                no_ps: data.no_ps,
                 kd_part: data.kd_part,
                 no_jwb: item.no_jwb
             }));
             $('#list-jwb').append(`
                 <tr class="fw-bolder fs-8 border" data-i="${item.no_jwb}">
                     <td class="text-center">${moment(item.tgl_jwb).format('YYYY/MM/DD HH:mm:ss')}</td>
+                    <td class="text-start">${item.no_ps??'-'}</td>
                     <td class="text-end">${formatRibuan(item.qty_jwb)}</td>
                     <td class="text-center">${(item.alasan == 'CA' ? 'Ganti Uang' : 'Ganti barang')}</td>
                     <td class="text-end">${formatRibuan(item.ca)}</td>
