@@ -76,7 +76,8 @@
                         </select>
                         <button class="btn btn-secondary" type="button" id="btn_search">Cari</button>
                     </div>
-                    <div class="input-group w-md-250px">
+                    <div class="input-group w-lg-350px">
+                        <div class="input-group-text">Tanggal PS</div>
                         <input type="text" class="form-control" placeholder="tgl" aria-label="tgl" id="tgl_input" value="">
                     </div>
                 </div>
