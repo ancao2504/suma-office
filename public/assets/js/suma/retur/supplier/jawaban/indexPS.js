@@ -255,7 +255,7 @@ let master = {
                     <td class="text-center">${item.no_klaim}</td>
                     <td class="text-end">${item.qty_jwb}</td>
                     <td class="text-center">${
-                        item.alasan == "Retur" ? "Ganti Barang" : "Ganti Uang"
+                        item.alasan == "RETUR" ? "Ganti Barang" : "Ganti Uang"
                     }</td>
                     <td class="text-end">${
                         item.ca ? formatRibuan(item.ca) : "-"
