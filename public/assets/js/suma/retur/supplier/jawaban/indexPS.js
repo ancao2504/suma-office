@@ -474,7 +474,7 @@ $(document).ready(async function () {
         mode: "range",
         dateFormat: "Y-m-d",
         defaultDate: [
-            moment().startOf("month").toDate(),
+            moment().subtract(2, 'months').startOf("month").toDate(),
             moment().endOf("month").toDate(),
         ],
     });

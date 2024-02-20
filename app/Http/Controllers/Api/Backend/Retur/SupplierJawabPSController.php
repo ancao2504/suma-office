@@ -46,8 +46,10 @@ class SupplierJawabPSController extends Controller
                 ->where('tgl_ps', $request->tanggal[0]);
             } else {
                 $filter = $filter
-                    ->whereMonth('tgl_ps', now()->month)
-                    ->whereYear('tgl_ps', now()->year);
+                    ->whereBetween('tgl_ps', [
+                        date('Y-m-d', strtotime('-2 months')), // Awal dari bulan 3 bulan yang lalu
+                        date('Y-m-d'), // Akhir dari bulan saat ini
+                    ]);
             }
 
             if(!empty($request->search) && !empty($request->search['value']) && in_array($request->search['field'], ['no_ps','kd_part','no_retur','no_klaim','kd_dealer'])) {
