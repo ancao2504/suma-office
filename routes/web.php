@@ -707,7 +707,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::controller(ReturSupplierJawab::class)->group(function () {
                             // CA
                             Route::get('/retur/supplier/jawab/ca',  'index')->name('index');
-                            Route::get('/retur/supplier/jawab/form',  'form')->name('form');
+                            Route::get('/retur/supplier/jawab/ca/form',  'form')->name('form');
                             Route::post('/retur/supplier/jawab/form',  'store')->name('store');
                             Route::post('/retur/supplier/jawab/delete',  'destroy')->name('delete');
                         });
