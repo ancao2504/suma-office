@@ -10,7 +10,7 @@ let formatter = new Intl.NumberFormat("id-ID", {
 });
 
 let filter_data = {
-    _token: "",
+    _token: $("meta[name=csrf-token]").attr("content"),
     tanggal: [],
     kd_sales: "",
     kd_jenis: "",
