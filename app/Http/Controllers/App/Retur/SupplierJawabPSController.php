@@ -102,7 +102,7 @@ class SupplierJawabPSController extends Controller
                 'jml'       => 'required',
                 'alasan'    => 'required|in:RETUR,CA',
                 'keputusan' => 'required|in:TERIMA,TOLAK',
-                'ket'       => 'required',
+                // 'ket'       => 'required',
             ];
 
             $messages = [
@@ -112,7 +112,7 @@ class SupplierJawabPSController extends Controller
                 'alasan.in'             => 'alasan Tidak Valid',
                 'keputusan.required'    => 'keputusan Tidak Boleh Kososng',
                 'keputusan.in'          => 'keputusan Tidak Valid',
-                'ket.required'          => 'keterangan Tidak Boleh Kososng',
+                // 'ket.required'          => 'keterangan Tidak Boleh Kososng',
             ];
 
             if ($request->alasan == 'CA') {

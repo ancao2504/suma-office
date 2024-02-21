@@ -227,7 +227,7 @@ class SupplierJawabPSController extends Controller
                 'jml'      => 'required|numeric|min:1',
                 'alasan' => 'required|in:RETUR,CA',
                 'keputusan' => 'required|in:TERIMA,TOLAK',
-                'ket' => 'required',
+                // 'ket' => 'required',
             ];
             $messages = [
                 'no_retur.required' => 'No Retur Toko Tidak Boleh Kososng',
@@ -237,7 +237,7 @@ class SupplierJawabPSController extends Controller
                 'alasan.in'  => 'alasan Tidak Valid',
                 'keputusan.required' => 'keputusan Tidak Boleh Kososng',
                 'keputusan.in'  => 'keputusan Tidak Valid',
-                'ket.required' => 'keterangan Tidak Boleh Kososng',
+                // 'ket.required' => 'keterangan Tidak Boleh Kososng',
             ];
 
             if ($request->alasan == 'CA') {

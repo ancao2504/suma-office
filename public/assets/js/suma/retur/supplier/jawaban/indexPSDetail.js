@@ -82,11 +82,11 @@ let formInputDetail = {
             $("#add_modal_retur #error_keputusan").text("ca Harus diisi");
         }
 
-        if (data.ket == "") {
-            isvalid = false;
-            $("#add_modal_retur #ket").addClass("is-invalid");
-            $("#add_modal_retur #error_ket").text("keterangan Harus diisi");
-        }
+        // if (data.ket == "") {
+        //     isvalid = false;
+        //     $("#add_modal_retur #ket").addClass("is-invalid");
+        //     $("#add_modal_retur #error_ket").text("keterangan Harus diisi");
+        // }
 
         if (isvalid) {
             $("#add_modal_retur #error_no_ps").text("");

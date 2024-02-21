@@ -189,7 +189,7 @@
                             <div class="invalid-feedback" id="error_keputusan"></div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="ket" class="form-label required">Keterangan</label>
+                            <label for="ket" class="form-label">Keterangan</label>
                             <textarea type="text" class="form-control" data-kt-autosize="true" id="ket" name="ket"
                                 rows="1"></textarea>
                             <div class="invalid-feedback" id="error_ket"></div>
