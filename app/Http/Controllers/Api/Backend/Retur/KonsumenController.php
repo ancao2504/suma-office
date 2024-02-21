@@ -397,6 +397,7 @@ class KonsumenController extends Controller
         }, 'klaim_dtl')
         ->selectRaw(
             'fakt_dtl.no_faktur,
+            fakt_dtl.tgl_faktur,
             fakt_dtl.kd_dealer,
             fakt_dtl.kd_part,
             isnull(qty_klaim,0) as qty_klaim,
@@ -405,6 +406,7 @@ class KonsumenController extends Controller
         ->rightJoinSub(function ($query) use ($request) {
             $query->selectRaw('
                     fakt_dtl.no_faktur,
+                    faktur.tgl_faktur,
                     fakt_dtl.kd_part,
                     faktur.kd_dealer,
                     fakt_dtl.jml_jual
@@ -425,6 +427,13 @@ class KonsumenController extends Controller
 
         if ($cekJmlQtyPart->count() > 0 && $request->pc == 0) {
             $cekJmlQtyPart = $cekJmlQtyPart->first();
+            if ($request->tgl_pakai < $cekJmlQtyPart->tgl_faktur) {
+                return (object)[
+                    'status'    => false,
+                    'message'   => 'Tanggal Pakai Harus Lebih Dari Tanggal Faktur',
+                    'data'      => ''
+                ];
+            }
             // ! Jika qty part klaim melebihi qty part pada faktur maka tampilkan pesan Peringatan
             if ($cekJmlQtyPart->qty_klaim > $cekJmlQtyPart->qty_faktur) {
                 return (object)[
