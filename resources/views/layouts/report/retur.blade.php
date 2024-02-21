@@ -69,7 +69,7 @@
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nama Dealer</th>
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Kode Sales</th>
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Part Number</th>
-                                <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Nomer Dokumen</th>
+                                <th scope="col" colspan="4" class="w-auto ps-3 pe-3">Nomer Dokumen</th>
                                 <th scope="col" colspan="2" class="w-auto ps-3 pe-3">Qty</th>
                                 <th scope="col" colspan="2" class="w-auto ps-3 pe-3">Tanggal</th>
                                 <th scope="col" rowspan="3" class="w-auto ps-3 pe-3">Pemakaian</th>
@@ -77,6 +77,11 @@
                                 <th scope="col" colspan="5" class="w-auto ps-3 pe-3">Status</th>
                             </tr>
                             <tr class="fs-8 fw-bolder text-muted text-center">
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Rtoko</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Supplier</th>
+                                <th scope="col" rowspan="2" class="ps-3 pe-3">Packing Sheet</th>
+
                                 <th scope="col" rowspan="2" class="ps-3 pe-3">Klaim</th>
                                 <th scope="col" rowspan="2" class="ps-3 pe-3">Jawab</th>
 

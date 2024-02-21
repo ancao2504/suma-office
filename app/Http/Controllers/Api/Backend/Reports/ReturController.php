@@ -30,6 +30,7 @@ class ReturController extends Controller
                     [klaim].[kd_sales],
                     [klaim].[kd_part],
                     klaim.qty_klaim,
+                    ISNULL(jwb.qty_jwb,0) as qty_jwb,
                     klaim.tgl_klaim,
                     klaim.tgl_pakai,
                     klaim.pemakaian,
@@ -138,6 +139,17 @@ class ReturController extends Controller
                     inner join [retur_dtl] on [retur_dtl].[no_retur] = [retur].[no_retur] and [retur_dtl].[CompanyId] = [retur].[CompanyId]
                     where [retur].[CompanyId] = '$request->companyid'
                 ) as [retur] on [retur].[no_klaim] = [rtoko].[no_retur] and [retur].[kd_part] = [klaim].[kd_part]
+                left join (
+                    select	no_klaim,
+                            kd_part,
+                            no_retur,
+                            sum(qty_jwb) as qty_jwb
+                    from jwb_claim
+                    where [jwb_claim].[CompanyId] = '$request->companyid' and jwb_claim.sts_end = '1'
+                    group by	no_klaim,
+                                kd_part,
+                                no_retur
+                ) as  jwb on rtoko.no_retur = jwb.no_klaim and klaim.kd_part = jwb.kd_part
             ";
 
             $data = DB::table(DB::raw("($sql) as a"))
@@ -152,7 +164,7 @@ class ReturController extends Controller
                     kd_sales,
                     kd_part,
                     qty_klaim,
-                    IIF(sts_klaim = 'IYA', 0, null) as qty_jwb,
+                    qty_jwb,
                     tgl_klaim,
                     tgl_pakai,
                     pemakaian,
@@ -168,112 +180,24 @@ class ReturController extends Controller
             ->orderBy('kd_sales', 'asc')
             ->orderBy('kd_part', 'asc')
             ->orderBy('tgl_klaim', 'asc')
-            ->get();
+            ->paginate($request->per_page);
 
-            // ! ambil data jawaban
-            $dataJawab = DB::table('jwb_claim')
-            ->selectRaw(
-                '
-                    no_klaim,
-                    kd_part,
-                    no_retur,
-                    sum(qty_jwb) as qty_jwb
-                '
-            )
-            ->whereIn('no_klaim', collect($data)->pluck('no_rtoko')->unique()->values()->toArray())
+            $dataPS = DB::table('jwb_claim')
+            ->select("no_ps", "no_klaim", "kd_part")
+            ->whereIn('no_klaim', collect($data->items())->pluck('no_rtoko')->unique()->values()->toArray())
             ->where('sts_end', 1)
             ->where('CompanyId', $request->companyid)
-            ->groupByRaw(
-                '
-                    no_klaim,
-                    kd_part,
-                    no_retur
-                '
-            )
+            ->groupBy('no_ps', 'no_klaim', 'kd_part')
             ->get();
 
-            // ! klompokan berdasarkan no rtoko dan kd part
-            $dataFilter = collect($data)->groupBy('no_rtoko')->map(function($item){
-                return $item->groupBy('kd_part');
-            });
-
-            // ? ---------------------------------------------------------------------------------------------
-            // ? Info : $dataFilter = [no_rtoko => [kd_part => [data]]]
-            // ? Info : $item->no_klaim merupakan sama dengan no_rtoko
-            // ? ---------------------------------------------------------------------------------------------
-
-            $dataJawab->map(function($item) use ($dataFilter, $data) {
-                // ! jika data filter tidak kosong
-                if(!empty($dataFilter[$item->no_klaim][$item->kd_part])){
-                    // ! tampung qty jawaban dari data jawaban
-                    (int)$qtyJwbTamp = (int)$item->qty_jwb;
-                    // ! looping data yang sudah di group by
-                    foreach($dataFilter[$item->no_klaim][$item->kd_part] as $key => $value){
-                            if($qtyJwbTamp >= 0){
-                                // ! membandingkan pada nomer rtoko dan part apakah jumlah jawabannya lebih besar dari jumlah klaim
-                                if((int)$qtyJwbTamp > (int)$value->qty_klaim){
-                                    // ! jika lebih besar maka qty jawaban di isi dengan qty klaim
-                                    $data
-                                        ->where('no_retur', $value->no_retur)
-                                        ->where('no_faktur', $value->no_faktur)
-                                        ->where('no_klaim', $value->no_klaim)
-                                        ->where('kd_part', $value->kd_part)
-                                        ->first()->qty_jwb = (int)$value->qty_klaim;
-                                    // ! qty jawaban tampungan dikurangi dengan qty klaim
-                                    (int)$qtyJwbTamp = ((int)$qtyJwbTamp - (int)$value->qty_klaim);
-
-                                    // ! jika qty jawaban sama dengan qty klaim
-                                } elseif((int)$qtyJwbTamp == (int)$value->qty_klaim){
-                                    // ! maka qty jawaban di isi dengan qty klaim
-                                    $data
-                                        ->where('no_retur', $value->no_retur)
-                                        ->where('no_faktur', $value->no_faktur)
-                                        ->where('no_klaim', $value->no_klaim)
-                                        ->where('kd_part', $value->kd_part)
-                                        ->first()->qty_jwb = (int)$value->qty_klaim;
-                                    // ! qty jawaban tampungan di isi dengan 0
-                                    (int)$qtyJwbTamp = 0;
-
-                                    // ! jika qty jawaban lebih kecil dari qty klaim
-                                } elseif((int)$qtyJwbTamp < (int)$value->qty_klaim){
-                                    // ! maka qty jawaban di isi dengan qty jawaban tampungan
-                                    $data
-                                        ->where('no_retur', $value->no_retur)
-                                        ->where('no_faktur', $value->no_faktur)
-                                        ->where('no_klaim', $value->no_klaim)
-                                        ->where('kd_part', $value->kd_part)
-                                        ->first()->qty_jwb = (int)$qtyJwbTamp;
-                                    // ! qty jawaban tampungan di isi dengan 0
-                                    (int)$qtyJwbTamp = 0;
-                                }
-                            } else {
-                                // ! jika qty jawaban tampungan kurang dari 0 maka qty jawaban di isi dengan 0
-                                $data
-                                    ->where('no_retur', $value->no_retur)
-                                    ->where('no_faktur', $value->no_faktur)
-                                    ->where('no_klaim', $value->no_klaim)
-                                    ->where('kd_part', $value->kd_part)
-                                    ->first()->qty_jwb =  0;
-                            }
-                    }
-
-                }
-            });
-
-            // buat pagination untuk $data
-            $paginationData = new \Illuminate\Pagination\LengthAwarePaginator(
-                ($data->slice(($request->page - 1) * $request->per_page, $request->per_page)),
-                $data->count(),
-                $request->per_page,
-                $request->page
-            );
-
-
+            foreach($data->items() as $key => $value){
+                $value->no_ps = $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->unique()->values()->toArray();
+            }
 
             return Response()->json([
                 'status'    => 1,
                 'message'   => 'success',
-                'data'      => $paginationData
+                'data'      => $data
             ], 200);
         } catch (\Exception $e) {
             return Response()->json([
@@ -298,6 +222,7 @@ class ReturController extends Controller
                     [klaim].[kd_sales],
                     [klaim].[kd_part],
                     klaim.qty_klaim,
+                    ISNULL(jwb.qty_jwb,0) as qty_jwb,
                     klaim.tgl_klaim,
                     klaim.tgl_pakai,
                     klaim.pemakaian,
@@ -316,8 +241,8 @@ class ReturController extends Controller
                         [klaim].[pc],
                         [klaim].[kd_dealer],
                         [klaim].[kd_sales],
-                        CONVERT(NVARCHAR(10), tgl_pakai, 105) as tgl_pakai,
-                        CONVERT(NVARCHAR(10), tgl_klaim, 105) as tgl_klaim,
+                        REPLACE(CONVERT(NVARCHAR(10), tgl_pakai, 105), '-', '/') as tgl_pakai,
+                        REPLACE(CONVERT(NVARCHAR(10), tgl_klaim, 105), '-', '/') as tgl_klaim,
                         CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim))) AS pemakaian,
                         sum([klaim_dtl].[qty]) as [qty_klaim],
                         [klaim_dtl].[keterangan],
@@ -349,8 +274,8 @@ class ReturController extends Controller
                         [klaim].[pc],
                         [klaim].[kd_dealer],
                         [klaim].[kd_sales],
-                        CONVERT(NVARCHAR(10), tgl_pakai, 105),
-                        CONVERT(NVARCHAR(10), tgl_klaim, 105),
+                        REPLACE(CONVERT(NVARCHAR(10), tgl_pakai, 105), '-', '/'),
+                        REPLACE(CONVERT(NVARCHAR(10), tgl_klaim, 105), '-', '/'),
                         CONVERT(NVARCHAR(10),(DATEDIFF(DAY, klaim_dtl.tgl_pakai, klaim_dtl.tgl_klaim))),
                         [klaim_dtl].[keterangan],
                         [klaim_dtl].[sts_klaim],
@@ -406,6 +331,17 @@ class ReturController extends Controller
                     inner join [retur_dtl] on [retur_dtl].[no_retur] = [retur].[no_retur] and [retur_dtl].[CompanyId] = [retur].[CompanyId]
                     where [retur].[CompanyId] = '$request->companyid'
                 ) as [retur] on [retur].[no_klaim] = [rtoko].[no_retur] and [retur].[kd_part] = [klaim].[kd_part]
+                left join (
+                    select	no_klaim,
+                            kd_part,
+                            no_retur,
+                            sum(qty_jwb) as qty_jwb
+                    from jwb_claim
+                    where [jwb_claim].[CompanyId] = '$request->companyid' and jwb_claim.sts_end = '1'
+                    group by	no_klaim,
+                                kd_part,
+                                no_retur
+                ) as  jwb on rtoko.no_retur = jwb.no_klaim and klaim.kd_part = jwb.kd_part
             ";
 
             $data = DB::table(DB::raw("($sql) as a"))
@@ -420,7 +356,7 @@ class ReturController extends Controller
                     kd_sales,
                     kd_part,
                     qty_klaim,
-                    IIF(sts_klaim = 'IYA', 0, null) as qty_jwb,
+                    qty_jwb,
                     tgl_klaim,
                     tgl_pakai,
                     pemakaian,
@@ -438,75 +374,17 @@ class ReturController extends Controller
             ->orderBy('tgl_klaim', 'asc')
             ->get();
 
-            $dataJawab = DB::table('jwb_claim')
-            ->selectRaw(
-                '
-                    no_klaim,
-                    kd_part,
-                    no_retur,
-                    sum(qty_jwb) as qty_jwb
-                '
-            )
+            $dataPS = DB::table('jwb_claim')
+            ->select("no_ps", "no_klaim", "kd_part")
             ->whereIn('no_klaim', collect($data)->pluck('no_rtoko')->unique()->values()->toArray())
             ->where('sts_end', 1)
             ->where('CompanyId', $request->companyid)
-            ->groupByRaw(
-                '
-                    no_klaim,
-                    kd_part,
-                    no_retur
-                '
-            )
+            ->groupBy('no_ps', 'no_klaim', 'kd_part')
             ->get();
 
-            $dataFilter = collect($data)->groupBy('no_rtoko')->map(function($item){
-                return $item->groupBy('kd_part');
-            });
-
-            $dataJawab->map(function($item) use ($dataFilter, $data) {
-                if(!empty($dataFilter[$item->no_klaim][$item->kd_part])){
-                    (int)$qtyJwbTamp = (int)$item->qty_jwb;
-                    foreach($dataFilter[$item->no_klaim][$item->kd_part] as $key => $value){
-                        if($qtyJwbTamp >= 0){
-                            if((int)$qtyJwbTamp > (int)$value->qty_klaim){
-                                $data
-                                    ->where('no_retur', $value->no_retur)
-                                    ->where('no_faktur', $value->no_faktur)
-                                    ->where('no_klaim', $value->no_klaim)
-                                    ->where('kd_part', $value->kd_part)
-                                    ->first()->qty_jwb = (int)$value->qty_klaim;
-
-                                (int)$qtyJwbTamp = ((int)$qtyJwbTamp - (int)$value->qty_klaim);
-                            } elseif((int)$qtyJwbTamp == (int)$value->qty_klaim){
-                                $data
-                                    ->where('no_retur', $value->no_retur)
-                                    ->where('no_faktur', $value->no_faktur)
-                                    ->where('no_klaim', $value->no_klaim)
-                                    ->where('kd_part', $value->kd_part)
-                                    ->first()->qty_jwb = (int)$value->qty_klaim;
-
-                                (int)$qtyJwbTamp = 0;
-                            } elseif((int)$qtyJwbTamp < (int)$value->qty_klaim){
-                                $data
-                                    ->where('no_retur', $value->no_retur)
-                                    ->where('no_faktur', $value->no_faktur)
-                                    ->where('no_klaim', $value->no_klaim)
-                                    ->where('kd_part', $value->kd_part)
-                                    ->first()->qty_jwb = (int)$qtyJwbTamp;
-
-                                (int)$qtyJwbTamp = 0;
-                            }
-                        } else {
-                            $data
-                                ->where('no_retur', $value->no_retur)
-                                ->where('no_faktur', $value->no_faktur)
-                                ->where('no_klaim', $value->no_klaim)
-                                ->where('kd_part', $value->kd_part)
-                                ->first()->qty_jwb =  0;
-                        }
-                    }
-                }
-            });
+            foreach($data as $key => $value){
+                $value->no_ps = ltrim(implode(',', $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->unique()->values()->toArray()));
+            }
 
             return Response()->json([
                 'status'    => 1,

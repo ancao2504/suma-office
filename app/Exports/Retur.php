@@ -21,15 +21,17 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
     public function collection(){
         ini_set('memory_limit', '4096M');
         ini_set('max_execution_time', '0');
-        $data = $this->data;
 
-        return collect($data)->map(function($item) {
+        return collect($this->data)->map(function($item) {
             return [
                 $item->kd_dealer,
                 $item->nm_dealer,
                 $item->kd_sales,
                 $item->kd_part,
                 $item->no_klaim,
+                $item->no_rtoko,
+                $item->no_retur,
+                $item->no_ps,
                 $item->qty_klaim,
                 $item->qty_jwb,
                 $item->tgl_klaim,
@@ -53,7 +55,10 @@ class Retur implements FromCollection, WithHeadings, ShouldAutoSize
             'Nama Dealer',
             'Kode Sales',
             'Part Number',
-            'Nomer Dokumen',
+            'Nomer Klaim',
+            'Nomer Rtoko',
+            'Nomer Supplier',
+            'Nomer PS',
             'QTY Klaim',
             'QTY Jawab',
             'Tanggal Klaim',
