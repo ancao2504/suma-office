@@ -190,7 +190,7 @@ class ReturController extends Controller
             ->get();
 
             foreach($data->items() as $key => $value){
-                $value->no_ps = $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->unique()->values()->toArray();
+                $value->no_ps = $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->filter()->unique()->values()->toArray();
             }
 
             return Response()->json([
@@ -381,7 +381,7 @@ class ReturController extends Controller
             ->get();
 
             foreach($data as $key => $value){
-                $value->no_ps = ltrim(implode(',', $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->unique()->values()->toArray()));
+                $value->no_ps = ltrim(implode(',', $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->filter()->unique()->values()->toArray()));
             }
 
             return Response()->json([
