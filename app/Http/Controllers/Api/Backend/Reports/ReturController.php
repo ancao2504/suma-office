@@ -39,7 +39,7 @@ class ReturController extends Controller
                     CASE WHEN klaim.sts_min = 1 THEN 'IYA' ELSE 'TIDAK' END AS sts_min,
                     CASE WHEN klaim.sts_klaim = 1 THEN 'IYA' ELSE 'TIDAK' END AS sts_klaim,
                     CASE WHEN klaim.status_approve = 1 THEN 1 ELSE 0 END AS sts_approve,
-                    CASE WHEN klaim.status_end = 1 THEN 1 ELSE 0 END AS sts_selesai
+                    CASE WHEN rtoko.status_end = 1 THEN 1 ELSE 0 END AS sts_selesai
                 from
                 (
                     select
@@ -57,8 +57,7 @@ class ReturController extends Controller
                         [klaim_dtl].[sts_klaim],
                         [klaim_dtl].[sts_min],
                         [klaim_dtl].[sts_stock],
-                        [klaim].[status_approve],
-                        [klaim].[status_end]
+                        [klaim].[status_approve]
                     from [klaim]
                     inner join [klaim_dtl] on [klaim_dtl].[no_dokumen] = [klaim].[no_dokumen] and [klaim_dtl].[companyid] = [klaim].[companyid]
                     where [klaim].[companyid] = '$request->companyid' and
@@ -89,8 +88,7 @@ class ReturController extends Controller
                         [klaim_dtl].[sts_klaim],
                         [klaim_dtl].[sts_min],
                         [klaim_dtl].[sts_stock],
-                        [klaim].[status_approve],
-                        [klaim].[status_end]
+                        [klaim].[status_approve]
                 ) klaim
                 left join (
                     select kd_dealer, nm_dealer from dealer where CompanyId = '$request->companyid'
@@ -117,6 +115,7 @@ class ReturController extends Controller
                         [rtoko].[kd_dealer],
                         [rtoko].[kd_sales],
                         [rtoko_dtl].[ket],
+                        [rtoko_dtl].[status_end],
                         [rtoko].[CompanyId]
                     from [rtoko]
                     inner join [rtoko_dtl] on [rtoko_dtl].[no_retur] = [rtoko].[no_retur] and [rtoko_dtl].[CompanyId] = [rtoko].[CompanyId]
@@ -231,7 +230,7 @@ class ReturController extends Controller
                     CASE WHEN klaim.sts_min = 1 THEN 'IYA' ELSE 'TIDAK' END AS sts_min,
                     CASE WHEN klaim.sts_klaim = 1 THEN 'IYA' ELSE 'TIDAK' END AS sts_klaim,
                     CASE WHEN klaim.status_approve = 1 THEN 1 ELSE 0 END AS sts_approve,
-                    CASE WHEN klaim.status_end = 1 THEN 1 ELSE 0 END AS sts_selesai
+                    CASE WHEN rtoko.status_end = 1 THEN 1 ELSE 0 END AS sts_selesai
                 from
                 (
                     select
@@ -249,8 +248,7 @@ class ReturController extends Controller
                         [klaim_dtl].[sts_klaim],
                         [klaim_dtl].[sts_min],
                         [klaim_dtl].[sts_stock],
-                        [klaim].[status_approve],
-                        [klaim].[status_end]
+                        [klaim].[status_approve]
                     from [klaim]
                     inner join [klaim_dtl] on [klaim_dtl].[no_dokumen] = [klaim].[no_dokumen] and [klaim_dtl].[companyid] = [klaim].[companyid]
                     where [klaim].[companyid] = '$request->companyid' and
@@ -281,8 +279,7 @@ class ReturController extends Controller
                         [klaim_dtl].[sts_klaim],
                         [klaim_dtl].[sts_min],
                         [klaim_dtl].[sts_stock],
-                        [klaim].[status_approve],
-                        [klaim].[status_end]
+                        [klaim].[status_approve]
                 ) klaim
                 left join (
                     select kd_dealer, nm_dealer from dealer where CompanyId = '$request->companyid'
@@ -309,6 +306,7 @@ class ReturController extends Controller
                         [rtoko].[kd_dealer],
                         [rtoko].[kd_sales],
                         [rtoko_dtl].[ket],
+                        [rtoko_dtl].[status_end],
                         [rtoko].[CompanyId]
                     from [rtoko]
                     inner join [rtoko_dtl] on [rtoko_dtl].[no_retur] = [rtoko].[no_retur] and [rtoko_dtl].[CompanyId] = [rtoko].[CompanyId]
