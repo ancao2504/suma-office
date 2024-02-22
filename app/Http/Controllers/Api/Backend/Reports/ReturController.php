@@ -11,7 +11,7 @@ class ReturController extends Controller
     public function data(Request $request)
     {
         try {
-            if(empty($request->page)){
+            if (empty($request->page)) {
                 $request->merge(['page' => 1]);
             }
 
@@ -62,18 +62,18 @@ class ReturController extends Controller
                     inner join [klaim_dtl] on [klaim_dtl].[no_dokumen] = [klaim].[no_dokumen] and [klaim_dtl].[companyid] = [klaim].[companyid]
                     where [klaim].[companyid] = '$request->companyid' and
                     CONVERT(DATE, klaim_dtl.tgl_klaim) between '{$request->tanggal[0]}' and '{$request->tanggal[1]}'";
-                    if (!empty($request->kd_dealer)){
-                        $sql .= " and [klaim].[kd_dealer] = '$request->kd_dealer'";
-                    }
-                    if (!empty($request->kd_sales)){
-                        $sql .= " and [klaim].[kd_sales] = '$request->kd_sales'";
-                    }
-                    if ($request->kd_jenis == 1) {
-                        $sql .= " and [klaim].[pc] = '0'";
-                    } else if ($request->kd_jenis == 2) {
-                        $sql .= " and [klaim].[pc] = '1'";
-                    }
-                    $sql .="
+            if (!empty($request->kd_dealer)) {
+                $sql .= " and [klaim].[kd_dealer] = '$request->kd_dealer'";
+            }
+            if (!empty($request->kd_sales)) {
+                $sql .= " and [klaim].[kd_sales] = '$request->kd_sales'";
+            }
+            if ($request->kd_jenis == 1) {
+                $sql .= " and [klaim].[pc] = '0'";
+            } else if ($request->kd_jenis == 2) {
+                $sql .= " and [klaim].[pc] = '1'";
+            }
+            $sql .= "
                     group by
                         klaim_dtl.no_faktur,
                         [klaim].[no_dokumen],
@@ -152,8 +152,8 @@ class ReturController extends Controller
             ";
 
             $data = DB::table(DB::raw("($sql) as a"))
-            ->selectRaw(
-                "
+                ->selectRaw(
+                    "
                     no_faktur,
                     no_retur,
                     no_klaim,
@@ -174,22 +174,22 @@ class ReturController extends Controller
                     sts_approve,
                     sts_selesai
                 "
-            )
-            ->orderBy('kd_dealer', 'asc')
-            ->orderBy('kd_sales', 'asc')
-            ->orderBy('kd_part', 'asc')
-            ->orderBy('tgl_klaim', 'asc')
-            ->paginate($request->per_page);
+                )
+                ->orderBy('kd_dealer', 'asc')
+                ->orderBy('kd_sales', 'asc')
+                ->orderBy('kd_part', 'asc')
+                ->orderBy('tgl_klaim', 'asc')
+                ->paginate($request->per_page);
 
             $dataPS = DB::table('jwb_claim')
-            ->select("no_ps", "no_klaim", "kd_part")
-            ->whereIn('no_klaim', collect($data->items())->pluck('no_rtoko')->unique()->values()->toArray())
-            ->where('sts_end', 1)
-            ->where('CompanyId', $request->companyid)
-            ->groupBy('no_ps', 'no_klaim', 'kd_part')
-            ->get();
+                ->select("no_ps", "no_klaim", "kd_part")
+                ->whereIn('no_klaim', collect($data->items())->pluck('no_rtoko')->unique()->values()->toArray())
+                ->where('sts_end', 1)
+                ->where('CompanyId', $request->companyid)
+                ->groupBy('no_ps', 'no_klaim', 'kd_part')
+                ->get();
 
-            foreach($data->items() as $key => $value){
+            foreach ($data->items() as $key => $value) {
                 $value->no_ps = $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->filter()->unique()->values()->toArray();
             }
 
@@ -207,7 +207,8 @@ class ReturController extends Controller
         }
     }
 
-    public function export(Request $request){
+    public function export(Request $request)
+    {
         try {
 
             $sql = "
@@ -253,18 +254,18 @@ class ReturController extends Controller
                     inner join [klaim_dtl] on [klaim_dtl].[no_dokumen] = [klaim].[no_dokumen] and [klaim_dtl].[companyid] = [klaim].[companyid]
                     where [klaim].[companyid] = '$request->companyid' and
                     CONVERT(DATE, klaim_dtl.tgl_klaim) between '{$request->tanggal[0]}' and '{$request->tanggal[1]}'";
-                    if (!empty($request->kd_dealer)){
-                        $sql .= " and [klaim].[kd_dealer] = '$request->kd_dealer'";
-                    }
-                    if (!empty($request->kd_sales)){
-                        $sql .= " and [klaim].[kd_sales] = '$request->kd_sales'";
-                    }
-                    if ($request->kd_jenis == 1) {
-                        $sql .= " and [klaim].[pc] = '0'";
-                    } else if ($request->kd_jenis == 2) {
-                        $sql .= " and [klaim].[pc] = '1'";
-                    }
-                    $sql .="
+            if (!empty($request->kd_dealer)) {
+                $sql .= " and [klaim].[kd_dealer] = '$request->kd_dealer'";
+            }
+            if (!empty($request->kd_sales)) {
+                $sql .= " and [klaim].[kd_sales] = '$request->kd_sales'";
+            }
+            if ($request->kd_jenis == 1) {
+                $sql .= " and [klaim].[pc] = '0'";
+            } else if ($request->kd_jenis == 2) {
+                $sql .= " and [klaim].[pc] = '1'";
+            }
+            $sql .= "
                     group by
                         klaim_dtl.no_faktur,
                         [klaim].[no_dokumen],
@@ -343,8 +344,8 @@ class ReturController extends Controller
             ";
 
             $data = DB::table(DB::raw("($sql) as a"))
-            ->selectRaw(
-                "
+                ->selectRaw(
+                    "
                     no_faktur,
                     no_retur,
                     no_klaim,
@@ -365,22 +366,22 @@ class ReturController extends Controller
                     sts_approve,
                     sts_selesai
                 "
-            )
-            ->orderBy('kd_dealer', 'asc')
-            ->orderBy('kd_sales', 'asc')
-            ->orderBy('kd_part', 'asc')
-            ->orderBy('tgl_klaim', 'asc')
-            ->get();
+                )
+                ->orderBy('kd_dealer', 'asc')
+                ->orderBy('kd_sales', 'asc')
+                ->orderBy('kd_part', 'asc')
+                ->orderBy('tgl_klaim', 'asc')
+                ->get();
 
             $dataPS = DB::table('jwb_claim')
-            ->select("no_ps", "no_klaim", "kd_part")
-            ->whereIn('no_klaim', collect($data)->pluck('no_rtoko')->unique()->values()->toArray())
-            ->where('sts_end', 1)
-            ->where('CompanyId', $request->companyid)
-            ->groupBy('no_ps', 'no_klaim', 'kd_part')
-            ->get();
+                ->select("no_ps", "no_klaim", "kd_part")
+                ->whereIn('no_klaim', collect($data)->pluck('no_rtoko')->unique()->values()->toArray())
+                ->where('sts_end', 1)
+                ->where('CompanyId', $request->companyid)
+                ->groupBy('no_ps', 'no_klaim', 'kd_part')
+                ->get();
 
-            foreach($data as $key => $value){
+            foreach ($data as $key => $value) {
                 $value->no_ps = ltrim(implode(',', $dataPS->where('no_klaim', $value->no_rtoko)->where('kd_part', $value->kd_part)->pluck('no_ps')->filter()->unique()->values()->toArray()));
             }
 
