@@ -366,14 +366,6 @@ class KonsumenController extends Controller
         ->where('klaim.companyid', $request->companyid)
         ->get();
 
-        if ($Detail->count() == 0) {
-            return (object)[
-                'status'    => false,
-                'message'   => 'Data Detail Tidak Ditemukan',
-                'data'      => ''
-            ];
-        }
-
         // ! Cek dan memastikan qty part klaim tidak melebihi qty part pada faktur
         $cekJmlQtyPart = DB::table(function ($query) use ($request, $Detail) {
             $query->selectRaw(

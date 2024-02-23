@@ -16,25 +16,38 @@ class SupplierJawabPSController extends Controller
         try {
 
             $filter_sql = "
-                select
-                    jwb_claim.no_ps,
-                    jwb_claim.tgl_ps,
-                    jwb_claim.kd_part,
-                    jwb_claim.no_retur,
-                    jwb_claim.no_klaim,
-                    rtoko.kd_dealer
-                from jwb_claim
-                inner join rtoko on jwb_claim.no_klaim = rtoko.no_retur and jwb_claim.CompanyId = rtoko.CompanyId
-                where jwb_claim.CompanyId = '{$request->companyid}'
-                    and jwb_claim.no_ps is not null
-                    and jwb_claim.no_retur is not null
-                    and jwb_claim.no_klaim is not null
-                group by jwb_claim.no_ps,
+                select header.*,filter.no_retur,filter.no_klaim  from (
+                    select
+                        jwb_claim.no_ps,
+                        jwb_claim.tgl_ps,
+                        jwb_claim.kd_part,
+                        part.ket as nm_part,
+                        jwb_claim.qty_jwb,
+                        jwb_claim.ket
+                    from jwb_claim
+                    inner join part on jwb_claim.kd_part = part.kd_part and jwb_claim.CompanyId = part.CompanyId
+                    where jwb_claim.no_retur is null and jwb_claim.CompanyId = '{$request->companyid}'
+                ) as header
+                left join (
+                    select
+                        jwb_claim.no_ps,
                         jwb_claim.tgl_ps,
                         jwb_claim.kd_part,
                         jwb_claim.no_retur,
-                        jwb_claim.no_klaim,
-                        rtoko.kd_dealer
+                        jwb_claim.no_klaim
+                    from jwb_claim
+                    inner join rtoko on jwb_claim.no_klaim = rtoko.no_retur and jwb_claim.CompanyId = rtoko.CompanyId
+                    where jwb_claim.CompanyId = '{$request->companyid}'
+                        and jwb_claim.no_ps is not null
+                        and jwb_claim.no_retur is not null
+                        and jwb_claim.no_klaim is not null
+                    group by jwb_claim.no_ps,
+                            jwb_claim.tgl_ps,
+                            jwb_claim.kd_part,
+                            jwb_claim.no_retur,
+                            jwb_claim.no_klaim,
+                            rtoko.kd_dealer
+                ) as filter on header.no_ps = filter.no_ps and header.kd_part = filter.kd_part
             ";
 
             $filter = DB::table(DB::raw("($filter_sql) as filter"));
@@ -74,9 +87,9 @@ class SupplierJawabPSController extends Controller
             ";
 
             $header = DB::table(DB::raw("($header_sql_a) as header"))
-                ->whereIn('header.no_ps', $filter->pluck('no_ps')->unique()->toArray())
-                ->whereIn('header.tgl_ps', $filter->pluck('tgl_ps')->unique()->toArray())
-                ->whereIn('header.kd_part', $filter->pluck('kd_part')->unique()->toArray())
+                ->whereIn('header.no_ps', $filter->pluck('no_ps')->filter()->unique()->toArray())
+                ->whereIn('header.tgl_ps', $filter->pluck('tgl_ps')->filter()->unique()->toArray())
+                ->whereIn('header.kd_part', $filter->pluck('kd_part')->filter()->unique()->toArray())
                 ->orderByRaw('header.tgl_ps DESC, header.usertime DESC')
                 ->get();
 
