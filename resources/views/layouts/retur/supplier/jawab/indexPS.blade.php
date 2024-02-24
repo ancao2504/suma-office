@@ -114,6 +114,23 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="card-footer" id="pagination">
+                    <div class="d-flex justify-content-between">
+                        <div class="form-group">
+                            <select class="form-select form-select-sm" name="per_page" id="per_page">
+                                <option value="10" selected>10</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="500">500</option>
+                            </select>
+                        </div>
+                        <nav aria-label="...">
+                            <ul id="page" class="justify-content-center pagination">
+                            </ul>
+                        </nav>
+                    </div>
+                    <span class="mt-3 badge badge-success" id="total"></span>
+                </div>
             </div>
             <div class="modal-footer">
                 {{-- tombol Simpan --}}

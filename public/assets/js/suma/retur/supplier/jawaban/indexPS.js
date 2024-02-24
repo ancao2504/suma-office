@@ -108,12 +108,33 @@ let formInput = {
 
 let master = {
     data: [],
+    pagination: {
+        links: [],
+        total: 0,
+        per_page: 0,
+        page: 1,
+    },
     list: async function (data = { type: "server", param: {} }) {
         if (data.type == "server") {
-            this.data = await service.get({
-                link: window.location.href,
-                data: { ...data.param },
-            });
+            let respon;
+            do {
+                if (data.param.page > respon?.last_page??1){
+                    data.param.page = respon.last_page;
+                }
+                respon = await service.get({
+                    link: window.location.href,
+                    data: { ...data.param },
+                });
+                if (respon) {
+                    this.data = respon.data;
+                    this.pagination.links = respon.links;
+                    this.pagination.total = respon.total;
+                    this.pagination.per_page = respon.per_page;
+                    this.pagination.page = respon.current_page;
+                } else {
+                    return;
+                }
+            } while (data.param.page > respon.last_page);
         }
 
         const target = $("#daftarReturSupplier");
@@ -198,6 +219,30 @@ let master = {
                     </td>
                 </tr>
             `);
+            $("#pagination #page").empty();
+            master.pagination.links.map((data) => {
+                $("#pagination #page").append(`
+                            <li class="page-item ${
+                                data.active ? "active" : ""
+                            } ${data.url ? "" : "disabled"}">
+                                <a class="page-link" data-page="${
+                                    data.url ? data.url.split("?page=")[1] : ""
+                                }">${data.label
+                    .replace(
+                        "pagination.previous",
+                        '<i class="fas fa-angle-double-left"></i>'
+                    )
+                    .replace(
+                        "pagination.next",
+                        '<i class="fas fa-angle-double-right"></i>'
+                    )}</a>
+                            </li >
+                        `);
+            });
+            $("#pagination #total").text(
+                "Jumlah data : " + master.pagination.total
+            );
+            $("#pagination #per_page").val(master.pagination.per_page);
         });
     },
     listDetail: async function (data) {
@@ -292,6 +337,8 @@ let master = {
                     field: $("#filter_table #select_search").val(),
                 },
                 tanggal: $("#filter_table #tgl_input").val().split(" to "),
+                per_page: master.pagination.per_page,
+                page: master.pagination.page,
             };
         },
     },
@@ -447,17 +494,17 @@ let master = {
                         timer: 1000,
                     });
 
-                    master.data.forEach((item, index) => {
-                        if (
-                            item.no_ps == request.no_ps &&
-                            item.tgl_ps == request.tgl_ps &&
-                            item.kd_part == request.kd_part &&
-                            item.qty_jwb == request.qty_jwb
-                        ) {
-                            master.data.splice(index, 1);
-                        }
-                    });
-                    master.list({ type: "local" });
+                    // master.data.forEach((item, index) => {
+                    //     if (
+                    //         item.no_ps == request.no_ps &&
+                    //         item.tgl_ps == request.tgl_ps &&
+                    //         item.kd_part == request.kd_part &&
+                    //         item.qty_jwb == request.qty_jwb
+                    //     ) {
+                    //         master.data.splice(index, 1);
+                    //     }
+                    // });
+                    master.list({ type: "server", param: master.filter.values() });
                 }
             }
         });
@@ -481,6 +528,20 @@ $(document).ready(async function () {
 
     master.list();
 
+    $("#pagination #per_page").on("change", function () {
+        master.pagination.per_page = $(this).val();
+        master.pagination.page = 1;
+        master.list({ type: "server", param: master.filter.values() });
+    });
+
+    $("#pagination .pagination").on(
+        "click",
+        ".page-item:not(.disabled)",
+        function () {
+        master.pagination.page = $(this).find("a").data("page");
+        master.list({ type: "server", param: master.filter.values() });
+    });
+
     $("#filter_table #btn_search").on("click", function () {
         const data = master.filter.values();
         if (data.search.field == "") {
@@ -499,12 +560,12 @@ $(document).ready(async function () {
         master.list({ type: "server", param: data });
     });
 
-    let a = 0;
+    let jmlOnChange = 0;
     $("#filter_table #tgl_input").on("change", function () {
-        a++;
-        if (a == 2) {
+        jmlOnChange++; // menambah jumlah onChange
+        if (jmlOnChange == 2) { // jika onChange sudah 2 kali maka yang ke 2 yang dijalankan
             master.list({ type: "server", param: master.filter.values() });
-            a = 0;
+            jmlOnChange = 0;
         }
     });
 

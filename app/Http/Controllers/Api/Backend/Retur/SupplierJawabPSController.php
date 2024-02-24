@@ -91,7 +91,7 @@ class SupplierJawabPSController extends Controller
                 ->whereIn('header.tgl_ps', $filter->pluck('tgl_ps')->filter()->unique()->toArray())
                 ->whereIn('header.kd_part', $filter->pluck('kd_part')->filter()->unique()->toArray())
                 ->orderByRaw('header.tgl_ps DESC, header.usertime DESC')
-                ->get();
+                ->paginate($request->per_page);
 
             $detail_sql = "
                 select
@@ -119,7 +119,7 @@ class SupplierJawabPSController extends Controller
                 ->orderByRaw('detail.tgl_jwb DESC')
                 ->get();
 
-            $header = collect($header)->filter(function ($item) use ($detail) {
+            collect($header->items())->filter(function ($item) use ($detail) {
                 $a = $detail->where('no_ps', $item->no_ps)->where('tgl_ps', $item->tgl_ps)->where('kd_part', $item->kd_part);
                 if ($detail->isNotEmpty()) {
                     $item->list_no_retur = [... $a->pluck('no_retur')->filter()->unique()->toArray()];
