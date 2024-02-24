@@ -17,8 +17,15 @@ let formInputDetail = {
         $("#add_modal_retur #jml").val("");
         $("#add_modal_retur #jml").removeClass("is-invalid");
         $("#add_modal_retur #ca").val("");
-        $("#add_modal_retur #ket").val("");
-        $("#add_modal_retur #ket").removeClass("is-invalid");
+        $("#add_modal_retur #ca").removeClass("is-invalid");
+        // $("#add_modal_retur #ket").val("");
+        // $("#add_modal_retur #ket").removeClass("is-invalid");
+        $("#add_modal_retur #alasan").val("RETUR");
+        $("#add_modal_retur #alasan").removeClass("is-invalid");
+        $("#add_modal_retur #keputusan").val("TERIMA");
+        $("#add_modal_retur #keputusan").removeClass("is-invalid");
+
+
     },
     validation: function () {
         const data = this.values();
@@ -63,7 +70,6 @@ let formInputDetail = {
                 );
             }
         }
-
         if (data.alasan == "") {
             isvalid = false;
             $("#add_modal_retur #alasan").addClass("is-invalid");
@@ -89,13 +95,17 @@ let formInputDetail = {
         // }
 
         if (isvalid) {
-            $("#add_modal_retur #error_no_ps").text("");
-            $("#add_modal_retur #error_kd_part").text("");
-            $("#add_modal_retur #error_qty").text("");
+            $("#add_modal_retur #error_no_retur").text("");
+            $("#add_modal_retur #error_jml").text("");
+            $("#add_modal_retur #error_alasan").text("");
+            $("#add_modal_retur #error_ca").text("");
+            $("#add_modal_retur #error_keputusan").text("");
 
-            $("#add_modal_retur #no_ps").removeClass("is-invalid");
-            $("#add_modal_retur #kd_part").removeClass("is-invalid");
-            $("#add_modal_retur #qty").removeClass("is-invalid");
+            $("#add_modal_retur #no_retur").removeClass("is-invalid");
+            $("#add_modal_retur #jml").removeClass("is-invalid");
+            $("#add_modal_retur #alasan").removeClass("is-invalid");
+            $("#add_modal_retur #ca").removeClass("is-invalid");
+            $("#add_modal_retur #keputusan").removeClass("is-invalid");
         }
 
         return isvalid;
@@ -164,6 +174,8 @@ let Detail = {
             loading.release();
             return;
         }
+
+        return false;
 
         const respon = await service.post({
             link: window.location.href + "/detail",
