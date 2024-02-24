@@ -4,10 +4,6 @@ let date = {
         end: moment().endOf("month"),
     },
 };
-let formatter = new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-});
 
 let filter_data = {
     _token: $("meta[name=csrf-token]").attr("content"),
