@@ -159,7 +159,7 @@
                     <h3 class="mt-10">Form Jawab Retur By Packing Sheet</h3>
                     <div class="border rounded-3 p-3 mb-10 mt-3 row g-3">
                         <div class="col-sm-4">
-                            <label for="no_retur" class="form-label required">No Retur Toko (no Klaim)</label>
+                            <label for="no_retur" class="form-label required">No Retur (Toko)</label>
                             <div class="input-group mb-3 has-validation">
                                 <button class="btn btn-primary list-klaim" type="button"><i
                                         class="fas fa-search"></i></button>
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <label for="no_ca" class="form-label">No Retur Supplier (No CA)</label>
+                            <label for="no_ca" class="form-label">No Retur (Supplier)</label>
                             <input type="text" class="form-control" id="no_ca" name="no_ca" value=""
                                 disabled>
                         </div>
