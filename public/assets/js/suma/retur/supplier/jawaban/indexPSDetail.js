@@ -261,7 +261,7 @@ let Detail = {
                 }
             });
 
-            master.list({ type: "local" });
+            master.list();
             master.listDetail(
                 master.data.filter(
                     (item) =>
