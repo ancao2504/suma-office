@@ -28,53 +28,74 @@ let formInput = {
         $("#form_ps #ket").val("");
     },
     validation: function () {
-        // const data = formInput.values();
         const data = this.values();
-        let isvalid = true;
+        let isvalid = [];
 
         if (data.no_ps == "") {
-            isvalid = false;
             $("#form_ps #no_ps").addClass("is-invalid");
             $("#form_ps #error_no_ps").text("No Packing Sheet Harus diisi");
+            isvalid.push({
+                no_ps: false,
+            });
+        } else {
+            $("#form_ps #no_ps").removeClass("is-invalid");
+            $("#form_ps #error_no_ps").text("");
+            isvalid.push({
+                no_ps: true,
+            });
         }
 
         if (data.tgl_ps == "") {
-            isvalid = false;
             $("#form_ps #tgl_ps").addClass("is-invalid");
             $("#form_ps #error_tgl_ps").text("Tgl Packing Sheet Harus diisi");
+            isvalid.push({
+                tgl_ps: false,
+            });
+        } else {
+            $("#form_ps #tgl_ps").removeClass("is-invalid");
+            $("#form_ps #error_tgl_ps").text("");
+            isvalid.push({
+                tgl_ps: true,
+            });
         }
 
         if (data.kd_part == "") {
-            isvalid = false;
             $("#form_ps #kd_part").addClass("is-invalid");
             $("#form_ps #error_kd_part").text("Kode Part Harus diisi");
+            isvalid.push({
+                kd_part: false,
+            })
+        } else {
+            $("#form_ps #kd_part").removeClass("is-invalid");
+            $("#form_ps #error_kd_part").text("");
+            isvalid.push({
+                kd_part: true,
+            })
         }
 
         if (data.qty == "") {
-            isvalid = false;
             $("#form_ps #qty").addClass("is-invalid");
             $("#form_ps #error_qty").text("Jumlah Harus diisi");
+            isvalid.push({
+                qty: false,
+            })
         } else {
             if (!/^[0-9]+$/.test(data.qty)) {
-                isvalid = false;
                 $("#form_ps #qty").addClass("is-invalid");
                 $("#form_ps #error_qty").text("Jumlah harus angka");
+                isvalid.push({
+                    qty: false,
+                })
+            } else {
+                $("#form_ps #qty").removeClass("is-invalid");
+                $("#form_ps #error_qty").text("");
+                isvalid.push({
+                    qty: true,
+                })
             }
         }
 
-        if (isvalid) {
-            $("#form_ps #error_no_ps").text("");
-            $("#form_ps #error_tgl_ps").text("");
-            $("#form_ps #error_kd_part").text("");
-            $("#form_ps #error_qty").text("");
-
-            $("#form_ps #no_ps").removeClass("is-invalid");
-            $("#form_ps #tgl_ps").removeClass("is-invalid");
-            $("#form_ps #kd_part").removeClass("is-invalid");
-            $("#form_ps #qty").removeClass("is-invalid");
-        }
-
-        return isvalid;
+        return isvalid.every(field => Object.values(field)[0]);
     },
     autocomplete: {
         kd_part: async function (kd_part) {
