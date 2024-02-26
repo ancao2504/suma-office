@@ -175,8 +175,6 @@ let Detail = {
             return;
         }
 
-        return false;
-
         const respon = await service.post({
             link: window.location.href + "/detail",
             param: {

@@ -273,7 +273,7 @@ let master = {
             return;
         }
 
-        let tgl_tamp = null;
+        // let tgl_tamp = null;
         $.each(data.jawab, function (index, item) {
             target.append(`
                 <tr class="fw-bolder fs-8 border">

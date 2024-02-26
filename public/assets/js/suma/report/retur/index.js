@@ -26,15 +26,16 @@ function report(page = 1) {
     $("#table_list .card-footer").addClass("d-none");
     $("#table_list tbody").empty();
     $("#table_list tbody").html(`
-            <tr>
-                <td colspan="24" class="text-center text-primary">
-                    <div class="text-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
+        <tr>
+            <td colspan="24" class="text-center text-primary">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-                </td>
-            </tr>`);
+                </div>
+            </td>
+        </tr>
+    `);
 
     $.post(window.location.href, filter_data, function (response) {
         if (response.status == "1") {
@@ -182,26 +183,26 @@ function report(page = 1) {
             });
         }
     })
-        .fail(function (jqXHR, textStatus, error) {
-            $("#dealer-list .close").trigger("click");
-            Swal.fire({
-                title: "Error " + jqXHR.status,
-                text: "Terjadi kesalahan, silahkan coba beberapa saat lagi",
-                icon: "error",
-                confirmButtonText: "OK",
-                customClass: {
-                    confirmButton: "btn btn-secondary",
-                },
-                allowOutsideClick: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
-        })
-        .always(function () {
-            loading.release();
+    .fail(function (jqXHR, textStatus, error) {
+        $("#dealer-list .close").trigger("click");
+        Swal.fire({
+            title: "Error " + jqXHR.status,
+            text: "Terjadi kesalahan, silahkan coba beberapa saat lagi",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+                confirmButton: "btn btn-secondary",
+            },
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload();
+            }
         });
+    })
+    .always(function () {
+        loading.release();
+    });
 }
 
 $(document).ready(function () {
