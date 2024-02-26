@@ -29,63 +29,118 @@ let formInputDetail = {
     },
     validation: function () {
         const data = this.values();
-        let isvalid = true;
+        let isvalid = [];
 
         if (data.no_retur == "") {
-            isvalid = false;
             $("#add_modal_retur #no_retur").addClass("is-invalid");
             $("#add_modal_retur #error_no_retur").text("No Retur Harus diisi");
+            isvalid.push({
+                no_retur: false,
+            })
+        } else {
+            $("#add_modal_retur #no_retur").removeClass("is-invalid");
+            $("#add_modal_retur #error_no_retur").text("");
+            isvalid.push({
+                no_retur: true,
+            });
         }
 
         if (data.jml == "") {
-            isvalid = false;
             $("#add_modal_retur #jml").addClass("is-invalid");
             $("#add_modal_retur #error_jml").text("Jumlah Harus diisi");
+            isvalid.push({
+                jml: false,
+            })
         } else {
             if (!/^[0-9]+$/.test(data.jml)) {
-                isvalid = false;
                 $("#add_modal_retur #jml").addClass("is-invalid");
                 $("#add_modal_retur #error_jml").text("Jumlah harus angka");
+                isvalid.push({
+                    jml: false,
+                })
+            } else {
+                $("#add_modal_retur #jml").removeClass("is-invalid");
+                $("#add_modal_retur #error_jml").text("");
+                isvalid.push({
+                    jml: true,
+                })
             }
 
             if (parseInt(data.jml) < 1) {
-                isvalid = false;
                 $("#add_modal_retur #jml").addClass("is-invalid");
                 $("#add_modal_retur #error_jml").text("Jumlah minimal 1 item");
+                isvalid.push({
+                    jml: false,
+                })
+            } else {
+                $("#add_modal_retur #jml").removeClass("is-invalid");
+                $("#add_modal_retur #error_jml").text("");
+                isvalid.push({
+                    jml: true,
+                })
             }
 
             if (parseInt(data.jml) > parseInt(this.limit.rtoko)) {
-                isvalid = false;
                 $("#add_modal_retur #jml").addClass("is-invalid");
                 $("#add_modal_retur #error_jml").text(
                     "Jumlah Ganti Melebihi Jumlah part yang di Retur"
                 );
+                isvalid.push({
+                    jml: false,
+                })
+            } else {
+                $("#add_modal_retur #jml").removeClass("is-invalid");
+                $("#add_modal_retur #error_jml").text("");
+                isvalid.push({
+                    jml: true,
+                })
             }
 
             if (parseInt(data.jml) > parseInt(this.modal.qty)) {
-                isvalid = false;
                 $("#add_modal_retur #jml").addClass("is-invalid");
                 $("#add_modal_retur #error_jml").text(
                     "Jumlah Ganti Melebihi Jumlah barang Packing Sheet"
                 );
+                isvalid.push({
+                    jml: false,
+                })
+            } else {
+                $("#add_modal_retur #jml").removeClass("is-invalid");
+                $("#add_modal_retur #error_jml").text("");
+                isvalid.push({
+                    jml: true,
+                })
             }
         }
+
         if (data.alasan == "") {
-            isvalid = false;
             $("#add_modal_retur #alasan").addClass("is-invalid");
             $("#add_modal_retur #error_alasan").text("alasan Harus diisi");
+            isvalid.push({
+                alasan: false,
+            })
         } else if (data.alasan == "CA") {
             if (data.ca == "") {
-                isvalid = false;
                 $("#add_modal_retur #ca").addClass("is-invalid");
                 $("#add_modal_retur #error_ca").text("Jumlah Uang Harus diisi");
+                isvalid.push({
+                    ca: false,
+                })
             }
         }
 
         if (data.keputusan == "") {
-            isvalid = false;
             $("#add_modal_retur #keputusan").addClass("is-invalid");
             $("#add_modal_retur #error_keputusan").text("ca Harus diisi");
+            isvalid.push({
+                keputusan: false,
+            })
+        } else {
+            $("#add_modal_retur #keputusan").removeClass("is-invalid");
+            $("#add_modal_retur #error_keputusan").text("");
+            isvalid.push({
+                keputusan: true,
+            })
         }
 
         // if (data.ket == "") {
@@ -94,21 +149,7 @@ let formInputDetail = {
         //     $("#add_modal_retur #error_ket").text("keterangan Harus diisi");
         // }
 
-        if (isvalid) {
-            $("#add_modal_retur #error_no_retur").text("");
-            $("#add_modal_retur #error_jml").text("");
-            $("#add_modal_retur #error_alasan").text("");
-            $("#add_modal_retur #error_ca").text("");
-            $("#add_modal_retur #error_keputusan").text("");
-
-            $("#add_modal_retur #no_retur").removeClass("is-invalid");
-            $("#add_modal_retur #jml").removeClass("is-invalid");
-            $("#add_modal_retur #alasan").removeClass("is-invalid");
-            $("#add_modal_retur #ca").removeClass("is-invalid");
-            $("#add_modal_retur #keputusan").removeClass("is-invalid");
-        }
-
-        return isvalid;
+        return isvalid.every(field => Object.values(field)[0]);
     },
     autoComplete: {
         rtoko: async function (requst) {
