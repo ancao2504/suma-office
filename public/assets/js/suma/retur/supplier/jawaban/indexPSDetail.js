@@ -144,9 +144,17 @@ let formInputDetail = {
         }
 
         // if (data.ket == "") {
-        //     isvalid = false;
         //     $("#add_modal_retur #ket").addClass("is-invalid");
         //     $("#add_modal_retur #error_ket").text("keterangan Harus diisi");
+        //     isvalid.push({
+        //         ket: false,
+        //     })
+        // } else {
+        //     $("#add_modal_retur #ket").removeClass("is-invalid");
+        //     $("#add_modal_retur #error_ket").text("");
+        //     isvalid.push({
+        //         ket: true,3
+        //     })
         // }
 
         return isvalid.every(field => Object.values(field)[0]);
@@ -239,7 +247,7 @@ let Detail = {
                 timer: 1000,
             });
 
-            await master.list();
+            await master.list({ type: "server", param: master.filter.values() });
 
             const data_detail = master.data.filter(
                 (item) =>
@@ -311,8 +319,7 @@ let Detail = {
                     });
                 }
             });
-
-            master.list();
+            master.list({ type: "server", param: master.filter.values() });
             master.listDetail(
                 master.data.filter(
                     (item) =>

@@ -444,7 +444,8 @@ let master = {
                         timer: 1000,
                     });
 
-                    master.list();
+
+                    master.list({ type: "server", param: master.filter.values() });
                 }
             }
         });
@@ -474,7 +475,7 @@ let master = {
             });
 
             formInput.clear();
-            master.list();
+            master.list({ type: "server", param: master.filter.values() });
         }
 
         loading.release();
