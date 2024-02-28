@@ -99,6 +99,10 @@ let formInput = {
     },
     autocomplete: {
         kd_part: async function (kd_part) {
+            if (kd_part.trim() == "") {
+                $("#form_ps #kd_part").val("");
+                return;
+            }
             const respon = await service.get({
                 link: base_url + "/part",
                 data: {
