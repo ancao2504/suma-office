@@ -232,14 +232,14 @@ let master = {
                             item.qty_terpakai > 0
                                 ? ""
                                 : `<button type="button" class="btn-sm btn btn-danger text-white" onclick='master.hapus(${JSON.stringify(
-                                      {
-                                          no_ps: item.no_ps,
-                                          tgl_ps: item.tgl_ps,
-                                          kd_part: item.kd_part,
-                                          nm_part: item.nm_part,
-                                          qty_jwb: item.qty_jwb,
-                                      }
-                                  )})'><i class="bi bi-trash"></i></button>`
+                                    {
+                                        no_ps: item.no_ps,
+                                        tgl_ps: item.tgl_ps,
+                                        kd_part: item.kd_part,
+                                        nm_part: item.nm_part,
+                                        qty_jwb: item.qty_jwb,
+                                    }
+                                )})'><i class="bi bi-trash"></i></button>`
                         }
                     </td>
                 </tr>
@@ -261,8 +261,8 @@ let master = {
                         "pagination.next",
                         '<i class="fas fa-angle-double-right"></i>'
                     )}</a>
-                            </li >
-                        `);
+                            </li>
+                `);
             });
             $("#pagination #total").text(
                 "Jumlah data : " + master.pagination.total
@@ -570,10 +570,10 @@ $(document).ready(async function () {
 
     $("#filter_table #btn_search").on("click", function () {
         const data = master.filter.values();
-        if (data.search.field == "") {
+        if (data.search.field == "" || data.search.value == "") {
             return;
         }
-
+        console.log(data);
         master.list({ type: "server", param: data });
     });
 
