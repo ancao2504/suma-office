@@ -163,46 +163,6 @@
     </div>
 </div>
 
-{{-- <div class="modal fade" id="modal_produksi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Pilih No Produksi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="card-body">
-                <div class="w-100">
-                    <button type="button" class="btn btn-primary mb-3" id="btn_pilih_otomatis">
-                        <span class="bi bi-check-circle"></span>
-                        Pilih Otomatis
-                    </button>
-                </div>
-                <div id="list_produksi" class="table-responsive border rounded-3 mb-10">
-                    <table id="datatable_produksi" class="table table-row-dashed table-row-gray-300 align-middle border">
-                        <thead class="border">
-                            <tr class="fs-8 fw-bolder text-muted text-center">
-                                <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3">No Produksi</th>
-                                <th rowspan="2" class="w-100px ps-3 pe-3">Action</th>
-                            </tr>
-                            <tr class="fs-8 fw-bolder text-muted text-center">
-                            </tr>
-                        </thead>
-                        <tbody id="list-produksi">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btn_pilih_produksi" class="btn btn-success text-white">Pilih</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#jwb_modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
-
-
 @endsection
 
 @push('scripts')

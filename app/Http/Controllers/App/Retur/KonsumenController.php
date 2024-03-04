@@ -195,7 +195,6 @@ class KonsumenController extends Controller
             }
 
             $responseApi = json_decode(Service::ReturKonsumenSimpan($request));
-            // return Service::ReturKonsumenSimpan($request);
             $statusApi = $responseApi->status;
             $messageApi =  $responseApi->message;
             $data = $responseApi->data;

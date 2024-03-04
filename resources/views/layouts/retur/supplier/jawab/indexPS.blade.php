@@ -2,11 +2,6 @@
 @section('title', $title_menu)
 @section('subtitle', $title_page)
 @push('styles')
-    <style>
-        .swal-height {
-            height: 80vh;
-        }
-    </style>
 @endpush
 
 @section('container')
@@ -130,11 +125,55 @@
                         </nav>
                     </div>
                     <span class="mt-3 badge badge-success" id="total"></span>
+                    <div class="table-responsive border rounded-3 mt-2">
+                        <table class="table table-row-dashed table-row-gray-300 align-middle border">
+                            <thead class="border">
+                                <tr class="fs-8 fw-bolder text-muted text-center">
+                                    <th rowspan="2" class="w-50px ps-3 pe-3">tombol</th>
+                                    <th rowspan="2" class="w-100px ps-3 pe-3">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">
+                                        <button class="btn-sm btn btn-success text-white">
+                                            <i class="bi bi-plus-circle"></i>
+                                        </button>
+                                        <button class="btn-sm btn btn-danger text-white"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                    <td class="text-start">
+                                        Belum ada data detail dan bisa di <span class="text-danger">hapus</span>
+                                    </td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">
+                                        <button class="position-relative btn-sm btn btn-success text-white">
+                                            <i class="bi bi-plus-circle"></i>
+                                            <span class="position-absolute top-0 start-0 translate-middle  badge badge-circle badge-warning">1</span>
+                                        </button>
+                                    </td>
+                                    <td class="text-start">
+                                        Sudah ada data yang di <span class="text-success">tambah</span> pada detail tetapi belum di <span class="text-primary">simpan dan proses</span>
+                                    </td>
+                                </tr>
+                                <tr class="fw-bolder fs-8 border">
+                                    <td class="text-center">
+                                        <button class="btn-sm btn btn-success text-white">
+                                            <i class="bi bi-plus-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td class="text-start">
+                                        Terdapat data yang sudah di <span class="text-primary">simpan dan proses</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 {{-- tombol Simpan --}}
-                <a role="button" id="simpan_jwb" class="btn btn-primary">Simpan</a>
+                <a role="button" id="simpan_jwb" class="btn btn-primary">Simpan dan Proses</a>
                 <a href="{{ URL::previous() }}" id="btn-back" class="btn btn-secondary">Kembali</a>
             </div>
         </div>
@@ -247,7 +286,6 @@
             </div>
         </div>
     </div>
-
 
     <!--begin::Modal Part data-->
     <div class="modal fade" tabindex="-1" id="klaim-list">

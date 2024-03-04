@@ -195,7 +195,8 @@ class SupplierController extends Controller
                 'retur.tglretur',
                 'retur.kd_supp',
                 'retur.total'
-            );
+            )
+            ->orderBy('retur.no_retur', 'desc');
 
         if ($request->has('filter.column') && count($request->input('filter.column')) > 0) {
             $validColumns = ['no_retur', 'tglretur', 'kd_supp', 'jmlretur', 'qty_jwb'];
