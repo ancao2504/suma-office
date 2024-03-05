@@ -16,7 +16,7 @@ class SupplierJawabPSController extends Controller
         try {
 
             $filter_sql = "
-                select header.*,filter.no_retur,filter.no_klaim  from (
+                select header.*,filter.no_retur,filter.no_klaim,filter.kd_dealer  from (
                     select
                         jwb_claim.no_ps,
                         jwb_claim.tgl_ps,
@@ -34,7 +34,8 @@ class SupplierJawabPSController extends Controller
                         jwb_claim.tgl_ps,
                         jwb_claim.kd_part,
                         jwb_claim.no_retur,
-                        jwb_claim.no_klaim
+                        jwb_claim.no_klaim,
+                        rtoko.kd_dealer
                     from jwb_claim
                     inner join rtoko on jwb_claim.no_klaim = rtoko.no_retur and jwb_claim.CompanyId = rtoko.CompanyId
                     where jwb_claim.CompanyId = '{$request->companyid}'
@@ -518,6 +519,7 @@ class SupplierJawabPSController extends Controller
             );
         };
     }
+
     public function destroyPSDetail(Request $request){
         try {
             $rules = [

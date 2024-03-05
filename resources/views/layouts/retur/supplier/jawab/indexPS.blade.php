@@ -129,7 +129,7 @@
                         <table class="table table-row-dashed table-row-gray-300 align-middle border">
                             <thead class="border">
                                 <tr class="fs-8 fw-bolder text-muted text-center">
-                                    <th rowspan="2" class="w-50px ps-3 pe-3">tombol</th>
+                                    <th rowspan="2" class="w-50px ps-3 pe-3">Tombol</th>
                                     <th rowspan="2" class="w-100px ps-3 pe-3">Keterangan</th>
                                 </tr>
                             </thead>
@@ -153,7 +153,7 @@
                                         </button>
                                     </td>
                                     <td class="text-start">
-                                        Sudah ada data yang di <span class="text-success">tambah</span> pada detail tetapi belum di <span class="text-primary">simpan dan proses</span>
+                                        Terdapat data yang di <span class="text-success">tambah</span> pada detail tetapi belum di <span class="text-primary">simpan dan proses</span>
                                     </td>
                                 </tr>
                                 <tr class="fw-bolder fs-8 border">

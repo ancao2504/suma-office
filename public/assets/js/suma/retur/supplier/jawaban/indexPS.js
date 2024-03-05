@@ -370,6 +370,7 @@ let master = {
     simpan: async function () {
         swal.fire({
             title: "Apakah anda yakin menyimpan data ini ?",
+            html: `<p class="text-start"><span class="required"></span>Tidak akan memproses data dari user lain</p>`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
