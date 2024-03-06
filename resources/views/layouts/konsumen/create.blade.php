@@ -223,6 +223,7 @@
             tipe: '{{ $data->type??'' }}',
             company: '{{ $data->companyid??'' }}',
             lokasi: '{{ $data->kd_lokasi??'' }}',
+            tgl_lahir: '{{ $data->tgl_lahir??'' }}'
         };
     </script>
 	<script language="JavaScript" src="{{ asset('assets/js/suma/konsumen/Create.js') }}?v={{ time() }}"></script>

@@ -353,6 +353,7 @@ $(document).ready(function () {
 
     $("#inputTanggalLahir").flatpickr({
         dateFormat: "d-m-Y",
+        defaultDate: moment(old.tgl_lahir).format('DD-MM-YYYY'),
     });
 
     $('#merk_motor').on('change', function () {
