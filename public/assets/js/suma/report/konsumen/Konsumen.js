@@ -111,6 +111,7 @@ $('document').ready(function() {
 
             $('#filter_report #jenis_produk_HONDA').attr('disabled', false);
             $('#filter_report #jenis_produk_FDR').attr('disabled', true);
+            $('#filter_report #jenis_produk_FDR').val('');
 
         } else if ($(this).val().toLowerCase() == 'fdr') {
             $('.text-kd_part').text('Ukuran Ban');
@@ -123,6 +124,7 @@ $('document').ready(function() {
             });
 
             $('#filter_report #jenis_produk_HONDA').attr('disabled', true);
+            $('#filter_report #jenis_produk_HONDA').val('');
             $('#filter_report #jenis_produk_FDR').attr('disabled', false);
         }
     });
