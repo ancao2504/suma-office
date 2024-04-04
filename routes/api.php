@@ -163,7 +163,7 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/campaign', 'dataCampaign')->name('campaign');
                     Route::post('/backend/salesman', 'dataSalesman')->name('salesman');
                     Route::post('/backend/retur', 'dataRetur')->name('retur');
-                    Route::post('/backend/Rtoko', 'dataRtoko')->name('retur');
+                    Route::post('/backend/Rtoko', 'dataRtoko')->name('Rtoko');
                     Route::post('/backend/supplier', 'dataSupplier')->name('supplier');
                     Route::post('/backend/dealer', 'dataDealer')->name('dealer');
                     Route::post('/backend/faktur/konsumen', 'dataFakturKonsumen')->name('faktur-konsumen');
