@@ -23,6 +23,7 @@ function request_data(page){
 
             jenis_part: $('#filter_report #jenis_part').val(),
             kd_part: $('#filter_report #kd_part').val(),
+            produk: $('#filter_report #divisi').val() == 'HONDA' ? $('#filter_report #jenis_produk_HONDA').val() : $('#filter_report #jenis_produk_FDR').val(),
 
             merek_motor: $('#filter_report #merek_motor').val(),
             tipe_motor: $('#filter_report #tipe_motor').val(),
@@ -107,6 +108,10 @@ $('document').ready(function() {
             Object.keys(honda_lokasi).map(function(item) {
                 $('#filter_report #company').append(`<option value="${honda_lokasi[item].companyid}">${honda_lokasi[item].companyid} (${honda_lokasi[item].nm_cabang})</option>`);
             });
+
+            $('#filter_report #jenis_produk_HONDA').attr('disabled', false);
+            $('#filter_report #jenis_produk_FDR').attr('disabled', true);
+
         } else if ($(this).val().toLowerCase() == 'fdr') {
             $('.text-kd_part').text('Ukuran Ban');
             $('#filter_report #kd_part').attr('placeholder', 'Contoh : 80/90-17');
@@ -116,6 +121,9 @@ $('document').ready(function() {
             Object.keys(fdr_lokasi).map(function(item) {
                 $('#filter_report #company').append(`<option value="${fdr_lokasi[item].companyid}">${fdr_lokasi[item].companyid} (${fdr_lokasi[item].nm_cabang})</option>`);
             });
+
+            $('#filter_report #jenis_produk_HONDA').attr('disabled', true);
+            $('#filter_report #jenis_produk_FDR').attr('disabled', false);
         }
     });
 
@@ -280,6 +288,7 @@ $('document').ready(function() {
 
                 jenis_part: $('#filter_report #jenis_part').val(),
                 kd_part: $('#filter_report #kd_part').val(),
+                produk: $('#filter_report #divisi').val() == 'HONDA' ? $('#filter_report #jenis_produk_HONDA').val() : $('#filter_report #jenis_produk_FDR').val(),
 
                 merek_motor: $('#filter_report #merek_motor').val(),
                 tipe_motor: $('#filter_report #tipe_motor').val(),

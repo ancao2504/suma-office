@@ -65,7 +65,7 @@
                         <thead class="border">
                             <tr  class="fs-8 fw-bolder text-muted text-center">
                                 <th rowspan="2" class="w-50px ps-3 pe-3">No</th>
-                                <th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_input">Tgl Transaksi</span></th>
+                                <th rowspan="2" class="w-50px ps-3 pe-3" ><span id="tgl_input">Tgl Faktur</span></th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3"><span id="jenis_motor">Jenis Motor</span></th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3"><span id="tipe_motor">Tipe Motor</span></th>
                                 <th rowspan="2" class="w-50px ps-3 pe-3"><span id="merek_motor">Merek Motor</span></th>
@@ -92,7 +92,7 @@
                                     @foreach ($data->data as $key => $value)
                                     <tr class="fw-bolder fs-8 border">
                                         <td class="text-center">{{ $no++ }}</td>
-                                        <td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_input)) }}</td>
+                                        <td class="text-center">{{ date('d/m/Y', strtotime($value->tgl_faktur)) }}</td>
                                         <td class="text-start">{{ ($value->jenis??'-') }}</td>
                                         <td class="text-start">{{ ($value->type??'-') }}</td>
                                         <td class="text-start">{{ ($value->merk??'-') }}</td>
@@ -261,6 +261,25 @@
 									</div>
 									<label for="kd_part" class="form-label text-kd_part">Kode Part</label>
 									<input class="form-control" name="kd_part" id="kd_part" placeholder="Contoh : 22535KWN901"/>
+								</div>
+							</div>
+							<div class="col-lg-4 pb-15">
+								<label for="produk" class="form-label">Filter Produk : </label>
+								<div class="w-100 h-100 border border-dark p-6 rounded">
+									<label for="jenis_produk_HONDA" class="form-label">HONDA</label>
+                                    <select name="jenis_produk_HONDA" id="jenis_produk_HONDA" class="form-select" data-placeholder="Pilih Jenis Produk" disabled>
+                                        <option value="">Pilih Jenis Produk</option>
+                                        @if (!empty($produk->HONDA))
+                                            {!! $produk->HONDA !!}
+                                        @endif
+                                    </select>
+									<label for="jenis_produk_FDR" class="form-label">FDR</label>
+                                    <select name="jenis_produk_FDR" id="jenis_produk_FDR" class="form-select" data-placeholder="Pilih Jenis Produk" disabled>
+                                        <option value="">Pilih Jenis Produk</option>
+                                        @if (!empty($produk->FDR))
+                                            {!! $produk->FDR !!}
+                                        @endif
+                                    </select>
 								</div>
 							</div>
 							<div class="col-lg-4 pb-15">

@@ -50,6 +50,14 @@ class KonsumenController extends Controller
                         ->on('faktur.CompanyId', 'fakt_dtl.companyid');
                     })
                     ->where('fakt_dtl.companyid', $request->companyid);
+                    if(!empty($request->tgl_transaksi)){
+                        if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
+                            $query = $query->whereMonth('faktur.tgl_faktur', date('m', strtotime($request->tgl_transaksi[0])))
+                            ->whereYear('faktur.tgl_faktur', date('Y', strtotime($request->tgl_transaksi[0])));
+                        } else {
+                            $query = $query->whereBetween('faktur.tgl_faktur', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
+                        }
+                    }
                     if (!empty($request->kd_lokasi)){
                         $query = $query->whereIn('fakt_dtl.kd_lokasi', Arr::wrap($request->kd_lokasi));
                     }
@@ -69,12 +77,12 @@ class KonsumenController extends Controller
                 'part.kd_part',
                 'part.ket',
                 DB::raw("CASE WHEN part.jenis = '' THEN NULL ELSE part.jenis END as ring"),
-                'konsumen.tanggal as tgl_input',
+                'faktur.tgl_faktur as tgl_faktur',
                 DB::raw("'".$request->divisi."' as divisi"),
                 'faktur.CompanyId',
                 'faktur.kd_lokasi'
             )
-            ->JoinSub(function ($query) use ($request) {
+            ->leftJoinSub(function ($query) use ($request) {
                 $query->select(
                     'companyid',
                     'no_faktur',
@@ -96,14 +104,6 @@ class KonsumenController extends Controller
                     'keterangan_mengetahui'
                 )->from(DB::raw($request->db.'konsumen'))
                 ->where('companyid', $request->companyid);
-                if(!empty($request->tgl_transaksi)){
-                    if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
-                        $query = $query->whereMonth('tanggal', date('m', strtotime($request->tgl_transaksi[0])))
-                        ->whereYear('tanggal', date('Y', strtotime($request->tgl_transaksi[0])));
-                    } else {
-                        $query = $query->whereBetween('tanggal', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
-                    }
-                }
                 if(!empty($request->tgl_lahir)){
                     if (count(Arr::wrap($request->tgl_lahir)) == 1) {
                         $query = $query->whereMonth('tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
@@ -155,7 +155,18 @@ class KonsumenController extends Controller
             }, 'part', function ($join) {
                 $join->on('part.kd_part', 'faktur.kd_part');
             })
-            ->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
+            ->leftjoin($request->db.'sub', function ($join) {
+                $join->on('part.kd_sub', 'sub.kd_sub');
+            })
+            ->leftJoin($request->db.'produk', function ($join) {
+                $join->on('sub.kd_produk', 'produk.kd_produk');
+            });
+
+            if(!empty($request->produk)){
+                $data = $data->where('produk.kd_produk', $request->produk);
+            }
+
+            $data = $data->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
             ->orderBy('faktur.no_faktur', 'ASC')
             ->paginate($request->per_page);
 
@@ -196,6 +207,14 @@ class KonsumenController extends Controller
                         ->on('faktur.CompanyId', 'fakt_dtl.companyid');
                     })
                     ->where('fakt_dtl.companyid', $request->companyid);
+                    if(!empty($request->tgl_transaksi)){
+                        if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
+                            $query = $query->whereMonth('faktur.tgl_faktur', date('m', strtotime($request->tgl_transaksi[0])))
+                            ->whereYear('faktur.tgl_faktur', date('Y', strtotime($request->tgl_transaksi[0])));
+                        } else {
+                            $query = $query->whereBetween('faktur.tgl_faktur', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
+                        }
+                    }
                     if (!empty($request->kd_lokasi)){
                         $query = $query->whereIn('fakt_dtl.kd_lokasi', Arr::wrap($request->kd_lokasi));
                     }
@@ -235,7 +254,7 @@ class KonsumenController extends Controller
                 'faktur.CompanyId',
                 DB::raw("'".$request->divisi."' as divisi")
             )
-            ->JoinSub(function ($query) use ($request) {
+            ->leftJoinSub(function ($query) use ($request) {
                 $query->select(
                     'companyid',
                     'no_faktur',
@@ -257,14 +276,6 @@ class KonsumenController extends Controller
                     'keterangan_mengetahui'
                 )->from(DB::raw($request->db.'konsumen'))
                 ->where('companyid', $request->companyid);
-                if(!empty($request->tgl_transaksi)){
-                    if (count(Arr::wrap($request->tgl_transaksi)) == 1) {
-                        $query = $query->whereMonth('tanggal', date('m', strtotime($request->tgl_transaksi[0])))
-                        ->whereYear('tanggal', date('Y', strtotime($request->tgl_transaksi[0])));
-                    } else {
-                        $query = $query->whereBetween('tanggal', [$request->tgl_transaksi[0], $request->tgl_transaksi[1]]);
-                    }
-                }
                 if(!empty($request->tgl_lahir)){
                     if (count(Arr::wrap($request->tgl_lahir)) == 1) {
                         $query = $query->whereMonth('tgl_lahir', Arr::wrap($request->tgl_lahir)[0]);
@@ -322,8 +333,13 @@ class KonsumenController extends Controller
             })
             ->leftJoin($request->db.'produk', function ($join) {
                 $join->on('sub.kd_produk', 'produk.kd_produk');
-            })
-            ->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
+            });
+
+            if(!empty($request->produk)){
+                $data = $data->where('produk.kd_produk', $request->produk);
+            }
+
+            $data = $data->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
             ->orderBy('faktur.no_faktur', 'ASC')
             ->get();
 

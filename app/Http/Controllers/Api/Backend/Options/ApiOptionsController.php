@@ -1425,6 +1425,13 @@ class ApiOptionsController extends Controller
 
     public function dataProduk(Request $request){
         try {
+            if($request->option == 'select2'){
+                return Response::responseSuccess('success', (object)[
+                    'HONDA' => DB::table(DB::raw('dbhonda.dbo.produk'))->select('kd_produk', 'nama as nm_produk')->orderBy('nm_produk', 'asc')->get(),
+                    'FDR' => DB::table(DB::raw('dbsuma.dbo.produk'))->select('kd_produk', 'nama as nm_produk')->orderBy('nm_produk', 'asc')->get(),
+                ]);
+            }
+
             $data = DB::table('produk')->lock('with (nolock)')->select('kd_produk', 'nama as nm_produk');
             if(!empty($request->kd_produk)) {
                 $data = $data->where('kd_produk', $request->kd_produk);

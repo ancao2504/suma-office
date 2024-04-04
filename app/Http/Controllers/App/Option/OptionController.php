@@ -1918,6 +1918,19 @@ class OptionController extends Controller
                 foreach ($data as $key => $value) {
                     $respon .= '<option value="'.$value->kd_produk.'" data-ket="'.$value->nm_produk.'">'.$value->kd_produk.($value->nm_produk ? '('.$value->nm_produk.')' : '').'</option>';
                 }
+            } else if ($request->option == 'select2') {
+                $fdr = '';
+                $honda = '';
+                foreach ($data->FDR as $key => $value) {
+                    $fdr .= '<option value="'.$value->kd_produk.'" data-ket="'.$value->nm_produk.'">'.$value->kd_produk.($value->nm_produk ? '('.$value->nm_produk.')' : '').'</option>';
+                }
+                foreach ($data->HONDA as $key => $value) {
+                    $honda .= '<option value="'.$value->kd_produk.'" data-ket="'.$value->nm_produk.'">'.$value->kd_produk.($value->nm_produk ? '('.$value->nm_produk.')' : '').'</option>';
+                }
+                $respon = (object)[
+                    'FDR' => $fdr,
+                    'HONDA' => $honda
+                ];
             }else if($request->option == 'page'){
                 $respon = view('layouts.option.option', [
                     'data' => $data,

@@ -36,7 +36,11 @@ class KonsumenController extends Controller
         $responseApi_typemotor = json_decode(OptionController::typemotor($request));
         $statusApi_typemotor = $responseApi_typemotor->status;
 
-        if ($responseApiringban->status == 1 && $statusApi_merekmotor == 1 && $statusApi_typemotor == 1) {
+        $request->merge(['option' => 'select2']);
+        $responseApi_Produk = OptionController::produk($request)->getData();
+        $statusApi_Produk = $responseApi_Produk->status;
+
+        if ($responseApiringban->status == 1 && $statusApi_merekmotor == 1 && $statusApi_typemotor == 1 && $statusApi_Produk == 1) {
             return view(
                 'layouts.report.konsumen.konsumen',
                 [
@@ -59,6 +63,7 @@ class KonsumenController extends Controller
                     'merk_motor'    =>  $responseApi_merekmotor->data,
                     'type_motor'    =>  $responseApi_typemotor->data,
                     'ring_ban'      =>  $responseApiringban->data,
+                    'produk' =>$responseApi_Produk->data
                 ]
             );
         } else {
