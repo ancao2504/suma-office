@@ -23,7 +23,7 @@ function request_data(page){
 
             jenis_part: $('#filter_report #jenis_part').val(),
             kd_part: $('#filter_report #kd_part').val(),
-            produk: $('#filter_report #divisi').val() == 'HONDA' ? $('#filter_report #jenis_produk_HONDA').val() : $('#filter_report #jenis_produk_FDR').val(),
+            produk: $('#filter_report #divisi').val() == 'honda' ? $('#filter_report #jenis_produk_HONDA').val() : $('#filter_report #jenis_produk_FDR').val(),
 
             merek_motor: $('#filter_report #merek_motor').val(),
             tipe_motor: $('#filter_report #tipe_motor').val(),
@@ -290,7 +290,7 @@ $('document').ready(function() {
 
                 jenis_part: $('#filter_report #jenis_part').val(),
                 kd_part: $('#filter_report #kd_part').val(),
-                produk: $('#filter_report #divisi').val() == 'HONDA' ? $('#filter_report #jenis_produk_HONDA').val() : $('#filter_report #jenis_produk_FDR').val(),
+                produk: $('#filter_report #divisi').val() == 'honda' ? $('#filter_report #jenis_produk_HONDA').val() : $('#filter_report #jenis_produk_FDR').val(),
 
                 merek_motor: $('#filter_report #merek_motor').val(),
                 tipe_motor: $('#filter_report #tipe_motor').val(),
