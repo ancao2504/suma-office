@@ -1,6 +1,6 @@
 @extends('layouts.main.index')
-@section('title','Shopee')
-@section('subtitle','Orders')
+@section('title','settings')
+@section('subtitle','Approve Harga Rugi')
 @section('container')
 <div class="row g-0">
     <div class="card card-flush shadow">
