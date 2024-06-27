@@ -561,6 +561,20 @@ class Service
         return $response;
     }
 
+    public static function ApproveHargaRugi($nomor_faktur, $user_id, $companyid, $option)
+    {
+        $request = 'backend/setting/approvehargarugi';
+        $header = ['Authorization' => session()->get('Authorization')];
+        $body = [
+            'nomor_faktur' => $nomor_faktur,
+            'user_id'   => $user_id,
+            'companyid' => $companyid,
+            'option'    => $option
+        ];
+        $response = ApiRequest::requestPost($request, $header, $body);
+        return $response;
+    }
+
     public static function OptionCompany($search, $page, $per_page)
     {
         $request = 'backend/options/company';

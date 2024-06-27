@@ -1144,6 +1144,19 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div
+                            class="menu-sub menu-sub-accordion {{ Request::is('setting/approvehargarugi*') ? 'show' : '' }}">
+                            <div class="menu-item">
+                                <a class="menu-link {{ Request::is('setting/approvehargarugi*') ? 'active' : '' }}"
+                                    href="{{ url('/setting/approvehargarugi') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Approve Harga Rugi</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 @endif
 
