@@ -43,6 +43,8 @@ use App\Retur\SupplierJawabController as ReturSupplierJawab;
 use App\Retur\SupplierJawabPSController as ReturSupplierJawabPS;
 use App\Setting\HargaNetto\HargaNettoPartsDealerControllers;
 use App\Http\Controllers\App\Gudang\Online\PackingController;
+use App\Http\Controllers\App\Home\HomeController;
+use App\Setting\ApproveHargaRugi\ApproveHargaRugiController;
 use App\Online\PemindahanController as PemindahanMarketplace;
 use App\Online\Shopee\EkspedisiController as EkspedisiShopee;
 use App\Online\Tiktok\EkspedisiController as EkspedisiTiktok;
@@ -86,7 +88,9 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
 
     Route::group(['middleware' => 'authLogin'], function () {
         Route::name('home.')->group(function () {
-            Route::get('/', 'App\Home\HomeController@index')->name('index');
+            Route::controller(HomeController::class)->group(function () {
+                Route::get('/', 'index')->name('index');
+            });
         });
 
         Route::name('dashboard.')->group(function () {
@@ -384,6 +388,13 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
                         Route::get('/setting/netto/part', 'index')->name('daftar');
                         Route::post('/setting/netto/part/simpan', 'storeDestroy')->name('simpan');
                     });
+                });
+            });
+
+            Route::name('approvehargarugi.')->group(function () {
+                Route::controller(ApproveHargaRugiController::class)->group(function () {
+                    Route::get('/setting/approvehargarugi', 'ApproveHargaRugi')->name('approve-harga-rugi');
+                    Route::post('/setting/approvehargarugi', 'ApproveHargaRugiUpdate')->name('approve-harga-rugi-update');
                 });
             });
         });
@@ -767,7 +778,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
         Route::name('konsumen.')->group(function () {
             // konsumen
             Route::controller(KonsumenController::class)->group(function () {
-                Route::get('konsumen/', 'index')->name('index');
+                Route::get('konsumen', 'index')->name('index');
                 Route::get('konsumen/create', 'create')->name('create');
                 Route::get('konsumen/edit/{id}', 'konsumenEdit')->name('edit');
                 Route::post('konsumen/store', 'konsumenStore')->name('store');

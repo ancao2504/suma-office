@@ -71,6 +71,8 @@ use Api\Backend\Online\Tokopedia\ApiEkspedisiController as EkspedisiTokopedia;
 use Api\Backend\Online\Tokopedia\ApiPemindahanController as PemindahanTokopedia;
 use Api\Backend\Online\Tokopedia\ApiUpdateHargaController as UpdateHargaTokopedia;
 use Api\Backend\Online\Tokopedia\ApiHistorySaldoController as HistorySaldoTokopedia;
+use Api\Backend\Setting\ApiSettingApproveHargaRugiController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -333,6 +335,10 @@ Route::group(['middleware' => 'authBasic'], function () {
                     Route::post('/backend/setting/harga/partnetto/dealer', 'daftarPartNettoDealer')->name('setting-part-netto-dealer-daftar');
                     Route::post('/backend/setting/harga/partnetto/dealer/simpan', 'simpanPartNettoDealer')->name('setting-part-netto-dealer-simpan');
                     Route::post('/backend/setting/harga/partnetto/dealer/hapus', 'hapusPartNettoDealer')->name('setting-part-netto-dealer-dealer');
+                });
+
+                Route::controller(ApiSettingApproveHargaRugiController::class)->group(function () {
+                    Route::post('/backend/setting/approvehargarugi', 'ApproveHargaRugi')->name('setting-approvehargarugi');
                 });
             });
 
