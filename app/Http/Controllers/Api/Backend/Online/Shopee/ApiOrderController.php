@@ -1533,7 +1533,7 @@ class ApiOrderController extends Controller
 
             foreach($result as $data) {
                 DB::transaction(function () use ($request, $data) {
-                    DB::insert('exec SP_Faktur_Simpan_New7 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [
+                    DB::insert('exec SP_Faktur_Simpan_New8 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?', [
                         trim(strtoupper($data->kd_key)), trim(strtoupper($data->no_faktur)), trim(strtoupper($data->no_faktur)),
                         trim($data->tgl_faktur), trim(strtoupper($data->no_pof)), trim(strtoupper($data->kd_beli)),
                         trim(strtoupper($data->kd_sales)), trim(strtoupper($data->kd_dealer)), trim(strtoupper($data->ket)),
@@ -1541,7 +1541,7 @@ class ApiOrderController extends Controller
                         trim(strtoupper($data->rh)), trim(strtoupper($data->bo)), (double)$data->discrp1, 'T', '', '', '', '', '', '',
                         trim(strtoupper($request->get('user_id'))).'=SUMAOFFICE', trim(strtoupper($data->companyid)),
                         1, 1, '', 0, trim(strtoupper(config('constants.api.shopee.kode_lokasi'))),
-                        trim(strtoupper($data->kd_ekspedisi))
+                        trim(strtoupper($data->kd_ekspedisi)), 0, '', ''
                     ]);
 
                     DB::delete('exec sp_faktdtltmpDelAll ?,?,?', [

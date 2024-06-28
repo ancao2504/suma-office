@@ -889,7 +889,8 @@ class ApiApproveOrderController extends Controller
 
             $sql = DB::table('faktur')->lock('with (nolock)')
                     ->selectRaw("isnull(faktur.no_faktur, '') as nomor_faktur,
-                            isnull(faktur.kd_ekspedisi, '') as kode_ekspedisi")
+                            isnull(faktur.kd_ekspedisi, '') as kode_ekspedisi,
+                            isnull(faktur.sts_rugi, 0) as status_penjualan_rugi")
                     ->where('faktur.ket', $request->get('nomor_invoice'))
                     ->where('faktur.companyid', $request->get('companyid'))
                     ->first();
@@ -900,6 +901,10 @@ class ApiApproveOrderController extends Controller
 
             if(strtoupper(trim($sql->kode_ekspedisi)) == '') {
                 return Response::responseWarning('Kode ekspedisi masih kosong');
+            }
+
+            if((int)$sql->status_penjualan_rugi == 1) {
+                return Response::responseWarning('Faktur penjualan rugi, minta akses ke supervisor untuk meng-approve faktur penjualan rugi');
             }
 
             if(strtoupper(trim($sql->kode_ekspedisi)) == 'TKPDEXP') {
@@ -939,7 +944,8 @@ class ApiApproveOrderController extends Controller
 
             $sql = DB::table('faktur')->lock('with (nolock)')
                     ->selectRaw("isnull(faktur.no_faktur, '') as nomor_faktur,
-                            isnull(faktur.kd_ekspedisi, '') as kode_ekspedisi")
+                            isnull(faktur.kd_ekspedisi, '') as kode_ekspedisi,
+                            isnull(faktur.sts_rugi, 0) as status_penjualan_rugi")
                     ->where('faktur.no_faktur', $request->get('nomor_faktur'))
                     ->where('faktur.companyid', $request->get('companyid'))
                     ->first();
@@ -950,6 +956,10 @@ class ApiApproveOrderController extends Controller
 
             if(strtoupper(trim($sql->kode_ekspedisi)) == '') {
                 return Response::responseWarning('Kode ekspedisi masih kosong');
+            }
+
+            if((int)$sql->status_penjualan_rugi == 1) {
+                return Response::responseWarning('Faktur penjualan rugi, minta akses ke supervisor untuk meng-approve faktur penjualan rugi');
             }
 
             if(strtoupper(trim($sql->kode_ekspedisi)) == 'TKPDEXP') {
