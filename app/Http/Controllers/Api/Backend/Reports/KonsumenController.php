@@ -40,6 +40,7 @@ class KonsumenController extends Controller
                 function ($query) use ($request) {
                     $query->select(
                         'fakt_dtl.no_faktur',
+                        'faktur.kd_dealer',
                         'faktur.tgl_faktur',
                         'fakt_dtl.kd_part',
                         'fakt_dtl.companyid',
@@ -165,6 +166,18 @@ class KonsumenController extends Controller
             if(!empty($request->produk)){
                 $data = $data->where('produk.kd_produk', $request->produk);
             }
+            if(!empty($request->kategori_konsumen)){
+                if ($request->kategori_konsumen == 'ada') {
+                    // konsumen.nama tidak kosong
+                    $data = $data->whereNotNull('konsumen.nama');
+                } else if ($request->kategori_konsumen == 'tidak') {
+                    // konsumen.nama kosong
+                    $data = $data->whereNull('konsumen.nama');
+                }
+            }
+            if (!empty($request->dealer)) {
+                $data = $data->where('faktur.kd_dealer', $request->dealer);
+            }
 
             $data = $data->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))
             ->orderBy('faktur.no_faktur', 'ASC')
@@ -196,6 +209,8 @@ class KonsumenController extends Controller
                 function ($query) use ($request) {
                     $query->select(
                         'fakt_dtl.no_faktur',
+                        'faktur.kd_dealer',
+                        'dealer.nm_dealer',
                         'faktur.tgl_faktur',
                         'fakt_dtl.kd_part',
                         'fakt_dtl.companyid',
@@ -205,6 +220,10 @@ class KonsumenController extends Controller
                     ->join($request->db.'faktur', function ($join) {
                         $join->on('faktur.no_faktur', 'fakt_dtl.no_faktur')
                         ->on('faktur.CompanyId', 'fakt_dtl.companyid');
+                    })
+                    ->join($request->db.'dealer', function ($join) {
+                        $join->on('dealer.kd_dealer', 'faktur.kd_dealer')
+                        ->on('dealer.CompanyId', 'faktur.CompanyId');
                     })
                     ->where('fakt_dtl.companyid', $request->companyid);
                     if(!empty($request->tgl_transaksi)){
@@ -250,6 +269,8 @@ class KonsumenController extends Controller
                 'konsumen.keterangan',
                 'konsumen.mengetahui',
                 'konsumen.keterangan_mengetahui',
+                'faktur.kd_dealer',
+                'faktur.nm_dealer',
                 'faktur.kd_lokasi',
                 'faktur.CompanyId',
                 DB::raw("'".$request->divisi."' as divisi")
@@ -337,6 +358,20 @@ class KonsumenController extends Controller
 
             if(!empty($request->produk)){
                 $data = $data->where('produk.kd_produk', $request->produk);
+            }
+
+            if(!empty($request->kategori_konsumen)){
+                if ($request->kategori_konsumen == 'ada') {
+                    // konsumen.nama tidak kosong
+                    $data = $data->whereNotNull('konsumen.nama');
+                } else if ($request->kategori_konsumen == 'tidak') {
+                    // konsumen.nama kosong
+                    $data = $data->whereNull('konsumen.nama');
+                }
+            }
+
+            if (!empty($request->dealer)) {
+                $data = $data->where('faktur.kd_dealer', $request->dealer);
             }
 
             $data = $data->orderBy(($request->filter['collom']??'faktur.tgl_faktur'), ($request->filter['by']??'asc'))

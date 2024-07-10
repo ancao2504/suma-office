@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 class Konsumen implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnWidths, WithColumnFormatting
 {
     private $data;
-    
+
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -20,17 +20,17 @@ class Konsumen implements FromCollection, WithHeadings, ShouldAutoSize, WithColu
     {
         $this->data = $data;
     }
-    
+
     public function collection(){
         ini_set('memory_limit', '4096M');
         ini_set('max_execution_time', '0');
         $data = $this->data;
-        
+
         return collect($data);
     }
 
 
-    
+
     public function headings(): array
     {
 
@@ -61,6 +61,8 @@ class Konsumen implements FromCollection, WithHeadings, ShouldAutoSize, WithColu
             'Keterangan',
             'Mengetahui',
             'Keterangan Mengetahui',
+            'kode dealer',
+            'Nama Dealer',
             'Lokasi',
             'Company',
             'Divisi',

@@ -41,7 +41,7 @@ class KonsumenController extends Controller
         if(empty($request->kd_lokasi)){
             $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
         }
-            
+
         $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
         $responseApi = json_decode(Service::KonsumenDaftar($request));
         $statusApi = $responseApi->status;
@@ -84,7 +84,7 @@ class KonsumenController extends Controller
     }
 
     public function konsumenStore(Request $request){
-        
+
         $validate = Validator::make($request->all(), [
             'divisi'    => 'required',
             'companyid' => 'required',
@@ -137,14 +137,14 @@ class KonsumenController extends Controller
     }
 
     public function konsumenEdit($id, Request $request){
-        
+
         $request->merge(['option' => 'select']);
         $responseApiMerekmotor = OptionController::merekmotor($request)->getData();
         $statusApiMerekmotor = $responseApiMerekmotor->status;
 
         $responseApiTypemotor = json_decode(OptionController::typemotor($request));
         $statusApiTypemotor = $responseApiTypemotor->status;
-        
+
         $lokasi = session()->get('app_user_company');
 
         // ! cek lokasi,cabang agar sesuai yang di izinkan
@@ -161,7 +161,7 @@ class KonsumenController extends Controller
         if(empty($request->kd_lokasi)){
             $request->merge(['kd_lokasi' => collect(collect($lokasi)->first()->lokasi)->first()->kd_lokasi[0]]);
         }
-            
+
         $request->merge(['divisi' => (in_array($request->companyid,collect(collect($lokasi)->first()->lokasi)->pluck('companyid')->toArray()))?collect($lokasi)->first()->divisi:collect($lokasi)->skip(1)->take(1)->first()->divisi]);
 
         $request->merge(['id' => $id]);
@@ -192,7 +192,7 @@ class KonsumenController extends Controller
     }
 
     public function konsumenDelete(Request $request){
-        
+
         $validate = Validator::make($request->all(), [
             'divisi'    => 'required',
             'companyid' => 'required',
@@ -229,7 +229,7 @@ class KonsumenController extends Controller
 
         $responseApi = json_decode(service::KonsumenHapus($request));
         $statusApi = $responseApi->status;
-        
+
         if($statusApi == 1){
             return Response()->json([
                 'status'    => 1,

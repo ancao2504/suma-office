@@ -300,6 +300,7 @@ Route::group(['middleware' => 'preventbackhistory'], function () {
             Route::controller(OptionController::class)->group(function () {
                 Route::get('/option/company', 'optionCompany')->name('company');
                 Route::get('/option/dealer', 'optionDealer')->name('dealer');
+                Route::get('/option/dealer/company', 'optionDealerCompany')->name('dealer-company');
                 Route::get('/option/dealersalesman', 'optionDealerSalesman')->name('dealer-salesman');
                 Route::get('/option/kabupaten', 'optionKabupaten')->name('kabupaten');
                 Route::get('/option/salesman', 'optionSalesman')->name('salesman');

@@ -72,7 +72,7 @@ function wh(requst) {
                         $('#btn_submit_start').attr("disabled", true);
                         $('.timer-container').attr("hidden", false);
                     }
-            
+
                     if(dataJson.tgl_start != null && dataJson.tgl_finish != null){
                         $('#btn_submit_start').attr("disabled", true);
                         $('#btn_submit_finish').attr("disabled", true);
@@ -169,7 +169,7 @@ function simpan(sts_packing){
                 $('#btn_submit_finish').attr("disabled", false);
                 $('#btn_submit_reset').attr("hidden", true);
                 $('.timer-container').attr("hidden", false);
-                
+
                 timer.tanggal = moment(response.data.tgl_start, 'YYYY-MM-DD');
                 timer.jam = moment(response.data.jam_start, 'HH:mm:ss');
             }
@@ -357,5 +357,6 @@ $(document).ready(function() {
         }
         document.getElementById('timer').innerText = `${diffDuration.hours().toString().padStart(2, '0')}:${diffDuration.minutes().toString().padStart(2, '0')}:${diffDuration.seconds().toString().padStart(2, '0')}`;
     }
-    setInterval(updateTimer, 1000);
+    setInterval(updateTimer, 100);
 });
+

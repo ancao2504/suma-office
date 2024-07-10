@@ -2348,6 +2348,8 @@ class Service
             'page'          => $request->page ?? 1,
             'per_page'      => $request->per_page ?? 10,
             'filter'        => $request->get('filter'),
+            'kategori_konsumen' => $request->kategori_konsumen,
+            'dealer' => $request->dealer
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
@@ -2370,6 +2372,8 @@ class Service
             'tipe_motor'    => $request->get('tipe_motor'),
             'jenis_motor'   => $request->get('jenis_motor'),
             'filter'        => $request->get('filter'),
+            'kategori_konsumen' => $request->kategori_konsumen,
+            'dealer' => $request->dealer
         ];
         $response = ApiRequest::requestPost($url, $header, $body);
         return $response;
