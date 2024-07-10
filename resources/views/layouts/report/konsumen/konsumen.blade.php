@@ -342,7 +342,6 @@
                                 <input class="form-control" name="kd_part" id="kd_part"
                                     placeholder="Contoh : 22535KWN901" />
                                 <label for="dealer" class="form-label text-dealer">Dealer</label>
-                                {{-- <input class="form-control" name="dealer" id="dealer" placeholder="Contoh : HONDA"/> --}}
                                 <div class="input-group">
                                     <input id="inputFilterDealer" name="dealer" type="text"
                                         placeholder="Semua Dealer" class="form-control" style="cursor: pointer;"
@@ -431,24 +430,6 @@
         @if (!empty($type_motor))
             const tipemotor = @json($type_motor);
         @endif
-
-        $('#btnFilterPilihDealer').on('click', function() {
-            if ($('#company').val() == '') {
-                swal.fire({
-                    icon: 'warning',
-                    title: 'Informasi',
-                    text: 'Cabang harus diisi terlebih dahulu!',
-                })
-                return false;
-            }
-            $('#modalOptionDealer').modal('show');
-            loadDataOptionDealer(1, 10, '');
-        });
-
-        $('#modalOptionDealer').on('click', '#selectedOptionDealer', function () {
-        $('#inputFilterDealer').val($(this).data('kode_dealer'));
-        $('#modalOptionDealer').modal('hide');
-    });
     </script>
     <script language="JavaScript" src="{{ asset('assets/js/suma/report/konsumen/Konsumen.js') }}?v={{ time() }}">
     </script>

@@ -59,7 +59,7 @@ function request_data(page) {
             page: page,
             per_page: $("#table_list").find("#per_page").val(),
 
-            dealer: $("#filter_report #dealer").val(),
+            dealer: $("#filter_report #inputFilterDealer").val(),
             kategori_konsumen: $("#filter_report #konsumen").val(),
 
             filter: {
@@ -226,6 +226,24 @@ $("document").ready(function () {
     $("#filter_report #tgl_tran0, #tgl_tran1").on("change", function () {
         $("#filter_report #tgl_tran").val("");
     });
+
+    $('#btnFilterPilihDealer').on('click', function() {
+        if ($('#company').val() == '') {
+            swal.fire({
+                icon: 'warning',
+                title: 'Informasi',
+                text: 'Cabang harus diisi terlebih dahulu!',
+            })
+            return false;
+        }
+        $('#modalOptionDealer').modal('show');
+        loadDataOptionDealer(1, 10, '');
+    });
+
+    $('#modalOptionDealer').on('click', '#selectedOptionDealer', function () {
+    $('#inputFilterDealer').val($(this).data('kode_dealer'));
+    $('#modalOptionDealer').modal('hide');
+});
 
     $("#filter_report #btn-smt").on("click", function () {
         if (
@@ -422,7 +440,7 @@ $("document").ready(function () {
                 tipe_motor: $("#filter_report #tipe_motor").val(),
                 jenis_motor: $("#filter_report #jenis_motor").val(),
 
-                dealer: $("#filter_report #dealer").val(),
+                dealer: $("#filter_report #inputFilterDealer").val(),
                 kategori_konsumen: $("#filter_report #konsumen").val(),
 
                 filter: {
